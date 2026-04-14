@@ -31,7 +31,6 @@ import { useTranslations } from 'next-intl'
 import type { MockProduct } from '@/lib/products-mock'
 
 const HERO_SLIDES: { src: string; href: string }[] = [
-  { src: '/images/hero/hero-energy.jpg', href: '/products' },
   { src: '/images/hero/hero-4.png', href: '/category/elektrikli-arac-sarj-urunleri' },
   { src: '/images/hero/hero-2.png', href: '/products?category=' + encodeURIComponent('Araç Şarj Kabloları') },
   { src: '/images/hero/hero-3.png', href: '/products' },
@@ -456,7 +455,7 @@ export default function HomePage() {
       {/* ─── 5. BANNER SLİDER ────────────────────────────────────────────── */}
       <section className="pt-0 pb-8 sm:pb-12 px-4 sm:px-6 md:px-8 lg:px-10" aria-label={t('heroTitle2')}>
         <div className="w-full max-w-[1600px] mx-auto min-w-0">
-          <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-slate-900 shadow-xl h-[160px] sm:h-[200px] md:h-[240px] ring-1 ring-slate-200/30 overflow-hidden">
+          <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-slate-900 shadow-xl min-h-[18vh] sm:min-h-0 aspect-[3/2] sm:aspect-[9/4] md:aspect-[5/2] ring-1 ring-slate-200/30 overflow-hidden">
             {HERO_SLIDES.map((slide, index) => (
               <div
                 key={slide.src + index}
@@ -472,7 +471,7 @@ export default function HomePage() {
                     src={slide.src}
                     alt=""
                     fill
-                    className={`object-cover pointer-events-none bg-slate-900 ${index === 0 ? 'object-[left_70%] md:object-[35%_70%]' : 'object-[center_70%]'}`}
+                    className={`object-cover pointer-events-none bg-slate-900 ${index === 0 ? 'object-left md:object-[35%_50%]' : 'object-center'}`}
                     sizes="(max-width: 768px) 100vw, 100vw"
                     unoptimized={slide.src.startsWith('http')}
                     onError={(e) => { const el = e.target as HTMLImageElement; if (el) el.style.display = 'none' }}
