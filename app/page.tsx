@@ -31,6 +31,7 @@ import { useTranslations } from 'next-intl'
 import type { MockProduct } from '@/lib/products-mock'
 
 const HERO_SLIDES: { src: string; href: string }[] = [
+  { src: '/images/hero/hero-energy.jpg', href: '/products' },
   { src: '/images/hero/hero-4.png', href: '/category/elektrikli-arac-sarj-urunleri' },
   { src: '/images/hero/hero-2.png', href: '/products?category=' + encodeURIComponent('Araç Şarj Kabloları') },
   { src: '/images/hero/hero-3.png', href: '/products' },
