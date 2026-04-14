@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import type { Metadata } from 'next'
-import { ArrowRight, Zap, Sun, Battery, Cpu, Flame, Clock } from 'lucide-react'
+import { ArrowRight, Zap, Sun, Battery, Cpu, Clock } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Blog – Enerji Rehberi | Voltekno',
@@ -113,15 +113,6 @@ export default function BlogPage() {
         </div>
       </div>
 
-      {/* Coming soon banner */}
-      <div className="bg-amber-50 border-y border-amber-200 px-4 py-3">
-        <div className="container mx-auto max-w-5xl flex items-center gap-3 text-amber-800">
-          <Clock className="w-4 h-4 shrink-0" />
-          <p className="text-sm font-medium">
-            Blog içerikleri hazırlanıyor. Yakında detaylı rehber yazılar yayımlanacak.
-          </p>
-        </div>
-      </div>
 
       {/* Category filter - static display */}
       <div className="border-b border-slate-200 bg-white sticky top-0 z-10 px-4">
@@ -150,18 +141,13 @@ export default function BlogPage() {
             {BLOG_POSTS.map((post) => {
               const Icon = post.icon
               return (
-                <article
+                <Link
                   key={post.slug}
-                  className="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                  href={`/blog/${post.slug}`}
+                  className="group rounded-2xl border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden block"
                 >
-                  {/* Placeholder image area */}
                   <div className={`h-44 ${post.iconBg} flex flex-col items-center justify-center gap-3 relative`}>
                     <Icon className={`w-14 h-14 ${post.iconColor} opacity-40`} />
-                    {post.comingSoon && (
-                      <span className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-widest bg-amber-100 text-amber-700 rounded-lg px-2.5 py-1">
-                        Yakında
-                      </span>
-                    )}
                   </div>
 
                   <div className="p-5">
@@ -179,11 +165,11 @@ export default function BlogPage() {
                     <p className="text-xs text-slate-500 leading-relaxed line-clamp-3 mb-4">
                       {post.desc}
                     </p>
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-400">
-                      Yakında Yayımlanacak
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand">
+                      Okumaya Devam Et <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
-                </article>
+                </Link>
               )
             })}
           </div>
