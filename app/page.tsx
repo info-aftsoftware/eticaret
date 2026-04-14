@@ -310,7 +310,7 @@ export default function HomePage() {
 
             {/* ─ Sağ: tek büyük görsel ─ */}
             <div className="order-1 lg:order-2 relative">
-              <div className="relative overflow-hidden rounded-3xl aspect-[4/5] lg:aspect-[3/4] shadow-xl shadow-slate-200/60">
+              <div className="relative overflow-hidden rounded-3xl aspect-[4/3] lg:aspect-[16/10] shadow-xl shadow-slate-200/60">
                 <Image
                   src="/images/ges/solar-hero-premium.png"
                   alt="Enerji sistemleri"
