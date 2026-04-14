@@ -310,13 +310,13 @@ export default function HomePage() {
 
             {/* ─ Sağ: tek büyük görsel ─ */}
             <div className="order-1 lg:order-2 relative">
-              <div className="relative overflow-hidden rounded-3xl aspect-[4/5] lg:aspect-[9/11] shadow-xl shadow-slate-200/60">
+              <div className="relative overflow-hidden rounded-3xl aspect-[4/5] lg:aspect-[3/4] shadow-xl shadow-slate-200/60">
                 <Image
                   src="/images/ges/solar-hero-premium.png"
                   alt="Enerji sistemleri"
                   fill
                   priority
-                  className="object-cover object-center"
+                  className="object-cover object-[center_62%]"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" />
