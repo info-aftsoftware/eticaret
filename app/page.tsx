@@ -471,7 +471,7 @@ export default function HomePage() {
                     src={slide.src}
                     alt=""
                     fill
-                    className={`object-cover pointer-events-none bg-slate-900 ${index === 0 ? 'object-left md:object-[35%_50%]' : 'object-center'}`}
+                    className={`object-cover pointer-events-none bg-slate-900 ${index === 0 ? 'object-[left_70%] md:object-[35%_70%]' : 'object-[center_70%]'}`}
                     sizes="(max-width: 768px) 100vw, 100vw"
                     unoptimized={slide.src.startsWith('http')}
                     onError={(e) => { const el = e.target as HTMLImageElement; if (el) el.style.display = 'none' }}
