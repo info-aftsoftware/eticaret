@@ -455,7 +455,7 @@ export default function HomePage() {
       {/* ─── 5. BANNER SLİDER ────────────────────────────────────────────── */}
       <section className="pt-0 pb-8 sm:pb-12 px-4 sm:px-6 md:px-8 lg:px-10" aria-label={t('heroTitle2')}>
         <div className="w-full max-w-[1600px] mx-auto min-w-0">
-          <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-slate-900 shadow-xl min-h-[18vh] sm:min-h-0 aspect-[2/1] sm:aspect-[3/1] md:aspect-[4/1] ring-1 ring-slate-200/30 overflow-hidden">
+          <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-slate-900 shadow-xl min-h-[18vh] sm:min-h-0 aspect-[3/1] sm:aspect-[4/1] md:aspect-[5/1] ring-1 ring-slate-200/30 overflow-hidden">
             {HERO_SLIDES.map((slide, index) => (
               <div
                 key={slide.src + index}
