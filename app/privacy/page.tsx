@@ -31,10 +31,10 @@ export default function PrivacyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-ink mt-0 mb-4">1. VERİ SORUMLUSU</h2>
               <p className="mb-3">
-                6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verileriniz veri sorumlusu sıfatıyla <strong>Voltekno Enerji Sistemleri</strong> ("Voltekno", "Şirket") tarafından işlenmektedir.
+                6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verileriniz veri sorumlusu sıfatıyla <strong>Yılmaz Uzun Şahıs Şirketi</strong> ("Voltekno", "Şirket") tarafından işlenmektedir.
               </p>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm">
-                <p className="mb-1"><strong>Ticaret Unvanı:</strong> Voltekno Enerji Sistemleri</p>
+                <p className="mb-1"><strong>Ticaret Unvanı:</strong> Yılmaz Uzun Şahıs Şirketi</p>
                 <p className="mb-1"><strong>Web Sitesi:</strong> www.voltekno.com</p>
                 <p className="mb-1"><strong>E-posta:</strong> info@voltekno.com</p>
                 <p><strong>Telefon:</strong> +90 551 829 16 13</p>

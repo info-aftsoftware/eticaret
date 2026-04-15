@@ -12,6 +12,7 @@ import {
   Zap,
 } from 'lucide-react'
 import { Logo } from './Logo'
+import Image from 'next/image'
 
 function NewsletterForm() {
   const [mounted, setMounted] = React.useState(false)
@@ -151,13 +152,19 @@ export function Footer() {
             <div className="pt-1 border-t border-white/5">
               <p className="text-[10px] text-slate-600 uppercase tracking-widest font-semibold mb-2">Güvenli Ödeme</p>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-700 tracking-wide">VISA</span>
-                <span className="inline-flex items-center bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-700 tracking-wide">MASTERCARD</span>
-                <span className="inline-flex items-center bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-700 tracking-wide">iyzico</span>
-                <span className="inline-flex items-center gap-1 bg-emerald-700 border border-emerald-600 rounded px-2 py-1 text-[11px] font-bold text-white tracking-wide">
-                  <ShieldCheck className="w-3 h-3" aria-hidden />
-                  SSL
-                </span>
+                <div className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center" style={{height: 32, minWidth: 52}}>
+                  <Image src="/images/payment/visa.svg" alt="Visa" width={46} height={16} className="object-contain" />
+                </div>
+                <div className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center" style={{height: 32, minWidth: 52}}>
+                  <Image src="/images/payment/mastercard.svg" alt="Mastercard" width={38} height={24} className="object-contain" />
+                </div>
+                <div className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center" style={{height: 32, minWidth: 64}}>
+                  <Image src="/images/payment/iyzico.png" alt="iyzico" width={52} height={20} className="object-contain" />
+                </div>
+                <div className="flex items-center gap-1 bg-emerald-700 rounded-md px-2 py-1.5" style={{height: 32}}>
+                  <ShieldCheck className="w-3.5 h-3.5 text-white" aria-hidden />
+                  <span className="text-[11px] font-bold text-white tracking-wide">SSL</span>
+                </div>
               </div>
             </div>
           </div>

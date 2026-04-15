@@ -35,7 +35,7 @@ export default function TermsPage() {
               </p>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm mb-4">
                 <p className="font-bold text-ink mb-2">SATICI</p>
-                <p className="text-ink-muted mb-1"><strong>Ticaret Unvanı:</strong> Voltekno Enerji Sistemleri</p>
+                <p className="text-ink-muted mb-1"><strong>Ticaret Unvanı:</strong> Yılmaz Uzun Şahıs Şirketi</p>
                 <p className="text-ink-muted mb-1"><strong>Web Sitesi:</strong> www.voltekno.com</p>
                 <p className="text-ink-muted mb-1"><strong>E-posta:</strong> info@voltekno.com</p>
                 <p className="text-ink-muted"><strong>Telefon:</strong> +90 551 829 16 13</p>
@@ -180,7 +180,7 @@ export default function TermsPage() {
                 Bu Sözleşme, Alıcı'nın siparişini tamamlaması ve Satıcı'nın sipariş onay e-postasını göndermesiyle karşılıklı olarak yürürlüğe girer. Alıcı, sipariş sürecinde Sözleşme metnini okuduğunu ve kabul ettiğini beyan eder.
               </p>
               <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mt-4 text-sm text-ink-muted">
-                <p><strong className="text-ink">Satıcı:</strong> Voltekno Enerji Sistemleri</p>
+                <p><strong className="text-ink">Satıcı:</strong> Yılmaz Uzun Şahıs Şirketi</p>
                 <p className="mt-1 text-xs">Son Güncelleme: Nisan 2025</p>
               </div>
             </section>
