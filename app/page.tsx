@@ -460,26 +460,30 @@ export default function HomePage() {
               Tüm Paketler <ArrowUpRight className="w-4 h-4" />
             </Link>
           </header>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             {PACKAGE_CATEGORIES.map((item) => (
               <Link
                 key={item.slug}
                 href={`/paketler/${item.slug}`}
                 className="group relative block rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 touch-manipulation"
               >
-                <div className="aspect-[3/4] relative overflow-hidden bg-slate-100">
+                <div className="aspect-[16/9] relative overflow-hidden bg-slate-100">
                   <Image
                     src={item.image}
                     alt={item.imageAlt}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 50vw, 20vw"
+                    sizes="(max-width: 640px) 50vw, 33vw"
                     style={{ objectPosition: item.objectPosition ?? 'center center' }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
                   <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <p className="text-white font-bold text-sm leading-tight">{item.shortTitle}</p>
+                    <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-white/55 mb-1">Enerji Paketi</span>
+                    <p className="text-white font-bold text-sm leading-tight">{item.shortTitle} Paketleri</p>
                     <p className="text-white/70 text-xs mt-0.5 line-clamp-2">{item.description}</p>
+                    <span className="inline-flex items-center gap-1 text-white/80 text-xs mt-2 font-semibold">
+                      İncele <ArrowRight className="w-3 h-3" />
+                    </span>
                   </div>
                 </div>
               </Link>
@@ -498,33 +502,34 @@ export default function HomePage() {
             <p className={sectionDescClass}>{t('categoriesDesc')}</p>
           </header>
 
-          {/* 6 kategori — menü ile birebir eşleşiyor */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
+          {/* 6 kategori — 3'lü kart grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
             {[
-              { href: '/category/elektrikli-arac-sarj-urunleri', title: 'EV Şarj',            image: '/images/categories/sarj.png' },
-              { href: '/category/batarya-depolama',              title: 'Batarya & Depolama', image: '/images/categories/batarya.png' },
-              { href: '/category/inverterler',                   title: 'İnverter',           image: '/images/products/deye-12kw-trifaze-hybrid-1.jpg' },
-              { href: '/category/gunes-enerjisi',                title: 'Güneş Enerjisi',     image: '/images/categories/panel.png' },
-              { href: '/category/isi-pompasi-hvac',              title: 'Isı Pompası',        image: '/images/hero/hero-3.png' },
-              { href: '/category/enerji-yonetimi',               title: 'Enerji Yönetimi',    image: '/images/hero/hero-4.png' },
+              { href: '/category/elektrikli-arac-sarj-urunleri', title: 'Şarj İstasyonları',  desc: 'AC/DC şarj istasyonu fiyatları ve modeller',          image: '/images/products/tommatech-ev-ac-dc-sarj.jpg' },
+              { href: '/category/batarya-depolama',              title: 'Batarya & Depolama', desc: 'Batarya ve taşınabilir güç çözümleri',                  image: '/images/products/tommatech-mobil-guc-istasyonu.jpg' },
+              { href: '/category/gunes-enerjisi',                title: 'Güneş Enerjisi',     desc: 'Güneş enerjisi panel ve sistem fiyatları',             image: '/images/products/tommatech-esnek-flexible-paneller.jpg' },
+              { href: '/category/inverterler',                   title: 'İnverterler',        desc: 'Hibrit ve off-grid inverter çözümleri',                image: '/images/products/tommatech-trio-hybrid-k.jpg' },
+              { href: '/category/isi-pompasi-hvac',              title: 'Isı Pompası',        desc: 'İklimlendirme ve ısıtma çözümleri',                   image: '/images/products/tommatech-r290-dc-inverter-isı-pompasi.jpg' },
+              { href: '/category/enerji-yonetimi',               title: 'Enerji Yönetimi',   desc: 'Akıllı enerji takip ve yönetim ürünleri',              image: '/images/categories/panel.png' },
             ].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className="group relative block rounded-2xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 touch-manipulation"
               >
-                <div className="aspect-square relative overflow-hidden bg-slate-100">
+                <div className="aspect-[4/3] relative overflow-hidden bg-slate-100">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                    sizes="(max-width: 640px) 50vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
                 </div>
-                <div className="px-3 py-3 border-t border-slate-100 text-center">
-                  <h3 className="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors leading-snug">{item.title}</h3>
+                <div className="px-4 py-4">
+                  <h3 className="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors leading-snug mb-1">{item.title}</h3>
+                  <p className="text-xs text-slate-500 mb-3 leading-relaxed">{item.desc}</p>
+                  <span className="inline-flex items-center justify-center bg-brand text-white text-xs font-semibold px-4 py-1.5 rounded-lg">İncele</span>
                 </div>
               </Link>
             ))}
