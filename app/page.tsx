@@ -505,12 +505,12 @@ export default function HomePage() {
           {/* 6 kategori — 3'lü kart grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
             {[
-              { href: '/category/elektrikli-arac-sarj-urunleri', title: 'Şarj İstasyonları',  desc: 'AC/DC şarj istasyonu fiyatları ve modeller',          image: '/images/products/tommatech-ev-ac-dc-sarj.jpg' },
-              { href: '/category/batarya-depolama',              title: 'Batarya & Depolama', desc: 'Batarya ve taşınabilir güç çözümleri',                  image: '/images/products/tommatech-mobil-guc-istasyonu.jpg' },
-              { href: '/category/gunes-enerjisi',                title: 'Güneş Enerjisi',     desc: 'Güneş enerjisi panel ve sistem fiyatları',             image: '/images/products/tommatech-esnek-flexible-paneller.jpg' },
-              { href: '/category/inverterler',                   title: 'İnverterler',        desc: 'Hibrit ve off-grid inverter çözümleri',                image: '/images/products/tommatech-trio-hybrid-k.jpg' },
-              { href: '/category/isi-pompasi-hvac',              title: 'Isı Pompası',        desc: 'İklimlendirme ve ısıtma çözümleri',                   image: '/images/products/tommatech-r290-dc-inverter-isı-pompasi.jpg' },
-              { href: '/category/enerji-yonetimi',               title: 'Enerji Yönetimi',   desc: 'Akıllı enerji takip ve yönetim ürünleri',              image: '/images/categories/panel.png' },
+              { href: '/category/elektrikli-arac-sarj-urunleri', title: 'Şarj İstasyonları',  desc: 'AC/DC şarj istasyonu fiyatları ve modeller',          image: '/images/categories/sarj.png' },
+              { href: '/category/batarya-depolama',              title: 'Batarya & Depolama', desc: 'Batarya ve taşınabilir güç çözümleri',                  image: '/images/categories/batarya.png' },
+              { href: '/category/gunes-enerjisi',                title: 'Güneş Enerjisi',     desc: 'Güneş enerjisi panel ve sistem fiyatları',             image: '/images/categories/panel.png' },
+              { href: '/category/inverterler',                   title: 'İnverterler',        desc: 'Hibrit ve off-grid inverter çözümleri',                image: '/images/categories/inverter.png' },
+              { href: '/category/isi-pompasi-hvac',              title: 'Isı Pompası',        desc: 'İklimlendirme ve ısıtma çözümleri',                   image: '/images/categories/isi-pompasi.png' },
+              { href: '/category/enerji-yonetimi',               title: 'Enerji Yönetimi',   desc: 'Akıllı enerji takip ve yönetim ürünleri',              image: '/images/hero/hero-4.png' },
             ].map((item) => (
               <Link
                 key={item.href}
