@@ -21,59 +21,31 @@ const BLOG_CONTENT: Record<string, {
     date: '12 Nisan 2025',
     desc: 'AC ve DC şarj farkları, güç seviyeleri ve ev elektrik altyapısına uygunluk rehberi.',
     content: `
-## Elektrikli Araç Şarj İstasyonu Seçiminde Nelere Dikkat Edilmeli?
+Elektrikli araç sahibi olduktan sonra akla gelen ilk soru genellikle şu oluyor: "Evde nasıl şarj edebilirim?" Benzin istasyonuna olan bağımlılık sona erdiğinde, onun yerini dolduracak bir çözüme ihtiyaç duyuyorsunuz. Doğru şarj istasyonu seçimi hem günlük konforunuzu hem de uzun vadeli tasarrufunuzu doğrudan etkiliyor.
 
-Elektrikli araç sahiplerinin en çok sorduğu sorulardan biri şudur: "Evim için hangi şarj istasyonunu almalıyım?" Bu rehberde AC ve DC şarj arasındaki farkları, güç seviyelerini ve ev elektrik altyapınıza uygunluğu adım adım açıklıyoruz.
+**AC mi, DC mi — aradaki gerçek fark**
 
-## AC ve DC Şarj: Temel Fark
+Ev şarj istasyonları iki ana kategoride incelenir. AC (alternatif akım) şarj istasyonları şebeke elektriğini doğrudan aracın dahili dönüştürücüsüne ileterek sessiz ve ekonomik biçimde çalışır; ev kullanımı için biçilmiş kaftandır. DC (doğru akım) istasyonları ise dönüştürme işlemini kendi bünyesinde yaparak bataryaya doğrudan akım verir. 50 kW ile 350 kW arasındaki güç seviyeleriyle ticari hızlı şarj istasyonlarının dünyasına aittir; ev kurulumu için hem gereksiz hem de orantısız maliyetlidir.
 
-**AC Şarj (Alternatif Akım)**
-AC şarj istasyonları, şebeke elektriğini doğrudan aracın kendi dahili şarj ünitesine (OBC) iletir. Araç içindeki bu ünite, AC akımı DC'ye çevirerek bataryayı şarj eder. Ev kullanımında en yaygın tercih budur.
+**Hangi güç seviyesi eve uygun?**
 
-- Güç aralığı: 3,7 kW – 22 kW
-- Şarj süresi: 4 – 12 saat (araca göre)
-- Kurulum maliyeti: Düşük
-- Tek fazlı veya üç fazlı bağlantı
+Çoğu elektrikli araç sahibi için 7,4 kW'lık tek fazlı şarj istasyonu altın orta yoldur. 230V / 32A ayrı bir sigorta hattıyla çalışır, boş bir bataryayı 6–8 saatte doldurur ve gece şarjı rutinine kolayca uyum sağlar. Sabah uyanıyorsunuz, araç tam dolu. Üç fazlı elektrik bağlantınız varsa 11 kW'a geçmek şarj süresini 3–4 saate indiriyor. Aracınızın dahili şarj ünitesi 22 kW'ı destekliyorsa bu modelle en hızlı ev şarj deneyimini yaşamak mümkün; desteklemiyorsa fazladan ödeme yapmanın bir anlamı kalmıyor.
 
-**DC Şarj (Doğru Akım)**
-DC şarj istasyonları, dönüşümü kendi içinde yaparak doğrudan bataryaya DC akım iletir. Hızlı şarj için tercih edilir; ancak ev kurulumu için genellikle aşırıdır ve pahalıdır.
+Kurulum öncesinde ev elektrik altyapısını mutlaka değerlendirin. 7,4 kW için 32A'lik bağımsız bir hat gereklidir. Elektrik panosundan şarj istasyonuna olan kablo mesafesi maliyeti doğrudan etkiler. Topraklamanın yeterliliği ise güvenli şarj için tartışmasız bir zorunluluk.
 
-- Güç aralığı: 50 kW – 350 kW
-- Şarj süresi: 20 – 60 dakika
-- Kurulum maliyeti: Yüksek
-- Ticari kullanıma uygun
+**Akıllı özellikler uzun vadede fark yaratır**
 
-## Evde Kaç kW'lık Şarj İstasyonu Yeterli?
+Modern şarj istasyonları yalnızca şarj etmekle kalmıyor. Gece tarifesi desteği sayesinde gün içi tarifenin çok altındaki birim fiyatlardan yararlanabilirsiniz; yıllık tasarruf kayda değer boyutlara ulaşıyor. WiFi bağlantısı ve mobil uygulama entegrasyonu şarj durumunu uzaktan takip etmenizi, zamanlama ayarlamanızı sağlıyor. Dış mekân kurulumlarında IP54 veya üzeri suya dayanıklılık derecesi tercih edilmeli; kablolu modeller her gün takıp çıkarma zahmeti olmadan daha pratik bir kullanım sunuyor.
 
-### 7,4 kW (Tek Fazlı, En Yaygın)
-Çoğu ev için ideal seçimdir. 230V / 32A sigorta ile çalışır. Boş bir bataryayı 6–8 saatte doldurur — gece şarjı için mükemmeldir.
+Geleceğe yönelik bir seçim yapmak isteyenler için OCPP protokolü desteği önemli bir ayrıntı. Bu standart, şarj istasyonunuzun ilerleyen dönemde akıllı ev otomasyon sistemlerine veya farklı yönetim platformlarına entegre edilmesine kapı aralıyor.
 
-### 11 kW (Üç Fazlı)
-Evinizde üç fazlı elektrik bağlantısı varsa bu seçenek şarj süresini önemli ölçüde kısaltır. 3–4 saatte tam şarj sağlar.
+- Tek fazlı, 7,4 kW: En yaygın ve pratik seçenek
+- Üç fazlı, 11 kW: Günlük uzun mesafe sürücüleri için
+- 22 kW: Aracın desteklemesi şart, yoksa avantajsız
+- IP54+: Dış mekân kurulumunda vazgeçilmez
+- OCPP desteği: Uzun vadeli yatırım güvencesi
 
-### 22 kW (Üç Fazlı, Hızlı)
-Aracınızın OBC'si 22 kW'ı destekliyorsa en hızlı ev şarj deneyimini sunar. Ancak araç desteklemiyorsa fark edilmez.
-
-## Ev Elektrik Altyapısı Kontrolü
-
-Şarj istasyonu kurmadan önce şu soruları sormalısınız:
-
-1. **Sigorta kapasitesi yeterli mi?** 7,4 kW için 32A ayrı bir hat gereklidir.
-2. **Tek mi, üç fazlı mı?** Çoğu konut tek fazlıdır.
-3. **Kablo mesafesi nedir?** Elektrik panosundan şarj noktasına uzaklık maliyet etkiler.
-4. **Topraklama var mı?** Güvenli şarj için zorunludur.
-
-## Hangi Özelliklere Bakılmalı?
-
-- **Akıllı şarj:** Gece tarifesinde otomatik şarj başlatma
-- **WiFi / uygulama:** Uzaktan kontrol ve şarj takibi
-- **Kablo veya soket:** Kablolu modeller daha pratiktir
-- **IP derecesi:** Dış mekan için IP54 ve üzeri tercih edin
-- **OCPP desteği:** Gelecekte akıllı ev sistemine entegrasyon
-
-## Özet
-
-Eviniz için en doğru seçim genellikle **7,4 kW AC şarj istasyonu**dur. Yeterli şarj hızı sunar, kurulumu basittir ve maliyeti makuldür. Üç fazlı elektriğiniz varsa ve günlük çok uzun mesafe sürüyorsanız 11 kW'a yükselmeyi düşünebilirsiniz.
+Sonuç olarak çoğu kullanıcı için 7,4 kW AC şarj istasyonu en dengeli tercih olmaya devam ediyor: makul maliyet, basit kurulum ve günlük kullanım için fazlasıyla yeterli hız.
     `,
   },
   'gunes-paneli-verimlilik': {
@@ -84,66 +56,34 @@ Eviniz için en doğru seçim genellikle **7,4 kW AC şarj istasyonu**dur. Yeter
     date: '5 Nisan 2025',
     desc: 'Panel gücü, yıllık üretim tahmini ve yatırım geri dönüş süresi. Monokristal ve polikristal panel farkları.',
     content: `
-## Güneş Paneli Verimi: Bilmeniz Gereken Her Şey
+Güneş paneli yatırımı yapmadan önce "bu sistem gerçekten ne kadar üretir, ne zaman kendini amorti eder?" sorusuna net bir yanıt almak gerekiyor. Doğru hesaplama hem fazla kapasiteye para harcamanızı hem de yetersiz sisteme razı olmanızı önler.
 
-Güneş paneli satın almadan önce "bu panel ne kadar elektrik üretir?" sorusunun cevabını bilmek, doğru yatırım yapmanızı sağlar. Bu yazıda verim hesaplamalarını, panel türlerini ve geri dönüş süresini ele alıyoruz.
+**Verim değerleri ne anlama geliyor?**
 
-## Panel Verimi Nedir?
+Panel kataloglarında gördüğünüz verim yüzdesi, standart test koşullarında ölçülür: 1000 W/m² güneş ışınımı, 25°C ortam sıcaklığı. Günümüz monokristal panelleri %19–23 verim sunarken bifacial (çift taraflı) modeller bu sınırı %25'e kadar zorlayabiliyor. Bu rakam ne kadar yükseğe çıkarsa, aynı çatı alanından o kadar fazla elektrik üretebilirsiniz.
 
-Güneş paneli verimi, güneş ışığının kaçta kaçının elektriğe dönüştürüldüğünü gösterir. Standart test koşullarında (STC: 1000 W/m², 25°C) ölçülür.
+**Yıllık üretim hesabı**
 
-- **Monokristal panel:** %19 – %23 verim
-- **Polikristal panel:** %15 – %18 verim
-- **Çift taraflı (bifacial):** %20 – %25 verim
-
-## Yıllık Üretim Nasıl Hesaplanır?
-
-Basit formül şudur:
-
-**Yıllık Üretim (kWh) = Panel Gücü (kWp) × Zirve Güneş Saati × 365 × Verim Katsayısı**
-
-Türkiye'de bölgeye göre günlük zirve güneş saati:
-- İç Anadolu: 4,5 – 5 saat
-- Akdeniz / Ege: 5,5 – 6,5 saat
-- Karadeniz: 3,5 – 4 saat
-
-**Örnek:** 10 kWp sistem, Ankara'da:
-10 × 4,8 × 365 × 0,85 = **14.892 kWh/yıl**
-
-Ortalama bir Türk hanesi yılda 3.000 – 5.000 kWh tüketir. Bu sistem bir aile için fazlasıyla yeterlidir.
-
-## Monokristal mi, Polikristal mi?
+Türkiye güneş enerjisi açısından son derece avantajlı bir konumda. Günlük zirve güneş saati Karadeniz kıyılarında 3,5–4 saat iken Akdeniz ve Ege bölgelerinde 5,5–6,5 saate çıkıyor. Hesap şu formüle dayanıyor: Panel Gücü (kWp) × Günlük Güneş Saati × 365 × 0,85 sistem verimi = Yıllık Üretim (kWh). Ankara'da 10 kWp'lik bir sistem yıllık yaklaşık 15.000 kWh üretiyor; bu, üç haneli bir apartmanın toplam tüketimini karşılamaya yeterli.
 
 | Özellik | Monokristal | Polikristal |
 |---------|-------------|-------------|
 | Verim | %19–23 | %15–18 |
-| Sıcaklık performansı | İyi | Orta |
-| Fiyat | Yüksek | Düşük |
-| Görünüm | Siyah/koyu | Mavi/açık |
+| Sıcaklık dayanımı | İyi | Orta |
+| Çatı alanı verimliliği | Yüksek | Orta |
 | Ömür | 25–30 yıl | 20–25 yıl |
 
-Çatı alanınız kısıtlıysa monokristal tercih edin. Geniş alanınız varsa polikristal daha ekonomik olabilir.
+Çatı alanınız kısıtlıysa monokristal açık ara öne çıkıyor. Geniş arazilerde polikristal başlangıç maliyetini düşürüyor; ancak uzun vadede monokristalın daha iyi sıcaklık katsayısı ve ömrü hesabı değiştiriyor.
 
-## Verimi Etkileyen Faktörler
+**Verimi düşüren faktörler ve önlemleri**
 
-1. **Eğim açısı:** Türkiye için 30–35° optimaldır
-2. **Yön:** Güneye bakan çatılar maksimum verim sağlar
-3. **Gölgelenme:** Tek bir hücre bile gölgelenirse tüm string etkilenir
-4. **Sıcaklık:** Her 1°C artış verimi ~%0,4 düşürür
-5. **Kirlilik:** Düzenli temizlik %5–10 verim artışı sağlar
+Türkiye için ideal panel eğimi 30–35° ve güneye yönelim temel koşullar. Gölgelenme en kritik düşman: tek bir hücrenin bile gölge alması tüm paneli etkiliyor; bu nedenle baca, komşu bina ve ağaç mesafesi kurulum öncesinde hassasiyetle değerlendirilmeli. Sıcaklık her 1°C artışta verimi yaklaşık %0,4 oranında düşürüyor — havalandırmalı montaj bu kaybı minimize ediyor. Yılda bir iki kez yapılan panel temizliği ise üretimi %5–10 artırabiliyor.
 
-## Yatırım Geri Dönüş Süresi
+**Yatırımın geri dönüş hesabı**
 
-Türkiye'de ortalama değerler:
-- 10 kWp sistem kurulum maliyeti: 180.000 – 250.000 TL
-- Yıllık elektrik tasarrufu: 30.000 – 50.000 TL
-- Geri dönüş süresi: **4 – 7 yıl**
+2025 itibarıyla 10 kWp'lik bir sistem 180.000–250.000 TL aralığında kuruluyor. Yıllık 35.000–50.000 TL elektrik tasarrufu ile geri dönüş süresi 4–7 yıl arasında gerçekleşiyor. Panelin 25–30 yıllık ekonomik ömrü düşünüldüğünde geri kalan 18–25 yıl tamamen net kâr. Enflasyon ortamında elektrik fiyatlarının artış eğilimi bu hesabı daha da lehte etkiliyor.
 
-Panel ömrü 25–30 yıl olduğu için yatırımın geri kalanı net kârdır.
-
-## Özet
-
-Doğru hesaplama için tüketiminizi, çatı alanınızı ve bölgenizdeki güneş saatini baz alın. Monokristal paneller küçük çatılar için avantajlıdır; uzun vadede her iki tip de karlı bir yatırımdır.
+Sonuç olarak güneş paneli yatırımını doğru şekillendirmek için önce tüketiminizi, ardından çatı alanınızı ve bölgenizdeki güneş saatini değerlendirin. Gerisi rakamların kendiliğinden doğrulayacağı bir süreç.
     `,
   },
   'lityum-vs-kursum-asit': {
@@ -154,73 +94,34 @@ Doğru hesaplama için tüketiminizi, çatı alanınızı ve bölgenizdeki güne
     date: '28 Mart 2025',
     desc: 'Fiyat, ömür, derinlik deşarj ve kullanım senaryolarına göre lityum LiFePO4 ile kurşun asit akü karşılaştırması.',
     content: `
-## Lityum mu Kurşun Asit mi? Hangisi Sizin İçin Doğru?
+Enerji depolama sistemi kurarken akü seçimi çoğu zaman en kritik —ve en çok ertelenen— karar oluyor. Rafta iki seçenek duruyor: uygun başlangıç fiyatıyla cazip gelen kurşun asit ve ilk bakışta pahalı görünse de uzun vadede hesabı değiştiren lityum LiFePO4. Hangisi gerçekten daha iyi bir yatırım?
 
-Enerji depolama sistemi kuracaklar için en kritik karar akü seçimidir. Bu rehberde lityum LiFePO4 ve kurşun asit akülerini fiyat, ömür, performans ve kullanım senaryoları açısından karşılaştırıyoruz.
+**Kullanılabilir kapasite: göründüğünden farklı bir hikâye**
 
-## Temel Farklara Genel Bakış
+Katalog değerleri yanıltıcı olabiliyor. 100 Ah'lik kurşun asit akü, maksimum %50 deşarj sınırıyla yalnızca 50 Ah kullanılabilir kapasite sunuyor. Bunu geçtiğinizde ömrü hızla kısalıyor. Aynı kapasitedeki LiFePO4'te bu oran %80–90'a çıkıyor. Pratik sonuç: aynı Ah değerinde lityum akü, gerçek kullanımda kurşun aside göre yaklaşık 1,7 kat daha fazla enerji sağlıyor. Satın almadan önce Ah değerine değil, kullanılabilir enerji miktarına bakın.
 
 | Özellik | Lityum LiFePO4 | Kurşun Asit (AGM/GEL) |
 |---------|----------------|----------------------|
-| Enerji yoğunluğu | Yüksek | Düşük |
-| Ağırlık | Hafif | Ağır |
-| Derinlik deşarj | %80–90 | %50 |
-| Şarj hızı | Hızlı (1C) | Yavaş (0,2C) |
-| Ömür (döngü) | 3.000–6.000 | 500–1.000 |
-| Bakım | Gerektirmez | Periyodik bakım |
-| Fiyat (kWh başına) | Yüksek | Düşük |
-| Güvenlik | Çok güvenli | Orta |
+| Kullanılabilir kapasite | %80–90 | %50 |
+| Şarj döngüsü ömrü | 3.000–6.000 | 500–1.000 |
+| Ağırlık (100 Ah, 12V) | ~12 kg | ~25 kg |
+| Şarj hızı | Yüksek (1C) | Düşük (0,2C) |
+| Bakım gerekliliği | Yok | Periyodik |
+| Güvenlik | Çok yüksek | Orta |
 
-## Derinlik Deşarj: Kullanılabilir Kapasite Farkı
+**10 yıllık maliyet gerçeği**
 
-Bu, iki teknoloji arasındaki en kritik farktır.
+5 kWh enerji depolama hedefiyle 10 yıllık kullanımı hesapladığınızda tablo netleşiyor. Kurşun asit için ilk kurulum daha ucuz; ancak 10 yılda 2–3 kez değişim gerekiyor ve toplam maliyet 40.000–50.000 TL'ye ulaşıyor. LiFePO4 için ilk maliyet daha yüksek; ancak 6.000 döngü ömrüyle 10 yıl boyunca hiç değişim gerekmiyor ve toplam maliyet kurşun asite benzer, hatta altında kalabiliyor. Buna ağırlık, bakım ve performans avantajlarını eklediğinizde denge belirgin biçimde lityum lehine bozuluyor.
 
-**100 Ah kurşun asit akü:**
-- Maksimum kullanılabilir: 50 Ah (%50 DoD)
-- Gerçek kullanılabilir enerji: ~600 Wh (12V)
+**Güvenlik konusunda net bir fark var**
 
-**100 Ah lityum LiFePO4:**
-- Maksimum kullanılabilir: 80–90 Ah
-- Gerçek kullanılabilir enerji: ~1.050 Wh (12V)
+LiFePO4 kimyası lityum ailesinin en güvenli üyesi. Termal kaçış riski son derece düşük, ateş almıyor. Kurşun asit aküler ise şarj sırasında hidrojen gazı açığa çıkarabiliyor; kapalı alanlarda yeterli havalandırma sağlanmadan kullanılmamalı.
 
-Aynı Ah değerinde lityum akü, kurşun aside göre yaklaşık **1,7 kat** daha fazla kullanılabilir enerji sunar.
+**Hangi durumda hangisi?**
 
-## Ömür ve Toplam Maliyet Analizi
+Günlük şarj-deşarj döngüsü yapıyorsanız, ağırlık ve hacim önemliyse —karavan, tekne, off-grid kurulumlarda olduğu gibi— ya da bakımla ilgilenmek istemiyorsanız seçim LiFePO4 yönünde net. Bütçe gerçekten çok kısıtlı ve seyrek kullanım söz konusuysa —tatil evi yedek enerjisi gibi— kurşun asit makul bir geçiş çözümü olarak değerlendirilebilir; ancak bunun bir uzun vadeli tasarruf değil, zorunluluktan kaynaklanan bir tercih olduğu unutulmamalı.
 
-Kurşun asit akü daha ucuz görünse de uzun vadede lityum daha ekonomiktir.
-
-**Örnek: 5 kWh enerji depolama, 10 yıl kullanım**
-
-Kurşun asit:
-- İlk maliyet: ~15.000 TL
-- 10 yılda 2–3 değişim
-- Toplam maliyet: ~45.000 TL
-
-Lityum LiFePO4:
-- İlk maliyet: ~40.000 TL
-- 10 yılda 0 değişim (6.000 döngü)
-- Toplam maliyet: ~40.000 TL
-
-## Hangi Senaryoda Hangisi?
-
-**Lityum LiFePO4 tercih edin:**
-- Günlük şarj/deşarj döngüsü yapıyorsanız
-- Ağırlık ve hacim önemliyse (karavan, tekne, off-grid)
-- Uzun vadeli yatırım düşünüyorsanız
-- Bakım yapmak istemiyorsanız
-
-**Kurşun Asit tercih edin:**
-- Bütçe çok kısıtlıysa
-- Seyrek kullanım söz konusuysa (yedek enerji, tatil evi)
-- Kısa vadeli çözüm arıyorsanız
-
-## Güvenlik
-
-LiFePO4 kimyası, lityum teknolojileri arasında en güvenli olanıdır. Termal kaçış (thermal runaway) riski son derece düşüktür, ateş almaz. Kurşun asit aküler ise hidrojen gazı üretebilir; iyi havalandırma gerektirir.
-
-## Özet
-
-Uzun vadeli enerji depolama için **lityum LiFePO4** açık ara kazanandır. İlk maliyeti yüksek olsa da döngü ömrü, kullanılabilir kapasite ve bakımsız yapısıyla toplam sahip olma maliyetini düşürür.
+Enerji depolama sistemine yatırım yapanların büyük çoğunluğu için LiFePO4, hem performans hem de toplam sahip olma maliyeti açısından tartışmasız öne çıkıyor.
     `,
   },
   'hibrit-inverter-nedir': {
