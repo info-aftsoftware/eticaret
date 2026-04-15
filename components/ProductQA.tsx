@@ -22,48 +22,25 @@ export function ProductQA({
   productId: string
   productName: string
 }) {
-  const { user, isAuthenticated } = useAuthStore()
+  const { user, isAuthenticated, token } = useAuthStore()
   const [qas, setQas] = useState<QAItem[]>([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
   const [showForm, setShowForm] = useState(false)
   const [question, setQuestion] = useState('')
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
+  const [guestName, setGuestName] = useState('')
+  const [guestEmail, setGuestEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      setUserName(user.name || '')
-      setUserEmail(user.email || '')
-    }
-  }, [isAuthenticated, user])
-
   const loadQAs = useCallback(async () => {
     try {
-      const { collection, getDocs, query, where, orderBy } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-      const q = query(
-        collection(db, 'productQuestions'),
-        where('productId', '==', productId),
-        orderBy('createdAt', 'desc')
-      )
-      const snap = await getDocs(q)
-      const rows: QAItem[] = snap.docs.map((d) => {
-        const data = d.data()
-        const ts = data.createdAt as { seconds: number } | null
-        return {
-          id: d.id,
-          question: data.question || '',
-          answer: data.answer || null,
-          userName: data.userName || 'Anonim',
-          createdAt: ts?.seconds ? new Date(ts.seconds * 1000).toISOString() : '',
-        }
-      })
-      setQas(rows)
+      const res = await fetch(`/api/products/${productId}/questions`)
+      if (res.ok) {
+        const data = await res.json()
+        setQas(data.questions || [])
+      }
     } catch {
       // silent
     } finally {
@@ -90,28 +67,38 @@ export function ProductQA({
       setError('Lütfen sorunuzu yazın.')
       return
     }
-    if (!userName.trim() || !userEmail.trim()) {
+    if (!isAuthenticated && (!guestName.trim() || !guestEmail.trim())) {
       setError('Ad ve e-posta zorunludur.')
       return
     }
     setSubmitting(true)
     setError('')
     try {
-      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-      await addDoc(collection(db, 'productQuestions'), {
-        productId,
-        productName,
-        userId: user?.id || null,
-        userName: userName.trim(),
-        userEmail: userEmail.trim(),
-        question: question.trim(),
-        answer: null,
-        createdAt: serverTimestamp(),
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      if (token) headers['Authorization'] = `Bearer ${token}`
+
+      const res = await fetch(`/api/products/${productId}/questions`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          question: question.trim(),
+          productName,
+          // Guests provide their own; logged-in users send profile as fallback
+          guestName: isAuthenticated ? user?.name : guestName.trim() || undefined,
+          guestEmail: isAuthenticated ? user?.email : guestEmail.trim() || undefined,
+        }),
       })
+
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Soru gönderilemedi. Lütfen tekrar deneyin.')
+        return
+      }
+
       setSubmitted(true)
       setQuestion('')
+      setGuestName('')
+      setGuestEmail('')
       setShowForm(false)
       setLoading(true)
       await loadQAs()
@@ -160,23 +147,33 @@ export function ProductQA({
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6">
           <h3 className="font-semibold text-slate-900 mb-4 text-sm">Soru Sor</h3>
           <form onSubmit={handleSubmit} className="space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
-                placeholder="Adınız *"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-                className="rounded-xl border-slate-200 text-sm"
-                required
-              />
-              <Input
-                type="email"
-                placeholder="E-posta *"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-                className="rounded-xl border-slate-200 text-sm"
-                required
-              />
-            </div>
+            {/* Guest name/email - only shown when not logged in */}
+            {!isAuthenticated && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Input
+                  placeholder="Adınız *"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  className="rounded-xl border-slate-200 text-sm"
+                  required
+                />
+                <Input
+                  type="email"
+                  placeholder="E-posta *"
+                  value={guestEmail}
+                  onChange={(e) => setGuestEmail(e.target.value)}
+                  className="rounded-xl border-slate-200 text-sm"
+                  required
+                />
+              </div>
+            )}
+
+            {isAuthenticated && user?.name && (
+              <p className="text-xs text-slate-500">
+                Soru <span className="font-medium text-slate-700">{user.name}</span> adına gönderilecek.
+              </p>
+            )}
+
             <Textarea
               placeholder={`"${productName}" hakkında sorunuzu yazın...`}
               value={question}

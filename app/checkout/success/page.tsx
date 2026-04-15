@@ -3,6 +3,7 @@
 import { Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Home, Package, Banknote } from 'lucide-react'
@@ -41,7 +42,7 @@ function SuccessContent() {
                 <div className="bg-white rounded-lg border border-amber-200 p-3 space-y-1.5 text-sm">
                   <div className="flex justify-between gap-2">
                     <span className="text-amber-700 font-medium shrink-0">Banka:</span>
-                    <span className="text-amber-900 font-semibold">Ziraat Bankası</span>
+                    <span className="text-amber-900 font-semibold">Halkbank</span>
                   </div>
                   <div className="flex justify-between gap-2">
                     <span className="text-amber-700 font-medium shrink-0">Hesap Sahibi:</span>
@@ -49,7 +50,17 @@ function SuccessContent() {
                   </div>
                   <div className="flex flex-col gap-0.5">
                     <span className="text-amber-700 font-medium">IBAN:</span>
-                    <span className="text-amber-900 font-mono font-bold tracking-wide">TR00 0000 0000 0000 0000 0000 00</span>
+                    <span className="text-amber-900 font-mono font-bold tracking-wide">TR76 0001 2009 5910 0001 1722 00</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 pt-2 border-t border-amber-200">
+                    <span className="text-[11px] text-amber-600 font-medium">IBAN QR Kodu</span>
+                    <Image
+                      src="/images/iban-qr.jpg"
+                      alt="Halkbank IBAN QR Kodu"
+                      width={140}
+                      height={140}
+                      className="rounded-lg border border-amber-200"
+                    />
                   </div>
                   {orderId && (
                     <div className="flex justify-between gap-2 pt-1 border-t border-amber-200">

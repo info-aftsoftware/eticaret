@@ -1,15 +1,30 @@
 /**
  * Product Questions API
- * GET: Get questions for a product
- * POST: Create a new question
+ * GET: Get questions for a product (from Firestore)
+ * POST: Create a new question (guest or logged-in)
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+export const dynamic = 'force-dynamic'
 
-// Static export için gerekli - Next.js 14 nested route support
-export function generateStaticParams() {
-  return []
+import { NextRequest, NextResponse } from 'next/server'
+import { getAdminFirestore, getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
+
+async function getUserFromToken(request: NextRequest): Promise<{ userId: string; name?: string; email?: string } | null> {
+  const authHeader = request.headers.get('authorization')
+  const token = authHeader?.replace('Bearer ', '')
+  if (!token) return null
+  try {
+    const adminAuth = getAdminAuth()
+    if (!adminAuth) return null
+    const decoded = await adminAuth.verifyIdToken(token)
+    return {
+      userId: decoded.uid,
+      name: decoded.name as string | undefined,
+      email: decoded.email,
+    }
+  } catch {
+    return null
+  }
 }
 
 export async function GET(
@@ -17,22 +32,29 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const questions = await prisma.productQuestion.findMany({
-      where: {
-        productId: params.id,
-        status: { in: ['pending', 'answered'] },
-      },
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
+    if (!isFirebaseAdminConfigured()) {
+      return NextResponse.json({ questions: [] })
+    }
+    const db = getAdminFirestore()
+    if (!db) return NextResponse.json({ questions: [] })
+
+    const snap = await db
+      .collection('productQuestions')
+      .where('productId', '==', params.id)
+      .orderBy('createdAt', 'desc')
+      .limit(100)
+      .get()
+
+    const questions = snap.docs.map((d) => {
+      const data = d.data()
+      const ts = data.createdAt as { toDate?: () => Date } | null
+      return {
+        id: d.id,
+        question: data.question || '',
+        answer: data.answer || null,
+        userName: data.userName || 'Anonim',
+        createdAt: ts?.toDate ? ts.toDate().toISOString() : '',
+      }
     })
 
     return NextResponse.json({ questions })
@@ -48,25 +70,44 @@ export async function POST(
 ) {
   try {
     const body = await request.json()
-    const { question, userId } = body
+    const { question, productName, guestName, guestEmail } = body
 
-    if (!question) {
-      return NextResponse.json({ error: 'Question is required' }, { status: 400 })
+    if (!question?.trim()) {
+      return NextResponse.json({ error: 'Soru gereklidir' }, { status: 400 })
     }
 
-    const productQuestion = await prisma.productQuestion.create({
-      data: {
-        productId: params.id,
-        userId: userId || null,
-        question,
-        status: 'pending',
-      },
+    // Logged-in user from Firebase ID token
+    const authUser = await getUserFromToken(request)
+
+    const resolvedName = authUser?.name || guestName?.trim()
+    const resolvedEmail = authUser?.email || guestEmail?.trim()
+
+    if (!resolvedName || !resolvedEmail) {
+      return NextResponse.json({ error: 'Ad ve e-posta gereklidir' }, { status: 400 })
+    }
+
+    if (!isFirebaseAdminConfigured()) {
+      return NextResponse.json({ error: 'Sunucu yapılandırılmamış' }, { status: 503 })
+    }
+    const db = getAdminFirestore()
+    if (!db) {
+      return NextResponse.json({ error: 'Veritabanı bağlantısı kurulamadı' }, { status: 503 })
+    }
+
+    const docRef = await db.collection('productQuestions').add({
+      productId: params.id,
+      productName: productName || null,
+      userId: authUser?.userId || null,
+      userName: resolvedName,
+      userEmail: resolvedEmail,
+      question: question.trim(),
+      answer: null,
+      createdAt: new Date(),
     })
 
-    return NextResponse.json({ question: productQuestion }, { status: 201 })
+    return NextResponse.json({ id: docRef.id }, { status: 201 })
   } catch (error) {
     console.error('Question POST error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: 'Bir hata oluştu' }, { status: 500 })
   }
 }
-

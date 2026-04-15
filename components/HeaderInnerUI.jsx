@@ -421,28 +421,28 @@ export function HeaderInnerUI(props) {
       {/* Şerit 2: Ana menü */}
       <div className="relative hidden md:block bg-white border-b border-slate-100 shrink-0">
         <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 min-w-0 overflow-x-hidden">
-          <nav className="flex items-center gap-0.5 h-[52px]" aria-label="Ana menu">
-            {navLinks.filter(l => l.href === '/' || l.href === '/products').map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`${desktopNavItemClass(pathname === link.href)} shrink-0 ${pathname === link.href ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-              >
-                <span className={desktopNavLabelClass}>{t(link.labelKey)}</span>
-              </Link>
-            ))}
-            <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" aria-hidden />
+          <nav className="flex items-center gap-0.5 h-[52px] min-w-0 overflow-hidden" aria-label="Ana menu">
+            <Link
+              href="/"
+              className={`${desktopNavItemClass(pathname === '/')} ${pathname === '/' ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+            >
+              <span className={desktopNavLabelClass}>Ana Sayfa</span>
+            </Link>
+            <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
             {navGroups.map((g) => navDropdown(g.labelKey, g.categories, g.href, g.id))}
-            <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" aria-hidden />
-            {navLinks.filter(l => l.href === '/contact').map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`${desktopNavItemClass(pathname === link.href)} shrink-0 ${pathname === link.href ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-              >
-                <span className={desktopNavLabelClass}>{t(link.labelKey)}</span>
-              </Link>
-            ))}
+            <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
+            <Link
+              href="/blog"
+              className={`${desktopNavItemClass(pathname === '/blog' || pathname?.startsWith('/blog/'))} ${pathname === '/blog' || pathname?.startsWith('/blog/') ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+            >
+              <span className={desktopNavLabelClass}>Blog</span>
+            </Link>
+            <Link
+              href="/contact"
+              className={`${desktopNavItemClass(pathname === '/contact')} ${pathname === '/contact' ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+            >
+              <span className={desktopNavLabelClass}>İletişim</span>
+            </Link>
           </nav>
         </div>
       </div>

@@ -455,7 +455,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     {outOfStock ? tCart('outOfStock') : tCart('addToCart')}
                   </Button>
                 ) : (
-                  <div className="flex-1 flex items-center h-12 rounded-xl border-2 border-brand bg-brand/5 overflow-hidden">
+                  <div className="flex-1 flex items-center h-[52px] rounded-xl border-2 border-brand bg-brand/5 overflow-hidden">
                     <button
                       type="button"
                       onClick={() => {

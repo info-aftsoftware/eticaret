@@ -38,43 +38,26 @@ function StarRow({
 }
 
 export function ProductReviews({ productId }: { productId: string }) {
-  const { user, isAuthenticated } = useAuthStore()
+  const { user, isAuthenticated, token } = useAuthStore()
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [rating, setRating] = useState(5)
   const [hoverRating, setHoverRating] = useState(0)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
+  const [guestName, setGuestName] = useState('')
+  const [guestEmail, setGuestEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
 
   const loadReviews = useCallback(async () => {
     try {
-      const { collection, getDocs, query, where, orderBy } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-      const q = query(
-        collection(db, 'productReviews'),
-        where('productId', '==', productId),
-        where('status', '==', 'approved'),
-        orderBy('createdAt', 'desc')
-      )
-      const snap = await getDocs(q)
-      const rows: Review[] = snap.docs.map((d) => {
-        const data = d.data()
-        const ts = data.createdAt as { seconds: number } | null
-        return {
-          id: d.id,
-          userId: data.userId || '',
-          userName: data.userName || 'Anonim',
-          rating: data.rating || 5,
-          title: data.title || '',
-          comment: data.comment || '',
-          createdAt: ts?.seconds ? new Date(ts.seconds * 1000).toISOString() : '',
-        }
-      })
-      setReviews(rows)
+      const res = await fetch(`/api/products/${productId}/reviews`)
+      if (res.ok) {
+        const data = await res.json()
+        setReviews(data.reviews || [])
+      }
     } catch {
       // silent
     } finally {
@@ -100,26 +83,41 @@ export function ProductReviews({ productId }: { productId: string }) {
       setError('Lütfen bir yorum yazın.')
       return
     }
+    if (!isAuthenticated && (!guestName.trim() || !guestEmail.trim())) {
+      setError('Ad ve e-posta zorunludur.')
+      return
+    }
     setSubmitting(true)
     setError('')
     try {
-      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-      await addDoc(collection(db, 'productReviews'), {
-        productId,
-        userId: user?.id || '',
-        userName: user?.name || 'Kullanıcı',
-        rating,
-        title: title.trim() || null,
-        comment: comment.trim(),
-        status: 'approved',
-        createdAt: serverTimestamp(),
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      if (token) headers['Authorization'] = `Bearer ${token}`
+
+      const res = await fetch(`/api/products/${productId}/reviews`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          rating,
+          title: title.trim() || undefined,
+          comment: comment.trim(),
+          // Guests provide their own; logged-in users send profile as fallback
+          guestName: isAuthenticated ? user?.name : guestName.trim() || undefined,
+          guestEmail: isAuthenticated ? user?.email : guestEmail.trim() || undefined,
+        }),
       })
+
+      const data = await res.json()
+      if (!res.ok) {
+        setError(data.error || 'Yorum gönderilemedi. Lütfen tekrar deneyin.')
+        return
+      }
+
       setSubmitted(true)
       setComment('')
       setTitle('')
       setRating(5)
+      setGuestName('')
+      setGuestEmail('')
       setLoading(true)
       await loadReviews()
     } catch {
@@ -128,6 +126,106 @@ export function ProductReviews({ productId }: { productId: string }) {
       setSubmitting(false)
     }
   }
+
+  const ReviewForm = (
+    <>
+      {submitted ? (
+        <div className="text-center py-2">
+          <p className="text-sm font-semibold text-green-700">
+            ✓ Değerlendirmeniz alındı, onaylandıktan sonra yayımlanacak. Teşekkürler!
+          </p>
+          <button
+            onClick={() => setSubmitted(false)}
+            className="text-xs text-brand hover:underline mt-1"
+          >
+            Tekrar değerlendir
+          </button>
+        </div>
+      ) : (
+        <>
+          <h3 className="font-semibold text-slate-900 mb-4 text-sm">Değerlendirme Yaz</h3>
+          <form onSubmit={handleSubmit} className="space-y-3">
+            {/* Yıldız seçici */}
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onMouseEnter={() => setHoverRating(s)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  onClick={() => setRating(s)}
+                  className="transition-transform hover:scale-110 focus:outline-none"
+                >
+                  <Star
+                    className={`w-8 h-8 transition-colors ${
+                      s <= (hoverRating || rating)
+                        ? 'fill-amber-400 text-amber-400'
+                        : 'text-slate-200 hover:text-amber-300'
+                    }`}
+                  />
+                </button>
+              ))}
+              <span className="ml-2 text-sm text-slate-500">
+                {['', 'Berbat', 'Kötü', 'Orta', 'İyi', 'Mükemmel'][hoverRating || rating]}
+              </span>
+            </div>
+
+            {/* Guest name/email - only shown when not logged in */}
+            {!isAuthenticated && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Input
+                  placeholder="Adınız *"
+                  value={guestName}
+                  onChange={(e) => setGuestName(e.target.value)}
+                  className="rounded-xl border-slate-200 text-sm"
+                  required
+                />
+                <Input
+                  type="email"
+                  placeholder="E-posta *"
+                  value={guestEmail}
+                  onChange={(e) => setGuestEmail(e.target.value)}
+                  className="rounded-xl border-slate-200 text-sm"
+                  required
+                />
+              </div>
+            )}
+
+            {isAuthenticated && user?.name && (
+              <p className="text-xs text-slate-500">
+                Değerlendirme <span className="font-medium text-slate-700">{user.name}</span> olarak gönderilecek.
+              </p>
+            )}
+
+            <Input
+              placeholder="Başlık (opsiyonel)"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="rounded-xl border-slate-200 text-sm"
+            />
+            <Textarea
+              placeholder="Ürün hakkında deneyiminizi paylaşın..."
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              rows={3}
+              className="rounded-xl border-slate-200 text-sm resize-none"
+              required
+            />
+            {error && <p className="text-xs text-red-500">{error}</p>}
+            <Button
+              type="submit"
+              disabled={submitting}
+              size="sm"
+              className="rounded-xl"
+            >
+              <Send className="w-3.5 h-3.5 mr-1.5" />
+              {submitting ? 'Gönderiliyor...' : 'Değerlendirmeyi Gönder'}
+            </Button>
+          </form>
+        </>
+      )}
+    </>
+  )
 
   return (
     <div className="mt-10 pt-8 border-t border-slate-200">
@@ -203,86 +301,10 @@ export function ProductReviews({ productId }: { productId: string }) {
         </div>
       )}
 
-      {/* Form */}
-      {isAuthenticated ? (
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
-          {submitted ? (
-            <div className="text-center py-2">
-              <p className="text-sm font-semibold text-green-700">✓ Değerlendirmeniz alındı, teşekkürler!</p>
-              <button
-                onClick={() => setSubmitted(false)}
-                className="text-xs text-brand hover:underline mt-1"
-              >
-                Tekrar değerlendir
-              </button>
-            </div>
-          ) : (
-            <>
-              <h3 className="font-semibold text-slate-900 mb-4 text-sm">Değerlendirme Yaz</h3>
-              <form onSubmit={handleSubmit} className="space-y-3">
-                {/* Yıldız seçici */}
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <button
-                      key={s}
-                      type="button"
-                      onMouseEnter={() => setHoverRating(s)}
-                      onMouseLeave={() => setHoverRating(0)}
-                      onClick={() => setRating(s)}
-                      className="transition-transform hover:scale-110 focus:outline-none"
-                    >
-                      <Star
-                        className={`w-8 h-8 transition-colors ${
-                          s <= (hoverRating || rating)
-                            ? 'fill-amber-400 text-amber-400'
-                            : 'text-slate-200 hover:text-amber-300'
-                        }`}
-                      />
-                    </button>
-                  ))}
-                  <span className="ml-2 text-sm text-slate-500">
-                    {['', 'Berbat', 'Kötü', 'Orta', 'İyi', 'Mükemmel'][hoverRating || rating]}
-                  </span>
-                </div>
-                <Input
-                  placeholder="Başlık (opsiyonel)"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="rounded-xl border-slate-200 text-sm"
-                />
-                <Textarea
-                  placeholder="Ürün hakkında deneyiminizi paylaşın..."
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  rows={3}
-                  className="rounded-xl border-slate-200 text-sm resize-none"
-                  required
-                />
-                {error && <p className="text-xs text-red-500">{error}</p>}
-                <Button
-                  type="submit"
-                  disabled={submitting}
-                  size="sm"
-                  className="rounded-xl"
-                >
-                  <Send className="w-3.5 h-3.5 mr-1.5" />
-                  {submitting ? 'Gönderiliyor...' : 'Değerlendirmeyi Gönder'}
-                </Button>
-              </form>
-            </>
-          )}
-        </div>
-      ) : (
-        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-4 text-center">
-          <p className="text-sm text-slate-600">
-            Değerlendirme yazmak için{' '}
-            <a href="/login" className="text-brand font-semibold hover:underline">
-              giriş yapın
-            </a>
-            .
-          </p>
-        </div>
-      )}
+      {/* Form — always visible, guest or logged-in */}
+      <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+        {ReviewForm}
+      </div>
     </div>
   )
 }

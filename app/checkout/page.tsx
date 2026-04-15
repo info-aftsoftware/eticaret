@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useAuthStore } from '@/lib/store/useAuthStore'
@@ -58,6 +59,7 @@ export default function CheckoutPage() {
   
   const isFromCart = cartItems.length > 0
 
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: user?.name || '',
     email: user?.email || '',
@@ -75,7 +77,11 @@ export default function CheckoutPage() {
     notes: '',
     createAccount: false,
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    useDifferentBillingAddress: false,
+    billingAddressLine: '',
+    billingCity: '',
+    billingDistrict: '',
   })
 
   const [savedAddresses, setSavedAddresses] = useState<any[]>([])
@@ -177,6 +183,9 @@ export default function CheckoutPage() {
           billingName: formData.billingType === 'company' ? formData.companyName : formData.name,
           taxId: formData.taxId,
           taxOffice: formData.taxOffice,
+          billingAddress: formData.useDifferentBillingAddress ? formData.billingAddressLine : formData.addressLine,
+          billingCity: formData.useDifferentBillingAddress ? formData.billingCity : formData.city,
+          billingDistrict: formData.useDifferentBillingAddress ? formData.billingDistrict : formData.district,
         },
         items: orderItems,
         pricing: { subtotal, tax, shipping, total },
@@ -234,6 +243,7 @@ export default function CheckoutPage() {
     }
 
     try {
+      setIsSubmitting(true)
       if (paymentMethod === 'card') {
         const data = await createOrderWithApi({
           paymentMethod: 'pending',
@@ -267,6 +277,8 @@ export default function CheckoutPage() {
       console.error('Order creation error:', error)
       setCheckoutErrors(prev => ({ ...prev, general: 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.' }))
       scrollToTop()
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -395,8 +407,14 @@ export default function CheckoutPage() {
                       {cartItems.map((item) => (
                         <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b last:border-0">
                           <div className="flex items-center gap-4 flex-1">
-                            <div className="w-16 h-16 bg-muted rounded-xl flex items-center justify-center flex-shrink-0">
-                              <Package className="w-8 h-8 text-ink-muted" />
+                            <div className="w-16 h-16 bg-muted rounded-xl overflow-hidden flex-shrink-0 relative">
+                              {item.image ? (
+                                <Image src={item.image} alt={item.name} fill className="object-cover" sizes="64px" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <Package className="w-8 h-8 text-ink-muted" />
+                                </div>
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="font-semibold text-ink text-sm sm:text-base">{item.name}</h3>
@@ -569,6 +587,59 @@ export default function CheckoutPage() {
                     {checkoutErrors.addressLine && <p className="text-sm text-destructive">{checkoutErrors.addressLine}</p>}
                   </div>
 
+                  {/* Billing address toggle */}
+                  <div className="flex items-center gap-2 mt-4">
+                    <input
+                      type="checkbox"
+                      id="diffBilling"
+                      checked={formData.useDifferentBillingAddress || false}
+                      onChange={e => setFormData(prev => ({ ...prev, useDifferentBillingAddress: e.target.checked }))}
+                      className="w-4 h-4 rounded border-gray-300 text-brand"
+                    />
+                    <label htmlFor="diffBilling" className="text-sm text-ink-muted cursor-pointer">
+                      Fatura adresi teslimat adresinden farklı
+                    </label>
+                  </div>
+
+                  {formData.useDifferentBillingAddress && (
+                    <div className="mt-4 space-y-3 p-4 rounded-xl border border-palette bg-surface/50">
+                      <p className="text-sm font-semibold text-ink">Fatura Adresi</p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <Label htmlFor="billingCity">Şehir</Label>
+                          <Input
+                            id="billingCity"
+                            name="billingCity"
+                            value={formData.billingCity}
+                            onChange={handleInputChange}
+                            className="rounded-xl"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="billingDistrict">İlçe</Label>
+                          <Input
+                            id="billingDistrict"
+                            name="billingDistrict"
+                            value={formData.billingDistrict}
+                            onChange={handleInputChange}
+                            className="rounded-xl"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="billingAddressLine">Fatura Adresi</Label>
+                        <Textarea
+                          id="billingAddressLine"
+                          name="billingAddressLine"
+                          value={formData.billingAddressLine}
+                          onChange={handleInputChange}
+                          rows={3}
+                          className="rounded-xl"
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Create Account Option - Only show if not authenticated */}
                   {!isAuthenticated && (
                     <div className="pt-4 border-t space-y-2">
@@ -677,6 +748,7 @@ export default function CheckoutPage() {
                       <label className={`flex items-center gap-3 p-3 min-h-[48px] rounded-xl border-2 cursor-pointer transition-colors touch-manipulation ${paymentMethod === 'havale' ? 'border-brand bg-brand-light' : 'border-palette hover:border-ink-muted/30'}`}>
                         <input type="radio" name="paymentMethod" checked={paymentMethod === 'havale'} onChange={() => setPaymentMethod('havale')} className="text-brand w-5 h-5" />
                         <span className="text-sm font-medium">Havale / EFT</span>
+                        <span className="ml-auto shrink-0 text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">%3 İndirim</span>
                       </label>
                       <label className={`flex items-center gap-3 p-3 min-h-[48px] rounded-xl border-2 cursor-pointer transition-colors touch-manipulation ${paymentMethod === 'card' ? 'border-brand bg-brand-light' : 'border-palette hover:border-ink-muted/30'}`}>
                         <input type="radio" name="paymentMethod" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="text-brand w-5 h-5" />
@@ -688,9 +760,12 @@ export default function CheckoutPage() {
                     )}
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full rounded-full bg-brand hover:bg-brand-hover font-semibold shadow-lg min-h-[48px] touch-manipulation">
-                    <CreditCard className="w-5 h-5 mr-2" />
-                    {'Ödemeye Geç'}
+                  <Button type="submit" disabled={isSubmitting} size="lg" className="w-full rounded-full bg-brand hover:bg-brand-hover font-semibold shadow-lg min-h-[48px] touch-manipulation">
+                    {isSubmitting ? (
+                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />İşleniyor...</>
+                    ) : (
+                      <><CreditCard className="w-5 h-5 mr-2" />Ödemeye Geç</>
+                    )}
                   </Button>
 
                   <Button

@@ -253,57 +253,54 @@ export default function HomePage() {
             <div className="order-2 lg:order-1">
 
               {/* Rozet */}
-              <div className="inline-flex items-center gap-2 bg-brand/8 border border-brand/15 rounded-full px-3.5 py-1.5 mb-10">
+              <div className="inline-flex items-center gap-2 bg-brand/8 border border-brand/15 rounded-full px-3.5 py-1.5 mb-8">
                 <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse shrink-0" />
                 <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-brand">1.500+ Ürün Stokta</span>
               </div>
 
               {/* Başlık */}
-              <h1 className="text-[clamp(2rem,3.4vw,3.2rem)] font-black text-slate-900 tracking-[-0.025em] leading-[1.08] mb-6 max-w-[500px]">
-                Enerjini Kendin<br />
-                Üret, <span className="text-brand">Depola</span><br />
-                ve Yönet.
+              <h1 className="text-[clamp(2rem,3.4vw,3.2rem)] font-black text-slate-900 tracking-[-0.025em] leading-[1.08] mb-5 max-w-[480px]">
+                Enerji Ürünleri,<br />
+                <span className="text-brand">Tek Adreste.</span>
               </h1>
 
-              <p className="text-sm text-slate-500 mb-10 leading-relaxed max-w-[390px]">
-                Güneş paneli, inverter, batarya ve EV şarj ürünleri — güvenilir markalar, hızlı teslimat, tek sepet.
+              <p className="text-sm text-slate-500 mb-8 leading-relaxed max-w-[380px]">
+                EV şarj, güneş paneli, batarya ve inverter — stokta hazır, hızlı teslimat.
               </p>
 
-              {/* 3 CTA */}
-              <div className="flex flex-wrap gap-3 mb-12">
+              {/* CTA butonları */}
+              <div className="flex flex-wrap gap-3 mb-7">
                 <Button asChild className="bg-brand hover:bg-brand-hover text-white font-bold rounded-xl h-11 px-6 text-sm shadow-md shadow-brand/20">
-                  <Link href="/ges" className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 shrink-0" />
-                    Teklif Al
+                  <Link href="/products" className="flex items-center gap-2">
+                    <ShoppingBag className="w-4 h-4 shrink-0" />
+                    Ürünleri İncele
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl h-11 px-6 text-sm">
-                  <Link href="/products" className="flex items-center gap-2">
-                    <ShoppingBag className="w-4 h-4 shrink-0" />
-                    Ürünleri İncele
-                  </Link>
-                </Button>
-                <Button asChild variant="ghost" className="text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl h-11 px-5 text-sm">
-                  <Link href="/paketler" className="flex items-center gap-1.5">
-                    Hazır Paketler
-                    <ArrowRight className="w-3.5 h-3.5" />
+                  <Link href="/ges" className="flex items-center gap-2">
+                    <FileText className="w-4 h-4 shrink-0" />
+                    Teklif Al
                   </Link>
                 </Button>
               </div>
 
-              {/* Güven rozetleri */}
-              <div className="flex flex-wrap gap-x-5 gap-y-2.5 border-t border-slate-100 pt-7">
+              {/* Kategori hızlı erişim pilleri */}
+              <div className="flex flex-wrap gap-2">
                 {[
-                  { icon: Truck,          label: 'Ücretsiz Kargo' },
-                  { icon: Shield,         label: '2 Yıl Garanti' },
-                  { icon: Clock,          label: 'Hızlı Teslimat' },
-                  { icon: HeadphonesIcon, label: '7/24 Destek' },
-                ].map(({ icon: Icon, label }) => (
-                  <div key={label} className="flex items-center gap-1.5 text-slate-400">
-                    <Icon className="w-3.5 h-3.5 text-brand/60 shrink-0" />
-                    <span className="text-[12px] font-medium">{label}</span>
-                  </div>
+                  { label: 'EV Şarj', href: '/category/elektrikli-arac-sarj-urunleri', icon: Zap },
+                  { label: 'Güneş Paneli', href: '/category/gunes-enerjisi', icon: Sun },
+                  { label: 'Batarya', href: '/category/batarya-depolama', icon: Battery },
+                  { label: 'İnverter', href: '/category/inverterler', icon: Cpu },
+                ].map(({ label, href, icon: Icon }) => (
+                  <Link
+                    key={label}
+                    href={href}
+                    className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-brand/10 hover:text-brand border border-slate-200 hover:border-brand/30 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors"
+                  >
+                    <Icon className="w-3 h-3 shrink-0" />
+                    {label}
+                  </Link>
                 ))}
               </div>
             </div>
@@ -328,92 +325,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ─── 3. KULLANIM SENARYOLARI ─────────────────────────────────────── */}
-      <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in`} aria-labelledby="use-cases-heading">
-        <div className={containerClass}>
-          <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-            <div>
-              <span className={sectionOverlineClass}>Kullanım Senaryoları</span>
-              <h2 id="use-cases-heading" className={sectionTitleClass}>Hangi İhtiyaç İçin?</h2>
-              <p className={sectionDescClass}>Kullanım alanınıza özel hazırlanmış enerji çözümleri.</p>
-            </div>
-            <Link href="/paketler" className="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
-              Tüm Paketler <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </header>
-
-          {/* Üst satır: 3 büyük kart — orijinal PACKAGE_CATEGORIES yapısı */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            {PACKAGE_CATEGORIES.slice(0, 3).map((item) => (
-              <Link
-                key={item.slug}
-                href={`/paketler/${item.slug}`}
-                className="group relative block overflow-hidden rounded-2xl bg-slate-900 shadow-md hover:shadow-xl transition-all duration-500"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.imageAlt}
-                    fill
-                    className="object-cover opacity-85 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
-                    sizes="(max-width: 640px) 100vw, 33vw"
-                    style={{ objectPosition: item.objectPosition ?? 'center' }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-5">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Enerji Paketi</p>
-                    <h3 className="text-xl font-bold text-white leading-tight">{item.title}</h3>
-                    <p className="mt-1 text-sm text-white/60 line-clamp-1">{item.description}</p>
-                    <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-light group-hover:gap-2 transition-all">
-                      İncele <ArrowUpRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {/* Orta satır: 2 geniş kart */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-            {PACKAGE_CATEGORIES.slice(3).map((item) => (
-              <Link
-                key={item.slug}
-                href={`/paketler/${item.slug}`}
-                className="group relative block overflow-hidden rounded-2xl bg-slate-900 shadow-md hover:shadow-xl transition-all duration-500"
-              >
-                <div className="relative aspect-[16/7] overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.imageAlt}
-                    fill
-                    className="object-cover opacity-85 group-hover:opacity-70 group-hover:scale-105 transition-all duration-700"
-                    sizes="(max-width: 640px) 100vw, 50vw"
-                    style={{ objectPosition: item.objectPosition ?? 'center' }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between gap-4">
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-white/50 mb-1">Enerji Paketi</p>
-                      <h3 className="text-xl font-bold text-white leading-tight">{item.title}</h3>
-                      <p className="mt-1 text-sm text-white/60 line-clamp-1">{item.description}</p>
-                    </div>
-                    <span className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm text-white group-hover:bg-brand group-hover:border-brand transition-all duration-300">
-                      <ArrowUpRight className="w-4 h-4" />
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
       {/* ─── 4. POPÜLER ÜRÜNLER ──────────────────────────────────────────── */}
       <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in animate-section-in-delay-1`} aria-labelledby="popular-products-heading">
         <div className={containerClass}>
           <header className="mb-6 md:mb-8">
-            <span className={sectionOverlineClass}>En Çok Tercih Edilenler</span>
             <h2 id="popular-products-heading" className={sectionTitleClass}>
               Popüler Ürünler
             </h2>
@@ -500,7 +415,6 @@ export default function HomePage() {
         <div className={containerClass}>
           <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <span className={sectionOverlineClass}>Seçili Ürünler</span>
               <h2 id="featured-grid-heading" className={sectionTitleClass}>Öne Çıkan Ürünler</h2>
               <p className={sectionDescClass}>En çok tercih edilen ve en yüksek puanlı ürünler.</p>
             </div>
@@ -533,47 +447,84 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ─── 3. KULLANIM SENARYOLARI ─────────────────────────────────────── */}
+      <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in`} aria-labelledby="use-cases-heading">
+        <div className={containerClass}>
+          <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+            <div>
+              <span className={sectionOverlineClass}>Kullanım Senaryoları</span>
+              <h2 id="use-cases-heading" className={sectionTitleClass}>Hangi İhtiyaç İçin?</h2>
+              <p className={sectionDescClass}>Kullanım alanınıza özel hazırlanmış enerji çözümleri.</p>
+            </div>
+            <Link href="/paketler" className="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+              Tüm Paketler <ArrowUpRight className="w-4 h-4" />
+            </Link>
+          </header>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+            {PACKAGE_CATEGORIES.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/paketler/${item.slug}`}
+                className="group relative block rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 touch-manipulation"
+              >
+                <div className="aspect-[3/4] relative overflow-hidden bg-slate-100">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 640px) 50vw, 20vw"
+                    style={{ objectPosition: item.objectPosition ?? 'center center' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="text-white font-bold text-sm leading-tight">{item.shortTitle}</p>
+                    <p className="text-white/70 text-xs mt-0.5 line-clamp-2">{item.description}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ─── 7. KATEGORİLER ──────────────────────────────────────────────── */}
       <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in`} aria-labelledby="main-categories-heading">
         <div className={containerClass}>
           <header className="mb-5 sm:mb-8 md:mb-10">
-            <span className={sectionOverlineClass}>{t('categoryDetails')}</span>
             <h2 id="main-categories-heading" className={sectionTitleClass}>
               {t('categoriesTitle')}
             </h2>
             <p className={sectionDescClass}>{t('categoriesDesc')}</p>
           </header>
 
-          {/* 5 kategori — tek unified grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5 md:gap-6 min-w-0">
+          {/* 6 kategori — menü ile birebir eşleşiyor */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
             {[
-              { href: '/category/elektrikli-arac-sarj-urunleri', title: t('categoryCharge'), subtitle: t('categoryChargeDesc'), image: '/images/categories/sarj.png', objectPosition: 'center center' },
-              { href: '/category/batarya-depolama', title: t('categoryBattery'), subtitle: t('categoryBatteryDesc'), image: '/images/categories/batarya.png', objectPosition: 'center center' },
-              { href: '/category/gunes-enerjisi', title: t('categorySolar'), subtitle: t('categorySolarDesc'), image: '/images/categories/panel.png', objectPosition: 'center center' },
-              ...EXTRA_CATEGORY_ITEMS.map(i => ({ href: i.href, title: i.title, subtitle: i.subtitle, image: i.image, objectPosition: 'center center' })),
-            ].map((item, idx) => (
+              { href: '/category/elektrikli-arac-sarj-urunleri', title: 'EV Şarj',            image: '/images/categories/sarj.png' },
+              { href: '/category/batarya-depolama',              title: 'Batarya & Depolama', image: '/images/categories/batarya.png' },
+              { href: '/category/inverterler',                   title: 'İnverter',           image: '/images/products/deye-12kw-trifaze-hybrid-1.jpg' },
+              { href: '/category/gunes-enerjisi',                title: 'Güneş Enerjisi',     image: '/images/categories/panel.png' },
+              { href: '/category/isi-pompasi-hvac',              title: 'Isı Pompası',        image: '/images/hero/hero-3.png' },
+              { href: '/category/enerji-yonetimi',               title: 'Enerji Yönetimi',    image: '/images/hero/hero-4.png' },
+            ].map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`group relative block rounded-xl sm:rounded-2xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-slate-300 hover:-translate-y-0.5 transition-all duration-300 min-w-0 touch-manipulation${idx === 4 ? ' col-span-2 sm:col-span-1' : ''}`}
+                className="group relative block rounded-2xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 touch-manipulation"
               >
-                <div className="aspect-[4/3] sm:aspect-[3/2] relative overflow-hidden bg-slate-100">
+                <div className="aspect-square relative overflow-hidden bg-slate-100">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                    sizes="(max-width: 640px) 50vw, 33vw"
-                    style={{ objectPosition: item.objectPosition }}
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" aria-hidden />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />
                 </div>
-                <div className="p-3 sm:p-4 border-t border-slate-100">
-                  <h3 className="font-bold text-slate-900 text-sm sm:text-base mb-0.5 group-hover:text-brand transition-colors line-clamp-1">{item.title}</h3>
-                  <p className="text-slate-600 text-xs sm:text-sm line-clamp-2 mb-3">{item.subtitle}</p>
-                  <span className="inline-flex items-center rounded-lg sm:rounded-xl bg-brand text-white text-[10px] sm:text-xs font-bold px-3 py-2 sm:px-4 sm:py-2.5 transition-all duration-300 shadow-sm group-hover:opacity-90">
-                    {t('categoryIncele')}
-                  </span>
+                <div className="px-3 py-3 border-t border-slate-100 text-center">
+                  <h3 className="font-bold text-slate-800 text-sm group-hover:text-brand transition-colors leading-snug">{item.title}</h3>
                 </div>
               </Link>
             ))}
@@ -649,7 +600,6 @@ export default function HomePage() {
       <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in`} aria-labelledby="reference-projects-heading">
         <div className={containerClass}>
           <header className="mb-8 md:mb-10">
-            <span className={sectionOverlineClass}>Referans Projeler</span>
             <h2 id="reference-projects-heading" className={sectionTitleClass}>Tamamlanan Projelerden</h2>
             <p className={sectionDescClass}>Gerçek projeler, gerçek sonuçlar.</p>
           </header>
@@ -693,7 +643,6 @@ export default function HomePage() {
         <div className={containerClass}>
           <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div>
-              <span className={sectionOverlineClass}>Blog</span>
               <h2 id="blog-heading" className={sectionTitleClass}>Enerji Rehberi</h2>
               <p className={sectionDescClass}>Bilgilendirici yazılar, ürün karşılaştırmaları ve kurulum rehberleri.</p>
             </div>

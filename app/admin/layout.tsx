@@ -21,6 +21,8 @@ import {
   TrendingUp,
   Zap,
   ChevronRight,
+  Star,
+  MessageCircle,
 } from 'lucide-react'
 import Image from 'next/image'
 
@@ -43,6 +45,13 @@ const navSections: NavSection[] = [
       { href: '/admin/musteriler', label: 'Müşteriler', icon: Users },
       { href: '/admin/ges-teklifler', label: 'GES Teklif İstekleri', icon: FileText },
       { href: '/admin/iletisim', label: 'İletişim Formları', icon: MessageSquare },
+    ],
+  },
+  {
+    title: 'Müşteri',
+    items: [
+      { href: '/admin/yorumlar', label: 'Yorumlar', icon: Star },
+      { href: '/admin/sorular', label: 'Sorular', icon: MessageCircle },
     ],
   },
   {

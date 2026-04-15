@@ -76,7 +76,11 @@
       "Bash(del \"C:\\\\Users\\\\aslan\\\\Desktop\\\\eticaret - Kopya\\\\.git\\\\index.lock\")",
       "Bash(xargs cat:*)",
       "Bash(sort -t: -k1,1 -k2,2n)",
-      "Bash(node_modules/.bin/tsc --noEmit)"
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(python3 -c ':*)",
+      "Bash(copy \"C:\\\\Users\\\\aslan\\\\Desktop\\\\qr.jpg\" \"C:\\\\Users\\\\aslan\\\\Desktop\\\\eticaret - Kopya\\\\public\\\\images\\\\iban-qr.jpg\")",
+      "Bash(powershell.exe -Command \"Copy-Item 'C:\\\\Users\\\\aslan\\\\Desktop\\\\qr.jpg' 'C:\\\\Users\\\\aslan\\\\Desktop\\\\eticaret - Kopya\\\\public\\\\images\\\\iban-qr.jpg'\")",
+      "Bash(powershell.exe -Command \"Test-Path 'C:\\\\Users\\\\aslan\\\\Desktop\\\\eticaret - Kopya\\\\public\\\\images\\\\iban-qr.jpg'\")"
     ]
   }
 }

@@ -7,12 +7,6 @@ import {
   Mail,
   Phone,
   MapPin,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Youtube,
-  CreditCard,
   ShieldCheck,
   Send,
   Zap,
@@ -94,14 +88,6 @@ export function Footer() {
   const headingClass = 'text-white/60 font-semibold text-[11px] uppercase tracking-widest mb-4'
   const linkClass = 'text-slate-400 text-sm py-1.5 block hover:text-white transition-colors'
 
-  const socials = [
-    { Icon: Facebook, name: 'Facebook', href: 'https://facebook.com/voltekno' },
-    { Icon: Twitter, name: 'Twitter / X', href: 'https://x.com/voltekno' },
-    { Icon: Instagram, name: 'Instagram', href: 'https://instagram.com/voltekno' },
-    { Icon: Linkedin, name: 'LinkedIn', href: 'https://linkedin.com/company/voltekno' },
-    { Icon: Youtube, name: 'YouTube', href: 'https://youtube.com/@voltekno' },
-  ] as const
-
   return (
     <footer className="bg-slate-900 text-slate-400 pb-safe">
 
@@ -127,7 +113,7 @@ export function Footer() {
           {/* Kolon 1: Marka + iletişim (4 col) */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-5">
             {/* Logo — beyaz bg kutusunda net görünür */}
-            <div className="bg-white rounded-2xl px-5 py-3 inline-flex items-center">
+            <div className="bg-white rounded-2xl px-5 py-3 inline-flex items-center justify-center">
               <Logo size="lg" href="/" />
             </div>
 
@@ -153,39 +139,25 @@ export function Footer() {
                   <span>info@voltekno.com</span>
                 </a>
               </li>
-              <li className="flex items-start gap-3 text-slate-400">
-                <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
+              <li className="flex items-center gap-3 text-slate-400">
+                <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
                   <MapPin className="w-3.5 h-3.5 text-brand" aria-hidden />
                 </span>
                 <span className="text-sm leading-relaxed">{t('location')}</span>
               </li>
             </ul>
 
-            {/* Sosyal medya */}
-            <div className="flex gap-2 flex-wrap pt-1">
-              {socials.map(({ Icon, name, href }) => (
-                <a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={name}
-                  className="w-9 h-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:bg-brand hover:border-brand hover:text-white transition-all"
-                >
-                  <Icon className="w-4 h-4" aria-hidden />
-                </a>
-              ))}
-            </div>
-
-            {/* SSL / ödeme güveni */}
-            <div className="flex items-center gap-4 pt-1 border-t border-white/5">
-              <div className="flex items-center gap-2 text-xs text-slate-500">
-                <CreditCard className="w-3.5 h-3.5 shrink-0" aria-hidden />
-                {t('securePayment')}
-              </div>
-              <div className="flex items-center gap-2 text-xs text-slate-500">
-                <ShieldCheck className="w-3.5 h-3.5 shrink-0" aria-hidden />
-                {t('sslCert')}
+            {/* Ödeme logoları */}
+            <div className="pt-1 border-t border-white/5">
+              <p className="text-[10px] text-slate-600 uppercase tracking-widest font-semibold mb-2">Güvenli Ödeme</p>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-700 tracking-wide">VISA</span>
+                <span className="inline-flex items-center bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-700 tracking-wide">MASTERCARD</span>
+                <span className="inline-flex items-center bg-white border border-slate-200 rounded px-2 py-1 text-[11px] font-bold text-slate-700 tracking-wide">iyzico</span>
+                <span className="inline-flex items-center gap-1 bg-emerald-700 border border-emerald-600 rounded px-2 py-1 text-[11px] font-bold text-white tracking-wide">
+                  <ShieldCheck className="w-3 h-3" aria-hidden />
+                  SSL
+                </span>
               </div>
             </div>
           </div>
@@ -259,11 +231,11 @@ export function Footer() {
             <h3 className={headingClass}>Kurumsal</h3>
             <ul className="space-y-0">
               {[
+                { href: '/hakkimizda', label: 'Hakkımızda' },
                 { href: '/blog', label: 'Blog' },
                 { href: '/privacy', label: 'Gizlilik Politikası' },
                 { href: '/terms', label: 'Uzaktan Satış Sözleşmesi' },
                 { href: '/cookies', label: 'Çerez Politikası' },
-                { href: '/contact', label: 'Hakkımızda' },
               ].map((item) => (
                 <li key={item.href + item.label}>
                   <Link href={item.href} className={linkClass}>{item.label}</Link>
