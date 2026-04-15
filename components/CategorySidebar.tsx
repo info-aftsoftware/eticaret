@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import {
-  Menu,
   Search,
   ChevronDown,
   ChevronRight,
@@ -13,24 +12,24 @@ import {
   Battery,
   Sun,
   Cpu,
+  Thermometer,
+  BarChart2,
+  LayoutGrid,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { useCategoriesWithProducts } from './CategoriesWithProductsProvider'
 
-const GROUP_ICONS: Record<string, React.ElementType> = {
-  'elektrikli-arac-sarj-urunleri': Zap,
-  'batarya-depolama': Battery,
-  'inverterler': Cpu,
-  'gunes-enerjisi': Sun,
-  'isi-pompasi-hvac': Cpu,
+const GROUP_CONFIG: Record<string, { icon: React.ElementType; color: string; bg: string }> = {
+  'elektrikli-arac-sarj-urunleri': { icon: Zap,         color: 'text-blue-600',   bg: 'bg-blue-50' },
+  'batarya-depolama':              { icon: Battery,      color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  'inverterler':                   { icon: Cpu,          color: 'text-violet-600',  bg: 'bg-violet-50' },
+  'gunes-enerjisi':                { icon: Sun,          color: 'text-orange-500',  bg: 'bg-orange-50' },
+  'isi-pompasi-hvac':              { icon: Thermometer,  color: 'text-rose-500',    bg: 'bg-rose-50' },
+  'enerji-yonetimi':               { icon: BarChart2,    color: 'text-sky-600',     bg: 'bg-sky-50' },
 }
 
-/**
- * Sticky kategori sidebar – ana gruplar + açılabilir alt kategoriler + arama.
- * Header'daki dropdown yapısıyla senkronize.
- */
 export function CategorySidebar() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -41,7 +40,6 @@ export function CategorySidebar() {
   const categoryParam = searchParams.get('category')
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') ?? '')
 
-  /** Ürünü olan alt kategorilerle filtrelenmiş gruplar; boşsa tüm gruplar gösterilir. */
   const filteredGroups = useMemo(() => {
     if (!categoriesWithProducts || categoriesWithProducts.size === 0) return CATEGORY_GROUPS
     const filtered = CATEGORY_GROUPS.map((group) => ({
@@ -51,7 +49,6 @@ export function CategorySidebar() {
     return filtered.length > 0 ? filtered : CATEGORY_GROUPS
   }, [categoriesWithProducts])
 
-  /** Aktif grup ID'sini tespit et */
   const activeGroupId = useMemo(() => {
     const match = pathname.match(/^\/category\/([^/]+)/)
     if (match) return match[1]
@@ -64,7 +61,6 @@ export function CategorySidebar() {
     return null
   }, [pathname, categoryParam, filteredGroups])
 
-  /** Hangi gruplar açık */
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set())
 
   useEffect(() => {
@@ -85,132 +81,141 @@ export function CategorySidebar() {
   const isAllActive = !activeGroupId && pathname === '/products'
 
   return (
-    <aside
-      className="w-full lg:w-60 xl:w-64 shrink-0"
-      aria-label="Tüm kategoriler"
-    >
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden lg:shadow-none lg:border-0 lg:bg-transparent">
-        {/* Başlık – sadece desktop */}
-        <div className="hidden lg:flex items-center gap-2 pb-3 border-b border-slate-200">
-          <Menu className="w-5 h-5 text-slate-400 shrink-0" aria-hidden />
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
-            Tüm Kategoriler
-          </h2>
+    <aside className="w-full lg:w-60 xl:w-64 shrink-0" aria-label="Tüm kategoriler">
+
+      {/* Mobil arama */}
+      <form
+        className="flex gap-2 mb-4 lg:hidden"
+        onSubmit={(e) => {
+          e.preventDefault()
+          const params = new URLSearchParams()
+          if (searchQuery.trim()) params.set('q', searchQuery.trim())
+          router.push(`/products${params.toString() ? `?${params.toString()}` : ''}`)
+        }}
+      >
+        <Input
+          type="search"
+          placeholder="Ürün ara..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-1 h-10 rounded-lg border-slate-200 bg-slate-50 text-sm placeholder:text-slate-400"
+          autoComplete="off"
+        />
+        <Button
+          type="submit"
+          size="icon"
+          className="h-10 w-10 shrink-0 rounded-lg bg-brand hover:bg-brand-hover"
+          aria-label="Ara"
+        >
+          <Search className="w-4 h-4 text-white" />
+        </Button>
+      </form>
+
+      {/* Kategori paneli */}
+      <div className="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+
+        {/* Panel başlığı */}
+        <div className="px-4 py-3 border-b border-slate-100 flex items-center gap-2">
+          <LayoutGrid className="w-4 h-4 text-slate-400 shrink-0" />
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Kategoriler</span>
         </div>
 
-        {/* Arama – sadece mobilde (masaüstünde header’da arama var) */}
-        <form
-          className="flex gap-2 mt-4 lg:hidden"
-          onSubmit={(e) => {
-            e.preventDefault()
-            const params = new URLSearchParams()
-            if (searchQuery.trim()) params.set('q', searchQuery.trim())
-            router.push(`/products${params.toString() ? `?${params.toString()}` : ''}`)
-          }}
-        >
-          <Input
-            type="search"
-            placeholder="Ürün ara..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1 h-10 rounded-lg border-slate-200 bg-slate-50 text-sm placeholder:text-slate-400"
-            autoComplete="off"
-          />
-          <Button
-            type="submit"
-            size="icon"
-            className="h-10 w-10 shrink-0 rounded-lg bg-brand hover:bg-brand-hover"
-            aria-label="Ara"
-          >
-            <Search className="w-4 h-4 text-white" />
-          </Button>
-        </form>
+        <nav aria-label="Ürün kategorileri">
+          <ul className="py-1">
 
-        {/* Kategori listesi – arama ile arasında net boşluk */}
-        <nav
-          className="mt-4 lg:mt-4 rounded-xl lg:rounded-none border border-slate-200 lg:border-0 overflow-hidden bg-white lg:bg-transparent"
-          aria-label="Ürün kategorileri"
-        >
-          {/* Mobil başlık */}
-          <div className="lg:hidden bg-brand text-white px-4 py-3 flex items-center gap-2">
-            <Menu className="w-5 h-5 shrink-0" />
-            <span className="font-semibold text-sm uppercase tracking-wide">Kategoriler</span>
-          </div>
-
-          <ul className="p-2 lg:p-0 space-y-0.5">
             {/* Tümü */}
             <li>
               <Link
                 href="/products"
-                className={`flex items-center gap-2 px-3.5 py-2.5 min-h-[44px] rounded-lg text-sm font-medium transition-colors touch-manipulation ${isAllActive
-                    ? 'bg-brand text-white'
-                    : 'text-slate-700 hover:bg-slate-100'
-                  }`}
+                className={`flex items-center gap-3 px-4 py-2.5 min-h-[44px] text-sm font-semibold transition-colors touch-manipulation ${
+                  isAllActive
+                    ? 'bg-brand/8 text-brand border-r-2 border-brand'
+                    : 'text-slate-700 hover:bg-slate-50'
+                }`}
               >
-                <span>{tCommon('all')}</span>
+                <span
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
+                    isAllActive ? 'bg-brand/15' : 'bg-slate-100'
+                  }`}
+                >
+                  <LayoutGrid className={`w-3.5 h-3.5 ${isAllActive ? 'text-brand' : 'text-slate-400'}`} />
+                </span>
+                {tCommon('all')}
               </Link>
             </li>
+
+            {/* Ayırıcı */}
+            <li className="mx-4 my-1 border-t border-slate-100" aria-hidden />
 
             {/* Gruplar */}
             {filteredGroups.map((group) => {
               const isGroupActive = activeGroupId === group.id
               const isExpanded = expandedGroups.has(group.id)
-              const Icon = GROUP_ICONS[group.id] ?? Menu
+              const cfg = GROUP_CONFIG[group.id] ?? { icon: LayoutGrid, color: 'text-slate-500', bg: 'bg-slate-100' }
+              const Icon = cfg.icon
               const label = tHeader(group.labelKey)
 
               return (
                 <li key={group.id}>
-                  {/* Grup satırı: link (sol) + toggle butonu (sağ) */}
-                  <div
-                    className={`flex items-stretch rounded-lg overflow-hidden transition-colors ${isGroupActive ? 'bg-brand' : 'hover:bg-slate-100'
-                      }`}
-                  >
+                  {/* Grup satırı */}
+                  <div className="flex items-stretch">
                     <Link
                       href={`/category/${group.id}`}
-                      className={`flex-1 flex items-center gap-2.5 px-3.5 py-3 min-h-[44px] text-sm font-semibold min-w-0 transition-colors touch-manipulation ${isGroupActive ? 'text-white' : 'text-slate-800'
-                        }`}
+                      className={`flex-1 flex items-center gap-3 px-4 py-2.5 min-h-[44px] text-sm font-semibold min-w-0 transition-colors touch-manipulation ${
+                        isGroupActive
+                          ? 'bg-brand/8 text-brand border-r-2 border-brand'
+                          : 'text-slate-800 hover:bg-slate-50'
+                      }`}
                     >
-                      <Icon
-                        className={`w-4 h-4 shrink-0 ${isGroupActive ? 'text-white/70' : 'text-slate-400'
-                          }`}
-                      />
-                      <span className="truncate">{label}</span>
+                      <span
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                          isGroupActive ? 'bg-brand/15' : cfg.bg
+                        }`}
+                      >
+                        <Icon
+                          className={`w-3.5 h-3.5 shrink-0 ${isGroupActive ? 'text-brand' : cfg.color}`}
+                        />
+                      </span>
+                      <span className="truncate leading-tight">{label}</span>
                     </Link>
+
+                    {/* Genişlet butonu */}
                     <button
                       type="button"
                       onClick={() => toggleGroup(group.id)}
-                      className={`min-h-[44px] min-w-[44px] px-2.5 shrink-0 transition-colors touch-manipulation ${isGroupActive
-                          ? 'text-white/70 hover:text-white hover:bg-white/10'
-                          : 'text-slate-400 hover:text-slate-700 hover:bg-slate-200'
-                        }`}
+                      className={`min-h-[44px] w-10 shrink-0 flex items-center justify-center transition-colors touch-manipulation ${
+                        isGroupActive
+                          ? 'text-brand hover:bg-brand/10'
+                          : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
+                      }`}
                       aria-label={isExpanded ? 'Daralt' : 'Genişlet'}
                     >
                       <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''
-                          }`}
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
                       />
                     </button>
                   </div>
 
                   {/* Alt kategoriler */}
                   {isExpanded && (
-                    <ul className="mt-0.5 ml-3 border-l-2 border-slate-200 pl-1.5 space-y-0.5 pb-1">
+                    <ul className="pb-1 bg-slate-50/60">
                       {(group.categoryValues as readonly string[]).map((catValue) => {
                         const isSubActive =
                           pathname === '/products' && categoryParam === catValue
                         const labelKey = getCategoryKey(catValue)
-                        const label = labelKey ? tHeader(labelKey) : catValue
+                        const subLabel = labelKey ? tHeader(labelKey) : catValue
                         return (
                           <li key={catValue}>
                             <Link
                               href={`/products?category=${encodeURIComponent(catValue)}`}
-                              className={`flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs font-medium leading-snug transition-colors touch-manipulation ${isSubActive
-                                  ? 'bg-brand text-white'
-                                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                                }`}
+                              className={`flex items-center gap-2 pl-[52px] pr-4 py-2 min-h-[40px] text-xs font-medium leading-snug transition-colors touch-manipulation ${
+                                isSubActive
+                                  ? 'text-brand font-semibold bg-brand/5 border-r-2 border-brand'
+                                  : 'text-slate-500 hover:text-slate-900 hover:bg-white'
+                              }`}
                             >
-                              <ChevronRight className="w-3 h-3 shrink-0 opacity-40" />
-                              <span className="truncate">{label}</span>
+                              <ChevronRight className={`w-3 h-3 shrink-0 ${isSubActive ? 'text-brand' : 'text-slate-300'}`} />
+                              <span className="truncate">{subLabel}</span>
                             </Link>
                           </li>
                         )

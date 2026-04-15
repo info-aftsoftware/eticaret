@@ -276,11 +276,6 @@ export default function CartPage() {
                       )}
                     </span>
                   </div>
-                  {subtotal < 3000 && (
-                    <div className="text-xs text-slate-600 mt-1">
-                      {formatPrice(3000 - subtotal)} daha alışveriş yapın, kargo ücretsiz olsun!
-                    </div>
-                  )}
                 </div>
 
                 <Separator />

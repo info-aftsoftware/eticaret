@@ -23,7 +23,7 @@ const values = [
   {
     icon: Zap,
     title: 'Hızlı Teslimat',
-    desc: 'Stokta bulunan ürünler 1–3 iş günü içinde kargoya verilir. 3.000 TL ve üzeri siparişlerde kargo ücretsiz.',
+    desc: 'Siparişler en kısa sürede kargoya verilir. Teslimat süresi siparişin içeriğine ve bölgeye göre değişir.',
   },
   {
     icon: Truck,

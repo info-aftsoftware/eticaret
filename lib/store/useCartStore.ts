@@ -119,6 +119,8 @@ export const useCartStore = create<CartState>()(
       storage: ({
         getItem: (name: string) => {
           if (typeof window === 'undefined') return null
+          // Giriş yapılmamışsa kayıtlı sepet yüklenmez — her seferinde boş başlar
+          if (!isUserAuthenticated()) return null
           try {
             const str = localStorage.getItem(name)
             if (!str) return null
@@ -138,11 +140,10 @@ export const useCartStore = create<CartState>()(
         },
         setItem: (name: string, value: { state: any; version?: number }): void => {
           if (typeof window === 'undefined') return
+          // Giriş yapılmamışsa sepet localStorage'a kaydedilmez
+          if (!isUserAuthenticated()) return
           try {
-            const isAuthenticated = isUserAuthenticated()
-            const expire = isAuthenticated
-              ? Date.now() + 60 * 24 * 60 * 60 * 1000 // 60 gün
-              : Date.now() + 7 * 24 * 60 * 60 * 1000  // misafir: 7 gün
+            const expire = Date.now() + 60 * 24 * 60 * 60 * 1000 // 60 gün
             localStorage.setItem(name, JSON.stringify({ ...value, expire }))
           } catch {
             localStorage.setItem(name, JSON.stringify(value))

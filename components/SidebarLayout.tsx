@@ -17,9 +17,17 @@ const SIDEBAR_EXCLUDE_PREFIXES = [
   '/ges',
 ]
 
+/** Tam genişlik (full-bleed) sayfalar — header/footer dışında container sarmalanmaz */
+const FULLWIDTH_PREFIXES = [
+  '/blog',
+  '/paketler',
+  '/hakkimizda',
+]
+
 function shouldHideSidebar(pathname: string): boolean {
   if (!pathname) return false
   if (pathname === '/' || pathname.startsWith('/products') || pathname.startsWith('/category/')) return true
+  if (FULLWIDTH_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'))) return true
   return SIDEBAR_EXCLUDE_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix + '/'))
 }
 
@@ -33,10 +41,11 @@ export function SidebarLayout({ children }: { children: React.ReactNode }) {
   if (hideSidebar) {
     const isHome = pathname === '/'
     const isProducts = pathname?.startsWith('/products') || pathname?.startsWith('/category/')
+    const isFullwidth = FULLWIDTH_PREFIXES.some((p) => (pathname ?? '') === p || (pathname ?? '').startsWith(p + '/'))
     return (
       <div
         className={
-          isHome
+          isHome || isFullwidth
             ? 'w-full min-w-0 overflow-x-hidden pt-0 pb-0'
             : isProducts
               ? 'w-full min-w-0 overflow-x-hidden pt-0 mt-0'

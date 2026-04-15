@@ -728,11 +728,6 @@ export default function CheckoutPage() {
                         )}
                       </span>
                     </div>
-                    {subtotal < 3000 && (
-                      <div className="text-xs text-brand mt-1">
-                        {formatPrice(3000 - subtotal)} daha alışveriş yapın, kargo ücretsiz olsun!
-                      </div>
-                    )}
                   </div>
 
                   <Separator />
@@ -786,6 +781,7 @@ export default function CheckoutPage() {
                       width={160}
                       height={36}
                       className="object-contain"
+                      style={{ height: 'auto' }}
                     />
                   </div>
 

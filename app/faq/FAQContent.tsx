@@ -26,11 +26,11 @@ const faqItems = [
     questions: [
       {
         q: 'Kargo süresi ne kadar?',
-        a: 'Stoktaki ürünler sipariş onayından sonra 1-3 iş günü içinde kargoya verilir. Teslimat süresi bölgeye göre 1-5 iş günü arasında değişir.',
+        a: 'Teslimat süresi siparişin içeriğine, stok durumuna ve bölgenize göre değişir. Tahmini süre sipariş onay e-postanızda belirtilir.',
       },
       {
         q: 'Kargo ücreti ne kadar?',
-        a: '3.000 TL ve üzeri siparişlerde kargo ücretsizdir. Altındaki siparişlerde ücret sepet ekranında hesaplanır.',
+        a: 'Kargo ücreti sipariş içeriğine, ağırlığa ve teslimat bölgesine göre belirlenir. Sepet ekranında hesaplanarak gösterilir.',
       },
       {
         q: 'Siparişimi takip edebilir miyim?',

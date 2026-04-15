@@ -10,9 +10,10 @@ interface LogoProps {
   className?: string
   href?: string
   asDiv?: boolean
+  align?: 'left' | 'center'
 }
 
-export function Logo({ size = 'md', className, href, asDiv = false }: LogoProps) {
+export function Logo({ size = 'md', className, href, asDiv = false, align = 'left' }: LogoProps) {
   const frameSizeClasses = {
     sm: 'h-11 w-[184px]',
     md: 'h-12 w-[204px]',
@@ -33,7 +34,7 @@ export function Logo({ size = 'md', className, href, asDiv = false }: LogoProps)
         fill
         priority={size === 'lg' || size === 'xl'}
         sizes="(max-width: 768px) 184px, (max-width: 1280px) 252px, 368px"
-        className="object-contain object-left"
+        className={cn('object-contain', align === 'center' ? 'object-center' : 'object-left')}
       />
     </span>
   )

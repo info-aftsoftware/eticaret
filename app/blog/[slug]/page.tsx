@@ -536,7 +536,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   return (
     <div className="min-h-full bg-white">
       {/* Hero */}
-      <div className="bg-slate-950 pt-10 pb-14 px-4">
+      <div className="bg-slate-950 pt-12 pb-14 px-4 mt-5 lg:mt-7">
         <div className="container mx-auto max-w-3xl">
           <Link
             href="/blog"

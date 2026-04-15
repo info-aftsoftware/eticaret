@@ -25,17 +25,6 @@ export default function ShippingPage() {
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         <div className="max-w-3xl mx-auto space-y-6">
 
-          {/* Ücretsiz Kargo Bandı */}
-          <div className="bg-brand rounded-xl p-5 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-              <Truck className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <p className="text-white font-bold text-lg">3.000 TL ve Üzeri Siparişlerde Kargo Ücretsiz</p>
-              <p className="text-white/80 text-sm mt-0.5">Sepetiniz 3.000 TL'yi geçtiğinde kargo bedeli otomatik olarak düşer.</p>
-            </div>
-          </div>
-
           {/* Teslimat Süreleri */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
@@ -49,7 +38,7 @@ export default function ShippingPage() {
                 <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-ink">Stokta Mevcut Ürünler</p>
-                  <p className="text-ink-muted text-sm mt-0.5">Ödeme onayından itibaren <strong>1–3 iş günü</strong> içinde kargoya verilir. Kargo firması teslim süresi bölgeye göre ortalama <strong>1–5 iş günü</strong>'dür.</p>
+                  <p className="text-ink-muted text-sm mt-0.5">Ödeme onayından itibaren kargoya verilir. Kargo firması teslim süresi bölgeye ve siparişe göre değişir; tahmini süre sipariş onay e-postanızda belirtilir.</p>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -68,7 +57,7 @@ export default function ShippingPage() {
               </div>
             </div>
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
-              Hafta sonu ve resmi tatil günleri iş günü sayılmaz. Kargo firmasının kendi bölgesel gecikmelerinden Voltekno sorumlu tutulamaz.
+              Teslimat süresi siparişin içeriğine, stok durumuna ve bulunduğunuz bölgeye göre değişiklik gösterebilir. Hafta sonu ve resmi tatil günleri iş günü sayılmaz.
             </div>
           </div>
 

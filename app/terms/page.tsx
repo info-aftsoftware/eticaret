@@ -75,7 +75,7 @@ export default function TermsPage() {
                 <strong>4.2.</strong> Ödeme yöntemleri: Kredi/banka kartı (Visa, Mastercard), havale/EFT. Ödeme bilgileri iyzico altyapısı üzerinden PCI-DSS standartlarına uygun şekilde işlenir; kart numarası Satıcı sisteminde saklanmaz.
               </p>
               <p className="mb-3 text-ink-muted">
-                <strong>4.3.</strong> Kargo ücreti: 3.000 TL ve üzeri siparişlerde <strong>ücretsizdir</strong>. Bu tutarın altındaki siparişlerde kargo bedeli sipariş özetinde gösterilir.
+                <strong>4.3.</strong> Kargo ücreti: Sipariş içeriğine, ağırlığa ve teslimat bölgesine göre belirlenir; sepet ve sipariş özeti ekranında gösterilir.
               </p>
               <p className="text-ink-muted">
                 <strong>4.4.</strong> Ödeme onayından sonra sipariş işleme alınır. Ödeme gerçekleşmeden ürün rezerve edilmez.

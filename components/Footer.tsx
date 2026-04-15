@@ -114,8 +114,8 @@ export function Footer() {
           {/* Kolon 1: Marka + iletişim (4 col) */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-5">
             {/* Logo — beyaz bg kutusunda net görünür */}
-            <div className="bg-white rounded-2xl px-5 py-3 inline-flex items-center justify-center">
-              <Logo size="lg" href="/" />
+            <div className="bg-white rounded-2xl px-6 py-4 flex items-center justify-center w-fit">
+              <Logo size="lg" href="/" align="center" />
             </div>
 
             <p className="text-sm text-slate-400 leading-relaxed">
@@ -157,6 +157,7 @@ export function Footer() {
                 width={240}
                 height={36}
                 className="object-contain max-w-full"
+                style={{ height: 'auto' }}
               />
             </div>
           </div>
