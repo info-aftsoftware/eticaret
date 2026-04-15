@@ -125,11 +125,11 @@ export function Footer() {
             {/* İletişim bilgileri — logo kolonunda, göze çarpan */}
             <ul className="space-y-3 text-sm">
               <li>
-                <a href="tel:+905518291613" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
+                <a href="tel:+905343288383" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
                   <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
                     <Phone className="w-3.5 h-3.5 text-brand" aria-hidden />
                   </span>
-                  <span className="font-semibold">+90 551 829 16 13</span>
+                  <span className="font-semibold">+90 534 328 83 83</span>
                 </a>
               </li>
               <li>
@@ -151,21 +151,13 @@ export function Footer() {
             {/* Ödeme logoları */}
             <div className="pt-1 border-t border-white/5">
               <p className="text-[10px] text-slate-600 uppercase tracking-widest font-semibold mb-2">Güvenli Ödeme</p>
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center" style={{height: 32, minWidth: 52}}>
-                  <Image src="/images/payment/visa.svg" alt="Visa" width={46} height={16} className="object-contain" />
-                </div>
-                <div className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center" style={{height: 32, minWidth: 52}}>
-                  <Image src="/images/payment/mastercard.svg" alt="Mastercard" width={38} height={24} className="object-contain" />
-                </div>
-                <div className="bg-white rounded-md px-2 py-1.5 flex items-center justify-center" style={{height: 32, minWidth: 64}}>
-                  <Image src="/images/payment/iyzico.png" alt="iyzico" width={52} height={20} className="object-contain" />
-                </div>
-                <div className="flex items-center gap-1 bg-emerald-700 rounded-md px-2 py-1.5" style={{height: 32}}>
-                  <ShieldCheck className="w-3.5 h-3.5 text-white" aria-hidden />
-                  <span className="text-[11px] font-bold text-white tracking-wide">SSL</span>
-                </div>
-              </div>
+              <Image
+                src="/images/payment/logo_band.png"
+                alt="Visa, Mastercard, iyzico ile güvenli ödeme"
+                width={240}
+                height={36}
+                className="object-contain max-w-full"
+              />
             </div>
           </div>
 
