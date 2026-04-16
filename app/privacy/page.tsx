@@ -97,7 +97,7 @@ export default function PrivacyPage() {
               <p className="mb-3 text-ink-muted">Kişisel verileriniz, yalnızca aşağıdaki durumlarda ve ölçülü biçimde üçüncü taraflarla paylaşılmaktadır:</p>
               <ul className="list-disc pl-6 space-y-2 text-ink-muted">
                 <li><strong>Kargo ve lojistik firmaları:</strong> Siparişinizin teslimatı için ad-soyad, adres ve telefon bilgileri.</li>
-                <li><strong>Ödeme hizmeti sağlayıcıları (iyzico vb.):</strong> PCI-DSS standartlarına uygun güvenli altyapı üzerinden ödeme işlemleri.</li>
+                <li><strong>Ödeme hizmeti sağlayıcıları:</strong> PCI-DSS standartlarına uygun güvenli altyapı üzerinden ödeme işlemleri.</li>
                 <li><strong>Mali müşavir ve muhasebe hizmetleri:</strong> Yasal fatura ve muhasebe yükümlülükleri için.</li>
                 <li><strong>Yasal makamlar:</strong> Mahkeme kararı, savcılık talebi veya yasal zorunluluk halinde.</li>
               </ul>

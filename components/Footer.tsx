@@ -148,18 +148,6 @@ export function Footer() {
               </li>
             </ul>
 
-            {/* Ödeme logoları */}
-            <div className="pt-1 border-t border-white/5">
-              <p className="text-[10px] text-slate-600 uppercase tracking-widest font-semibold mb-2">Güvenli Ödeme</p>
-              <Image
-                src="/images/payment/logo_band.png"
-                alt="Visa, Mastercard, iyzico ile güvenli ödeme"
-                width={240}
-                height={36}
-                className="object-contain max-w-full"
-                style={{ height: 'auto' }}
-              />
-            </div>
           </div>
 
           {/* Kolon 2: Ürünler (2 col) */}

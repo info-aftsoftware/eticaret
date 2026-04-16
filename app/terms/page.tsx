@@ -72,7 +72,7 @@ export default function TermsPage() {
                 <strong>4.1.</strong> Alıcı, ürünü sepetine ekleyerek ödeme adımlarını tamamladığında sipariş verilmiş sayılır. Satıcı'nın sipariş onay e-postası göndermesiyle Sözleşme kurulmuş olur.
               </p>
               <p className="mb-3 text-ink-muted">
-                <strong>4.2.</strong> Ödeme yöntemleri: Kredi/banka kartı (Visa, Mastercard), havale/EFT. Ödeme bilgileri iyzico altyapısı üzerinden PCI-DSS standartlarına uygun şekilde işlenir; kart numarası Satıcı sisteminde saklanmaz.
+                <strong>4.2.</strong> Ödeme yöntemleri: Kredi/banka kartı (Visa, Mastercard), havale/EFT. Ödeme bilgileri güvenli ödeme altyapısı üzerinden PCI-DSS standartlarına uygun şekilde işlenir; kart numarası Satıcı sisteminde saklanmaz.
               </p>
               <p className="mb-3 text-ink-muted">
                 <strong>4.3.</strong> Kargo ücreti: Sipariş içeriğine, ağırlığa ve teslimat bölgesine göre belirlenir; sepet ve sipariş özeti ekranında gösterilir.

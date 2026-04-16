@@ -774,16 +774,6 @@ export default function CheckoutPage() {
                     {isTestOrderLoading ? 'Oluşturuluyor...' : 'Deneme için sipariş oluştur'}
                   </Button>
 
-                  <div className="flex justify-center pt-1">
-                    <Image
-                      src="/images/payment/iyzico_ile_ode.png"
-                      alt="iyzico ile öde"
-                      width={160}
-                      height={36}
-                      className="object-contain"
-                      style={{ height: 'auto' }}
-                    />
-                  </div>
 
                   <div className="text-xs text-ink-muted text-center space-y-1">
                     <div className="flex items-center justify-center gap-1">
