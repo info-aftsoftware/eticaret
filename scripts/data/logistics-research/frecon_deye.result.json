@@ -1,0 +1,1003 @@
+{
+  "DEYE-00396": {
+    "dimsCm": [
+      42.4,
+      32.3,
+      17.6
+    ],
+    "weightKg": 8.6,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/offgrid-inverter/SUN3-3-6-5-6KOG02LP1EUAM1.html",
+    "note": "Assumed model SUN-5K-OG03LP1; Deye official spec for SUN-3/3.6/5/6.6/8.8K-OG03LP1-EU: cabinet 323x424x176 mm (WxHxD, excl. connectors/brackets), net weight 8.6 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00397": {
+    "dimsCm": [
+      42.4,
+      32.3,
+      17.6
+    ],
+    "weightKg": 8.6,
+    "basis": "series",
+    "source": "https://www.deyeinverter.com/product/offgrid-inverter/SUN3-3-6-5-6KOG02LP1EUAM1.html",
+    "note": "Assumed model no exact 6K in current OG03LP1 range (3/3.6/5/6.6/8.8K); range shares one cabinet, assumed SUN-6.6K-OG03LP1 - verify actual model sold; Deye official spec for SUN-3/3.6/5/6.6/8.8K-OG03LP1-EU: cabinet 323x424x176 mm (WxHxD, excl. connectors/brackets), net weight 8.6 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00398": {
+    "dimsCm": [
+      28.0,
+      27.2,
+      17.1
+    ],
+    "weightKg": 5.6,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/SUN-1-15-2-25-3-36-4K-G04P1-EU-SinglePhase-AM1.html",
+    "note": "Assumed model SUN-3K-G04P1; Deye official spec for SUN-1~4K-G04P1-EU-AM1: cabinet 280x272.5x171.5 mm (WxHxD, excl. connectors/brackets), net weight 5.6 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00399": {
+    "dimsCm": [
+      30.5,
+      28.0,
+      18.0
+    ],
+    "weightKg": 7.7,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/SUN3-6-4-4-2-4-6-5-5-2-6-6-2KG04P1EUAM2P1-3-66-2kW-Single-Phase-2-MPPT-2332.html",
+    "note": "Assumed model SUN-5K-G05P1; Deye official spec for SUN-3.6~6.2K-G05P1-EU-AM2: cabinet 305x280x180 mm (WxHxD, excl. connectors/brackets), net weight 7.7 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00400": {
+    "dimsCm": [
+      33.0,
+      31.0,
+      20.9
+    ],
+    "weightKg": 12.1,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/SUN3-6-5-6KG04AU-3-66kW-Single-Phase-2-MPPT.html",
+    "note": "Assumed model SUN-8K-G02P1; Deye official spec for SUN-7/7.5/8K-G02P1-EU-AM2: cabinet 330x310x208.5 mm (WxHxD, excl. connectors/brackets), net weight 12.1 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00401": {
+    "dimsCm": [
+      41.0,
+      33.0,
+      21.4
+    ],
+    "weightKg": 14.8,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/sun7-7-5-8-9-10-10-5kg-710-5kw-single-phase-2-mppt.html",
+    "note": "Assumed model SUN-10K-G02P1; Deye official spec for SUN-9/10/10.5K-G02P1-EU-AM2: cabinet 330x410x213.5 mm (WxHxD, excl. connectors/brackets), net weight 14.8 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00402": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-5K-G06P3; Deye official spec for SUN-3~15K-G06P3-EU-BM2: cabinet 283x525x178 mm (WxHxD, excl. connectors/brackets), net weight 11.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00403": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-8K-G06P3; Deye official spec for SUN-3~15K-G06P3-EU-BM2: cabinet 283x525x178 mm (WxHxD, excl. connectors/brackets), net weight 11.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00404": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-10K-G06P3; Deye official spec for SUN-3~15K-G06P3-EU-BM2: cabinet 283x525x178 mm (WxHxD, excl. connectors/brackets), net weight 11.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00405": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-12K-G06P3; Deye official spec for SUN-3~15K-G06P3-EU-BM2: cabinet 283x525x178 mm (WxHxD, excl. connectors/brackets), net weight 11.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00406": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-15K-G06P3; Deye official spec for SUN-3~15K-G06P3-EU-BM2: cabinet 283x525x178 mm (WxHxD, excl. connectors/brackets), net weight 11.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00407": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      22.4
+    ],
+    "weightKg": 12.7,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/07/14/BDatasheetSUN-18-25K-G06P3-EU-AM220260714en-lSQS.pdf",
+    "note": "Assumed model SUN-20K-G06P3 (datasheet weight 12.7 kg spans 18/20K columns, 16 kg spans 22/23/25K); Deye official spec for SUN-18/20K-G06P3-EU-AM2: cabinet 283x525x224 mm (WxHxD, excl. connectors/brackets), net weight 12.7 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00408": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      22.4
+    ],
+    "weightKg": 16,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/07/14/BDatasheetSUN-18-25K-G06P3-EU-AM220260714en-lSQS.pdf",
+    "note": "Assumed model SUN-25K-G06P3 (datasheet weight 16 kg spans 22/23/25K columns); Deye official spec for SUN-22/23/25K-G06P3-EU-AM2: cabinet 283x525x224 mm (WxHxD, excl. connectors/brackets), net weight 16 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00409": {
+    "dimsCm": [
+      57.2,
+      33.0,
+      20.6
+    ],
+    "weightKg": 28.7,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun30-33-36kg04-3036kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-30K-G04; Deye official spec for SUN-30/33/35/36K-G04: cabinet 330x572x206 mm (WxHxD, excl. connectors/brackets), net weight 28.7 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00410": {
+    "dimsCm": [
+      57.2,
+      33.0,
+      20.6
+    ],
+    "weightKg": 28.7,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun30-33-36kg04-3036kw-three-phase-2-mppt.html",
+    "note": "Assumed model SUN-33K-G04; Deye official spec for SUN-30/33/35/36K-G04: cabinet 330x572x206 mm (WxHxD, excl. connectors/brackets), net weight 28.7 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00411": {
+    "dimsCm": [
+      57.0,
+      43.4,
+      24.3
+    ],
+    "weightKg": 39,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html",
+    "note": "Assumed model SUN-40K-G04; Deye official spec for SUN-40/45/50K-G04: cabinet 434x570x243 mm (WxHxD, excl. connectors/brackets), net weight 39 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00412": {
+    "dimsCm": [
+      57.0,
+      43.4,
+      24.3
+    ],
+    "weightKg": 39,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html",
+    "note": "Assumed model SUN-50K-G04; Deye official spec for SUN-40/45/50K-G04: cabinet 434x570x243 mm (WxHxD, excl. connectors/brackets), net weight 39 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00413": {
+    "dimsCm": [
+      69.8,
+      61.3,
+      23.6
+    ],
+    "weightKg": 53.7,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html",
+    "note": "Assumed model SUN-60K-G04P3; Deye official spec for SUN-60/70/75/80K-G04P3-EU-AM4: cabinet 698x613x236.5 mm (WxHxD, excl. connectors/brackets), net weight 53.7 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00414": {
+    "dimsCm": [
+      69.8,
+      61.3,
+      23.6
+    ],
+    "weightKg": 53.7,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html",
+    "note": "Assumed model SUN-80K-G04P3; Deye official spec for SUN-60/70/75/80K-G04P3-EU-AM4: cabinet 698x613x236.5 mm (WxHxD, excl. connectors/brackets), net weight 53.7 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00416": {
+    "dimsCm": [
+      43.3,
+      33.0,
+      22.8
+    ],
+    "weightKg": 17,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+    "note": "Assumed model SUN-5K-SG04LP1; Deye official spec for SUN-3/3.6/5/6K-SG04LP1: cabinet 330x433x228 mm (WxHxD, excl. connectors/brackets), net weight 17 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00417": {
+    "dimsCm": [
+      43.3,
+      33.0,
+      22.8
+    ],
+    "weightKg": 17,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+    "note": "Assumed model SUN-6K-SG04LP1; Deye official spec for SUN-3/3.6/5/6K-SG04LP1: cabinet 330x433x228 mm (WxHxD, excl. connectors/brackets), net weight 17 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00418": {
+    "dimsCm": [
+      59.0,
+      36.6,
+      23.7
+    ],
+    "weightKg": 26.8,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/single-phase-low-voltage-hybrid-inverter/sun7-7-6-8ksg05lp1eusm2.html",
+    "note": "Assumed model SUN-8K-SG05LP1; Deye official spec for SUN-7/7.6/8/10K-SG05LP1-EU-SM2: cabinet 366x589.5x237 mm (WxHxD, excl. connectors/brackets), net weight 26.8 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00419": {
+    "dimsCm": [
+      59.0,
+      36.6,
+      23.7
+    ],
+    "weightKg": 26.8,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/single-phase-low-voltage-hybrid-inverter/sun7-7-6-8ksg05lp1eusm2.html",
+    "note": "Assumed model SUN-10K-SG05LP1; Deye official spec for SUN-7/7.6/8/10K-SG05LP1-EU-SM2: cabinet 366x589.5x237 mm (WxHxD, excl. connectors/brackets), net weight 26.8 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00420": {
+    "dimsCm": [
+      76.3,
+      46.4,
+      28.2
+    ],
+    "weightKg": 54.1,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-12-18K-SG01LP1-EU-AM3-P20260911en.pdf",
+    "note": "Assumed model SUN-12K-SG01LP1; Deye official spec for SUN-12/14/16K-SG01LP1-EU-AM3-P: cabinet 464x763x282 mm (WxHxD, excl. connectors/brackets), net weight 54.1 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00421": {
+    "dimsCm": [
+      76.3,
+      46.4,
+      28.2
+    ],
+    "weightKg": 54.1,
+    "basis": "series",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-12-18K-SG01LP1-EU-AM3-P20260911en.pdf",
+    "note": "Assumed model no Deye 15K SG01LP1 model (12/14/16/18K); 12-16K share this cabinet/weight - verify actual model sold; Deye official spec for SUN-12/14/16K-SG01LP1-EU-AM3-P: cabinet 464x763x282 mm (WxHxD, excl. connectors/brackets), net weight 54.1 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00422": {
+    "dimsCm": [
+      76.3,
+      46.4,
+      28.2
+    ],
+    "weightKg": 54.1,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-12-18K-SG01LP1-EU-AM3-P20260911en.pdf",
+    "note": "Assumed model SUN-16K-SG01LP1; Deye official spec for SUN-12/14/16K-SG01LP1-EU-AM3-P: cabinet 464x763x282 mm (WxHxD, excl. connectors/brackets), net weight 54.1 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00423": {
+    "dimsCm": [
+      69.9,
+      42.2,
+      27.9
+    ],
+    "weightKg": 33.6,
+    "basis": "product",
+    "source": "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf",
+    "note": "Assumed model SUN-8K-SG04LP3; Deye official spec for SUN-5~12K-SG04LP3: cabinet 422x699.3x279 mm (WxHxD, excl. connectors/brackets), net weight 33.6 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00424": {
+    "dimsCm": [
+      69.9,
+      42.2,
+      27.9
+    ],
+    "weightKg": 33.6,
+    "basis": "product",
+    "source": "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf",
+    "note": "Assumed model SUN-10K-SG04LP3; Deye official spec for SUN-5~12K-SG04LP3: cabinet 422x699.3x279 mm (WxHxD, excl. connectors/brackets), net weight 33.6 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00425": {
+    "dimsCm": [
+      69.9,
+      42.2,
+      27.9
+    ],
+    "weightKg": 33.6,
+    "basis": "product",
+    "source": "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf",
+    "note": "Assumed model SUN-12K-SG04LP3; Deye official spec for SUN-5~12K-SG04LP3: cabinet 422x699.3x279 mm (WxHxD, excl. connectors/brackets), net weight 33.6 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00426": {
+    "dimsCm": [
+      75.0,
+      45.6,
+      26.9
+    ],
+    "weightKg": 51.9,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-hybrid-inverter-1/sun14-15-16-18-20ksg05lp3eusm2-1420kw-three-phase-2-mppt-hybrid-inverter-lv-battery-supported.html",
+    "note": "Assumed model SUN-15K-SG05LP3; Deye official spec for SUN-14/15/16/18/20K-SG05LP3-EU-SM2: cabinet 456x750x268.5 mm (WxHxD, excl. connectors/brackets), net weight 51.9 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00427": {
+    "dimsCm": [
+      75.0,
+      45.6,
+      26.9
+    ],
+    "weightKg": 51.9,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-hybrid-inverter-1/sun14-15-16-18-20ksg05lp3eusm2-1420kw-three-phase-2-mppt-hybrid-inverter-lv-battery-supported.html",
+    "note": "Assumed model SUN-20K-SG05LP3 (input datasheet SG04LP3 only covers 5-12K); Deye official spec for SUN-14/15/16/18/20K-SG05LP3-EU-SM2: cabinet 456x750x268.5 mm (WxHxD, excl. connectors/brackets), net weight 51.9 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00428": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf",
+    "note": "Assumed model SUN-10K-SG01HP3; Deye official spec for SUN-5~25K-SG01HP3-EU-AM2: cabinet 408x638x237 mm (WxHxD, excl. connectors/brackets), net weight 30.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00429": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf",
+    "note": "Assumed model SUN-12K-SG01HP3; Deye official spec for SUN-5~25K-SG01HP3-EU-AM2: cabinet 408x638x237 mm (WxHxD, excl. connectors/brackets), net weight 30.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00430": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf",
+    "note": "Assumed model SUN-15K-SG01HP3; Deye official spec for SUN-5~25K-SG01HP3-EU-AM2: cabinet 408x638x237 mm (WxHxD, excl. connectors/brackets), net weight 30.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00431": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf",
+    "note": "Assumed model SUN-20K-SG01HP3; Deye official spec for SUN-5~25K-SG01HP3-EU-AM2: cabinet 408x638x237 mm (WxHxD, excl. connectors/brackets), net weight 30.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00432": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf",
+    "note": "Assumed model SUN-25K-SG01HP3; Deye official spec for SUN-5~25K-SG01HP3-EU-AM2: cabinet 408x638x237 mm (WxHxD, excl. connectors/brackets), net weight 30.5 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00433": {
+    "dimsCm": [
+      89.4,
+      52.7,
+      29.4
+    ],
+    "weightKg": 80,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-high-voltage-hybrid-inverter/sun29-9-30-35-40-50ksg01hp3eubm3-4-29-950kw-three-phase-2-3-4-mppt-hybrid-inverter-hv-battery-supported-339.html",
+    "note": "Assumed model SUN-30K-SG01HP3-BM3; Deye official spec for SUN-29.9/30/35/40/50K-SG01HP3-EU-BM3/BM4: cabinet 527x894x294 mm (WxHxD, excl. connectors/brackets), net weight 80 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00434": {
+    "dimsCm": [
+      89.4,
+      52.7,
+      29.4
+    ],
+    "weightKg": 80,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-high-voltage-hybrid-inverter/sun29-9-30-35-40-50ksg01hp3eubm3-4-29-950kw-three-phase-2-3-4-mppt-hybrid-inverter-hv-battery-supported-339.html",
+    "note": "Assumed model SUN-40K-SG01HP3-BM3/BM4; Deye official spec for SUN-29.9/30/35/40/50K-SG01HP3-EU-BM3/BM4: cabinet 527x894x294 mm (WxHxD, excl. connectors/brackets), net weight 80 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00435": {
+    "dimsCm": [
+      89.4,
+      52.7,
+      29.4
+    ],
+    "weightKg": 80,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-high-voltage-hybrid-inverter/sun29-9-30-35-40-50ksg01hp3eubm3-4-29-950kw-three-phase-2-3-4-mppt-hybrid-inverter-hv-battery-supported-339.html",
+    "note": "Assumed model SUN-50K-SG01HP3-BM4; Deye official spec for SUN-29.9/30/35/40/50K-SG01HP3-EU-BM3/BM4: cabinet 527x894x294 mm (WxHxD, excl. connectors/brackets), net weight 80 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00436": {
+    "dimsCm": [
+      92.7,
+      60.6,
+      31.4
+    ],
+    "weightKg": 105,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-high-voltage-hybrid-inverter/sun60-70-75-80ksg02hp3euem6.html",
+    "note": "Assumed model SUN-60K-SG02HP3-EM6; Deye official spec for SUN-60/70/75/80K-SG02HP3-EU-EM6: cabinet 606x927x314 mm (WxHxD, excl. connectors/brackets), net weight 105 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "DEYE-00437": {
+    "dimsCm": [
+      92.7,
+      60.6,
+      31.4
+    ],
+    "weightKg": 105,
+    "basis": "product",
+    "source": "https://www.deyeinverter.com/product/three-phase-high-voltage-hybrid-inverter/sun60-70-75-80ksg02hp3euem6.html",
+    "note": "Assumed model SUN-80K-SG02HP3-EM6; Deye official spec for SUN-60/70/75/80K-SG02HP3-EU-EM6: cabinet 606x927x314 mm (WxHxD, excl. connectors/brackets), net weight 105 kg. Catalog does not state exact model code; package dims/gross weight not published."
+  },
+  "FRECON-PV150A2S04BH-00550": {
+    "dimsCm": [
+      15.0,
+      12.0,
+      7.5
+    ],
+    "weightKg": 0.95,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150A 0.2-1.5kW frame (75x150x120mm), N.W 0.95 kg."
+  },
+  "FRECON-PV150A2S07BH-00551": {
+    "dimsCm": [
+      15.0,
+      12.0,
+      7.5
+    ],
+    "weightKg": 0.95,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150A 0.2-1.5kW frame (75x150x120mm), N.W 0.95 kg."
+  },
+  "FRECON-PV150I2S07BH-00554": {
+    "dimsCm": [
+      17.1,
+      13.0,
+      9.3
+    ],
+    "weightKg": 1.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150I-2S-0.7B row 93x171x130mm, N.W 1.5 kg."
+  },
+  "FRECON-PV150A2S15BH-00552": {
+    "dimsCm": [
+      17.1,
+      13.2,
+      9.3
+    ],
+    "weightKg": 1.46,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150A 1.5-4.0kW frame (93x171x132mm), N.W 1.46 kg."
+  },
+  "FRECON-PV150I2S15BH-00555": {
+    "dimsCm": [
+      17.1,
+      13.0,
+      9.3
+    ],
+    "weightKg": 1.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150I-2S-1.5B row 93x171x130mm, N.W 1.5 kg."
+  },
+  "FRECON-PV150A2S22BH-00553": {
+    "dimsCm": [
+      17.1,
+      13.2,
+      9.3
+    ],
+    "weightKg": 1.46,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150A 1.5-4.0kW frame (93x171x132mm), N.W 1.46 kg."
+  },
+  "FRECON-PV150I2S22BH-00556": {
+    "dimsCm": [
+      18.7,
+      16.0,
+      11.7
+    ],
+    "weightKg": 2.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150I-2S-2.2B row 117x187x160mm, N.W 2.5 kg."
+  },
+  "FRECON-PV5004T22BH-00559": {
+    "dimsCm": [
+      20.0,
+      16.7,
+      8.0
+    ],
+    "weightKg": 1.34,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-2.2B frame 80x200x167mm, 1.34 kg (frame shared across ratings)."
+  },
+  "FRECON-PV150I2S40BH-00557": {
+    "dimsCm": [
+      24.9,
+      17.4,
+      14.6
+    ],
+    "weightKg": 3.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150I-2S-4.0B row 146x249x174mm, N.W 3.9 kg."
+  },
+  "FRECON-PV150I2S55BH-00558": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      18.2
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV150I-2S-5.5B row 198x300x182mm, N.W 6.2 kg."
+  },
+  "FRECON-PV5004T40BH-00560": {
+    "dimsCm": [
+      18.7,
+      17.5,
+      11.7
+    ],
+    "weightKg": 2.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-4.0B frame 116.6x186.6x175mm, 2.5 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T40BHVH-00585": {
+    "dimsCm": [
+      18.7,
+      17.5,
+      11.7
+    ],
+    "weightKg": 2.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-4.0B frame 116.6x186.6x175mm, 2.5 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T558H-00561": {
+    "dimsCm": [
+      18.7,
+      17.5,
+      11.7
+    ],
+    "weightKg": 2.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-5.5B frame 116.6x186.6x175mm, 2.5 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T558HVH-00586": {
+    "dimsCm": [
+      18.7,
+      17.5,
+      11.7
+    ],
+    "weightKg": 2.5,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-5.5B frame 116.6x186.6x175mm, 2.5 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T758H-00562": {
+    "dimsCm": [
+      24.9,
+      18.7,
+      14.6
+    ],
+    "weightKg": 3.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-7.5B frame 146x249x187mm, 3.9 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T75BHVH-00587": {
+    "dimsCm": [
+      24.9,
+      18.7,
+      14.6
+    ],
+    "weightKg": 3.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-7.5B frame 146x249x187mm, 3.9 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T011BH-00563": {
+    "dimsCm": [
+      24.9,
+      18.7,
+      14.6
+    ],
+    "weightKg": 3.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-011B frame 146x249x187mm, 3.9 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T011BHVH-00588": {
+    "dimsCm": [
+      24.9,
+      18.7,
+      14.6
+    ],
+    "weightKg": 3.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-011B frame 146x249x187mm, 3.9 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T015BH-00564": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      19.5
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-015B frame 198x300x195mm, 6.2 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T015BHVH-00589": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      19.5
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-015B frame 198x300x195mm, 6.2 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T0188H-00565": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      19.5
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-018B frame 198x300x195mm, 6.2 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T018BHVH-00590": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      19.5
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-018B frame 198x300x195mm, 6.2 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T022BH-00566": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      19.5
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-022B frame 198x300x195mm, 6.2 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T022BHVH-00591": {
+    "dimsCm": [
+      30.0,
+      19.8,
+      19.5
+    ],
+    "weightKg": 6.2,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-022B frame 198x300x195mm, 6.2 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T030BH-00567": {
+    "dimsCm": [
+      43.2,
+      25.0,
+      22.7
+    ],
+    "weightKg": 12.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-030B frame 250x432x227mm, 12.9 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T030BHVH-00592": {
+    "dimsCm": [
+      43.2,
+      25.0,
+      22.7
+    ],
+    "weightKg": 12.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-030B frame 250x432x227mm, 12.9 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T037H-00568": {
+    "dimsCm": [
+      43.2,
+      25.0,
+      22.7
+    ],
+    "weightKg": 12.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-037 frame 250x432x227mm, 12.9 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T037HVH-00593": {
+    "dimsCm": [
+      43.2,
+      25.0,
+      22.7
+    ],
+    "weightKg": 12.9,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-037 frame 250x432x227mm, 12.9 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T045H-00569": {
+    "dimsCm": [
+      48.5,
+      30.0,
+      22.6
+    ],
+    "weightKg": 15,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-045 frame 300x485x226mm, 15 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T045HVH-00594": {
+    "dimsCm": [
+      48.5,
+      30.0,
+      22.6
+    ],
+    "weightKg": 15,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-045 frame 300x485x226mm, 15 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T055H-00570": {
+    "dimsCm": [
+      48.5,
+      30.0,
+      22.6
+    ],
+    "weightKg": 15,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-055 frame 300x485x226mm, 15 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T055HVH-00595": {
+    "dimsCm": [
+      48.5,
+      30.0,
+      22.6
+    ],
+    "weightKg": 15,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-055 frame 300x485x226mm, 15 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T075H-00571": {
+    "dimsCm": [
+      62.0,
+      31.0,
+      28.0
+    ],
+    "weightKg": 26,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-075 frame 310x620x280mm, 26 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T075HVH-00596": {
+    "dimsCm": [
+      62.0,
+      31.0,
+      28.0
+    ],
+    "weightKg": 26,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-075 frame 310x620x280mm, 26 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T090H-00572": {
+    "dimsCm": [
+      62.0,
+      31.0,
+      28.0
+    ],
+    "weightKg": 26,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-090 frame 310x620x280mm, 26 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T090HVH-00597": {
+    "dimsCm": [
+      62.0,
+      31.0,
+      28.0
+    ],
+    "weightKg": 26,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-090 frame 310x620x280mm, 26 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T110H-00573": {
+    "dimsCm": [
+      65.0,
+      35.0,
+      31.0
+    ],
+    "weightKg": 45,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-110 frame 310x650x350mm, 45 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T110HVH-00598": {
+    "dimsCm": [
+      65.0,
+      35.0,
+      31.0
+    ],
+    "weightKg": 45,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-110 frame 310x650x350mm, 45 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T132H-00574": {
+    "dimsCm": [
+      65.0,
+      35.0,
+      31.0
+    ],
+    "weightKg": 45,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-132 frame 310x650x350mm, 45 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T132HVH-00599": {
+    "dimsCm": [
+      65.0,
+      35.0,
+      31.0
+    ],
+    "weightKg": 45,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-132 frame 310x650x350mm, 45 kg (frame shared across ratings). HV (high-voltage PV input) variant is not listed separately in the dimension table; manual lists HV only as an input-spec option, frame assumed identical - verify."
+  },
+  "FRECON-PV5004T160-00575": {
+    "dimsCm": [
+      75.0,
+      40.0,
+      30.0
+    ],
+    "weightKg": 68,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-160 frame 400x750x300mm, 68 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T185-00576": {
+    "dimsCm": [
+      85.5,
+      50.0,
+      37.0
+    ],
+    "weightKg": 112,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-185 frame 500x855x370mm, 112 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T200-00577": {
+    "dimsCm": [
+      85.5,
+      50.0,
+      37.0
+    ],
+    "weightKg": 112,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-200 frame 500x855x370mm, 112 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T220-00578": {
+    "dimsCm": [
+      85.5,
+      50.0,
+      37.0
+    ],
+    "weightKg": 112,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-220 frame 500x855x370mm, 112 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T250-00579": {
+    "dimsCm": [
+      92.5,
+      54.0,
+      38.0
+    ],
+    "weightKg": 120,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-250 frame 540x924.5x380mm, 120 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T280-00580": {
+    "dimsCm": [
+      92.5,
+      54.0,
+      38.0
+    ],
+    "weightKg": 120,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-280 frame 540x924.5x380mm, 120 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T315-00581": {
+    "dimsCm": [
+      102.5,
+      70.0,
+      40.0
+    ],
+    "weightKg": 133,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-315 frame 700x1025.5x400mm, 133 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T355-00582": {
+    "dimsCm": [
+      102.5,
+      70.0,
+      40.0
+    ],
+    "weightKg": 133,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-355 frame 700x1025.5x400mm, 133 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T400H-00583": {
+    "dimsCm": [
+      102.5,
+      70.0,
+      40.0
+    ],
+    "weightKg": 133,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-400 frame 700x1025.5x400mm, 133 kg (frame shared across ratings)."
+  },
+  "FRECON-PV5004T450H-00584": {
+    "dimsCm": [
+      168.4,
+      94.0,
+      44.0
+    ],
+    "weightKg": 195,
+    "basis": "series",
+    "source": "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+    "note": "Frecon PV500&PV150A manual Table 1-6 / 1.3 Dimension Drawing; net weight, product (unpackaged) W x H x D: PV500-4T-450 frame 940x1684x440mm, 195 kg (frame shared across ratings)."
+  }
+}

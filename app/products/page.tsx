@@ -15,51 +15,18 @@ import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { mockProducts } from '@/lib/products-mock'
 import { ProductCard } from '@/components/ProductCard'
+import { buildSpecFacets } from '@/lib/spec-facets'
 import { CATEGORY_GROUPS, getGroupIdForCategory, getCategoryValuesByGroupId, getCategoryKey } from '@/lib/categories'
 import { productMatchesQuery } from '@/lib/search-product'
 import { ProductPageShell } from '@/components/ProductPageShell'
 
 type SortOption = 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc' | 'newest'
 type SpecFilters = Record<string, string[]>
-type SpecFacet = { key: string; values: string[] }
 
 const ALL_CATEGORY_VALUES = new Set(CATEGORY_GROUPS.flatMap((g) => [...g.categoryValues] as string[]))
 
 function isGroupId(cat: string) {
   return CATEGORY_GROUPS.some((g) => g.id === cat)
-}
-
-function buildSpecFacets(products: (typeof mockProducts)[number][]): SpecFacet[] {
-  const map = new Map<string, Set<string>>()
-
-  for (const product of products) {
-    const specs = product.specifications ?? {}
-    for (const [keyRaw, valueRaw] of Object.entries(specs)) {
-      const key = keyRaw.trim()
-      const value = String(valueRaw).trim()
-      if (!key || !value) continue
-      if (!map.has(key)) map.set(key, new Set())
-      map.get(key)!.add(value)
-    }
-  }
-
-  const facets: SpecFacet[] = []
-  for (const [key, valuesSet] of map.entries()) {
-    const values = Array.from(valuesSet)
-      .filter(Boolean)
-      .sort((a, b) => a.localeCompare(b, 'tr'))
-
-    if (values.length >= 2 && values.length <= 12) {
-      facets.push({ key, values })
-    }
-  }
-
-  return facets
-    .sort((a, b) => {
-      if (a.values.length !== b.values.length) return a.values.length - b.values.length
-      return a.key.localeCompare(b.key, 'tr')
-    })
-    .slice(0, 6)
 }
 
 function ProductsPageContent() {

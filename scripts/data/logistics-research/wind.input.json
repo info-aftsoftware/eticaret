@@ -1,0 +1,636 @@
+[
+ {
+  "sku": "ALTECH-00384",
+  "name": "Altech Boreas 2000 2 kW 48V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-2000-2-kw-48v-off-grid-ruzgar-turbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-00385",
+  "name": "Altech Boreas 2000 2 kW 24V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-2000-2-kw-24v-off-grid-ruzgar-turbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-00387",
+  "name": "Altech Boreas 4000 4 kW 48V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-4000-4-kw-48v-off-grid-ruzgar-turbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-00388",
+  "name": "Altech Boreas 4000 4 kW 24V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-4000-4-kw-24v-off-grid-ruzgar-turbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-00390",
+  "name": "Altech Boreas 6000 6 kW 48V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-6000-6-kw-48v-off-grid-ruzgar-turbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-00391",
+  "name": "Altech 7 m Kafes Tipi Rüzgar Türbini Montaj Direği",
+  "brand": "Altech",
+  "productId": "altech-7-m-kafes-tipi-ruzgar-turbini-montaj-diregi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-AT3KWNOVA3000-00392",
+  "name": "Altech Nova 3000 3 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-AT5KWNOVA5000-00393",
+  "name": "Altech Nova 5000 5 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-AT8KWNOVA8000-00394",
+  "name": "Altech Nova 8000 8 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ALTECH-AT12KWNOVAPRE-00395",
+  "name": "Altech Nova 12000 12 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-I500-00639",
+  "name": "İstabreeze i-500 500W 12/24V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-serisi-ruzgar-turbini-500w-2000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/i-500w-12v-24v-wind-turbine/",
+   "https://istabreeze.us/i-700w-12v-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/"
+  ]
+ },
+ {
+  "sku": "İSTABR-I700-00641",
+  "name": "İstabreeze i-700 700W 12/24/48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-serisi-ruzgar-turbini-500w-2000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/i-500w-12v-24v-wind-turbine/",
+   "https://istabreeze.us/i-700w-12v-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/"
+  ]
+ },
+ {
+  "sku": "İSTABR-I1000-00642",
+  "name": "İstabreeze i-1000 1000W 24/48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-serisi-ruzgar-turbini-500w-2000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/i-500w-12v-24v-wind-turbine/",
+   "https://istabreeze.us/i-700w-12v-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/"
+  ]
+ },
+ {
+  "sku": "İSTABR-I1500-00643",
+  "name": "İstabreeze i-1500 1500W 24/48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-serisi-ruzgar-turbini-500w-2000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/i-500w-12v-24v-wind-turbine/",
+   "https://istabreeze.us/i-700w-12v-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/"
+  ]
+ },
+ {
+  "sku": "İSTABR-I2000-00644",
+  "name": "İstabreeze i-2000 2000W 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-serisi-ruzgar-turbini-500w-2000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/i-500w-12v-24v-wind-turbine/",
+   "https://istabreeze.us/i-700w-12v-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+   "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/"
+  ]
+ },
+ {
+  "sku": "İSTABR-00640",
+  "name": "İstabreeze Air Speed 500W 12/24V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-air-speed-500w-12-24v-ruzgar-turbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00645",
+  "name": "İstabreeze Windsafe 1500W 24V Korumalı Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-windsafe-korumali-ruzgar-turbini-1500w-24v-2000w-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00646",
+  "name": "İstabreeze Windsafe 2000W 48V Korumalı Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-windsafe-korumali-ruzgar-turbini-1500w-24v-2000w-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00647",
+  "name": "İstabreeze Heli 2.0 2 kW 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-48v-ruzgar-turbini-2-kw-4-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00648",
+  "name": "İstabreeze Heli 4.0 4 kW 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-48v-ruzgar-turbini-2-kw-4-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00649",
+  "name": "İstabreeze 650W 12/24V Rüzgar-Güneş Hibrit Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-gunes-hibrit-sarj-kontrol-cihazi-650w-850w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/hybrid-charge-controller-12v-24v-48v-650w-850w-for-wind-turbine-generator/"
+  ]
+ },
+ {
+  "sku": "İSTABR-00650",
+  "name": "İstabreeze 850W 12/24/48V Rüzgar-Güneş Hibrit Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-gunes-hibrit-sarj-kontrol-cihazi-650w-850w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/hybrid-charge-controller-12v-24v-48v-650w-850w-for-wind-turbine-generator/"
+  ]
+ },
+ {
+  "sku": "İSTABR-00651",
+  "name": "İstabreeze Pro Wind 1500W 24V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/wind-generators-accessories/charge-controller/"
+  ]
+ },
+ {
+  "sku": "İSTABR-00652",
+  "name": "İstabreeze Pro Wind 2000W 24/48V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/wind-generators-accessories/charge-controller/"
+  ]
+ },
+ {
+  "sku": "İSTABR-00653",
+  "name": "İstabreeze Pro Wind 4000W 48V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://istabreeze.us/wind-generators-accessories/charge-controller/"
+  ]
+ },
+ {
+  "sku": "İSTABR-00654",
+  "name": "İstabreeze Rüzgar Türbini Manuel Fren Panosu",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-manuel-fren-panosu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00655",
+  "name": "İstabreeze Rüzgar Türbini Direk Seti (15 kg Taşıma Kapasiteli)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-direk-seti-15-kg-tasima-kapasiteli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00656",
+  "name": "İstabreeze Rüzgar Türbini Direği (40 kg Taşıma Kapasiteli)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-diregi-40-kg-tasima-kapasiteli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00657",
+  "name": "İstabreeze Direk Uzatma Ek Borusu (15 kg Taşıma Kapasiteli)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-direk-uzatma-ek-borusu-15-kg-40-kg",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00658",
+  "name": "İstabreeze Direk Uzatma Ek Borusu (40 kg Taşıma Kapasiteli)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-direk-uzatma-ek-borusu-15-kg-40-kg",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00659",
+  "name": "İstabreeze Rüzgar Türbini Ses Düşürücü Amortisör",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-ses-dusurucu-amortisor",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00660",
+  "name": "İstabreeze 500G 12/24V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00661",
+  "name": "İstabreeze 800G 12/24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00662",
+  "name": "İstabreeze 1000G 24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00663",
+  "name": "İstabreeze 1500G 24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00664",
+  "name": "İstabreeze 2000G 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00665",
+  "name": "İstabreeze Heli 2.0 2 kW 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-ruzgar-turbini-alternatoru-2-kw-4-kw-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00666",
+  "name": "İstabreeze Heli 4.0 4 kW 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-ruzgar-turbini-alternatoru-2-kw-4-kw-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00667",
+  "name": "İstabreeze 50 cm Kompozit Rüzgar Türbini Kanadı (Siyah-Beyaz)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-50-cm-kompozit-ruzgar-turbini-kanadi-siyah-beyaz",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00668",
+  "name": "İstabreeze 56 cm Karbon Rüzgar Türbini Kanadı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-56-cm-karbon-ruzgar-turbini-kanadi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00669",
+  "name": "İstabreeze 57 cm Kompozit Rüzgar Türbini Kanadı (Siyah)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-57-cm-kompozit-ruzgar-turbini-kanadi-siyah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00670",
+  "name": "İstabreeze 60 cm Kompozit Rüzgar Türbini Kanadı (Beyaz-Siyah)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kompozit-ruzgar-turbini-kanadi-60-cm-107-cm-beyaz-siyah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00672",
+  "name": "İstabreeze 107 cm Kompozit Rüzgar Türbini Kanadı (Beyaz-Siyah)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kompozit-ruzgar-turbini-kanadi-60-cm-107-cm-beyaz-siyah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00671",
+  "name": "İstabreeze 90 cm Kompozit Rüzgar Türbini Kanadı (Beyaz)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-90-cm-kompozit-ruzgar-turbini-kanadi-beyaz",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00673",
+  "name": "İstabreeze Rüzgar Türbini Küçük Burun",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-kucuk-burun",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00674",
+  "name": "İstabreeze Rüzgar Türbini Büyük Burun",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-buyuk-burun",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00675",
+  "name": "İstabreeze Rüzgar Türbini 5 Kollu Büyük Burun",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-5-kollu-buyuk-burun",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00676",
+  "name": "İstabreeze Rüzgar Türbini Kuyruğu (700W-2000W Modeller İçin)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-kuyrugu-700w-2000w-modeller-icin",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00677",
+  "name": "İstabreeze i-700 Rüzgar Türbini Kuyruk Borusu",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-700-ruzgar-turbini-kuyruk-borusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00678",
+  "name": "İstabreeze Rüzgar Türbini Kuyruk Borusu (1-2 kW Modeller İçin)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-kuyruk-borusu-1-2-kw-modeller-icin",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00679",
+  "name": "İstabreeze Alüminyum Kanat Flanşı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-aluminyum-kanat-flansi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00680",
+  "name": "İstabreeze 3 Kollu Kanat Flanşı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kanat-flansi-3-kollu-5-kollu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "İSTABR-00681",
+  "name": "İstabreeze 5 Kollu Kanat Flanşı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kanat-flansi-3-kollu-5-kollu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "MEXXSU-RG06018MPMX005-00809",
+  "name": "Mexxsun MPK8 60A 12/24/48V MPPT Şarj Kontrol Cihazı",
+  "brand": "Mexxsun",
+  "productId": "mexxsun-mpk8-60a-12-24-48v-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ }
+]

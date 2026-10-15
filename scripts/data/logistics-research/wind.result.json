@@ -1,0 +1,464 @@
+{
+ "ALTECH-00384": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-00385": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-00387": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-00388": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-00390": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-00391": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-AT3KWNOVA3000-00392": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-AT5KWNOVA5000-00393": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-AT8KWNOVA8000-00394": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "ALTECH-AT12KWNOVAPRE-00395": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "",
+  "note": "No official Altech datasheet or retailer listing with dimensions/weight found online (model codes not indexed). Request packing list from supplier; turbines/7 m lattice mast are likely freight items."
+ },
+ "İSTABR-I500-00639": {
+  "dimsCm": [
+   70,
+   30,
+   20
+  ],
+  "weightKg": 6,
+  "basis": "package",
+  "source": "https://istabreeze.us/i-500w-12v-24v-wind-turbine/",
+  "note": "Official package 70x30x20 cm (6 kg)."
+ },
+ "İSTABR-I700-00641": {
+  "dimsCm": [
+   110,
+   35,
+   25
+  ],
+  "weightKg": 18,
+  "basis": "package",
+  "source": "https://istabreeze.us/i-700w-12v-24v-48v-wind-turbine/",
+  "note": "3-blade version single box 110x35x25 cm (18 kg). 5-blade version ships as 60x40x40 cm (15 kg) + 110x19x12 cm (4.5 kg)."
+ },
+ "İSTABR-I1000-00642": {
+  "dimsCm": [
+   60,
+   40,
+   30
+  ],
+  "weightKg": 21,
+  "basis": "package",
+  "source": "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+  "note": "Ships as 2 parcels per official spec: main box 60x40x30 cm (17.5 kg) + blade box 110x19x12 cm (3.5 kg); dimsCm = main box, weightKg = total of both parcels."
+ },
+ "İSTABR-I1500-00643": {
+  "dimsCm": [
+   60,
+   40,
+   30
+  ],
+  "weightKg": 23,
+  "basis": "package",
+  "source": "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+  "note": "Ships as 2 parcels per official spec: main box 60x40x30 cm (19.5 kg) + blade box 110x19x12 cm (3.5 kg); dimsCm = main box, weightKg = total of both parcels."
+ },
+ "İSTABR-I2000-00644": {
+  "dimsCm": [
+   60,
+   40,
+   30
+  ],
+  "weightKg": 24,
+  "basis": "package",
+  "source": "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/",
+  "note": "Ships as 2 parcels per official spec: main box 60x40x30 cm (20.5 kg) + blade box 110x19x12 cm (3.5 kg); dimsCm = main box, weightKg = total of both parcels."
+ },
+ "İSTABR-00640": {
+  "dimsCm": [
+   70,
+   30,
+   20
+  ],
+  "weightKg": 7,
+  "basis": "package",
+  "source": "https://istabreeze.us/air-speed-500w-12v-24v-wind-turbine/",
+  "note": "Official package 70x30x20 cm (7 kg)."
+ },
+ "İSTABR-00645": {
+  "dimsCm": [
+   60,
+   40,
+   30
+  ],
+  "weightKg": 30,
+  "basis": "package",
+  "source": "https://istabreeze.us/1500w-24v-48v-windsafe-wind-turbine/",
+  "note": "Ships as 2 parcels per official spec: main box 60x40x30 cm (26.5 kg) + blade box 110x19x12 cm (3.5 kg); dimsCm = main box, weightKg = total of both parcels."
+ },
+ "İSTABR-00646": {
+  "dimsCm": [
+   60,
+   40,
+   30
+  ],
+  "weightKg": 32,
+  "basis": "package",
+  "source": "https://istabreeze.us/2000w-24v-48v-windsafe-wind-turbine/",
+  "note": "Ships as 2 parcels per official spec: main box 60x40x30 cm (28.5 kg) + blade box 110x19x12 cm (3.5 kg); dimsCm = main box, weightKg = total of both parcels."
+ },
+ "İSTABR-00647": {
+  "dimsCm": null,
+  "weightKg": 86.12,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/istabreeze-heli2-offgrid-netz",
+  "note": "Official store shipping weight for Heli 2.0 off-grid without controller (86.12 kg); spec sheet gives 81 kg. Blades 125 cm (rotor 250 cm). Package dims not published - freight item, needs human check."
+ },
+ "İSTABR-00648": {
+  "dimsCm": null,
+  "weightKg": 100,
+  "basis": "product",
+  "source": "https://istabreeze.us/heli-4kw-48v-off-grid-wind-turbine/",
+  "note": "Official 'Total weight of wind generator 100 kg' (official store shipping weight 146 kg). Blades 150 cm (rotor 300 cm). Package dims not published - freight item, needs human check."
+ },
+ "İSTABR-00649": {
+  "dimsCm": [
+   20,
+   11.5,
+   6
+  ],
+  "weightKg": 0.62,
+  "basis": "product",
+  "source": "https://www.altinelenerji.net/english-manual-book/650W-850W-Hybrid-Charge-Controller-Manual-Book.pdf",
+  "note": "Manufacturer manual: size 200x115x60 mm, weight (gross) 620 g."
+ },
+ "İSTABR-00650": {
+  "dimsCm": [
+   20,
+   11.5,
+   6
+  ],
+  "weightKg": 0.62,
+  "basis": "product",
+  "source": "https://www.altinelenerji.net/english-manual-book/650W-850W-Hybrid-Charge-Controller-Manual-Book.pdf",
+  "note": "Manufacturer manual: size 200x115x60 mm, weight (gross) 620 g (istabreeze.store lists 140x120x60 mm / 0.6 kg; store shipping weight 1.05 kg)."
+ },
+ "İSTABR-00651": {
+  "dimsCm": null,
+  "weightKg": 14.4,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/ihcc-laderegler-1500-2000",
+  "note": "Official store shipping weight for Pro controller HCC-1500/24V (incl. dump load). Dimensions not published."
+ },
+ "İSTABR-00652": {
+  "dimsCm": null,
+  "weightKg": 14.4,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/istabreeze-laderegler-ihcc-24v-48v",
+  "note": "Official store shipping weight for i/HCC-Pro 2000 (incl. dump load). Dimensions not published."
+ },
+ "İSTABR-00653": {
+  "dimsCm": null,
+  "weightKg": 12,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/4000w-48v-laderegler",
+  "note": "Official store shipping weight for 4000W 48V controller. Dimensions not published."
+ },
+ "İSTABR-00654": {
+  "dimsCm": [
+   28,
+   21,
+   13
+  ],
+  "weightKg": 1.8,
+  "basis": "product",
+  "source": "https://istabreeze.us/3-phase-ac-short-switch-istabreeze/",
+  "note": "Assumed = IstaBreeze 3-phase AC short/stop switch (manual brake): 210x280x130 mm, 1.8 kg - confirm it is the same item."
+ },
+ "İSTABR-00655": {
+  "dimsCm": [
+   100,
+   25,
+   20
+  ],
+  "weightKg": 21,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/mastturm-zubehoer-15kg-windgenerator",
+  "note": "Official packing size 100x25x20 cm (21 kg) for 15 kg tower 4 m."
+ },
+ "İSTABR-00656": {
+  "dimsCm": [
+   100,
+   25,
+   20
+  ],
+  "weightKg": 27,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/mast-zubehoer-40kg-angebot",
+  "note": "Official packing size 100x25x20 cm (27 kg) for 40 kg tower 4 m."
+ },
+ "İSTABR-00657": {
+  "dimsCm": [
+   100,
+   4.2,
+   4.2
+  ],
+  "weightKg": 4.5,
+  "basis": "product",
+  "source": "https://istabreeze.store/products/mastturm-zubehoer-15kg-windgenerator",
+  "note": "1 m extension; OD 42 mm from 15 kg tower spec; weight = official store shipping weight 4.5 kg."
+ },
+ "İSTABR-00658": {
+  "dimsCm": [
+   100,
+   6,
+   6
+  ],
+  "weightKg": 5.6,
+  "basis": "product",
+  "source": "https://istabreeze.us/mast-tower-extension-part-pipe-tube-for-40-kg-wind-turbine/",
+  "note": "1 m long, OD 60 mm, 5.60 kg (store shipping weight 5.5 kg)."
+ },
+ "İSTABR-00659": {
+  "dimsCm": [
+   20,
+   5,
+   5
+  ],
+  "weightKg": 3.7,
+  "basis": "product",
+  "source": "https://istabreeze.us/vibration-damper/",
+  "note": "Total height 200 mm, OD 50 mm, 3.7 kg (store shipping weight 4.5 kg)."
+ },
+ "İSTABR-00660": {
+  "dimsCm": null,
+  "weightKg": 2.7,
+  "basis": "package",
+  "source": "https://istabreeze.store/products/permanentmagnet-generator-12-24",
+  "note": "Official store shipping weight of G-500 12/24V generator (polyamide body). Aluminium G-500 variant ships at 8 kg - confirm which body is sold. Dims not published."
+ },
+ "İSTABR-00661": {
+  "dimsCm": null,
+  "weightKg": 8.75,
+  "basis": "product",
+  "source": "https://istabreeze.us/g-800-12v-24v-48v-permanent-magnet-generator/",
+  "note": "G-800 weight 8.75 kg (store shipping 8 kg). Dims not published."
+ },
+ "İSTABR-00662": {
+  "dimsCm": null,
+  "weightKg": 10,
+  "basis": "product",
+  "source": "https://istabreeze.us/g-1000-24v-48v-permanent-magnet-generator/",
+  "note": "G-1000 weight 10 kg (store shipping 11 kg). Dims not published."
+ },
+ "İSTABR-00663": {
+  "dimsCm": null,
+  "weightKg": 11.5,
+  "basis": "product",
+  "source": "https://istabreeze.us/g-1500-24v-48v-permanent-magnet-generator/",
+  "note": "G-1500 weight 11.5 kg (store shipping 12 kg). Dims not published."
+ },
+ "İSTABR-00664": {
+  "dimsCm": null,
+  "weightKg": 13.6,
+  "basis": "product",
+  "source": "https://istabreeze.us/g-2000-48v-permanent-magnet-generator/",
+  "note": "G-2000 weight 13.6 kg (store shipping 14 kg). Dims not published."
+ },
+ "İSTABR-00665": {
+  "dimsCm": null,
+  "weightKg": 25,
+  "basis": "product",
+  "source": "https://istabreeze.store/products/48v-low-rpm-pm-generator",
+  "note": "Heli 2.0 low-rpm generator weight 25 kg. Dims not published."
+ },
+ "İSTABR-00666": {
+  "dimsCm": null,
+  "weightKg": 33.5,
+  "basis": "product",
+  "source": "https://istabreeze.store/products/48v-low-rpm-pm-generator",
+  "note": "Heli 4.0 low-rpm generator weight 33.5 kg (istabreeze.us Heli 4 page says 31 kg). Dims not published."
+ },
+ "İSTABR-00667": {
+  "dimsCm": null,
+  "weightKg": 0.19,
+  "basis": "product",
+  "source": "https://istabreeze.us/50-cm-wind-blade-for-wind-turbine/",
+  "note": "Per blade: 50 cm, 190 g (official site sells a set of 3 = 0.57 kg). Cross-section not published."
+ },
+ "İSTABR-00668": {
+  "dimsCm": null,
+  "weightKg": 0.18,
+  "basis": "product",
+  "source": "https://istabreeze.us/56-cm-carbon-blade-for-wind-turbine/",
+  "note": "Per blade: 56 cm, 180 g. Cross-section not published."
+ },
+ "İSTABR-00669": {
+  "dimsCm": null,
+  "weightKg": 0.21,
+  "basis": "product",
+  "source": "https://istabreeze.us/57-cm-blade-for-wind-turbine/",
+  "note": "Per blade: 57 cm, 210 g; width 12.5 cm per i-500 spec. Thickness not published."
+ },
+ "İSTABR-00670": {
+  "dimsCm": null,
+  "weightKg": 0.27,
+  "basis": "product",
+  "source": "https://istabreeze.us/60-cm-wind-blade-for-wind-turbine/",
+  "note": "Per blade: 60 cm, 270 g (sold as set of 3 on official site). Cross-section not published."
+ },
+ "İSTABR-00672": {
+  "dimsCm": null,
+  "weightKg": 0.65,
+  "basis": "product",
+  "source": "https://istabreeze.us/107-cm-wind-blade-for-wind-turbine/",
+  "note": "Per blade: 107 cm, 650 g composite (770 g carbon); width 14.3 cm. Thickness not published."
+ },
+ "İSTABR-00671": {
+  "dimsCm": null,
+  "weightKg": 0.62,
+  "basis": "product",
+  "source": "https://istabreeze.us/90-cm-wind-blade-for-wind-turbine/",
+  "note": "Per blade: 90 cm, 620 g; width 14.3 cm per i-700 spec. Thickness not published."
+ },
+ "İSTABR-00673": {
+  "dimsCm": [
+   14,
+   14,
+   7.9
+  ],
+  "weightKg": 0.05,
+  "basis": "product",
+  "source": "https://istabreeze.us/nose-for-3-blade-500w-wind-turbines/",
+  "note": "Diameter 140 mm, height 79 mm, 50 g."
+ },
+ "İSTABR-00674": {
+  "dimsCm": [
+   16,
+   16,
+   9.3
+  ],
+  "weightKg": 0.1,
+  "basis": "product",
+  "source": "https://istabreeze.us/nose-for-3-blade-version-between-700w-2kw-wind-turbines/",
+  "note": "Diameter 160 mm, height 93 mm, 100 g."
+ },
+ "İSTABR-00675": {
+  "dimsCm": [
+   40,
+   40,
+   15.5
+  ],
+  "weightKg": 0.53,
+  "basis": "product",
+  "source": "https://istabreeze.us/nose-for-5-blade-version-between-1kw-2kw-wind-turbines/",
+  "note": "Diameter 400 mm, height 155 mm, 530 g."
+ },
+ "İSTABR-00676": {
+  "dimsCm": null,
+  "weightKg": 0.79,
+  "basis": "product",
+  "source": "https://istabreeze.us/tail-for-between-700w-2000w/",
+  "note": "Weight 790 g; dimensions not published."
+ },
+ "İSTABR-00677": {
+  "dimsCm": [
+   50,
+   5,
+   5
+  ],
+  "weightKg": null,
+  "basis": "product",
+  "source": "https://istabreeze.us/tail-pipe-for-700w/",
+  "note": "Length 50 cm, pipe diameter 50 mm; weight not published."
+ },
+ "İSTABR-00678": {
+  "dimsCm": [
+   100,
+   5,
+   5
+  ],
+  "weightKg": null,
+  "basis": "product",
+  "source": "https://istabreeze.us/tail-pipe-for-1kw-2kw/",
+  "note": "Length 100 cm, pipe diameter 50 mm; weight not published."
+ },
+ "İSTABR-00679": {
+  "dimsCm": null,
+  "weightKg": 0.285,
+  "basis": "product",
+  "source": "https://istabreeze.us/flange-for-3-blade-500w-wind-turbines/",
+  "note": "Diameter 132 mm, 285 g; height not published."
+ },
+ "İSTABR-00680": {
+  "dimsCm": null,
+  "weightKg": 2.7,
+  "basis": "product",
+  "source": "https://istabreeze.us/flange-for-3-blade-version-between-700w-2kw-wind-turbines/",
+  "note": "Diameter 390 mm, 5 mm steel, 2.7 kg; overall height not published."
+ },
+ "İSTABR-00681": {
+  "dimsCm": null,
+  "weightKg": 3.2,
+  "basis": "product",
+  "source": "https://istabreeze.us/flange-for-5-blade-version-between-1kw-2kw-wind-turbines/",
+  "note": "Diameter 390 mm, 5 mm steel, 3.2 kg (istabreeze.store lists 2 kg); overall height not published."
+ },
+ "MEXXSU-RG06018MPMX005-00809": {
+  "dimsCm": null,
+  "weightKg": null,
+  "basis": "product",
+  "source": "https://www.mexxsun.com/tr/urun/mpk8-60a-mppt-12-24-48v-3111",
+  "note": "Official MPK8 user manual (https://www.mexxsun.com/files/pms/2025/06/-mpk8-60a-mppt-12-24-48v.pdf) has no mechanical dimensions or weight; none found on retailer pages."
+ }
+}

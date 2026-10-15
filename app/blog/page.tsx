@@ -39,7 +39,7 @@ const BLOG_POSTS: {
     category: 'EV Şarj',
     categorySlug: 'ev-sarj',
     readTime: '6 dk',
-    image: '/images/categories/sarj.png',
+    image: '/images/products/voltekno/1xWJp1WcdJ2j8Dy3YpYNeSV2aIUblX2uV.webp',
     accent: 'bg-blue-600',
   },
   {

@@ -59,6 +59,16 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
       'Solar pompa sürücüsü fiyatları: monofaze ve trifaze solar pompa inverterleri, tarımsal sulama için güneş enerjili pompa sistemleri. Frecon, TommaTech ve daha fazlası voltekno\'da.',
     keywords: ['solar pompa sürücüsü', 'solar pompa inverteri', 'güneş enerjili sulama', 'tarımsal sulama', 'solar pompa'],
   },
+  'isi-pompasi': {
+    title: 'Isı Pompası',
+    description: 'Monoblok, split ve havuz tipi ısı pompaları; R290, R32 ve EVI teknolojisiyle ısıtma, soğutma ve sıcak su.',
+    seoDescription:
+      'Isı pompası fiyatları: TommaTech monoblok, split ve havuz tipi ısı pompaları, R290 / R32 EVI inverter modeller. Ev ve endüstriyel ısıtma-soğutma çözümleri voltekno\'da.',
+    keywords: ['ısı pompası', 'ısı pompası fiyatları', 'havuz ısı pompası', 'split ısı pompası', 'r290 ısı pompası', 'evi ısı pompası', 'tommatech ısı pompası'],
+    image: '/images/categories/isi-pompasi.png',
+    imagePosition: 'center center',
+    imageScale: 0.78,
+  },
   akuler: {
     title: 'Aküler',
     description: 'Kurşun asit ve jel aküler; solar sistemler, UPS ve karavan uygulamaları için.',
@@ -96,16 +106,16 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
   },
   'aksesuar-ve-koruma': {
     title: 'Aksesuar ve Koruma',
-    description: 'Sistem bileşenleri, koruma ekipmanları ve tamamlayıcı aksesuarlar.',
+    description: 'Sistem bileşenleri, koruma ekipmanları, izleme ve kontrol cihazları.',
     seoDescription:
       'Solar ve enerji depolama sistemleri için sistem bileşenleri, koruma ekipmanları ve aksesuarlar voltekno\'da.',
     keywords: ['solar aksesuar', 'sistem bileşenleri', 'koruma ekipmanı', 'enerji sistemi aksesuarı'],
   },
   diger: {
     title: 'Diğer Ürünler',
-    description: 'İzleme ve kontrol cihazları, güç istasyonları, rüzgar türbini parçaları ve diğer enerji ürünleri.',
+    description: 'Diğer enerji ürünleri ve aksesuarlar.',
     seoDescription:
-      'GX izleme cihazları, ekranlar, transfer switch, şönt, inverter ve rüzgar türbini yedek parçaları gibi diğer enerji ürünleri voltekno\'da.',
-    keywords: ['gx touch', 'smart shunt', 'transfer switch', 'enerji izleme', 'rüzgar türbini parçaları'],
+      'Güneş enerjisi, enerji depolama ve rüzgar sistemleri için diğer ürün ve aksesuarlar voltekno\'da.',
+    keywords: ['enerji ürünleri', 'solar aksesuar'],
   },
 }

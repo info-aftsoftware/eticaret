@@ -75,8 +75,10 @@ function applies(c: ActiveCampaign, p: MergedProduct): boolean {
 
 function discounted(price: number, c: ActiveCampaign): number {
   const next = c.type === 'PERCENT' ? price * (1 - Math.min(c.value, 99) / 100) : price - c.value
-  // Ürün 0 TL'ye inemez: en fazla %99 indirim
-  return round2(Math.max(next, price * 0.01))
+  // Ürün 0 TL'ye inemez: en fazla %99 indirim.
+  // Katalog fiyatları tam TL (lib/fx-rates.ts); kampanyalı fiyat da tam TL'ye yukarı yuvarlanır
+  const floor = Math.max(next, price * 0.01)
+  return Number.isInteger(price) ? Math.ceil(floor - 1e-9) : round2(floor)
 }
 
 /** Ürüne en avantajlı kampanyayı uygular (taban fiyat ve varyant fiyatları). */

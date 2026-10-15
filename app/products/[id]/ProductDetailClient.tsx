@@ -15,7 +15,7 @@ import { FavoriteButton } from '@/components/FavoriteButton'
 import { StockAlertForm } from '@/components/StockAlertForm'
 import { CompareButton } from '@/components/CompareButton'
 import { Turnstile } from '@/components/Turnstile'
-import { mockProducts, COMPLEMENTARY_BY_CATEGORY } from '@/lib/products-mock'
+import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
 import { useTranslations } from 'next-intl'
@@ -157,36 +157,13 @@ export default function ProductDetailClient({ initialProduct, productId: product
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id])
 
-  /** Birleşik kablo sayfasında sadece diğer metreler (aynı seri, farklı uzunluk = farklı ürün). SKU listesi değil kart gösterilecek. */
-  const isMergedCableProduct = product?.category === 'Araç Şarj Kabloları' && product?.id.startsWith('hims-22kw-tip2-') && product?.id.endsWith('-elektrikli-arac-sarj-kablosu')
-  const otherLengthProducts = React.useMemo(() => {
-    if (!isMergedCableProduct || !product) return []
-    return mockProducts.filter(
-      (p) =>
-        p.id !== product.id &&
-        p.category === 'Araç Şarj Kabloları' &&
-        p.id.startsWith('hims-22kw-tip2-') &&
-        p.id.endsWith('-elektrikli-arac-sarj-kablosu')
-    )
-  }, [product?.id, isMergedCableProduct])
-
-  /** Diğer seri varyantları (kablo dışı ürünlerde kullanılır; kart olarak gösterilir) */
-  const getEMEFFamilyKey = (p: (typeof mockProducts)[number]) =>
-    p.sku?.match(/^EMEF-[A-Z0-9]{4}/)?.[0] ?? ((p as { productFamilyKey?: string }).productFamilyKey?.startsWith?.('EMEF-') ? (p as { productFamilyKey?: string }).productFamilyKey! : null)
-  const familyVariants = React.useMemo(() => {
-    if (isMergedCableProduct || !product) return []
-    const fk = getEMEFFamilyKey(product)
-    if (!fk) return []
-    return mockProducts.filter((p) => p.id !== product.id && getEMEFFamilyKey(p) === fk)
-  }, [product?.id, product?.sku, (product as { productFamilyKey?: string } | null)?.productFamilyKey, isMergedCableProduct])
-
   /** Önerilen ürünler: en az 4–5 adet; önce tamamlayıcı/kategori, eksikse genel listeden tamamlanır */
   const MIN_RECOMMENDED = 5
   const recommendedProducts = React.useMemo(() => {
     if (!product) return []
-    const complementary = product.category ? COMPLEMENTARY_BY_CATEGORY[product.category] : undefined
-    let ids = complementary
-      ? complementary.productIds.filter((id) => id !== product.id && mockProductsMap[id])
+    const complementaryIds = getComplementaryIds(product).filter((id) => mockProductsMap[id])
+    let ids = complementaryIds.length > 0
+      ? complementaryIds
       : mockProducts
         .filter((p) => p.category === product.category && p.id !== product.id)
         .slice(0, Math.max(MIN_RECOMMENDED, 8))
@@ -202,7 +179,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
     return ids
       .map((id) => mockProductsMap[id])
       .filter(Boolean) as (typeof mockProducts)[number][]
-  }, [product?.id, product?.category])
+  }, [product?.id, product?.category, product?.brand])
 
   if (loading) {
     return (
@@ -407,11 +384,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
               {product.variants && product.variants.length > 0 && (
                 <div className="mb-4">
                   <p className="text-sm font-semibold text-slate-700 mb-2">
-                    {product.category === 'Araç Şarj Kabloları' && product.id.startsWith('hims-22kw-tip2-')
-                      ? tProduct('color')
-                      : product.category === 'Araç Şarj Kabloları'
-                        ? tProduct('length')
-                        : tProduct('modelCapacity')}
+                    {tProduct('modelCapacity')}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {product.variants.map((v) => (
@@ -547,8 +520,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
               {(() => {
                 const complementary = product.category ? COMPLEMENTARY_BY_CATEGORY[product.category] : undefined
                 if (!complementary) return null
-                const compatProducts = complementary.productIds
-                  .filter((id) => id !== product.id && mockProductsMap[id])
+                const compatProducts = getComplementaryIds(product)
+                  .filter((id) => mockProductsMap[id])
                   .slice(0, 4)
                   .map((id) => mockProductsMap[id])
                   .filter(Boolean) as (typeof mockProducts)[number][]
@@ -719,7 +692,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
           {/* Ürün Açıklamaları: sol = teknik tablo, sağ = akordiyon. Varyant seçiliyse o varyantın özellikleri gösterilir. */}
           {(() => {
             const displaySpecs = effectiveVariant?.specifications ?? product.specifications
-            const hasSpecs = displaySpecs && Object.keys(displaySpecs).length > 0
+            // HTML açıklama teknik tabloları zaten içerir; aynı bilgi iki kez gösterilmesin (özellikler karşılaştırma ve filtrede kullanılır)
+            const hasSpecs = !product.descriptionHtml && !!displaySpecs && Object.keys(displaySpecs).length > 0
             return (hasSpecs ||
               product.descriptionHtml ||
               product.fullDescription ||
@@ -840,68 +814,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
               </div>
             ) : null
           })()}
-
-          {/* Diğer uzunluklar: sadece birleşik kablo sayfalarında, farklı metreler ayrı ürün kartları olarak */}
-          {otherLengthProducts.length > 0 && (
-            <div className="mt-10 pt-8 border-t border-slate-200 min-w-0">
-              <h2 className="text-lg font-bold text-slate-900 mb-2">{tProduct('otherLengths')}</h2>
-              <p className="text-sm text-slate-600 mb-4">{tProduct('otherLengthsDesc')}</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 min-w-0">
-                {otherLengthProducts.map((p) => (
-                  <ProductCard
-                    key={p.id}
-                    product={{
-                      id: p.id,
-                      name: p.name,
-                      description: p.description,
-                      price: p.price,
-                      image: p.images?.[0] ?? p.image,
-                      category: p.category,
-                      brand: p.brand,
-                    }}
-                    oldPrice={p.oldPrice}
-                    discount={p.discount}
-                    badges={p.tags}
-                    sku={p.sku}
-                    stock={p.stock}
-                    isVariantProduct={p.isVariantProduct}
-                    variant="compact"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Bu serinin diğer varyantları (kablo dışı): kart grid, SKU listesi yok */}
-          {familyVariants.length > 0 && (
-            <div className="mt-10 pt-8 border-t border-slate-200 min-w-0">
-              <h2 className="text-lg font-bold text-slate-900 mb-2">{tProduct('otherVariantsInSeries')}</h2>
-              <p className="text-sm text-slate-600 mb-4">{tProduct('otherVariantsInSeriesDesc')}</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 min-w-0">
-                {familyVariants.map((p) => (
-                  <ProductCard
-                    key={p.id}
-                    product={{
-                      id: p.id,
-                      name: p.name,
-                      description: p.description,
-                      price: p.price,
-                      image: p.images?.[0] ?? p.image,
-                      category: p.category,
-                      brand: p.brand,
-                    }}
-                    oldPrice={p.oldPrice}
-                    discount={p.discount}
-                    badges={p.tags}
-                    sku={p.sku}
-                    stock={p.stock}
-                    isVariantProduct={p.isVariantProduct}
-                    variant="compact"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
 
           {/* Önerilen Ürünler – her ürün sayfasında en az 1 sıra mutlaka gösterilir */}
           <div className="mt-10 pt-8 border-t border-slate-200 min-w-0">

@@ -1,0 +1,1326 @@
+{
+  "TOMMAT-TT450108TN10-00071": {
+    "dimsCm": [
+      172.2,
+      113.4,
+      3.0
+    ],
+    "weightKg": 21.45,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/108tn10-450-420wp-topcon-n-type-gunes-panelleri-929-tr.pdf",
+    "note": "CWT450-108TN10 datasheet panel size 1722x1134x30 mm, 21.45 kg"
+  },
+  "TOMMAT-TT600144TN10-00073": {
+    "dimsCm": [
+      227.8,
+      113.4,
+      3.5
+    ],
+    "weightKg": 29.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/144tn10-620-590wp-topcon-n-type-gunes-panelleri-896-tr.pdf",
+    "note": "CWT600-144TN10 column; 2278x1134x35 mm, 29.0 kg"
+  },
+  "TOMMAT-TT04036TN10-00075": {
+    "dimsCm": [
+      68.0,
+      43.0,
+      2.0
+    ],
+    "weightKg": 3.32,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT040-36TN10 column: 430x680x20 mm, 3.32 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT04536TN10-00076": {
+    "dimsCm": [
+      68.0,
+      43.0,
+      2.0
+    ],
+    "weightKg": 3.32,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT045-36TN10 column: 430x680x20 mm, 3.32 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT05536TN10-00077": {
+    "dimsCm": [
+      69.2,
+      46.4,
+      2.0
+    ],
+    "weightKg": 4.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT055-36TN10 column: 464x692x20 mm, 4.0 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT06536TN10-00078": {
+    "dimsCm": [
+      60.1,
+      56.2,
+      2.0
+    ],
+    "weightKg": 5.26,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT065-36TN10 column: 562x601x20 mm, 5.26 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT07036TN10-00079": {
+    "dimsCm": [
+      69.2,
+      67.4,
+      2.0
+    ],
+    "weightKg": 5.54,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT070-36TN10 column: 674x692x20 mm, 5.54 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT08036TN10-00080": {
+    "dimsCm": [
+      69.2,
+      67.4,
+      2.0
+    ],
+    "weightKg": 5.54,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT080-36TN10 column: 674x692x20 mm, 5.54 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT08536TN11-00081": {
+    "dimsCm": [
+      79.0,
+      68.0,
+      2.0
+    ],
+    "weightKg": 5.87,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT085-36TN10 column: 680x790x20 mm, 5.87 kg (Ver.2509.29) ; SKU code says 36TN11"
+  },
+  "TOMMAT-TT10036TN10-00082": {
+    "dimsCm": [
+      88.4,
+      69.2,
+      2.0
+    ],
+    "weightKg": 7.1,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT100-36TN10 column: 692x884x20 mm, 7.1 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT11036TN10-00083": {
+    "dimsCm": [
+      88.4,
+      69.2,
+      2.0
+    ],
+    "weightKg": 7.1,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT110-36TN10 column: 692x884x20 mm, 7.1 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT12036TN10-00084": {
+    "dimsCm": [
+      88.4,
+      69.2,
+      2.0
+    ],
+    "weightKg": 7.1,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT120-36TN10 column: 692x884x20 mm, 7.1 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT13036TN10-00085": {
+    "dimsCm": [
+      88.4,
+      69.2,
+      2.0
+    ],
+    "weightKg": 7.1,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT130-36TN10 column: 692x884x20 mm, 7.1 kg (Ver.2509.29)"
+  },
+  "TOMMAT-TT24048PM12-00086": {
+    "dimsCm": [
+      130.3,
+      93.1,
+      3.0
+    ],
+    "weightKg": 13.46,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-m12-36-48pm-hc-mb-solar-panels-1155-en.pdf",
+    "note": "TT240-48PM12: 931x1303x30 mm, 13.46 kg"
+  },
+  "TOMMAT-TT28572TN10-00087": {
+    "dimsCm": [
+      172.2,
+      76.7,
+      3.0
+    ],
+    "weightKg": 15.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/72-36tn10-285-40wp-topcon-n-type-solar-panels-en.pdf",
+    "note": "TT285-72TN10: 767x1722x30 mm, 15.50 kg"
+  },
+  "TOMMAT-TT15036TN10PRT-00091": {
+    "dimsCm": [
+      60.0,
+      42.0,
+      2.5
+    ],
+    "weightKg": 4.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-150w-tasinabilir-gunes-paneli-1670-tr.pdf",
+    "note": "Folded size 420x600x25 mm; weight is packaged weight 4.5 kg (net 3.4 kg); box dims not given"
+  },
+  "TOMMAT-BTRPMRN1128V100AHS-00098": {
+    "dimsCm": [
+      22.9,
+      13.8,
+      21.0
+    ],
+    "weightKg": 9.9,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-100ah-lfp-marine-batarya-1944-tr.pdf",
+    "note": "BTR-MRN1-12.8V-100AH-S: 229x138x210 mm, 9.9 kg"
+  },
+  "TOMMAT-BTRPMRN1128V200AH-00099": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      21.9
+    ],
+    "weightKg": 21.6,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf",
+    "note": "BTR-MRN1-12.8V-200AH: 522x240x219 mm, 21.6 kg"
+  },
+  "TOMMAT-BTRPMRN1256V100AH-00101": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      21.9
+    ],
+    "weightKg": 21.6,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf",
+    "note": "BTR-MRN1-25.6V-100AH: 522x240x219 mm, 21.6 kg"
+  },
+  "TOMMAT-BTRPMRN1256V200AH-00103": {
+    "dimsCm": [
+      52.2,
+      26.9,
+      21.9
+    ],
+    "weightKg": 40.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-256v-200ah-lfp-marine-batarya-1946-tr.pdf",
+    "note": "BTR-P-MRN1-25.6V-200AH: 522x269x219 mm, 40.5 kg"
+  },
+  "TOMMAT-BTRPMRN3128V200AH-00100": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      21.9
+    ],
+    "weightKg": 21.6,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf",
+    "note": "BTR-MRN3-12.8V-200AH: 522x240x219 mm, 21.6 kg"
+  },
+  "TOMMAT-BTRPMRN3256V100AH-00102": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      21.9
+    ],
+    "weightKg": 21.6,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf",
+    "note": "BTR-MRN3-25.6V-100AH: 522x240x219 mm, 21.6 kg"
+  },
+  "TOMMAT-BTRP512V102AH-00198": {
+    "dimsCm": [
+      62.8,
+      46.9,
+      19.9
+    ],
+    "weightKg": 47.7,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-512v-102ah-rack-moduler-serisi-g2-lityumbatarya-tr.pdf",
+    "note": "BTR-P-51.2V-102Ah: 628x468.5x198.5 mm (drawing 470.3), 47.70 kg"
+  },
+  "TOMMAT-MGIV1200WPLS-00106": {
+    "dimsCm": [
+      34.0,
+      22.0,
+      25.0
+    ],
+    "weightKg": 12.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tt-tasinabilir-guc-istasyonu-v-serisi-960wh-1030wh-1653-tr.pdf",
+    "note": "MGI-V-1800W-PLS 1030Wh: 340x220x250 mm, net 12 kg"
+  },
+  "TOMMAT-KBLMC4XT6012AWG1M-00109": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "No datasheet; MC4-XT60 12AWG 1 m cable, small parcel"
+  },
+  "TOMMAT-KBLMC4DC552518AWG1-00110": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "No datasheet; MC4-DC5525 18AWG cable, small parcel"
+  },
+  "TOMMAT-INVTTONGINOVA5KTF-00120": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-30-150kw-trio-inova-serisi-on-grid-inverter-tr.pdf",
+    "note": "Trio Inova 5K: 283x525x178 mm (WxHxD), 11.5 kg (sheet covers 3-15K despite filename)"
+  },
+  "TOMMAT-INVTTONGINOVA10KTF-00121": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      17.8
+    ],
+    "weightKg": 11.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-30-150kw-trio-inova-serisi-on-grid-inverter-tr.pdf",
+    "note": "Trio Inova 10K: 283x525x178 mm, 11.5 kg"
+  },
+  "TOMMAT-INVTTONGINOVA15KTF-00122": {
+    "dimsCm": [
+      52.5,
+      28.3,
+      18.8
+    ],
+    "weightKg": 12.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-30-150kw-trio-inova-serisi-on-grid-inverter-tr.pdf",
+    "note": "Trio Inova 15K: 283x525x188 mm, 12 kg"
+  },
+  "TOMMAT-ONGTTHYN16KLVMF-00134": {
+    "dimsCm": [
+      76.3,
+      46.4,
+      28.2
+    ],
+    "weightKg": 54.1,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/uno-hybrid-n-16k-1953-tr.pdf",
+    "note": "UNO-HYB-LV-N16K-1P: 464x763x282 mm, 54.1 kg"
+  },
+  "TOMMAT-INVTTHY10SHVAIO-00140": {
+    "dimsCm": [
+      53.5,
+      45.0,
+      39.3
+    ],
+    "weightKg": 40.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-50-200kw-trio-hybrid-s-series-hv-aio-hybrid-inverter-user-manual-en.pdf",
+    "note": "HV AIO user manual datasheet: 535Wx450Hx393D mm, 40 kg (AIO datasheet itself omits inverter size)"
+  },
+  "TOMMAT-INVTTHY15SHVAIO-00141": {
+    "dimsCm": [
+      53.5,
+      45.0,
+      39.3
+    ],
+    "weightKg": 40.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-50-200kw-trio-hybrid-s-series-hv-aio-hybrid-inverter-user-manual-en.pdf",
+    "note": "HV AIO user manual (12-20K table): 535x450x393 mm, 40 kg"
+  },
+  "TOMMAT-INVTTHY20SHVAIO-00142": {
+    "dimsCm": [
+      53.5,
+      45.0,
+      39.3
+    ],
+    "weightKg": 40.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-50-200kw-trio-hybrid-s-series-hv-aio-hybrid-inverter-user-manual-en.pdf",
+    "note": "HV AIO user manual (12-20K table): 535x450x393 mm, 40 kg"
+  },
+  "TOMMAT-INVTTHY12SLVAIO-00143": {
+    "dimsCm": [
+      72.0,
+      44.0,
+      25.5
+    ],
+    "weightKg": 38.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-50-120kw-trio-hybrid-s-series-lv-aio-hybrid-inverter-en.pdf",
+    "note": "Trio Hybrid S 12K LV AIO datasheet Ver.2603: 720x255x440 mm, 38 kg (older user manual says 720x460.5x254, 43.75 kg)"
+  },
+  "TOMMAT-INVTTHY10SHV-00144": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf",
+    "note": "Trio Hybrid S 10K HV: 408x638x237 mm, 30.5 kg"
+  },
+  "TOMMAT-INVTTHY20SHV-00145": {
+    "dimsCm": [
+      63.8,
+      40.8,
+      23.7
+    ],
+    "weightKg": 30.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf",
+    "note": "Trio Hybrid S 20K HV: 408x638x237 mm, 30.5 kg"
+  },
+  "TOMMAT-ONGTT35MTRSMRTMF-00152": {
+    "dimsCm": [
+      10.0,
+      6.55,
+      3.6
+    ],
+    "weightKg": 1.2,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/smart-meter-datasheet-1481-tr.pdf",
+    "note": "Uno Smart Meter DDSU666: 100x36x65.5 mm, 1.2 kg incl. cables"
+  },
+  "TOMMAT-ONGTT35MTRSMRTTF-00153": {
+    "dimsCm": [
+      10.0,
+      7.2,
+      6.55
+    ],
+    "weightKg": 1.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/smart-meter-datasheet-1481-tr.pdf",
+    "note": "Trio Smart Meter DTSU666: 100x72x65.5 mm, 1.5 kg incl. cables"
+  },
+  "TOMMAT-ONGTT36MTRSMRTWCTT-00154": {
+    "dimsCm": [
+      10.0,
+      7.2,
+      6.55
+    ],
+    "weightKg": 1.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/smart-meter-datasheet-1481-tr.pdf",
+    "note": "Trio Smart Meter-CT DTSU666-CT: 100x72x65.5 mm, 1.5 kg incl. cables (3 CTs included)"
+  },
+  "TOMMAT-BTRYTTHV40KWHS-00162": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-series-hv-battery-system-user-manual-en.pdf",
+    "note": "Only system values published (AIO-S8 540x385x650 mm 97 kg ... S24 1530 mm 253 kg). Per-module increment implies ~540x385x220 mm, ~39 kg; manual says module >30 kg. Needs confirmation"
+  },
+  "TOMMAT-BTRYTTHVBMS40SAIO-00163": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-series-hv-battery-system-user-manual-en.pdf",
+    "note": "BMS dims not published separately; system table implies BMS+base ~540x385x210 mm, ~19 kg (97-2x39). Needs confirmation"
+  },
+  "TOMMAT-BTRYTTHVBMS40S-00164": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-series-hv-battery-system-user-manual-en.pdf",
+    "note": "BMS dims not published separately; system table implies BMS+base ~540x385x210 mm, ~19 kg. Needs confirmation"
+  },
+  "TOMMAT-BTRYTTLVS51KWHA-00165": {
+    "dimsCm": [
+      72.0,
+      30.0,
+      25.5
+    ],
+    "weightKg": 53.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-50-120kw-trio-hybrid-s-series-lv-aio-hybrid-inverter-en.pdf",
+    "note": "Battery module 720x255x300 mm, 53 kg (LV AIO battery user manual states 55 kg)"
+  },
+  "TOMMAT-BTRYTTLVBMSS51A-00166": {
+    "dimsCm": [
+      72.0,
+      25.5,
+      22.8
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-50-120kw-trio-hybrid-s-series-lv-aio-hybrid-inverter-en.pdf",
+    "note": "Battery PDU3 (BMS) 720x255x228 mm; base 720x255x68 mm separate. Weight not published (system table implies ~21.5 kg for PDU+base: 76.5-55)"
+  },
+  "TOMMAT-AKSKBLSETTTRM15CM-00200": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/lithium-battery-accessories-954-en.pdf",
+    "note": "AKS-KBL-SET-TT-R-M-15CM: 2x15 cm 5AWG cable; no size/weight published (small parcel)"
+  },
+  "TOMMAT-AKSKBLSETTTRM15M-00201": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/lithium-battery-accessories-954-en.pdf",
+    "note": "AKS-KBL-SET-TT-R-M-1.5M: 2x1.5 m 4AWG cable set; no size/weight published"
+  },
+  "TOMMAT-AKSKBLSETTPE5015M-00202": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "No datasheet found; 50 mm2 1.5 m cable, no size/weight published"
+  },
+  "TOMMAT-KSAMTLTBN256V512V-00203": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/lithium-battery-accessories-954-en.pdf",
+    "note": "Only older base AKS-ALT-TBN-MTL-TT-MDL (396x678x50 mm, for TT-MDL 48V100Ah) documented; G2 25.6/51.2V base dims/weight not published"
+  },
+  "TOMMAT-SRJTTACENT24V10A-00204": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "SC series 24V 10A: no datasheet found"
+  },
+  "TOMMAT-SRJTTACENT24V40ASC-00206": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "SC series 24V 40A: no datasheet found"
+  },
+  "TOMMAT-SRJTTACENT48V20ASC-00208": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "SC series 48V 20A: no datasheet found"
+  },
+  "TOMMAT-SRJTTACENT48V25ASC-00210": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "SC series 48V 25A: no datasheet found"
+  },
+  "TOMMAT-SRJTTACENT24V50A-00207": {
+    "dimsCm": [
+      33.5,
+      19.2,
+      14.9
+    ],
+    "weightKg": 5.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-battery-charger-integrated-24v-50a-1551-en.pdf",
+    "note": "Integrated 24V 50A: 335x192x149 mm, 5.0 kg"
+  },
+  "TOMMAT-SRJTTACENT48V20A-00209": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet found for integrated 48V 20A (published: 24V30A 289x158x82/3.15kg, 48V30A same, 24V50A 335x192x149/5.0kg, 60V15A)"
+  },
+  "TOMMAT-SRJTTACENT48V25A-00211": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet found for integrated 48V 25A (published: 24V30A 289x158x82/3.15kg, 48V30A same, 24V50A 335x192x149/5.0kg, 60V15A)"
+  },
+  "TOMMAT-SRJTTACENT48V30A-00212": {
+    "dimsCm": [
+      28.9,
+      15.8,
+      8.2
+    ],
+    "weightKg": 3.15,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-battery-charger-integrated-48v-30a-1244-en.pdf",
+    "note": "Integrated 48V 30A: 289x158x82 mm, 3.15 kg"
+  },
+  "TOMMAT-SRJTTACENT48V50A-00213": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet found for integrated 48V 50A (published: 24V30A 289x158x82/3.15kg, 48V30A same, 24V50A 335x192x149/5.0kg, 60V15A)"
+  },
+  "TOMMAT-SRJTTACENT48V60A-00214": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet found for integrated 48V 60A (published: 24V30A 289x158x82/3.15kg, 48V30A same, 24V50A 335x192x149/5.0kg, 60V15A)"
+  },
+  "TOMMAT-SRJTTACENT72V25A-00215": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet found for integrated 72V 25A (published: 24V30A 289x158x82/3.15kg, 48V30A same, 24V50A 335x192x149/5.0kg, 60V15A)"
+  },
+  "TOMMAT-SRJTTACMBL24V100A-00216": {
+    "dimsCm": [
+      35.2,
+      27.9,
+      18.4
+    ],
+    "weightKg": 12.4,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-24v48v-100a-1246-tr.pdf",
+    "note": "CHGR-TT-PC-24V-100A: 352.4x279.4x183.8 mm, 12.4 kg"
+  },
+  "TOMMAT-SRJTTACMBL48V100A-00217": {
+    "dimsCm": [
+      35.2,
+      27.9,
+      18.4
+    ],
+    "weightKg": 14.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-24v48v-100a-1246-tr.pdf",
+    "note": "CHGR-TT-PC-48V-100A: 352.4x279.4x183.8 mm, 14.5 kg"
+  },
+  "TOMMAT-SRJTTACMBL72V40A-00218": {
+    "dimsCm": [
+      35.2,
+      27.9,
+      18.4
+    ],
+    "weightKg": null,
+    "basis": "series",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-24v48v-100a-1246-tr.pdf",
+    "note": "72V 40A model has no published datasheet (site lists 72V 80A mobile). Dims are the shop's known mobile-series housing value (matches 24/48V-100A sheet); weight unknown"
+  },
+  "TOMMAT-SRJTTACDVR24V100A-00219": {
+    "dimsCm": [
+      41.5,
+      33.7,
+      11.2
+    ],
+    "weightKg": 12.4,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-battery-charger-wall-type-24v-100a-1545-en.pdf",
+    "note": "SRJ-TT-AC-DVR-24V-100A: 415x337x112 mm, 12.4 kg"
+  },
+  "TOMMAT-SRJTTACDVR48V150A-00221": {
+    "dimsCm": [
+      51.0,
+      39.9,
+      13.2
+    ],
+    "weightKg": 18.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-battery-charger-wall-type-48v-150a-1547-en.pdf",
+    "note": "SRJ-TT-AC-DVR-48V-150A: 510x398.5x132 mm, 18 kg"
+  },
+  "TOMMAT-SRJTTACDVR48V200A-00222": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet published for wall type 48V 200A (site has 24V100A, 48V100A, 48V150A, 72V80A, 80V100A, 80V200A only)"
+  },
+  "TOMMAT-SRJTTACDVR72V40A-00223": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet published for wall type 72V 40A (site has 24V100A, 48V100A, 48V150A, 72V80A, 80V100A, 80V200A only)"
+  },
+  "TOMMAT-SRJTTACDVR80V80A-00224": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet published for wall type 80V 80A (site has 24V100A, 48V100A, 48V150A, 72V80A, 80V100A, 80V200A only)"
+  },
+  "TOMMAT-SRJTTACDVR80V100A-00225": {
+    "dimsCm": [
+      70.0,
+      56.2,
+      12.9
+    ],
+    "weightKg": 24.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-battery-charger-wall-type-80v-100a-1549-en.pdf",
+    "note": "SRJ-TT-AC-DVR-80V-100A: 700x562x129 mm, 24 kg"
+  },
+  "TOMMAT-SRJTTACDVR80V200A-00226": {
+    "dimsCm": [
+      70.0,
+      56.2,
+      12.9
+    ],
+    "weightKg": 32.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-battery-charger-wall-type-80v-200a-1550-en.pdf",
+    "note": "SRJ-TT-AC-DVR-80V-200A: 700x562x129 mm, 32 kg"
+  },
+  "TOMMAT-SRJTTACDVR80V300A-00227": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/en/products/lithium-battery-chargers",
+    "note": "No datasheet published for wall type 80V 300A (site has 24V100A, 48V100A, 48V150A, 72V80A, 80V100A, 80V200A only)"
+  },
+  "TOMMAT-SRJTTADJ30100V200A-00228": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Adjustable 30-100V 200A mobile charger: no datasheet found"
+  },
+  "TOMMAT-SRJTTADJ40100V200A-00229": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Adjustable 40-100V 200A charger: no datasheet found"
+  },
+  "TOMMAT-SRJTTADJ40100V300A-00230": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Adjustable 40-100V 300A charger: no datasheet found"
+  },
+  "TOMMAT-OFGTT01NEW1K12MF-00231": {
+    "dimsCm": [
+      32.0,
+      22.5,
+      8.8
+    ],
+    "weightKg": 4.4,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf",
+    "note": "TT 1K 12V: DxWxH 88x225x320 mm, net 4.4 kg"
+  },
+  "TOMMAT-OFGTT02NMPPT1K12MF-00232": {
+    "dimsCm": [
+      32.0,
+      22.5,
+      8.8
+    ],
+    "weightKg": 4.4,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf",
+    "note": "TT 1K 12V MPPT: 88x225x320 mm, net 4.4 kg"
+  },
+  "TOMMAT-OFGTT03NEW3K24MF-00233": {
+    "dimsCm": [
+      33.4,
+      28.5,
+      10.0
+    ],
+    "weightKg": 6.3,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf",
+    "note": "TT 3K 24V (PWM): 100x285x334 mm, net 6.3 kg (MPPT variant 6.5 kg)"
+  },
+  "TOMMAT-OFGTT05NEW5K48MF-00234": {
+    "dimsCm": [
+      44.0,
+      30.0,
+      10.0
+    ],
+    "weightKg": 8.5,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf",
+    "note": "TT 5K 48V (PWM): 100x300x440 mm, net 8.5 kg (MPPT variant 9.7 kg)"
+  },
+  "TOMMAT-OFGTTPRO3KWIFI24MF-00235": {
+    "dimsCm": [
+      39.0,
+      28.8,
+      11.0
+    ],
+    "weightKg": 7.2,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-3-5kw-c-pro-serisi-off-grid-inverter-1195-tr.pdf",
+    "note": "C Pro 3K: DxWxH 110x288x390 mm, net 7.2 kg"
+  },
+  "TOMMAT-OFGTTPRO5KWIFI48MF-00236": {
+    "dimsCm": [
+      44.0,
+      30.0,
+      12.0
+    ],
+    "weightKg": 10.0,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-3-5kw-c-pro-serisi-off-grid-inverter-1195-tr.pdf",
+    "note": "C Pro 5K: 120x300x440 mm, net 10 kg"
+  },
+  "TOMMAT-EVCLIKYAAC22KLED-00244": {
+    "dimsCm": [
+      33.7,
+      25.3,
+      14.0
+    ],
+    "weightKg": 5.6,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-ac-arac-sarj-cihazlari-teknik-dokumani-1865-tr.pdf",
+    "note": "EVC-LIKYA-AC-22K-WF: 337x140x253 mm, 5.6 kg"
+  },
+  "TOMMAT-EVCLIKYAAC22KLEDKB-00245": {
+    "dimsCm": [
+      33.7,
+      25.3,
+      14.0
+    ],
+    "weightKg": 6.2,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-ac-arac-sarj-cihazlari-teknik-dokumani-1865-tr.pdf",
+    "note": "EVC-LIKYA-AC-22K-WF-KBL: 337x140x253 mm, 6.2 kg (incl. 5 m cable; box will be larger)"
+  },
+  "TOMMAT-EVCTTAC22KWLCD-00246": {
+    "dimsCm": [
+      37.0,
+      24.9,
+      14.2
+    ],
+    "weightKg": 6.2,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/22-kw-elektrikli-arac-sarj-unitesi-1189-tr.pdf",
+    "note": "EVC-TT-AC-22KW-LCD(-CBL) shared column: 249x370x142 mm, 6.2 kg"
+  },
+  "TOMMAT-EVCTTCVSTANT22KW-00247": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "No datasheet found for 22 kW charger LED stand (empty panel)"
+  },
+  "TOMMAT-EVCTTTFCBLTYPE2-00248": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Type 2 cable datasheet (tommatech-type-2-arac-sarj-kablosu-1686-tr.pdf) gives length 5 m, dia 16.8 mm only; no weight/package size"
+  },
+  "TOMMAT-00249": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Software license - non-physical, no shipping"
+  },
+  "TOMMAT-00250": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "RFID card - no data; negligible size/weight"
+  },
+  "TOMMAT-SPITT0222MF-00286": {
+    "dimsCm": [
+      18.0,
+      12.0,
+      15.4
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-2.2-MF: HxWxD 180x120x154 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT0540TF-00288": {
+    "dimsCm": [
+      25.0,
+      16.1,
+      18.4
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-4.0-TF: HxWxD 250x161x184 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT0655TF-00289": {
+    "dimsCm": [
+      25.0,
+      16.1,
+      18.4
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-5.5-TF: HxWxD 250x161x184 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT11220TF-00291": {
+    "dimsCm": [
+      46.7,
+      29.0,
+      23.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-22.0-TF: HxWxD 467x290x230 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT12300TF-00292": {
+    "dimsCm": [
+      46.7,
+      29.0,
+      23.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-30.0-TF: HxWxD 467x290x230 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT13370TF-00293": {
+    "dimsCm": [
+      46.7,
+      29.0,
+      23.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-37.0-TF: HxWxD 467x290x230 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT15550TF-00295": {
+    "dimsCm": [
+      58.0,
+      37.5,
+      27.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-55.0-TF: HxWxD 580x375x270 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT16750TF-00296": {
+    "dimsCm": [
+      75.5,
+      46.0,
+      33.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-75.0-TF: HxWxD 755x460x330 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT17900TF-00297": {
+    "dimsCm": [
+      75.5,
+      46.0,
+      33.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-90.0-TF: HxWxD 755x460x330 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT181100TF-00298": {
+    "dimsCm": [
+      75.5,
+      46.0,
+      33.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-110.0-TF: HxWxD 755x460x330 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT222500TF-00304": {
+    "dimsCm": [
+      140.0,
+      75.0,
+      40.5
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-250.0-TF: HxWxD 1400x750x405 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT243150TF-00305": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "315 kW not in datasheet table (max 250 kW listed; >250 kW 'on request up to 650 kW'); needs manufacturer data, likely freight/pallet item"
+  },
+  "TOMMAT-SPITT243550TF-00306": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "355 kW not in datasheet table (max 250 kW listed; >250 kW 'on request up to 650 kW'); needs manufacturer data, likely freight/pallet item"
+  },
+  "TOMMAT-SPITT245000TF-00309": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "500 kW not in datasheet table (max 250 kW listed; >250 kW 'on request up to 650 kW'); needs manufacturer data, likely freight/pallet item"
+  },
+  "TOMMAT-SPITT246300TF-00310": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "630 kW not in datasheet table (max 250 kW listed; >250 kW 'on request up to 650 kW'); needs manufacturer data, likely freight/pallet item"
+  },
+  "TOMMAT-SPITT0422TF-00287": {
+    "dimsCm": [
+      18.0,
+      12.0,
+      15.4
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-2.2-TF: HxWxD 180x120x154 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT10185TF-00290": {
+    "dimsCm": [
+      46.7,
+      29.0,
+      23.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-18.5-TF: HxWxD 467x290x230 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT14450TF-00294": {
+    "dimsCm": [
+      58.0,
+      37.5,
+      27.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-45.0-TF: HxWxD 580x375x270 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT191320TF-00299": {
+    "dimsCm": [
+      81.0,
+      49.0,
+      37.5
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-132.0-TF: HxWxD 810x490x375 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT201600TF-00300": {
+    "dimsCm": [
+      120.0,
+      55.0,
+      38.5
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-160.0-TF: HxWxD 1200x550x385 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT211850TF-00301": {
+    "dimsCm": [
+      120.0,
+      55.0,
+      38.5
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-185.0-TF: HxWxD 1200x550x385 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT200TF-00302": {
+    "dimsCm": [
+      125.0,
+      55.0,
+      38.5
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-200.0-TF: HxWxD 1250x550x385 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT220TF-00303": {
+    "dimsCm": [
+      125.0,
+      55.0,
+      38.5
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "SPI-TT-220.0-TF: HxWxD 1250x550x385 mm; weight not published in datasheet/manual"
+  },
+  "TOMMAT-SPITT244000TF-00307": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "400 kW not in datasheet table (max 250 kW listed; >250 kW 'on request up to 650 kW'); needs manufacturer data, likely freight/pallet item"
+  },
+  "TOMMAT-SPITT244500TF-00308": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf",
+    "note": "450 kW not in datasheet table (max 250 kW listed; >250 kW 'on request up to 650 kW'); needs manufacturer data, likely freight/pallet item"
+  },
+  "TOMMAT-INVSLMTFV275KW-00311": {
+    "dimsCm": [
+      32.0,
+      22.1,
+      19.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf",
+    "note": "1000VDC SPI-TT-7.5-TF: H 320 x W 221 x D 190 mm; weight not published"
+  },
+  "TOMMAT-INVSLMTFV211KW-00312": {
+    "dimsCm": [
+      32.0,
+      22.1,
+      19.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf",
+    "note": "1000VDC SPI-TT-11.0-TF: H 320 x W 221 x D 190 mm; weight not published"
+  },
+  "TOMMAT-INVSLMTFV215KW-00313": {
+    "dimsCm": [
+      32.0,
+      22.1,
+      19.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf",
+    "note": "1000VDC SPI-TT-15.0-TF: H 320 x W 221 x D 190 mm; weight not published"
+  },
+  "TOMMAT-UECINVSLM4G-00314": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "4G remote access device for pump driver: no data found"
+  },
+  "TOMMAT-SLMDIYODMDK25A-00315": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK55A-00316": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK90A-00318": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK70A-00317": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK90A-00319": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK110A-00321": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK110A-00320": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK110A-00322": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK110A-00323": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDK110A-00324": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-SLMDIYODMDC15016-00325": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Pump-driver diode module: no TommaTech datasheet with size/weight found"
+  },
+  "TOMMAT-HPRSTMF009NM1-00328": {
+    "dimsCm": [
+      132.7,
+      45.5,
+      102.0
+    ],
+    "weightKg": 107,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf",
+    "note": "HP-RST-MF-009-N-M1: carton 1327x455x1020 mm; weight is NET 107 kg (gross not published); body 1263x440x875"
+  },
+  "TOMMAT-HPRSTMF013NM1-00329": {
+    "dimsCm": [
+      132.7,
+      45.5,
+      102.0
+    ],
+    "weightKg": 111,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf",
+    "note": "HP-RST-MF-013-N-M1: carton 1327x455x1020 mm; weight is NET 111 kg (gross not published); body 1263x440x875"
+  },
+  "TOMMAT-HPRSTMF016NM1-00330": {
+    "dimsCm": [
+      132.7,
+      45.5,
+      102.0
+    ],
+    "weightKg": 153,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf",
+    "note": "HP-RST-MF-016-N-M1: carton 1327x455x1020 mm; weight is NET 153 kg (gross not published); body 1263x440x875"
+  },
+  "TOMMAT-HPRSTTF016NM1-00331": {
+    "dimsCm": [
+      132.7,
+      45.5,
+      102.0
+    ],
+    "weightKg": 163,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf",
+    "note": "HP-RST-TF-016-N-M1: carton 1327x455x1020 mm; weight is NET 163 kg (gross not published); body 1263x440x875"
+  },
+  "TOMMAT-HPRSTTF020NM1-00332": {
+    "dimsCm": [
+      132.7,
+      45.5,
+      102.0
+    ],
+    "weightKg": 168,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf",
+    "note": "HP-RST-TF-020-N-M1: carton 1327x455x1020 mm; weight is NET 168 kg (gross not published); body 1263x440x875"
+  },
+  "TOMMAT-HPRSTTF026NM1-00333": {
+    "dimsCm": [
+      132.7,
+      45.5,
+      102.0
+    ],
+    "weightKg": 173,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf",
+    "note": "HP-RST-TF-026-N-M1: carton 1327x455x1020 mm; weight is NET 173 kg (gross not published); body 1263x440x875"
+  },
+  "TOMMAT-HPTTIND50R290-00346": {
+    "dimsCm": [
+      253.5,
+      135.0,
+      110.0
+    ],
+    "weightKg": 490.0,
+    "basis": "package",
+    "source": "https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf",
+    "note": "HP-TT-IND-50-R290: carton 1100x1350x2535 mm; weight NET 490 kg (gross n/a); pallet/freight item"
+  },
+  "TOMMAT-HPTTPOOL515R410TF-00348": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "51.5 kW R410 pool heat pump not in TommaTech catalogue (only 21/28 kW R32, 24/33 kW R290 Aquavera)"
+  },
+  "TOMMAT-HPTT12R32MFDIS-00349": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "R32 split outdoor unit 12 kW MF: no datasheet found"
+  },
+  "TOMMAT-HPTT18R32MFDIS-00350": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "R32 split outdoor unit 18 kW MF: no datasheet found"
+  },
+  "TOMMAT-HPTT12R32TFDIS-00351": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "R32 split outdoor unit 12 kW TF: no datasheet found"
+  },
+  "TOMMAT-HPTT22R32TFDIS-00352": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "R32 split outdoor unit 22 kW TF: no datasheet found"
+  },
+  "TOMMAT-HPTT812R32MFIC-00353": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "R32 split indoor unit 8-12 kW: no datasheet found"
+  },
+  "TOMMAT-HPTT1822R32MFIC-00354": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "R32 split indoor unit 18-22 kW: no datasheet found"
+  }
+}

@@ -38,6 +38,8 @@ interface FavoriteProduct {
   stock?: number
   slug?: string
   createdAt: string
+  /** Ürün katalogdan kaldırılmış (eski katalog) */
+  unavailable?: boolean
 }
 
 export default function FavoritesPage() {
@@ -82,12 +84,14 @@ export default function FavoritesPage() {
             createdAt: '',
           }
         }
+        // Katalogdan kaldırılmış ürün: adres eski ürün yönlendirmesiyle yeni ürüne/kategoriye gider
         return {
           id: f.productId,
           favoriteId: f.productId,
-          name: `Ürün #${f.productId}`,
+          name: 'Bu ürün artık satışta değil',
           price: 0,
           createdAt: '',
+          unavailable: true,
         }
       })
       setFavorites(enriched)
@@ -288,7 +292,9 @@ export default function FavoritesPage() {
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <div className="text-2xl font-bold text-ink">
-                        {product.price > 0 ? formatPrice(product.price) : 'Fiyat bilgisi yok'}
+                        {product.unavailable ? (
+                          <span className="text-sm font-medium text-ink-muted">Favorilerinizden kaldırabilirsiniz</span>
+                        ) : product.price > 0 ? formatPrice(product.price) : 'Fiyat bilgisi yok'}
                       </div>
                     </div>
                   </div>

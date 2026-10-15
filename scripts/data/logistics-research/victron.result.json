@@ -1,0 +1,608 @@
+{
+  "VICTRO-CEP122160000-01406": {
+    "dimsCm": [
+      51.0,
+      21.4,
+      11.0
+    ],
+    "weightKg": 14.3,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/inverters-chargers/easyplus-12v-1600va",
+    "note": "Dims = Victron product dims (h510 x w214 x d110 mm), product weight 11.7 kg; weightKg = shipping weight 14.3 kg from Victron distributor voltaconsolar.com/products/victron-easyplus-compact-12-1600-70-16-230v-vebus. Victron lists this SKU as EasyPlus Compact 12/1600/70-16 230V VE.Bus"
+  },
+  "VICTRO-PMP482305102-01465": {
+    "dimsCm": [
+      57.2,
+      27.7,
+      14.7
+    ],
+    "weightKg": 19,
+    "basis": "product",
+    "source": "https://www.victronenergy.com/inverters-chargers/multiplus-ii",
+    "note": "Product (net) weight and dims; no package data found"
+  },
+  "VICTRO-LYN060102010-01716": {
+    "dimsCm": [
+      29.0,
+      17.0,
+      8.0
+    ],
+    "weightKg": 2.5,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/dc-distribution-systems/lynx-distributor",
+    "note": "Dims = Victron product dims; product weight 2.2 kg; weightKg = shipping weight from voltaconsolar.com/products/victron-lynx-distributor-m10"
+  },
+  "VICTRO-CIP100200100-01759": {
+    "dimsCm": [
+      7.5,
+      5.4,
+      4.6
+    ],
+    "weightKg": 0.09,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/DimensionDrawing-Modular-MEGA-fuse-holder-(CIP100200100).pdf",
+    "note": "Dims from Victron dimension drawing (one module); weight = distributor shipping weight voltaconsolar.com/products/victron-mega-fuse-modular-holder-cip100200100"
+  },
+  "VICTRO-CIP106100000-01765": {
+    "dimsCm": [
+      9.0,
+      4.6,
+      2.4
+    ],
+    "weightKg": 0.12,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/dc-distribution-systems/fuses-and-fuse-holders",
+    "note": "Dims = Victron product dims; weight = distributor shipping weight voltaconsolar.com/products/victron-anl-fuse-holder-cip106100000"
+  },
+  "VICTRO-BPP900480100-01767": {
+    "dimsCm": [
+      18.7,
+      12.4,
+      3.0
+    ],
+    "weightKg": 0.95,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Datasheet-Ekrano-GX-EN.pdf",
+    "note": "Dims = product without connectors/mounting accessories (datasheet); weight = shipping weight voltaconsolar.com/products/victron-ekrano-gx-bpp900480100 (ussolarsupplier lists 0.68 kg)"
+  },
+  "VICTRO-BPP900495100-01768": {
+    "dimsCm": [
+      18.7,
+      12.8,
+      8.0
+    ],
+    "weightKg": 0.267,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Assy-Ekrano-Wallbox_A_20240717.pdf",
+    "note": "Dims from Victron assembly drawing (also enclosure datasheet 128x187x80); weight = shipping weight voltaconsolar.com/products/victron-ekrano-gx-wall-mount (product 0.186 kg)"
+  },
+  "VICTRO-BPP900455050-01771": {
+    "dimsCm": [
+      12.8,
+      8.7,
+      1.2
+    ],
+    "weightKg": 0.52,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/display-and-panels/gx-touch-50",
+    "note": "Dims = display only (2 m cable attached); weight = shipping weight voltaconsolar.com/products/victron-gx-touch-50-display (ussolarsupplier 0.413 kg)"
+  },
+  "VICTRO-BPP900465070-01777": {
+    "dimsCm": [
+      17.6,
+      11.3,
+      2.5
+    ],
+    "weightKg": 0.25,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/GX-Touch70-Wall-Mount.pdf",
+    "note": "Dims from Victron dimension drawing; weight = shipping weight voltaconsolar.com/products/gx-touch-70-wall-mount"
+  },
+  "VICTRO-BPP900800150-01778": {
+    "dimsCm": [
+      12.3,
+      6.7,
+      2.3
+    ],
+    "weightKg": 0.25,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Datasheet-GX-IO-Extender-150-EN-.pdf",
+    "note": "Dims and product weight 0.17 kg from datasheet; weightKg = shipping weight voltaconsolar.com/products/victron-gx-io-extender-150"
+  },
+  "VICTRO-BPP900400100-01779": {
+    "dimsCm": [
+      14.3,
+      9.6,
+      4.5
+    ],
+    "weightKg": 0.413,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Datasheet-Venus-GX-EN.pdf",
+    "note": "Dims from Venus GX datasheet (45 x 143 x 96 mm); weight = shipping weight ussolarsupplier.com/products/victron-bpp900400100-venus-gx-system-controller. Product no longer on current Victron site (likely EOL)"
+  },
+  "VICTRO-BPP900100200-01781": {
+    "dimsCm": null,
+    "weightKg": 0.03,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-ccgx-wifi-module-simple-nano-usb",
+    "note": "Nano USB WiFi stick; no dims published. ussolarsupplier lists 1.542 kg (implausible, ignored)"
+  },
+  "VICTRO-VPN000200000-01783": {
+    "dimsCm": [
+      12.0,
+      6.5,
+      5.3
+    ],
+    "weightKg": 0.275,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Dimension-Drawing-GMDSS-Panel.pdf",
+    "note": "Dims read from Victron dimension drawing text (120 x 65, depth 53) - not visually verified; weight = shipping weight voltaconsolar.com/products/victron-ve-net-gmdss-panel (ussolarsupplier 0.10 kg)"
+  },
+  "VICTRO-BPP920140100-01786": {
+    "dimsCm": null,
+    "weightKg": 0.11,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-gx-tank-140",
+    "note": "No dims published by Victron (only STEP file). ussolarsupplier 0.136 kg"
+  },
+  "VICTRO-REC020005010-01787": {
+    "dimsCm": null,
+    "weightKg": 0.28,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-digital-multi-control-200-200a",
+    "note": "Victron drawing gives front plate 120 x 65 mm only (no depth)"
+  },
+  "VICTRO-DMC000200010R-01788": {
+    "dimsCm": [
+      12.0,
+      6.5,
+      1.7
+    ],
+    "weightKg": 0.211,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Dimensions-of-plastic-panel-for-DMC000200000R-Digital-Multi-Control-200-200A-GX-_v1.0.pdf",
+    "note": "Dims = plastic panel housing 120 x 65 x 17 mm (drawing); weight = shipping weight voltaconsolar.com/products/victron-digital-multi-control-200a-gx-right-angle-rj45 (ussolarsupplier 1.633 kg, implausible)"
+  },
+  "VICTRO-REC030001210-01789": {
+    "dimsCm": null,
+    "weightKg": 0.118,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-inverter-control-remote-panel",
+    "note": "Victron metal-panel drawing has no depth; ussolarsupplier 0.127 kg"
+  },
+  "VICTRO-REC010001110-01790": {
+    "dimsCm": null,
+    "weightKg": 0.208,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-phoenix-charger-control",
+    "note": "Victron metal-panel drawing has no depth; ussolarsupplier 0.204 kg"
+  },
+  "VICTRO-REC040010210R-01791": {
+    "dimsCm": [
+      6.5,
+      6.0,
+      3.8
+    ],
+    "weightKg": 0.12,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Inverter-Control-VE.Direct.pdf",
+    "note": "Dims read from Victron dimension drawing text (65/60/38 mm) - not visually verified; weight = shipping weight voltaconsolar.com/products/victron-inverter-control-ve-direct (ussolarsupplier 0.454 kg)"
+  },
+  "VICTRO-REC000300010R-01792": {
+    "dimsCm": [
+      12.0,
+      6.5,
+      1.7
+    ],
+    "weightKg": 0.215,
+    "basis": "series",
+    "source": "https://voltaconsolar.com/products/victron-skylla-i-control-gx-right-angle-rj45",
+    "note": "Weight = shipping weight (voltacon). Dims = standard 65 x 120 mm GX plastic panel (Victron wall-mounted display enclosures datasheet); depth 17 mm taken from DMC GX plastic panel drawing (same housing family) - verify"
+  },
+  "VICTRO-BPA000100010R-01795": {
+    "dimsCm": [
+      12.0,
+      6.5,
+      1.7
+    ],
+    "weightKg": 0.22,
+    "basis": "series",
+    "source": "https://voltaconsolar.com/products/victron-battery-alarm-gx-retail",
+    "note": "Weight = shipping weight (voltacon). Dims = standard 65 x 120 mm GX plastic panel (Victron wall-mounted display enclosures datasheet); depth 17 mm taken from DMC GX plastic panel drawing (same housing family) - verify"
+  },
+  "VICTRO-GSM900200100-01801": {
+    "dimsCm": null,
+    "weightKg": 0.09,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-active-gps-antenna",
+    "note": "Accessory antenna; no dims published. ussolarsupplier 0.091 kg"
+  },
+  "VICTRO-ASS030066018-01813": {
+    "dimsCm": null,
+    "weightKg": 0.044,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-rj12-utp-cable-1-8m",
+    "note": "Cable; no dims published"
+  },
+  "VICTRO-ASS030560100-01840": {
+    "dimsCm": null,
+    "weightKg": 0.066,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-m8-circular-connector-3-pole-1m-cable",
+    "note": "Cable (bag of 2); no dims published"
+  },
+  "VICTRO-ASS030532010-01849": {
+    "dimsCm": null,
+    "weightKg": 0.07,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-canusb-interface",
+    "note": "ussolarsupplier 0.014 kg, wattuneed 0.5 kg - sources disagree"
+  },
+  "VICTRO-ASS030200000-01852": {
+    "dimsCm": null,
+    "weightKg": 0.1,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-rs232-to-usb-converter",
+    "note": "ussolarsupplier also 0.10 kg"
+  },
+  "VICTRO-ASS030550120-01860": {
+    "dimsCm": null,
+    "weightKg": 0.014,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-inverting-remote-on-off-cable",
+    "note": "Cable; wattuneed lists 0.6 kg (likely placeholder)"
+  },
+  "VICTRO-ASS030550220-01861": {
+    "dimsCm": null,
+    "weightKg": 0.12,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-non-inverting-remote-on-off-cable",
+    "note": "Cable; ussolarsupplier 0.082 kg"
+  },
+  "VICTRO-CSE000100000-01865": {
+    "dimsCm": null,
+    "weightKg": 0.1,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-ac-current-sensor-single-phase-40a",
+    "note": "ussolarsupplier and wattuneed also 0.1 kg"
+  },
+  "VICTRO-ASS000100000-01874": {
+    "dimsCm": null,
+    "weightKg": 0.075,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-temperature-sensor-bmv-702-712",
+    "note": "Cable sensor; ussolarsupplier 0.177 kg"
+  },
+  "VICTRO-ASS070400100-01875": {
+    "dimsCm": null,
+    "weightKg": 0.095,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-pre-charge-cable",
+    "note": "Victron datasheet gives housing only 15 x 46 x 23 mm (cables 40 cm with clamps) - not a shipping size"
+  },
+  "VICTRO-ADA500140100-01877": {
+    "dimsCm": [
+      9.2,
+      3.5,
+      1.1
+    ],
+    "weightKg": 0.1,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/DimensionDrawing-DIN-35-adapter-medium.pdf",
+    "note": "Dims per adapter (pack has 2) read from Victron drawing text - not visually verified; weight = voltaconsolar.com/products/victron-din35-adapter-medium-2-pack"
+  },
+  "VICTRO-ADA500180100-01878": {
+    "dimsCm": [
+      10.5,
+      3.5,
+      1.1
+    ],
+    "weightKg": 0.1,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/DimensionDrawing-DIN-35-adapter-large.pdf",
+    "note": "Dims per adapter (pack has 2) read from Victron drawing text - not visually verified; weight = voltaconsolar.com/products/victron-din35-adapter-large-2-pack"
+  },
+  "VICTRO-ASS030536011-01879": {
+    "dimsCm": [
+      6.7,
+      3.5,
+      2.0
+    ],
+    "weightKg": 0.12,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/VE.Direct-Bluetooth-Smart-dongle.pdf",
+    "note": "Dims from Victron drawing (body, excl. cable); weight = voltaconsolar.com/products/victron-ve-direct-bluetooth-smart-dongle (ussolarsupplier 0.118, wattuneed 0.1)"
+  },
+  "VICTRO-REL100100000-01880": {
+    "dimsCm": [
+      10.5,
+      9.0,
+      6.9
+    ],
+    "weightKg": 0.35,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Ziehl-Voltage-&-Frequency-relay-UFR1001E.pdf",
+    "note": "Dims 90 x 105 x 69 mm and product weight ca. 250 g from Ziehl datasheet; weightKg = shipping weight voltaconsolar.com/products/victron-anti-islanding-relay-ufr1001e"
+  },
+  "VICTRO-REL200300100-01885": {
+    "dimsCm": [
+      9.0,
+      7.1,
+      5.9
+    ],
+    "weightKg": 0.37,
+    "basis": "product",
+    "source": "https://www.victronenergy.com/meters-and-sensors/energy-meter",
+    "note": "Victron product weight; voltacon shipping weight 0.35 kg"
+  },
+  "VICTRO-ASS030572018-01886": {
+    "dimsCm": null,
+    "weightKg": 0.09,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-rs485-to-usb-interface-cable-1-8m",
+    "note": "Cable; ussolarsupplier 0.15 kg"
+  },
+  "VICTRO-ASS030572050-01887": {
+    "dimsCm": null,
+    "weightKg": 0.203,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-rs485-to-usb-interface-cable-5m",
+    "note": "Cable; ussolarsupplier 0.367 kg"
+  },
+  "VICTRO-ASS300420100-01888": {
+    "dimsCm": [
+      7.0,
+      5.0,
+      2.4
+    ],
+    "weightKg": 0.298,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Dimension-Zigbee.pdf",
+    "note": "Dims from Victron Zigbee dimension drawing / DRF datasheet (70 x 50 x 24 mm); weight = voltaconsolar.com/products/victron-zigbee-rs485-converter"
+  },
+  "VICTRO-CYR010120110R-01922": {
+    "dimsCm": [
+      8.9,
+      4.6,
+      4.6
+    ],
+    "weightKg": 1.0,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/battery-isolators-and-combiners/cyrix-battery-combiner-kit",
+    "note": "Dims = Cyrix-ct relay only (Victron; product weight 0.1 kg); kit also contains cables/fuses so the box is larger - weight = shipping weight voltaconsolar.com/products/victron-cyrix-ct-12-24v-120a-battery-combiner-r. Verify box dims"
+  },
+  "VICTRO-BBA000100100-01928": {
+    "dimsCm": [
+      11.3,
+      10.0,
+      4.7
+    ],
+    "weightKg": 0.408,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/batteries/battery-balancer",
+    "note": "Dims = Victron product; product weight 0.4 kg; shipping weight voltaconsolar.com/products/victron-battery-balancer-24v-48v"
+  },
+  "VICTRO-SCC900300000-01955": {
+    "dimsCm": null,
+    "weightKg": 0.31,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-bluesolar-pwm-pro-remote-panel",
+    "note": "Victron manual gives frame 114 x 114 mm, faceplate 98 x 98 mm, weight 0.2 kg, no depth"
+  },
+  "VICTRO-SCC940100100-01956": {
+    "dimsCm": null,
+    "weightKg": 0.065,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-bluesolar-pwm-pro-temperature-sensor",
+    "note": "Cable sensor; no dims"
+  },
+  "VICTRO-SCC940100200-01957": {
+    "dimsCm": null,
+    "weightKg": 0.05,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-bluesolar-pwm-pro-usb-interface-cable",
+    "note": "Cable; no dims"
+  },
+  "VICTRO-SCC900650010-02000": {
+    "dimsCm": [
+      11.6,
+      5.0,
+      2.5
+    ],
+    "weightKg": 0.094,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/display-and-panels/smartsolar-control-display",
+    "note": "Dims = Victron product; product weight listed as 66 (g); weightKg = shipping weight voltaconsolar.com/products/victron-smartsolar-pluggable-display-scc900650010"
+  },
+  "VICTRO-SCC900500000-02001": {
+    "dimsCm": [
+      6.9,
+      6.9,
+      3.1
+    ],
+    "weightKg": 0.17,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/MPPT_Control_Display/MPPT_Control_display_manual-en.pdf",
+    "note": "Manual: front bezel 69 x 69 mm, body depth 31 mm (bezel thickness not included), product weight 50 g; weightKg = shipping weight voltaconsolar.com/products/victron-mppt-control-remote-display-panel"
+  },
+  "VICTRO-SBS050150200-02002": {
+    "dimsCm": [
+      4.2,
+      4.0,
+      1.5
+    ],
+    "weightKg": 0.051,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Smart-battery-Sense.pdf",
+    "note": "Dims read from Victron long-range dimension drawing text (body, excl. cable) - not visually verified; weight = voltaconsolar.com/products/victron-smart-battery-sense-long-range-10m (ussolarsupplier 0.299 kg)"
+  },
+  "VICTRO-SHS121409230-02003": {
+    "dimsCm": [
+      20.4,
+      14.8,
+      6.7
+    ],
+    "weightKg": 0.85,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Datasheet-SHS-200-MPPT-EN.pdf",
+    "note": "Dims (148 x 204 x 67 mm) and net weight 0.39 kg from Victron datasheet; weightKg = shipping weight voltaconsolar.com/products/victron-shs-200-mppt-v3-mc4-solar-home-system"
+  },
+  "VICTRO-SHS900120050-02004": {
+    "dimsCm": null,
+    "weightKg": 0.475,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-shs-200-solar-cable-5m",
+    "note": "Cable; ussolarsupplier 0.472 kg"
+  },
+  "VICTRO-SHS800300300-02005": {
+    "dimsCm": null,
+    "weightKg": 5.0,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-battery-box-shs-200",
+    "note": "Voltacon description says 4.775 kg (shipping field 5.0). A tinybuildelectrics listing reportedly gives 364 x 207 x 310 mm / 0.4 kg (seen only in a search summary, page blocked) - dims unverified, needs human check"
+  },
+  "VICTRO-SCC950200000-02009": {
+    "dimsCm": null,
+    "weightKg": 0.275,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-mppt-wirebox-m-100-30-100-50-150-35-150-45",
+    "note": "No dims found; ussolarsupplier 0.272 kg"
+  },
+  "VICTRO-BMS300200200-02099": {
+    "dimsCm": [
+      10.6,
+      9.4,
+      2.4
+    ],
+    "weightKg": 0.246,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/upload/documents/Datasheet-VE-Bus-BMS-V2-EN.pdf",
+    "note": "Datasheet: 23.8 x 94.5 x 105.5 mm, 120 g (product page wrongly shows depth 10.5 mm); weightKg = shipping weight voltaconsolar.com/products/victron-vebus-bms-v2"
+  },
+  "VICTRO-BMS300200300-02100": {
+    "dimsCm": [
+      10.6,
+      9.5,
+      2.3
+    ],
+    "weightKg": 0.308,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/battery-management-systems/ve-bus-bms-ng",
+    "note": "Dims = Victron product, product weight 0.12 kg; weightKg = shipping weight voltaconsolar.com/products/victron-vebus-bms-ng"
+  },
+  "VICTRO-BMS400100000-02101": {
+    "dimsCm": [
+      10.6,
+      4.2,
+      2.3
+    ],
+    "weightKg": 0.1,
+    "basis": "product",
+    "source": "https://www.victronenergy.com/battery-management-systems/smallbms"
+  },
+  "VICTRO-BMS400100300-02102": {
+    "dimsCm": [
+      10.6,
+      4.2,
+      2.3
+    ],
+    "weightKg": 0.1,
+    "basis": "product",
+    "source": "https://www.victronenergy.com/battery-management-systems/smallbms-ng"
+  },
+  "VICTRO-BMS800200104-02103": {
+    "dimsCm": [
+      6.6,
+      5.8,
+      2.3
+    ],
+    "weightKg": 0.054,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/accessories/solidswitch-104",
+    "note": "Dims = Victron product; weight = shipping weight voltaconsolar.com/products/victron-solidswitch-104-bms-load-disconnect"
+  },
+  "VICTRO-BMS210055000-02114": {
+    "dimsCm": [
+      34.0,
+      12.0,
+      6.5
+    ],
+    "weightKg": 2.72,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/battery-management-systems/smart-bms-12-200",
+    "note": "Dims = Victron product, product weight 2 kg; weightKg = shipping weight voltaconsolar.com/products/victron-smart-bms-12-200"
+  },
+  "VICTRO-BMS110022000-02115": {
+    "dimsCm": [
+      22.4,
+      12.0,
+      6.5
+    ],
+    "weightKg": 2.0,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/battery-management-systems/smart-bms-current-limiter",
+    "note": "Dims = Victron product, product weight 1.6 kg; weightKg = shipping weight voltaconsolar.com/products/victron-smart-bms-cl-12-100"
+  },
+  "VICTRO-ASS070200100-02116": {
+    "dimsCm": null,
+    "weightKg": 0.1,
+    "basis": "package",
+    "source": "https://voltaconsolar.com/products/victron-smart-bms-cl-12-100-multiplus-cable",
+    "note": "Cable; no dims"
+  },
+  "VICTRO-BAT512020705-02120": {
+    "dimsCm": [
+      18.1,
+      16.7,
+      7.7
+    ],
+    "weightKg": 3.6,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Dims = Victron product; product weight 3 kg; weightKg = shipping weight voltaconsolar.com/products/victron-lithium-superpack-12v-20ah-m5. Lithium battery (UN3480)"
+  },
+  "VICTRO-BAT512060705-02121": {
+    "dimsCm": [
+      22.9,
+      21.3,
+      13.8
+    ],
+    "weightKg": 9.6,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Dims = Victron product; product weight 7.5 kg; weightKg = shipping weight voltaconsolar.com/products/victron-lithium-superpack-12v-60ah-lifepo4-battery. Lithium battery"
+  },
+  "VICTRO-BAT512110712-02122": {
+    "dimsCm": [
+      30.6,
+      21.5,
+      16.9
+    ],
+    "weightKg": 11.0,
+    "basis": "package",
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Dims = Victron product (100Ah-a M8); product weight 10.5 kg; weightKg = shipping weight voltaconsolar.com/products/victron-lithium-superpack-12v-100ah-m8. Lithium battery"
+  },
+  "VICTRO-BAT512120705-02123": {
+    "dimsCm": [
+      52.0,
+      26.9,
+      20.8
+    ],
+    "weightKg": 21,
+    "basis": "product",
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Product weight/dims (datasheet). Lithium battery"
+  },
+  "VICTRO-BAT524050705-02124": {
+    "dimsCm": [
+      33.0,
+      22.0,
+      17.2
+    ],
+    "weightKg": 14,
+    "basis": "product",
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Product weight/dims (datasheet); voltacon shipping field 13 kg (below product weight, ignored). Lithium battery"
+  }
+}

@@ -166,7 +166,11 @@
     "catEVStationAccessories": "İstasyon ve Aksesuar",
     "catPowerDataCables": "Güç ve Veri Kabloları",
     "catSystemComponents": "Sistem Bileşenleri",
-    "catGeneral": "Genel"
+    "catGeneral": "Genel",
+    "catGroupHeatPump": "Isı Pompası",
+    "catHeatPump": "Isı Pompası",
+    "catPortablePowerStation": "Taşınabilir Güç İstasyonu",
+    "catMonitoringControl": "İzleme ve Kontrol"
   },
   "headerTopBar": {
     "gesButton": "GES Hesaplama",

@@ -14,7 +14,7 @@ eksik olanlar Google Drive'dan indirilir.
 
 Yalnızca Python standart kütüphanesi kullanılır.
 """
-import json, os, re, sys, time, zipfile, urllib.request
+import html, json, math, os, re, sys, time, zipfile, urllib.request
 import xml.etree.ElementTree as ET
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -167,7 +167,231 @@ def strip_brand_suffix(title):
     return re.sub(r'\s*\|\s*Voltekno\s*$', '', title, flags=re.I).strip()
 
 
+def ceil_try(value):
+    """TL fiyat tam TL'ye yukarı yuvarlanır (lib/fx-rates.ts toTry ile aynı kural)."""
+    return float(math.ceil(value - 1e-9))
+
+
+# ---------------------------------------------------------------------------
+# Kategori düzeltmeleri: Excel'de yanlış/genel kategoride duran ürünler.
+# (ürün adı regex'i, mevcut kategori koşulu (None = her kategori), yeni alt kategori)
+# Yeni alt kategoriler lib/categories.ts CATEGORY_GROUPS içinde tanımlı olmalıdır.
+CATEGORY_CORRECTIONS = [
+    (r'Isı Pompası', None, 'Isı Pompası'),
+    (r'Taşınabilir Güç İstasyonu', 'Genel', 'Taşınabilir Güç İstasyonu'),
+    (r'İnverter', 'Genel', 'İnverter'),
+    (r'Şarj Kontrol Cihazı|MiniSolar|Harici Ekran', 'Genel', 'MPPT/PWM'),
+    (r'DC-DC Şarj', 'Genel', 'AC/DC Şarj'),
+    (r'Transfer Switch|Shunt', 'Genel', 'Sistem Bileşenleri'),
+    (r'^İstabreeze', 'Genel', 'Türbin ve Aksesuar'),
+    (r'^Victron', 'Genel', 'İzleme ve Kontrol'),
+]
+
+
+def corrected_category(name, category):
+    for pattern, only_from, target in CATEGORY_CORRECTIONS:
+        if (only_from is None or only_from == category) and re.search(pattern, name):
+            return target
+    return category
+
+
+def variant_labels(rows):
+    """Varyant etiketleri: SEO adlarının ortak ön ekini atarak farklılaşan kısım (ör. '40Wp TOPCon 36TN10 Güneş Paneli').
+    Excel'deki 'Varyant Değer 1' tutarsız olduğundan (ör. 'kWh - EXELON-ELH12-00535') SEO adı esas alınır."""
+    names = [(x[COL_SEO_NAME] or x[COL_VARIANT_VALUE] or x[COL_SKU]).split() for x in rows]
+    prefix = 0
+    while all(len(t) > prefix + 1 for t in names) and len({t[prefix] for t in names}) == 1:
+        prefix += 1
+    labels = [' '.join(t[prefix:]) for t in names]
+    if len(set(labels)) != len(labels) or any(len(label) < 2 for label in labels):
+        labels = [x[COL_SEO_NAME] or x[COL_VARIANT_VALUE] or x[COL_SKU] for x in rows]
+    return labels
+
+
+# ---------------------------------------------------------------------------
+# Açıklama tabloları → teknik özellikler, ölçü ve ağırlık
+
+def cell_text(s):
+    return html.unescape(re.sub(r'<[^>]+>', ' ', s)).replace('\xa0', ' ').replace('−', '-').strip()
+
+
+def parse_tables(desc):
+    """HTML açıklamadaki tablolar: [[hücre, ...], ...] listesi (ilk satır başlık olabilir)."""
+    out = []
+    for t in re.findall(r'<table.*?</table>', desc, re.S | re.I):
+        rows = []
+        for r in re.findall(r'<tr.*?</tr>', t, re.S | re.I):
+            cells = [re.sub(r'\s+', ' ', cell_text(c)) for c in re.findall(r'<t[hd][^>]*>(.*?)</t[hd]>', r, re.S | re.I)]
+            if cells:
+                rows.append(cells)
+        if rows:
+            out.append(rows)
+    return out
+
+
+def norm(s):
+    return re.sub(r'[^a-z0-9]', '', s.lower().replace('ı', 'i').replace(',', '.').replace('.', ''))
+
+
+def match_row_to_variant(row_key, variants_text):
+    """Model tablosundaki satırı varyanta eşler: satırın ilk hücresinin parçalarından en çoğunu içeren varyant."""
+    parts = [norm(p) for p in re.split(r'[\s/()]+', row_key) if len(norm(p)) >= 2]
+    whole = norm(row_key)
+    best, best_score, tie = None, 0, False
+    for i, text in enumerate(variants_text):
+        score = (10 if whole and whole in text else 0) + sum(1 for p in parts if p in text)
+        if score > best_score:
+            best, best_score, tie = i, score, False
+        elif score == best_score and score > 0:
+            tie = True
+    return None if tie or best_score == 0 else best
+
+
+def extract_specs(desc, variants_text):
+    """(ürün özellikleri, varyant indeksine göre özellikler)."""
+    product_specs, by_variant = {}, {}
+    for t in parse_tables(desc):
+        if all(len(r) <= 2 for r in t):
+            # Anahtar/değer tablosu; tek hücreli satırlar ara başlıktır ("Genel", "200Wp Model Teknik Değerleri").
+            # Ara başlık bir varyantı işaret ediyorsa altındaki satırlar o varyanta aittir.
+            target = product_specs
+            for r in t:
+                if len(r) == 1:
+                    i = match_row_to_variant(r[0], variants_text) if variants_text else None
+                    target = by_variant.setdefault(i, {}) if i is not None else product_specs
+                    continue
+                k, v = r
+                if k and v and k.lower() not in ('özellik', 'parametre') and k not in target:
+                    target[k] = v
+            continue
+        header, body = t[0], t[1:]
+        if len(header) < 2 or not body:
+            continue
+        if not variants_text:
+            if len(body) == 1:
+                for k, v in zip(header, body[0]):
+                    if k and v:
+                        product_specs.setdefault(k, v)
+            continue
+        for r in body:
+            i = match_row_to_variant(r[0], variants_text)
+            if i is None:
+                continue
+            specs = by_variant.setdefault(i, {})
+            for k, v in zip(header, r):
+                if k and v:
+                    specs.setdefault(k, v)
+    return product_specs, by_variant
+
+
+DIM_KEY = re.compile(r'boyut|ölçü|ebat|dimension|^\s*(en|boy)\s*[x×]', re.I)
+WEIGHT_KEY = re.compile(r'ağırlı|weight', re.I)
+
+
+def parse_dims_cm(value):
+    """'1722 × 1134 × 30 mm' → [172.2, 113.4, 3.0] (cm). Üç ölçü yoksa None."""
+    m = re.search(r'(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+(?:[.,]\d+)?)\s*[x×*]\s*(\d+(?:[.,]\d+)?)\s*(mm|cm|m)\b', value, re.I)
+    if not m:
+        return None
+    nums = [float(n.replace(',', '.')) for n in m.groups()[:3]]
+    unit = m.group(4).lower()
+    factor = {'mm': 0.1, 'cm': 1.0, 'm': 100.0}[unit]
+    return [round(n * factor, 1) for n in nums]
+
+
+def parse_weight_kg(value):
+    m = re.search(r'(\d+(?:[.,]\d+)?)\s*(kg|g)\b', value, re.I)
+    if not m:
+        return None
+    n = float(m.group(1).replace(',', '.'))
+    return round(n / 1000 if m.group(2).lower() == 'g' else n, 3)
+
+
+def pick_logistics(specs):
+    """Özellik sözlüğünden kargo için ölçü (cm) ve ağırlık (kg). Katlanır ürünlerde kapalı/ambalaj ölçüsü tercih edilir."""
+    dims_candidates, weights = [], []
+    for k, v in specs.items():
+        if DIM_KEY.search(k):
+            d = parse_dims_cm(v)
+            if d:
+                priority = 0 if re.search(r'ambalaj|paket|kutu|kapalı|katlanmış', k, re.I) else (2 if re.search(r'açık', k, re.I) else 1)
+                dims_candidates.append((priority, d))
+        if WEIGHT_KEY.search(k):
+            w = parse_weight_kg(v)
+            if w:
+                weights.append((0 if re.search(r'brüt|ambalaj|paket', k, re.I) else 1, w))
+    dims = sorted(dims_candidates)[0][1] if dims_candidates else None
+    weight = sorted(weights)[0][1] if weights else None
+    return dims, weight
+
+
+def desi_of(dims_cm, weight_kg, parcels=None):
+    """Kargo desisi: max(en×boy×yükseklik (cm) / 3000, ağırlık kg), yukarı yuvarlanmış tam sayı (en az 1).
+    Ölçü bilinmiyorsa desi hesaplanmaz (yalnızca ağırlıkla hesaplanan desi hacimli ürünlerde eksik çıkar).
+    Birden çok koliyle gönderilen ürün: parcels=[{dimsCm, weightKg?}] → kolilerin hacim desisi toplamı ile toplam ağırlığın büyüğü."""
+    if parcels:
+        vol = sum(p['dimsCm'][0] * p['dimsCm'][1] * p['dimsCm'][2] / 3000 for p in parcels)
+        total_w = weight_kg or sum(p.get('weightKg') or 0 for p in parcels)
+        return max(1, math.ceil(max(vol, total_w) - 1e-9))
+    if not dims_cm:
+        return None
+    vol = dims_cm[0] * dims_cm[1] * dims_cm[2] / 3000
+    return max(1, math.ceil(max(vol, weight_kg or 0) - 1e-9))
+
+
+def load_logistics_overrides():
+    """SKU → {dimsCm, weightKg, source}: üretici kaynaklarından araştırılan ölçüler.
+    scripts/data/logistics-research/*.result.json (araştırma) + scripts/data/product-logistics.json (elle düzeltme, öncelikli)."""
+    data = {}
+    research_dir = os.path.join(ROOT, 'scripts', 'data', 'logistics-research')
+    if os.path.isdir(research_dir):
+        for name in sorted(os.listdir(research_dir)):
+            if name.endswith('.result.json'):
+                with open(os.path.join(research_dir, name), encoding='utf-8') as f:
+                    data.update(json.load(f))
+    manual = os.path.join(ROOT, 'scripts', 'data', 'product-logistics.json')
+    if os.path.exists(manual):
+        with open(manual, encoding='utf-8') as f:
+            for sku, value in json.load(f).items():
+                data[sku] = {**data.get(sku, {}), **value}
+    return data
+
+
+def apply_logistics(target, specs, override):
+    """Açıklamadaki ölçü/ağırlık öncelikli; eksik olan alan araştırma verisinden tamamlanır.
+    desiSource: description | package | product | series | manual (ölçünün kaynağı). True: ölçü ve ağırlık tam."""
+    if override and override.get('noShipping'):
+        # Dijital ürün (yazılım lisansı vb.): kargo gönderilmez
+        target['desi'] = 0
+        target['desiSource'] = 'no-shipping'
+        return True
+    dims, weight = pick_logistics(specs)
+    source = 'description' if dims else None
+    parcels = None
+    if override:
+        if override.get('parcels'):
+            parcels = override['parcels']
+            dims = dims or parcels[0]['dimsCm']
+            source = 'manual'
+        if not dims and override.get('dimsCm'):
+            dims, source = override['dimsCm'], override.get('basis') or 'research'
+        if not weight and override.get('weightKg'):
+            weight = override['weightKg']
+    desi = desi_of(dims, weight, parcels)
+    if dims:
+        target['dimensionsCm'] = dims
+    if weight:
+        target['weightKg'] = weight
+    if desi:
+        target['desi'] = desi
+        target['desiSource'] = source
+    return bool(dims and weight)
+
+
 def main():
+    # Windows konsolunda (cp1254) Türkçe dışı karakterler hata vermesin
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     if len(sys.argv) < 2:
         sys.exit('Kullanım: python scripts/import-ikas-excel.py <excel.xlsx>')
     rows = read_xlsx(sys.argv[1])
@@ -198,7 +422,9 @@ def main():
             order.append(key)
         groups[key].append(r)
 
+    logistics = load_logistics_overrides()
     products, descriptions, missing, ids = [], {}, [], set()
+    missing_logistics = []
     featured_categories = set()
     for key in order:
         g = groups[key]
@@ -212,16 +438,17 @@ def main():
             raise ValueError(pid + ': varyantlarda farklı para birimi')
         currency = currencies.pop()
         parent, _, child = head[COL_CATS].partition('>')
-        category = (child or parent).strip()
         is_variant = len(g) > 1 or bool(head[COL_GROUP])
 
         def to_try(base):
-            return round(base * fx[currency], 2)
+            return ceil_try(base * fx[currency])
 
         if is_variant and head[COL_META_TITLE]:
             name = strip_brand_suffix(head[COL_META_TITLE])
         else:
             name = head[COL_SEO_NAME] or head[COL_NAME]
+        category = corrected_category(name, (child or parent).strip())
+        desc_html = sanitize_html(head[COL_DESC])
         p = {
             'id': pid,
             'sku': head[COL_SKU],
@@ -238,16 +465,30 @@ def main():
         }
         if is_variant:
             variants, by_variant = [], []
-            for x in g:
+            labels = variant_labels(g)
+            variants_text = [norm(' '.join([labels[i], x[COL_SKU], x[COL_SEO_NAME], x[COL_VARIANT_VALUE]])) for i, x in enumerate(g)]
+            product_specs, specs_by_variant = extract_specs(desc_html, variants_text)
+            for i, x in enumerate(g):
                 _, base = price_of(x)
-                variants.append({
+                v = {
                     'key': variant_key(x[COL_SKU]),
-                    'label': x[COL_VARIANT_VALUE] or x[COL_SEO_NAME],
+                    'label': labels[i],
                     'sku': x[COL_SKU],
                     'basePrice': base,
                     'price': to_try(base),
-                })
+                }
+                vspecs = specs_by_variant.get(i)
+                if vspecs:
+                    v['specifications'] = vspecs
+                # Varyantın kendi model satırı yoksa, ürünün ortak özellikleri ölçü/ağırlık için kullanılabilir
+                # yalnızca tek ölçü verilmişse (tüm varyantlar için ortak kasa)
+                if not apply_logistics(v, vspecs or {}, logistics.get(x[COL_SKU])):
+                    if not apply_logistics(v, product_specs, logistics.get(x[COL_SKU])):
+                        missing_logistics.append({'sku': x[COL_SKU], 'name': x[COL_SEO_NAME], 'brand': head[COL_BRAND], 'productId': pid, 'has': {k: v.get(k) for k in ('dimensionsCm', 'weightKg')}})
+                variants.append(v)
                 by_variant.append(images_of(x, missing))
+            if product_specs:
+                p['specifications'] = product_specs
             if len({v['key'] for v in variants}) != len(variants):
                 raise ValueError(pid + ': tekrarlanan varyant anahtarı')
             # Görseli olmayan varyant, ürünün ilk görselini kullanır
@@ -261,18 +502,42 @@ def main():
             p['images'] = by_variant[0]
             # Varyantlar ürün stoğunu paylaşır (sipariş fiyatlandırması da böyle kontrol eder)
             p['stock'] = max(int(float(x[COL_STOCK] or 0)) for x in g)
+            # Ürün düzeyinde ölçü/desi: varsayılan varyantınki (liste ve akışlar için)
+            for k in ('dimensionsCm', 'weightKg', 'desi'):
+                if k in variants[0]:
+                    p[k] = variants[0][k]
         else:
             _, base = price_of(head)
             p['basePrice'] = base
             p['price'] = to_try(base)
             p['images'] = images_of(head, missing) or [PLACEHOLDER]
+            product_specs, _ = extract_specs(desc_html, [])
+            if product_specs:
+                p['specifications'] = product_specs
+            if not apply_logistics(p, product_specs, logistics.get(head[COL_SKU])):
+                missing_logistics.append({'sku': head[COL_SKU], 'name': name, 'brand': head[COL_BRAND], 'productId': pid, 'has': {k: p.get(k) for k in ('dimensionsCm', 'weightKg')}})
         p['image'] = p['images'][0]
         # Ana sayfa "öne çıkanlar" için her kategoriden görselli ilk ürün
         if category not in featured_categories and p['image'] != PLACEHOLDER:
             featured_categories.add(category)
             p['featured'] = True
         products.append({k: v for k, v in p.items() if v is not None})
-        descriptions[pid] = sanitize_html(head[COL_DESC])
+        descriptions[pid] = desc_html
+
+    # Görseli hiç olmayan ürünler: aynı marka ve kategorideki en benzer adlı ürünün görseli (aynı seri/parça ailesi)
+    def name_tokens(s):
+        return {t for t in re.split(r'[^0-9a-zçğıöşü]+', s.lower()) if len(t) > 1}
+    for p in products:
+        if p['image'] != PLACEHOLDER:
+            continue
+        candidates = [q for q in products if q is not p and q['image'] != PLACEHOLDER and q.get('brand') == p.get('brand') and q['category'] == p['category']]
+        if candidates:
+            best = max(candidates, key=lambda q: len(name_tokens(q['name']) & name_tokens(p['name'])))
+            p['images'] = [best['image']]
+            p['image'] = best['image']
+            if 'imagesByVariant' in p:
+                p['imagesByVariant'] = [[best['image']] if i == [PLACEHOLDER] else i for i in p['imagesByVariant']]
+            print(f'Görselsiz ürün "{p["name"]}" için benzer ürün görseli kullanıldı: {best["name"]}')
 
     os.makedirs(OUT_DIR, exist_ok=True)
     with open(os.path.join(OUT_DIR, 'products.json'), 'w', encoding='utf-8') as f:
@@ -291,6 +556,26 @@ def main():
     no_img = [p['id'] for p in products if p['image'] == PLACEHOLDER]
     if no_img:
         print(f'Görseli olmayan {len(no_img)} ürün placeholder ile eklendi: {", ".join(no_img)}')
+    with_specs = sum(1 for p in products if p.get('specifications') or any(v.get('specifications') for v in p.get('variants', [])))
+    print(f'Teknik özellik: {with_specs}/{len(products)} ürün')
+    # SKU bazında desi raporu (Excel'de açılabilir; ; ayraçlı, UTF-8 BOM)
+    report_path = os.path.join(ROOT, 'scripts', 'data', 'desi-raporu.csv')
+    os.makedirs(os.path.dirname(report_path), exist_ok=True)
+    with open(report_path, 'w', encoding='utf-8-sig', newline='') as f:
+        f.write('SKU;Ürün;Varyant;Marka;Kategori;Ölçü (cm);Ağırlık (kg);Desi;Kaynak\n')
+        for p in products:
+            for v in p.get('variants') or [p]:
+                dims = ' x '.join(f'{d:g}' for d in v.get('dimensionsCm', [])) if v.get('dimensionsCm') else ''
+                cells = [v.get('sku') or p['sku'], p['name'], v.get('label', ''), p.get('brand', ''), p['category'],
+                         dims, f"{v['weightKg']:g}" if v.get('weightKg') else '', str(v['desi']) if 'desi' in v else '',
+                         v.get('desiSource', 'eksik')]
+                f.write(';'.join(c.replace(';', ',') for c in cells) + '\n')
+    missing_path = os.path.join(ROOT, 'scripts', 'data', 'missing-logistics.json')
+    os.makedirs(os.path.dirname(missing_path), exist_ok=True)
+    with open(missing_path, 'w', encoding='utf-8') as f:
+        json.dump(missing_logistics, f, ensure_ascii=False, indent=1)
+    print(f'Ölçü/ağırlık eksik {len(missing_logistics)} SKU → scripts/data/missing-logistics.json '
+          f'(scripts/data/product-logistics.json ile tamamlanır)')
 
 
 if __name__ == '__main__':

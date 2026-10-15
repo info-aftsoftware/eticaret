@@ -464,7 +464,7 @@ export default function OrderDetailPage() {
                   {order.paymentStatus === 'PAID' && (
                     <Button variant="outline" size="sm" onClick={() => downloadDocument('invoice')} disabled={downloading !== null}>
                       {downloading === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <FileText className="w-4 h-4 mr-1" />}
-                      Faturayı İndir
+                      Sipariş Özetini İndir (Proforma)
                     </Button>
                   )}
                 </div>

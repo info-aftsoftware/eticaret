@@ -8,6 +8,8 @@ import { getStorefrontProducts } from '@/lib/discounts'
 import { computeOrderTotals, VAT_RATE } from '@/lib/store-config'
 import { SELLER } from '@/lib/legal/company'
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
+import { getGroupIdForCategory } from '@/lib/categories'
+import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 
 export const revalidate = 3600
 
@@ -22,6 +24,13 @@ const xml = (v: unknown) =>
     .replace(/"/g, '&quot;')
 const abs = (u?: string) => (!u ? '' : u.startsWith('http') ? u : `${SITE_URL}${u.startsWith('/') ? '' : '/'}${u}`)
 const money = (n: number) => `${(Math.round(n * 100) / 100).toFixed(2)} TRY`
+
+/** "Güneş Paneli > Panel" biçiminde ürün türü (Excel'deki kategori hiyerarşisi) */
+function productType(category: string): string {
+  const groupId = getGroupIdForCategory(category)
+  const group = groupId ? CATEGORY_META[groupId]?.title : undefined
+  return group && group !== category ? `${group} > ${category}` : category
+}
 
 export async function GET() {
   // Merchant Center görselsiz ürünü reddeder: placeholder görselli ürünler akışa girmez
@@ -45,8 +54,9 @@ export async function GET() {
       ${sale ? `<g:sale_price>${money(sale)}</g:sale_price>` : ''}${sale && p.campaign?.endsAt ? `<g:sale_price_effective_date>${new Date().toISOString()}/${p.campaign.endsAt}</g:sale_price_effective_date>` : ''}
       <g:condition>new</g:condition>
       ${p.brand ? `<g:brand>${xml(p.brand)}</g:brand>` : ''}
-      ${p.sku ? `<g:mpn>${xml(p.sku)}</g:mpn>` : '<g:identifier_exists>no</g:identifier_exists>'}
-      ${p.category ? `<g:product_type>${xml(p.category)}</g:product_type>` : ''}
+      ${/* SKU mağazanın iç kodu (TOMMAT-…), üretici parça no / GTIN değil: Google'a tanımlayıcı yok bildirilir */ ''}<g:identifier_exists>no</g:identifier_exists>
+      ${p.category ? `<g:product_type>${xml(productType(p.category))}</g:product_type>` : ''}
+      ${p.weightKg ? `<g:shipping_weight>${p.weightKg} kg</g:shipping_weight>` : ''}
       <g:shipping><g:country>TR</g:country><g:price>${money(shipping)}</g:price></g:shipping>
     </item>`
   })

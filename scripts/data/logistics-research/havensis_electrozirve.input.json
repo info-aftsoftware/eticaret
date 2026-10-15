@@ -1,0 +1,849 @@
+[
+ {
+  "sku": "ELECTR-00446",
+  "name": "Electrozirve 12,8V 100Ah LiFePO4 Lityum Akü",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-12-8v-lifepo4-lityum-aku-100ah-200ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00447",
+  "name": "Electrozirve 12,8V 200Ah LiFePO4 Lityum Akü",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-12-8v-lifepo4-lityum-aku-100ah-200ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00469",
+  "name": "Electrozirve IC 1000 1000W Tam Sinüs İnverter",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ic-serisi-tam-sinus-inverter-1000w-3000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00470",
+  "name": "Electrozirve IC 2000 2000W Tam Sinüs İnverter",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ic-serisi-tam-sinus-inverter-1000w-3000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00471",
+  "name": "Electrozirve IC 3000 3000W Tam Sinüs İnverter",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ic-serisi-tam-sinus-inverter-1000w-3000w",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00473",
+  "name": "Electrozirve CR80 Kablolu İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-cr80-kablolu-inverter-kumandasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00474",
+  "name": "Electrozirve CRW80 Kablosuz İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-crw80-kablosuz-inverter-kumandasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00475",
+  "name": "Electrozirve CRW88 Kablosuz (Car Design) İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-crw88-kablosuz-car-design-inverter-kumandasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00476",
+  "name": "Electrozirve CRD80 Kablolu Ekranlı İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-crd80-kablolu-ekranli-inverter-kumandasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00481",
+  "name": "Electrozirve HP2410 10A PWM Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-hp2410-10a-pwm-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00482",
+  "name": "Electrozirve HP2420 20A PWM Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-hp2420-20a-pwm-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00483",
+  "name": "Electrozirve HP2430 30A PWM Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-hp2430-30a-pwm-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00484",
+  "name": "Electrozirve HP2440 40A PWM Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-hp2440-40a-pwm-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00485",
+  "name": "Electrozirve HP2450 50A PWM Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-hp2450-50a-pwm-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00486",
+  "name": "Electrozirve HP2460 60A PWM Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-hp2460-60a-pwm-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00489",
+  "name": "Electrozirve ML-2420 20A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ml-serisi-ekranli-mppt-sarj-kontrol-cihazi-20a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00490",
+  "name": "Electrozirve ML-2430 30A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ml-serisi-ekranli-mppt-sarj-kontrol-cihazi-20a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00491",
+  "name": "Electrozirve ML-2440 40A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ml-serisi-ekranli-mppt-sarj-kontrol-cihazi-20a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00492",
+  "name": "Electrozirve ML-4860 60A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ml-serisi-ekranli-mppt-sarj-kontrol-cihazi-20a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00493",
+  "name": "Electrozirve MC-2420 20A Ekransız MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-serisi-ekransiz-mppt-sarj-kontrol-cihazi-20a-50a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00494",
+  "name": "Electrozirve MC-2430 30A Ekransız MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-serisi-ekransiz-mppt-sarj-kontrol-cihazi-20a-50a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00495",
+  "name": "Electrozirve MC-2440 40A Ekransız MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-serisi-ekransiz-mppt-sarj-kontrol-cihazi-20a-50a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00496",
+  "name": "Electrozirve MC-2450 50A Ekransız MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-serisi-ekransiz-mppt-sarj-kontrol-cihazi-20a-50a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00497",
+  "name": "Electrozirve MC-4860N25 60A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-4860n25-60a-ekranli-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00498",
+  "name": "Electrozirve MC-4885N15 85A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-4885n15-85a-ekranli-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00499",
+  "name": "Electrozirve MC-48100N25 100A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mc-48100n25-100a-ekranli-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00500",
+  "name": "Electrozirve MF-4860N15 60A Ekranlı MPPT Şarj Kontrol Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-mf-4860n15-60a-ekranli-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00501",
+  "name": "Electrozirve RM-6 Şarj Kontrol Cihazı Harici Ekranı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-sarj-kontrol-cihazi-harici-ekrani-rm-5-rm-6",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00502",
+  "name": "Electrozirve RM-5 Şarj Kontrol Cihazı Harici Ekranı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-sarj-kontrol-cihazi-harici-ekrani-rm-5-rm-6",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00503",
+  "name": "Electrozirve BT-1 Şarj Kontrol Cihazı Bluetooth Kiti",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-sarj-kontrol-cihazi-bluetooth-kiti-bt-1-bt-2",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00504",
+  "name": "Electrozirve BT-2 Şarj Kontrol Cihazı Bluetooth Kiti",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-sarj-kontrol-cihazi-bluetooth-kiti-bt-1-bt-2",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00505",
+  "name": "Electrozirve AC1225C 12V 25A Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ac1225c-12v-25a-aku-sarj-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00516",
+  "name": "Electrozirve EC12-12 12V 20A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00517",
+  "name": "Electrozirve EC12-12 12V 40A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00518",
+  "name": "Electrozirve EC12-12 12V 60A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00519",
+  "name": "Electrozirve 30A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00521",
+  "name": "Electrozirve 40A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "ELECTR-00520",
+  "name": "Electrozirve 30A Çift Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-30a-cift-yonlu-dc-dc-aku-sarj-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00600",
+  "name": "Havensis MiniSolar-3AES 12V 3A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-3aes-12v-3a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00601",
+  "name": "Havensis MiniSolar-5AES 12V 5A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-5aes-12v-5a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00602",
+  "name": "Havensis MiniSolar-6AES 12V 6A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-6aes-12v-6a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00603",
+  "name": "Havensis MiniSolar-10AES 12V 10A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-10aes-12v-10a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00604",
+  "name": "Havensis MiniSolar-20AES 12V 20A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-20aes-12v-20a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00605",
+  "name": "Havensis MiniSolar-10ASS 12/24V 10A PWM Şarj Kontrol Cihazı (Standart Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-10ass-12-24v-10a-pwm-sarj-kontrol-cihazi-standart-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00606",
+  "name": "Havensis MiniSolar-20ASS 12/24V 20A PWM Şarj Kontrol Cihazı (Standart Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-20ass-12-24v-20a-pwm-sarj-kontrol-cihazi-standart-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00607",
+  "name": "Havensis MiniSolar-10ADS 12/24V 10A PWM Şarj Kontrol Cihazı (Dijital Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-10ads-12-24v-10a-pwm-sarj-kontrol-cihazi-dijital-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00608",
+  "name": "Havensis MiniSolar-20ADS 12/24V 20A PWM Şarj Kontrol Cihazı (Dijital Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-20ads-12-24v-20a-pwm-sarj-kontrol-cihazi-dijital-seri",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00609",
+  "name": "Havensis MiniSolar MPS 3A 12V MPPT Şarj Kontrol Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-mps-3a-12v-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00610",
+  "name": "Havensis MPS Serisi 20A 12/24V MPPT Şarj Kontrol Cihazı (100V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-20a-12-24v-mppt-sarj-kontrol-cihazi-100v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00611",
+  "name": "Havensis MPS Serisi 30A 12/24V MPPT Şarj Kontrol Cihazı (100V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-30a-12-24v-mppt-sarj-kontrol-cihazi-100v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00612",
+  "name": "Havensis MPS Serisi 40A 12/24V MPPT Şarj Kontrol Cihazı (100V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-40a-mppt-sarj-kontrol-cihazi-100v-150v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00615",
+  "name": "Havensis MPS Serisi 40A 12/24/36/48V MPPT Şarj Kontrol Cihazı (150V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-40a-mppt-sarj-kontrol-cihazi-100v-150v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00613",
+  "name": "Havensis MPS Serisi 50A 12/24V MPPT Şarj Kontrol Cihazı (100V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-50a-12-24v-mppt-sarj-kontrol-cihazi-100v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00614",
+  "name": "Havensis MPS Serisi 60A 12/24V MPPT Şarj Kontrol Cihazı (100V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-60a-mppt-sarj-kontrol-cihazi-100v-150v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00616",
+  "name": "Havensis MPS Serisi 60A 12/24/36/48V MPPT Şarj Kontrol Cihazı (150V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-60a-mppt-sarj-kontrol-cihazi-100v-150v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00617",
+  "name": "Havensis MPS Serisi 70A 12/24/36/48V MPPT Şarj Kontrol Cihazı (150V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-70a-12-24-36-48v-mppt-sarj-kontrol-cihazi-150v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00618",
+  "name": "Havensis MPS Serisi 80A 12/24/36/48V MPPT Şarj Kontrol Cihazı (150V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-80a-12-24-36-48v-mppt-sarj-kontrol-cihazi-150v-200v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00619",
+  "name": "Havensis MPS Serisi 80A 12/24/36/48V MPPT Şarj Kontrol Cihazı (200V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-80a-12-24-36-48v-mppt-sarj-kontrol-cihazi-150v-200v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00620",
+  "name": "Havensis HV MPS Serisi Solar-80AMPS 45A 60/72V MPPT Şarj Kontrol Cihazı (200V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-hv-mps-serisi-solar-80amps-45a-60-72v-mppt-sarj-kontrol-cihazi-200v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00621",
+  "name": "Havensis HV MPS Serisi Solar-45AMPS 45A 60/72V MPPT Şarj Kontrol Cihazı (200V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-hv-mps-serisi-solar-45amps-45a-60-72v-mppt-sarj-kontrol-cihazi-200v-pv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00622",
+  "name": "Havensis BATCHG-1224BBC 12/12V 20A DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-batchg-1224bbc-12-12v-20a-dc-dc-aku-sarj-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00623",
+  "name": "Havensis DCDC-1224 12/24V 30A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dcdc-1224-12-24v-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00625",
+  "name": "Havensis DCDC-1224 12/24V 40A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dcdc-1224-12-24v-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00624",
+  "name": "Havensis DCDC-1224B 12/24V 30A Çift Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dcdc-1224b-12-24v-cift-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00626",
+  "name": "Havensis DCDC-1224B 12/24V 40A Çift Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dcdc-1224b-12-24v-cift-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00627",
+  "name": "Havensis DualCharger-3020AMD 50A MPPT + DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dualcharger-3020amd-50a-mppt-dc-dc-aku-sarj-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00628",
+  "name": "Havensis DualCharger-4030AMD 60A MPPT + DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dualcharger-4030amd-60a-mppt-dc-dc-aku-sarj-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00629",
+  "name": "Havensis Boost MPPT-2472 24-72V Boost MPPT Şarj Kontrol Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-boost-mppt-2472-24-72v-boost-mppt-sarj-kontrol-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00630",
+  "name": "Havensis Boost DCDC-2448 24-48V 20A Boost DC-DC Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-boost-dcdc-2448-24-48v-boost-dc-dc-sarj-cihazi-20a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00631",
+  "name": "Havensis Boost DCDC-2448 24-48V 40A Boost DC-DC Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-boost-dcdc-2448-24-48v-boost-dc-dc-sarj-cihazi-20a-40a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00632",
+  "name": "Havensis HINV 1300W 12V Tam Sinüs UPS'li İnverter",
+  "brand": "Havensis",
+  "productId": "havensis-hinv-1300w-12v-tam-sinus-ups-li-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-HVSS50070DC-00633",
+  "name": "Havensis HVSS-500 500A Smart Shunt Akü Monitörü",
+  "brand": "Havensis",
+  "productId": "havensis-hvss-500-500a-smart-shunt-aku-monitoru",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00634",
+  "name": "Havensis Solar-WiFi-485 MPPT Uzaktan İzleme Modülü",
+  "brand": "Havensis",
+  "productId": "havensis-solar-wifi-485-mppt-uzaktan-izleme-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00635",
+  "name": "Havensis MiniSolar-BT V2 RS485 Bluetooth Uzaktan İzleme Modülü",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-bt-v2-rs485-bluetooth-uzaktan-izleme-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00636",
+  "name": "Havensis C216DSP Şarj Kontrol Cihazı Harici Ekranı",
+  "brand": "Havensis",
+  "productId": "havensis-c216dsp-sarj-kontrol-cihazi-harici-ekrani",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00637",
+  "name": "Havensis EKBT Bluetooth'lu Harici Ekran",
+  "brand": "Havensis",
+  "productId": "havensis-ekbt-bluetooth-lu-harici-ekran",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "HAVENS-00638",
+  "name": "Havensis HTS-230-15 Otomatik Transfer Switch",
+  "brand": "Havensis",
+  "productId": "havensis-hts-230-15-otomatik-transfer-switch",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ }
+]

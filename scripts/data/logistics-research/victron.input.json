@@ -1,0 +1,712 @@
+[
+ {
+  "sku": "VICTRO-CEP122160000-01406",
+  "name": "Victron EasyPlus C 12/1600/70-16 İnverter/Şarj Cihazı (12V 1600VA)",
+  "brand": "Victron",
+  "productId": "victron-easyplus-c-12-1600-70-16-inverter-sarj-cihazi-12v-1600va",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-PMP482305102-01465",
+  "name": "Victron MultiPlus-II 48/3000/35-50 İnverter/Şarj Cihazı (48V 3000VA, 120V, UL 1741)",
+  "brand": "Victron",
+  "productId": "victron-multiplus-ii-48-3000-35-50-inverter-sarj-cihazi-48v-3000va-120v-ul-1741",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-LYN060102010-01716",
+  "name": "Victron Lynx Distributor DC Dağıtım Modülü (M10)",
+  "brand": "Victron",
+  "productId": "victron-lynx-distributor-dc-dagitim-modulu-m10",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-CIP100200100-01759",
+  "name": "Victron Modüler MEGA Sigorta Yuvası",
+  "brand": "Victron",
+  "productId": "victron-moduler-mega-sigorta-yuvasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-CIP106100000-01765",
+  "name": "Victron ANL Sigorta Yuvası",
+  "brand": "Victron",
+  "productId": "victron-anl-sigorta-yuvasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP900480100-01767",
+  "name": "Victron Ekrano GX Sistem İzleme Ekranı",
+  "brand": "Victron",
+  "productId": "victron-ekrano-gx-sistem-izleme-ekrani",
+  "known": {
+   "dimensionsCm": [
+    12.4,
+    18.7,
+    3
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.victronenergy.com/upload/documents/Ekrano_GX/140558-Ekrano_GX__Cerbo_GX__Nucleo_GX_Manual-pdf-en.pdf"
+  ]
+ },
+ {
+  "sku": "VICTRO-BPP900495100-01768",
+  "name": "Victron Ekrano GX Duvar Montaj Aparatı",
+  "brand": "Victron",
+  "productId": "victron-ekrano-gx-duvar-montaj-aparati",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP900455050-01771",
+  "name": "Victron GX Touch 50 Dokunmatik Ekran",
+  "brand": "Victron",
+  "productId": "victron-gx-touch-50-dokunmatik-ekran",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP900465070-01777",
+  "name": "Victron GX Touch 70 Duvar Montaj Aparatı",
+  "brand": "Victron",
+  "productId": "victron-gx-touch-70-duvar-montaj-aparati",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP900800150-01778",
+  "name": "Victron GX IO-Extender 150 Giriş/Çıkış Genişletme Modülü",
+  "brand": "Victron",
+  "productId": "victron-gx-io-extender-150-giris-cikis-genisletme-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP900400100-01779",
+  "name": "Victron Venus GX Sistem İzleme Cihazı",
+  "brand": "Victron",
+  "productId": "victron-venus-gx-sistem-izleme-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP900100200-01781",
+  "name": "Victron CCGX Wi-Fi Modülü (Basit)",
+  "brand": "Victron",
+  "productId": "victron-ccgx-wi-fi-modulu-basit",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-VPN000200000-01783",
+  "name": "Victron VE.Net GMDSS Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-ve-net-gmdss-kontrol-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPP920140100-01786",
+  "name": "Victron GX Tank 140 Tank Seviye Ölçüm Modülü",
+  "brand": "Victron",
+  "productId": "victron-gx-tank-140-tank-seviye-olcum-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REC020005010-01787",
+  "name": "Victron Digital Multi Control 200/200A Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-digital-multi-control-200-200a-uzaktan-kontrol-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-DMC000200010R-01788",
+  "name": "Victron Digital Multi Control 200/200A GX Uzaktan Kontrol Paneli (90° RJ45)",
+  "brand": "Victron",
+  "productId": "victron-digital-multi-control-200-200a-gx-uzaktan-kontrol-paneli-90-rj45",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REC030001210-01789",
+  "name": "Victron Inverter Control İnverter Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-inverter-control-inverter-uzaktan-kontrol-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REC010001110-01790",
+  "name": "Victron Phoenix Charger Control Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-phoenix-charger-control-uzaktan-kontrol-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REC040010210R-01791",
+  "name": "Victron Inverter Control VE.Direct İnverter Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-inverter-control-ve-direct-inverter-uzaktan-kontrol-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REC000300010R-01792",
+  "name": "Victron Skylla-i Control GX Uzaktan Kontrol Paneli (90° RJ45)",
+  "brand": "Victron",
+  "productId": "victron-skylla-i-control-gx-uzaktan-kontrol-paneli-90-rj45",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BPA000100010R-01795",
+  "name": "Victron Battery Alarm GX Akü Alarm Cihazı",
+  "brand": "Victron",
+  "productId": "victron-battery-alarm-gx-aku-alarm-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-GSM900200100-01801",
+  "name": "Victron GX GSM ve GX LTE Aktif GPS Anteni",
+  "brand": "Victron",
+  "productId": "victron-gx-gsm-ve-gx-lte-aktif-gps-anteni",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030066018-01813",
+  "name": "Victron RJ12 UTP Kablo 1,8 m",
+  "brand": "Victron",
+  "productId": "victron-rj12-utp-kablo-1-8-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030560100-01840",
+  "name": "Victron 3 Pinli Erkek-Dişi Uzatma Kablosu 1 m (2'li Paket)",
+  "brand": "Victron",
+  "productId": "victron-3-pinli-erkek-disi-uzatma-kablosu-1-m-2-li-paket",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030532010-01849",
+  "name": "Victron CANUSB Arayüz",
+  "brand": "Victron",
+  "productId": "victron-canusb-arayuz",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030200000-01852",
+  "name": "Victron RS232 - USB Dönüştürücü",
+  "brand": "Victron",
+  "productId": "victron-rs232-usb-donusturucu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030550120-01860",
+  "name": "Victron Ters Çeviren (Inverting) Uzaktan Aç/Kapa Kablosu",
+  "brand": "Victron",
+  "productId": "victron-ters-ceviren-inverting-uzaktan-ac-kapa-kablosu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030550220-01861",
+  "name": "Victron Ters Çevirmeyen (Non-Inverting) Uzaktan Aç/Kapa Kablosu",
+  "brand": "Victron",
+  "productId": "victron-ters-cevirmeyen-non-inverting-uzaktan-ac-kapa-kablosu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-CSE000100000-01865",
+  "name": "Victron AC Akım Sensörü",
+  "brand": "Victron",
+  "productId": "victron-ac-akim-sensoru",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS000100000-01874",
+  "name": "Victron BMV-702/712 İçin Sıcaklık Sensörü",
+  "brand": "Victron",
+  "productId": "victron-bmv-702-712-icin-sicaklik-sensoru",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS070400100-01875",
+  "name": "Victron Ön Şarj (Pre-charge) Kablosu",
+  "brand": "Victron",
+  "productId": "victron-on-sarj-pre-charge-kablosu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ADA500140100-01877",
+  "name": "Victron DIN35 Ray Adaptörü Orta (Çift)",
+  "brand": "Victron",
+  "productId": "victron-din35-ray-adaptoru-orta-cift",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ADA500180100-01878",
+  "name": "Victron DIN35 Ray Adaptörü Büyük (Çift)",
+  "brand": "Victron",
+  "productId": "victron-din35-ray-adaptoru-buyuk-cift",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030536011-01879",
+  "name": "Victron VE.Direct Bluetooth Smart Dongle",
+  "brand": "Victron",
+  "productId": "victron-ve-direct-bluetooth-smart-dongle",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REL100100000-01880",
+  "name": "Victron UFR1001E Ada Modu Koruma (Anti-Islanding) Rölesi",
+  "brand": "Victron",
+  "productId": "victron-ufr1001e-ada-modu-koruma-anti-islanding-rolesi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-REL200300100-01885",
+  "name": "Victron VM-3P75CT Trifaze Enerji Sayacı",
+  "brand": "Victron",
+  "productId": "victron-vm-3p75ct-trifaze-enerji-sayaci",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030572018-01886",
+  "name": "Victron RS485 - USB Arayüz Kablosu 1,8 m",
+  "brand": "Victron",
+  "productId": "victron-rs485-usb-arayuz-kablosu-1-8-m-5-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS030572050-01887",
+  "name": "Victron RS485 - USB Arayüz Kablosu 5 m",
+  "brand": "Victron",
+  "productId": "victron-rs485-usb-arayuz-kablosu-1-8-m-5-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS300420100-01888",
+  "name": "Victron Zigbee - RS485 Dönüştürücü",
+  "brand": "Victron",
+  "productId": "victron-zigbee-rs485-donusturucu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-CYR010120110R-01922",
+  "name": "Victron Cyrix-ct 12/24V 120A Akü Birleştirici Kiti",
+  "brand": "Victron",
+  "productId": "victron-cyrix-ct-12-24v-120a-aku-birlestirici-kiti",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BBA000100100-01928",
+  "name": "Victron Battery Balancer Akü Dengeleyici",
+  "brand": "Victron",
+  "productId": "victron-battery-balancer-aku-dengeleyici",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SCC900300000-01955",
+  "name": "Victron BlueSolar PWM-Pro Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-bluesolar-pwm-pro-uzaktan-kontrol-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SCC940100100-01956",
+  "name": "Victron BlueSolar PWM-Pro Sıcaklık Sensörü",
+  "brand": "Victron",
+  "productId": "victron-bluesolar-pwm-pro-sicaklik-sensoru",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SCC940100200-01957",
+  "name": "Victron BlueSolar PWM-Pro - USB Arayüz Kablosu",
+  "brand": "Victron",
+  "productId": "victron-bluesolar-pwm-pro-usb-arayuz-kablosu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SCC900650010-02000",
+  "name": "Victron SmartSolar Takılabilir Ekran (Pluggable Display)",
+  "brand": "Victron",
+  "productId": "victron-smartsolar-takilabilir-ekran-pluggable-display",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SCC900500000-02001",
+  "name": "Victron MPPT Control Uzaktan Ekran (VE.Direct Kablo Hariç)",
+  "brand": "Victron",
+  "productId": "victron-mppt-control-uzaktan-ekran-ve-direct-kablo-haric",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SBS050150200-02002",
+  "name": "Victron Smart Battery Sense Kablosuz Akü Sensörü (10 m Menzil)",
+  "brand": "Victron",
+  "productId": "victron-smart-battery-sense-kablosuz-aku-sensoru-10-m-menzil",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SHS121409230-02003",
+  "name": "Victron SHS 200 MPPT v3.0 Kullandıkça Öde Solar Ev Sistemi (MC4)",
+  "brand": "Victron",
+  "productId": "victron-shs-200-mppt-v3-0-kullandikca-ode-solar-ev-sistemi-mc4",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SHS900120050-02004",
+  "name": "Victron SHS 200 Solar Kablo 5 m",
+  "brand": "Victron",
+  "productId": "victron-shs-200-solar-kablo-5-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SHS800300300-02005",
+  "name": "Victron SHS 200 Akü Kutusu",
+  "brand": "Victron",
+  "productId": "victron-shs-200-aku-kutusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-SCC950200000-02009",
+  "name": "Victron MPPT WireBox-M Kablo Kapağı",
+  "brand": "Victron",
+  "productId": "victron-mppt-wirebox-m-kablo-kapagi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS300200200-02099",
+  "name": "Victron VE.Bus BMS V2 (Lityum Batarya Yönetim Sistemi)",
+  "brand": "Victron",
+  "productId": "victron-ve-bus-bms-v2-lityum-batarya-yonetim-sistemi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS300200300-02100",
+  "name": "Victron VE.Bus BMS NG (Lityum Batarya Yönetim Sistemi)",
+  "brand": "Victron",
+  "productId": "victron-ve-bus-bms-ng-lityum-batarya-yonetim-sistemi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS400100000-02101",
+  "name": "Victron smallBMS Lityum Batarya Yönetim Sistemi",
+  "brand": "Victron",
+  "productId": "victron-smallbms-lityum-batarya-yonetim-sistemi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS400100300-02102",
+  "name": "Victron smallBMS NG Lityum Batarya Yönetim Sistemi",
+  "brand": "Victron",
+  "productId": "victron-smallbms-ng-lityum-batarya-yonetim-sistemi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS800200104-02103",
+  "name": "Victron SolidSwitch 104 Katı Hal Anahtarı",
+  "brand": "Victron",
+  "productId": "victron-solidswitch-104-kati-hal-anahtari",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS210055000-02114",
+  "name": "Victron Smart BMS 12/200 Lityum Batarya Yönetim Sistemi",
+  "brand": "Victron",
+  "productId": "victron-smart-bms-12-200-lityum-batarya-yonetim-sistemi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BMS110022000-02115",
+  "name": "Victron Smart BMS CL 12/100 Lityum Batarya Yönetim Sistemi",
+  "brand": "Victron",
+  "productId": "victron-smart-bms-cl-12-100-lityum-batarya-yonetim-sistemi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-ASS070200100-02116",
+  "name": "Victron Smart BMS CL 12/100 Bağlantı Kablosu",
+  "brand": "Victron",
+  "productId": "victron-smart-bms-cl-12-100-baglanti-kablosu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BAT512020705-02120",
+  "name": "Victron Lithium SuperPack 12,8V 20Ah Lityum Akü (M5)",
+  "brand": "Victron",
+  "productId": "victron-lithium-superpack-12-8v-20ah-lityum-aku-m5",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BAT512060705-02121",
+  "name": "Victron Lithium SuperPack 12,8V 60Ah Lityum Akü (M6)",
+  "brand": "Victron",
+  "productId": "victron-lithium-superpack-12-8v-60ah-lityum-aku-m6",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BAT512110712-02122",
+  "name": "Victron Lithium SuperPack 12,8V 100Ah Lityum Akü (M8)",
+  "brand": "Victron",
+  "productId": "victron-lithium-superpack-12-8v-100ah-lityum-aku-m8",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BAT512120705-02123",
+  "name": "Victron Lithium SuperPack 12,8V 200Ah Lityum Akü (M8)",
+  "brand": "Victron",
+  "productId": "victron-lithium-superpack-lityum-aku-12-8v-200ah-25-6v-50ah-m8",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "VICTRO-BAT524050705-02124",
+  "name": "Victron Lithium SuperPack 25,6V 50Ah Lityum Akü (M8)",
+  "brand": "Victron",
+  "productId": "victron-lithium-superpack-lityum-aku-12-8v-200ah-25-6v-50ah-m8",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ }
+]

@@ -1,0 +1,765 @@
+{
+  "ELECTR-00446": {
+    "dimsCm": [
+      28.0,
+      21.3,
+      22.9
+    ],
+    "weightKg": 14.5,
+    "basis": "product",
+    "source": "https://www.idefix.com/electrozirve-100-amper-lityum-aku-128v-lifepo4-aku-p-24582088",
+    "note": "idefix listing 'Electrozirve 100 Amper Lityum Aku 12.8V': Boyutlar 280x213x228.5 mm, 14.5 kg"
+  },
+  "ELECTR-00447": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00469": {
+    "dimsCm": [
+      32.9,
+      22.9,
+      8.8
+    ],
+    "weightKg": 3.2,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Pure-Sine-Wave-Inverter-IC.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE SR-IC12-1kW: 329x229x88 mm, 3.2 kg"
+  },
+  "ELECTR-00470": {
+    "dimsCm": [
+      32.9,
+      22.9,
+      8.8
+    ],
+    "weightKg": 6.0,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Pure-Sine-Wave-Inverter-IC.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE SR-IC12-2kW: 329x229x88 mm, 6.0 kg (Electrozirve page: IC2000-12)"
+  },
+  "ELECTR-00471": {
+    "dimsCm": [
+      36.6,
+      30.0,
+      11.6
+    ],
+    "weightKg": 7.0,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Pure-Sine-Wave-Inverter-IC.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE SR-IC12-3kW: 366x300x116 mm, 7.0 kg (assumes 12V version)"
+  },
+  "ELECTR-00473": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00474": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00475": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00476": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00481": {
+    "dimsCm": [
+      10.3,
+      7.1,
+      3.6
+    ],
+    "weightKg": 0.1,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/PWM-Solar-Charge-Controller-HP.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE HP2410: 103x71x36 mm, 100 g"
+  },
+  "ELECTR-00482": {
+    "dimsCm": [
+      13.0,
+      7.5,
+      3.8
+    ],
+    "weightKg": 0.16,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/PWM-Solar-Charge-Controller-HP.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE HP2420: 130x75x38 mm, 160 g"
+  },
+  "ELECTR-00483": {
+    "dimsCm": [
+      16.4,
+      10.4,
+      4.7
+    ],
+    "weightKg": 0.39,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/PWM-Solar-Charge-Controller-HP.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE HP2430: 164.0x103.5x47.0 mm, 390 g"
+  },
+  "ELECTR-00484": {
+    "dimsCm": [
+      16.4,
+      10.4,
+      4.7
+    ],
+    "weightKg": 0.39,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/PWM-Solar-Charge-Controller-HP.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE HP2440: 164.0x103.5x47.0 mm, 390 g"
+  },
+  "ELECTR-00485": {
+    "dimsCm": [
+      18.9,
+      12.7,
+      5.4
+    ],
+    "weightKg": 0.65,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/PWM-Solar-Charge-Controller-HP.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE HP2450: 189.27x127.2x54.0 mm, 650 g"
+  },
+  "ELECTR-00486": {
+    "dimsCm": [
+      18.9,
+      12.7,
+      5.4
+    ],
+    "weightKg": 0.65,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/PWM-Solar-Charge-Controller-HP.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE HP2460: 189.27x127.2x54.0 mm, 650 g"
+  },
+  "ELECTR-00489": {
+    "dimsCm": [
+      21.0,
+      15.1,
+      6.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-ML.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE ML series 24V datasheet V1.2: ML2420/ML2430 210x151x59.5 mm, 1.4 kg"
+  },
+  "ELECTR-00490": {
+    "dimsCm": [
+      21.0,
+      15.1,
+      6.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-ML.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE ML series 24V datasheet V1.2: ML2420/ML2430 210x151x59.5 mm, 1.4 kg"
+  },
+  "ELECTR-00491": {
+    "dimsCm": [
+      23.8,
+      17.3,
+      7.3
+    ],
+    "weightKg": 2.0,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-ML.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE ML series 24V datasheet V1.2: ML2440 238x173x72.5 mm, 2 kg"
+  },
+  "ELECTR-00492": {
+    "dimsCm": [
+      28.5,
+      20.5,
+      9.3
+    ],
+    "weightKg": 3.6,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-ML.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE ML series 48V datasheet V1.2: ML4860N15 285x205x93 mm, 3.6 kg"
+  },
+  "ELECTR-00493": {
+    "dimsCm": [
+      15.0,
+      10.6,
+      6.2
+    ],
+    "weightKg": 0.65,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC24v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC2420N10: 150x105.6x61.5 mm, 0.65 kg"
+  },
+  "ELECTR-00494": {
+    "dimsCm": [
+      15.0,
+      10.6,
+      6.8
+    ],
+    "weightKg": 0.83,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC24v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC2430N10: 150x105.6x67.5 mm, 0.83 kg"
+  },
+  "ELECTR-00495": {
+    "dimsCm": [
+      18.3,
+      12.7,
+      6.6
+    ],
+    "weightKg": 1.04,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC24v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC2440N10: 183x127x65.5 mm, 1.04 kg"
+  },
+  "ELECTR-00496": {
+    "dimsCm": [
+      18.3,
+      12.7,
+      7.0
+    ],
+    "weightKg": 1.335,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC24v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC2450N10: 183x127x69.5 mm, 1.335 kg"
+  },
+  "ELECTR-00497": {
+    "dimsCm": [
+      26.6,
+      19.4,
+      11.9
+    ],
+    "weightKg": 3.6,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC48v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC4860N25: 266x194x119 mm, 3.6 kg"
+  },
+  "ELECTR-00498": {
+    "dimsCm": [
+      31.4,
+      22.7,
+      12.1
+    ],
+    "weightKg": 5.7,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC48v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC4885N15: 314x227x121 mm, 5.7 kg"
+  },
+  "ELECTR-00499": {
+    "dimsCm": [
+      31.4,
+      22.7,
+      12.1
+    ],
+    "weightKg": 5.7,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MC48v.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MC48100N25: 314x227x121 mm, 5.7 kg"
+  },
+  "ELECTR-00500": {
+    "dimsCm": [
+      27.5,
+      16.7,
+      9.0
+    ],
+    "weightKg": 3.6,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/Mppt-Solar-Charge-Controller-MF.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE MF series 48V 60A datasheet V1.0 (MF4860N15): 275x167x90 mm, 3.6 kg"
+  },
+  "ELECTR-00501": {
+    "dimsCm": [
+      10.5,
+      5.6,
+      1.2
+    ],
+    "weightKg": 0.09,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/rm-6-7-8.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE RM-6 datasheet: 104.5x55.5x11.8 mm, 90 g"
+  },
+  "ELECTR-00502": {
+    "dimsCm": [
+      11.9,
+      11.9,
+      4.8
+    ],
+    "weightKg": 0.5,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/rm-5.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE RM-5 datasheet: external 118.5x118.5x48 mm, product weight 0.5 kg (web page also lists 66x51x15.5 mm)"
+  },
+  "ELECTR-00503": {
+    "dimsCm": [
+      6.6,
+      5.1,
+      1.6
+    ],
+    "weightKg": 0.12,
+    "basis": "product",
+    "source": "https://www.wattuneed.com/en/charge-controllers/4815-bluetooth-adapter-for-srne-controllers-sr-bt-1-0712971136779.html",
+    "note": "SRNE BT-1 (OEM of Electrozirve BT-1, ML datasheet lists BT-1 as accessory): 66x51x15.5 mm, net 120 g; same retailer also lists 'product weight 0.5 kg' (likely packed)"
+  },
+  "ELECTR-00504": {
+    "dimsCm": [
+      6.7,
+      3.6,
+      1.6
+    ],
+    "weightKg": 0.13,
+    "basis": "product",
+    "source": "https://www.wattuneed.com/en/charge-controllers/26471-bluetooth-adapter-for-srne-controllers-bt-2-0712971136779.html",
+    "note": "SRNE BT-2: SRNE doc 67.3x36x15.5 mm (retailers 67.3x35x14 mm), net 130 g. Assumes Electrozirve BT-2 = SRNE BT-2"
+  },
+  "ELECTR-00505": {
+    "dimsCm": [
+      34.8,
+      12.4,
+      6.6
+    ],
+    "weightKg": 1.7,
+    "basis": "product",
+    "source": "https://www.srnesolar.com/productdetail/AC-series.html",
+    "note": "Electrozirve model code identical to SRNE OEM model; values from SRNE official spec (product, not package) - verify Electrozirve is SRNE rebrand. SRNE AC series 12V 25A EU datasheet V1.0 (AC1225C): 347.7x124.1x66.0 mm, 1.7 kg"
+  },
+  "ELECTR-00516": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00517": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00518": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00519": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00521": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "ELECTR-00520": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00600": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00601": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00602": {
+    "dimsCm": [
+      10.9,
+      5.4,
+      3.0
+    ],
+    "weightKg": 0.07,
+    "basis": "series",
+    "source": "https://www.havensis.com.tr/urunler/minisolar-eko-seri",
+    "note": "Eko series page covers MiniSolar-6A and 10A; only 10AES datasheet: 108.75x54x30.3 mm, 0.07 kg. Another Havensis manual (MS20ADS file with MiniSolar-6A drawing) gives same 108.75x54x30.3 mm but 0.25 kg"
+  },
+  "HAVENS-00603": {
+    "dimsCm": [
+      10.9,
+      5.4,
+      3.0
+    ],
+    "weightKg": 0.07,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/minisolar-eko-seri",
+    "note": "'MiniSolar10AES_Tanitim Kilavuzu.pdf': 108(.75) x 54 mm footprint, 30.3 mm height (drawing), 0.07 kg"
+  },
+  "HAVENS-00604": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00605": {
+    "dimsCm": [
+      15.6,
+      6.8,
+      5.0
+    ],
+    "weightKg": 0.24,
+    "basis": "series",
+    "source": "https://www.havensis.com.tr/urunler/standar-seri-solar-sarj-kontrol-cihazi",
+    "note": "Only 20ASS spec published (MS10/20ASS manual link): 156x68.3x50 mm, 0.24 kg"
+  },
+  "HAVENS-00606": {
+    "dimsCm": [
+      15.6,
+      6.8,
+      5.0
+    ],
+    "weightKg": 0.24,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/standar-seri-solar-sarj-kontrol-cihazi",
+    "note": "'MiniSolar20ASS_Kullanma Kilavuzu.pdf': Dis olculer 156x68.3x50(+1.0) mm, 0.24 kg"
+  },
+  "HAVENS-00607": {
+    "dimsCm": [
+      15.6,
+      6.8,
+      5.0
+    ],
+    "weightKg": 0.18,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/dijital-seri-solar-sarj-kontrol",
+    "note": "'MiniSolar-10-20ADS Tanitim Kilavuzu.pdf': outer 156.0x68.3 mm, 0.18 kg (10ADS). Height not stated for ADS; 50 mm taken from Standard series (same 156x68.3 housing, MiniSolar-20ASS manual)"
+  },
+  "HAVENS-00608": {
+    "dimsCm": [
+      15.6,
+      6.8,
+      5.0
+    ],
+    "weightKg": 0.23,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/dijital-seri-solar-sarj-kontrol",
+    "note": "'MiniSolar-10-20ADS Tanitim Kilavuzu.pdf': outer 156.0x68.3 mm, 0.23 kg (20ADS). Height 50 mm from Standard series same housing"
+  },
+  "HAVENS-00609": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00610": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "series",
+    "source": "https://www.havensis.com.tr/urunler/30a-mppt-solar-sarj-kontrol",
+    "note": "No 20A-specific datasheet; values from Solar-30AMPS datasheet (Solar30Av5_1) / 100V 20/30/40A manual family: 210x159x70 mm, 1.4 kg"
+  },
+  "HAVENS-00611": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/30a-mppt-solar-sarj-kontrol",
+    "note": "'Solar30Av5_1 Datasheet.pdf' (linked on product page): 210x159x70 mm, 1.40 kg (product, not package)"
+  },
+  "HAVENS-00612": {
+    "dimsCm": [
+      21.0,
+      16.8,
+      8.5
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/40a-mppt-solar-sarj-kontrol",
+    "note": "'Solar40Av6 Datasheet.pdf' (linked on product page): 210x168x85 mm, 1.40 kg. Older manual gives 210x159x70 mm"
+  },
+  "HAVENS-00615": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00613": {
+    "dimsCm": [
+      22.4,
+      19.7,
+      8.0
+    ],
+    "weightKg": 2.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual '5060A MPPT KULLANMA KILAVUZU.pdf' (Solar-AMPS 100|50): 197.2x224x80 mm, 2.4 kg"
+  },
+  "HAVENS-00614": {
+    "dimsCm": [
+      22.4,
+      19.7,
+      8.0
+    ],
+    "weightKg": 2.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual '5060A MPPT KULLANMA KILAVUZU.pdf' (Solar-AMPS 100|60): 197.2x224x80 mm, 2.4 kg"
+  },
+  "HAVENS-00616": {
+    "dimsCm": [
+      28.0,
+      23.0,
+      10.0
+    ],
+    "weightKg": 5.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "'Havensis Solar-MPS 60A-70A-80A Datasheet.pdf' + 80A manual (covers 150|60/70/80 and 200|80): 280x230x100 mm, 5.40 kg. Page text says 274x245x100 mm"
+  },
+  "HAVENS-00617": {
+    "dimsCm": [
+      28.0,
+      23.0,
+      10.0
+    ],
+    "weightKg": 5.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "'Havensis Solar-MPS 60A-70A-80A Datasheet.pdf' + 80A manual (covers 150|60/70/80 and 200|80): 280x230x100 mm, 5.40 kg. Page text says 274x245x100 mm"
+  },
+  "HAVENS-00618": {
+    "dimsCm": [
+      28.0,
+      23.0,
+      10.0
+    ],
+    "weightKg": 5.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "'Havensis Solar-MPS 60A-70A-80A Datasheet.pdf' + 80A manual (covers 150|60/70/80 and 200|80): 280x230x100 mm, 5.40 kg. Page text says 274x245x100 mm"
+  },
+  "HAVENS-00619": {
+    "dimsCm": [
+      28.0,
+      23.0,
+      10.0
+    ],
+    "weightKg": 5.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "'Havensis Solar-MPS 60A-70A-80A Datasheet.pdf' + 80A manual (covers 150|60/70/80 and 200|80): 280x230x100 mm, 5.40 kg. Page text says 274x245x100 mm"
+  },
+  "HAVENS-00620": {
+    "dimsCm": [
+      28.0,
+      23.5,
+      10.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/solar-45amps-6072v-45a-hv-mppt-1",
+    "note": "Product page 'Solar-45AMPS 60/72V 45A HV MPPT': Cihaz Boyutu 280x235x100 mm; no weight. SKU name mixes '80AMPS' and '45A' - verify model"
+  },
+  "HAVENS-00621": {
+    "dimsCm": [
+      28.0,
+      23.5,
+      10.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/solar-45amps-6072v-45a-hv-mppt-1",
+    "note": "Product page: Cihaz Boyutu 280x235x100 mm; no weight published"
+  },
+  "HAVENS-00622": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00623": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'DC DC CHARGER GUNCEL KILAVUZ v4.pdf' (30A, BC-1224BBC): 210x159x70 mm, 1.4 kg. Conflict: product page https://www.havensis.com.tr/urunler/akilli-dc-dc-aku-sarj-cihazi says 197x132x61 mm, 1.4 kg. Older v1.3 manual/datasheet (old case) gives 194x132x61 mm, 1.2-1.4 kg; used current v4 manual"
+  },
+  "HAVENS-00625": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'DC DC CHARGER GUNCEL KILAVUZ 40A V4.pdf': 210x159x70 mm, 1.4 kg. Conflict: product page https://www.havensis.com.tr/urunler/40a-dc-dc-aku-sarj-cihazi-69426e0c57782 says 140x200x85 mm, 1.4 kg. Older v1.3 manual/datasheet (old case) gives 194x132x61 mm, 1.2-1.4 kg; used current v4 manual"
+  },
+  "HAVENS-00624": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'DC DC CHARGER GUNCEL KILAVUZ v4.pdf' (30A incl. takviye/bidirectional mode): 210x159x70 mm, 1.4 kg. Conflict: product page https://www.havensis.com.tr/urunler/cift-yonlu-dc-dc-aku-sarj-cihazi says 197x132x61 mm, 1.4 kg. Older v1.3 manual/datasheet (old case) gives 194x132x61 mm, 1.2-1.4 kg; used current v4 manual"
+  },
+  "HAVENS-00626": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'DC DC CHARGER GUNCEL KILAVUZ 40A V4.pdf': 210x159x70 mm, 1.4 kg. Conflict: product page https://www.havensis.com.tr/urunler/40a-cift-yonlu-dc-dc-aku-sarj-cihazi-takviye-modlu-677cd5129e0de says 140x200x85 mm, 1.4 kg. Older v1.3 manual/datasheet (old case) gives 194x132x61 mm, 1.2-1.4 kg; used current v4 manual"
+  },
+  "HAVENS-00627": {
+    "dimsCm": [
+      22.4,
+      19.7,
+      8.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/50a-dualcharger-3020amd-mpptdc-dc-69426f665e2fe",
+    "note": "Product page: Cihaz Boyutu 197.2x224x80 mm; no weight published"
+  },
+  "HAVENS-00628": {
+    "dimsCm": [
+      28.0,
+      23.5,
+      10.0
+    ],
+    "weightKg": 5.5,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Dual Charger manual (DUAL CHARGER KULLANIM KITAPCIGI v4.pdf, MPPT 40A + DCDC 30A = 60A): Cihaz Boyutu 280x235x100 mm (spec table 280x230x100), 5.5 kg"
+  },
+  "HAVENS-00629": {
+    "dimsCm": [
+      21.0,
+      15.9,
+      7.0
+    ],
+    "weightKg": 1.4,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'BOOST MPPT V4.pdf' (BOOST-2472BMC): 210x159x70 mm, 1.4 kg. Older V1 manual (old case) gives 194x132x61 mm, 1.4 kg"
+  },
+  "HAVENS-00630": {
+    "dimsCm": [
+      22.4,
+      19.7,
+      8.0
+    ],
+    "weightKg": 2.4,
+    "basis": "series",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'BOOST DC DC CHARGER 60A.pdf' (12/24V-60A in, 36-48V out): 197.2x224x80 mm, 2.4 kg. 20A variant not separately specified - verify"
+  },
+  "HAVENS-00631": {
+    "dimsCm": [
+      22.4,
+      19.7,
+      8.0
+    ],
+    "weightKg": 2.4,
+    "basis": "series",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'BOOST DC DC CHARGER 60A.pdf': 197.2x224x80 mm, 2.4 kg. 40A variant not separately specified - verify"
+  },
+  "HAVENS-00632": {
+    "dimsCm": [
+      37.5,
+      22.5,
+      11.0
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/1300w-tam-sinus-sarjli-invertor-ups-69a54b9b19b5d",
+    "note": "Product page: Cihaz Boyutu 375x225x110 mm; no weight published"
+  },
+  "HAVENS-HVSS50070DC-00633": {
+    "dimsCm": [
+      12.0,
+      5.4,
+      4.6
+    ],
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/urunler/hvss-smart-shunt-500a-69a549f16f30e",
+    "note": "'HVSS SmartShunt-TR.pdf': 500 A: 46 x 120 x 54 mm; weight not stated"
+  },
+  "HAVENS-00634": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00635": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00636": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00637": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "Not found in manufacturer site/manuals or accessible marketplace listings"
+  },
+  "HAVENS-00638": {
+    "dimsCm": [
+      19.0,
+      9.0,
+      8.0
+    ],
+    "weightKg": 0.9,
+    "basis": "product",
+    "source": "https://www.havensis.com.tr/indirmeler",
+    "note": "Manual 'TRANSFER SWICTH.pdf' (HTS-230 15A): 190x90x80 mm, 0.90 kg"
+  }
+}

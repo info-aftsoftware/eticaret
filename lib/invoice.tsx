@@ -168,7 +168,8 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({
         </View>
 
         {/* Invoice Title */}
-        <Text style={styles.invoiceTitle}>FATURA</Text>
+        {/* Resmî e-Arşiv faturası entegratör bağlanınca ayrıca düzenlenir; bu belge sipariş özetidir */}
+        <Text style={styles.invoiceTitle}>SİPARİŞ ÖZETİ / PROFORMA</Text>
 
         {/* Order Info */}
         <View style={styles.orderInfo}>
@@ -279,7 +280,7 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({
         {/* Footer */}
         <View style={styles.footer}>
           <Text>
-            Bu fatura elektronik ortamda düzenlenmiştir ve imza gerektirmez.
+            Bu belge sipariş özetidir, mali değeri yoktur. Resmî faturanız (e-Arşiv) ayrıca düzenlenir.
           </Text>
           <Text>
             Ödeme yöntemi: {orderData.paymentMethod === 'bank_transfer' ? 'Havale / EFT' : orderData.paymentMethod ? 'Kredi / Banka Kartı' : '—'}

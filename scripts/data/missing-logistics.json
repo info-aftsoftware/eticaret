@@ -1,0 +1,2260 @@
+[
+ {
+  "sku": "TOMMAT-KBLMC4XT6012AWG1M-00109",
+  "name": "TommaTech V Serisi Güç İstasyonu Panel Bağlantı Kablosu (MC4-XT60)",
+  "brand": "TommaTech",
+  "productId": "tommatech-v-serisi-guc-istasyonu-panel-baglanti-kablosu-mc4-xt60",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-KBLMC4DC552518AWG1-00110",
+  "name": "TommaTech R Serisi Güç İstasyonu Panel Bağlantı Kablosu (Daire Soket)",
+  "brand": "TommaTech",
+  "productId": "tommatech-r-serisi-guc-istasyonu-panel-baglanti-kablosu-daire-soket",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHV40KWHS-00162",
+  "name": "TommaTech Hightech Power S 4 kWh HV Lityum Batarya Modülü",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-4-kwh-hv-lityum-batarya-modulu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHVBMS40SAIO-00163",
+  "name": "TommaTech Hightech Power S HV BMS (AIO)",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-hv-bms-aio",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHVBMS40S-00164",
+  "name": "TommaTech Hightech Power S HV BMS",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-hv-bms",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTLVBMSS51A-00166",
+  "name": "TommaTech Hightech Power S LV BMS (AIO)",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-lv-bms-aio",
+  "has": {
+   "dimensionsCm": [
+    72.0,
+    25.5,
+    22.8
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTTRM15CM-00200",
+  "name": "TommaTech Rack/Modüler Batarya Paralel Kablo Seti 15 cm",
+  "brand": "TommaTech",
+  "productId": "tommatech-rack-moduler-batarya-paralel-kablo-seti-15-cm",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTTRM15M-00201",
+  "name": "TommaTech Rack/Modüler Batarya Seri Güç Kablosu Seti 1,5 m",
+  "brand": "TommaTech",
+  "productId": "tommatech-rack-moduler-batarya-seri-guc-kablosu-seti-1-5-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTPE5015M-00202",
+  "name": "TommaTech TPE 50 mm² Kırmızı Batarya Güç Kablosu 1,5 m",
+  "brand": "TommaTech",
+  "productId": "tommatech-tpe-50-mm2-kirmizi-batarya-guc-kablosu-1-5-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-KSAMTLTBN256V512V-00203",
+  "name": "TommaTech Modüler Batarya Alt Taban (25,6V 208Ah / 51,2V 102Ah)",
+  "brand": "TommaTech",
+  "productId": "tommatech-moduler-batarya-alt-taban-25-6v-208ah-51-2v-102ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V10A-00204",
+  "name": "TommaTech 24V 10A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V40ASC-00206",
+  "name": "TommaTech 24V 40A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V20ASC-00208",
+  "name": "TommaTech 48V 20A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V25ASC-00210",
+  "name": "TommaTech 48V 25A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V20A-00209",
+  "name": "TommaTech 48V 20A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V25A-00211",
+  "name": "TommaTech 48V 25A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V50A-00213",
+  "name": "TommaTech 48V 50A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V60A-00214",
+  "name": "TommaTech 48V 60A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT72V25A-00215",
+  "name": "TommaTech 72V 25A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACMBL72V40A-00218",
+  "name": "TommaTech 72V 40A Mobil Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-mobil-tip-batarya-sarj-unitesi-24v-48v-72v",
+  "has": {
+   "dimensionsCm": [
+    35.2,
+    27.9,
+    18.4
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR48V200A-00222",
+  "name": "TommaTech 48V 200A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR72V40A-00223",
+  "name": "TommaTech 72V 40A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V80A-00224",
+  "name": "TommaTech 80V 80A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V300A-00227",
+  "name": "TommaTech 80V 300A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ30100V200A-00228",
+  "name": "TommaTech 30-100V 200A Ayarlanabilir Mobil Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-30-100v-200a-ayarlanabilir-mobil-batarya-sarj-unitesi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ40100V200A-00229",
+  "name": "TommaTech 40-100V 200A Ayarlanabilir Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-40-100v-ayarlanabilir-batarya-sarj-unitesi-200a-300a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ40100V300A-00230",
+  "name": "TommaTech 40-100V 300A Ayarlanabilir Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-40-100v-ayarlanabilir-batarya-sarj-unitesi-200a-300a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-EVCTTCVSTANT22KW-00247",
+  "name": "TommaTech 22 kW Araç Şarj İstasyonu LED Işıklı Stand (Boş Pano)",
+  "brand": "TommaTech",
+  "productId": "tommatech-22-kw-arac-sarj-istasyonu-led-isikli-stand-bos-pano",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-EVCTTTFCBLTYPE2-00248",
+  "name": "TommaTech 22 kW Type 2 32A Araç Şarj Kablosu 5 m",
+  "brand": "TommaTech",
+  "productId": "tommatech-22-kw-type-2-32a-arac-sarj-kablosu-5-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-00250",
+  "name": "TommaTech RFID Araç Şarj İstasyonu Kartı",
+  "brand": "TommaTech",
+  "productId": "tommatech-rfid-arac-sarj-istasyonu-karti",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT0222MF-00286",
+  "name": "TommaTech 2,2 kW Monofaze 220V Solar Pompa Sürücüsü (450VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    18.0,
+    12.0,
+    15.4
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT0540TF-00288",
+  "name": "TommaTech 4 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    25.0,
+    16.1,
+    18.4
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT0655TF-00289",
+  "name": "TommaTech 5,5 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    25.0,
+    16.1,
+    18.4
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT11220TF-00291",
+  "name": "TommaTech 22 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    46.7,
+    29.0,
+    23.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT12300TF-00292",
+  "name": "TommaTech 30 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    46.7,
+    29.0,
+    23.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT13370TF-00293",
+  "name": "TommaTech 37 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    46.7,
+    29.0,
+    23.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT15550TF-00295",
+  "name": "TommaTech 55 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    58.0,
+    37.5,
+    27.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT16750TF-00296",
+  "name": "TommaTech 75 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    75.5,
+    46.0,
+    33.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT17900TF-00297",
+  "name": "TommaTech 90 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    75.5,
+    46.0,
+    33.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT181100TF-00298",
+  "name": "TommaTech 110 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    75.5,
+    46.0,
+    33.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT222500TF-00304",
+  "name": "TommaTech 250 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": [
+    140.0,
+    75.0,
+    40.5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT243150TF-00305",
+  "name": "TommaTech 315 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT243550TF-00306",
+  "name": "TommaTech 355 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT245000TF-00309",
+  "name": "TommaTech 500 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT246300TF-00310",
+  "name": "TommaTech 630 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT0422TF-00287",
+  "name": "TommaTech 2,2 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-2-2-kw-trifaze-380v-solar-pompa-surucusu-900vdc",
+  "has": {
+   "dimensionsCm": [
+    18.0,
+    12.0,
+    15.4
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT10185TF-00290",
+  "name": "TommaTech 18,5 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    46.7,
+    29.0,
+    23.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT14450TF-00294",
+  "name": "TommaTech 45 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    58.0,
+    37.5,
+    27.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT191320TF-00299",
+  "name": "TommaTech 132 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    81.0,
+    49.0,
+    37.5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT201600TF-00300",
+  "name": "TommaTech 160 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    120.0,
+    55.0,
+    38.5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT211850TF-00301",
+  "name": "TommaTech 185 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    120.0,
+    55.0,
+    38.5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT200TF-00302",
+  "name": "TommaTech 200 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    125.0,
+    55.0,
+    38.5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT220TF-00303",
+  "name": "TommaTech 220 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    125.0,
+    55.0,
+    38.5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT244000TF-00307",
+  "name": "TommaTech 400 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT244500TF-00308",
+  "name": "TommaTech 450 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-INVSLMTFV275KW-00311",
+  "name": "TommaTech 7,5 kW Trifaze 380V Solar Pompa Sürücüsü (1000VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    32.0,
+    22.1,
+    19.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-INVSLMTFV211KW-00312",
+  "name": "TommaTech 11 kW Trifaze 380V Solar Pompa Sürücüsü (1000VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    32.0,
+    22.1,
+    19.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-INVSLMTFV215KW-00313",
+  "name": "TommaTech 15 kW Trifaze 380V Solar Pompa Sürücüsü (1000VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "has": {
+   "dimensionsCm": [
+    32.0,
+    22.1,
+    19.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-UECINVSLM4G-00314",
+  "name": "TommaTech Solar Pompa Sürücüsü 4G Uzaktan Erişim Cihazı",
+  "brand": "TommaTech",
+  "productId": "tommatech-solar-pompa-surucusu-4g-uzaktan-erisim-cihazi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK25A-00315",
+  "name": "TommaTech MDK25A Solar Pompa Sürücüsü Diyot Modülü (2,2-5,5 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk25a-solar-pompa-surucusu-diyot-modulu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK55A-00316",
+  "name": "TommaTech MDK55A Solar Pompa Sürücüsü Diyot Modülü (7,5-11 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-solar-pompa-surucusu-diyot-modulu-mdk55a-mdk90a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK90A-00318",
+  "name": "TommaTech MDK90A Solar Pompa Sürücüsü Diyot Modülü (18,5-30 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-solar-pompa-surucusu-diyot-modulu-mdk55a-mdk90a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK70A-00317",
+  "name": "TommaTech MDK70A Solar Pompa Sürücüsü Diyot Modülü (15 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk70a-solar-pompa-surucusu-diyot-modulu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK90A-00319",
+  "name": "TommaTech MDK90A Solar Pompa Sürücüsü Diyot Modülü (37-45 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk90a-solar-pompa-surucusu-diyot-modulu-37-45-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00321",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (90-110 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk110a-solar-pompa-surucusu-diyot-modulu-90-110-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00320",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (55-75 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk110a-solar-pompa-surucusu-diyot-modulu-55-75-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00322",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (132 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00323",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (160 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00324",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (185 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDC15016-00325",
+  "name": "TommaTech MDC150-16 Solar Pompa Sürücüsü Diyot Modülü (250 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTTPOOL515R410TF-00348",
+  "name": "TommaTech 51,5 kW R410 Trifaze Havuz Tipi Isı Pompası",
+  "brand": "TommaTech",
+  "productId": "tommatech-51-5-kw-r410-trifaze-havuz-tipi-isi-pompasi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT12R32MFDIS-00349",
+  "name": "TommaTech 12 kW R32 Monofaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-monofaze-split-isi-pompasi-dis-unite-12-kw-18-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT18R32MFDIS-00350",
+  "name": "TommaTech 18 kW R32 Monofaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-monofaze-split-isi-pompasi-dis-unite-12-kw-18-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT12R32TFDIS-00351",
+  "name": "TommaTech 12 kW R32 Trifaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-trifaze-split-isi-pompasi-dis-unite-12-kw-22-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT22R32TFDIS-00352",
+  "name": "TommaTech 22 kW R32 Trifaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-trifaze-split-isi-pompasi-dis-unite-12-kw-22-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT812R32MFIC-00353",
+  "name": "TommaTech 8-12 kW R32 Monofaze Split Isı Pompası İç Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-split-isi-pompasi-ic-unite-8-12-kw-18-22-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT1822R32MFIC-00354",
+  "name": "TommaTech 18-22 kW R32 Monofaze Split Isı Pompası İç Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-split-isi-pompasi-ic-unite-8-12-kw-18-22-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALPEX-00381",
+  "name": "Alpex 6200W 48V On-Grid/Off-Grid Hibrit İnverter",
+  "brand": "Alpex",
+  "productId": "alpex-6200w-48v-on-grid-off-grid-hibrit-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00384",
+  "name": "Altech Boreas 2000 2 kW 48V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-2000-2-kw-48v-off-grid-ruzgar-turbini",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00385",
+  "name": "Altech Boreas 2000 2 kW 24V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-2000-2-kw-24v-off-grid-ruzgar-turbini",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00387",
+  "name": "Altech Boreas 4000 4 kW 48V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-4000-4-kw-48v-off-grid-ruzgar-turbini",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00388",
+  "name": "Altech Boreas 4000 4 kW 24V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-4000-4-kw-24v-off-grid-ruzgar-turbini",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00390",
+  "name": "Altech Boreas 6000 6 kW 48V Off-Grid Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-boreas-6000-6-kw-48v-off-grid-ruzgar-turbini",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00391",
+  "name": "Altech 7 m Kafes Tipi Rüzgar Türbini Montaj Direği",
+  "brand": "Altech",
+  "productId": "altech-7-m-kafes-tipi-ruzgar-turbini-montaj-diregi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT3KWNOVA3000-00392",
+  "name": "Altech Nova 3000 3 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT5KWNOVA5000-00393",
+  "name": "Altech Nova 5000 5 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT8KWNOVA8000-00394",
+  "name": "Altech Nova 8000 8 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT12KWNOVAPRE-00395",
+  "name": "Altech Nova 12000 12 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "productId": "altech-nova-ruzgar-turbini-3-kw-12-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00438",
+  "name": "NP Power 3,5 kW MPPT Akıllı İnverter",
+  "brand": "NP Power",
+  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00439",
+  "name": "NP Power 6,2 kW MPPT Akıllı İnverter",
+  "brand": "NP Power",
+  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00440",
+  "name": "NP Power 8,5 kW MPPT Akıllı İnverter",
+  "brand": "NP Power",
+  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00441",
+  "name": "NP Power 11 kW MPPT Akıllı İnverter",
+  "brand": "NP Power",
+  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00442",
+  "name": "Apex APX 4.2 Pro 4,2 kW Hibrit MPPT Akıllı İnverter",
+  "brand": "Apex",
+  "productId": "apex-apx-4-2-pro-4-2-kw-hibrit-mppt-akilli-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00443",
+  "name": "Apex APX 6.2 Pro 6,2 kW Hibrit MPPT Akıllı İnverter",
+  "brand": "Apex",
+  "productId": "apex-apx-6-2-pro-6-2-kw-hibrit-mppt-akilli-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00444",
+  "name": "Apex APX 8.5 Pro 8,5 kW MPPT Akıllı İnverter",
+  "brand": "Apex",
+  "productId": "apex-apx-8-5-pro-8-5-kw-mppt-akilli-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00445",
+  "name": "Apex APX 11 Pro 11 kW MPPT Akıllı İnverter",
+  "brand": "Apex",
+  "productId": "apex-apx-11-pro-11-kw-mppt-akilli-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00447",
+  "name": "Electrozirve 12,8V 200Ah LiFePO4 Lityum Akü",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-12-8v-lifepo4-lityum-aku-100ah-200ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00448",
+  "name": "Apex 51,2V 100Ah LiFePO4 Lityum Akü",
+  "brand": "Apex",
+  "productId": "apex-51-2v-lifepo4-lityum-aku-100ah-280ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00450",
+  "name": "Apex 51,2V 280Ah LiFePO4 Lityum Akü",
+  "brand": "Apex",
+  "productId": "apex-51-2v-lifepo4-lityum-aku-100ah-280ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00449",
+  "name": "NP Power 51,2V 100Ah LiFePO4 Lityum Akü",
+  "brand": "NP Power",
+  "productId": "np-power-51-2v-100ah-lifepo4-lityum-aku",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00451",
+  "name": "Apex Safepower 12V 100Ah Jel Akü",
+  "brand": "Apex",
+  "productId": "apex-safepower-12v-jel-aku-100ah-150ah-200ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00452",
+  "name": "Apex Safepower 12V 150Ah Jel Akü",
+  "brand": "Apex",
+  "productId": "apex-safepower-12v-jel-aku-100ah-150ah-200ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00453",
+  "name": "Apex Safepower 12V 200Ah Jel Akü",
+  "brand": "Apex",
+  "productId": "apex-safepower-12v-jel-aku-100ah-150ah-200ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00454",
+  "name": "NP Power 12V 100Ah Jel Akü",
+  "brand": "NP Power",
+  "productId": "np-power-12v-jel-aku-100ah-200ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00455",
+  "name": "NP Power 12V 200Ah Jel Akü",
+  "brand": "NP Power",
+  "productId": "np-power-12v-jel-aku-100ah-200ah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00456",
+  "name": "Apex NFS 1500W Şarjlı Tam Sinüs İnverter (25A Şarj, 16A Bypass)",
+  "brand": "Apex",
+  "productId": "apex-nfs-1500w-sarjli-tam-sinus-inverter-25a-sarj-16a-bypass",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00457",
+  "name": "Apex NPS 600W Şarjlı Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00458",
+  "name": "Apex NPS 1000W Şarjlı Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00459",
+  "name": "Apex NPS 1500W Şarjlı Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00460",
+  "name": "Apex NPS 2000W Şarjlı Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00461",
+  "name": "NP Power NP 300 300W 12V Tam Sinüs İnverter",
+  "brand": "NP Power",
+  "productId": "np-power-12v-tam-sinus-inverter-300w-600w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00462",
+  "name": "NP Power NP 600 600W 12V Tam Sinüs İnverter",
+  "brand": "NP Power",
+  "productId": "np-power-12v-tam-sinus-inverter-300w-600w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00463",
+  "name": "Apex FS 600 D 600W 12V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00464",
+  "name": "Apex FS 1000 D 1000W 12/24V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00465",
+  "name": "Apex FS 1500 D 1500W 12/24V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00466",
+  "name": "Apex FS 2000 D 2000W 12/24V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00467",
+  "name": "Apex FS 3000 D 3000W 12/24V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00468",
+  "name": "Apex FS 4000 D 4000W 12/24V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00472",
+  "name": "Apex NK 600 600W 12V Tam Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-nk-600-600w-12v-tam-sinus-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00473",
+  "name": "Electrozirve CR80 Kablolu İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-cr80-kablolu-inverter-kumandasi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00474",
+  "name": "Electrozirve CRW80 Kablosuz İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-crw80-kablosuz-inverter-kumandasi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00475",
+  "name": "Electrozirve CRW88 Kablosuz (Car Design) İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-crw88-kablosuz-car-design-inverter-kumandasi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00476",
+  "name": "Electrozirve CRD80 Kablolu Ekranlı İnverter Kumandası",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-crd80-kablolu-ekranli-inverter-kumandasi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00477",
+  "name": "Apex NS 300W Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-ns-serisi-modifiye-sinus-inverter-300w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00478",
+  "name": "Apex NS 600W Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-ns-serisi-modifiye-sinus-inverter-300w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00479",
+  "name": "Apex NS 1200W 12/24V Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-ns-serisi-modifiye-sinus-inverter-300w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00480",
+  "name": "Apex NS 2000W Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "productId": "apex-ns-serisi-modifiye-sinus-inverter-300w-2000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00487",
+  "name": "NP Power NP2430 30A MPPT Şarj Kontrol Cihazı",
+  "brand": "NP Power",
+  "productId": "np-power-mppt-sarj-kontrol-cihazi-30a-40a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00488",
+  "name": "NP Power NP2440 40A MPPT Şarj Kontrol Cihazı",
+  "brand": "NP Power",
+  "productId": "np-power-mppt-sarj-kontrol-cihazi-30a-40a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00506",
+  "name": "Apex APX1240 12V 40A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "productId": "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00507",
+  "name": "Apex APX2420 24V 20A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "productId": "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00508",
+  "name": "Apex APX1260 12V 60A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "productId": "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00509",
+  "name": "Apex APX1280 12V 80A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "productId": "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00510",
+  "name": "Apex APX2440 24V 40A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "productId": "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00511",
+  "name": "Apex APX12100 12V 100A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "productId": "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00512",
+  "name": "NP Power NP1210 12V 10A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "productId": "np-power-aku-sarj-cihazi-12v-24v-10a-30a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00513",
+  "name": "NP Power NP1220 12V 20A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "productId": "np-power-aku-sarj-cihazi-12v-24v-10a-30a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00514",
+  "name": "NP Power NP2410 24V 10A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "productId": "np-power-aku-sarj-cihazi-12v-24v-10a-30a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00515",
+  "name": "NP Power NP1230 12V 30A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "productId": "np-power-aku-sarj-cihazi-12v-24v-10a-30a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00516",
+  "name": "Electrozirve EC12-12 12V 20A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00517",
+  "name": "Electrozirve EC12-12 12V 40A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00518",
+  "name": "Electrozirve EC12-12 12V 60A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00519",
+  "name": "Electrozirve 30A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00521",
+  "name": "Electrozirve 40A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00520",
+  "name": "Electrozirve 30A Çift Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "productId": "electrozirve-30a-cift-yonlu-dc-dc-aku-sarj-cihazi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00528",
+  "name": "Apex 80A Otomatik Transfer Switch",
+  "brand": "Apex",
+  "productId": "apex-80a-otomatik-transfer-switch",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "EXELON-00533",
+  "name": "Exelon EMAX PMAX-11P 11 kW 48V Akıllı İnverter",
+  "brand": "Exelon",
+  "productId": "exelon-emax-pmax-11p-11-kw-akilli-inverter",
+  "has": {
+   "dimensionsCm": [
+    60.1,
+    36.0,
+    16.3
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "EXELON-00534",
+  "name": "Exelon EMAX PMAX-12P 12 kW 48V Akıllı İnverter",
+  "brand": "Exelon",
+  "productId": "exelon-emax-pmax-12p-12-kw-akilli-inverter",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "EXELON-ELH24-00537",
+  "name": "Exelon ELH-24 Akıllı İnverter",
+  "brand": "Exelon",
+  "productId": "exelon-elh-serisi-akilli-inverter-elh-12-elh-15-elh-24",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00600",
+  "name": "Havensis MiniSolar-3AES 12V 3A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-3aes-12v-3a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00601",
+  "name": "Havensis MiniSolar-5AES 12V 5A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-5aes-12v-5a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00604",
+  "name": "Havensis MiniSolar-20AES 12V 20A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-20aes-12v-20a-pwm-sarj-kontrol-cihazi-eko-seri",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00609",
+  "name": "Havensis MiniSolar MPS 3A 12V MPPT Şarj Kontrol Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-mps-3a-12v-mppt-sarj-kontrol-cihazi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00615",
+  "name": "Havensis MPS Serisi 40A 12/24/36/48V MPPT Şarj Kontrol Cihazı (150V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-mps-serisi-40a-mppt-sarj-kontrol-cihazi-100v-150v-pv",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00620",
+  "name": "Havensis HV MPS Serisi Solar-80AMPS 45A 60/72V MPPT Şarj Kontrol Cihazı (200V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-hv-mps-serisi-solar-80amps-45a-60-72v-mppt-sarj-kontrol-cihazi-200v-pv",
+  "has": {
+   "dimensionsCm": [
+    28.0,
+    23.5,
+    10.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00621",
+  "name": "Havensis HV MPS Serisi Solar-45AMPS 45A 60/72V MPPT Şarj Kontrol Cihazı (200V PV)",
+  "brand": "Havensis",
+  "productId": "havensis-hv-mps-serisi-solar-45amps-45a-60-72v-mppt-sarj-kontrol-cihazi-200v-pv",
+  "has": {
+   "dimensionsCm": [
+    28.0,
+    23.5,
+    10.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00622",
+  "name": "Havensis BATCHG-1224BBC 12/12V 20A DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-batchg-1224bbc-12-12v-20a-dc-dc-aku-sarj-cihazi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00627",
+  "name": "Havensis DualCharger-3020AMD 50A MPPT + DC-DC Akü Şarj Cihazı",
+  "brand": "Havensis",
+  "productId": "havensis-dualcharger-3020amd-50a-mppt-dc-dc-aku-sarj-cihazi",
+  "has": {
+   "dimensionsCm": [
+    22.4,
+    19.7,
+    8.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00632",
+  "name": "Havensis HINV 1300W 12V Tam Sinüs UPS'li İnverter",
+  "brand": "Havensis",
+  "productId": "havensis-hinv-1300w-12v-tam-sinus-ups-li-inverter",
+  "has": {
+   "dimensionsCm": [
+    37.5,
+    22.5,
+    11.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-HVSS50070DC-00633",
+  "name": "Havensis HVSS-500 500A Smart Shunt Akü Monitörü",
+  "brand": "Havensis",
+  "productId": "havensis-hvss-500-500a-smart-shunt-aku-monitoru",
+  "has": {
+   "dimensionsCm": [
+    12.0,
+    5.4,
+    4.6
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00634",
+  "name": "Havensis Solar-WiFi-485 MPPT Uzaktan İzleme Modülü",
+  "brand": "Havensis",
+  "productId": "havensis-solar-wifi-485-mppt-uzaktan-izleme-modulu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00635",
+  "name": "Havensis MiniSolar-BT V2 RS485 Bluetooth Uzaktan İzleme Modülü",
+  "brand": "Havensis",
+  "productId": "havensis-minisolar-bt-v2-rs485-bluetooth-uzaktan-izleme-modulu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00636",
+  "name": "Havensis C216DSP Şarj Kontrol Cihazı Harici Ekranı",
+  "brand": "Havensis",
+  "productId": "havensis-c216dsp-sarj-kontrol-cihazi-harici-ekrani",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00637",
+  "name": "Havensis EKBT Bluetooth'lu Harici Ekran",
+  "brand": "Havensis",
+  "productId": "havensis-ekbt-bluetooth-lu-harici-ekran",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "İSTABR-00647",
+  "name": "İstabreeze Heli 2.0 2 kW 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-48v-ruzgar-turbini-2-kw-4-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 86.12
+  }
+ },
+ {
+  "sku": "İSTABR-00648",
+  "name": "İstabreeze Heli 4.0 4 kW 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-48v-ruzgar-turbini-2-kw-4-kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 100
+  }
+ },
+ {
+  "sku": "İSTABR-00651",
+  "name": "İstabreeze Pro Wind 1500W 24V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 14.4
+  }
+ },
+ {
+  "sku": "İSTABR-00652",
+  "name": "İstabreeze Pro Wind 2000W 24/48V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 14.4
+  }
+ },
+ {
+  "sku": "İSTABR-00653",
+  "name": "İstabreeze Pro Wind 4000W 48V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 12
+  }
+ },
+ {
+  "sku": "İSTABR-00660",
+  "name": "İstabreeze 500G 12/24V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 2.7
+  }
+ },
+ {
+  "sku": "İSTABR-00661",
+  "name": "İstabreeze 800G 12/24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 8.75
+  }
+ },
+ {
+  "sku": "İSTABR-00662",
+  "name": "İstabreeze 1000G 24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 10
+  }
+ },
+ {
+  "sku": "İSTABR-00663",
+  "name": "İstabreeze 1500G 24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 11.5
+  }
+ },
+ {
+  "sku": "İSTABR-00664",
+  "name": "İstabreeze 2000G 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-alternatoru-500g-2000g",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 13.6
+  }
+ },
+ {
+  "sku": "İSTABR-00665",
+  "name": "İstabreeze Heli 2.0 2 kW 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-ruzgar-turbini-alternatoru-2-kw-4-kw-48v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 25
+  }
+ },
+ {
+  "sku": "İSTABR-00666",
+  "name": "İstabreeze Heli 4.0 4 kW 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-heli-serisi-ruzgar-turbini-alternatoru-2-kw-4-kw-48v",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 33.5
+  }
+ },
+ {
+  "sku": "İSTABR-00667",
+  "name": "İstabreeze 50 cm Kompozit Rüzgar Türbini Kanadı (Siyah-Beyaz)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-50-cm-kompozit-ruzgar-turbini-kanadi-siyah-beyaz",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.19
+  }
+ },
+ {
+  "sku": "İSTABR-00668",
+  "name": "İstabreeze 56 cm Karbon Rüzgar Türbini Kanadı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-56-cm-karbon-ruzgar-turbini-kanadi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.18
+  }
+ },
+ {
+  "sku": "İSTABR-00669",
+  "name": "İstabreeze 57 cm Kompozit Rüzgar Türbini Kanadı (Siyah)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-57-cm-kompozit-ruzgar-turbini-kanadi-siyah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.21
+  }
+ },
+ {
+  "sku": "İSTABR-00670",
+  "name": "İstabreeze 60 cm Kompozit Rüzgar Türbini Kanadı (Beyaz-Siyah)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kompozit-ruzgar-turbini-kanadi-60-cm-107-cm-beyaz-siyah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.27
+  }
+ },
+ {
+  "sku": "İSTABR-00672",
+  "name": "İstabreeze 107 cm Kompozit Rüzgar Türbini Kanadı (Beyaz-Siyah)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kompozit-ruzgar-turbini-kanadi-60-cm-107-cm-beyaz-siyah",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.65
+  }
+ },
+ {
+  "sku": "İSTABR-00671",
+  "name": "İstabreeze 90 cm Kompozit Rüzgar Türbini Kanadı (Beyaz)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-90-cm-kompozit-ruzgar-turbini-kanadi-beyaz",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.62
+  }
+ },
+ {
+  "sku": "İSTABR-00676",
+  "name": "İstabreeze Rüzgar Türbini Kuyruğu (700W-2000W Modeller İçin)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-kuyrugu-700w-2000w-modeller-icin",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.79
+  }
+ },
+ {
+  "sku": "İSTABR-00677",
+  "name": "İstabreeze i-700 Rüzgar Türbini Kuyruk Borusu",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-i-700-ruzgar-turbini-kuyruk-borusu",
+  "has": {
+   "dimensionsCm": [
+    50,
+    5,
+    5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "İSTABR-00678",
+  "name": "İstabreeze Rüzgar Türbini Kuyruk Borusu (1-2 kW Modeller İçin)",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-ruzgar-turbini-kuyruk-borusu-1-2-kw-modeller-icin",
+  "has": {
+   "dimensionsCm": [
+    100,
+    5,
+    5
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "İSTABR-00679",
+  "name": "İstabreeze Alüminyum Kanat Flanşı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-aluminyum-kanat-flansi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.285
+  }
+ },
+ {
+  "sku": "İSTABR-00680",
+  "name": "İstabreeze 3 Kollu Kanat Flanşı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kanat-flansi-3-kollu-5-kollu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 2.7
+  }
+ },
+ {
+  "sku": "İSTABR-00681",
+  "name": "İstabreeze 5 Kollu Kanat Flanşı",
+  "brand": "İstabreeze",
+  "productId": "istabreeze-kanat-flansi-3-kollu-5-kollu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 3.2
+  }
+ },
+ {
+  "sku": "MEXXSU-RG06018MPMX005-00809",
+  "name": "Mexxsun MPK8 60A 12/24/48V MPPT Şarj Kontrol Cihazı",
+  "brand": "Mexxsun",
+  "productId": "mexxsun-mpk8-60a-12-24-48v-mppt-sarj-kontrol-cihazi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "VICTRO-BPP900100200-01781",
+  "name": "Victron CCGX Wi-Fi Modülü (Basit)",
+  "brand": "Victron",
+  "productId": "victron-ccgx-wi-fi-modulu-basit",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.03
+  }
+ },
+ {
+  "sku": "VICTRO-BPP920140100-01786",
+  "name": "Victron GX Tank 140 Tank Seviye Ölçüm Modülü",
+  "brand": "Victron",
+  "productId": "victron-gx-tank-140-tank-seviye-olcum-modulu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.11
+  }
+ },
+ {
+  "sku": "VICTRO-REC020005010-01787",
+  "name": "Victron Digital Multi Control 200/200A Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-digital-multi-control-200-200a-uzaktan-kontrol-paneli",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.28
+  }
+ },
+ {
+  "sku": "VICTRO-REC030001210-01789",
+  "name": "Victron Inverter Control İnverter Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-inverter-control-inverter-uzaktan-kontrol-paneli",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.118
+  }
+ },
+ {
+  "sku": "VICTRO-REC010001110-01790",
+  "name": "Victron Phoenix Charger Control Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-phoenix-charger-control-uzaktan-kontrol-paneli",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.208
+  }
+ },
+ {
+  "sku": "VICTRO-GSM900200100-01801",
+  "name": "Victron GX GSM ve GX LTE Aktif GPS Anteni",
+  "brand": "Victron",
+  "productId": "victron-gx-gsm-ve-gx-lte-aktif-gps-anteni",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.09
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030066018-01813",
+  "name": "Victron RJ12 UTP Kablo 1,8 m",
+  "brand": "Victron",
+  "productId": "victron-rj12-utp-kablo-1-8-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.044
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030560100-01840",
+  "name": "Victron 3 Pinli Erkek-Dişi Uzatma Kablosu 1 m (2'li Paket)",
+  "brand": "Victron",
+  "productId": "victron-3-pinli-erkek-disi-uzatma-kablosu-1-m-2-li-paket",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.066
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030532010-01849",
+  "name": "Victron CANUSB Arayüz",
+  "brand": "Victron",
+  "productId": "victron-canusb-arayuz",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.07
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030200000-01852",
+  "name": "Victron RS232 - USB Dönüştürücü",
+  "brand": "Victron",
+  "productId": "victron-rs232-usb-donusturucu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.1
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030550120-01860",
+  "name": "Victron Ters Çeviren (Inverting) Uzaktan Aç/Kapa Kablosu",
+  "brand": "Victron",
+  "productId": "victron-ters-ceviren-inverting-uzaktan-ac-kapa-kablosu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.014
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030550220-01861",
+  "name": "Victron Ters Çevirmeyen (Non-Inverting) Uzaktan Aç/Kapa Kablosu",
+  "brand": "Victron",
+  "productId": "victron-ters-cevirmeyen-non-inverting-uzaktan-ac-kapa-kablosu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.12
+  }
+ },
+ {
+  "sku": "VICTRO-CSE000100000-01865",
+  "name": "Victron AC Akım Sensörü",
+  "brand": "Victron",
+  "productId": "victron-ac-akim-sensoru",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.1
+  }
+ },
+ {
+  "sku": "VICTRO-ASS000100000-01874",
+  "name": "Victron BMV-702/712 İçin Sıcaklık Sensörü",
+  "brand": "Victron",
+  "productId": "victron-bmv-702-712-icin-sicaklik-sensoru",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.075
+  }
+ },
+ {
+  "sku": "VICTRO-ASS070400100-01875",
+  "name": "Victron Ön Şarj (Pre-charge) Kablosu",
+  "brand": "Victron",
+  "productId": "victron-on-sarj-pre-charge-kablosu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.095
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030572018-01886",
+  "name": "Victron RS485 - USB Arayüz Kablosu 1,8 m",
+  "brand": "Victron",
+  "productId": "victron-rs485-usb-arayuz-kablosu-1-8-m-5-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.09
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030572050-01887",
+  "name": "Victron RS485 - USB Arayüz Kablosu 5 m",
+  "brand": "Victron",
+  "productId": "victron-rs485-usb-arayuz-kablosu-1-8-m-5-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.203
+  }
+ },
+ {
+  "sku": "VICTRO-SCC900300000-01955",
+  "name": "Victron BlueSolar PWM-Pro Uzaktan Kontrol Paneli",
+  "brand": "Victron",
+  "productId": "victron-bluesolar-pwm-pro-uzaktan-kontrol-paneli",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.31
+  }
+ },
+ {
+  "sku": "VICTRO-SCC940100100-01956",
+  "name": "Victron BlueSolar PWM-Pro Sıcaklık Sensörü",
+  "brand": "Victron",
+  "productId": "victron-bluesolar-pwm-pro-sicaklik-sensoru",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.065
+  }
+ },
+ {
+  "sku": "VICTRO-SCC940100200-01957",
+  "name": "Victron BlueSolar PWM-Pro - USB Arayüz Kablosu",
+  "brand": "Victron",
+  "productId": "victron-bluesolar-pwm-pro-usb-arayuz-kablosu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.05
+  }
+ },
+ {
+  "sku": "VICTRO-SHS900120050-02004",
+  "name": "Victron SHS 200 Solar Kablo 5 m",
+  "brand": "Victron",
+  "productId": "victron-shs-200-solar-kablo-5-m",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.475
+  }
+ },
+ {
+  "sku": "VICTRO-SHS800300300-02005",
+  "name": "Victron SHS 200 Akü Kutusu",
+  "brand": "Victron",
+  "productId": "victron-shs-200-aku-kutusu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 5.0
+  }
+ },
+ {
+  "sku": "VICTRO-SCC950200000-02009",
+  "name": "Victron MPPT WireBox-M Kablo Kapağı",
+  "brand": "Victron",
+  "productId": "victron-mppt-wirebox-m-kablo-kapagi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.275
+  }
+ },
+ {
+  "sku": "VICTRO-ASS070200100-02116",
+  "name": "Victron Smart BMS CL 12/100 Bağlantı Kablosu",
+  "brand": "Victron",
+  "productId": "victron-smart-bms-cl-12-100-baglanti-kablosu",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 0.1
+  }
+ }
+]

@@ -7,6 +7,61 @@ _Kontrol tarihi: 12.10.2026 · Kapsam: kod denetimi (sepet → ödeme → sipari
 Öncelik: 🔴 P0 = canlıdan önce mutlaka · 🟠 P1 = ilk 2 hafta · 🟡 P2 = ilk ay · 🟢 P3 = büyüme
 
 
+## 📌 Güncel açık işler (15.10.2026, uygulama sonrası)
+
+_ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardından yapılan düzeltmeler. `[x]` yapıldı,
+`[ ]` sizin kararınız / erişiminiz gereken iş. Ayrıntılar aşağıdaki fazlarda._
+
+### ✅ Faz 8 — katalog düzeltmeleri (15.10.2026)
+
+- [x] **Firestore kuralları ve indeksleri** canlı projeye (eticaret-54bdc) yüklendi; yorum/soru 500 hatası indeksler oluşunca kalkar (birkaç dakika). `.firebaserc` eklendi.
+- [x] **Fiyatlar tam TL'ye yukarı yuvarlanıyor** (kur çevirisi ve kampanyalı fiyat). Excel fiyatları KDV hariç kabul edildi (onaylandı).
+- [x] **Kur yedeği:** son başarılı canlı kur `.data/fx-rates.json`'a yazılıyor; kaynaklar düşerse import günündeki kur yerine bu kullanılır.
+- [x] **Kategori düzeltmeleri** import sırasında (`scripts/import-ikas-excel.py` → `CATEGORY_CORRECTIONS`): 13 ısı pompası yeni **Isı Pompası** kategorisine; "Diğer > Genel"deki 58 ürün inverter, şarj kontrol, türbin aksesuarı, sistem bileşeni, yeni **Taşınabilir Güç İstasyonu** ve **İzleme ve Kontrol** kategorilerine dağıtıldı ("Genel" boş).
+- [x] **Varyant adları** Excel'in tutarsız "Varyant Değer 1" sütunu yerine SEO adlarından üretiliyor (ör. "40Wp TOPCon 36TN10 Güneş Paneli", "5 kW Trifaze On-Grid İnverter").
+- [x] **Teknik özellikler** açıklama tablolarından çıkarılıyor: 340/340 ürün, model tablolarındaki satırlar varyantlara eşleniyor. Karşılaştırma sayfası ve kategori filtreleri (yaygın, kısa değerli en fazla 6 özellik) bunları kullanıyor; ürün sayfasında HTML açıklama zaten tabloları içerdiği için ayrıca gösterilmiyor.
+- [x] **Desi hesabı** (SKU bazında): desi = max(en×boy×yükseklik cm / 3000, kg), yukarı yuvarlanmış. Ölçü/ağırlık önce ürün açıklamasından, eksikse üretici kaynaklarından yapılan araştırmadan (`scripts/data/logistics-research/*.result.json`, her değerin kaynak URL'si var) alınıyor. **562 SKU’nun 381’inde desi var** (348’inde ölçü + ağırlık, 32’sinde yalnızca ölçü; 1 dijital ürün). 46 SKU’da yalnızca ağırlık bulundu (ölçü olmadan desi doğru hesaplanamaz, boş bırakıldı), 135 SKU’da hiç veri yok.
+  Rapor: `scripts/data/desi-raporu.csv` (Excel'de açılır). Eksik liste: `scripts/data/missing-logistics.json`. Elle düzeltme/ekleme: `scripts/data/product-logistics.json` (SKU → `dimsCm`, `weightKg`; iki koliyle giden ürün için `parcels`, dijital ürün için `noShipping`).
+- [x] **Görselsiz 3 ürün** aynı marka/kategorideki en benzer ürünün görselini kullanıyor (Frecon PV500-4T-315, İstabreeze 5 Kollu Büyük Burun, Victron Smart BMS CL kablosu).
+- [x] **Eski ürün adresleri:** 80 eski ürün id'si kalıcı yönlendiriliyor (`lib/legacy-product-redirects.json`): 8 TommaTech ürünü yeni karşılığına, diğerleri (Hims, ORBİT, SRP vb.) ilgili yeni kategoriye.
+- [x] **Google Merchant:** `identifier_exists=no` (iç SKU MPN olarak gönderilmiyor), `product_type` "Grup > Kategori", ağırlık varsa `shipping_weight`, görselsiz ürün akışa girmiyor.
+- [x] **Favoriler/karşılaştırma:** katalogdan kalkmış ürünler "Bu ürün artık satışta değil" olarak gösteriliyor; karşılaştırma listesinden otomatik çıkarılıyor.
+- [x] **Uyumlu ürünler marka öncelikli** (ör. Victron inverter → önce Victron batarya); ürün sayfasındaki eski Hims/EMEF kablo kodu temizlendi.
+- [x] **Görsel/tasarım:** banner'ı olmayan kategorilerde hero'da ürün görseli kolajı (geniş ekran); Isı Pompası kategorisi TommaTech banner'ıyla; Hims ürünlerini gösteren `categories/sarj.png` ve slaytlar kaldırıldı, tek slaytta nokta gösterilmiyor.
+- [x] **Fatura PDF'i** "SİPARİŞ ÖZETİ / PROFORMA" oldu (mali değeri olmadığı yazıyor); e-posta ve indirme etiketleri buna göre.
+- [x] **Performans:** ürün görselleri 51 MB → ~36 MB (1200 px üstü küçültüldü, ağır PNG fotoğraflar JPEG'e çevrildi).
+- [x] **Repo temizliği:** zip paketleri, `public_html/`, `build_output.txt` depodan çıkarıldı (diskte duruyor, `.gitignore`'da); bozuk `.claude/worktrees` kayıtları silindi (`git status` artık hatasız); `nul`, `dev.log` silindi.
+- [x] **Testler:** birim testleri (kur yuvarlama dahil) ve E2E (Chrome ile `PW_CHANNEL=chrome`, 47 geçti / 4 kampanya nedeniyle atlandı).
+
+### 🔴 P0 — Yayından önce (sizde)
+
+- [ ] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi.
+- [ ] **"yeni10" kampanyası** (tüm ürünlere %10, süresiz) yerelde aktif; canlıda da varsa Admin > İndirimler'den kapatın.
+- [ ] **Gerçek stok:** Excel'de tüm ürünlerin stoğu 17; varyantlar ürün stoğunu paylaşıyor.
+- [ ] **Kargo ücreti kuralı** (siz verecektiniz): şu an 50 TL, 3.000 TL üstü ücretsiz. Desi verisi hazır; kural gelince `lib/store-config.ts`'e desi bazlı hesap eklenir.
+- [ ] **Yayın yöntemi:** statik `public_html` yerine Node (standalone) yayın — canlı kur, sepet, sipariş ve ödeme sunucu ister; eski URL yönlendirmeleri de yalnızca Node yayında çalışır.
+- [ ] **Merchant Center**'da akışı yeniden getirin; **Search Console**'a sitemap'i yeniden gönderin.
+- [ ] Banka sanal POS bilgileri (`POS_*`) ve test; Hostinger cron'ları (`expire-orders`, `backup`) + `CRON_SECRET`; IBAN hesap sahibi adı kontrolü; e-Arşiv entegratörü; canlıdaki eski fatura PDF'lerinin silinmesi; SQLite → PostgreSQL.
+
+### 🟠 P1 — Veri teyidi (desi araştırmasından)
+
+- [ ] **Deye (41 SKU):** Excel'de model kodu yok; araştırmada güncel AB model aileleri varsayıldı (ör. LV hibrit 5–6 kW = SUN-xK-SG04LP1). Satılan kuşak farklıysa ölçü/ağırlık değişir. 6 kW off-grid ve 15 kW monofaze LV hibrit Deye'nin güncel serisinde yok.
+- [ ] **Electrozirve:** ölçüler, model kodları birebir eşleşen SRNE kaynaklarından alındı; Electrozirve'nin SRNE markalı ürün sattığını teyit edin.
+- [ ] **Ölçüsü bulunamayanlar** (`missing-logistics.json`): Altech türbin ve direkleri (tedarikçiden koli listesi), Mexxsun MPK8, TommaTech duvar/entegre/SC/ayarlanabilir şarj üniteleri, R32 split ısı pompaları, SPI 315–630 kW sürücüler (paletli/ambar), kablolar ve küçük aksesuarlar, Electrozirve DC-DC ve uzaktan kumandalar, bazı Havensis aksesuarları.
+- [ ] **Büyük/özel gönderiler:** 50 kW R290 ısı pompası (490 kg), büyük Frecon/SPI sürücüler, Heli 2.0/4.0 türbinler, Altech Nova → ambar/palet; Lithium SuperPack'ler UN3480 (lityum) — kargo firmasıyla kısıtları kontrol edin.
+- [ ] **İstabreeze kanatları** araştırmada tek kanat ağırlığıyla; set (3'lü) satılıyorsa düzeltin. İstabreeze i-1000…Windsafe türbinleri iki koliyle gidiyor (tanımlandı).
+- [ ] **Ölçüler çoğunlukla ürün (kutusuz) ölçüsü**; üreticiler koli ölçüsü yayımlamıyor. Kesin desi için ilk sevkiyatlarda koli ölçüsü alınıp `product-logistics.json`'a yazılması önerilir.
+- [ ] Excel'de **eksik 16 görsel** (Drive'da silinmiş) yeniden yüklenmeli; **barkod/GTIN** sütunu boş.
+- [ ] **Veri kaynağı kararı:** admin panelindeki ürün düzenlemeleri Excel yeniden aktarılınca da geçerli kalır.
+
+### 🟡 P2 ve sonrası
+
+- [ ] Ürün adları/açıklamaları yalnızca Türkçe (İngilizce arayüz).
+- [ ] Görsel optimizasyonu için Next image optimizasyonu (sharp) / WebP; istemci paketine giren tüm katalog (~370 KB) için hafif liste.
+- [ ] Ana sayfa için yeni banner/slayt tasarımları (şu an tek slayt).
+- [ ] Kargo firması API, SMS, stok rezervasyonu, taksit ve ORDERSTATUS, mutabakat raporu, PayTR (entegre et ya da kaldır), admin 2FA, Redis rate limit, Sentry, Turnstile anahtarları, ETBİS bağlantısı, İYS kaydı, misafir siparişi hesaba bağlama, staging, tahmini teslim, kurumsal müşteri, Meta Pixel/Ads, ERP, X al Y öde, sadakat, kâr/huni raporları.
+
+
 ## ✅ P0 uygulama durumu (12.10.2026)
 
 §1 ve §2'deki kod düzeltmeleri yapıldı (`[x]`); `[~]` kısmen yapıldı. Doğrulama: `tsc` temiz, 25 API testi + webhook senaryoları + tarayıcıda sepet→ödeme akışı.

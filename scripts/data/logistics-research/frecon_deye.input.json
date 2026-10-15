@@ -1,0 +1,1204 @@
+[
+ {
+  "sku": "DEYE-00396",
+  "name": "Deye 5 kW Off-Grid Akıllı İnverter",
+  "brand": "Deye",
+  "productId": "deye-off-grid-akilli-inverter-5-kw-6-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00397",
+  "name": "Deye 6 kW Off-Grid Akıllı İnverter",
+  "brand": "Deye",
+  "productId": "deye-off-grid-akilli-inverter-5-kw-6-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00398",
+  "name": "Deye 3 kW Monofaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-on-grid-inverter-3-kw-10-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00399",
+  "name": "Deye 5 kW Monofaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-on-grid-inverter-3-kw-10-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00400",
+  "name": "Deye 8 kW Monofaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-on-grid-inverter-3-kw-10-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00401",
+  "name": "Deye 10 kW Monofaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-on-grid-inverter-3-kw-10-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00402",
+  "name": "Deye 5 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-5-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00403",
+  "name": "Deye 8 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-8-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00404",
+  "name": "Deye 10 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-10-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00405",
+  "name": "Deye 12 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-12-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00406",
+  "name": "Deye 15 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-15-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00407",
+  "name": "Deye 20 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-20-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00408",
+  "name": "Deye 25 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-25-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00409",
+  "name": "Deye 30 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-30-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00410",
+  "name": "Deye 33 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-33-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00411",
+  "name": "Deye 40 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-40-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00412",
+  "name": "Deye 50 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-50-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00413",
+  "name": "Deye 60 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-60-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00414",
+  "name": "Deye 80 kW Trifaze On-Grid İnverter",
+  "brand": "Deye",
+  "productId": "deye-80-kw-trifaze-on-grid-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "DEYE-00416",
+  "name": "Deye 5 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00417",
+  "name": "Deye 6 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00418",
+  "name": "Deye 8 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00419",
+  "name": "Deye 10 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00420",
+  "name": "Deye 12 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00421",
+  "name": "Deye 15 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00422",
+  "name": "Deye 16 kW Monofaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-3-6K-SG04LP120260911en.pdf",
+   "https://deye.com/product/sun-12-14-16k-sg01lp1-eu"
+  ]
+ },
+ {
+  "sku": "DEYE-00423",
+  "name": "Deye 8 kW Trifaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-lv-hibrit-inverter-8-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00424",
+  "name": "Deye 10 kW Trifaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-lv-hibrit-inverter-8-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00425",
+  "name": "Deye 12 kW Trifaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-lv-hibrit-inverter-8-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00426",
+  "name": "Deye 15 kW Trifaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-lv-hibrit-inverter-8-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00427",
+  "name": "Deye 20 kW Trifaze LV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-lv-hibrit-inverter-8-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://deyeinverter.com/deyeinverter/2025/05/16/datasheet_sun-5-12k-sg04lp3.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00428",
+  "name": "Deye 10 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00429",
+  "name": "Deye 12 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00430",
+  "name": "Deye 15 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00431",
+  "name": "Deye 20 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00432",
+  "name": "Deye 25 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00433",
+  "name": "Deye 30 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00434",
+  "name": "Deye 40 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00435",
+  "name": "Deye 50 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00436",
+  "name": "Deye 60 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "DEYE-00437",
+  "name": "Deye 80 kW Trifaze HV Hibrit İnverter",
+  "brand": "Deye",
+  "productId": "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.deyeinverter.com/deyeinverter/2026/09/12/BDatasheetSUN-5-25K-SG01HP3-EU-AM220260911en.pdf"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150A2S04BH-00550",
+  "name": "Frecon PV150A-2S-0.4B-H 0,4 kW 0,53 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv150a-2s-0-4b-h-0-4-kw-0-53-hp-solar-pompa-surucusu-220v-monofaze-giris",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150A2S07BH-00551",
+  "name": "Frecon PV150A-2S-0.7B-H 0,75 kW 1 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-0-75-kw-1-hp-solar-pompa-surucusu-pv150a-pv150i",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150I2S07BH-00554",
+  "name": "Frecon PV150I-2S-0.7B-H 0,75 kW 1 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-0-75-kw-1-hp-solar-pompa-surucusu-pv150a-pv150i",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150A2S15BH-00552",
+  "name": "Frecon PV150A-2S-1.5B-H 1,5 kW 2 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-1-5-kw-2-hp-solar-pompa-surucusu-pv150a-pv150i",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150I2S15BH-00555",
+  "name": "Frecon PV150I-2S-1.5B-H 1,5 kW 2 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-1-5-kw-2-hp-solar-pompa-surucusu-pv150a-pv150i",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150A2S22BH-00553",
+  "name": "Frecon PV150A-2S-2.2B-H 2,2 kW 3 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-2-2-kw-3-hp-solar-pompa-surucusu-pv150a-pv150i-pv500",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150I2S22BH-00556",
+  "name": "Frecon PV150I-2S-2.2B-H 2,2 kW 3 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-2-2-kw-3-hp-solar-pompa-surucusu-pv150a-pv150i-pv500",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T22BH-00559",
+  "name": "Frecon PV500-4T-2.2B-H 2,2 kW 3 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-2-2-kw-3-hp-solar-pompa-surucusu-pv150a-pv150i-pv500",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/338.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150I2S40BH-00557",
+  "name": "Frecon PV150I-2S-4.0B-H 4 kW 5,5 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv150i-2s-4-0b-h-4-kw-5-5-hp-solar-pompa-surucusu-220v-monofaze-giris",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV150I2S55BH-00558",
+  "name": "Frecon PV150I-2S-5.5B-H 5,5 kW 7,5 HP Solar Pompa Sürücüsü (220V Monofaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv150i-2s-5-5b-h-5-5-kw-7-5-hp-solar-pompa-surucusu-220v-monofaze-giris",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T40BH-00560",
+  "name": "Frecon PV500-4T-4.0B-H 4 kW 5,4 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-4-kw-5-4-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T40BHVH-00585",
+  "name": "Frecon PV500-4T-4.0B-HV-H 4 kW 5,4 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-4-kw-5-4-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T558H-00561",
+  "name": "Frecon PV500-4T-5.5B-H 5,5 kW 7,4 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-5-5-kw-7-4-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T558HVH-00586",
+  "name": "Frecon PV500-4T-5.5B-HV-H 5,5 kW 7,4 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-5-5-kw-7-4-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T758H-00562",
+  "name": "Frecon PV500-4T-7.5B-H 7,5 kW 10 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-7-5-kw-10-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T75BHVH-00587",
+  "name": "Frecon PV500-4T-7.5B-HV-H 7,5 kW 10 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-7-5-kw-10-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T011BH-00563",
+  "name": "Frecon PV500-4T-011B-H 11 kW 14,75 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-11-kw-14-75-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T011BHVH-00588",
+  "name": "Frecon PV500-4T-011B-HV-H 11 kW 14,75 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-11-kw-14-75-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T015BH-00564",
+  "name": "Frecon PV500-4T-015B-H 15 kW 20 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-15-kw-20-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T015BHVH-00589",
+  "name": "Frecon PV500-4T-015B-HV-H 15 kW 20 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-15-kw-20-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T0188H-00565",
+  "name": "Frecon PV500-4T-018B-H 18,5 kW 25 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-18-5-kw-25-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T018BHVH-00590",
+  "name": "Frecon PV500-4T-018B-HV-H 18,5 kW 25 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-18-5-kw-25-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T022BH-00566",
+  "name": "Frecon PV500-4T-022B-H 22 kW 29,5 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-22-kw-29-5-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T022BHVH-00591",
+  "name": "Frecon PV500-4T-022B-HV-H 22 kW 29,5 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-22-kw-29-5-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T030BH-00567",
+  "name": "Frecon PV500-4T-030B-H 30 kW 40 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-30-kw-40-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T030BHVH-00592",
+  "name": "Frecon PV500-4T-030B-HV-H 30 kW 40 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-30-kw-40-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T037H-00568",
+  "name": "Frecon PV500-4T-037-H 37 kW 49,6 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-37-kw-49-6-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T037HVH-00593",
+  "name": "Frecon PV500-4T-037-HV-H 37 kW 49,6 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-37-kw-49-6-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T045H-00569",
+  "name": "Frecon PV500-4T-045-H 45 kW 60,3 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-45-kw-60-3-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T045HVH-00594",
+  "name": "Frecon PV500-4T-045-HV-H 45 kW 60,3 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-45-kw-60-3-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T055H-00570",
+  "name": "Frecon PV500-4T-055-H 55 kW 73,75 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-55-kw-73-75-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T055HVH-00595",
+  "name": "Frecon PV500-4T-055-HV-H 55 kW 73,75 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-55-kw-73-75-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T075H-00571",
+  "name": "Frecon PV500-4T-075-H 75 kW 100 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-75-kw-100-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T075HVH-00596",
+  "name": "Frecon PV500-4T-075-HV-H 75 kW 100 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-75-kw-100-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T090H-00572",
+  "name": "Frecon PV500-4T-090-H 90 kW 120 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-90-kw-120-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T090HVH-00597",
+  "name": "Frecon PV500-4T-090-HV-H 90 kW 120 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-90-kw-120-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T110H-00573",
+  "name": "Frecon PV500-4T-110-H 110 kW 147 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-110-kw-147-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T110HVH-00598",
+  "name": "Frecon PV500-4T-110-HV-H 110 kW 147 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-110-kw-147-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T132H-00574",
+  "name": "Frecon PV500-4T-132-H 132 kW 177 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-132-kw-177-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T132HVH-00599",
+  "name": "Frecon PV500-4T-132-HV-H 132 kW 177 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-132-kw-177-hp-trifaze-solar-pompa-surucusu-standart-hv",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T160-00575",
+  "name": "Frecon PV500-4T-160 160 kW 203 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-160-160-kw-203-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T185-00576",
+  "name": "Frecon PV500-4T-185 185 kW 247 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-185-185-kw-247-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T200-00577",
+  "name": "Frecon PV500-4T-200 200 kW 267 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-200-200-kw-267-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T220-00578",
+  "name": "Frecon PV500-4T-220 220 kW 293 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-220-220-kw-293-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T250-00579",
+  "name": "Frecon PV500-4T-250 250 kW 333 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-250-250-kw-333-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T280-00580",
+  "name": "Frecon PV500-4T-280 280 kW 373 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-280-280-kw-373-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T315-00581",
+  "name": "Frecon PV500-4T-315 315 kW 420 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-315-315-kw-420-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T355-00582",
+  "name": "Frecon PV500-4T-355 355 kW 473 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-355-355-kw-473-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T400H-00583",
+  "name": "Frecon PV500-4T-400-H 400 kW 536 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-400-h-400-kw-536-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ },
+ {
+  "sku": "FRECON-PV5004T450H-00584",
+  "name": "Frecon PV500-4T-450-H 450 kW 603 HP Solar Pompa Sürücüsü (380V Trifaze)",
+  "brand": "Frecon",
+  "productId": "frecon-pv500-4t-450-h-450-kw-603-hp-trifaze-solar-pompa-surucusu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://www.frecon-inverter.com/static/upload/file/20240408/1712572704576105.pdf",
+   "https://www.frecon-inverter.com/products_170/335.html"
+  ]
+ }
+]

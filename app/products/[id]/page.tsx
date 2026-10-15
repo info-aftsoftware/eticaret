@@ -1,12 +1,23 @@
 import type { Metadata } from 'next'
 import { mockProducts } from '@/lib/products-mock'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import ProductDetailClient from './ProductDetailClient'
 import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discounts'
 import { computeOrderTotals, VAT_RATE } from '@/lib/store-config'
 import { SELLER } from '@/lib/legal/company'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
+import legacyProductRedirects from '@/lib/legacy-product-redirects.json'
+
+const LEGACY_PRODUCT_REDIRECTS = legacyProductRedirects as Record<string, string>
+
+function safeDecode(value: string) {
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return value
+  }
+}
 
 export async function generateStaticParams() {
   return mockProducts.map((p) => ({ id: p.id }))
@@ -153,7 +164,13 @@ function buildProductJsonLd(product: StorefrontProduct) {
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
   const product = await loadProduct(params.id)
-  if (!product) notFound()
+  if (!product) {
+    // Eski katalogdaki ürün: yeni ürüne/kategoriye kalıcı yönlendirme (next.config.js redirects ile aynı liste;
+    // boşluk içeren eski kablo id'leri gibi config'te eşleşmeyen adresler burada yakalanır)
+    const legacyTarget = LEGACY_PRODUCT_REDIRECTS[params.id] ?? LEGACY_PRODUCT_REDIRECTS[safeDecode(params.id)]
+    if (legacyTarget) permanentRedirect(legacyTarget)
+    notFound()
+  }
 
   return (
     <>

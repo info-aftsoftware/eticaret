@@ -2,15 +2,17 @@
   "categoryValues": [
     "Panel",
     "Lityum Batarya",
-    "Genel",
+    "Taşınabilir Güç İstasyonu",
     "Güç ve Veri Kabloları",
     "İnverter",
     "Sistem Bileşenleri",
     "MPPT/PWM",
     "İstasyon ve Aksesuar",
     "Solar Pompa/Sürücü",
+    "Isı Pompası",
     "Türbin ve Aksesuar",
     "Kurşun/Jel Akü",
-    "AC/DC Şarj"
+    "AC/DC Şarj",
+    "İzleme ve Kontrol"
   ]
 }

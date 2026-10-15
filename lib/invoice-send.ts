@@ -25,19 +25,19 @@ export async function generateAndSendInvoice(
 
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2>Faturanız</h2>
+        <h2>Sipariş Özetiniz</h2>
         <p>Merhaba ${escapeHtml(orderData.customer.name || '')},</p>
         <p><strong>Sipariş No:</strong> ${escapeHtml(orderId)}</p>
-        <p>Faturanız bu e-postanın ekindedir. Faturanızı ayrıca sipariş sayfanızdan da indirebilirsiniz.</p>
+        <p>Sipariş özetiniz (proforma) bu e-postanın ekindedir; sipariş sayfanızdan da indirebilirsiniz. Resmî faturanız (e-Arşiv) ayrıca gönderilir.</p>
         <p>İyi günler,<br>Voltekno</p>
       </div>
     `
 
     const result = await sendEmail(
       customerEmail,
-      `Fatura - ${orderId}`,
+      `Sipariş Özeti - ${orderId}`,
       htmlBody,
-      [{ filename: `fatura-${orderId}.pdf`, content: pdfBuffer, contentType: 'application/pdf' }]
+      [{ filename: `siparis-ozeti-${orderId}.pdf`, content: pdfBuffer, contentType: 'application/pdf' }]
     )
 
     return result.success ? { sent: true } : { sent: false, error: result.error }

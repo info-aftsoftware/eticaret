@@ -292,7 +292,7 @@ export default function AdminOrderDetailPage() {
               </CardContent>
             </Card>
             <Card className="border-slate-200/80 bg-white shadow-sm">
-              <CardHeader><CardTitle className="text-base">Fatura</CardTitle></CardHeader>
+              <CardHeader><CardTitle className="text-base">Sipariş Özeti (Proforma)</CardTitle></CardHeader>
               <CardContent className="text-sm text-slate-700 space-y-1">
                 <p className="font-medium text-slate-900">{c.billingName || c.companyName || c.name}</p>
                 <p>{c.billingType === 'company' ? 'Kurumsal' : 'Bireysel'}</p>

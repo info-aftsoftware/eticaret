@@ -1,0 +1,1782 @@
+[
+ {
+  "sku": "TOMMAT-TT450108TN10-00071",
+  "name": "TommaTech 450Wp 16BB TOPCon Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-16bb-topcon-gunes-paneli-450wp-600wp",
+  "known": {
+   "dimensionsCm": [
+    172.2,
+    113.4,
+    3
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/108tn10-450-420wp-topcon-n-type-gunes-panelleri-929-tr.pdf?v=20260908174132",
+   "https://cw-enerji.com/images/down_file/144tn10-620-590wp-topcon-n-type-gunes-panelleri-896-tr.pdf?v=20260909115732"
+  ]
+ },
+ {
+  "sku": "TOMMAT-TT600144TN10-00073",
+  "name": "TommaTech 600Wp 16BB TOPCon Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-16bb-topcon-gunes-paneli-450wp-600wp",
+  "known": {
+   "dimensionsCm": [
+    227.8,
+    113.4,
+    3.5
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/108tn10-450-420wp-topcon-n-type-gunes-panelleri-929-tr.pdf?v=20260908174132",
+   "https://cw-enerji.com/images/down_file/144tn10-620-590wp-topcon-n-type-gunes-panelleri-896-tr.pdf?v=20260909115732"
+  ]
+ },
+ {
+  "sku": "TOMMAT-TT04036TN10-00075",
+  "name": "TommaTech 40Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT04536TN10-00076",
+  "name": "TommaTech 45Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT05536TN10-00077",
+  "name": "TommaTech 55Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT06536TN10-00078",
+  "name": "TommaTech 65Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT07036TN10-00079",
+  "name": "TommaTech 70Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT08036TN10-00080",
+  "name": "TommaTech 80Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT08536TN11-00081",
+  "name": "TommaTech 85Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT10036TN10-00082",
+  "name": "TommaTech 100Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT11036TN10-00083",
+  "name": "TommaTech 110Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT12036TN10-00084",
+  "name": "TommaTech 120Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT13036TN10-00085",
+  "name": "TommaTech 130Wp TOPCon 36TN10 Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT24048PM12-00086",
+  "name": "TommaTech 240Wp 48PM Half-Cut Monokristal Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-240wp-48pm-half-cut-monokristal-gunes-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT28572TN10-00087",
+  "name": "TommaTech 285Wp 72TN10 TOPCon Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-285wp-72tn10-topcon-gunes-paneli",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-TT15036TN10PRT-00091",
+  "name": "TommaTech 150Wp Katlanabilir Çanta Tipi Güneş Paneli",
+  "brand": "TommaTech",
+  "productId": "tommatech-katlanabilir-canta-tipi-gunes-paneli-150wp-200wp",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-150w-tasinabilir-gunes-paneli-1670-tr.pdf?v=20260514140943",
+   "https://cw-enerji.com/images/down_file/tommatech-200w-tasinabilir-gunes-paneli-1679-tr.pdf?v=20260514141003"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRPMRN1128V100AHS-00098",
+  "name": "TommaTech Marine MRN1 12,8V 100Ah LiFePO4 Lityum Akü (Small)",
+  "brand": "TommaTech",
+  "productId": "tommatech-marine-mrn1-12-8v-100ah-lifepo4-lityum-aku-small",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-100ah-lfp-marine-batarya-1944-tr.pdf?v=20251104112822"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRPMRN1128V200AH-00099",
+  "name": "TommaTech Marine MRN1 12,8V 200Ah LiFePO4 Lityum Akü",
+  "brand": "TommaTech",
+  "productId": "tommatech-marine-mrn1-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah-25-6v-200ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf?v=20260219114737",
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-256v-200ah-lfp-marine-batarya-1946-tr.pdf?v=20251104113140"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRPMRN1256V100AH-00101",
+  "name": "TommaTech Marine MRN1 25,6V 100Ah LiFePO4 Lityum Akü",
+  "brand": "TommaTech",
+  "productId": "tommatech-marine-mrn1-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah-25-6v-200ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf?v=20260219114737",
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-256v-200ah-lfp-marine-batarya-1946-tr.pdf?v=20251104113140"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRPMRN1256V200AH-00103",
+  "name": "TommaTech Marine MRN1 25,6V 200Ah LiFePO4 Lityum Akü",
+  "brand": "TommaTech",
+  "productId": "tommatech-marine-mrn1-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah-25-6v-200ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf?v=20260219114737",
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-256v-200ah-lfp-marine-batarya-1946-tr.pdf?v=20251104113140"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRPMRN3128V200AH-00100",
+  "name": "TommaTech Marine MRN3 12,8V 200Ah LiFePO4 Lityum Akü",
+  "brand": "TommaTech",
+  "productId": "tommatech-marine-mrn3-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf?v=20260219114737"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRPMRN3256V100AH-00102",
+  "name": "TommaTech Marine MRN3 25,6V 100Ah LiFePO4 Lityum Akü",
+  "brand": "TommaTech",
+  "productId": "tommatech-marine-mrn3-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-abspc-kasa-128v-200ah-256v-100ah-lfp-marine-batarya-1945-tr.pdf?v=20260219114737"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRP512V102AH-00198",
+  "name": "TommaTech Modüler Seri 51,2V 102Ah LiFePO4 Lityum Batarya",
+  "brand": "TommaTech",
+  "productId": "tommatech-moduler-seri-lifepo4-lityum-batarya-25-6v-204ah-51-2v-102ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-128256512v-102-204ah-moduler-series-g2-lfp-lityumbatarya-1336-tr.pdf?v=20260311161608",
+   "https://cw-enerji.com/images/down_file/tommatech-512v-102ah-rack-moduler-serisi-g2-lityumbatarya-tr.pdf?v=20260723085232"
+  ]
+ },
+ {
+  "sku": "TOMMAT-MGIV1200WPLS-00106",
+  "name": "TommaTech V Serisi Plus 1030Wh Taşınabilir Güç İstasyonu (1800W AC Şarj)",
+  "brand": "TommaTech",
+  "productId": "tommatech-v-serisi-plus-tasinabilir-guc-istasyonu-1030wh-2240wh",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tt-tasinabilir-guc-istasyonu-v-serisi-960wh-1030wh-1653-tr.pdf?v=20260113120445",
+   "https://cw-enerji.com/images/down_file/tt-tasinabilir-guc-istasyonu-v-serisi-2240wh-1655-tr.pdf?v=20250804143326"
+  ]
+ },
+ {
+  "sku": "TOMMAT-KBLMC4XT6012AWG1M-00109",
+  "name": "TommaTech V Serisi Güç İstasyonu Panel Bağlantı Kablosu (MC4-XT60)",
+  "brand": "TommaTech",
+  "productId": "tommatech-v-serisi-guc-istasyonu-panel-baglanti-kablosu-mc4-xt60",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-KBLMC4DC552518AWG1-00110",
+  "name": "TommaTech R Serisi Güç İstasyonu Panel Bağlantı Kablosu (Daire Soket)",
+  "brand": "TommaTech",
+  "productId": "tommatech-r-serisi-guc-istasyonu-panel-baglanti-kablosu-daire-soket",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-INVTTONGINOVA5KTF-00120",
+  "name": "TommaTech Trio Inova 5 kW Trifaze On-Grid İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-inova-trifaze-on-grid-inverter-5-kw-10-kw-15-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-30-150kw-trio-inova-serisi-on-grid-inverter-tr.pdf?v=20260909155352"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTONGINOVA10KTF-00121",
+  "name": "TommaTech Trio Inova 10 kW Trifaze On-Grid İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-inova-trifaze-on-grid-inverter-5-kw-10-kw-15-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-30-150kw-trio-inova-serisi-on-grid-inverter-tr.pdf?v=20260909155352"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTONGINOVA15KTF-00122",
+  "name": "TommaTech Trio Inova 15 kW Trifaze On-Grid İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-inova-trifaze-on-grid-inverter-5-kw-10-kw-15-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-30-150kw-trio-inova-serisi-on-grid-inverter-tr.pdf?v=20260909155352"
+  ]
+ },
+ {
+  "sku": "TOMMAT-ONGTTHYN16KLVMF-00134",
+  "name": "TommaTech Uno Hybrid N16K 16 kW Monofaze LV Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-uno-hybrid-n16k-16-kw-monofaze-lv-hibrit-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/uno-hybrid-n-16k-1953-tr.pdf?v=20251107092951"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTHY10SHVAIO-00140",
+  "name": "TommaTech Trio Hybrid S 10 kW HV AIO Trifaze Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-hybrid-s-10-kw-hv-aio-trifaze-hibrit-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf?v=20260312142440"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTHY15SHVAIO-00141",
+  "name": "TommaTech Trio Hybrid S 15 kW HV AIO Trifaze Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-hybrid-s-15-kw-hv-aio-trifaze-hibrit-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf?v=20260312142440"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTHY20SHVAIO-00142",
+  "name": "TommaTech Trio Hybrid S 20 kW HV AIO Trifaze Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-hybrid-s-20-kw-hv-aio-trifaze-hibrit-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf?v=20260312142440"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTHY12SLVAIO-00143",
+  "name": "TommaTech Trio Hybrid S 12 kW LV AIO Trifaze Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-hybrid-s-12-kw-lv-aio-trifaze-hibrit-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-INVTTHY10SHV-00144",
+  "name": "TommaTech Trio Hybrid S 10 kW HV Trifaze Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-hybrid-s-hv-trifaze-hibrit-inverter-10-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf?v=20260312142440"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVTTHY20SHV-00145",
+  "name": "TommaTech Trio Hybrid S 20 kW HV Trifaze Hibrit İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-hybrid-s-hv-trifaze-hibrit-inverter-10-kw-20-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-trio-hybrid-s-series-50-250kw-hv-hybrid-inverter-en.pdf?v=20260312142440"
+  ]
+ },
+ {
+  "sku": "TOMMAT-ONGTT35MTRSMRTMF-00152",
+  "name": "TommaTech Uno Smart Meter (Monofaze Akıllı Sayaç)",
+  "brand": "TommaTech",
+  "productId": "tommatech-uno-smart-meter-monofaze-akilli-sayac",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/smart-meter-datasheet-1481-tr.pdf?v=20240918085802"
+  ]
+ },
+ {
+  "sku": "TOMMAT-ONGTT35MTRSMRTTF-00153",
+  "name": "TommaTech Trio Smart Meter (Trifaze Akıllı Sayaç)",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-smart-meter-trifaze-akilli-sayac",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/smart-meter-datasheet-1481-tr.pdf?v=20240918085802"
+  ]
+ },
+ {
+  "sku": "TOMMAT-ONGTT36MTRSMRTWCTT-00154",
+  "name": "TommaTech Trio Smart Meter CT'li (Akım Trafolu Trifaze Sayaç)",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-smart-meter-ct-li-akim-trafolu-trifaze-sayac",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/smart-meter-datasheet-1481-tr.pdf?v=20240918085802"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHV40KWHS-00162",
+  "name": "TommaTech Hightech Power S 4 kWh HV Lityum Batarya Modülü",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-4-kwh-hv-lityum-batarya-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-serisi-hv-batarya-sistemi-tr.pdf?v=20260910100810"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHVBMS40SAIO-00163",
+  "name": "TommaTech Hightech Power S HV BMS (AIO)",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-hv-bms-aio",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-serisi-hv-batarya-sistemi-tr.pdf?v=20260910100810"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHVBMS40S-00164",
+  "name": "TommaTech Hightech Power S HV BMS",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-hv-bms",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-serisi-hv-batarya-sistemi-tr.pdf?v=20260910100810"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRYTTLVS51KWHA-00165",
+  "name": "TommaTech Hightech Power S 5,1 kWh LV AIO Lityum Batarya",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-5-1-kwh-lv-aio-lityum-batarya",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-51kwh-hightech-power-s-series-lv-aio-battery-system-user-manual-en.pdf?v=20260415092012"
+  ]
+ },
+ {
+  "sku": "TOMMAT-BTRYTTLVBMSS51A-00166",
+  "name": "TommaTech Hightech Power S LV BMS (AIO)",
+  "brand": "TommaTech",
+  "productId": "tommatech-hightech-power-s-lv-bms-aio",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-51kwh-hightech-power-s-series-lv-aio-battery-system-user-manual-en.pdf?v=20260415092012"
+  ]
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTTRM15CM-00200",
+  "name": "TommaTech Rack/Modüler Batarya Paralel Kablo Seti 15 cm",
+  "brand": "TommaTech",
+  "productId": "tommatech-rack-moduler-batarya-paralel-kablo-seti-15-cm",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTTRM15M-00201",
+  "name": "TommaTech Rack/Modüler Batarya Seri Güç Kablosu Seti 1,5 m",
+  "brand": "TommaTech",
+  "productId": "tommatech-rack-moduler-batarya-seri-guc-kablosu-seti-1-5-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTPE5015M-00202",
+  "name": "TommaTech TPE 50 mm² Kırmızı Batarya Güç Kablosu 1,5 m",
+  "brand": "TommaTech",
+  "productId": "tommatech-tpe-50-mm2-kirmizi-batarya-guc-kablosu-1-5-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-KSAMTLTBN256V512V-00203",
+  "name": "TommaTech Modüler Batarya Alt Taban (25,6V 208Ah / 51,2V 102Ah)",
+  "brand": "TommaTech",
+  "productId": "tommatech-moduler-batarya-alt-taban-25-6v-208ah-51-2v-102ah",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V10A-00204",
+  "name": "TommaTech 24V 10A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V40ASC-00206",
+  "name": "TommaTech 24V 40A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V20ASC-00208",
+  "name": "TommaTech 48V 20A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V25ASC-00210",
+  "name": "TommaTech 48V 25A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V50A-00207",
+  "name": "TommaTech 24V 50A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V20A-00209",
+  "name": "TommaTech 48V 20A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V25A-00211",
+  "name": "TommaTech 48V 25A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V30A-00212",
+  "name": "TommaTech 48V 30A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V50A-00213",
+  "name": "TommaTech 48V 50A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V60A-00214",
+  "name": "TommaTech 48V 60A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT72V25A-00215",
+  "name": "TommaTech 72V 25A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-entegre-24v-30a-1243-tr.pdf?v=20250908161825"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACMBL24V100A-00216",
+  "name": "TommaTech 24V 100A Mobil Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-mobil-tip-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": [
+    35.2,
+    27.9,
+    18.4
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-24v48v-100a-1246-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACMBL48V100A-00217",
+  "name": "TommaTech 48V 100A Mobil Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-mobil-tip-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": [
+    35.2,
+    27.9,
+    18.4
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-24v48v-100a-1246-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACMBL72V40A-00218",
+  "name": "TommaTech 72V 40A Mobil Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-mobil-tip-batarya-sarj-unitesi-24v-48v-72v",
+  "known": {
+   "dimensionsCm": [
+    35.2,
+    27.9,
+    18.4
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-24v48v-100a-1246-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR24V100A-00219",
+  "name": "TommaTech 24V 100A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR48V150A-00221",
+  "name": "TommaTech 48V 150A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR48V200A-00222",
+  "name": "TommaTech 48V 200A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR72V40A-00223",
+  "name": "TommaTech 72V 40A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V80A-00224",
+  "name": "TommaTech 80V 80A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V100A-00225",
+  "name": "TommaTech 80V 100A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V200A-00226",
+  "name": "TommaTech 80V 200A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V300A-00227",
+  "name": "TommaTech 80V 300A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-48v-100a-1546-tr.pdf?v=20250908160322"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ30100V200A-00228",
+  "name": "TommaTech 30-100V 200A Ayarlanabilir Mobil Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-30-100v-200a-ayarlanabilir-mobil-batarya-sarj-unitesi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ40100V200A-00229",
+  "name": "TommaTech 40-100V 200A Ayarlanabilir Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-40-100v-ayarlanabilir-batarya-sarj-unitesi-200a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ40100V300A-00230",
+  "name": "TommaTech 40-100V 300A Ayarlanabilir Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "productId": "tommatech-40-100v-ayarlanabilir-batarya-sarj-unitesi-200a-300a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-OFGTT01NEW1K12MF-00231",
+  "name": "TommaTech New 1K 12V 1000W Akıllı İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-new-1k-12v-1000w-akilli-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf?v=20260225161601"
+  ]
+ },
+ {
+  "sku": "TOMMAT-OFGTT02NMPPT1K12MF-00232",
+  "name": "TommaTech New 1K 12V 1000W MPPT Akıllı İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-new-1k-12v-1000w-mppt-akilli-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf?v=20260225161601"
+  ]
+ },
+ {
+  "sku": "TOMMAT-OFGTT03NEW3K24MF-00233",
+  "name": "TommaTech New 3K 24V 3000W Akıllı İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-new-3k-24v-3000w-akilli-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf?v=20260225161601"
+  ]
+ },
+ {
+  "sku": "TOMMAT-OFGTT05NEW5K48MF-00234",
+  "name": "TommaTech New 5K 48V 5000W Akıllı İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-new-5k-48v-5000w-akilli-inverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-1-3-5kw-new-serisi-off-grid-inverter-447-tr.pdf?v=20260225161601"
+  ]
+ },
+ {
+  "sku": "TOMMAT-OFGTTPRO3KWIFI24MF-00235",
+  "name": "TommaTech Pro 3K 24V 3000W MPPT Wi-Fi Akıllı İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-pro-3k-24v-3000w-mppt-wi-fi-akilli-inverter",
+  "known": {
+   "dimensionsCm": [
+    11,
+    28.8,
+    39
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-3-5kw-c-pro-serisi-off-grid-inverter-1195-tr.pdf?v=20260820154210"
+  ]
+ },
+ {
+  "sku": "TOMMAT-OFGTTPRO5KWIFI48MF-00236",
+  "name": "TommaTech Pro 5K 48V 5000W MPPT Wi-Fi Akıllı İnverter",
+  "brand": "TommaTech",
+  "productId": "tommatech-pro-5k-48v-5000w-mppt-wi-fi-akilli-inverter",
+  "known": {
+   "dimensionsCm": [
+    12,
+    30,
+    44
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-3-5kw-c-pro-serisi-off-grid-inverter-1195-tr.pdf?v=20260820154210"
+  ]
+ },
+ {
+  "sku": "TOMMAT-EVCLIKYAAC22KLED-00244",
+  "name": "TommaTech Likya 22 kW AC Araç Şarj İstasyonu (Soketli, LED, Bluetooth)",
+  "brand": "TommaTech",
+  "productId": "tommatech-likya-22-kw-ac-arac-sarj-istasyonu-soketli-led-bluetooth",
+  "known": {
+   "dimensionsCm": [
+    33.7,
+    14,
+    25.3
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-ac-arac-sarj-cihazlari-teknik-dokumani-1865-tr.pdf?v=20260729164329"
+  ]
+ },
+ {
+  "sku": "TOMMAT-EVCLIKYAAC22KLEDKB-00245",
+  "name": "TommaTech Likya 22 kW AC Araç Şarj İstasyonu (5 m Kablolu, LED, Bluetooth)",
+  "brand": "TommaTech",
+  "productId": "tommatech-likya-22-kw-ac-arac-sarj-istasyonu-5-m-kablolu-led-bluetooth",
+  "known": {
+   "dimensionsCm": [
+    33.7,
+    14,
+    25.3
+   ],
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-ac-arac-sarj-cihazlari-teknik-dokumani-1865-tr.pdf?v=20260729164329"
+  ]
+ },
+ {
+  "sku": "TOMMAT-EVCTTAC22KWLCD-00246",
+  "name": "TommaTech Trio 22 kW Trifaze AC Araç Şarj İstasyonu (Wi-Fi, LCD)",
+  "brand": "TommaTech",
+  "productId": "tommatech-trio-22-kw-trifaze-ac-arac-sarj-istasyonu-wi-fi-lcd",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-EVCTTCVSTANT22KW-00247",
+  "name": "TommaTech 22 kW Araç Şarj İstasyonu LED Işıklı Stand (Boş Pano)",
+  "brand": "TommaTech",
+  "productId": "tommatech-22-kw-arac-sarj-istasyonu-led-isikli-stand-bos-pano",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-EVCTTTFCBLTYPE2-00248",
+  "name": "TommaTech 22 kW Type 2 32A Araç Şarj Kablosu 5 m",
+  "brand": "TommaTech",
+  "productId": "tommatech-22-kw-type-2-32a-arac-sarj-kablosu-5-m",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-type-2-arac-sarj-kablosu-1686-tr.pdf?v=20260220101429"
+  ]
+ },
+ {
+  "sku": "TOMMAT-00249",
+  "name": "TommaTech Şarj Takip Ortak Şarj Yönetimi Yazılımı",
+  "brand": "TommaTech",
+  "productId": "tommatech-sarj-takip-ortak-sarj-yonetimi-yazilimi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-00250",
+  "name": "TommaTech RFID Araç Şarj İstasyonu Kartı",
+  "brand": "TommaTech",
+  "productId": "tommatech-rfid-arac-sarj-istasyonu-karti",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SPITT0222MF-00286",
+  "name": "TommaTech 2,2 kW Monofaze 220V Solar Pompa Sürücüsü (450VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT0540TF-00288",
+  "name": "TommaTech 4 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT0655TF-00289",
+  "name": "TommaTech 5,5 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT11220TF-00291",
+  "name": "TommaTech 22 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT12300TF-00292",
+  "name": "TommaTech 30 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT13370TF-00293",
+  "name": "TommaTech 37 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT15550TF-00295",
+  "name": "TommaTech 55 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT16750TF-00296",
+  "name": "TommaTech 75 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT17900TF-00297",
+  "name": "TommaTech 90 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT181100TF-00298",
+  "name": "TommaTech 110 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT222500TF-00304",
+  "name": "TommaTech 250 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT243150TF-00305",
+  "name": "TommaTech 315 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT243550TF-00306",
+  "name": "TommaTech 355 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT245000TF-00309",
+  "name": "TommaTech 500 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT246300TF-00310",
+  "name": "TommaTech 630 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT0422TF-00287",
+  "name": "TommaTech 2,2 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-2-2-kw-trifaze-380v-solar-pompa-surucusu-900vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT10185TF-00290",
+  "name": "TommaTech 18,5 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT14450TF-00294",
+  "name": "TommaTech 45 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT191320TF-00299",
+  "name": "TommaTech 132 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT201600TF-00300",
+  "name": "TommaTech 160 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT211850TF-00301",
+  "name": "TommaTech 185 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT200TF-00302",
+  "name": "TommaTech 200 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT220TF-00303",
+  "name": "TommaTech 220 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT244000TF-00307",
+  "name": "TommaTech 400 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-SPITT244500TF-00308",
+  "name": "TommaTech 450 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVSLMTFV275KW-00311",
+  "name": "TommaTech 7,5 kW Trifaze 380V Solar Pompa Sürücüsü (1000VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVSLMTFV211KW-00312",
+  "name": "TommaTech 11 kW Trifaze 380V Solar Pompa Sürücüsü (1000VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-INVSLMTFV215KW-00313",
+  "name": "TommaTech 15 kW Trifaze 380V Solar Pompa Sürücüsü (1000VDC)",
+  "brand": "TommaTech",
+  "productId": "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/tommatech-900v-spi-serisi-515-tr.pdf?v=20260105163820",
+   "https://cw-enerji.com/images/down_file/tommatech-1000v-spi-serisi-1453-tr.pdf?v=20260105163247"
+  ]
+ },
+ {
+  "sku": "TOMMAT-UECINVSLM4G-00314",
+  "name": "TommaTech Solar Pompa Sürücüsü 4G Uzaktan Erişim Cihazı",
+  "brand": "TommaTech",
+  "productId": "tommatech-solar-pompa-surucusu-4g-uzaktan-erisim-cihazi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK25A-00315",
+  "name": "TommaTech MDK25A Solar Pompa Sürücüsü Diyot Modülü (2,2-5,5 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk25a-solar-pompa-surucusu-diyot-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK55A-00316",
+  "name": "TommaTech MDK55A Solar Pompa Sürücüsü Diyot Modülü (7,5-11 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-solar-pompa-surucusu-diyot-modulu-mdk55a-mdk90a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK90A-00318",
+  "name": "TommaTech MDK90A Solar Pompa Sürücüsü Diyot Modülü (18,5-30 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-solar-pompa-surucusu-diyot-modulu-mdk55a-mdk90a",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK70A-00317",
+  "name": "TommaTech MDK70A Solar Pompa Sürücüsü Diyot Modülü (15 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk70a-solar-pompa-surucusu-diyot-modulu",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK90A-00319",
+  "name": "TommaTech MDK90A Solar Pompa Sürücüsü Diyot Modülü (37-45 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk90a-solar-pompa-surucusu-diyot-modulu-37-45-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00321",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (90-110 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk110a-solar-pompa-surucusu-diyot-modulu-90-110-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00320",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (55-75 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-mdk110a-solar-pompa-surucusu-diyot-modulu-55-75-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00322",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (132 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00323",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (160 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00324",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (185 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDC15016-00325",
+  "name": "TommaTech MDC150-16 Solar Pompa Sürücüsü Diyot Modülü (250 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "productId": "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPRSTMF009NM1-00328",
+  "name": "TommaTech Titan 9 kW Monofaze EVI İnverter Isı Pompası (Isıtma ve Soğutma)",
+  "brand": "TommaTech",
+  "productId": "tommatech-titan-monofaze-evi-inverter-isi-pompasi-9-kw-13-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf?v=20260625144515"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPRSTMF013NM1-00329",
+  "name": "TommaTech Titan 13 kW Monofaze EVI İnverter Isı Pompası (Isıtma ve Soğutma)",
+  "brand": "TommaTech",
+  "productId": "tommatech-titan-monofaze-evi-inverter-isi-pompasi-9-kw-13-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf?v=20260625144515"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPRSTMF016NM1-00330",
+  "name": "TommaTech Titan 16 kW Monofaze EVI İnverter Isı Pompası (Isıtma ve Soğutma)",
+  "brand": "TommaTech",
+  "productId": "tommatech-titan-evi-inverter-isi-pompasi-16-kw-monofaze-16-20-26-kw-trifaze",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf?v=20260625144515",
+   "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf?v=20260625144625"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPRSTTF016NM1-00331",
+  "name": "TommaTech Titan 16 kW Trifaze EVI İnverter Isı Pompası (Isıtma ve Soğutma)",
+  "brand": "TommaTech",
+  "productId": "tommatech-titan-evi-inverter-isi-pompasi-16-kw-monofaze-16-20-26-kw-trifaze",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf?v=20260625144515",
+   "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf?v=20260625144625"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPRSTTF020NM1-00332",
+  "name": "TommaTech Titan 20 kW Trifaze EVI İnverter Isı Pompası (Isıtma ve Soğutma)",
+  "brand": "TommaTech",
+  "productId": "tommatech-titan-evi-inverter-isi-pompasi-16-kw-monofaze-16-20-26-kw-trifaze",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf?v=20260625144515",
+   "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf?v=20260625144625"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPRSTTF026NM1-00333",
+  "name": "TommaTech Titan 26 kW Trifaze EVI İnverter Isı Pompası (Isıtma ve Soğutma)",
+  "brand": "TommaTech",
+  "productId": "tommatech-titan-evi-inverter-isi-pompasi-16-kw-monofaze-16-20-26-kw-trifaze",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/monoblock-isi-pompasi-monofaze-1524-tr.pdf?v=20260625144515",
+   "https://cw-enerji.com/images/down_file/tommatech-titan-serisi-trifaze-isi-pompalari-944-tr.pdf?v=20260625144625"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPTTIND50R290-00346",
+  "name": "TommaTech 50 kW R290 Endüstriyel Isı Pompası",
+  "brand": "TommaTech",
+  "productId": "tommatech-50-kw-r290-endustriyel-isi-pompasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": [
+   "https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf?v=20260625170026"
+  ]
+ },
+ {
+  "sku": "TOMMAT-HPTTPOOL515R410TF-00348",
+  "name": "TommaTech 51,5 kW R410 Trifaze Havuz Tipi Isı Pompası",
+  "brand": "TommaTech",
+  "productId": "tommatech-51-5-kw-r410-trifaze-havuz-tipi-isi-pompasi",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPTT12R32MFDIS-00349",
+  "name": "TommaTech 12 kW R32 Monofaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-monofaze-split-isi-pompasi-dis-unite-12-kw-18-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPTT18R32MFDIS-00350",
+  "name": "TommaTech 18 kW R32 Monofaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-monofaze-split-isi-pompasi-dis-unite-12-kw-18-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPTT12R32TFDIS-00351",
+  "name": "TommaTech 12 kW R32 Trifaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-trifaze-split-isi-pompasi-dis-unite-12-kw-22-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPTT22R32TFDIS-00352",
+  "name": "TommaTech 22 kW R32 Trifaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-trifaze-split-isi-pompasi-dis-unite-12-kw-22-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPTT812R32MFIC-00353",
+  "name": "TommaTech 8-12 kW R32 Monofaze Split Isı Pompası İç Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-split-isi-pompasi-ic-unite-8-12-kw-18-22-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ },
+ {
+  "sku": "TOMMAT-HPTT1822R32MFIC-00354",
+  "name": "TommaTech 18-22 kW R32 Monofaze Split Isı Pompası İç Ünite",
+  "brand": "TommaTech",
+  "productId": "tommatech-r32-split-isi-pompasi-ic-unite-8-12-kw-18-22-kw",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  },
+  "datasheetLinks": []
+ }
+]

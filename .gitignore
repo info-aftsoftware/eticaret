@@ -75,3 +75,15 @@ public_html (2).zip
 
 # veritabanı yedekleri (api/cron/backup)
 /backups
+
+# Son canlı döviz kuru önbelleği (lib/fx-rates.ts)
+.data/
+
+# Yayın paketleri ve derleme çıktıları (diskte kalır, depoya girmez)
+*.zip
+public_html/
+build_output.txt
+dev.log
+tmp-email-preview/
+# Claude Code çalışma ağaçları
+.claude/worktrees/

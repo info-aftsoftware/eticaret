@@ -14,15 +14,15 @@ test('USD fiyat güncel kurla TL’ye çevrilir', () => {
   assert.equal(applyTryRates(product(), rates).price, 4000)
 })
 
-test('EUR fiyat ve varyant fiyatları çevrilir, kuruş yuvarlanır', () => {
+test('EUR fiyat ve varyant fiyatları çevrilir, tam TL’ye yukarı yuvarlanır', () => {
   const p = applyTryRates(product({
     priceCurrency: 'EUR',
     basePrice: 10.333,
     isVariantProduct: true,
     variants: [{ key: 'a', label: 'A', price: 0, basePrice: 10.333 }, { key: 'b', label: 'B', price: 0, basePrice: 20 }],
   }), rates)
-  assert.equal(p.price, 464.99)
-  assert.deepEqual(p.variants!.map((v) => v.price), [464.99, 900])
+  assert.equal(p.price, 465)
+  assert.deepEqual(p.variants!.map((v) => v.price), [465, 900])
 })
 
 test('döviz bilgisi olmayan (TL) ürün değişmez', () => {

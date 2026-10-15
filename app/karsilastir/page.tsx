@@ -47,7 +47,11 @@ export default function ComparePage() {
     }
     fetch('/api/products')
       .then((r) => (r.ok ? r.json() : []))
-      .then((all: P[]) => setProducts(ids.map((id) => all.find((p) => p.id === id)).filter(Boolean) as P[]))
+      .then((all: P[]) => {
+        // Katalogdan kaldırılmış ürünler karşılaştırma listesinden de çıkarılır (yer kaplamasın)
+        if (Array.isArray(all) && all.length > 0) ids.filter((id) => !all.some((p) => p.id === id)).forEach(remove)
+        setProducts(ids.map((id) => all.find((p) => p.id === id)).filter(Boolean) as P[])
+      })
       .catch(() => setProducts([]))
   }, [ids])
 

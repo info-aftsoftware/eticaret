@@ -24,6 +24,16 @@ const nextConfig = {
       },
     ],
   },
+  // Eski katalogdaki ürün adresleri → yeni ürün veya kategori (Google'da dizinli sayfalar 404 olmasın).
+  // Liste: lib/legacy-product-redirects.json. Static export'ta yönlendirme desteklenmez.
+  ...(!isStaticExport && {
+    async redirects() {
+      const map = require('./lib/legacy-product-redirects.json')
+      return Object.entries(map)
+        .filter(([id]) => /^[a-z0-9-]+$/.test(id))
+        .map(([id, destination]) => ({ source: `/products/${id}`, destination, permanent: true }))
+    },
+  }),
   // Production optimizasyonları
   compress: true,
   poweredByHeader: false,

@@ -22,6 +22,12 @@ export interface ProductVariant {
   basePrice?: number
   sku?: string
   specifications?: Record<string, string>
+  /** Kargo: ölçüler (cm, U×G×Y), ağırlık (kg) ve desi = max(hacim/3000, kg) yukarı yuvarlanmış */
+  dimensionsCm?: number[]
+  weightKg?: number
+  desi?: number
+  /** Ölçü/ağırlık kaynağı: description (ürün açıklaması) | package | product | series (üretici kaynağı araştırması) */
+  desiSource?: string
 }
 
 export interface MockProduct {
@@ -75,6 +81,11 @@ export interface MockProduct {
   productFamilyKey?: string
   /** Varyantlı ürünlerde sayfa açıldığında seçili olacak varyant key */
   defaultVariantKey?: string
+  /** Kargo bilgisi (varyantlı üründe varsayılan varyantınki; varyant bazlısı variants[].desi) */
+  dimensionsCm?: number[]
+  weightKg?: number
+  desi?: number
+  desiSource?: string
 }
 
 /** Eksik ürün görselleri için placeholder */
@@ -112,6 +123,16 @@ const COMPLEMENTARY_CATEGORIES: Record<string, { title: string; description: str
     description: 'Şarj kontrol cihazınızı güneş paneli ve akü/batarya ile eksiksiz bir sisteme dönüştürün.',
     categories: ['Panel', 'Lityum Batarya', 'Kurşun/Jel Akü'],
   },
+  'Isı Pompası': {
+    title: 'Birlikte alınanlar',
+    description: 'Isı pompanızı güneş paneli ve inverter ile besleyerek işletme maliyetini düşürebilirsiniz.',
+    categories: ['Panel', 'İnverter', 'Sistem Bileşenleri'],
+  },
+  'Taşınabilir Güç İstasyonu': {
+    title: 'Birlikte alınanlar',
+    description: 'Güç istasyonunuzu katlanabilir güneş panelleri ve bağlantı kablolarıyla doğada şarj edin.',
+    categories: ['Panel', 'Güç ve Veri Kabloları'],
+  },
   'Solar Pompa/Sürücü': {
     title: 'Birlikte alınanlar',
     description: 'Solar pompa sürücünüz için güneş paneli ve bağlantı kablolarını inceleyin.',
@@ -137,6 +158,26 @@ const COMPLEMENTARY_CATEGORIES: Record<string, { title: string; description: str
 /** Tamamlayıcı kategorilerden sırayla (her kategoriden birer) en fazla 8 ürün seçer */
 function pickComplementaryIds(categories: string[]): string[] {
   const pools = categories.map((c) => mockProducts.filter((p) => p.category === c && p.image !== PLACEHOLDER_PRODUCT_IMAGE))
+  const ids: string[] = []
+  for (let i = 0; ids.length < 8 && pools.some((pool) => pool.length > i); i++) {
+    for (const pool of pools) {
+      if (pool[i] && ids.length < 8) ids.push(pool[i].id)
+    }
+  }
+  return ids
+}
+
+/**
+ * Ürüne özel tamamlayıcı ürünler: kategorinin tamamlayıcı kategorilerinden, önce aynı markanın ürünleri
+ * (ör. Victron inverter → Victron batarya), sonra diğer markalar; her kategoriden sırayla, en fazla 8.
+ */
+export function getComplementaryIds(product: Pick<MockProduct, 'id' | 'category' | 'brand'>): string[] {
+  const config = COMPLEMENTARY_CATEGORIES[product.category]
+  if (!config) return []
+  const pools = config.categories.map((c) => {
+    const inCategory = mockProducts.filter((p) => p.category === c && p.id !== product.id && p.image !== PLACEHOLDER_PRODUCT_IMAGE)
+    return [...inCategory.filter((p) => p.brand === product.brand), ...inCategory.filter((p) => p.brand !== product.brand)]
+  })
   const ids: string[] = []
   for (let i = 0; ids.length < 8 && pools.some((pool) => pool.length > i); i++) {
     for (const pool of pools) {

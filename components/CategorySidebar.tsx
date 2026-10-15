@@ -20,6 +20,7 @@ import {
   Car,
   Cable,
   ShieldCheck,
+  Thermometer,
   LayoutGrid,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -33,6 +34,7 @@ const GROUP_CONFIG: Record<string, { icon: React.ElementType; color: string; bg:
   'enerji-depolama':             { icon: BatteryCharging, color: 'text-emerald-600', bg: 'bg-emerald-50' },
   'solar-sarj-kontrol':          { icon: Gauge,           color: 'text-amber-600',   bg: 'bg-amber-50' },
   'pompa-ve-surucu':             { icon: Droplets,        color: 'text-sky-600',     bg: 'bg-sky-50' },
+  'isi-pompasi':                 { icon: Thermometer,     color: 'text-red-500',     bg: 'bg-red-50' },
   'akuler':                      { icon: Battery,         color: 'text-lime-600',    bg: 'bg-lime-50' },
   'ruzgar-enerjisi':             { icon: Wind,            color: 'text-teal-600',    bg: 'bg-teal-50' },
   'sarj-cihazlari':              { icon: PlugZap,         color: 'text-rose-500',    bg: 'bg-rose-50' },

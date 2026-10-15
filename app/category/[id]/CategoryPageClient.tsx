@@ -10,8 +10,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { mockProducts } from '@/lib/products-mock'
+import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { getCategoryValuesByGroupId } from '@/lib/categories'
+import { buildSpecFacets } from '@/lib/spec-facets'
 import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 import { ProductPageShell } from '@/components/ProductPageShell'
 import { useTranslations } from 'next-intl'
@@ -46,6 +47,11 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
 
   const meta = CATEGORY_META[groupId]
   const categoryValues = useMemo(() => getCategoryValuesByGroupId(groupId), [groupId])
+  const heroImages = useMemo(() => {
+    const inGroup = catalog.filter((p) => categoryValues.includes(p.category) && p.image && p.image !== PLACEHOLDER_PRODUCT_IMAGE)
+    const ordered = [...inGroup.filter((p) => p.featured), ...inGroup.filter((p) => !p.featured)]
+    return Array.from(new Set(ordered.map((p) => p.image as string))).slice(0, 3)
+  }, [catalog, categoryValues])
 
   const subcategories = useMemo(
     () => categoryValues.filter((v) => catalog.some((p) => p.category === v)),
@@ -85,23 +91,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
     setMaxInput(String(dynamicMaxPrice))
   }, [dynamicMinPrice, dynamicMaxPrice])
 
-  const specFacets = useMemo(() => {
-    const map = new Map<string, Set<string>>()
-    for (const p of productsInRange) {
-      const specs = p.specifications ?? {}
-      for (const [keyRaw, valueRaw] of Object.entries(specs)) {
-        const key = keyRaw.trim()
-        const value = String(valueRaw).trim()
-        if (!key || !value) continue
-        if (!map.has(key)) map.set(key, new Set())
-        map.get(key)!.add(value)
-      }
-    }
-    return Array.from(map.entries())
-      .map(([key, set]) => ({ key, values: Array.from(set).sort((a, b) => a.localeCompare(b, 'tr')) }))
-      .filter(f => f.values.length >= 2)
-      .sort((a, b) => a.key.localeCompare(b.key, 'tr'))
-  }, [productsInRange])
+  const specFacets = useMemo(() => buildSpecFacets(productsInRange), [productsInRange])
 
   const filteredProducts = useMemo(() => {
     let list = catalog.filter((p) => {
@@ -181,7 +171,20 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
               />
             </div>
           ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-brand/40" />
+            <>
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-brand/40" />
+              {/* Banner görseli olmayan kategorilerde kategorinin öne çıkan ürün görselleri */}
+              <div className="absolute inset-y-0 right-0 hidden xl:flex items-center gap-4 pr-10" aria-hidden>
+                {heroImages.map((src, i) => (
+                  <div
+                    key={src}
+                    className={`relative rounded-2xl bg-white/95 shadow-xl overflow-hidden ${i === 1 ? 'w-48 h-48' : 'w-32 h-32'}`}
+                  >
+                    <Image src={src} alt="" fill className="object-contain p-3" sizes="208px" />
+                  </div>
+                ))}
+              </div>
+            </>
           )}
           <div className="relative z-10 h-full flex flex-col justify-end max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-8 sm:pb-10 md:pb-12 text-white">
             <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold mb-2 tracking-tight leading-tight">

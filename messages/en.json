@@ -166,7 +166,11 @@
     "catEVStationAccessories": "Stations & Accessories",
     "catPowerDataCables": "Power & Data Cables",
     "catSystemComponents": "System Components",
-    "catGeneral": "General"
+    "catGeneral": "General",
+    "catGroupHeatPump": "Heat Pumps",
+    "catHeatPump": "Heat Pumps",
+    "catPortablePowerStation": "Portable Power Stations",
+    "catMonitoringControl": "Monitoring & Control"
   },
   "headerTopBar": {
     "gesButton": "GES Calculator",

@@ -24,7 +24,7 @@ export const CATEGORY_GROUPS = [
     id: 'enerji-depolama',
     labelKey: 'catGroupEnergyStorage', // Enerji Depolama
     navLabelKey: 'catGroupEnergyStorage',
-    categoryValues: ['Lityum Batarya'],
+    categoryValues: ['Lityum Batarya', 'Taşınabilir Güç İstasyonu'],
   },
   {
     id: 'solar-sarj-kontrol',
@@ -37,6 +37,12 @@ export const CATEGORY_GROUPS = [
     labelKey: 'catGroupPumpDrive', // Pompa ve Sürücü
     navLabelKey: 'catNavSolarPump',
     categoryValues: ['Solar Pompa/Sürücü'],
+  },
+  {
+    // Excel'de "Pompa ve Sürücü" altında duran ısı pompaları import sırasında buraya taşınır (scripts/import-ikas-excel.py)
+    id: 'isi-pompasi',
+    labelKey: 'catGroupHeatPump', // Isı Pompası
+    categoryValues: ['Isı Pompası'],
   },
   {
     id: 'akuler',
@@ -66,7 +72,7 @@ export const CATEGORY_GROUPS = [
   {
     id: 'aksesuar-ve-koruma',
     labelKey: 'catGroupAccessories', // Aksesuar ve Koruma
-    categoryValues: ['Sistem Bileşenleri'],
+    categoryValues: ['Sistem Bileşenleri', 'İzleme ve Kontrol'],
   },
   {
     id: 'diger',
@@ -95,8 +101,8 @@ export const LEGACY_CATEGORY_REDIRECTS: Record<string, CategoryGroupId | null> =
   'gunes-enerjisi': 'gunes-paneli',
   'gunes-panelleri': 'gunes-paneli',
   // Isı pompaları Excel'de "Pompa ve Sürücü > Solar Pompa/Sürücü" altında
-  'isi-pompasi-hvac': 'pompa-ve-surucu',
-  'isi-pompalari': 'pompa-ve-surucu',
+  'isi-pompasi-hvac': 'isi-pompasi',
+  'isi-pompalari': 'isi-pompasi',
 }
 
 /** Tüm kategori değerleri (static export / API yokken menü fallback için). */
@@ -129,6 +135,9 @@ const CATEGORY_KEYS: Record<string, string> = {
   'Güç ve Veri Kabloları': 'catPowerDataCables',
   'Sistem Bileşenleri': 'catSystemComponents',
   Genel: 'catGeneral',
+  'Isı Pompası': 'catHeatPump',
+  'Taşınabilir Güç İstasyonu': 'catPortablePowerStation',
+  'İzleme ve Kontrol': 'catMonitoringControl',
 }
 
 function getCategoryKeyFromValue(value: string): string | undefined {

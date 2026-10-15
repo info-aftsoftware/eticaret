@@ -1,0 +1,111 @@
+{
+ "İSTABR-I1000-00642": {
+  "parcels": [
+   {
+    "dimsCm": [
+     60,
+     40,
+     30
+    ]
+   },
+   {
+    "dimsCm": [
+     110,
+     19,
+     12
+    ]
+   }
+  ],
+  "weightKg": 21,
+  "source": "https://istabreeze.us/i-1000w-24v-48v-wind-turbine/",
+  "note": "Üretici: iki koli (ana kutu + kanat kutusu); ağırlık toplam"
+ },
+ "İSTABR-I1500-00643": {
+  "parcels": [
+   {
+    "dimsCm": [
+     60,
+     40,
+     30
+    ]
+   },
+   {
+    "dimsCm": [
+     110,
+     19,
+     12
+    ]
+   }
+  ],
+  "weightKg": 23,
+  "source": "https://istabreeze.us/i-1500w-24v-48v-wind-turbine/",
+  "note": "Üretici: iki koli (ana kutu + kanat kutusu); ağırlık toplam"
+ },
+ "İSTABR-I2000-00644": {
+  "parcels": [
+   {
+    "dimsCm": [
+     60,
+     40,
+     30
+    ]
+   },
+   {
+    "dimsCm": [
+     110,
+     19,
+     12
+    ]
+   }
+  ],
+  "weightKg": 24,
+  "source": "https://istabreeze.us/i-2000w-24v-48v-wind-turbine/",
+  "note": "Üretici: iki koli (ana kutu + kanat kutusu); ağırlık toplam"
+ },
+ "İSTABR-00645": {
+  "parcels": [
+   {
+    "dimsCm": [
+     60,
+     40,
+     30
+    ]
+   },
+   {
+    "dimsCm": [
+     110,
+     19,
+     12
+    ]
+   }
+  ],
+  "weightKg": 30,
+  "source": "https://istabreeze.us/1500w-24v-48v-windsafe-wind-turbine/",
+  "note": "Üretici: iki koli (ana kutu + kanat kutusu); ağırlık toplam"
+ },
+ "İSTABR-00646": {
+  "parcels": [
+   {
+    "dimsCm": [
+     60,
+     40,
+     30
+    ]
+   },
+   {
+    "dimsCm": [
+     110,
+     19,
+     12
+    ]
+   }
+  ],
+  "weightKg": 32,
+  "source": "https://istabreeze.us/2000w-24v-48v-windsafe-wind-turbine/",
+  "note": "Üretici: iki koli (ana kutu + kanat kutusu); ağırlık toplam"
+ },
+ "TOMMAT-00249": {
+  "noShipping": true,
+  "note": "Yazılım lisansı (Şarj Takip Ortak Şarj Yönetimi) — fiziksel gönderim yok"
+ }
+}

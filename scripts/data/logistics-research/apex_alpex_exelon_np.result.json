@@ -1,0 +1,726 @@
+{
+  "ALPEX-00355": {
+    "dimsCm": [
+      29.5,
+      16.0,
+      8.0
+    ],
+    "weightKg": 1.479,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/500-watt-12-volt-tam-sinus-inverter-694275c092c42.pdf",
+    "note": "Alpex JYP-500 datasheet (JYP-500/600 column): box 295x160x80 mm, net/gross 1197/1479 g; device 244x112x67 mm"
+  },
+  "ALPEX-00356": {
+    "dimsCm": [
+      36.0,
+      33.5,
+      10.0
+    ],
+    "weightKg": 3.23,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1000-watt-24-volt-tam-sinus-inverter-694270a3ab100.pdf",
+    "note": "Alpex JYP-800/1000/1200 datasheet (single column for all voltages): box 360x335x100 mm, net/gross 2760/3230 g; device 296x180x78 mm. idefix 12V listing confirms 296x180x78 mm, 2.8 kg (https://www.idefix.com/alpex-1000w-12v-tam-sinus-inverter-p-27437766)"
+  },
+  "ALPEX-00357": {
+    "dimsCm": [
+      36.0,
+      33.5,
+      10.0
+    ],
+    "weightKg": 3.23,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1000-watt-24-volt-tam-sinus-inverter-694270a3ab100.pdf",
+    "note": "Alpex JYP-1000 datasheet: box 360x335x100 mm, net/gross 2760/3230 g; device 296x180x78 mm"
+  },
+  "ALPEX-00358": {
+    "dimsCm": [
+      44.5,
+      24.0,
+      14.5
+    ],
+    "weightKg": 3.732,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-12-volt-tam-sinus-inverter-6942706fa632c.pdf",
+    "note": "Alpex JYP-1500 datasheet: box 445x240x145 mm, net/gross 3100/3732 g; device 310x180x78 mm"
+  },
+  "ALPEX-00359": {
+    "dimsCm": [
+      44.5,
+      24.0,
+      14.5
+    ],
+    "weightKg": 3.732,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-24-volt-tam-sinus-inverter-6942705a7db3e.pdf",
+    "note": "Alpex JYP-1500 datasheet: box 445x240x145 mm, net/gross 3100/3732 g; device 310x180x78 mm"
+  },
+  "ALPEX-00360": {
+    "dimsCm": [
+      44.5,
+      24.0,
+      14.5
+    ],
+    "weightKg": 4.676,
+    "basis": "package",
+    "source": "https://www.idefix.com/alpex-2000-watt-12-volt-tam-sinus-inverter-p-26255432",
+    "note": "idefix (Alpex Enerji store) + Alpex JYP-2000 datasheet: box 445x240x145 mm, net/gross 3935/4676 g; device 396x180x78 mm"
+  },
+  "ALPEX-00361": {
+    "dimsCm": [
+      44.5,
+      24.0,
+      14.5
+    ],
+    "weightKg": 4.676,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/2000-watt-24-volt-tam-sinus-inverter-69427090c2abe.pdf",
+    "note": "Alpex JYP-2000 datasheet: box 445x240x145 mm, net/gross 3935/4676 g; device 396x180x78 mm"
+  },
+  "ALPEX-00362": {
+    "dimsCm": [
+      25.0,
+      16.5,
+      9.5
+    ],
+    "weightKg": 1.1,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/300-watt-12-volt-modifiye-sinus-inverter-6942775ae0a1a.pdf",
+    "note": "Alpex JYM-150/300 column: box 250x165x95 mm, net/gross 800/1100 g; device 187x112x67 mm"
+  },
+  "ALPEX-00363": {
+    "dimsCm": [
+      28.0,
+      17.0,
+      10.5
+    ],
+    "weightKg": 1.35,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/600-watt-12-volt-modifiye-sinus-inverter-6942774e022e3.pdf",
+    "note": "Alpex JYM-500/600 column: box 280x170x105 mm, net/gross 1000/1350 g; device 225x112x67 mm"
+  },
+  "ALPEX-00364": {
+    "dimsCm": [
+      28.0,
+      17.0,
+      10.5
+    ],
+    "weightKg": 1.35,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/600-watt-24-volt-modifiye-sinus-inverter-694276af4445c.pdf",
+    "note": "Alpex JYM-500/600 column: box 280x170x105 mm, net/gross 1000/1350 g; device 225x112x67 mm"
+  },
+  "ALPEX-00365": {
+    "dimsCm": [
+      35.5,
+      18.0,
+      9.5
+    ],
+    "weightKg": 2.288,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1000-watt-24-volt-modifiye-sinus-inverter-694276f8c1d15.pdf",
+    "note": "Alpex JYM-1000 datasheet (covers 12/24/48V): box 355x180x95 mm, net/gross 1788/2288 g; device 308x135x78 mm"
+  },
+  "ALPEX-00366": {
+    "dimsCm": [
+      35.5,
+      18.0,
+      9.5
+    ],
+    "weightKg": 2.288,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1000-watt-24-volt-modifiye-sinus-inverter-694276f8c1d15.pdf",
+    "note": "Alpex JYM-1000 datasheet: box 355x180x95 mm, net/gross 1788/2288 g; device 308x135x78 mm"
+  },
+  "ALPEX-00367": {
+    "dimsCm": [
+      37.5,
+      24.5,
+      10.5
+    ],
+    "weightKg": 3.55,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-12-volt-modifiye-sinus-inverter-6942777277b4e.pdf",
+    "note": "Alpex JYM-1500 datasheet: box 375x245x105 mm, net/gross 2950/3550 g; device 312x180x78 mm"
+  },
+  "ALPEX-00368": {
+    "dimsCm": [
+      37.5,
+      24.5,
+      10.5
+    ],
+    "weightKg": 3.55,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-24-volt-modifiye-sinus-inverter-694276c0a6a35.pdf",
+    "note": "Alpex JYM-1500 datasheet: box 375x245x105 mm, net/gross 2950/3550 g; device 312x180x78 mm"
+  },
+  "ALPEX-00369": {
+    "dimsCm": [
+      39.5,
+      24.0,
+      10.5
+    ],
+    "weightKg": 4.4,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/2000-watt-12-volt-modifiye-sinus-inverter-6942773bc1496.pdf",
+    "note": "Alpex JYM-2000 datasheet: box 395x240x105 mm, net/gross 3600/4400 g; device 346x180x78 mm"
+  },
+  "ALPEX-00370": {
+    "dimsCm": [
+      39.5,
+      24.0,
+      10.5
+    ],
+    "weightKg": 4.4,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/2000-watt-24-volt-modifiye-sinus-inverter-694276de31d12.pdf",
+    "note": "Alpex JYM-2000 datasheet: box 395x240x105 mm, net/gross 3600/4400 g; device 346x180x78 mm"
+  },
+  "ALPEX-00372": {
+    "dimsCm": [
+      50.0,
+      24.5,
+      16.5
+    ],
+    "weightKg": 4.165,
+    "basis": "series",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/500-watt-12-volt-ups-sebeke-sarjli-tam-sinus-inverter-6942749352750.pdf",
+    "note": "Datasheet linked from the Alpex 500W UPS product page covers only JYPU-300 (box 360x225x100, 2854/3290 g) and JYPU-600/1000 (box 500x245x165, 3310/4165 g); no 500W column. Larger (600/1000) values used conservatively - verify"
+  },
+  "ALPEX-00376": {
+    "dimsCm": [
+      40.0,
+      24.5,
+      20.0
+    ],
+    "weightKg": 6.857,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/2000-watt-24-volt-ups-sebeke-sarjli-tam-sinus-inverter-6942743ae1240.pdf",
+    "note": "Alpex JYPU-2000 datasheet: box 400x245x200 mm, net/gross 5552/6857 g; device 396x180x128 mm. (idefix 12V listing states 5350/6250 g)"
+  },
+  "ALPEX-00378": {
+    "dimsCm": [
+      36.0,
+      22.5,
+      10.0
+    ],
+    "weightKg": 3.255,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/500-watt-12-volt-ups-sebeke-sarjli-modifiye-sinus-inverter-6942779981da5.pdf",
+    "note": "Alpex JYMU-500/600 datasheet: box 360x225x100 mm, net/gross 2820/3255 g; device 305x180x78 mm"
+  },
+  "ALPEX-00379": {
+    "dimsCm": [
+      38.5,
+      24.5,
+      20.0
+    ],
+    "weightKg": 4.135,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1000-watt-12-volt-ups-sebeke-sarjli-modifiye-sinus-inverter-694277a5147ec.pdf",
+    "note": "Alpex JYMU-1000 datasheet: box 385x245x200 mm, net/gross 3450/4135 g; device 264x180x128 mm"
+  },
+  "ALPEX-00380": {
+    "dimsCm": [
+      38.5,
+      24.5,
+      20.0
+    ],
+    "weightKg": 4.968,
+    "basis": "package",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-12-volt-ups-sebeke-sarjli-modifiye-sinus-inverter-694277b1899e6.pdf",
+    "note": "Alpex JYMU-1500 datasheet: box 385x245x200 mm, net/gross 4190/4968 g; device 312x180x128 mm"
+  },
+  "ALPEX-00381": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "ALPEX-00382": {
+    "dimsCm": [
+      14.0,
+      20.0,
+      11.0
+    ],
+    "weightKg": 0.31,
+    "basis": "product",
+    "source": "https://www.alpexpower.com/wifi-plug",
+    "note": "Alpex store spec: Boyut 14*20*11 cm, Ağırlık 0.31 kg (likely boxed size)"
+  },
+  "NPPOWE-00438": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00439": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00440": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00441": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00442": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00443": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00444": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00445": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00448": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00450": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00449": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00451": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00452": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00453": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00454": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00455": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00456": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00457": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00458": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00459": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00460": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00461": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00462": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00463": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00464": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00465": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00466": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00467": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00468": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00472": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00477": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00478": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00479": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00480": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00487": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00488": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00506": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00507": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00508": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00509": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00510": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00511": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00512": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00513": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00514": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "NPPOWE-00515": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "APEX-00528": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "EXELON-EXS320024-00529": {
+    "dimsCm": [
+      43.5,
+      33.5,
+      16.5
+    ],
+    "weightKg": 5.8,
+    "basis": "package",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EML-3200-24-SMART-INV.pdf",
+    "note": "Exelon EML-3200-24 datasheet: carton 435x335x165 mm, net 4.8 kg / gross 5.8 kg; device 357x273x95 mm"
+  },
+  "EXELON-EXS420024-00530": {
+    "dimsCm": [
+      40.0,
+      41.5,
+      11.0
+    ],
+    "weightKg": 9.0,
+    "basis": "package",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2025/01/4.2-KW-SMART-INV-1.pdf",
+    "note": "Datasheet linked from EXS-4200/24 page is OEM 'N M ECO 4.2 KW PLUS': carton 400x415x110 mm (smaller than stated device 420x350x110 - datasheet likely typo), net 8.0 / gross 9.0 kg. Verify carton size"
+  },
+  "EXELON-ECP620048-00531": {
+    "dimsCm": [
+      50.0,
+      41.5,
+      18.0
+    ],
+    "weightKg": 10.0,
+    "basis": "package",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/ECP-6200-48-SMART-INV-1.pdf",
+    "note": "Exelon ECP 6200/48 datasheet: carton 500x415x180 mm, net 8.9 / gross 10.0 kg; device 420x350x110 mm"
+  },
+  "EXELON-00532": {
+    "dimsCm": [
+      61.8,
+      46.3,
+      24.2
+    ],
+    "weightKg": 16.8,
+    "basis": "package",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EMAX-PRO-10.2-KW-SMART-INV.pdf",
+    "note": "Exelon EMAX PRO-10.2KW datasheet: carton 618x463x242 mm, net 16.2 / gross 16.8 kg; device 530x390x170 mm"
+  },
+  "EXELON-00533": {
+    "dimsCm": [
+      60.1,
+      36.0,
+      16.3
+    ],
+    "weightKg": null,
+    "basis": "series",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EXELON-3-KW-11-KW-SMART-INV.pdf",
+    "note": "Exelon 3-11 kW smart inverter datasheet, 11KW column (dual MPPT, parallel): device 601x360x163 mm; no weight given. PMAX-11P model name not printed on sheet - verify"
+  },
+  "EXELON-00534": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "",
+    "note": "not researched yet / not found"
+  },
+  "EXELON-ELH12-00535": {
+    "dimsCm": [
+      42.2,
+      65.8,
+      25.4
+    ],
+    "weightKg": 45.0,
+    "basis": "series",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2026/01/HL3K-15K-LV-HYBRIT-INV.pdf",
+    "note": "Exelon LV 3-phase hybrid 5-15K datasheet (HI-3P12K-LV column): cabinet 422x658x254 mm (W x H x D), weight <=45 kg (product, upper bound). Exelon 12 kW page links a 16-20K sheet instead"
+  },
+  "EXELON-ELH15-00536": {
+    "dimsCm": [
+      42.2,
+      65.8,
+      25.4
+    ],
+    "weightKg": 45.0,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2026/01/HL3K-15K-LV-HYBRIT-INV.pdf",
+    "note": "HI-3P15K-LV: cabinet 422x658x254 mm (W x H x D), weight <=45 kg (upper bound, product without packaging)"
+  },
+  "EXELON-ELH24-00537": {
+    "dimsCm": null,
+    "weightKg": null,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/?product=24-kw-48-v-dusuk-voltaj-hibrit-invertor",
+    "note": "No 24 kW datasheet; Exelon page links the 5-15K sheet (422x658x254 mm, <=45 kg). Nearest larger family 16-20K-LV: 470x800x313 mm, 59.5 kg (https://exelon.com.tr/magaza/wp-content/uploads/2026/09/HL-16K-20K-LV-HYBRIT-INV.pdf). Needs confirmation"
+  },
+  "EXELON-EL12100-00538": {
+    "dimsCm": [
+      31.0,
+      19.5,
+      16.5
+    ],
+    "weightKg": 12.7,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2026/06/LIT12.8V-100AH-LI-BAT.pdf",
+    "note": "Exelon LIT12.8-100 spec: 310x195x165 mm, approx. 12.7 kg +/-1 kg (no packaging data)"
+  },
+  "EXELON-EL12200-00539": {
+    "dimsCm": [
+      38.2,
+      26.0,
+      16.5
+    ],
+    "weightKg": 22.5,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2026/06/LIT12.8V-200Ah-LI-BAT.pdf",
+    "note": "Exelon LIT12.8-200 spec: 382x260x165 mm, approx. 22.5 kg +/-1 kg (no packaging data)"
+  },
+  "EXELON-00547": {
+    "dimsCm": [
+      33.0,
+      17.3,
+      21.8
+    ],
+    "weightKg": 30.8,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EPGS-12V-100Ah-GEL-BAT.pdf",
+    "note": "Exelon EPGS12-100 (Xtreme 12V 100Ah): 330x173x218 mm total height, approx 30.8 kg"
+  },
+  "EXELON-00548": {
+    "dimsCm": [
+      48.3,
+      17.0,
+      23.9
+    ],
+    "weightKg": 43.6,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EPGS-12V-150Ah-GEL-BAT.pdf",
+    "note": "Exelon EPGS12-150: 483x170x238.5 mm, approx 43.6 kg"
+  },
+  "EXELON-00549": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      22.4
+    ],
+    "weightKg": 60.3,
+    "basis": "product",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EPGS-12V-200Ah-GEL-BAT.pdf",
+    "note": "Exelon EPGS12-200: 522x240x224 mm total height, approx 60.3 kg"
+  }
+}

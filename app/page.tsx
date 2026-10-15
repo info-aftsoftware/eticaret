@@ -126,7 +126,7 @@ const REFERENCE_PROJECTS = [
     capacity: '22 kW AC',
     type: 'Ticari EV Şarj',
     desc: 'AVM otoparkı için 8 noktalı çift taraflı AC şarj istasyonu kurulumu.',
-    image: '/images/categories/sarj.png',
+    image: '/images/products/voltekno/1xWJp1WcdJ2j8Dy3YpYNeSV2aIUblX2uV.webp',
     color: 'from-blue-500 to-blue-700',
   },
   {
@@ -146,7 +146,7 @@ const BLOG_PLACEHOLDER: { slug: string; title: string; desc: string; category: s
     title: 'Ev için EV Şarj İstasyonu Nasıl Seçilir?',
     desc: 'AC ve DC şarj farkları, güç seviyeleri ve ev altyapısına uygunluk — satın almadan önce bilinmesi gerekenler.',
     category: 'EV Şarj',
-    image: '/images/categories/sarj.png',
+    image: '/images/products/voltekno/1xWJp1WcdJ2j8Dy3YpYNeSV2aIUblX2uV.webp',
     icon: Zap,
     iconColor: 'text-blue-400',
   },
@@ -181,7 +181,7 @@ const EXTRA_CATEGORY_ITEMS = [
     bg: 'from-teal-600 to-teal-800',
   },
   {
-    href: '/category/pompa-ve-surucu',
+    href: '/category/isi-pompasi',
     title: 'Isı Pompası',
     subtitle: 'İklimlendirme ve ısıtma sistemleri',
     image: '/images/categories/isi-pompasi.png',
@@ -398,7 +398,7 @@ export default function HomePage() {
               </div>
             ))}
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none z-[2]" aria-hidden />
-            <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-[3] flex gap-0.5">
+            <div className={`absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-[3] flex gap-0.5 ${HERO_SLIDES.length < 2 ? 'hidden' : ''}`}>
               {HERO_SLIDES.map((_, i) => (
                 <button
                   key={i}
@@ -522,7 +522,7 @@ export default function HomePage() {
               { href: '/category/inverter-ve-guc-elektronigi', title: 'İnverterler',           desc: 'On-grid, hibrit ve off-grid inverter çözümleri',   image: '/images/categories/inverter.png' },
               { href: '/category/enerji-depolama',             title: 'Enerji Depolama',       desc: 'LiFePO4 bataryalar ve güç istasyonları',          image: '/images/categories/batarya.png' },
               { href: '/category/solar-sarj-kontrol',          title: 'Solar Şarj Kontrol',    desc: 'MPPT ve PWM şarj kontrol cihazları',               image: CATEGORY_CARD_PRODUCT_IMAGE['MPPT/PWM'], contain: true },
-              { href: '/category/pompa-ve-surucu',             title: 'Pompa ve Sürücü',       desc: 'Solar pompa sürücüleri ve ısı pompaları',          image: CATEGORY_CARD_PRODUCT_IMAGE['Solar Pompa/Sürücü'], contain: true },
+              { href: '/category/pompa-ve-surucu',             title: 'Pompa ve Sürücü',       desc: 'Solar pompa sürücüleri ve diyot modülleri',          image: CATEGORY_CARD_PRODUCT_IMAGE['Solar Pompa/Sürücü'], contain: true },
             ].filter((item) => !!item.image).map((item) => (
               <Link
                 key={item.href}
