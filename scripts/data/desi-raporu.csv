@@ -259,41 +259,41 @@ DEYE-00434;Deye Trifaze HV Hibrit İnverter (10 kW - 80 kW);40 kW Trifaze HV Hib
 DEYE-00435;Deye Trifaze HV Hibrit İnverter (10 kW - 80 kW);50 kW Trifaze HV Hibrit İnverter;Deye;İnverter;89.4 x 52.7 x 29.4;80;80;product
 DEYE-00436;Deye Trifaze HV Hibrit İnverter (10 kW - 80 kW);60 kW Trifaze HV Hibrit İnverter;Deye;İnverter;92.7 x 60.6 x 31.4;105;105;product
 DEYE-00437;Deye Trifaze HV Hibrit İnverter (10 kW - 80 kW);80 kW Trifaze HV Hibrit İnverter;Deye;İnverter;92.7 x 60.6 x 31.4;105;105;product
-NPPOWE-00438;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);3,5 kW MPPT Akıllı İnverter;NP Power;İnverter;;;;eksik
-NPPOWE-00439;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);6,2 kW MPPT Akıllı İnverter;NP Power;İnverter;;;;eksik
-NPPOWE-00440;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);8,5 kW MPPT Akıllı İnverter;NP Power;İnverter;;;;eksik
-NPPOWE-00441;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);11 kW MPPT Akıllı İnverter;NP Power;İnverter;;;;eksik
+NPPOWE-00438;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);3,5 kW MPPT Akıllı İnverter;NP Power;İnverter;43.8 x 29.5 x 10.5;8.2;9;product
+NPPOWE-00439;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);6,2 kW MPPT Akıllı İnverter;NP Power;İnverter;43.4 x 31.1 x 12.7;9.8;10;product
+NPPOWE-00440;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);8,5 kW MPPT Akıllı İnverter;NP Power;İnverter;43.8 x 29.5 x 10.5;8.7;9;product
+NPPOWE-00441;NP Power MPPT Akıllı İnverter (3,5 kW - 11 kW);11 kW MPPT Akıllı İnverter;NP Power;İnverter;43.8 x 29.5 x 10.5;8.7;9;product
 APEX-00442;Apex APX 4.2 Pro 4,2 kW Hibrit MPPT Akıllı İnverter;;Apex;İnverter;;;;eksik
-APEX-00443;Apex APX 6.2 Pro 6,2 kW Hibrit MPPT Akıllı İnverter;;Apex;İnverter;;;;eksik
-APEX-00444;Apex APX 8.5 Pro 8,5 kW MPPT Akıllı İnverter;;Apex;İnverter;;;;eksik
-APEX-00445;Apex APX 11 Pro 11 kW MPPT Akıllı İnverter;;Apex;İnverter;;;;eksik
+APEX-00443;Apex APX 6.2 Pro 6,2 kW Hibrit MPPT Akıllı İnverter;;Apex;İnverter;41 x 32 x 11.5;12.5;13;product
+APEX-00444;Apex APX 8.5 Pro 8,5 kW MPPT Akıllı İnverter;;Apex;İnverter;54.3 x 39 x 14.8;17.2;18;product
+APEX-00445;Apex APX 11 Pro 11 kW MPPT Akıllı İnverter;;Apex;İnverter;54.3 x 39 x 14.8;17.2;18;product
 ELECTR-00446;Electrozirve 12,8V LiFePO4 Lityum Akü (100Ah / 200Ah);100Ah LiFePO4 Lityum Akü;Electrozirve;Lityum Batarya;28 x 21.3 x 22.9;14.5;15;product
 ELECTR-00447;Electrozirve 12,8V LiFePO4 Lityum Akü (100Ah / 200Ah);200Ah LiFePO4 Lityum Akü;Electrozirve;Lityum Batarya;;;;eksik
 APEX-00448;Apex 51,2V LiFePO4 Lityum Akü (100Ah / 280Ah);100Ah LiFePO4 Lityum Akü;Apex;Lityum Batarya;;;;eksik
 APEX-00450;Apex 51,2V LiFePO4 Lityum Akü (100Ah / 280Ah);280Ah LiFePO4 Lityum Akü;Apex;Lityum Batarya;;;;eksik
-NPPOWE-00449;NP Power 51,2V 100Ah LiFePO4 Lityum Akü;;NP Power;Lityum Batarya;;;;eksik
-APEX-00451;Apex Safepower 12V Jel Akü (100Ah / 150Ah / 200Ah);100Ah Jel Akü;Apex;Kurşun/Jel Akü;;;;eksik
-APEX-00452;Apex Safepower 12V Jel Akü (100Ah / 150Ah / 200Ah);150Ah Jel Akü;Apex;Kurşun/Jel Akü;;;;eksik
-APEX-00453;Apex Safepower 12V Jel Akü (100Ah / 150Ah / 200Ah);200Ah Jel Akü;Apex;Kurşun/Jel Akü;;;;eksik
+NPPOWE-00449;NP Power 51,2V 100Ah LiFePO4 Lityum Akü;;NP Power;Lityum Batarya;49 x 50 x 17;;14;product
+APEX-00451;Apex Safepower 12V Jel Akü (100Ah / 150Ah / 200Ah);100Ah Jel Akü;Apex;Kurşun/Jel Akü;33 x 17.2 x 22.3;28.2;29;product
+APEX-00452;Apex Safepower 12V Jel Akü (100Ah / 150Ah / 200Ah);150Ah Jel Akü;Apex;Kurşun/Jel Akü;48.1 x 17 x 24.7;43.7;44;product
+APEX-00453;Apex Safepower 12V Jel Akü (100Ah / 150Ah / 200Ah);200Ah Jel Akü;Apex;Kurşun/Jel Akü;52.2 x 24 x 22.6;57;57;product
 NPPOWE-00454;NP Power 12V Jel Akü (100Ah / 200Ah);100Ah Jel Akü;NP Power;Kurşun/Jel Akü;;;;eksik
 NPPOWE-00455;NP Power 12V Jel Akü (100Ah / 200Ah);200Ah Jel Akü;NP Power;Kurşun/Jel Akü;;;;eksik
-APEX-00456;Apex NFS 1500W Şarjlı Tam Sinüs İnverter (25A Şarj, 16A Bypass);;Apex;İnverter;;;;eksik
-APEX-00457;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);600W Şarjlı Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00458;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);1000W Şarjlı Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00459;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);1500W Şarjlı Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00460;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);2000W Şarjlı Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-NPPOWE-00461;NP Power 12V Tam Sinüs İnverter (300W / 600W);300 300W 12V Tam Sinüs İnverter;NP Power;İnverter;;;;eksik
-NPPOWE-00462;NP Power 12V Tam Sinüs İnverter (300W / 600W);600 600W 12V Tam Sinüs İnverter;NP Power;İnverter;;;;eksik
-APEX-00463;Apex FS D Serisi Tam Sinüs İnverter;600 D 600W 12V Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00464;Apex FS D Serisi Tam Sinüs İnverter;1000 D 1000W 12/24V Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00465;Apex FS D Serisi Tam Sinüs İnverter;1500 D 1500W 12/24V Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00466;Apex FS D Serisi Tam Sinüs İnverter;2000 D 2000W 12/24V Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00467;Apex FS D Serisi Tam Sinüs İnverter;3000 D 3000W 12/24V Tam Sinüs İnverter;Apex;İnverter;;;;eksik
-APEX-00468;Apex FS D Serisi Tam Sinüs İnverter;4000 D 4000W 12/24V Tam Sinüs İnverter;Apex;İnverter;;;;eksik
+APEX-00456;Apex NFS 1500W Şarjlı Tam Sinüs İnverter (25A Şarj, 16A Bypass);;Apex;İnverter;48 x 23 x 11;5.3;6;product
+APEX-00457;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);600W Şarjlı Tam Sinüs İnverter;Apex;İnverter;33 x 23 x 10.6;5.2;6;product
+APEX-00458;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);1000W Şarjlı Tam Sinüs İnverter;Apex;İnverter;33 x 23 x 10.6;5.8;6;product
+APEX-00459;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);1500W Şarjlı Tam Sinüs İnverter;Apex;İnverter;41 x 25.2 x 10.1;8.3;9;product
+APEX-00460;Apex NPS Şarjlı Tam Sinüs İnverter (600W - 2000W);2000W Şarjlı Tam Sinüs İnverter;Apex;İnverter;41 x 25.2 x 10.1;8.3;9;product
+NPPOWE-00461;NP Power 12V Tam Sinüs İnverter (300W / 600W);300 300W 12V Tam Sinüs İnverter;NP Power;İnverter;19 x 10.8 x 6;1.2;2;product
+NPPOWE-00462;NP Power 12V Tam Sinüs İnverter (300W / 600W);600 600W 12V Tam Sinüs İnverter;NP Power;İnverter;24 x 13 x 7;1.8;2;product
+APEX-00463;Apex FS D Serisi Tam Sinüs İnverter;600 D 600W 12V Tam Sinüs İnverter;Apex;İnverter;28.2 x 17.4 x 10.3;2.1;3;series
+APEX-00464;Apex FS D Serisi Tam Sinüs İnverter;1000 D 1000W 12/24V Tam Sinüs İnverter;Apex;İnverter;31.4 x 17.4 x 10.3;2.9;3;series
+APEX-00465;Apex FS D Serisi Tam Sinüs İnverter;1500 D 1500W 12/24V Tam Sinüs İnverter;Apex;İnverter;32.5 x 28.1 x 11.3;5.2;6;series
+APEX-00466;Apex FS D Serisi Tam Sinüs İnverter;2000 D 2000W 12/24V Tam Sinüs İnverter;Apex;İnverter;32.5 x 28.1 x 11.3;5.5;6;series
+APEX-00467;Apex FS D Serisi Tam Sinüs İnverter;3000 D 3000W 12/24V Tam Sinüs İnverter;Apex;İnverter;44.2 x 26.1 x 11.3;8;8;series
+APEX-00468;Apex FS D Serisi Tam Sinüs İnverter;4000 D 4000W 12/24V Tam Sinüs İnverter;Apex;İnverter;55.3 x 26.1 x 11.3;8.5;9;series
 ELECTR-00469;Electrozirve IC Serisi Tam Sinüs İnverter (1000W - 3000W);1000 1000W Tam Sinüs İnverter;Electrozirve;İnverter;32.9 x 22.9 x 8.8;3.2;4;product
 ELECTR-00470;Electrozirve IC Serisi Tam Sinüs İnverter (1000W - 3000W);2000 2000W Tam Sinüs İnverter;Electrozirve;İnverter;32.9 x 22.9 x 8.8;6;6;product
 ELECTR-00471;Electrozirve IC Serisi Tam Sinüs İnverter (1000W - 3000W);3000 3000W Tam Sinüs İnverter;Electrozirve;İnverter;36.6 x 30 x 11.6;7;7;product
-APEX-00472;Apex NK 600 600W 12V Tam Sinüs İnverter;;Apex;İnverter;;;;eksik
+APEX-00472;Apex NK 600 600W 12V Tam Sinüs İnverter;;Apex;İnverter;28.2 x 17.4 x 10.3;2.1;3;series
 ELECTR-00473;Electrozirve CR80 Kablolu İnverter Kumandası;;Electrozirve;Güç ve Veri Kabloları;;;;eksik
 ELECTR-00474;Electrozirve CRW80 Kablosuz İnverter Kumandası;;Electrozirve;Güç ve Veri Kabloları;;;;eksik
 ELECTR-00475;Electrozirve CRW88 Kablosuz (Car Design) İnverter Kumandası;;Electrozirve;Güç ve Veri Kabloları;;;;eksik
@@ -308,7 +308,7 @@ ELECTR-00483;Electrozirve HP2430 30A PWM Şarj Kontrol Cihazı;;Electrozirve;MPP
 ELECTR-00484;Electrozirve HP2440 40A PWM Şarj Kontrol Cihazı;;Electrozirve;MPPT/PWM;16.4 x 10.4 x 4.7;0.39;1;product
 ELECTR-00485;Electrozirve HP2450 50A PWM Şarj Kontrol Cihazı;;Electrozirve;MPPT/PWM;18.9 x 12.7 x 5.4;0.65;1;product
 ELECTR-00486;Electrozirve HP2460 60A PWM Şarj Kontrol Cihazı;;Electrozirve;MPPT/PWM;18.9 x 12.7 x 5.4;0.65;1;product
-NPPOWE-00487;NP Power MPPT Şarj Kontrol Cihazı (30A / 40A);NP2430 30A MPPT Şarj Kontrol Cihazı;NP Power;MPPT/PWM;;;;eksik
+NPPOWE-00487;NP Power MPPT Şarj Kontrol Cihazı (30A / 40A);NP2430 30A MPPT Şarj Kontrol Cihazı;NP Power;MPPT/PWM;24.5 x 16.5 x 6.8;1.8;2;product
 NPPOWE-00488;NP Power MPPT Şarj Kontrol Cihazı (30A / 40A);NP2440 40A MPPT Şarj Kontrol Cihazı;NP Power;MPPT/PWM;;;;eksik
 ELECTR-00489;Electrozirve ML Serisi Ekranlı MPPT Şarj Kontrol Cihazı;ML-2420 20A Ekranlı MPPT Şarj Kontrol Cihazı;Electrozirve;MPPT/PWM;21 x 15.1 x 6;1.4;2;product
 ELECTR-00490;Electrozirve ML Serisi Ekranlı MPPT Şarj Kontrol Cihazı;ML-2430 30A Ekranlı MPPT Şarj Kontrol Cihazı;Electrozirve;MPPT/PWM;21 x 15.1 x 6;1.4;2;product

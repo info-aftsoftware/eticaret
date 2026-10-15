@@ -976,80 +976,10 @@
   }
  },
  {
-  "sku": "NPPOWE-00438",
-  "name": "NP Power 3,5 kW MPPT Akıllı İnverter",
-  "brand": "NP Power",
-  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "NPPOWE-00439",
-  "name": "NP Power 6,2 kW MPPT Akıllı İnverter",
-  "brand": "NP Power",
-  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "NPPOWE-00440",
-  "name": "NP Power 8,5 kW MPPT Akıllı İnverter",
-  "brand": "NP Power",
-  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "NPPOWE-00441",
-  "name": "NP Power 11 kW MPPT Akıllı İnverter",
-  "brand": "NP Power",
-  "productId": "np-power-mppt-akilli-inverter-3-5-kw-11-kw",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
   "sku": "APEX-00442",
   "name": "Apex APX 4.2 Pro 4,2 kW Hibrit MPPT Akıllı İnverter",
   "brand": "Apex",
   "productId": "apex-apx-4-2-pro-4-2-kw-hibrit-mppt-akilli-inverter",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00443",
-  "name": "Apex APX 6.2 Pro 6,2 kW Hibrit MPPT Akıllı İnverter",
-  "brand": "Apex",
-  "productId": "apex-apx-6-2-pro-6-2-kw-hibrit-mppt-akilli-inverter",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00444",
-  "name": "Apex APX 8.5 Pro 8,5 kW MPPT Akıllı İnverter",
-  "brand": "Apex",
-  "productId": "apex-apx-8-5-pro-8-5-kw-mppt-akilli-inverter",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00445",
-  "name": "Apex APX 11 Pro 11 kW MPPT Akıllı İnverter",
-  "brand": "Apex",
-  "productId": "apex-apx-11-pro-11-kw-mppt-akilli-inverter",
   "has": {
    "dimensionsCm": null,
    "weightKg": null
@@ -1091,37 +1021,11 @@
   "brand": "NP Power",
   "productId": "np-power-51-2v-100ah-lifepo4-lityum-aku",
   "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00451",
-  "name": "Apex Safepower 12V 100Ah Jel Akü",
-  "brand": "Apex",
-  "productId": "apex-safepower-12v-jel-aku-100ah-150ah-200ah",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00452",
-  "name": "Apex Safepower 12V 150Ah Jel Akü",
-  "brand": "Apex",
-  "productId": "apex-safepower-12v-jel-aku-100ah-150ah-200ah",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00453",
-  "name": "Apex Safepower 12V 200Ah Jel Akü",
-  "brand": "Apex",
-  "productId": "apex-safepower-12v-jel-aku-100ah-150ah-200ah",
-  "has": {
-   "dimensionsCm": null,
+   "dimensionsCm": [
+    49.0,
+    50.0,
+    17.0
+   ],
    "weightKg": null
   }
  },
@@ -1140,146 +1044,6 @@
   "name": "NP Power 12V 200Ah Jel Akü",
   "brand": "NP Power",
   "productId": "np-power-12v-jel-aku-100ah-200ah",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00456",
-  "name": "Apex NFS 1500W Şarjlı Tam Sinüs İnverter (25A Şarj, 16A Bypass)",
-  "brand": "Apex",
-  "productId": "apex-nfs-1500w-sarjli-tam-sinus-inverter-25a-sarj-16a-bypass",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00457",
-  "name": "Apex NPS 600W Şarjlı Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00458",
-  "name": "Apex NPS 1000W Şarjlı Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00459",
-  "name": "Apex NPS 1500W Şarjlı Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00460",
-  "name": "Apex NPS 2000W Şarjlı Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-nps-sarjli-tam-sinus-inverter-600w-2000w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "NPPOWE-00461",
-  "name": "NP Power NP 300 300W 12V Tam Sinüs İnverter",
-  "brand": "NP Power",
-  "productId": "np-power-12v-tam-sinus-inverter-300w-600w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "NPPOWE-00462",
-  "name": "NP Power NP 600 600W 12V Tam Sinüs İnverter",
-  "brand": "NP Power",
-  "productId": "np-power-12v-tam-sinus-inverter-300w-600w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00463",
-  "name": "Apex FS 600 D 600W 12V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00464",
-  "name": "Apex FS 1000 D 1000W 12/24V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00465",
-  "name": "Apex FS 1500 D 1500W 12/24V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00466",
-  "name": "Apex FS 2000 D 2000W 12/24V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00467",
-  "name": "Apex FS 3000 D 3000W 12/24V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00468",
-  "name": "Apex FS 4000 D 4000W 12/24V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "APEX-00472",
-  "name": "Apex NK 600 600W 12V Tam Sinüs İnverter",
-  "brand": "Apex",
-  "productId": "apex-nk-600-600w-12v-tam-sinus-inverter",
   "has": {
    "dimensionsCm": null,
    "weightKg": null
@@ -1360,16 +1124,6 @@
   "name": "Apex NS 2000W Modifiye Sinüs İnverter",
   "brand": "Apex",
   "productId": "apex-ns-serisi-modifiye-sinus-inverter-300w-2000w",
-  "has": {
-   "dimensionsCm": null,
-   "weightKg": null
-  }
- },
- {
-  "sku": "NPPOWE-00487",
-  "name": "NP Power NP2430 30A MPPT Şarj Kontrol Cihazı",
-  "brand": "NP Power",
-  "productId": "np-power-mppt-sarj-kontrol-cihazi-30a-40a",
   "has": {
    "dimensionsCm": null,
    "weightKg": null

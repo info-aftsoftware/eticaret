@@ -234,8 +234,8 @@
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.alpexpower.com/on-grid/off-grid-hybrid-inverter-48-volt-6200-watt",
+    "note": "Alpex ALP.HYB0062.48: no dimensions/weight on Alpex store, idefix or datasheet"
   },
   "ALPEX-00382": {
     "dimsCm": [
@@ -249,333 +249,437 @@
     "note": "Alpex store spec: Boyut 14*20*11 cm, Ağırlık 0.31 kg (likely boxed size)"
   },
   "NPPOWE-00438": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      43.8,
+      29.5,
+      10.5
+    ],
+    "weightKg": 8.2,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-3-5-kw-akilli-inverter-24v-mppt-2/",
+    "note": "Electrozirve (official distributor) page via Wayback 2026-07: 438 x 295 x 105 mm, net 8.2 kg; same on idefix/n11"
   },
   "NPPOWE-00439": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      43.4,
+      31.1,
+      12.7
+    ],
+    "weightKg": 9.8,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.n11.com/urun/np-power-62kw-akilli-inverter-48v-mppt-129238885",
+    "note": "n11 retailer spec: 434 x 311 x 126.5 mm, 9.8 kg; product values"
   },
   "NPPOWE-00440": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      43.8,
+      29.5,
+      10.5
+    ],
+    "weightKg": 8.7,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.idefix.com/np-power-8500w-akilli-inverter-140a-mppt-500vdc-panel-p-22334044",
+    "note": "Retailer spec 438 x 295 x 105 mm, 8.7 kg - identical to the 3.5 kW housing and to the 11 kW listing; looks copy-pasted, low confidence"
   },
   "NPPOWE-00441": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      43.8,
+      29.5,
+      10.5
+    ],
+    "weightKg": 8.7,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.n11.com/urun/np-power-11000w-akilli-inverter-160a-mppt-500vdc-panel-124669796",
+    "note": "Retailer spec 438 x 295 x 105 mm, 8.7 kg (same text on idefix) - implausibly light for 11 kW, likely copy-paste; low confidence"
   },
   "APEX-00442": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.idefix.com/apex-pro-42kw-24v-hybrid-akilli-inverter-p-26993613",
+    "note": "Retailer listing states dimensions/weight 'Üretici tarafından belirtilmemiştir'. Sibling APX 6.2 Pro: 410x320x115 mm, 12.5 kg"
   },
   "APEX-00443": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      41.0,
+      32.0,
+      11.5
+    ],
+    "weightKg": 12.5,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.idefix.com/apex-pro-62-kw-hybrid-akilli-inverter-p-22334087",
+    "note": "Retailer spec (also on n11 121973042): 410 x 320 x 115 mm, 12.5 kg; product values, no packaging data"
   },
   "APEX-00444": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      54.3,
+      39.0,
+      14.8
+    ],
+    "weightKg": 17.2,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.idefix.com/apex-pro-85-kw-akilli-inverter-48v-mppt-p-22334005",
+    "note": "Retailer spec (also n11 111112599): 543 x 390 x 148 mm, 17.2 kg; product values"
   },
   "APEX-00445": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      54.3,
+      39.0,
+      14.8
+    ],
+    "weightKg": 17.2,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.idefix.com/apex-pro-11kw-akilli-inverter-48v-mppt-p-31835584",
+    "note": "Retailer spec (also n11 141544853): 543 x 390 x 148 mm, 17.2 kg - identical to 8.5 kW listing; product values"
   },
   "APEX-00448": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/apx-yro-rck-apex-51-2v-100ah-lityum-lifepo4-batarya/",
+    "note": "Not published on Electrozirve, idefix or n11; Electrozirve user manual PDF has no dims"
   },
   "APEX-00450": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
     "source": "",
-    "note": "not researched yet / not found"
+    "note": "No Apex 51.2V 280Ah listing/datasheet found (Electrozirve lists 100Ah and 314Ah only)"
   },
   "NPPOWE-00449": {
-    "dimsCm": null,
+    "dimsCm": [
+      49.0,
+      50.0,
+      17.0
+    ],
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.n11.com/urun/np-power-512v-100ah-lityum-lifepo4-batarya-125647621",
+    "note": "n11 / idefix listing: 'Ürün Ölçüleri En:49 Boy:50 Yükseklik:17' (cm); no weight stated"
   },
   "APEX-00451": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      33.0,
+      17.2,
+      22.3
+    ],
+    "weightKg": 28.2,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/dacegug/2025/03/GE100-12-Safepower-TR.pdf",
+    "note": "Apex Safepower GE100-12 datasheet (Electrozirve): 330 x 172 x 218/223 mm (total height 223), 28.2 kg +/-3%"
   },
   "APEX-00452": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      48.1,
+      17.0,
+      24.7
+    ],
+    "weightKg": 43.7,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-safepower-12-volt-150-amper-jel-aku/",
+    "note": "Electrozirve (Apex distributor) Safepower GE150-12 page (Wayback 2026-07): 481 x 170 x 242/247 mm, 43.7 kg +/-3%"
   },
   "APEX-00453": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      52.2,
+      24.0,
+      22.6
+    ],
+    "weightKg": 57.0,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-safepower-12-volt-200-amper-jel-aku/",
+    "note": "Electrozirve Safepower GE200-12 page (Wayback 2026-07): 522 x 240 x 221/226 mm, 57.0 kg +/-3%"
   },
   "NPPOWE-00454": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
     "source": "",
-    "note": "not researched yet / not found"
+    "note": "No NP Power 12V 100Ah gel spec found"
   },
   "NPPOWE-00455": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-200ah-jel-aku/",
+    "note": "Electrozirve page has no dimensions/weight"
   },
   "APEX-00456": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      48.0,
+      23.0,
+      11.0
+    ],
+    "weightKg": 5.3,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.n11.com/urun/nfs1500-12-apex-1500w-sarjli-tam-sinus-inverter-12v-64273333",
+    "note": "n11 listing NFS1500-12: L 480 x W 230 x H 110 mm, approx 5.3 kg"
   },
   "APEX-00457": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      33.0,
+      23.0,
+      10.6
+    ],
+    "weightKg": 5.2,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.electrozirve.com/apex-nps-600w-sarjli-tam-sinus-inverter-12v-1331000",
+    "note": "Electrozirve NPS 600W page (Wayback 2024-04): 330 x 230 x 106 mm, 5.2 kg"
   },
   "APEX-00458": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      33.0,
+      23.0,
+      10.6
+    ],
+    "weightKg": 5.8,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.electrozirve.com/apex-nps-1000w-sarjli-tam-sinus-inverter-12v-24v-1331002",
+    "note": "Electrozirve NPS 1000W page (Wayback 2024-04): 330 x 230 x 106 mm, 5.8 kg (same on idefix 4540348)"
   },
   "APEX-00459": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      41.0,
+      25.2,
+      10.1
+    ],
+    "weightKg": 8.3,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.electrozirve.com/apex-nps-1500w-sarjli-tam-sinus-inverter-12v-1331004",
+    "note": "Electrozirve NPS 1500W page (Wayback 2024-04): 410 x 252 x 101 mm, 8.3 kg"
   },
   "APEX-00460": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      41.0,
+      25.2,
+      10.1
+    ],
+    "weightKg": 8.3,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.electrozirve.com/apex-nps-2000w-sarjli-tam-sinus-inverter-12v-1331006",
+    "note": "Electrozirve NPS 2000W page (Wayback 2024-04): 410 x 252 x 101 mm, 8.3 kg"
   },
   "NPPOWE-00461": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      19.0,
+      10.8,
+      6.0
+    ],
+    "weightKg": 1.2,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-12-volt-300-watt-tam-sinus-inverter/",
+    "note": "Electrozirve page (Wayback 2026-07): 190 x 108 x 60 mm, 1.2 kg. Another idefix listing states 130x168x58 mm, 2 kg"
   },
   "NPPOWE-00462": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      24.0,
+      13.0,
+      7.0
+    ],
+    "weightKg": 1.8,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-12-volt-600-watt-tam-sinus-inverter/",
+    "note": "Electrozirve page (Wayback 2026-07): 240 x 130 x 70 mm, 1.8 kg"
   },
   "APEX-00463": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      28.2,
+      17.4,
+      10.3
+    ],
+    "weightKg": 2.1,
+    "basis": "series",
+    "source": "https://electrozirve.com/apex-fs-600w-tam-sinus-inverter-12v-1311001",
+    "note": "Electrozirve FS 600W 12V page (Wayback 2024-07): 281.5 x 173.6 x 103.1 mm, 2.1 kg. Page is FS series, 'D' suffix not shown"
   },
   "APEX-00464": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      31.4,
+      17.4,
+      10.3
+    ],
+    "weightKg": 2.9,
+    "basis": "series",
+    "source": "https://electrozirve.com/apex-fs-1000w-tam-sinus-inverter-12v-1311002",
+    "note": "Electrozirve FS 1000W 12V page (Wayback): 313.5 x 173.6 x 103.1 mm, 2.9 kg (same on alizemarinmarket.com)"
   },
   "APEX-00465": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      32.5,
+      28.1,
+      11.3
+    ],
+    "weightKg": 5.2,
+    "basis": "series",
+    "source": "https://electrozirve.com/apex-fs-serisi-12volt-1500-watt-tam-sinus-inverter/",
+    "note": "Electrozirve FS 1500W 12V: 325.2 x 281.3 x 112.7 mm, 5.2 kg"
   },
   "APEX-00466": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      32.5,
+      28.1,
+      11.3
+    ],
+    "weightKg": 5.5,
+    "basis": "series",
+    "source": "https://electrozirve.com/apex-fs-2000w-tam-sinus-inverter-24v-1311006",
+    "note": "Electrozirve FS 2000W 24V: 325.2 x 281.3 x 112.7 mm, 5.5 kg (12V series page says height 122.7 mm)"
   },
   "APEX-00467": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      44.2,
+      26.1,
+      11.3
+    ],
+    "weightKg": 8.0,
+    "basis": "series",
+    "source": "https://electrozirve.com/apex-fs-3000w-tam-sinus-inverter-12v-1311009",
+    "note": "Electrozirve FS 3000W 12V: 442.2 x 261.3 x 112.7 mm, 8 kg"
   },
   "APEX-00468": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      55.3,
+      26.1,
+      11.3
+    ],
+    "weightKg": 8.5,
+    "basis": "series",
+    "source": "https://electrozirve.com/apex-fs-serisi-12volt-4000-watt-tam-sinus-inverter/",
+    "note": "Electrozirve FS 4000W 12V page (Wayback 2026-07): 553.2 x 261.3 x 112.7 mm, 8.5 kg; packing '2 adet - 18 kg - 0.08 m3' per master carton (2 units). 'D' suffix not shown"
   },
   "APEX-00472": {
-    "dimsCm": null,
-    "weightKg": null,
-    "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "dimsCm": [
+      28.2,
+      17.4,
+      10.3
+    ],
+    "weightKg": 2.1,
+    "basis": "series",
+    "source": "https://www.idefix.com/apex-12v-700w-tam-sinus-inverter-p-4710361",
+    "note": "No NK600 spec found. NK series 700W listing: 281.5 x 173.6 x 103.1 mm, 2.1 kg; NK 1000W same housing, 2.9 kg (https://www.alizemarinmarket.com/urun/apex-nk-serisi-tam-sinus-inverter-12v-1000w). Verify"
   },
   "APEX-00477": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/ns300-12-apex-300w-modife-sinus-inverter-12v/",
+    "note": "No NS series dimensions/weight published"
   },
   "APEX-00478": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-12-volt-600-watt-modifiye-sinus-inverter/",
+    "note": "No NS series dimensions/weight published"
   },
   "APEX-00479": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/ns1200-24-apex-1200w-modifiye-sinus-inverter-24v/",
+    "note": "No NS series dimensions/weight published"
   },
   "APEX-00480": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/ns2000-12-apex-2000w-modifiye-sinus-inverter-12v/",
+    "note": "No NS series dimensions/weight published"
   },
   "NPPOWE-00487": {
-    "dimsCm": null,
-    "weightKg": null,
+    "dimsCm": [
+      24.5,
+      16.5,
+      6.8
+    ],
+    "weightKg": 1.8,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-mppt-solar-sarj-kontrol-cihazi-30-amper-12v-24v/",
+    "note": "Electrozirve page: spec table 245 x 165 x 68 mm, 1.8 kg; same page also says 205 x 157 x 53 mm elsewhere - inconsistent"
   },
   "NPPOWE-00488": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://www.n11.com/urun/np-power-mppt-40a-solar-charge-controller-1224-121673407",
+    "note": "No 40A spec found; NP2430 (30A) page lists 245x165x68 mm, 1.8 kg"
   },
   "APEX-00506": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/apx1240-apex-12v-40a-smart-aku-sarj-cihazi/",
+    "note": "APX charger dimensions/weight not published"
   },
   "APEX-00507": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-apx-24-volt-20-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "APEX-00508": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-apx-12-volt-60-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "APEX-00509": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-apx-12-volt-80-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "APEX-00510": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/apx2440-apex-24v-40a-smart-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "APEX-00511": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/apex-apx-12-volt-100-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "NPPOWE-00512": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-12-volt-10-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "NPPOWE-00513": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-12-volt-20-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "NPPOWE-00514": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/np2410-np-power-24v-10a-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "NPPOWE-00515": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/np-power-12-volt-30-amper-aku-sarj-cihazi/",
+    "note": "Not published"
   },
   "APEX-00528": {
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://electrozirve.com/urun/apex-80a-transfer-switch/",
+    "note": "No dimensions/weight published by Electrozirve or marketplaces"
   },
   "EXELON-EXS320024-00529": {
     "dimsCm": [
@@ -636,8 +740,8 @@
     "dimsCm": null,
     "weightKg": null,
     "basis": "product",
-    "source": "",
-    "note": "not researched yet / not found"
+    "source": "https://exelon.com.tr/magaza/",
+    "note": "EMAX PMAX-12P not listed on exelon.com.tr; no datasheet found"
   },
   "EXELON-ELH12-00535": {
     "dimsCm": [
