@@ -10,10 +10,16 @@ import {
   ChevronRight,
   Zap,
   Battery,
+  BatteryCharging,
   Sun,
   Cpu,
-  Thermometer,
-  BarChart2,
+  Gauge,
+  Droplets,
+  Wind,
+  PlugZap,
+  Car,
+  Cable,
+  ShieldCheck,
   LayoutGrid,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -22,12 +28,18 @@ import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { useCategoriesWithProducts } from './CategoriesWithProductsProvider'
 
 const GROUP_CONFIG: Record<string, { icon: React.ElementType; color: string; bg: string }> = {
-  'elektrikli-arac-sarj-urunleri': { icon: Zap,         color: 'text-blue-600',   bg: 'bg-blue-50' },
-  'batarya-depolama':              { icon: Battery,      color: 'text-emerald-600', bg: 'bg-emerald-50' },
-  'inverterler':                   { icon: Cpu,          color: 'text-violet-600',  bg: 'bg-violet-50' },
-  'gunes-enerjisi':                { icon: Sun,          color: 'text-orange-500',  bg: 'bg-orange-50' },
-  'isi-pompasi-hvac':              { icon: Thermometer,  color: 'text-rose-500',    bg: 'bg-rose-50' },
-  'enerji-yonetimi':               { icon: BarChart2,    color: 'text-sky-600',     bg: 'bg-sky-50' },
+  'gunes-paneli':                { icon: Sun,             color: 'text-orange-500',  bg: 'bg-orange-50' },
+  'inverter-ve-guc-elektronigi': { icon: Cpu,             color: 'text-violet-600',  bg: 'bg-violet-50' },
+  'enerji-depolama':             { icon: BatteryCharging, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  'solar-sarj-kontrol':          { icon: Gauge,           color: 'text-amber-600',   bg: 'bg-amber-50' },
+  'pompa-ve-surucu':             { icon: Droplets,        color: 'text-sky-600',     bg: 'bg-sky-50' },
+  'akuler':                      { icon: Battery,         color: 'text-lime-600',    bg: 'bg-lime-50' },
+  'ruzgar-enerjisi':             { icon: Wind,            color: 'text-teal-600',    bg: 'bg-teal-50' },
+  'sarj-cihazlari':              { icon: PlugZap,         color: 'text-rose-500',    bg: 'bg-rose-50' },
+  'elektrikli-arac-sarj':        { icon: Car,             color: 'text-blue-600',    bg: 'bg-blue-50' },
+  'kablolar-ve-baglanti':        { icon: Cable,           color: 'text-slate-600',   bg: 'bg-slate-100' },
+  'aksesuar-ve-koruma':          { icon: ShieldCheck,     color: 'text-indigo-600',  bg: 'bg-indigo-50' },
+  'diger':                       { icon: Zap,             color: 'text-slate-500',   bg: 'bg-slate-100' },
 }
 
 export function CategorySidebar() {
@@ -96,6 +108,7 @@ export function CategorySidebar() {
         <Input
           type="search"
           placeholder="Ürün ara..."
+          aria-label="Ürün ara"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="flex-1 h-10 rounded-lg border-slate-200 bg-slate-50 text-sm placeholder:text-slate-400"

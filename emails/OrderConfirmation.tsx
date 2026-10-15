@@ -9,6 +9,7 @@ import {
   Button,
   Hr,
 } from '@react-email/components'
+import { BANK_ACCOUNTS, BANK_ACCOUNT_HOLDER } from '../lib/store-config'
 
 interface OrderConfirmationProps {
   orderId: string
@@ -95,9 +96,10 @@ export default function OrderConfirmation({ orderId, orderData }: OrderConfirmat
               <Section style={bankSection}>
                 <Text style={sectionTitle}>Havale / EFT Bilgileri</Text>
                 <Text style={detailText}>Ödemenizi aşağıdaki hesaba yaparken açıklama kısmına sipariş numaranızı (<strong>{orderId}</strong>) yazınız.</Text>
-                <Text style={detailText}><strong>Banka:</strong> Ziraat Bankası</Text>
-                <Text style={detailText}><strong>Hesap Sahibi:</strong> Voltekno Enerji Sistemleri</Text>
-                <Text style={detailText}><strong>IBAN:</strong> TR00 0000 0000 0000 0000 0000 00</Text>
+                <Text style={detailText}><strong>Hesap Sahibi:</strong> {BANK_ACCOUNT_HOLDER}</Text>
+                {BANK_ACCOUNTS.map((a) => (
+                  <Text key={a.iban} style={detailText}><strong>{a.bank}:</strong> {a.iban}</Text>
+                ))}
               </Section>
             )}
 

@@ -2,15 +2,21 @@
 
 import { useEffect } from 'react'
 import { isFirebaseConfigured, getAnalytics } from '@/lib/firebase/config'
+import { COOKIE_CONSENT_EVENT, hasAnalyticsConsent } from '@/components/CookieConsent'
 
 /**
  * Firebase Analytics'i tarayıcıda başlatır (measurementId tanımlıysa).
- * Layout içinde bir kez render edilir.
+ * Analitik çerezleri zorunlu olmadığından yalnızca kullanıcı çerez bandında "Kabul Et" dedikten sonra başlar.
  */
 export function FirebaseAnalyticsInit() {
   useEffect(() => {
     if (!isFirebaseConfigured) return
-    void getAnalytics()
+    const start = () => {
+      if (hasAnalyticsConsent()) void getAnalytics()
+    }
+    start()
+    window.addEventListener(COOKIE_CONSENT_EVENT, start)
+    return () => window.removeEventListener(COOKIE_CONSENT_EVENT, start)
   }, [])
   return null
 }

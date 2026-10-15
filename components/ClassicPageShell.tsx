@@ -35,7 +35,7 @@ export function ClassicPageShell({
   noTitle = false,
 }: ClassicPageShellProps) {
   return (
-    <div className={`min-h-screen bg-slate-50 pb-safe w-full max-w-full min-w-0 overflow-x-hidden ${className}`} id="main-content">
+    <div className={`min-h-screen bg-slate-50 pb-safe w-full max-w-full min-w-0 overflow-x-hidden ${className}`}>
       <div className="bg-white border-b border-slate-200 shadow-sm">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-8 lg:px-8 pt-5 pb-4 md:pt-6 md:pb-5 min-w-0">
           {breadcrumbs.length > 0 && (
@@ -56,6 +56,10 @@ export function ClassicPageShell({
                 </React.Fragment>
               ))}
             </nav>
+          )}
+          {/* Görünür başlık yoksa ekran okuyucular için sayfa başlığı (her sayfada tek h1) */}
+          {(noTitle || !title) && breadcrumbs.length > 0 && (
+            <h1 className="sr-only">{breadcrumbs[breadcrumbs.length - 1].label}</h1>
           )}
           {!noTitle && (title || description) && (
             <div className="mt-1 md:mt-2">

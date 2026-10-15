@@ -8,6 +8,8 @@ import { Footer } from '@/components/Footer'
 import { SidebarLayout } from '@/components/SidebarLayout'
 import { SuppressConsoleWarnings } from '@/components/SuppressConsoleWarnings'
 import { CookieConsent } from '@/components/CookieConsent'
+import { CompareBar } from '@/components/CompareBar'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { HtmlLangSync } from '@/components/HtmlLangSync'
 import { StructuredData } from '@/components/StructuredData'
 import { CategoriesWithProductsProvider } from '@/components/CategoriesWithProductsProvider'
@@ -85,6 +87,8 @@ export default async function IntlProvider({
             </main>
             <Footer />
             <CookieConsent />
+            <CompareBar />
+            <WhatsAppButton />
           </div>
           </CategoriesWithProductsProvider>
         </ToastProvider>

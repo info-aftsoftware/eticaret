@@ -24,6 +24,10 @@ import { useToast } from '@/components/ui/toast'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useTranslations } from 'next-intl'
 import { getCategoryKey } from '@/lib/categories'
+import { toOrderView, ORDER_STATUS_LABELS } from '@/lib/order-view'
+import { getAuthToken } from '@/lib/store/useAuthStore'
+import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard'
+import { MarketingConsentCard } from '@/components/profile/MarketingConsentCard'
 
 function ProfilePageContent() {
   const tHeader = useTranslations('header')
@@ -72,12 +76,26 @@ function ProfilePageContent() {
   const loadOrders = useCallback(async () => {
     if (!user?.id) return
     try {
-      // Static hosting: yalnızca Firestore'dan siparişleri yükle (Prisma API yok)
-      const firestoreList = await getOrders(user.id)
-      const normalized = firestoreList.map((o: any) => ({
-        ...o,
-        createdAt: o.createdAt instanceof Date ? o.createdAt : new Date(o.createdAt?.seconds ? o.createdAt.seconds * 1000 : 0),
-      }))
+      // Güncel siparişler Prisma'da (GET /api/orders, yalnızca kendi siparişleri);
+      // eski Firestore siparişleri de listede kalır.
+      const authToken = await getAuthToken()
+      const [apiOrders, firestoreList] = await Promise.all([
+        authToken
+          ? fetch('/api/orders', { headers: { Authorization: `Bearer ${authToken}` } })
+              .then((r) => (r.ok ? r.json() : null))
+              .then((d) => (Array.isArray(d?.orders) ? d.orders.map(toOrderView) : []))
+              .catch(() => [])
+          : Promise.resolve([]),
+        getOrders(user.id).catch(() => []),
+      ])
+      const seen = new Set(apiOrders.map((o: any) => o.orderId))
+      const legacy = firestoreList
+        .filter((o: any) => !seen.has(o.orderId))
+        .map((o: any) => ({
+          ...o,
+          createdAt: o.createdAt instanceof Date ? o.createdAt : new Date(o.createdAt?.seconds ? o.createdAt.seconds * 1000 : 0),
+        }))
+      const normalized = [...apiOrders, ...legacy]
       normalized.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       setOrders(normalized)
     } catch (error) {
@@ -373,12 +391,7 @@ function ProfilePageContent() {
                                   : 'bg-yellow-100 text-yellow-800'
                               }
                             >
-                              {order.status === 'pending' && 'Beklemede'}
-                              {order.status === 'confirmed' && 'Onaylandı'}
-                              {order.status === 'processing' && 'İşleniyor'}
-                              {order.status === 'shipped' && 'Kargoda'}
-                              {order.status === 'delivered' && 'Teslim Edildi'}
-                              {order.status === 'cancelled' && 'İptal'}
+                              {order.awaitingTransfer ? 'Ödeme bekleniyor' : ORDER_STATUS_LABELS[order.status] || order.status}
                             </Badge>
                             <div className="text-lg font-bold text-brand">
                               {formatPrice(order.pricing?.total || 0)}
@@ -867,6 +880,8 @@ function ProfilePageContent() {
                   </Button>
                 </CardContent>
               </Card>
+              <MarketingConsentCard />
+              <DeleteAccountCard />
             </TabsContent>
 
             <TabsContent value="havale" className="space-y-4">
@@ -876,7 +891,22 @@ function ProfilePageContent() {
                   <p className="text-sm text-ink-muted">Ödeme yaptıktan sonra havale/EFT bilgilerinizi buradan iletebilirsiniz.</p>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-ink-muted">Bu özellik yakında eklenecektir. Ödeme bildirimi için şimdilik <Link href="/contact" className="text-brand hover:underline">iletişim</Link> sayfamızdan bize ulaşabilirsiniz.</p>
+                  {orders.filter((o: any) => o.awaitingTransfer).length === 0 ? (
+                    <p className="text-ink-muted">Ödeme bekleyen havale/EFT siparişiniz yok.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {orders.filter((o: any) => o.awaitingTransfer).map((o: any) => (
+                        <li key={o.id} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                          <span className="text-sm">
+                            <strong>#{o.orderId}</strong> · {formatPrice(o.pricing?.total || 0)}
+                          </span>
+                          <Button asChild size="sm" variant="outline" className="bg-white">
+                            <Link href={`/orders/${o.id}`}>Ödeme bilgileri ve bildirim</Link>
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

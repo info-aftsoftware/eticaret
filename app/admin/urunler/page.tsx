@@ -147,7 +147,7 @@ export default function AdminUrunlerPage() {
   ]
 
   return (
-    <div className="space-y-6 pb-safe" id="main-content">
+    <div className="space-y-6 pb-safe">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-900">Stok Yönetimi</h1>

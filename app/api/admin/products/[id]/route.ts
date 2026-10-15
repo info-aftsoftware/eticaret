@@ -1,7 +1,7 @@
 /**
  * Admin Product Detail API
  * Get, update, delete individual products (Prisma).
- * Auth: Bearer JWT veya x-user-id (Prisma user.role === 'admin').
+ * Auth: admin_session cookie veya Bearer JWT (Prisma user.role === 'admin').
  */
 
 import { NextRequest, NextResponse } from 'next/server'

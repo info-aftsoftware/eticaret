@@ -9,11 +9,21 @@ function getKey(identifier: string, prefix: string): string {
   return `${prefix}:${identifier}`
 }
 
-function getIdentifier(request: Request): string {
-  const forwarded = request.headers.get('x-forwarded-for')
+/**
+ * İstemci kimliği. X-Forwarded-For'un İLK değeri istemci tarafından yazılabildiği için kullanılmaz:
+ * 1) Platformun verdiği IP (NextRequest.ip), 2) vekil sunucunun yazdığı x-real-ip,
+ * 3) X-Forwarded-For'un SON değeri (en yakın vekilin eklediği adres).
+ */
+export function getClientIp(request: Request): string {
+  const platformIp = (request as Request & { ip?: string }).ip
+  if (platformIp) return platformIp
   const realIp = request.headers.get('x-real-ip')
-  if (forwarded) return forwarded.split(',')[0].trim()
-  if (realIp) return realIp
+  if (realIp) return realIp.trim()
+  const forwarded = request.headers.get('x-forwarded-for')
+  if (forwarded) {
+    const parts = forwarded.split(',').map((p) => p.trim()).filter(Boolean)
+    if (parts.length) return parts[parts.length - 1]
+  }
   return 'unknown'
 }
 
@@ -30,8 +40,10 @@ export function isRateLimited(
   maxRequests: number = 10,
   windowMs: number = 60_000
 ): boolean {
-  const key = getKey(getIdentifier(request), prefix)
+  const key = getKey(getClientIp(request), prefix)
   const now = Date.now()
+  // Bellek büyümesini sınırla
+  if (store.size > 10_000) cleanupRateLimitStore()
   const entry = store.get(key)
 
   if (!entry) {

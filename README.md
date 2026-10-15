@@ -33,6 +33,22 @@ npm install
 npm run dev
 ```
 
+## 🗂️ Ürün Kataloğu (ikas Excel)
+
+Ürünler ikas ürün dışa aktarım Excel'inden üretilir; veritabanında değil, kodda (`lib/catalog/`) tutulur.
+
+```bash
+python scripts/import-ikas-excel.py voltekno_ikas_nihai.xlsx   # katalog + görseller + kur
+npx tsx scripts/clear-legacy-catalog.ts --apply                # katalogda olmayan ürünlerin DB kayıtlarını temizler
+npx tsx scripts/generate-categories-json.ts                    # statik menü için kategori listesi
+```
+
+- `lib/catalog/products.json`: ürünler ve varyantlar (Excel'deki "Ürün Grup ID" aynı olan satırlar tek ürünün varyantlarıdır)
+- `lib/catalog/descriptions.json`: HTML açıklamalar (yalnızca sunucuda yüklenir)
+- `public/images/products/voltekno/`: Google Drive'dan indirilen görseller
+- Fiyatlar Excel'deki USD/EUR değerleridir (KDV hariç). Sitede, sepette ve siparişte TCMB döviz satış kuruyla TL'ye çevrilir (`lib/fx-rates.ts`, 1 saat önbellek). `lib/catalog/fx-snapshot.json` yalnızca kur servisine ulaşılamadığında ve statik export'ta kullanılır.
+- Kategoriler Excel'deki "Ana Kategori > Alt Kategori" yapısını izler: `lib/categories.ts`. Yeni bir kategori gelirse buraya, `messages/*.json` (header) ve `app/category/[id]/category-meta.ts` dosyalarına eklenir.
+
 ## 📁 Proje Yapısı
 
 - `app/`: Sayfa yapıları ve API rotaları

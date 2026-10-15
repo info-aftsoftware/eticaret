@@ -25,6 +25,7 @@ import { Badge } from '@/components/ui/badge'
 import { Percent, Plus, Pencil, Trash2, Loader2, ToggleLeft, ToggleRight } from 'lucide-react'
 import { CATEGORY_GROUPS } from '@/lib/categories'
 import { mockProducts } from '@/lib/products-mock'
+import { CouponManager } from '@/components/admin/CouponManager'
 
 type Discount = {
   id: string
@@ -207,18 +208,18 @@ export default function AdminIndirimlerPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">İndirimler</h1>
-          <p className="text-slate-600 mt-1">Kampanya indirimlerini tanımlayın (tüm ürünler, kategori veya ürün bazlı)</p>
+          <h1 className="text-xl font-bold text-slate-900">Kampanyalar ve Kuponlar</h1>
+          <p className="text-slate-600 mt-1">Kampanyalar ürün fiyatına otomatik uygulanır (tüm ürünler, kategori veya ürün bazlı); kupon kodlarını müşteri sepette girer.</p>
         </div>
         <Button onClick={openCreate} className="shrink-0">
           <Plus className="w-4 h-4 mr-2" />
-          Yeni indirim
+          Yeni kampanya
         </Button>
       </div>
 
       <Card className="border-slate-200/80 bg-white shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg">Tanımlı indirimler</CardTitle>
+          <CardTitle className="text-lg">Kampanyalar (otomatik indirim)</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -304,6 +305,8 @@ export default function AdminIndirimlerPage() {
           )}
         </CardContent>
       </Card>
+
+      <CouponManager />
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
@@ -398,6 +401,12 @@ export default function AdminIndirimlerPage() {
               </div>
               <div>
                 <Label htmlFor="value">{form.type === 'PERCENT' ? 'Yüzde (%)' : 'Tutar (TL)'}</Label>
+                <p className="text-xs text-slate-500">
+                  {form.type === 'PERCENT'
+                    ? 'Ürün ve varyant fiyatlarına yüzde olarak uygulanır.'
+                    : 'Birim fiyattan (KDV hariç) düşülür.'}{' '}
+                  Bir ürüne birden fazla kampanya uyarsa müşteri için en avantajlısı uygulanır; kampanyalar toplanmaz.
+                </p>
                 <Input
                   id="value"
                   type="number"

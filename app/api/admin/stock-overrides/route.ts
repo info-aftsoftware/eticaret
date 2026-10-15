@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 
@@ -41,6 +42,8 @@ export async function PATCH(request: NextRequest) {
       update: { stock: value },
       create: { productId: productId.trim(), stock: value },
     })
+    // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
+    if (value > 0) processStockAlerts([row.productId]).catch((e) => console.error('Stock alert error:', e))
     return NextResponse.json(row)
   } catch (error) {
     console.error('Admin stock-overrides PATCH error:', error)

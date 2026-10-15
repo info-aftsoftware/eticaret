@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { trackViewItem, grossPrice } from '@/lib/analytics'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -11,6 +12,9 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { FavoriteButton } from '@/components/FavoriteButton'
+import { StockAlertForm } from '@/components/StockAlertForm'
+import { CompareButton } from '@/components/CompareButton'
+import { Turnstile } from '@/components/Turnstile'
 import { mockProducts, COMPLEMENTARY_BY_CATEGORY } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
@@ -89,6 +93,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
     phone: '',
     message: '',
   })
+  const [contactTurnstile, setContactTurnstile] = useState<string | null>(null)
+  const [contactTurnstileReset, setContactTurnstileReset] = useState(0)
   const [contactSubmitting, setContactSubmitting] = useState(false)
   const [contactSent, setContactSent] = useState(false)
   const [contactFormOpen, setContactFormOpen] = useState(false)
@@ -96,7 +102,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
 
   useEffect(() => {
     if (!productId) return
-    setLoading(true)
+    // Sunucu ürünü hazır gönderdiyse sayfa iskelete dönmeden arka planda tazelenir (stok/kampanya)
+    if (!initialProduct) setLoading(true)
     fetch(`/api/products/${productId}`)
       .then((res) => res.ok ? res.json() : null)
       .then((fetched) => {
@@ -122,7 +129,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
         setQuantity(st > 0 ? 1 : 0)
       })
       .finally(() => setLoading(false))
-  }, [productId])
+  }, [productId, initialProduct])
 
   /** Varyant seçiliyse ve üründe imagesByVariant varsa o varyantın görselleri; yoksa product.images */
   const effectiveVariant = selectedVariant ?? product?.variants?.[0] ?? null
@@ -140,6 +147,15 @@ export default function ProductDetailClient({ initialProduct, productId: product
   useEffect(() => {
     setSelectedIndex(0)
   }, [productId, effectiveVariant?.key])
+
+  // GA4: ürün görüntüleme (ürün başına bir kez)
+  const viewedProductId = React.useRef<string | null>(null)
+  useEffect(() => {
+    if (!product || viewedProductId.current === product.id) return
+    viewedProductId.current = product.id
+    void trackViewItem({ item_id: product.id, item_name: product.name, price: grossPrice(product.price), ...(product.category ? { item_category: product.category } : {}) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id])
 
   /** Birleşik kablo sayfasında sadece diğer metreler (aynı seri, farklı uzunluk = farklı ürün). SKU listesi değil kart gösterilecek. */
   const isMergedCableProduct = product?.category === 'Araç Şarj Kabloları' && product?.id.startsWith('hims-22kw-tip2-') && product?.id.endsWith('-elektrikli-arac-sarj-kablosu')
@@ -378,12 +394,13 @@ export default function ProductDetailClient({ initialProduct, productId: product
             <div className="flex flex-col">
               <div className="flex items-center gap-3 mb-4 flex-wrap">
                 {product.brand && <p className="text-sm font-bold text-brand uppercase tracking-wider">{product.brand}</p>}
-                {product.sku && (
+                {(effectiveVariant?.sku || product.sku) && (
                   <span className="text-xs font-semibold text-slate-600 border border-slate-200 px-3 py-1 rounded-lg bg-white">
-                    {tProduct('productCode', { sku: product.sku })}
+                    {tProduct('productCode', { sku: effectiveVariant?.sku || product.sku })}
                   </span>
                 )}
                 <FavoriteButton productId={product.id} className="ml-auto sm:ml-0" />
+                <CompareButton productId={product.id} productName={product.name} />
               </div>
               <h1 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 tracking-tight leading-snug max-w-xl">{product.name}</h1>
 
@@ -415,6 +432,22 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 </div>
               )}
 
+              {(() => {
+                const sp = product as typeof product & { oldPrice?: number; discount?: number; campaign?: { name: string; endsAt: string | null } }
+                if (!sp.campaign || !sp.oldPrice) return null
+                // Varyantta eski fiyat: kampanya oranından geri hesaplanır
+                const old = effectiveVariant && sp.discount ? effectiveVariant.price / (1 - sp.discount / 100) : sp.oldPrice
+                return (
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="text-lg text-slate-400 line-through">{formatPrice(old)}</span>
+                    {!!sp.discount && <span className="rounded-md bg-brand px-2 py-0.5 text-xs font-bold text-white">%{sp.discount} İndirim</span>}
+                    <span className="text-xs text-slate-600">
+                      {sp.campaign.name}
+                      {sp.campaign.endsAt && ` · ${new Date(sp.campaign.endsAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })} tarihine kadar`}
+                    </span>
+                  </div>
+                )
+              })()}
               <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 {formatPrice(effectiveVariant ? effectiveVariant.price : product.price)}
               </p>
@@ -436,6 +469,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   </span>
                 )}
               </div>
+
+              {outOfStock && <StockAlertForm productId={product.id} />}
 
               <div className="flex gap-2 sm:gap-3 mb-6">
                 {cartQty === 0 ? (
@@ -605,19 +640,23 @@ export default function ProductDetailClient({ initialProduct, productId: product
                           if (contactSubmitting || !contactForm.name.trim() || !contactForm.email.trim() || !contactForm.phone.trim() || !contactForm.message.trim()) return
                           setContactSubmitting(true)
                           try {
-                            const { collection, addDoc, serverTimestamp } = await import('firebase/firestore')
-                            const { getDb } = await import('@/lib/firebase/config')
-                            const db = getDb()
-                            await addDoc(collection(db, 'contactMessages'), {
-                              name: contactForm.name.trim(),
-                              email: contactForm.email.trim(),
-                              phone: contactForm.phone.trim(),
-                              subject: tProduct('contactSubject'),
-                              message: `[Ürün: ${product.name}]\n\n${contactForm.message.trim()}`,
-                              productId: product.id,
-                              createdAt: serverTimestamp(),
-                              status: 'new',
+                            // Sunucu: doğrulama + bot koruması + admin'e e-posta + panel kaydı
+                            const res = await fetch('/api/contact', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                name: contactForm.name.trim(),
+                                email: contactForm.email.trim(),
+                                phone: contactForm.phone.trim(),
+                                subject: tProduct('contactSubject'),
+                                message: `[Ürün: ${product.name}]\n\n${contactForm.message.trim()}`,
+                                productId: product.id,
+                                turnstileToken: contactTurnstile,
+                              }),
                             })
+                            setContactTurnstileReset((n) => n + 1)
+                            const data = await res.json().catch(() => null)
+                            if (!res.ok || !data?.success) throw new Error(data?.error)
                             setContactSent(true)
                             addToast({ type: 'success', title: tProduct('sentTitle'), description: tProduct('sentDesc') })
                           } catch {
@@ -659,6 +698,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                           rows={2}
                           required
                         />
+                        <Turnstile onToken={setContactTurnstile} resetKey={contactTurnstileReset} />
                         <Button type="submit" disabled={contactSubmitting} size="sm" className="w-full rounded-lg h-9 text-sm font-semibold">
                           {contactSubmitting ? tProduct('contactSending') : (
                             <>
@@ -681,6 +721,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
             const displaySpecs = effectiveVariant?.specifications ?? product.specifications
             const hasSpecs = displaySpecs && Object.keys(displaySpecs).length > 0
             return (hasSpecs ||
+              product.descriptionHtml ||
               product.fullDescription ||
               product.description ||
               (product.features && product.features.length > 0) ||
@@ -718,7 +759,16 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   )}
                   {/* Sağ: Ürün Açıklamaları = sağdaki yazının başlığı */}
                   <div className="min-w-0 flex-1 space-y-6">
-                    {(() => {
+                    {product.descriptionHtml ? (
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 mb-3">{tProduct('descriptions')}</h3>
+                        {/* Excel'den (ikas) gelen HTML; import sırasında temizlenir (scripts/import-ikas-excel.py) */}
+                        <div
+                          className="product-description-html"
+                          dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+                        />
+                      </div>
+                    ) : (() => {
                       const rawDescription = product.fullDescription || product.description || ''
                       const hasExplicitSections = product.descriptionSections && product.descriptionSections.length > 0
                       const sections = hasExplicitSections

@@ -1,10 +1,12 @@
 /**
  * Cart Store — Static hosting uyumlu.
  * Backend API yok: localStorage persist kullanılır.
- * Giriş yapan kullanıcılar için 60 gün, misafirler için sekme kapanınca temizlenir.
+ * Giriş yapan kullanıcılar için localStorage'da 60 gün, misafirler için sessionStorage'da
+ * (sekme kapanınca temizlenir; ödeme sağlayıcısından geri dönüşte sepet korunur).
  */
 import { create } from 'zustand'
 import { persist, PersistStorage } from 'zustand/middleware'
+import { cartItemToGa, trackAddToCart, trackRemoveFromCart } from '@/lib/analytics'
 
 export interface CartItem {
   id: string
@@ -25,6 +27,8 @@ export interface CartItem {
 
 interface CartState {
   items: CartItem[]
+  /** Sepette doğrulanan kupon kodu; ödeme sırasında sunucu tekrar doğrular */
+  couponCode: string | null
   isLoading: boolean
   /** localStorage'dan sepet yüklendikten sonra true (boş sepet gösteriminde kullanılır) */
   _hasHydrated: boolean
@@ -32,6 +36,9 @@ interface CartState {
   removeItem: (id: string) => void
   updateQuantity: (id: string, quantity: number) => void
   clearCart: () => void
+  setCouponCode: (code: string | null) => void
+  /** Sunucudan gelen güncel birim fiyatları uygular (kampanya / fiyat değişikliği) */
+  syncPrices: (prices: Record<string, number>) => void
   getTotalPrice: () => number
   getTotalItems: () => number
   getItemQuantity: (id: string) => number
@@ -56,11 +63,13 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      couponCode: null,
       isLoading: false,
       _hasHydrated: false,
 
       addItem: (item) => {
         const qty = item.quantity ?? 1
+        void trackAddToCart(cartItemToGa({ ...item, quantity: qty }))
         const existingItem = get().items.find(i => i.id === item.id)
         if (existingItem) {
           set((state) => ({
@@ -76,6 +85,8 @@ export const useCartStore = create<CartState>()(
       },
 
       removeItem: (id) => {
+        const removed = get().items.find((i) => i.id === id)
+        if (removed) void trackRemoveFromCart(cartItemToGa(removed))
         set((state) => ({
           items: state.items.filter(i => i.id !== id)
         }))
@@ -93,7 +104,14 @@ export const useCartStore = create<CartState>()(
         }))
       },
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], couponCode: null }),
+
+      setCouponCode: (code) => set({ couponCode: code }),
+
+      syncPrices: (prices) =>
+        set((state) => ({
+          items: state.items.map((i) => (prices[i.id] != null && prices[i.id] !== i.price ? { ...i, price: prices[i.id] } : i)),
+        })),
 
       getTotalPrice: () =>
         get().items.reduce((total, item) => total + item.price * item.quantity, 0),
@@ -112,15 +130,23 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: 'cart-storage',
-      partialize: (state) => ({ items: state.items }),
+      partialize: (state) => ({ items: state.items, couponCode: state.couponCode }),
       onRehydrateStorage: () => () => {
         useCartStore.setState({ _hasHydrated: true })
       },
       storage: ({
         getItem: (name: string) => {
           if (typeof window === 'undefined') return null
-          // Giriş yapılmamışsa kayıtlı sepet yüklenmez — her seferinde boş başlar
-          if (!isUserAuthenticated()) return null
+          // Misafir: sekme oturumu boyunca sessionStorage
+          if (!isUserAuthenticated()) {
+            try {
+              const str = sessionStorage.getItem(name)
+              const data = str ? JSON.parse(str) : null
+              return data?.state ? { state: data.state, version: data.version || 0 } : null
+            } catch {
+              return null
+            }
+          }
           try {
             const str = localStorage.getItem(name)
             if (!str) return null
@@ -140,8 +166,13 @@ export const useCartStore = create<CartState>()(
         },
         setItem: (name: string, value: { state: any; version?: number }): void => {
           if (typeof window === 'undefined') return
-          // Giriş yapılmamışsa sepet localStorage'a kaydedilmez
-          if (!isUserAuthenticated()) return
+          // Giriş yapılmamışsa sepet yalnızca bu sekmede (sessionStorage) tutulur
+          if (!isUserAuthenticated()) {
+            try {
+              sessionStorage.setItem(name, JSON.stringify(value))
+            } catch {}
+            return
+          }
           try {
             const expire = Date.now() + 60 * 24 * 60 * 60 * 1000 // 60 gün
             localStorage.setItem(name, JSON.stringify({ ...value, expire }))
@@ -150,7 +181,11 @@ export const useCartStore = create<CartState>()(
           }
         },
         removeItem: (name: string): void => {
-          if (typeof window !== 'undefined') localStorage.removeItem(name)
+          if (typeof window === 'undefined') return
+          localStorage.removeItem(name)
+          try {
+            sessionStorage.removeItem(name)
+          } catch {}
         },
       }) as any,
     }

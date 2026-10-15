@@ -6,6 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { processStockAlerts } from '@/lib/stock-alerts'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
@@ -110,6 +111,8 @@ export async function PATCH(
       },
     })
 
+    // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
+    processStockAlerts([productId]).catch((e) => console.error('Stock alert error:', e))
     return NextResponse.json(updated)
   } catch (error) {
     console.error('Admin catalog PATCH error:', error)

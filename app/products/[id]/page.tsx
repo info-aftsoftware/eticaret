@@ -2,9 +2,29 @@ import type { Metadata } from 'next'
 import { mockProducts } from '@/lib/products-mock'
 import { notFound } from 'next/navigation'
 import ProductDetailClient from './ProductDetailClient'
+import type { MergedProduct } from '@/lib/catalog-merge'
+import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discounts'
+import { computeOrderTotals, VAT_RATE } from '@/lib/store-config'
+import { SELLER } from '@/lib/legal/company'
+import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 
 export async function generateStaticParams() {
   return mockProducts.map((p) => ({ id: p.id }))
+}
+
+// Admin fiyat/stok değişiklikleri sayfaya ve yapılandırılmış veriye 10 dakika içinde yansır
+export const revalidate = 600
+
+/** Katalog (kod + admin düzenlemeleri); veritabanına ulaşılamazsa koddaki ürün */
+async function loadProduct(id: string): Promise<StorefrontProduct | null> {
+  try {
+    const merged = await getStorefrontProductById(id)
+    if (merged) return merged
+  } catch (e) {
+    console.error('Product load error:', e)
+  }
+  const mock = mockProducts.find((p) => p.id === id)
+  return mock ? { ...mock, id: mock.id, descriptionHtml: getProductDescriptionHtml(mock.id) } : null
 }
 
 const SITE_NAME = 'voltekno'
@@ -16,10 +36,11 @@ function truncate(str: string, max: number) {
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const product = mockProducts.find((p) => p.id === params.id)
+  const product = await loadProduct(params.id)
   if (!product) return { title: 'Ürün Bulunamadı' }
 
-  const title = `${product.name} | ${SITE_NAME}`
+  // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir
+  const title = product.metaTitle || `${product.name} | ${SITE_NAME}`
   const baseDesc = product.description || `${product.name} — ${product.category}.`
   const description = truncate(baseDesc, 160)
   const image = (product.images && product.images[0]) || product.image
@@ -34,7 +55,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   ].filter(Boolean) as string[]
 
   return {
-    title,
+    title: { absolute: title },
     description,
     keywords,
     alternates: {
@@ -57,7 +78,10 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-function buildProductJsonLd(product: (typeof mockProducts)[number]) {
+function buildProductJsonLd(product: StorefrontProduct) {
+  // Google: yapılandırılmış veri fiyatı sayfadaki satış fiyatıyla (KDV dahil) aynı olmalı
+  const priceWithVat = Math.round(product.price * (1 + VAT_RATE / 100) * 100) / 100
+  const shippingFee = computeOrderTotals({ subtotal: product.price, paymentMethod: 'card' }).shipping
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
 
@@ -84,24 +108,34 @@ function buildProductJsonLd(product: (typeof mockProducts)[number]) {
       '@type': 'Offer',
       url: `${SITE_URL}/products/${product.id}`,
       priceCurrency: 'TRY',
-      price: product.price,
+      price: priceWithVat,
       priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
       availability:
-        product.stock > 0
+        (product.stock ?? 0) > 0
           ? 'https://schema.org/InStock'
           : 'https://schema.org/OutOfStock',
       seller: {
         '@type': 'Organization',
-        name: 'voltekno',
+        name: SELLER.brand,
+        legalName: SELLER.legalName,
         url: SITE_URL,
+      },
+      hasMerchantReturnPolicy: {
+        '@type': 'MerchantReturnPolicy',
+        applicableCountry: 'TR',
+        returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+        merchantReturnDays: 14,
+        returnMethod: 'https://schema.org/ReturnByMail',
+        returnFees: 'https://schema.org/FreeReturn',
       },
       shippingDetails: {
         '@type': 'OfferShippingDetails',
         shippingRate: {
           '@type': 'MonetaryAmount',
-          value: product.price >= 3000 ? 0 : 150,
+          value: shippingFee,
           currency: 'TRY',
         },
+        shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TR' },
         deliveryTime: {
           '@type': 'ShippingDeliveryTime',
           businessDays: {
@@ -118,7 +152,7 @@ function buildProductJsonLd(product: (typeof mockProducts)[number]) {
 }
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
-  const product = mockProducts.find((p) => p.id === params.id)
+  const product = await loadProduct(params.id)
   if (!product) notFound()
 
   return (

@@ -156,7 +156,11 @@ export const useFirebaseAuthStore = create<AuthState>()(
         }))
       },
     }),
-    { name: 'auth-storage' }
+    {
+      name: 'auth-storage',
+      // authReady kalıcı değil: her sayfa yüklemesinde Firebase dinleyicisi oturumu doğrulayana kadar false
+      partialize: (state) => ({ user: state.user, token: state.token, isAuthenticated: state.isAuthenticated, rememberMe: state.rememberMe }),
+    }
   )
 )
 
@@ -194,4 +198,21 @@ if (typeof window !== 'undefined' && isFirebaseConfigured) {
   }
 } else {
   useFirebaseAuthStore.setState({ authReady: true })
+}
+
+/**
+ * API istekleri için geçerli Firebase ID token'ı. Firebase SDK süresi dolmuş token'ı otomatik yeniler
+ * (store'da saklanan token 1 saat sonra geçersizleşir). Oturum yoksa null.
+ */
+export async function getAuthToken(): Promise<string | null> {
+  if (typeof window === 'undefined' || !isFirebaseConfigured) return null
+  try {
+    const current = getAuth().currentUser
+    if (!current) return useFirebaseAuthStore.getState().token
+    const token = await current.getIdToken()
+    if (token !== useFirebaseAuthStore.getState().token) useFirebaseAuthStore.setState({ token })
+    return token
+  } catch {
+    return null
+  }
 }

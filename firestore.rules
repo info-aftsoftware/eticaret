@@ -7,8 +7,19 @@ service cloud.firestore {
     }
 
     // Kullanıcı profili ve alt koleksiyonları (adresler, siparişler, favoriler) - sadece kendi verisi
+    // `role` alanını kullanıcı kendisi admin yapamaz (yalnızca 'customer' yazılabilir / değiştirilemez).
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function roleUnchangedOrCustomer() {
+      return !('role' in request.resource.data)
+        || request.resource.data.role == 'customer'
+        || (resource != null && 'role' in resource.data && request.resource.data.role == resource.data.role);
+    }
+
     match /users/{uid} {
-      allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == uid);
+      allow read, delete: if isAdmin() || isOwner(uid);
+      allow create, update: if isAdmin() || (isOwner(uid) && roleUnchangedOrCustomer());
       match /addresses/{addressId} {
         allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == uid);
       }
@@ -20,39 +31,56 @@ service cloud.firestore {
       }
     }
 
-    // Misafir siparişleri
+    // Herkese açık form kayıtları için ortak kontroller: sunucu zamanı, alan sayısı, metin boyutu
+    function str(v, max) {
+      return v is string && v.size() > 0 && v.size() <= max;
+    }
+    function optStr(data, key, max) {
+      return !(key in data) || (data[key] is string && data[key].size() <= max);
+    }
+    function isFreshCreate() {
+      return request.resource.data.createdAt == request.time;
+    }
+
+    // Eski misafir siparişleri (yeni siparişler sunucuda/Prisma'da) — istemciden yeni kayıt yok
     match /guestOrders/{id} {
-      allow create: if true;
+      allow create: if false;
       allow read, update, delete: if isAdmin();
     }
 
-    // Kupon kodları — herkes okuyabilir, yazma admin
+    // Kupon kodları — yalnızca admin (doğrulama sunucuda: /api/coupons/preview, /api/orders)
     match /coupons/{id} {
-      allow read: if true;
-      allow write: if isAdmin();
+      allow read, write: if isAdmin();
     }
 
-    // İletişim formu mesajları
+    // İletişim formu mesajları — yalnızca sunucu (POST /api/contact: doğrulama, bot koruması, deneme sınırı) yazar
     match /contactMessages/{id} {
-      allow create: if true;
+      allow create: if false;
       allow read, update, delete: if isAdmin();
     }
 
     // GES teklif talepleri
     match /gesQuotes/{id} {
-      allow create: if true;
+      allow create: if isFreshCreate()
+        && request.resource.data.size() <= 60
+        && !('status' in request.resource.data) && !('adminNote' in request.resource.data);
       allow read, update, delete: if isAdmin();
     }
 
     // GES teklif doğrulama talepleri
     match /gesVerifications/{id} {
-      allow create: if true;
+      allow create: if isFreshCreate()
+        && request.resource.data.size() <= 80
+        && !('status' in request.resource.data) && !('adminNote' in request.resource.data);
       allow read, update, delete: if isAdmin();
     }
 
     // Bülten abonelikleri
     match /newsletter/{id} {
-      allow create: if true;
+      allow create: if isFreshCreate()
+        && request.resource.data.keys().hasOnly(['email', 'createdAt', 'consentText'])
+        && str(request.resource.data.email, 200)
+        && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
       allow read, update, delete: if isAdmin();
     }
 

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuthStore } from '@/lib/store/useAuthStore'
+import { safeRedirect as safeRedirectPath } from '@/lib/safe-redirect'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { Mail, Lock, LogIn, AlertCircle, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -32,7 +33,7 @@ function LoginForm() {
 
     if (result.success) {
       const redirect = searchParams.get('redirect')
-      const safeRedirect = redirect && redirect.startsWith('/') && !redirect.startsWith('//') ? redirect : '/profile'
+      const safeRedirect = safeRedirectPath(redirect)
       router.push(safeRedirect)
     } else {
       setError(result.error || 'Giriş başarısız')

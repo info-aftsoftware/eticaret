@@ -44,6 +44,8 @@ export function ProductCard({
   className = '',
   stock,
   isVariantProduct,
+  oldPrice,
+  discount,
 }: ProductCardProps) {
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -124,6 +126,13 @@ export function ProductCard({
             )}
           </div>
 
+          {/* Kampanya rozeti */}
+          {!!discount && discount > 0 && (
+            <span className="absolute top-2 left-2 z-10 rounded-md bg-brand px-1.5 py-0.5 text-[11px] font-bold text-white shadow-sm">
+              %{discount} İndirim
+            </span>
+          )}
+
           {/* Favori butonu — hover'da görünür */}
           <button
             type="button"
@@ -151,7 +160,10 @@ export function ProductCard({
           </h3>
           <div className="flex items-center justify-between mt-1.5">
             <p className={`font-bold text-slate-900 ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
-              {formatPrice(displayPrice)}
+              {!selectedVariant && oldPrice && oldPrice > displayPrice && (
+                <span className="block text-[11px] font-normal text-slate-400 line-through">{formatPrice(oldPrice)}</span>
+              )}
+              <span className={!selectedVariant && oldPrice && oldPrice > displayPrice ? 'text-brand' : ''}>{formatPrice(displayPrice)}</span>
             </p>
             {stock !== undefined && stock <= 5 && stock > 0 && (
               <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">

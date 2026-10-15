@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { CATEGORY_GROUPS } from '@/lib/categories'
+import { CATEGORY_GROUPS, LEGACY_CATEGORY_REDIRECTS } from '@/lib/categories'
 import { CategoryPageClient } from './CategoryPageClient'
 import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
@@ -53,16 +53,11 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
 }
 
 export default function CategoryPage({ params }: { params: { id: string } }) {
-  if (params.id === 'isi-pompalari') redirect('/category/isi-pompasi-hvac')
-  if (params.id === 'akilli-enerji') redirect('/category/inverterler')
-  if (params.id === 'ev-sarj') redirect('/category/elektrikli-arac-sarj-urunleri')
-  if (params.id === 'ev-sarj-istasyonlari') redirect('/category/elektrikli-arac-sarj-urunleri')
-  if (params.id === 'ev-sarj-kablolari') redirect('/category/elektrikli-arac-sarj-urunleri')
-  if (params.id === 'ev-sarj-aksesuarlari') redirect('/category/elektrikli-arac-sarj-urunleri')
-  if (params.id === 'gunes-panelleri') redirect('/category/gunes-enerjisi')
-  if (params.id === 'enerji-depolama') redirect('/category/batarya-depolama')
-  if (params.id === 'enerji-depolama-sistemleri') redirect('/category/batarya-depolama')
-  if (params.id === 'enerji-yonetimi') redirect('/category/batarya-depolama')
+  // Eski kategori URL'leri yeni Excel kategorilerine yönlendirilir (karşılığı yoksa tüm ürünler)
+  if (params.id in LEGACY_CATEGORY_REDIRECTS) {
+    const target = LEGACY_CATEGORY_REDIRECTS[params.id]
+    redirect(target ? `/category/${target}` : '/products')
+  }
 
   const title = getCategoryTitle(params.id)
   const meta = CATEGORY_META[params.id]

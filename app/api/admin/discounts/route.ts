@@ -8,6 +8,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { invalidateCampaignCache } from '@/lib/discounts'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
@@ -76,6 +77,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    invalidateCampaignCache()
     return NextResponse.json(discount)
   } catch (error) {
     console.error('Admin discounts POST error:', error)

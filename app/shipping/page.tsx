@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/lib/store-config'
 import { Truck, Package, Clock, MapPin, ChevronRight, AlertTriangle, CheckCircle } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function ShippingPage() {
   return (
-    <div className="min-h-screen bg-surface" id="main-content">
+    <div className="min-h-screen bg-surface">
       <div className="bg-surface-elevated border-b border-palette">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center gap-2 text-xs font-medium text-ink-muted mb-2" aria-label="Breadcrumb">
@@ -59,6 +60,26 @@ export default function ShippingPage() {
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
               Teslimat süresi siparişin içeriğine, stok durumuna ve bulunduğunuz bölgeye göre değişiklik gösterebilir. Hafta sonu ve resmi tatil günleri iş günü sayılmaz.
             </div>
+          </div>
+
+          {/* Kargo Ücreti */}
+          <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
+                <Package className="w-5 h-5 text-brand" />
+              </div>
+              <h2 className="text-xl font-bold text-ink">Kargo Ücreti</h2>
+            </div>
+            <ul className="space-y-2 text-ink-muted text-sm">
+              <li>
+                <strong className="text-ink">{FREE_SHIPPING_THRESHOLD.toLocaleString('tr-TR')} TL ve üzeri</strong> siparişlerde kargo ücretsizdir
+                (KDV hariç ara toplam, indirimler öncesi).
+              </li>
+              <li>
+                Bu tutarın altındaki siparişlerde kargo ücreti <strong className="text-ink">{SHIPPING_FEE.toLocaleString('tr-TR')} TL</strong>&apos;dir ve
+                ödeme adımında sipariş özetinde gösterilir.
+              </li>
+            </ul>
           </div>
 
           {/* Kargo Firması */}

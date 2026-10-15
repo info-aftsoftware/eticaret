@@ -2,23 +2,38 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { sendOrderStatusUpdate, sendShipmentNotice } from '@/lib/notifications'
+import { toCustomerOrder } from '@/lib/customer-order'
+import { getCustomerFromRequest } from '@/lib/customerAuth'
 
 // Static export için gerekli - Next.js 14 nested route support
 export function generateStaticParams() {
   return []
 }
 
+/**
+ * Müşterinin kendi siparişi (id ile). Auth zorunlu; yalnızca sipariş sahibi görebilir.
+ * Durum güncelleme yalnızca admin API'sinden yapılır: PATCH /api/admin/orders/[id].
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const userId = (await getCustomerFromRequest(request))?.userId ?? null
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, error: 'Giriş yapmanız gerekiyor' },
+        { status: 401 }
+      )
+    }
+
     const order = await prisma.order.findUnique({
-      where: { id: params.id }
+      where: { id: params.id },
+      include: { lines: true, events: { where: { visibleToCustomer: true }, orderBy: { createdAt: 'asc' } }, returnRequests: { orderBy: { createdAt: 'asc' } } },
     })
 
-    if (!order) {
+    // Başkasının siparişi için de 404 dön (varlığını sızdırma)
+    if (!order || order.userId !== userId) {
       return NextResponse.json(
         { success: false, error: 'Sipariş bulunamadı' },
         { status: 404 }
@@ -27,7 +42,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
-      order
+      order: toCustomerOrder(order),
     })
   } catch (error) {
     console.error('Error fetching order:', error)
@@ -37,55 +52,3 @@ export async function GET(
     )
   }
 }
-
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const body = await request.json()
-    const { status, trackingNumber, notes } = body
-
-    const updateData: any = {}
-    if (status) updateData.status = status
-    if (trackingNumber !== undefined) updateData.trackingNumber = trackingNumber
-    if (notes !== undefined) updateData.notes = notes
-
-    const order = await prisma.order.update({
-      where: { id: params.id },
-      data: updateData
-    })
-
-    // Send email notifications if status changed
-    if (status && status !== order.status) {
-      const notificationData = {
-        orderId: order.orderNo,
-        orderData: order,
-        customer: {
-          name: order.shippingName,
-          email: order.shippingEmail ?? '',
-        },
-      }
-
-      // Send status update email
-      await sendOrderStatusUpdate(notificationData, status)
-
-      // If shipped, send tracking info
-      if (status === 'shipped' && trackingNumber) {
-        await sendShipmentNotice(notificationData, trackingNumber)
-      }
-    }
-
-    return NextResponse.json({
-      success: true,
-      order
-    })
-  } catch (error) {
-    console.error('Error updating order:', error)
-    return NextResponse.json(
-      { success: false, error: 'Sipariş güncellenirken bir hata oluştu' },
-      { status: 500 }
-    )
-  }
-}
-

@@ -6,161 +6,106 @@ export type CategoryMetaItem = {
   seoDescription?: string
   /** SEO keywords listesi */
   keywords?: string[]
-  image: string
+  /** Hero görseli; yoksa koyu degrade arka plan kullanılır */
+  image?: string
   imagePosition?: string
   imageScale?: number
   objectFit?: 'cover' | 'contain'
 }
 
-/** Kategori sayfası hero görselleri – ana sayfa kartlarından farklı, sayfa başına büyük görsel. */
+/** Kategori sayfası başlık, açıklama ve SEO metinleri – anahtarlar lib/categories.ts CATEGORY_GROUPS id'leri. */
 export const CATEGORY_META: Record<string, CategoryMetaItem> = {
-  'elektrikli-arac-sarj-urunleri': {
-    title: 'EV Şarj İstasyonu ve Şarj Kabloları',
-    description:
-      'AC, DC hızlı ve taşınabilir şarj istasyonları. Ev, site ve işletmeler için akıllı şarj çözümleri.',
+  'gunes-paneli': {
+    title: 'Güneş Paneli',
+    description: 'TOPCon, monokristal, bifacial, esnek ve katlanabilir güneş panelleri. Ev, karavan ve ticari projeler için.',
     seoDescription:
-      'Elektrikli araç şarj istasyonları ve Tip2 şarj kabloları. AC/DC duvar tipi şarj üniteleri, taşınabilir şarj cihazları ve aksesuar ürünleri. voltekno\'da EV şarj fiyatları ve teknik destek.',
-    keywords: [
-      'ev şarj istasyonu',
-      'elektrikli araç şarj istasyonu',
-      'tip2 şarj kablosu',
-      'ac şarj istasyonu fiyatları',
-      'dc hızlı şarj',
-      'taşınabilir şarj cihazı',
-      'wallbox şarj istasyonu',
-      'elektrikli araba şarj aleti',
-      'araç şarj kablosu tip2',
-      'şarj istasyonu kurulumu',
-    ],
-    image: '/images/categories/sarj.png',
+      'Güneş paneli fiyatları ve modelleri: TOPCon, half-cut monokristal, bifacial, esnek (flexible) ve katlanabilir çanta tipi paneller. Teknik özellikler ve datasheet voltekno\'da.',
+    keywords: ['güneş paneli', 'güneş paneli fiyatları', 'topcon güneş paneli', 'monokristal panel', 'bifacial panel', 'esnek güneş paneli', 'katlanabilir güneş paneli', 'solar panel'],
+    image: '/images/categories/panel.png',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
-  'batarya-depolama': {
-    title: 'Akü ve Enerji Depolama Sistemleri',
-    description:
-      'Lityum (LiFePO4) aküler, kurşun asit aküler ve batarya modülleri. 12V, 24V, 48V seçenekler.',
+  'inverter-ve-guc-elektronigi': {
+    title: 'İnverter ve Güç Elektroniği',
+    description: 'On-grid, hibrit ve off-grid inverterler, tam sinüs inverterler, akıllı sayaçlar ve izleme cihazları.',
     seoDescription:
-      'Lityum akü, LiFePO4 batarya, kurşun asit akü ve enerji depolama sistemleri. 12V 24V 48V akü seçenekleri. Güneş sistemi, karavan, tekne ve ev uygulamaları için akü fiyatları.',
-    keywords: [
-      'lityum akü',
-      'lifepo4 akü fiyatları',
-      'lityum akü fiyat',
-      'akü satın al',
-      'güneş sistemi akü',
-      'karavan akü',
-      'ev bataryası fiyatları',
-      'enerji depolama sistemi',
-      'lifepo4 batarya',
-      'kurşun asit akü',
-      'taşınabilir güç istasyonu',
-    ],
-    image: '/images/categories/batarya.png',
-    imagePosition: 'center center',
-    imageScale: 0.78,
-  },
-  'inverterler': {
-    title: 'İnverterler — Hibrit, Off-Grid, Mikro',
-    description:
-      'Hibrit, Off-Grid ve Mikro inverterler. Ev ve ticari projeler için tüm kapasiteler.',
-    seoDescription:
-      'Hibrit inverter, off-grid inverter ve mikro inverter modelleri. Güneş enerjisi sistemleri için doğru inverter seçimi. İnverter fiyatları, güç aralıkları ve teknik destek voltekno\'da.',
-    keywords: [
-      'hibrit inverter',
-      'off grid inverter',
-      'mikro inverter',
-      'inverter fiyatları',
-      'güneş inverter',
-      'solar inverter fiyat',
-      'ges inverter',
-      'ev tipi inverter',
-      'inverter nedir nasıl çalışır',
-      'enerji inverter modelleri',
-    ],
+      'İnverter fiyatları: on-grid (şebeke bağlantılı), hibrit ve off-grid inverterler, tam sinüs ve modifiye sinüs inverterler, Smart Meter ve izleme aksesuarları. TommaTech, Deye, Victron ve daha fazlası voltekno\'da.',
+    keywords: ['inverter', 'hibrit inverter', 'on-grid inverter', 'off-grid inverter', 'tam sinüs inverter', 'solar inverter fiyatları', 'smart meter'],
     image: '/images/categories/inverter.png',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
-  'gunes-enerjisi': {
-    title: 'Güneş Paneli Fiyatları ve Solar Sistemler',
-    description:
-      'Güneş panelleri, taşınabilir paneller ve solar sistemler. GES kurulumu için komple çözümler.',
-    seoDescription:
-      'Monokristal güneş paneli fiyatları, taşınabilir güneş paneli ve hazır solar sistemler. Bağ evi, villa, karavan, çatı GES uygulamaları. Güneş paneli satın al — voltekno teknik destek.',
-    keywords: [
-      'güneş paneli fiyatları',
-      'monokristal güneş paneli',
-      'güneş paneli satın al',
-      'solar panel fiyat',
-      'taşınabilir güneş paneli',
-      'çatı güneş paneli',
-      'ges kurulum',
-      'güneş enerji sistemi',
-      'solar sistemler',
-      'güneş paneli watt fiyat',
-      'bağ evi güneş paneli',
-    ],
-    image: '/images/categories/panel.png',
-    imagePosition: 'center center',
-    imageScale: 0.78,
-  },
-  'isi-pompasi-hvac': {
-    title: 'Isı Pompası ve HVAC Sistemleri',
-    description:
-      'Endüstriyel ve havuz tipi ısı pompaları, split EVI sistemleri ve fan coil üniteleri.',
-    seoDescription:
-      'Hava kaynaklı ısı pompası, havuz ısı pompası ve HVAC sistemleri. Enerji tasarruflu ısıtma ve soğutma çözümleri. Isı pompası fiyatları ve kurulum desteği voltekno\'da.',
-    keywords: [
-      'ısı pompası fiyatları',
-      'hava kaynaklı ısı pompası',
-      'havuz ısı pompası',
-      'hvac sistemleri',
-      'ısı pompası kurulumu',
-      'enerji tasarruflu ısıtma',
-      'heat pump türkiye',
-      'ısı pompası nedir',
-      'split ısı pompası',
-    ],
-    image: '/images/categories/isi-pompasi.png',
-    imagePosition: 'center center',
-    imageScale: 0.78,
-  },
-  'enerji-yonetimi': {
-    title: 'Enerji Yönetim Sistemleri',
-    description:
-      'Smart meter, akıllı kontrolörler, EPS box ve şarj istasyonu yönetim sistemleri.',
-    seoDescription:
-      'Akıllı enerji yönetim sistemleri, enerji monitörleme ve otomasyon çözümleri. Smart meter, EPS box ve şarj yönetimi. Güneş enerjisi üretiminizi gerçek zamanlı takip edin.',
-    keywords: [
-      'enerji yönetim sistemi',
-      'akıllı enerji yönetimi',
-      'enerji monitörleme',
-      'smart meter',
-      'ems sistemi',
-      'ev enerji yönetimi',
-      'güneş enerjisi takip sistemi',
-      'solar monitörleme',
-      'şarj istasyonu yönetimi',
-    ],
-    image: '/images/categories/panel.png',
-    imagePosition: 'center center',
-    imageScale: 0.78,
-  },
-  // Eski URL uyumu (yönlendirme yapılıyor ama yedek olarak tutuluyor)
-  'ev-sarj': {
-    title: 'Şarj İstasyonları',
-    description:
-      'Duvar tipi, taşınabilir ve hızlı şarj istasyonları. Ev, site ve işletmeler için AC/DC çözümler.',
-    image: '/images/categories/sarj.png',
-    imagePosition: 'center center',
-    imageScale: 0.78,
-  },
   'enerji-depolama': {
-    title: 'Batarya Paketleri',
-    description:
-      'Ev tipi lityum bataryalar, taşınabilir güç istasyonları ve endüstriyel ESS sistemleri.',
+    title: 'Enerji Depolama',
+    description: 'LiFePO4 lityum bataryalar, yüksek voltaj batarya modülleri ve taşınabilir güç istasyonları.',
+    seoDescription:
+      'Lityum batarya fiyatları: LiFePO4 aküler, yüksek ve düşük voltaj enerji depolama modülleri, marin aküler ve taşınabilir güç istasyonları. Güneş enerjisi sistemleri için enerji depolama çözümleri voltekno\'da.',
+    keywords: ['lityum batarya', 'lifepo4 akü', 'enerji depolama', 'solar batarya', 'taşınabilir güç istasyonu', 'lityum akü fiyatları'],
     image: '/images/categories/batarya.png',
     imagePosition: 'center center',
     imageScale: 0.78,
+  },
+  'solar-sarj-kontrol': {
+    title: 'Solar Şarj Kontrol Cihazları',
+    description: 'MPPT ve PWM solar şarj kontrol cihazları, uzaktan izleme modülleri ve ekranlar.',
+    seoDescription:
+      'MPPT ve PWM solar şarj kontrol cihazı fiyatları. Güneş paneli ile akü/batarya arasında verimli şarj yönetimi için Victron, Havensis, TommaTech ve diğer markalar voltekno\'da.',
+    keywords: ['mppt şarj kontrol', 'pwm şarj kontrol', 'solar şarj kontrol cihazı', 'şarj regülatörü', 'mppt fiyatları'],
+  },
+  'pompa-ve-surucu': {
+    title: 'Solar Pompa ve Sürücüler',
+    description: 'Güneş enerjili tarımsal sulama için solar pompa sürücüleri ve pompa inverterleri.',
+    seoDescription:
+      'Solar pompa sürücüsü fiyatları: monofaze ve trifaze solar pompa inverterleri, tarımsal sulama için güneş enerjili pompa sistemleri. Frecon, TommaTech ve daha fazlası voltekno\'da.',
+    keywords: ['solar pompa sürücüsü', 'solar pompa inverteri', 'güneş enerjili sulama', 'tarımsal sulama', 'solar pompa'],
+  },
+  akuler: {
+    title: 'Aküler',
+    description: 'Kurşun asit ve jel aküler; solar sistemler, UPS ve karavan uygulamaları için.',
+    seoDescription:
+      'Jel akü ve kurşun asit akü fiyatları. Güneş enerjisi sistemleri, UPS ve karavan uygulamaları için derin döngü aküler voltekno\'da.',
+    keywords: ['jel akü', 'kurşun asit akü', 'solar akü', 'derin döngü akü', 'akü fiyatları'],
+  },
+  'ruzgar-enerjisi': {
+    title: 'Rüzgar Enerjisi',
+    description: 'Rüzgar türbinleri, direk setleri, kanatlar ve türbin aksesuarları.',
+    seoDescription:
+      'Rüzgar türbini fiyatları ve aksesuarları: ev tipi rüzgar türbinleri, direk setleri, kanatlar, burun ve kuyruk parçaları. İstabreeze ürünleri voltekno\'da.',
+    keywords: ['rüzgar türbini', 'ev tipi rüzgar türbini', 'rüzgar jeneratörü', 'türbin kanadı', 'rüzgar enerjisi'],
+  },
+  'sarj-cihazlari': {
+    title: 'Şarj Cihazları',
+    description: 'Akü ve batarya şarj cihazları; AC/DC şarj üniteleri.',
+    seoDescription:
+      'Akü şarj cihazı fiyatları: kurşun asit, jel ve lityum aküler için AC/DC şarj cihazları voltekno\'da.',
+    keywords: ['akü şarj cihazı', 'lityum şarj cihazı', 'ac dc şarj', 'batarya şarj cihazı'],
+  },
+  'elektrikli-arac-sarj': {
+    title: 'Elektrikli Araç Şarj',
+    description: 'Elektrikli araç şarj istasyonları ve aksesuarları.',
+    seoDescription:
+      'Elektrikli araç şarj istasyonu fiyatları ve aksesuarları. Ev ve işletmeler için AC şarj çözümleri voltekno\'da.',
+    keywords: ['elektrikli araç şarj istasyonu', 'ev şarj istasyonu', 'ev şarj cihazı', 'wallbox'],
+  },
+  'kablolar-ve-baglanti': {
+    title: 'Kablolar ve Bağlantı',
+    description: 'Güç ve veri kabloları, BMS ve iletişim kabloları, panel bağlantı kabloları.',
+    seoDescription:
+      'Güç ve veri kabloları: VE.Direct, VE.Can, BMS ve panel bağlantı kabloları. Solar ve enerji depolama sistemleri için bağlantı ürünleri voltekno\'da.',
+    keywords: ['solar kablo', 've.direct kablo', 'bms kablosu', 'panel bağlantı kablosu', 'veri kablosu'],
+  },
+  'aksesuar-ve-koruma': {
+    title: 'Aksesuar ve Koruma',
+    description: 'Sistem bileşenleri, koruma ekipmanları ve tamamlayıcı aksesuarlar.',
+    seoDescription:
+      'Solar ve enerji depolama sistemleri için sistem bileşenleri, koruma ekipmanları ve aksesuarlar voltekno\'da.',
+    keywords: ['solar aksesuar', 'sistem bileşenleri', 'koruma ekipmanı', 'enerji sistemi aksesuarı'],
+  },
+  diger: {
+    title: 'Diğer Ürünler',
+    description: 'İzleme ve kontrol cihazları, güç istasyonları, rüzgar türbini parçaları ve diğer enerji ürünleri.',
+    seoDescription:
+      'GX izleme cihazları, ekranlar, transfer switch, şönt, inverter ve rüzgar türbini yedek parçaları gibi diğer enerji ürünleri voltekno\'da.',
+    keywords: ['gx touch', 'smart shunt', 'transfer switch', 'enerji izleme', 'rüzgar türbini parçaları'],
   },
 }

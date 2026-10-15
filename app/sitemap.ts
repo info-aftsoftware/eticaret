@@ -2,10 +2,15 @@ import type { MetadataRoute } from 'next'
 import { mockProducts } from '@/lib/products-mock'
 import { CATEGORY_GROUPS } from '@/lib/categories'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
+import { getMergedProducts } from '@/lib/catalog-merge'
+import { LEGAL_SLUGS, legalHref } from '@/lib/legal/documents'
+
+// Admin'in eklediği ürünler de site haritasına girsin
+export const revalidate = 3600
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date()
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -17,10 +22,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/faq`, lastModified: now, changeFrequency: 'weekly', priority: 0.78 },
     { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE_URL}/shipping`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${SITE_URL}/returns`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${SITE_URL}/terms`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${SITE_URL}/privacy`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${SITE_URL}/cookies`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${SITE_URL}/siparis-takip`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
+    // Yasal metinler (eski /terms, /privacy, /cookies, /returns bu adreslere canonical verir)
+    ...LEGAL_SLUGS.map((slug) => ({
+      url: `${SITE_URL}${legalHref(slug)}`,
+      lastModified: now,
+      changeFrequency: 'yearly' as const,
+      priority: 0.4,
+    })),
   ]
 
   const categoryPages: MetadataRoute.Sitemap = CATEGORY_GROUPS.map((group) => ({
@@ -37,7 +46,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  const productPages: MetadataRoute.Sitemap = mockProducts.map((product) => ({
+  let products: { id: string }[] = mockProducts
+  try {
+    products = await getMergedProducts()
+  } catch (e) {
+    console.error('Sitemap catalog error:', e)
+  }
+  const productPages: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${SITE_URL}/products/${product.id}`,
     lastModified: now,
     changeFrequency: 'weekly',

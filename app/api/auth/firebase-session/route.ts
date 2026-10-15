@@ -14,18 +14,21 @@ import jwt from 'jsonwebtoken'
 const JWT_SECRET = process.env.JWT_SECRET
 const JWT_EXPIRY = '7d'
 
-/** Firestore users/{uid} profilinden role ve customerNo oku. */
-async function getFirestoreProfile(uid: string): Promise<{ role: 'customer' | 'admin' | null; customerNo?: string }> {
+/**
+ * Firestore users/{uid} profilinden customerNo oku.
+ * Rol bilinçli olarak OKUNMAZ: kullanıcı kendi Firestore belgesine yazabildiği için oradaki `role`
+ * güvenilir değildir. Yetki için tek kaynak Prisma `User.role` alanıdır.
+ */
+async function getFirestoreProfile(uid: string): Promise<{ customerNo?: string }> {
   const db = getAdminFirestore()
-  if (!db) return { role: null }
+  if (!db) return {}
   try {
     const snap = await db.doc(`users/${uid}`).get()
     const data = snap?.data()
-    const role = data?.role === 'admin' || data?.role === 'customer' ? data.role : null
     const customerNo = typeof data?.customerNo === 'string' ? data.customerNo : undefined
-    return { role, customerNo }
+    return { customerNo }
   } catch {
-    return { role: null }
+    return {}
   }
 }
 
@@ -56,7 +59,6 @@ export async function POST(request: NextRequest) {
     const name = (decoded.name as string) || (email ? email.split('@')[0] : 'Kullanıcı')
 
     const firestoreProfile = await getFirestoreProfile(uid)
-    const role = firestoreProfile.role ?? 'customer'
 
     let user = await prisma.user.findUnique({
       where: { id: uid },
@@ -68,16 +70,15 @@ export async function POST(request: NextRequest) {
           id: uid,
           email: email.toLowerCase() || `firebase-${uid}@placeholder.local`,
           name,
-          role,
+          role: 'customer',
           emailVerified: decoded.email_verified ?? false,
           customerNo: firestoreProfile.customerNo ?? undefined,
         },
       })
     } else {
-      const updateData: { email?: string; name?: string; role?: string; emailVerified?: boolean; customerNo?: string } = {
+      const updateData: { email?: string; name?: string; emailVerified?: boolean; customerNo?: string } = {
         email: email ? email.toLowerCase() : user.email,
         name: user.name || name,
-        role: firestoreProfile.role ?? user.role,
         emailVerified: decoded.email_verified ?? user.emailVerified,
       }
       if (firestoreProfile.customerNo && !user.customerNo) updateData.customerNo = firestoreProfile.customerNo

@@ -7,6 +7,8 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isRateLimited, getClientIp } from '@/lib/rate-limit'
+import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
 import { getAdminFirestore, getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 
 async function getUserFromToken(request: NextRequest): Promise<{ userId: string; name?: string; email?: string } | null> {
@@ -45,7 +47,11 @@ export async function GET(
       .limit(100)
       .get()
 
-    const questions = snap.docs.map((d) => {
+    // Yalnızca yanıtlanmış (admin onaylı) sorular yayınlanır
+    const questions = snap.docs.filter((d) => {
+      const data = d.data()
+      return !!data.answer && data.status !== 'hidden'
+    }).map((d) => {
       const data = d.data()
       const ts = data.createdAt as { toDate?: () => Date } | null
       return {
@@ -69,21 +75,33 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const body = await request.json()
+    if (isRateLimited(request, 'product-question', 5, 10 * 60_000)) {
+      return NextResponse.json({ error: 'Çok fazla soru gönderdiniz. Lütfen daha sonra tekrar deneyin.' }, { status: 429 })
+    }
+    const body = await request.json().catch(() => ({}))
     const { question, productName, guestName, guestEmail } = body
+    if (!(await verifyTurnstile(body.turnstileToken, getClientIp(request)))) {
+      return NextResponse.json({ error: TURNSTILE_ERROR }, { status: 400 })
+    }
 
-    if (!question?.trim()) {
+    if (typeof question !== 'string' || !question.trim()) {
       return NextResponse.json({ error: 'Soru gereklidir' }, { status: 400 })
+    }
+    if (question.trim().length > 1000) {
+      return NextResponse.json({ error: 'Soru en fazla 1000 karakter olabilir.' }, { status: 400 })
     }
 
     // Logged-in user from Firebase ID token
     const authUser = await getUserFromToken(request)
 
-    const resolvedName = authUser?.name || guestName?.trim()
-    const resolvedEmail = authUser?.email || guestEmail?.trim()
+    const resolvedName = (authUser?.name || (typeof guestName === 'string' ? guestName.trim() : '')).slice(0, 100)
+    const resolvedEmail = (authUser?.email || (typeof guestEmail === 'string' ? guestEmail.trim() : '')).slice(0, 200)
 
     if (!resolvedName || !resolvedEmail) {
       return NextResponse.json({ error: 'Ad ve e-posta gereklidir' }, { status: 400 })
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(resolvedEmail)) {
+      return NextResponse.json({ error: 'Geçerli bir e-posta adresi girin.' }, { status: 400 })
     }
 
     if (!isFirebaseAdminConfigured()) {
@@ -96,12 +114,14 @@ export async function POST(
 
     const docRef = await db.collection('productQuestions').add({
       productId: params.id,
-      productName: productName || null,
+      productName: typeof productName === 'string' ? productName.slice(0, 300) : null,
       userId: authUser?.userId || null,
       userName: resolvedName,
       userEmail: resolvedEmail,
       question: question.trim(),
       answer: null,
+      // Moderasyon: soru, admin yanıtlayana kadar sitede yayınlanmaz
+      status: 'pending',
       createdAt: new Date(),
     })
 

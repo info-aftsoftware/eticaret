@@ -19,9 +19,35 @@ type OrderRow = {
   total: number
   status: string
   paymentStatus?: string
+  paymentMethod?: string | null
+  /** Açık iade talebi sayısı (talep alındı / onaylandı / teslim alındı) */
+  openReturns?: number
+  /** Müşteri havale yaptığını bildirdi */
+  paymentNotified?: boolean
   createdAt: string
   userId?: string | null
 }
+
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  PENDING: 'Bekliyor',
+  pending: 'Bekliyor',
+  PAID: 'Ödendi',
+  paid: 'Ödendi',
+  FAILED: 'Başarısız',
+  REFUNDED: 'İade edildi',
+  PARTIALLY_REFUNDED: 'Kısmi iade',
+}
+
+const PAYMENT_METHOD_LABELS: Record<string, string> = {
+  bank_transfer: 'Havale/EFT',
+  stripe: 'Kart',
+  card: 'Kart (Sanal POS)',
+  paytr: 'Kart (PayTR)',
+}
+
+const isAwaitingTransfer = (o: OrderRow) =>
+  o.source === 'prisma' && o.paymentMethod === 'bank_transfer' && o.paymentStatus !== 'PAID' &&
+  (o.status === 'PENDING' || o.status === 'pending')
 
 const STATUS_LABELS: Record<string, string> = {
   pending: 'Beklemede',
@@ -65,7 +91,9 @@ const STATUS_BADGE_CLASS: Record<string, string> = {
   paid: 'bg-green-100 text-green-800 border-0',
 }
 
-const FILTER_STATUSES = ['PENDING', 'PICKING', 'SHIPPED', 'DELIVERED', 'CANCELLED']
+const FILTER_STATUSES = ['PENDING', 'PAID', 'PICKING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'RETURNED']
+const AWAITING_TRANSFER_FILTER = '__awaiting_transfer'
+const OPEN_RETURNS_FILTER = '__open_returns'
 
 async function loadOrdersFromAPI(): Promise<OrderRow[]> {
   const res = await fetch('/api/admin/orders', { credentials: 'include' })
@@ -85,6 +113,9 @@ async function loadOrdersFromAPI(): Promise<OrderRow[]> {
       total: o.total ?? 0,
       status: o.status ?? 'PENDING',
       paymentStatus: o.paymentStatus,
+      paymentMethod: o.paymentMethod ?? null,
+      openReturns: Array.isArray(o.returnRequests) ? o.returnRequests.length : 0,
+      paymentNotified: Array.isArray(o.events) && o.events.length > 0,
       createdAt: o.createdAt ?? '',
       userId: o.userId ?? null,
     })
@@ -120,6 +151,7 @@ export default function AdminOrdersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState<string | null>(null)
   const [updatingId, setUpdatingId] = useState<string | null>(null)
+  const [actionError, setActionError] = useState<string | null>(null)
 
   const fetchOrders = async (silent = false) => {
     if (!silent) setLoading(true)
@@ -140,8 +172,11 @@ export default function AdminOrdersPage() {
     fetchOrders()
   }, [router])
 
-  const handleStatusChange = async (row: OrderRow, newStatus: string) => {
+  /** Prisma siparişlerinde lib/order-service üzerinden işlem yapar (e-posta + zaman çizelgesi). */
+  const runQuickAction = async (row: OrderRow, body: Record<string, unknown>, confirmText?: string) => {
+    if (confirmText && !window.confirm(confirmText)) return
     setUpdatingId(row.id)
+    setActionError(null)
     try {
       const url = row.source === 'firestore' && row.userId
         ? `/api/admin/orders/${row.id}?source=firestore&userId=${row.userId}`
@@ -149,17 +184,21 @@ export default function AdminOrdersPage() {
       const res = await fetch(url, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify(body),
         credentials: 'include',
       })
-      if (!res.ok) throw new Error('Güncelleme hatası')
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Güncelleme hatası')
+      const updated = data?.order
       setOrders((prev) =>
         prev.map((o) =>
-          o.id === row.id && o.source === row.source ? { ...o, status: newStatus } : o
+          o.id === row.id && o.source === row.source
+            ? { ...o, status: updated?.status ?? o.status, paymentStatus: updated?.paymentStatus ?? o.paymentStatus }
+            : o
         )
       )
     } catch (err) {
-      console.error('Status update error:', err)
+      setActionError(`${row.orderId}: ${err instanceof Error ? err.message : 'Güncelleme hatası'}`)
     } finally {
       setUpdatingId(null)
     }
@@ -172,12 +211,23 @@ export default function AdminOrdersPage() {
       (order.orderId || '').toLowerCase().includes(q) ||
       (order.customerName || '').toLowerCase().includes(q) ||
       (order.customerEmail || '').toLowerCase().includes(q)
-    const matchesStatus = !statusFilter || order.status === statusFilter
+    const matchesStatus =
+      !statusFilter ||
+      (statusFilter === AWAITING_TRANSFER_FILTER
+        ? isAwaitingTransfer(order)
+        : statusFilter === OPEN_RETURNS_FILTER
+          ? (order.openReturns ?? 0) > 0
+          : order.status === statusFilter)
     return matchesSearch && matchesStatus
   })
 
-  const pendingCount = orders.filter((o) => o.status === 'pending' || o.status === 'PENDING').length
-  const totalRevenue = orders.reduce((sum, o) => sum + (o.total || 0), 0)
+  const awaitingTransferCount = orders.filter(isAwaitingTransfer).length
+  const openReturnsCount = orders.filter((o) => (o.openReturns ?? 0) > 0).length
+  const toPrepareCount = orders.filter((o) => o.status === 'PAID').length
+  // Yalnızca ödemesi alınmış ve iptal/iade edilmemiş siparişler
+  const totalRevenue = orders
+    .filter((o) => (o.paymentStatus === 'PAID' || o.paymentStatus === 'paid') && !['CANCELLED', 'RETURNED', 'cancelled', 'returned'].includes(o.status))
+    .reduce((sum, o) => sum + (o.total || 0), 0)
 
   return (
     <div className="space-y-6">
@@ -185,7 +235,7 @@ export default function AdminOrdersPage() {
         <div>
           <h1 className="text-xl font-bold text-slate-900">Siparişler</h1>
           <p className="text-slate-600 mt-1">
-            {loading ? 'Yükleniyor...' : `${orders.length} sipariş · ${fmtTRY(totalRevenue)} toplam gelir`}
+            {loading ? 'Yükleniyor...' : `${orders.length} sipariş · ${fmtTRY(totalRevenue)} tahsil edilen`}
           </p>
         </div>
         <Button
@@ -201,10 +251,34 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Özet satırı */}
-      {!loading && pendingCount > 0 && (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium">
-          <CheckCircle2 className="w-5 h-5 shrink-0 text-amber-600" />
-          {pendingCount} sipariş onay bekliyor — aşağıdan hızlıca onaylayabilirsiniz.
+      {!loading && (awaitingTransferCount > 0 || toPrepareCount > 0) && (
+        <div className="flex flex-col sm:flex-row gap-2">
+          {awaitingTransferCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setStatusFilter(AWAITING_TRANSFER_FILTER)}
+              className="flex-1 flex items-center gap-3 px-4 py-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-sm font-medium text-left hover:bg-amber-100"
+            >
+              <CheckCircle2 className="w-5 h-5 shrink-0 text-amber-600" />
+              {awaitingTransferCount} sipariş havale/EFT ödemesi bekliyor — hesaba geçenleri “Ödeme Alındı” ile onaylayın.
+            </button>
+          )}
+          {toPrepareCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setStatusFilter('PAID')}
+              className="flex-1 flex items-center gap-3 px-4 py-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-800 text-sm font-medium text-left hover:bg-blue-100"
+            >
+              <Package className="w-5 h-5 shrink-0 text-blue-600" />
+              {toPrepareCount} ödenmiş sipariş hazırlanmayı bekliyor.
+            </button>
+          )}
+        </div>
+      )}
+
+      {actionError && (
+        <div role="alert" className="px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm">
+          {actionError}
         </div>
       )}
 
@@ -238,6 +312,24 @@ export default function AdminOrdersPage() {
               >
                 Tümü ({orders.length})
               </Button>
+              {openReturnsCount > 0 && (
+                <Button
+                  variant={statusFilter === OPEN_RETURNS_FILTER ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setStatusFilter(statusFilter === OPEN_RETURNS_FILTER ? null : OPEN_RETURNS_FILTER)}
+                >
+                  İade talebi ({openReturnsCount})
+                </Button>
+              )}
+              {awaitingTransferCount > 0 && (
+                <Button
+                  variant={statusFilter === AWAITING_TRANSFER_FILTER ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setStatusFilter(statusFilter === AWAITING_TRANSFER_FILTER ? null : AWAITING_TRANSFER_FILTER)}
+                >
+                  Havale bekleyen ({awaitingTransferCount})
+                </Button>
+              )}
               {FILTER_STATUSES.map((s) => {
                 const count = orders.filter((o) => o.status === s || (s === 'pending' && o.status === 'PENDING')).length
                 if (count === 0) return null
@@ -288,6 +380,7 @@ export default function AdminOrdersPage() {
                     <th className="py-3 px-4 font-semibold">Tutar</th>
                     <th className="py-3 px-4 font-semibold">Durum</th>
                     <th className="py-3 px-4 font-semibold">Ödeme</th>
+                    <th className="py-3 px-4 font-semibold">Yöntem</th>
                     <th className="py-3 px-4 font-semibold">Tarih</th>
                     <th className="py-3 px-4 font-semibold">İşlemler</th>
                   </tr>
@@ -297,7 +390,17 @@ export default function AdminOrdersPage() {
                     const isUpdating = updatingId === row.id
                     return (
                       <tr key={`${row.source}-${row.id}`} className="hover:bg-slate-50/60 transition-colors">
-                        <td className="py-3 px-4 font-medium text-slate-900 text-sm">{row.orderId}</td>
+                        <td className="py-3 px-4 font-medium text-slate-900 text-sm">
+                          {row.orderId}
+                          {row.paymentNotified && isAwaitingTransfer(row) && (
+                            <Badge className="ml-2 bg-emerald-100 text-emerald-800 border-0 text-[10px]">Ödeme bildirildi</Badge>
+                          )}
+                          {(row.openReturns ?? 0) > 0 && (
+                            <Link href={`/admin/orders/${row.id}?source=prisma#iade`} className="ml-2 inline-block">
+                              <Badge className="bg-orange-100 text-orange-800 border-0 text-[10px]">İade talebi</Badge>
+                            </Link>
+                          )}
+                        </td>
                         <td className="py-3 px-4">
                           <div className="text-sm font-medium text-slate-900">{row.customerName || '—'}</div>
                           {row.customerEmail && (
@@ -311,9 +414,15 @@ export default function AdminOrdersPage() {
                           </Badge>
                         </td>
                         <td className="py-3 px-4">
-                          <Badge variant="outline" className="text-xs">
-                            {STATUS_LABELS[row.paymentStatus ?? ''] ?? row.paymentStatus ?? '—'}
+                          <Badge
+                            variant="outline"
+                            className={`text-xs ${row.paymentStatus === 'PAID' ? 'border-green-300 text-green-700' : row.paymentStatus === 'FAILED' ? 'border-red-300 text-red-700' : ''}`}
+                          >
+                            {PAYMENT_STATUS_LABELS[row.paymentStatus ?? ''] ?? row.paymentStatus ?? '—'}
                           </Badge>
+                        </td>
+                        <td className="py-3 px-4 text-xs text-slate-600 whitespace-nowrap">
+                          {PAYMENT_METHOD_LABELS[row.paymentMethod ?? ''] ?? row.paymentMethod ?? '—'}
                         </td>
                         <td className="py-3 px-4 text-sm text-slate-500 whitespace-nowrap">
                           {row.createdAt
@@ -335,24 +444,30 @@ export default function AdminOrdersPage() {
                                 Detay
                               </Link>
                             </Button>
-                            {(row.status === 'pending' || row.status === 'PENDING') && (
+                            {row.source === 'prisma' && isAwaitingTransfer(row) && (
                               <Button
                                 size="sm"
                                 className="h-7 text-xs bg-green-600 hover:bg-green-700"
-                                onClick={() => handleStatusChange(row, 'PICKING')}
+                                onClick={() => runQuickAction(row, { action: 'mark_paid' },
+                                  `${row.orderId} için ${fmtTRY(row.total)} havale/EFT ödemesi hesaba geçti mi? Müşteriye ödeme onayı ve fatura e-postası gönderilecek.`)}
                                 disabled={isUpdating}
                               >
-                                {isUpdating ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Onayla'}
+                                {isUpdating ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Ödeme Alındı'}
                               </Button>
                             )}
-                            {(row.status === 'PICKING' || row.status === 'picking') && (
+                            {row.source === 'prisma' && row.status === 'PAID' && (
                               <Button
                                 size="sm"
                                 className="h-7 text-xs bg-indigo-600 hover:bg-indigo-700"
-                                onClick={() => handleStatusChange(row, 'SHIPPED')}
+                                onClick={() => runQuickAction(row, { action: 'status', status: 'PICKING' })}
                                 disabled={isUpdating}
                               >
-                                {isUpdating ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Kargoya Ver'}
+                                {isUpdating ? <Loader2 className="w-3 h-3 animate-spin" /> : 'Hazırlamaya Al'}
+                              </Button>
+                            )}
+                            {row.source === 'prisma' && row.status === 'PICKING' && (
+                              <Button asChild size="sm" className="h-7 text-xs bg-purple-600 hover:bg-purple-700">
+                                <Link href={`/admin/orders/${row.id}?source=prisma#kargo`}>Kargoya Ver</Link>
                               </Button>
                             )}
                           </div>

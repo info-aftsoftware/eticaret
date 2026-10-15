@@ -1,5 +1,6 @@
 import React from 'react'
 import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer'
+import { SELLER } from './legal/company'
 
 // Register font for Turkish characters (TTF format — woff2 is not supported by fontkit/react-pdf)
 Font.register({
@@ -15,6 +16,18 @@ Font.register({
     },
   ],
 })
+
+const STATUS_TR: Record<string, string> = {
+  PENDING: 'Beklemede',
+  PAID: 'Ödendi',
+  CONFIRMED: 'Onaylandı',
+  PROCESSING: 'Hazırlanıyor',
+  PICKING: 'Hazırlanıyor',
+  SHIPPED: 'Kargoda',
+  DELIVERED: 'Teslim Edildi',
+  CANCELLED: 'İptal',
+  RETURNED: 'İade',
+}
 
 const styles = StyleSheet.create({
   page: {
@@ -137,19 +150,19 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.companyName}>
-            {process.env.COMPANY_LEGAL_NAME || 'Voltekno'}
+            {process.env.COMPANY_LEGAL_NAME || SELLER.shortLegalName}
           </Text>
           <View style={styles.companyInfo}>
             <Text>
-              {process.env.COMPANY_ADDRESS || 'Adres satırı, İl/İlçe, Türkiye'}
+              {process.env.COMPANY_ADDRESS || SELLER.address}
             </Text>
             <Text>
-              Vergi No: {process.env.COMPANY_TAX_ID || '1234567890'} |
-              Vergi Dairesi: {process.env.COMPANY_TAX_OFFICE || 'İSTANBUL'}
+              Vergi No: {process.env.COMPANY_TAX_ID || SELLER.taxNo} |
+              Vergi Dairesi: {process.env.COMPANY_TAX_OFFICE || SELLER.taxOffice}
             </Text>
             <Text>
-              Tel: {process.env.COMPANY_PHONE || '+90 5XX XXX XX XX'} |
-              E-posta: {process.env.COMPANY_EMAIL || 'support@example.com'}
+              Tel: {process.env.COMPANY_PHONE || SELLER.phone} |
+              E-posta: {process.env.COMPANY_EMAIL || SELLER.invoiceEmail}
             </Text>
           </View>
         </View>
@@ -162,7 +175,7 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({
           <View style={styles.orderDetails}>
             <Text>Sipariş No: {orderId}</Text>
             <Text>Tarih: {new Date().toLocaleDateString('tr-TR')}</Text>
-            <Text>Durum: {orderData.status || 'Yeni'}</Text>
+            <Text>Durum: {STATUS_TR[String(orderData.status || '').toUpperCase()] ?? (orderData.status || 'Yeni')}</Text>
           </View>
           <View style={styles.customerInfo}>
             <Text style={{ fontWeight: 'bold' }}>Müşteri Bilgileri:</Text>
@@ -222,6 +235,17 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({
               })}
             </Text>
           </View>
+          {Number(pricing.discount) > 0 && (
+            <View style={styles.totalRow}>
+              <Text>İndirim:</Text>
+              <Text>
+                -{(Number(pricing.discount) || 0).toLocaleString('tr-TR', {
+                  style: 'currency',
+                  currency: 'TRY',
+                })}
+              </Text>
+            </View>
+          )}
           <View style={styles.totalRow}>
             <Text>KDV (%20):</Text>
             <Text>
@@ -258,7 +282,7 @@ export const InvoiceDocument: React.FC<InvoiceDocumentProps> = ({
             Bu fatura elektronik ortamda düzenlenmiştir ve imza gerektirmez.
           </Text>
           <Text>
-            Ödeme: Stripe ile işlenmiştir. Ödeme ID: {orderData.payment?.stripeSessionId || 'N/A'}
+            Ödeme yöntemi: {orderData.paymentMethod === 'bank_transfer' ? 'Havale / EFT' : orderData.paymentMethod ? 'Kredi / Banka Kartı' : '—'}
           </Text>
         </View>
       </Page>

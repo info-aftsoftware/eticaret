@@ -6,6 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { invalidateCampaignCache } from '@/lib/discounts'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
@@ -83,6 +84,7 @@ export async function PATCH(
       where: { id },
       data: data as Parameters<typeof prisma.discount.update>[0]['data'],
     })
+    invalidateCampaignCache()
 
     return NextResponse.json(discount)
   } catch (error) {
@@ -105,6 +107,7 @@ export async function DELETE(
     await prisma.discount.delete({
       where: { id },
     })
+    invalidateCampaignCache()
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Admin discount DELETE error:', error)

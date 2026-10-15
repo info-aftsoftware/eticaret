@@ -144,7 +144,7 @@ function buildFormEmail(props: {
 
 export async function POST(request: NextRequest) {
   try {
-    if (isRateLimited(request as unknown as Request, 'ges-quote-notify', 20, 60_000)) {
+    if (isRateLimited(request as unknown as Request, 'ges-quote-notify', 5, 10 * 60_000)) {
       return NextResponse.json(
         { success: false, error: 'Çok fazla istek. Lütfen bir dakika sonra tekrar deneyin.' },
         { status: 429 }

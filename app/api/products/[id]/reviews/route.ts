@@ -7,6 +7,8 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isRateLimited, getClientIp } from '@/lib/rate-limit'
+import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
 import { getAdminFirestore, getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 
 async function getUserFromToken(request: NextRequest): Promise<{ userId: string; name?: string; email?: string } | null> {
@@ -83,6 +85,18 @@ export async function POST(
   try {
     const body = await request.json()
     const { rating, title, comment, guestName, guestEmail } = body
+    if (!(await verifyTurnstile(body.turnstileToken, getClientIp(request)))) {
+      return NextResponse.json({ success: false, error: TURNSTILE_ERROR }, { status: 400 })
+    }
+    if (isRateLimited(request, 'product-review', 5, 10 * 60_000)) {
+      return NextResponse.json({ success: false, error: 'Çok fazla yorum gönderdiniz. Lütfen daha sonra tekrar deneyin.' }, { status: 429 })
+    }
+    if (typeof comment === 'string' && comment.trim().length > 3000) {
+      return NextResponse.json({ success: false, error: 'Yorum en fazla 3000 karakter olabilir.' }, { status: 400 })
+    }
+    if (typeof title === 'string' && title.trim().length > 200) {
+      return NextResponse.json({ success: false, error: 'Başlık en fazla 200 karakter olabilir.' }, { status: 400 })
+    }
 
     if (!comment?.trim()) {
       return NextResponse.json({ success: false, error: 'Yorum gereklidir' }, { status: 400 })

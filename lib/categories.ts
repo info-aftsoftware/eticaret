@@ -1,75 +1,103 @@
 /**
  * Ürün kategorileri – filtre, URL ve çeviri anahtarları için tek kaynak.
- * Sidebar'da az sayıda ana grup gösterilir; her grup birden fazla product.category değerini toplar.
+ * Yapı, ikas ürün Excel'indeki "Ana Kategori > Alt Kategori" hiyerarşisini birebir izler:
+ * grup = ana kategori (URL: /category/<id>), categoryValues = product.category değerleri (alt kategori).
  *
- * Kategori hiyerarşisi:
- * 1. Elektrikli Araç Şarj Ürünleri  → AC, DC, Mobil
- * 2. EV Şarj Kabloları              → Tip 2, Çantalı
- * 3. EV Şarj Aksesuarları           → Adaptörler, Fiş/Priz, Aksesuarlar
- * 4. Batarya ve Enerji Depolama      → Lityum, Kurşun, Batarya Modülleri
- * 5. İnverterler                     → Hibrit, Off-Grid, Mikro
- * 6. Güneş Enerjisi                  → Güneş Panelleri, Taşınabilir, Solar Sistemler
- * 7. Enerji Depolama Sistemleri      → ESS, Taşınabilir Güç
- * 8. Isı Pompası ve HVAC             → Isı Pompası ve HVAC
- * 9. Enerji Yönetimi                 → Enerji Yönetimi
+ * Yeni bir Excel kategorisi eklenirse: buraya grup/değer, messages/tr.json + en.json (header) içine
+ * çeviri anahtarları ve gerekirse app/category/[id]/category-meta.ts içine SEO metni eklenir.
  */
 
-/** Sidebar'da gösterilecek ana kategoriler (gruplar). URL'de category=<id> kullanılır. */
 export const CATEGORY_GROUPS = [
   {
-    id: 'elektrikli-arac-sarj-urunleri',
-    labelKey: 'groupEVMobility', // Elektrikli Araç Şarj Ürünleri
-    categoryValues: [
-      'AC Şarj İstasyonları',
-      'DC Hızlı Şarj İstasyonları',
-      'Mobil / Taşınabilir Şarj İstasyonları',
-      'Tip 2 – Tip 2 Şarj Kabloları',
-      'Çantalı Şarj Kabloları',
-      'Adaptörler',
-      'Fiş / Priz Dönüştürücüler',
-      'EV Şarj Aksesuarları',
-    ],
+    id: 'gunes-paneli',
+    labelKey: 'catGroupSolarPanel', // Güneş Paneli
+    navLabelKey: 'catGroupSolarPanel',
+    categoryValues: ['Panel'],
   },
   {
-    id: 'batarya-depolama',
-    labelKey: 'groupBatteryModules', // Batarya ve Enerji Depolama
-    categoryValues: [
-      'Lityum Aküler',
-      'Kurşun Asit Aküler',
-      'Batarya Modülleri',
-      'Enerji Depolama Sistemleri',
-      'Taşınabilir Güç İstasyonları',
-      'Enerji Yönetimi',
-    ],
+    id: 'inverter-ve-guc-elektronigi',
+    labelKey: 'catGroupInverterPower', // İnverter ve Güç Elektroniği
+    navLabelKey: 'catNavInverter',
+    categoryValues: ['İnverter'],
   },
   {
-    id: 'inverterler',
-    labelKey: 'groupInverters', // İnverterler
-    categoryValues: [
-      'Hibrit İnverterler',
-      'Off-Grid İnverterler',
-      'Mikro İnverter',
-    ],
+    id: 'enerji-depolama',
+    labelKey: 'catGroupEnergyStorage', // Enerji Depolama
+    navLabelKey: 'catGroupEnergyStorage',
+    categoryValues: ['Lityum Batarya'],
   },
   {
-    id: 'gunes-enerjisi',
-    labelKey: 'groupSolarEnergy', // Güneş Enerjisi
-    categoryValues: [
-      'Güneş Panelleri',
-      'Taşınabilir Paneller',
-      'Solar Sistemler',
-    ],
+    id: 'solar-sarj-kontrol',
+    labelKey: 'catGroupSolarChargeControl', // Solar Şarj Kontrol
+    navLabelKey: 'catNavChargeControl',
+    categoryValues: ['MPPT/PWM'],
   },
   {
-    id: 'isi-pompasi-hvac',
-    labelKey: 'groupHeatPumpsHVAC', // Isı Pompası ve HVAC
-    categoryValues: [
-      'Isı Pompası ve HVAC',
-    ],
+    id: 'pompa-ve-surucu',
+    labelKey: 'catGroupPumpDrive', // Pompa ve Sürücü
+    navLabelKey: 'catNavSolarPump',
+    categoryValues: ['Solar Pompa/Sürücü'],
+  },
+  {
+    id: 'akuler',
+    labelKey: 'catGroupBatteries', // Aküler
+    categoryValues: ['Kurşun/Jel Akü'],
+  },
+  {
+    id: 'ruzgar-enerjisi',
+    labelKey: 'catGroupWindEnergy', // Rüzgar Enerjisi
+    categoryValues: ['Türbin ve Aksesuar'],
+  },
+  {
+    id: 'sarj-cihazlari',
+    labelKey: 'catGroupChargers', // Şarj Cihazları
+    categoryValues: ['AC/DC Şarj'],
+  },
+  {
+    id: 'elektrikli-arac-sarj',
+    labelKey: 'catGroupEVCharging', // Elektrikli Araç Şarj
+    categoryValues: ['İstasyon ve Aksesuar'],
+  },
+  {
+    id: 'kablolar-ve-baglanti',
+    labelKey: 'catGroupCables', // Kablolar ve Bağlantı
+    categoryValues: ['Güç ve Veri Kabloları'],
+  },
+  {
+    id: 'aksesuar-ve-koruma',
+    labelKey: 'catGroupAccessories', // Aksesuar ve Koruma
+    categoryValues: ['Sistem Bileşenleri'],
+  },
+  {
+    id: 'diger',
+    labelKey: 'catGroupOther', // Diğer
+    categoryValues: ['Genel'],
   },
 ] as const
 
 export type CategoryGroupId = (typeof CATEGORY_GROUPS)[number]['id']
+
+/** Masaüstü üst menüde ayrı açılır menü olarak gösterilen grup sayısı; kalanlar "Diğer Kategoriler" altında toplanır. */
+export const HEADER_NAV_GROUP_COUNT = 5
+
+/** Eski kategori URL'leri → yeni grup (SEO için kalıcı yönlendirme) */
+export const LEGACY_CATEGORY_REDIRECTS: Record<string, CategoryGroupId | null> = {
+  'elektrikli-arac-sarj-urunleri': 'elektrikli-arac-sarj',
+  'ev-sarj': 'elektrikli-arac-sarj',
+  'ev-sarj-istasyonlari': 'elektrikli-arac-sarj',
+  'ev-sarj-kablolari': 'elektrikli-arac-sarj',
+  'ev-sarj-aksesuarlari': 'elektrikli-arac-sarj',
+  'batarya-depolama': 'enerji-depolama',
+  'enerji-depolama-sistemleri': 'enerji-depolama',
+  'enerji-yonetimi': 'aksesuar-ve-koruma',
+  inverterler: 'inverter-ve-guc-elektronigi',
+  'akilli-enerji': 'inverter-ve-guc-elektronigi',
+  'gunes-enerjisi': 'gunes-paneli',
+  'gunes-panelleri': 'gunes-paneli',
+  // Isı pompaları Excel'de "Pompa ve Sürücü > Solar Pompa/Sürücü" altında
+  'isi-pompasi-hvac': 'pompa-ve-surucu',
+  'isi-pompalari': 'pompa-ve-surucu',
+}
 
 /** Tüm kategori değerleri (static export / API yokken menü fallback için). */
 export const ALL_CATEGORY_VALUES = CATEGORY_GROUPS.flatMap((g) => [...g.categoryValues])
@@ -88,41 +116,33 @@ export function getCategoryValuesByGroupId(groupId: string): string[] {
   return group ? [...group.categoryValues] : []
 }
 
-/** Eski tekil kategori listesi – ürün detay sayfası breadcrumb/label için hâlâ kullanılabilir. */
+const CATEGORY_KEYS: Record<string, string> = {
+  Panel: 'catSolarPanel',
+  'İnverter': 'catInverter',
+  'Lityum Batarya': 'catLithiumBattery',
+  'MPPT/PWM': 'catMpptPwm',
+  'Solar Pompa/Sürücü': 'catSolarPumpDrive',
+  'Kurşun/Jel Akü': 'catLeadGelBattery',
+  'Türbin ve Aksesuar': 'catTurbineAccessories',
+  'AC/DC Şarj': 'catAcDcCharger',
+  'İstasyon ve Aksesuar': 'catEVStationAccessories',
+  'Güç ve Veri Kabloları': 'catPowerDataCables',
+  'Sistem Bileşenleri': 'catSystemComponents',
+  Genel: 'catGeneral',
+}
+
+function getCategoryKeyFromValue(value: string): string | undefined {
+  return CATEGORY_KEYS[value]
+}
+
+/** Tekil kategori listesi – ürün detay sayfası breadcrumb/label için. */
 export const PRODUCT_CATEGORIES = CATEGORY_GROUPS.flatMap((g) =>
   g.categoryValues.map((value) => ({ value, key: getCategoryKeyFromValue(value) }))
 )
 
-function getCategoryKeyFromValue(value: string): string {
-  switch (value) {
-    case 'AC Şarj İstasyonları': return 'categoryACStations'
-    case 'DC Hızlı Şarj İstasyonları': return 'categoryDCStations'
-    case 'Mobil / Taşınabilir Şarj İstasyonları': return 'categoryPortableStations'
-    case 'Tip 2 – Tip 2 Şarj Kabloları': return 'categoryTip2Cables'
-    case 'Çantalı Şarj Kabloları': return 'categoryBaggedCables'
-    case 'Adaptörler': return 'categoryAdapters'
-    case 'Fiş / Priz Dönüştürücüler': return 'categoryFişPriz'
-    case 'EV Şarj Aksesuarları': return 'categoryEVAccessories'
-    case 'Lityum Aküler': return 'categoryLiFePO4'
-    case 'Kurşun Asit Aküler': return 'categoryLeadAcid'
-    case 'Batarya Modülleri': return 'categoryBatteryModules'
-    case 'Hibrit İnverterler': return 'categoryHybridInverters'
-    case 'Off-Grid İnverterler': return 'categoryOffGridInverters'
-    case 'Mikro İnverter': return 'categoryMicroInverters'
-    case 'Güneş Panelleri': return 'categorySolarPanels'
-    case 'Taşınabilir Paneller': return 'categoryPortablePanels'
-    case 'Solar Sistemler': return 'categorySolarSystems'
-    case 'Enerji Depolama Sistemleri': return 'categoryESS'
-    case 'Taşınabilir Güç İstasyonları': return 'categoryMobilePowerStations'
-    case 'Isı Pompası ve HVAC': return 'categoryHeatPumps'
-    case 'Enerji Yönetimi': return 'categoryEnergyManagement'
-    default: return value
-  }
-}
-
 export type ProductCategoryValue = (typeof PRODUCT_CATEGORIES)[number]['value']
 
-/** Kategori value (product.category) ile çeviri key'ini döndürür. */
+/** Kategori value (product.category) ile çeviri key'ini döndürür; bilinmeyen kategoride undefined (ham değer gösterilir). */
 export function getCategoryKey(value: string): string | undefined {
-  return getCategoryKeyFromValue(value) || undefined
+  return getCategoryKeyFromValue(value)
 }

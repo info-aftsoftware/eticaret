@@ -1,85 +1,65 @@
 /**
  * PayTR Payment Adapter
- * Implements PaymentAdapter interface for PayTR payments
- * Note: This is a mock implementation for development
+ * Webhook (bildirim URL) doğrulaması PayTR dokümantasyonuna göre yapılır:
+ *   hash = base64(HMAC-SHA256(merchant_key, merchant_oid + merchant_salt + status + total_amount))
+ * Ödeme başlatma (iFrame token) henüz entegre edilmedi; checkout şu an Stripe kullanır.
  */
 
 import crypto from 'crypto'
 import { PaymentAdapter, PaymentInitInput, PaymentInitResult, PaymentWebhookResult } from './base'
 
+function getCredentials() {
+  const merchantId = process.env.PAYTR_MERCHANT_ID
+  const merchantKey = process.env.PAYTR_MERCHANT_KEY
+  const merchantSalt = process.env.PAYTR_MERCHANT_SALT
+  if (!merchantId || !merchantKey || !merchantSalt) {
+    // Fail-closed: gizli anahtarlar yoksa hiçbir bildirim kabul edilmez.
+    throw new Error('PAYTR_MERCHANT_ID / PAYTR_MERCHANT_KEY / PAYTR_MERCHANT_SALT tanımlı değil')
+  }
+  return { merchantId, merchantKey, merchantSalt }
+}
+
 export class PayTRAdapter implements PaymentAdapter {
-  private merchantId: string
-  private merchantKey: string
-  private merchantSalt: string
-
-  constructor() {
-    this.merchantId = process.env.PAYTR_MERCHANT_ID || 'mock_merchant_id'
-    this.merchantKey = process.env.PAYTR_MERCHANT_KEY || 'mock_merchant_key'
-    this.merchantSalt = process.env.PAYTR_MERCHANT_SALT || 'mock_merchant_salt'
-  }
-
-  private generateHash(data: string): string {
-    return crypto
-      .createHash('sha256')
-      .update(data + this.merchantSalt)
-      .digest('base64')
-  }
-
-  async initPayment(input: PaymentInitInput): Promise<PaymentInitResult> {
-    // Mock implementation - in production, this would call PayTR API
-    const merchantOid = `ORDER_${input.orderId}_${Date.now()}`
-    const hashStr = `${this.merchantId}${merchantOid}${input.customer.email}${Math.round(input.amount * 100)}${this.merchantSalt}`
-    const hash = this.generateHash(hashStr)
-
-    // In production, make actual API call to PayTR
-    // For now, return a mock redirect URL
-    const mockRedirectUrl = process.env.NODE_ENV === 'development'
-      ? `/api/payments/paytr/mock?merchantOid=${merchantOid}&hash=${hash}`
-      : `https://www.paytr.com/odeme?merchantOid=${merchantOid}&hash=${hash}`
-
-    return {
-      redirectUrl: mockRedirectUrl,
-      providerRef: merchantOid,
-      requiresRedirect: true,
-    }
+  async initPayment(_input: PaymentInitInput): Promise<PaymentInitResult> {
+    throw new Error('PayTR ödeme başlatma henüz entegre edilmedi')
   }
 
   async verifyWebhook(req: Request): Promise<PaymentWebhookResult> {
-    const body = await req.json()
-    const { merchant_oid, status, total_amount, hash } = body
+    const { merchantKey, merchantSalt } = getCredentials()
 
-    // Verify hash
-    const hashStr = `${merchant_oid}${this.merchantSalt}${status}${total_amount}`
-    const calculatedHash = this.generateHash(hashStr)
+    // PayTR bildirimi application/x-www-form-urlencoded gönderir
+    const form = new URLSearchParams(await req.text())
+    const merchantOid = form.get('merchant_oid') || ''
+    const status = form.get('status') || ''
+    const totalAmount = form.get('total_amount') || ''
+    const hash = form.get('hash') || ''
+    if (!merchantOid || !status || !totalAmount || !hash) {
+      throw new Error('Eksik PayTR bildirim alanları')
+    }
 
-    if (calculatedHash !== hash) {
+    const expected = crypto
+      .createHmac('sha256', merchantKey)
+      .update(merchantOid + merchantSalt + status + totalAmount)
+      .digest('base64')
+    const a = Buffer.from(expected)
+    const b = Buffer.from(hash)
+    if (a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
       throw new Error('Invalid PayTR webhook hash')
     }
 
-    // Extract order ID from merchant_oid (format: ORDER_{orderId}_{timestamp})
-    const orderId = merchant_oid.split('_')[1]
-
-    let paymentStatus: 'PAID' | 'FAILED' | 'PENDING' = 'PENDING'
-    if (status === 'success') {
-      paymentStatus = 'PAID'
-    } else if (status === 'failed') {
-      paymentStatus = 'FAILED'
-    }
-
     return {
-      orderId,
-      status: paymentStatus,
-      providerRef: merchant_oid,
-      amount: parseFloat(total_amount) / 100,
+      // Sipariş yalnızca kayıtlı paymentProviderRef (merchant_oid) ile eşleştirilir
+      orderId: '',
+      status: status === 'success' ? 'PAID' : 'FAILED',
+      providerRef: merchantOid,
+      amount: parseFloat(totalAmount) / 100,
       currency: 'TRY',
     }
   }
 
   async getPaymentStatus(providerRef: string): Promise<PaymentWebhookResult> {
-    // In production, call PayTR API to get payment status
-    // For now, return mock data
     return {
-      orderId: providerRef.split('_')[1] || '',
+      orderId: '',
       status: 'PENDING',
       providerRef,
       amount: 0,
@@ -87,4 +67,3 @@ export class PayTRAdapter implements PaymentAdapter {
     }
   }
 }
-

@@ -4,32 +4,61 @@
     {
       "name": "Next.js Dev",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev"],
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "dev"
+      ],
       "port": 3000
     },
     {
       "name": "Next.js Dev 3005",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "-p", "3005"],
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "dev",
+        "-p",
+        "3005"
+      ],
       "port": 3005
     },
     {
       "name": "Next.js Production Preview",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/next/dist/bin/next", "start"],
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start"
+      ],
       "port": 3000
     },
     {
       "name": "Prisma Studio",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/.bin/prisma", "studio"],
+      "runtimeArgs": [
+        "node_modules/.bin/prisma",
+        "studio"
+      ],
       "port": 5555
     },
     {
       "name": "Playwright Test UI",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["node_modules/.bin/playwright", "test", "--ui"],
+      "runtimeArgs": [
+        "node_modules/.bin/playwright",
+        "test",
+        "--ui"
+      ],
       "port": 9323
+    },
+    {
+      "name": "Next.js Production 3007",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        "3007"
+      ],
+      "port": 3007
     }
   ]
 }

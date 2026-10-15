@@ -6,7 +6,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BAS
 export const metadata: Metadata = {
   title: 'İletişim — Teknik Destek ve Ürün Teklifi',
   description:
-    'voltekno ile iletişime geçin. Güneş paneli, akü, inverter ve EV şarj ürünleri için fiyat teklifi, teknik destek ve kurulum danışmanlığı. Antalya merkezli, Türkiye geneli hizmet.',
+    'voltekno ile iletişime geçin. Güneş paneli, akü, inverter ve EV şarj ürünleri için fiyat teklifi, teknik destek ve kurulum danışmanlığı. Elazığ merkezli, Türkiye geneli hizmet.',
   keywords: [
     'voltekno iletişim',
     'güneş paneli teklif',
@@ -42,11 +42,13 @@ export default function ContactLayout({ children }: { children: React.ReactNode 
               '@type': 'LocalBusiness',
               name: 'voltekno',
               url: SITE_URL,
-              telephone: '+90-534-328-83-83',
+              telephone: '+90-551-829-16-13',
               email: 'info@voltekno.com',
               address: {
                 '@type': 'PostalAddress',
-                addressLocality: 'Antalya',
+                streetAddress: 'Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17',
+                addressLocality: 'Merkez',
+                addressRegion: 'Elazığ',
                 addressCountry: 'TR',
               },
               openingHoursSpecification: [

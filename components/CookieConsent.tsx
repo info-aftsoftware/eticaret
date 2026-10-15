@@ -6,7 +6,18 @@ import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Cookie } from 'lucide-react'
 
-const STORAGE_KEY = 'voltekno_cookie_consent'
+export const COOKIE_CONSENT_KEY = 'voltekno_cookie_consent'
+export const COOKIE_CONSENT_EVENT = 'voltekno:cookie-consent'
+const STORAGE_KEY = COOKIE_CONSENT_KEY
+
+/** Analitik gibi zorunlu olmayan çerezler yalnızca açık onayla ('accepted') kullanılabilir. */
+export function hasAnalyticsConsent(): boolean {
+  try {
+    return typeof window !== 'undefined' && localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted'
+  } catch {
+    return false
+  }
+}
 
 export function CookieConsent() {
   const t = useTranslations('cookie')
@@ -27,6 +38,7 @@ export function CookieConsent() {
     try {
       localStorage.setItem(STORAGE_KEY, 'accepted')
     } catch {}
+    window.dispatchEvent(new Event(COOKIE_CONSENT_EVENT))
     setVisible(false)
   }
 
@@ -54,11 +66,11 @@ export function CookieConsent() {
             <p className="text-sm font-medium text-ink mb-0.5">{t('title')}</p>
             <p className="text-sm text-ink-muted">
               {t('description')}{' '}
-              <Link href="/cookies" className="text-brand underline hover:no-underline font-medium">
+              <Link href="/pages/gizlilik-ve-cerez-politikasi" className="text-brand underline hover:no-underline font-medium">
                 {t('cookieLink')}
               </Link>
               {' · '}
-              <Link href="/privacy" className="text-brand underline hover:no-underline font-medium">
+              <Link href="/pages/kvkk" className="text-brand underline hover:no-underline font-medium">
                 {t('privacyLink')}
               </Link>
             </p>

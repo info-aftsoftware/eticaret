@@ -29,7 +29,12 @@ export async function GET(request: NextRequest) {
       const where = status ? { status: status as any } : {}
       result.prisma = await prisma.order.findMany({
         where,
-        include: { lines: true, user: { select: { id: true, email: true, name: true, customerNo: true } } },
+        include: {
+          lines: true,
+          user: { select: { id: true, email: true, name: true, customerNo: true } },
+          returnRequests: { where: { status: { in: ['REQUESTED', 'APPROVED', 'RECEIVED'] } }, select: { id: true, status: true } },
+          events: { where: { type: 'payment_notice' }, select: { id: true } },
+        },
         orderBy: { createdAt: 'desc' },
         take: limit,
       })

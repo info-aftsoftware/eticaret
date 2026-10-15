@@ -39,7 +39,7 @@ const values = [
 
 export default function HakkimizdaPage() {
   return (
-    <div className="min-h-screen bg-surface" id="main-content">
+    <div className="min-h-screen bg-surface">
 
       {/* Breadcrumb + Başlık */}
       <div className="bg-surface-elevated border-b border-palette">

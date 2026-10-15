@@ -1,0 +1,229 @@
+/**
+ * Admin sipariş detayı ve işlemleri (Prisma siparişleri).
+ * İşlemler lib/order-service üzerinden yapılır; böylece zaman çizelgesi, e-postalar ve stok tutarlı kalır.
+ */
+
+import { NextResponse } from 'next/server'
+import { reportError } from '@/lib/alerts'
+import type { OrderStatus } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
+import { getAllCarriers, getCarrier } from '@/lib/shipping/carriers'
+import {
+  allowedNextStatuses,
+  changeOrderStatus,
+  logOrderEvent,
+  markOrderPaid,
+  updateShipment,
+  OrderTransitionError,
+  ORDER_STATUS_LABELS_TR,
+} from '@/lib/order-service'
+import { updateReturnRequest, suggestedRefund, RETURN_TYPES, RETURN_STATUS_LABELS, type ReturnType } from '@/lib/return-service'
+
+const ORDER_STATUSES: OrderStatus[] = ['PENDING', 'CONFIRMED', 'PROCESSING', 'PAID', 'PICKING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'RETURNED']
+
+/** Eski admin arayüzünden gelen küçük harfli değerler → OrderStatus */
+function normalizeStatus(s: unknown): OrderStatus | undefined {
+  if (typeof s !== 'string' || !s) return undefined
+  const map: Record<string, OrderStatus> = { confirmed: 'PICKING', processing: 'PICKING', preparing: 'PICKING' }
+  const up = (map[s.toLowerCase()] ?? s.toUpperCase()) as OrderStatus
+  return ORDER_STATUSES.includes(up) ? up : undefined
+}
+
+function parseConsents(notes: string | null) {
+  try {
+    const n = notes ? JSON.parse(notes) : null
+    return n?.consents ?? null
+  } catch {
+    return null
+  }
+}
+
+export async function getAdminOrderDetail(id: string) {
+  const order = await prisma.order.findUnique({
+    where: { id },
+    include: {
+      lines: true,
+      events: { orderBy: { createdAt: 'asc' } },
+      returnRequests: { orderBy: { createdAt: 'asc' } },
+      user: { select: { id: true, email: true, name: true, customerNo: true } },
+    },
+  })
+  if (!order) return null
+  const carrier = order.shippingCarrier ? getCarrier(order.shippingCarrier) : undefined
+  return {
+    id: order.id,
+    source: 'prisma' as const,
+    orderId: order.orderNo,
+    userId: order.userId ?? undefined,
+    customerNo: order.user?.customerNo ?? null,
+    customer: {
+      name: order.shippingName,
+      email: order.shippingEmail ?? order.user?.email ?? '',
+      phone: order.shippingPhone,
+      addressLine: order.shippingAddress,
+      city: order.shippingCity,
+      district: order.shippingDistrict,
+      postalCode: order.shippingPostalCode,
+      country: order.shippingCountry,
+      billingType: order.billingType,
+      companyName: order.billingName,
+      billingName: order.billingName,
+      taxId: order.billingTaxId,
+      taxOffice: order.billingTaxOffice,
+      billingAddress: [order.billingAddress, order.billingDistrict, order.billingCity].filter(Boolean).join(', '),
+    },
+    items: order.lines.map((l) => ({
+      id: l.id,
+      name: l.productName,
+      productId: (l.variantMatrix as { productId?: string } | null)?.productId ?? null,
+      price: l.unitPrice,
+      unitPrice: l.unitPrice,
+      quantity: l.quantity,
+      lineTotal: l.lineTotal,
+    })),
+    pricing: {
+      subtotal: order.subtotal,
+      couponCode: order.couponCode,
+      couponDiscount: order.couponDiscount,
+      paymentDiscount: order.paymentDiscount,
+      discount: order.discount,
+      tax: order.vatTotal,
+      shipping: order.shippingCost,
+      total: order.total,
+    },
+    paymentMethod: order.paymentMethod,
+    paymentProviderRef: order.paymentProviderRef,
+    status: order.status,
+    statusLabel: ORDER_STATUS_LABELS_TR[order.status],
+    paymentStatus: order.paymentStatus,
+    allowedNextStatuses: allowedNextStatuses(order.status).map((s) => ({ value: s, label: ORDER_STATUS_LABELS_TR[s] })),
+    shippingCarrier: order.shippingCarrier,
+    shippingCarrierName: carrier?.name ?? null,
+    trackingNumber: order.trackingNumber ?? undefined,
+    trackingUrl: carrier && order.trackingNumber ? carrier.trackingUrl(order.trackingNumber) : null,
+    carriers: getAllCarriers().map((c) => ({ id: c.id, name: c.name })),
+    customerNote: order.customerNote,
+    adminNote: order.adminNote,
+    consents: parseConsents(order.notes),
+    createdAt: order.createdAt.toISOString(),
+    paidAt: order.paidAt?.toISOString() ?? null,
+    shippedAt: order.shippedAt?.toISOString() ?? null,
+    deliveredAt: order.deliveredAt?.toISOString() ?? null,
+    cancelledAt: order.cancelledAt?.toISOString() ?? null,
+    returnRequests: order.returnRequests.map((r) => {
+      const items = Array.isArray(r.items) ? (r.items as { lineId: string; name: string; quantity: number }[]) : []
+      return {
+        id: r.id,
+        requestNo: r.requestNo,
+        type: r.type,
+        typeLabel: RETURN_TYPES[r.type as ReturnType] ?? r.type,
+        status: r.status,
+        statusLabel: RETURN_STATUS_LABELS[r.status] ?? r.status,
+        items,
+        reason: r.reason,
+        customerNote: r.customerNote,
+        adminNote: r.adminNote,
+        rejectReason: r.rejectReason,
+        returnCarrier: r.returnCarrier,
+        returnCarrierName: r.returnCarrier ? getCarrier(r.returnCarrier)?.name ?? r.returnCarrier : null,
+        returnCode: r.returnCode,
+        refundAmount: r.refundAmount,
+        suggestedRefund: suggestedRefund(order, items),
+        createdAt: r.createdAt.toISOString(),
+        approvedAt: r.approvedAt?.toISOString() ?? null,
+        receivedAt: r.receivedAt?.toISOString() ?? null,
+        refundedAt: r.refundedAt?.toISOString() ?? null,
+      }
+    }),
+    events: order.events.map((e) => ({
+      id: e.id,
+      type: e.type,
+      status: e.status,
+      message: e.message,
+      actor: e.actor,
+      visibleToCustomer: e.visibleToCustomer,
+      createdAt: e.createdAt.toISOString(),
+    })),
+  }
+}
+
+/**
+ * Body (action tabanlı):
+ *  { action: 'mark_paid', note? }
+ *  { action: 'status', status, carrier?, trackingNumber?, reason?, notifyCustomer? }
+ *  { action: 'shipment', carrier, trackingNumber, notifyCustomer? }
+ *  { action: 'note', adminNote }
+ *  { action: 'return', returnId, op: 'approve' | 'reject' | 'receive' | 'refund', carrier?, code?, reason?, amount? }
+ * Geriye dönük: { status?, paymentStatus?: 'PAID', trackingNumber?, carrier? }
+ */
+export async function patchAdminOrder(id: string, body: Record<string, any>) {
+  const exists = await prisma.order.findUnique({ where: { id }, select: { id: true } })
+  if (!exists) return NextResponse.json({ error: 'Sipariş bulunamadı' }, { status: 404 })
+
+  try {
+    let action: string | undefined = body.action
+    if (!action) {
+      if (typeof body.paymentStatus === 'string' && body.paymentStatus.toUpperCase() === 'PAID') action = 'mark_paid'
+      else if (body.status) action = 'status'
+      else if (body.adminNote !== undefined) action = 'note'
+    }
+
+    switch (action) {
+      case 'mark_paid': {
+        const changed = await markOrderPaid(id, {
+          actor: 'admin',
+          note: typeof body.note === 'string' && body.note.trim() ? `Ödeme admin tarafından onaylandı: ${body.note.trim()}` : undefined,
+        })
+        if (!changed) return NextResponse.json({ error: 'Sipariş zaten ödendi olarak işaretli.' }, { status: 409 })
+        break
+      }
+      case 'status': {
+        const next = normalizeStatus(body.status)
+        if (!next) return NextResponse.json({ error: 'Geçersiz durum.' }, { status: 400 })
+        await changeOrderStatus(id, next, {
+          actor: 'admin',
+          carrier: typeof body.carrier === 'string' ? body.carrier : null,
+          trackingNumber: typeof body.trackingNumber === 'string' ? body.trackingNumber : null,
+          reason: typeof body.reason === 'string' ? body.reason.trim().slice(0, 500) : null,
+          notifyCustomer: body.notifyCustomer !== false,
+        })
+        break
+      }
+      case 'shipment': {
+        await updateShipment(id, String(body.carrier ?? ''), String(body.trackingNumber ?? ''), body.notifyCustomer === true)
+        break
+      }
+      case 'return': {
+        const op = body.op
+        if (!['approve', 'reject', 'receive', 'refund'].includes(op) || typeof body.returnId !== 'string') {
+          return NextResponse.json({ error: 'Geçersiz iade işlemi.' }, { status: 400 })
+        }
+        await updateReturnRequest(id, body.returnId, op, {
+          actor: 'admin',
+          carrier: typeof body.carrier === 'string' ? body.carrier : undefined,
+          code: typeof body.code === 'string' ? body.code : undefined,
+          reason: typeof body.reason === 'string' ? body.reason : undefined,
+          amount: body.amount !== undefined && body.amount !== '' ? Number(body.amount) : undefined,
+          adminNote: typeof body.adminNote === 'string' ? body.adminNote : undefined,
+        })
+        break
+      }
+      case 'note': {
+        const adminNote = typeof body.adminNote === 'string' ? body.adminNote.slice(0, 5000) : ''
+        await prisma.order.update({ where: { id }, data: { adminNote: adminNote || null } })
+        await logOrderEvent(id, { type: 'note', message: 'Admin notu güncellendi.', actor: 'admin', visibleToCustomer: false })
+        break
+      }
+      default:
+        return NextResponse.json({ error: 'Geçersiz işlem.' }, { status: 400 })
+    }
+
+    return NextResponse.json({ success: true, order: await getAdminOrderDetail(id) })
+  } catch (e) {
+    if (e instanceof OrderTransitionError) {
+      return NextResponse.json({ error: e.message }, { status: 409 })
+    }
+    await reportError('admin-siparis-islemi', e, { orderId: id, action: body.action })
+    return NextResponse.json({ error: 'Sipariş güncellenirken bir hata oluştu' }, { status: 500 })
+  }
+}

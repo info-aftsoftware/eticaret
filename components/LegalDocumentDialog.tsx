@@ -1,0 +1,44 @@
+'use client'
+
+import React from 'react'
+import Link from 'next/link'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { LegalDocumentView } from '@/components/LegalDocumentView'
+import { getLegalDocument, legalHref, type LegalSlug } from '@/lib/legal/documents'
+
+/** Yasal metni sayfadan ayrılmadan gösteren pencere (sepet, ödeme, kayıt formları). */
+export function LegalDocumentDialog({ slug, onClose }: { slug: LegalSlug | null; onClose: () => void }) {
+  const doc = slug ? getLegalDocument(slug) : null
+  return (
+    <Dialog open={!!doc} onOpenChange={(open) => { if (!open) onClose() }}>
+      <DialogContent className="max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0">
+        <DialogHeader className="p-5 border-b border-slate-200">
+          <DialogTitle className="text-lg">{doc?.title}</DialogTitle>
+        </DialogHeader>
+        <div className="p-5 overflow-y-auto flex-1">{doc && <LegalDocumentView doc={doc} compact />}</div>
+        <div className="p-4 border-t border-slate-200 flex flex-col sm:flex-row gap-2 justify-between">
+          {slug && (
+            <Link href={legalHref(slug)} target="_blank" className="text-sm text-brand hover:underline self-center">
+              Yeni sekmede aç
+            </Link>
+          )}
+          <Button onClick={onClose} className="sm:w-auto w-full">Kapat</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+/** Metin içinde yasal belge bağlantısı: tıklanınca pencere açar. */
+export function LegalLink({ slug, children, onOpen }: { slug: LegalSlug; children: React.ReactNode; onOpen: (slug: LegalSlug) => void }) {
+  return (
+    <button
+      type="button"
+      onClick={(e) => { e.preventDefault(); e.stopPropagation(); onOpen(slug) }}
+      className="font-medium text-ink underline underline-offset-2 hover:text-brand text-left"
+    >
+      {children}
+    </button>
+  )
+}

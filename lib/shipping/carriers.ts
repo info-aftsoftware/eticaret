@@ -1,6 +1,7 @@
 /**
  * Shipping Carriers Adapter Interface
- * Mock implementations for Turkish carriers (Yurtiçi, Aras, UPS, PTT)
+ * Türkiye kargo firmaları: takip linkleri (Yurtiçi, MNG, Sürat, Aras, UPS, PTT).
+ * Admin panelinde kargo firması seçimi ve müşteri e-postasındaki takip linki buradan gelir.
  */
 
 export interface Carrier {
@@ -16,6 +17,16 @@ export const carriers: Record<string, Carrier> = {
     id: 'yurtici',
     name: 'Yurtiçi Kargo',
     trackingUrl: (trackingNumber) => `https://www.yurticikargo.com/tr/online-servisler/gonderi-sorgula?code=${trackingNumber}`,
+  },
+  mng: {
+    id: 'mng',
+    name: 'MNG Kargo',
+    trackingUrl: (trackingNumber) => `https://www.mngkargo.com.tr/gonderi-takip/?takipNo=${encodeURIComponent(trackingNumber)}`,
+  },
+  surat: {
+    id: 'surat',
+    name: 'Sürat Kargo',
+    trackingUrl: (trackingNumber) => `https://www.suratkargo.com.tr/KargoTakip/?kargotakipno=${encodeURIComponent(trackingNumber)}`,
   },
   aras: {
     id: 'aras',

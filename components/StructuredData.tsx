@@ -11,7 +11,7 @@ export function StructuredData() {
         "logo": "https://voltekno.com/logo.png",
         "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "+90-534-328-83-83",
+            "telephone": "+90-551-829-16-13",
             "contactType": "customer service",
             "areaServed": "TR",
             "availableLanguage": "Turkish"

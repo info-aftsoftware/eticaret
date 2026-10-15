@@ -1,13 +1,12 @@
 export const dynamic = 'force-dynamic'
 
 /**
- * Product Detail API by ID or Slug
- * Önce site kataloğu (mock + ProductOverride) aranır; yoksa Prisma Product döner.
+ * Product Detail API by ID
+ * Site kataloğu (lib/catalog + ProductOverride + kampanya) — HTML açıklama ve güncel kurla TL fiyat dahil.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { getMergedProductById } from '@/lib/catalog-merge'
+import { getStorefrontProductById } from '@/lib/discounts'
 
 export function generateStaticParams() {
   return []
@@ -20,102 +19,14 @@ export async function GET(
   try {
     const { id } = await params
 
-    const merged = await getMergedProductById(id)
+    const merged = await getStorefrontProductById(id)
     if (merged) {
       return NextResponse.json(merged)
     }
 
-    // Fallback: Prisma Product (id veya slug)
-    let product = await prisma.product.findUnique({
-      where: { id },
-      include: {
-        category: true,
-        variants: {
-          where: { isActive: true },
-          include: {
-            stock: true,
-          },
-        },
-        priceRules: {
-          where: { active: true },
-        },
-        compatibleProducts: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
-        similarProducts: {
-          select: {
-            id: true,
-            name: true,
-            slug: true,
-          },
-        },
-        reviews: {
-          where: { status: 'approved' },
-          take: 10,
-          orderBy: { createdAt: 'desc' },
-        },
-        questions: {
-          where: { status: { in: ['pending', 'answered'] } },
-          take: 10,
-          orderBy: { createdAt: 'desc' },
-        },
-      },
-    })
-
-    if (!product) {
-      product = await prisma.product.findUnique({
-        where: { slug: id },
-        include: {
-          category: true,
-          variants: {
-            where: { isActive: true },
-            include: {
-              stock: true,
-            },
-          },
-          priceRules: {
-            where: { active: true },
-          },
-          compatibleProducts: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
-            },
-          },
-          similarProducts: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
-            },
-          },
-          reviews: {
-            where: { status: 'approved' },
-            take: 10,
-            orderBy: { createdAt: 'desc' },
-          },
-          questions: {
-            where: { status: { in: ['pending', 'answered'] } },
-            take: 10,
-            orderBy: { createdAt: 'desc' },
-          },
-        },
-      })
-    }
-
-    if (!product || !product.active) {
-      return NextResponse.json({ error: 'Product not found' }, { status: 404 })
-    }
-
-    return NextResponse.json(product)
+    return NextResponse.json({ error: 'Product not found' }, { status: 404 })
   } catch (error) {
     console.error('Product GET error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
-

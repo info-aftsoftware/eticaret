@@ -1,3 +1,0 @@
-# TommaTech ürün görselleri bu klasöre konur.
-# Dosya adı: products-mock.ts içindeki ürün id ile aynı olmalı (örn. tommatech-micro-s-800w.jpg)
-# Referans URL'ler: lib/tommatech-image-mapping.ts (TOMMATECH_PRODUCT_PAGE_MAP)

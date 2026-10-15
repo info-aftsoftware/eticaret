@@ -468,6 +468,7 @@ function ProductsPageContent() {
     <ProductPageShell
       breadcrumbs={
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 flex-wrap py-1">
+          <h1 className="sr-only">{tProducts('allProducts')}</h1>
           <div className="flex items-center gap-2 text-sm text-slate-500 min-w-0">
             <Link href="/" className="hover:text-slate-900 transition-colors shrink-0">{tCommon('home')}</Link>
             <ChevronRight className="w-3.5 h-3.5 shrink-0 text-slate-300" />

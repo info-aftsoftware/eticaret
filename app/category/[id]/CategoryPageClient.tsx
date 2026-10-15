@@ -35,26 +35,35 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
 
+  // Güncel katalog (admin fiyat/stok düzenlemeleri + aktif kampanyalar); ilk çizim için koddaki liste
+  const [catalog, setCatalog] = useState<(typeof mockProducts)[number][]>(mockProducts)
+  React.useEffect(() => {
+    fetch('/api/products')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => { if (Array.isArray(data) && data.length > 0) setCatalog(data) })
+      .catch(() => {})
+  }, [])
+
   const meta = CATEGORY_META[groupId]
   const categoryValues = useMemo(() => getCategoryValuesByGroupId(groupId), [groupId])
 
   const subcategories = useMemo(
-    () => categoryValues.filter((v) => mockProducts.some((p) => p.category === v)),
-    [categoryValues]
+    () => categoryValues.filter((v) => catalog.some((p) => p.category === v)),
+    [categoryValues, catalog]
   )
 
   const brands = useMemo(() => {
     const set = new Set(
-      mockProducts
+      catalog
         .filter((p) => categoryValues.includes(p.category) && p.brand)
         .map((p) => p.brand as string)
     )
     return Array.from(set).sort((a, b) => a.localeCompare(b, 'tr'))
-  }, [categoryValues])
+  }, [categoryValues, catalog])
 
   const productsInRange = useMemo(() => {
-    return mockProducts.filter((p) => categoryValues.includes(p.category))
-  }, [categoryValues])
+    return catalog.filter((p) => categoryValues.includes(p.category))
+  }, [categoryValues, catalog])
 
   const dynamicMinPrice = useMemo(() => {
     if (productsInRange.length === 0) return 0
@@ -95,7 +104,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   }, [productsInRange])
 
   const filteredProducts = useMemo(() => {
-    let list = mockProducts.filter((p) => {
+    let list = catalog.filter((p) => {
       const catOk = selectedSub ? p.category === selectedSub : categoryValues.includes(p.category)
       const brandOk = !selectedBrand || p.brand === selectedBrand
       const priceOk = p.price >= priceRange[0] && p.price <= priceRange[1]
@@ -114,7 +123,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
     else if (sortBy === 'name-asc') list = [...list].sort((a, b) => a.name.localeCompare(b.name, 'tr'))
 
     return list
-  }, [categoryValues, selectedBrand, selectedSub, sortBy, priceRange, searchQuery, selectedSpecs])
+  }, [catalog, categoryValues, selectedBrand, selectedSub, sortBy, priceRange, searchQuery, selectedSpecs])
 
   const updateSpecFilter = (key: string, value: string, checked: boolean) => {
     setSelectedSpecs((prev) => {
@@ -159,17 +168,21 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
           {/* Arka plan: görselin arkası siyah */}
           <div className="absolute inset-0 bg-black" />
           {/* Görsel yukarı ve aşağıdan görünebildiği kadar: object-contain, dikeyde tam görünür */}
-          <div className="absolute inset-0 flex items-center justify-center p-0">
-            <Image
-              src={meta.image}
-              alt={meta.title}
-              fill
-              className="object-contain"
-              style={{ objectPosition: meta.imagePosition ?? 'center center' }}
-              priority
-              sizes="100vw"
-            />
-          </div>
+          {meta.image ? (
+            <div className="absolute inset-0 flex items-center justify-center p-0">
+              <Image
+                src={meta.image}
+                alt={meta.title}
+                fill
+                className="object-contain"
+                style={{ objectPosition: meta.imagePosition ?? 'center center' }}
+                priority
+                sizes="100vw"
+              />
+            </div>
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-brand/40" />
+          )}
           <div className="relative z-10 h-full flex flex-col justify-end max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-8 sm:pb-10 md:pb-12 text-white">
             <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold mb-2 tracking-tight leading-tight">
               {meta.title}
@@ -600,6 +613,8 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                     badges={product.tags}
                     stock={product.stock}
                     isVariantProduct={product.isVariantProduct}
+                    oldPrice={product.oldPrice}
+                    discount={product.discount}
                   />
                 ))}
               </div>

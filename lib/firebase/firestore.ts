@@ -67,7 +67,15 @@ export async function getUserProfile(uid: string): Promise<FirebaseUserProfile |
 
 export async function setUserProfile(
   uid: string,
-  data: { name?: string; phone?: string; email?: string; role?: 'customer' | 'admin'; customerNo?: string }
+  data: {
+    name?: string
+    phone?: string
+    email?: string
+    role?: 'customer' | 'admin'
+    customerNo?: string
+    /** Üyelik onayları: kullanım koşulları, KVKK bilgilendirmesi, ticari elektronik ileti izni (zaman damgalı) */
+    consents?: Record<string, unknown>
+  }
 ): Promise<void> {
   try {
     const db = getDb()
@@ -80,6 +88,7 @@ export async function setUserProfile(
         ...(data.email != null && { email: data.email }),
         ...(data.role != null && { role: data.role }),
         ...(data.customerNo != null && { customerNo: data.customerNo }),
+        ...(data.consents != null && { consents: data.consents }),
       } as DocumentData)
     } else {
       await setDoc(ref, {
@@ -88,6 +97,7 @@ export async function setUserProfile(
         phone: data.phone ?? '',
         role: data.role ?? 'customer',
         ...(data.customerNo != null && { customerNo: data.customerNo }),
+        ...(data.consents != null && { consents: data.consents }),
         createdAt: serverTimestamp(),
       })
     }

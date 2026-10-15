@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { Turnstile } from '@/components/Turnstile'
+import { whatsappHref, WhatsAppIcon } from '@/components/WhatsAppButton'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -63,6 +65,9 @@ export default function ContactPage() {
     }
   }, [])
 
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileReset, setTurnstileReset] = useState(0)
+
   const validate = (): boolean => {
     const next: Record<string, string> = {}
     if (!formData.name?.trim()) next.name = 'Ad Soyad zorunludur.'
@@ -83,23 +88,24 @@ export default function ContactPage() {
     }
     setIsSubmitting(true)
     try {
-      // Static hosting: Firestore'a kaydet (API yok)
-      const { collection, addDoc, serverTimestamp } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-      await addDoc(collection(db, 'contactMessages'), {
-        ...formData,
-        createdAt: serverTimestamp(),
-        status: 'new',
+      // Sunucu: doğrulama + bot koruması + admin'e e-posta + panel kaydı (contactMessages)
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, turnstileToken }),
       })
+      const data = await res.json().catch(() => null)
+      if (!res.ok || !data?.success) throw new Error(data?.error || 'Mesaj gönderilemedi.')
       setIsSubmitting(false)
+      setTurnstileReset((n) => n + 1)
       setIsSubmitted(true)
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
       setTimeout(() => setIsSubmitted(false), 5000)
     } catch (error) {
       console.error('Contact form error:', error)
       setIsSubmitting(false)
-      setErrors({ general: 'Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.' })
+      setErrors({ general: error instanceof Error && error.message ? error.message : 'Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.' })
+      setTurnstileReset((n) => n + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
@@ -205,6 +211,7 @@ export default function ContactPage() {
                     />
                     {errors.message && <p className="text-sm text-destructive">{errors.message}</p>}
                   </div>
+                  <Turnstile onToken={setTurnstileToken} resetKey={turnstileReset} />
                   <Button
                     type="submit"
                     size="lg"
@@ -268,10 +275,18 @@ export default function ContactPage() {
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Telefon</h3>
               <a
-                href="tel:+905343288383"
+                href="tel:+905518291613"
                 className="text-slate-800 hover:text-slate-600 text-sm font-medium block py-2 touch-manipulation min-h-[44px] flex items-center"
               >
-                0534 328 83 83
+                0551 829 16 13
+              </a>
+              <a
+                href={whatsappHref('Merhaba, voltekno.com üzerinden yazıyorum.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-[#128C7E] hover:underline py-2 min-h-[44px]"
+              >
+                <WhatsAppIcon className="w-4 h-4" /> WhatsApp ile yazın
               </a>
             </CardContent>
           </Card>
@@ -281,7 +296,7 @@ export default function ContactPage() {
                 <MapPin className="w-5 h-5 text-slate-600" />
               </div>
               <h3 className="font-semibold text-slate-900 mb-1">Adres</h3>
-              <p className="text-slate-600 text-sm">Antalya, Türkiye</p>
+              <p className="text-slate-600 text-sm">Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ</p>
             </CardContent>
           </Card>
           <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">

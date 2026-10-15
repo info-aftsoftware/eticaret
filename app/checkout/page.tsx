@@ -5,7 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/lib/store/useCartStore'
-import { useAuthStore } from '@/lib/store/useAuthStore'
+import { trackBeginCheckout, trackAddPaymentInfo, cartItemToGa } from '@/lib/analytics'
+import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -18,6 +19,10 @@ import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { getAddresses } from '@/lib/firebase/firestore'
+import { computeOrderTotals, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
+import { CartQuoteNotice } from '@/components/CartQuoteNotice'
+import type { LegalSlug } from '@/lib/legal/documents'
 
 function onlyDigits(value: string) {
   return value.replace(/\D/g, '')
@@ -37,7 +42,7 @@ function formatPhoneNumber(value: string) {
 function readPersistedCartItems() {
   if (typeof window === 'undefined') return []
   try {
-    const raw = window.localStorage.getItem('cart-storage')
+    const raw = window.localStorage.getItem('cart-storage') || window.sessionStorage.getItem('cart-storage')
     if (!raw) return []
     const parsed = JSON.parse(raw)
     return Array.isArray(parsed?.state?.items) ? parsed.state.items : []
@@ -54,6 +59,7 @@ export default function CheckoutPage() {
   const cartItems = useCartStore((state) => state.items)
   const cartTotal = useCartStore((state) => state.getTotalPrice())
   const clearCart = useCartStore((state) => state.clearCart)
+  const couponCode = useCartStore((state) => state.couponCode)
   const cartHydrated = useCartStore((state) => state._hasHydrated)
   const { user, isAuthenticated, token } = useAuthStore()
   
@@ -88,11 +94,32 @@ export default function CheckoutPage() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
   const [checkoutErrors, setCheckoutErrors] = useState<Record<string, string>>({})
   const [paymentMethod, setPaymentMethod] = useState<'havale' | 'card'>('havale')
-  const [isTestOrderLoading, setIsTestOrderLoading] = useState(false)
+  const [acceptedTerms, setAcceptedTerms] = useState(false)
+  const [legalDoc, setLegalDoc] = useState<LegalSlug | null>(null)
+  const [couponDiscount, setCouponDiscount] = useState(0)
+  // Fiyatlar sunucuda katalogdan hesaplanır; istemci yalnızca kalem id + adet gönderir
   const orderItems = useMemo(
-    () => cartItems.map((i) => ({ id: i.id, name: i.name, price: i.price, quantity: i.quantity })),
+    () => cartItems.map((i) => ({ id: i.id, quantity: i.quantity })),
     [cartItems]
   )
+
+  // Sepette uygulanan kuponun indirimini sunucudan al (sipariş sırasında tekrar doğrulanır)
+  React.useEffect(() => {
+    if (!couponCode || orderItems.length === 0) {
+      setCouponDiscount(0)
+      return
+    }
+    let cancelled = false
+    fetch('/api/coupons/preview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: couponCode, items: orderItems }),
+    })
+      .then((r) => r.json())
+      .then((d) => { if (!cancelled) setCouponDiscount(d?.success ? Number(d.discount) || 0 : 0) })
+      .catch(() => { if (!cancelled) setCouponDiscount(0) })
+    return () => { cancelled = true }
+  }, [couponCode, orderItems])
 
   // Load saved addresses from Firestore when user is authenticated
   React.useEffect(() => {
@@ -136,16 +163,26 @@ export default function CheckoutPage() {
     return () => window.clearTimeout(timer)
   }, [cartHydrated])
 
-  const subtotal = cartTotal
-  
-  const tax = subtotal * 0.20
-  const shipping = subtotal > 3000 ? 0 : 50
-  const total = subtotal + tax + shipping
+  // Sunucuyla aynı hesaplayıcı (lib/store-config): indirimler KDV matrahından düşülür
+  const totals = computeOrderTotals({
+    subtotal: cartTotal,
+    couponDiscount,
+    paymentMethod: paymentMethod === 'havale' ? 'bank_transfer' : 'card',
+  })
+  const { subtotal, tax, shipping, total, paymentDiscount } = totals
 
   React.useEffect(() => {
     if (!cartHydrated) return
     if (!isFromCart) router.push('/cart')
   }, [cartHydrated, isFromCart, router])
+
+  // GA4: ödeme adımına başlama (sayfa başına bir kez)
+  const beginCheckoutSent = React.useRef(false)
+  React.useEffect(() => {
+    if (!cartHydrated || !isFromCart || beginCheckoutSent.current) return
+    beginCheckoutSent.current = true
+    void trackBeginCheckout(cartItems.map(cartItemToGa), couponCode)
+  }, [cartHydrated, isFromCart, cartItems, couponCode])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -158,15 +195,14 @@ export default function CheckoutPage() {
     if (checkoutErrors[name]) setCheckoutErrors(prev => ({ ...prev, [name]: '' }))
   }
 
-  const createOrderWithApi = async (options: {
-    paymentMethod: 'bank_transfer' | 'pending'
-    paymentProvider?: 'stripe'
-  }) => {
+  const createOrderWithApi = async (options: { paymentMethod: 'bank_transfer' | 'card' }) => {
+    // Üye siparişi hesaba bağlansın diye güncel (yenilenmiş) Firebase token gönderilir
+    const authToken = isAuthenticated ? await getAuthToken() : null
     const response = await fetch('/api/orders', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
       },
       body: JSON.stringify({
         customer: {
@@ -179,7 +215,7 @@ export default function CheckoutPage() {
           postalCode: formData.postalCode,
           country: formData.country || 'Türkiye',
           billingType: formData.billingType,
-          address: formData.addressLine,
+          idNumber: formData.idNumber,
           billingName: formData.billingType === 'company' ? formData.companyName : formData.name,
           taxId: formData.taxId,
           taxOffice: formData.taxOffice,
@@ -188,10 +224,10 @@ export default function CheckoutPage() {
           billingDistrict: formData.useDifferentBillingAddress ? formData.billingDistrict : formData.district,
         },
         items: orderItems,
-        pricing: { subtotal, tax, shipping, total },
+        couponCode: couponCode || undefined,
+        notes: formData.notes || undefined,
+        acceptedTerms,
         paymentMethod: options.paymentMethod,
-        userId: user?.id || null,
-        ...(options.paymentProvider ? { paymentProvider: options.paymentProvider } : {}),
       }),
     })
 
@@ -203,12 +239,34 @@ export default function CheckoutPage() {
     return data as {
       success: true
       orderId: string
-      payment?: { redirectUrl?: string; clientSecret?: string; requiresRedirect: boolean }
+      pricing?: { total: number; tax?: number; shipping?: number }
+      payment?: { bank: string; form: { action: string; fields: Record<string, string> } }
     }
   }
 
+  /** Bankanın 3D Secure sayfasına imzalı formla geçiş (kart bilgisi sitemizden geçmez) */
+  const submitToBank = (form: { action: string; fields: Record<string, string> }) => {
+    const el = document.createElement('form')
+    el.method = 'POST'
+    el.action = form.action
+    el.acceptCharset = 'UTF-8'
+    for (const [name, value] of Object.entries(form.fields)) {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = name
+      input.value = value
+      el.appendChild(input)
+    }
+    document.body.appendChild(el)
+    el.submit()
+  }
+
+  /** Sipariş oluştu ve sayfadan ayrılınıyor (banka / başarı sayfası): ikinci tıklama yeni sipariş açmasın */
+  const leavingRef = React.useRef(false)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (leavingRef.current || isSubmitting) return
     
     const scrollToTop = () => {
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -222,9 +280,10 @@ export default function CheckoutPage() {
     if (!formData.addressLine?.trim()) err.addressLine = 'Adres zorunludur.'
     if (!formData.city?.trim()) err.city = 'Şehir zorunludur.'
     if (!formData.district?.trim()) err.district = 'İlçe zorunludur.'
+    if (!acceptedTerms) err.terms = "Siparişi tamamlamak için Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi'ni onaylamalısınız."
     if (Object.keys(err).length > 0) {
       setCheckoutErrors(err)
-      scrollToTop()
+      if (!err.terms || Object.keys(err).length > 1) scrollToTop()
       return
     }
     setCheckoutErrors({})
@@ -242,24 +301,34 @@ export default function CheckoutPage() {
       }
     }
 
+    const gaItems = cartItems.map(cartItemToGa)
+    void trackAddPaymentInfo(gaItems, paymentMethod === 'card' ? 'card' : 'bank_transfer')
     try {
       setIsSubmitting(true)
       if (paymentMethod === 'card') {
-        const data = await createOrderWithApi({
-          paymentMethod: 'pending',
-          paymentProvider: 'stripe',
-        })
-        if (!data.payment?.redirectUrl) {
-          setCheckoutErrors(prev => ({ ...prev, payment: 'Stripe bağlantısı kurulamadı. Lütfen tekrar deneyin.' }))
+        const data = await createOrderWithApi({ paymentMethod: 'card' })
+        if (!data.payment?.form) {
+          setCheckoutErrors(prev => ({ ...prev, payment: 'Banka ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.' }))
           scrollToTop()
           return
         }
-        if (isFromCart) clearCart()
-        window.location.href = data.payment.redirectUrl
+        // GA4 satın alma olayı ödeme onaylanınca başarı sayfasında gönderilir
+        try {
+          sessionStorage.setItem('last-order', JSON.stringify({ orderNo: data.orderId, total: data.pricing?.total ?? total, tax: data.pricing?.tax ?? tax, shipping: data.pricing?.shipping ?? shipping, coupon: couponCode, gaItems }))
+        } catch {}
+        // Sepet burada temizlenmez: ödeme iptal edilirse müşteri sepetine geri döner.
+        // Ödeme onaylanınca /checkout/success sayfası sepeti temizler.
+        leavingRef.current = true
+        submitToBank(data.payment.form)
         return
       }
 
       const data = await createOrderWithApi({ paymentMethod: 'bank_transfer' })
+      // Başarı sayfası havale tutarını göstersin (misafir siparişi API'den okunamaz)
+      try {
+        sessionStorage.setItem('last-order', JSON.stringify({ orderNo: data.orderId, total: data.pricing?.total ?? total, tax: data.pricing?.tax ?? tax, shipping: data.pricing?.shipping ?? shipping, coupon: couponCode, email: formData.email, gaItems }))
+      } catch {}
+      leavingRef.current = true
       if (isFromCart) clearCart()
       if (formData.createAccount) {
         const params = new URLSearchParams({
@@ -275,71 +344,18 @@ export default function CheckoutPage() {
       }
     } catch (error) {
       console.error('Order creation error:', error)
-      setCheckoutErrors(prev => ({ ...prev, general: 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.' }))
+      const message = error instanceof Error && error.message ? error.message : 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.'
+      setCheckoutErrors(prev => ({ ...prev, general: message }))
       scrollToTop()
     } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  /** Deneme siparişi: normal sipariş akışıyla aynı, paymentMethod='bank_transfer', success URL'de payment=test */
-  const handleTestOrder = async () => {
-    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' })
-    const err: Record<string, string> = {}
-    if (!formData.name?.trim()) err.name = 'Ad Soyad zorunludur.'
-    if (!formData.email?.trim()) err.email = 'E-posta zorunludur.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) err.email = 'Geçerli bir e-posta adresi girin.'
-    if (!formData.phone?.trim()) err.phone = 'Telefon zorunludur.'
-    if (!formData.addressLine?.trim()) err.addressLine = 'Adres zorunludur.'
-    if (!formData.city?.trim()) err.city = 'Şehir zorunludur.'
-    if (!formData.district?.trim()) err.district = 'İlçe zorunludur.'
-    if (Object.keys(err).length > 0) {
-      setCheckoutErrors(err)
-      scrollToTop()
-      return
-    }
-    if (formData.createAccount) {
-      if (!formData.password || formData.password.length < 6) {
-        setCheckoutErrors(prev => ({ ...prev, password: 'Şifre en az 6 karakter olmalıdır' }))
-        scrollToTop()
-        return
-      }
-      if (formData.password !== formData.confirmPassword) {
-        setCheckoutErrors(prev => ({ ...prev, confirmPassword: 'Şifreler eşleşmiyor' }))
-        scrollToTop()
-        return
-      }
-    }
-    setCheckoutErrors({})
-    setIsTestOrderLoading(true)
-    try {
-      const data = await createOrderWithApi({ paymentMethod: 'bank_transfer' })
-      if (isFromCart) clearCart()
-      const successUrl = `/checkout/success?order_id=${data.orderId}&payment=test`
-      if (!user?.id && formData.createAccount) {
-        const params = new URLSearchParams({
-          email: formData.email || '',
-          name: formData.name || '',
-          from_order: '1',
-          redirect: successUrl,
-        })
-        if (formData.phone) params.set('phone', formData.phone)
-        router.push(`/register?${params.toString()}`)
-      } else {
-        router.push(successUrl)
-      }
-    } catch (e) {
-      console.error('Test order error:', e)
-      setCheckoutErrors(prev => ({ ...prev, general: 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.' }))
-      scrollToTop()
-    } finally {
-      setIsTestOrderLoading(false)
+      // Yönlendirme sürerken düğme kilitli kalır
+      if (!leavingRef.current) setIsSubmitting(false)
     }
   }
 
   if (!cartHydrated) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center px-4" id="main-content">
+      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
         <Card className="rounded-2xl border border-palette shadow-lg p-8 max-w-md text-center">
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-light mb-4">
             <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
@@ -353,7 +369,7 @@ export default function CheckoutPage() {
 
   if (!isFromCart) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center px-4" id="main-content">
+      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
         <Card className="rounded-2xl border border-palette shadow-lg p-8 max-w-md text-center">
           <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-light mb-4">
             <AlertCircle className="w-8 h-8 text-brand" />
@@ -371,7 +387,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface pb-safe" id="main-content">
+    <div className="min-h-screen bg-surface pb-safe">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-8 py-5 sm:py-6 md:py-8">
         <Button variant="ghost" onClick={() => router.back()} className="mb-4 sm:mb-6 rounded-xl min-h-[44px] touch-manipulation -ml-2 pl-2">
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -709,13 +725,26 @@ export default function CheckoutPage() {
                   <CardTitle>Sipariş Özeti</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <CartQuoteNotice />
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-ink-muted">Ara Toplam</span>
                       <span className="font-medium">{formatPrice(subtotal)}</span>
                     </div>
+                    {couponDiscount > 0 && (
+                      <div className="flex justify-between text-sm text-green-600">
+                        <span>Kupon ({couponCode})</span>
+                        <span className="font-medium">-{formatPrice(couponDiscount)}</span>
+                      </div>
+                    )}
+                    {paymentDiscount > 0 && (
+                      <div className="flex justify-between text-sm text-green-600">
+                        <span>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</span>
+                        <span className="font-medium">-{formatPrice(paymentDiscount)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-sm">
-                      <span className="text-ink-muted">KDV (%20)</span>
+                      <span className="text-ink-muted">KDV (%{VAT_RATE})</span>
                       <span className="font-medium">{formatPrice(tax)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -743,15 +772,47 @@ export default function CheckoutPage() {
                       <label className={`flex items-center gap-3 p-3 min-h-[48px] rounded-xl border-2 cursor-pointer transition-colors touch-manipulation ${paymentMethod === 'havale' ? 'border-brand bg-brand-light' : 'border-palette hover:border-ink-muted/30'}`}>
                         <input type="radio" name="paymentMethod" checked={paymentMethod === 'havale'} onChange={() => setPaymentMethod('havale')} className="text-brand w-5 h-5" />
                         <span className="text-sm font-medium">Havale / EFT</span>
-                        <span className="ml-auto shrink-0 text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">%3 İndirim</span>
+                        <span className="ml-auto shrink-0 text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">%{BANK_TRANSFER_DISCOUNT_RATE} İndirim</span>
                       </label>
                       <label className={`flex items-center gap-3 p-3 min-h-[48px] rounded-xl border-2 cursor-pointer transition-colors touch-manipulation ${paymentMethod === 'card' ? 'border-brand bg-brand-light' : 'border-palette hover:border-ink-muted/30'}`}>
                         <input type="radio" name="paymentMethod" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="text-brand w-5 h-5" />
-                        <span className="text-sm font-medium">Kredi kartı ile öde</span>
+                        <span className="text-sm font-medium">Kredi / banka kartı ile öde</span>
+                        <span className="ml-auto shrink-0 text-[11px] font-semibold text-ink-muted border border-palette rounded-full px-2 py-0.5">3D Secure</span>
                       </label>
                     </div>
-                    {paymentMethod === 'card' && (
-                      <p className="text-xs text-ink-muted">Güvenli ödeme sayfasına (Stripe) yönlendirileceksiniz.</p>
+                    {paymentMethod === 'card' ? (
+                      <p className="text-xs text-ink-muted">
+                        Siparişi onayladığınızda bankanın 3D Secure güvenli ödeme sayfasına yönlendirilirsiniz; kart bilgileriniz yalnızca bankaya iletilir, sitemizde saklanmaz.
+                        Ödeme onaylanınca siparişiniz hazırlanmaya alınır.
+                      </p>
+                    ) : (
+                      <p className="text-xs text-ink-muted">
+                        Sipariş sonrası IBAN bilgileri ekranda ve e-postanızda yer alır. Siparişiniz ödemeniz hesabımıza geçtiğinde onaylanır.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="flex items-start gap-3 cursor-pointer touch-manipulation">
+                      <input
+                        type="checkbox"
+                        checked={acceptedTerms}
+                        onChange={(e) => {
+                          setAcceptedTerms(e.target.checked)
+                          if (checkoutErrors.terms) setCheckoutErrors(prev => ({ ...prev, terms: '' }))
+                        }}
+                        className="mt-0.5 w-5 h-5 min-w-[20px] rounded border-palette text-brand"
+                        aria-invalid={!!checkoutErrors.terms}
+                        aria-label="Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi onayı"
+                      />
+                      <span className="text-xs text-ink-muted leading-relaxed">
+                        <LegalLink slug="on-bilgilendirme-formu" onOpen={setLegalDoc}>Ön Bilgilendirme Formu</LegalLink>{"'nu ve "}
+                        <LegalLink slug="mesafeli-satis-sozlesmesi" onOpen={setLegalDoc}>Mesafeli Satış Sözleşmesi</LegalLink>
+                        {"'ni okudum, onaylıyorum. Sözleşme ve sipariş özeti e-posta adresime gönderilecektir."}
+                      </span>
+                    </label>
+                    {checkoutErrors.terms && (
+                      <p className="text-xs text-destructive">{checkoutErrors.terms}</p>
                     )}
                   </div>
 
@@ -762,18 +823,6 @@ export default function CheckoutPage() {
                       <><CreditCard className="w-5 h-5 mr-2" />Ödemeye Geç</>
                     )}
                   </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="lg"
-                    className="w-full rounded-full border-dashed min-h-[48px] touch-manipulation text-ink-muted hover:text-ink hover:border-brand"
-                    disabled={isTestOrderLoading}
-                    onClick={handleTestOrder}
-                  >
-                    {isTestOrderLoading ? 'Oluşturuluyor...' : 'Deneme için sipariş oluştur'}
-                  </Button>
-
 
                   <div className="text-xs text-ink-muted text-center space-y-1">
                     <div className="flex items-center justify-center gap-1">
@@ -787,6 +836,7 @@ export default function CheckoutPage() {
             </div>
           </div>
         </form>
+        <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />
       </div>
     </div>
   )

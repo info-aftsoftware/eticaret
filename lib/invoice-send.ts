@@ -1,17 +1,21 @@
 /**
- * Fatura PDF oluşturur, isteğe bağlı storage'a yükler ve müşteriye e-posta ile gönderir (PDF ekli).
+ * Fatura PDF oluşturur ve müşteriye e-posta eki olarak gönderir.
+ * Fatura kişisel veri içerdiği için herkese açık bir adrese YÜKLENMEZ; müşteri ayrıca sipariş sayfasından
+ * yetkili olarak indirebilir (GET /api/orders/by-no/[orderNo]/documents?type=invoice).
  */
 
 import { generateInvoicePDF } from './pdf'
-import { uploadInvoice } from './storage'
 import { sendEmail } from './email'
 import type { InvoiceData } from './invoice-data'
+
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 
 export async function generateAndSendInvoice(
   orderId: string,
   orderData: InvoiceData,
   customerEmail: string
-): Promise<{ sent: boolean; invoiceUrl?: string; error?: string }> {
+): Promise<{ sent: boolean; error?: string }> {
   if (!customerEmail?.trim()) {
     return { sent: false, error: 'Müşteri e-postası yok' }
   }
@@ -19,19 +23,12 @@ export async function generateAndSendInvoice(
   try {
     const pdfBuffer = await generateInvoicePDF(orderId, orderData)
 
-    let invoiceUrl: string | undefined
-    try {
-      invoiceUrl = await uploadInvoice(orderId, pdfBuffer)
-    } catch (e) {
-      console.warn('Fatura storage yüklenemedi, e-posta eki ile gönderiliyor:', e)
-    }
-
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Faturanız</h2>
-        <p>Merhaba ${orderData.customer.name},</p>
-        <p><strong>Sipariş No:</strong> ${orderId}</p>
-        <p>Faturanız ektedir.${invoiceUrl ? ` İndirmek için: <a href="${invoiceUrl}">Fatura PDF</a>` : ''}</p>
+        <p>Merhaba ${escapeHtml(orderData.customer.name || '')},</p>
+        <p><strong>Sipariş No:</strong> ${escapeHtml(orderId)}</p>
+        <p>Faturanız bu e-postanın ekindedir. Faturanızı ayrıca sipariş sayfanızdan da indirebilirsiniz.</p>
         <p>İyi günler,<br>Voltekno</p>
       </div>
     `
@@ -43,10 +40,7 @@ export async function generateAndSendInvoice(
       [{ filename: `fatura-${orderId}.pdf`, content: pdfBuffer, contentType: 'application/pdf' }]
     )
 
-    if (result.success) {
-      return { sent: true, invoiceUrl }
-    }
-    return { sent: false, error: result.error }
+    return result.success ? { sent: true } : { sent: false, error: result.error }
   } catch (error) {
     console.error('generateAndSendInvoice error:', error)
     return {

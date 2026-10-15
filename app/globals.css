@@ -462,3 +462,37 @@
     @apply text-lg font-bold uppercase tracking-tight border-b pb-2 mb-4;
   }
 }
+/* Ürün detay – Excel'den (ikas) gelen HTML açıklama */
+@layer components {
+  .product-description-html {
+    @apply text-sm leading-relaxed text-slate-600 min-w-0 break-words;
+  }
+  .product-description-html h2 {
+    @apply text-base sm:text-lg font-bold text-slate-900 mt-1 mb-3;
+  }
+  .product-description-html h3 {
+    @apply text-sm sm:text-base font-bold text-slate-900 mt-6 mb-2;
+  }
+  .product-description-html p {
+    @apply mb-3;
+  }
+  .product-description-html ul {
+    @apply list-disc pl-5 mb-3 space-y-1;
+  }
+  .product-description-html ol {
+    @apply list-decimal pl-5 mb-3 space-y-1;
+  }
+  .product-description-html a {
+    @apply text-brand font-semibold underline underline-offset-2 hover:text-brand-hover;
+  }
+  .product-description-html strong {
+    @apply font-semibold text-slate-900;
+  }
+  /* Geniş tablolar mobilde yatay kaydırılır (import scripti tabloları .pd-table ile sarar) */
+  .product-description-html .pd-table {
+    @apply w-full max-w-full overflow-x-auto mb-3;
+  }
+  .product-description-html img {
+    @apply max-w-full h-auto;
+  }
+}

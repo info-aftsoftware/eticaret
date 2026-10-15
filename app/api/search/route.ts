@@ -1,80 +1,65 @@
 /**
  * Search API Route
- * Handles product search with parametric filters
+ * Site kataloğunda (mock + ProductOverride) arama yapar; /api/products ile aynı kaynak ve eşleştirme.
+ * Query: q, category?, brand?, priceMin?, priceMax?, inStock?, featured?, page?, pageSize|limit?
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { PostgresSearchAdapter } from '@/lib/adapters/search/postgres'
+import { getStorefrontProducts } from '@/lib/discounts'
+import { searchProducts } from '@/lib/search-product'
 
 export const dynamic = 'force-dynamic'
 
-const searchAdapter = new PostgresSearchAdapter(prisma)
-
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const sp = request.nextUrl.searchParams
+    const q = sp.get('q')?.trim()
+    const category = sp.get('category')
+    const brand = sp.get('brand')
+    const priceMin = sp.get('priceMin') ? parseFloat(sp.get('priceMin')!) : undefined
+    const priceMax = sp.get('priceMax') ? parseFloat(sp.get('priceMax')!) : undefined
 
-    const filters = {
-      query: searchParams.get('q') || undefined,
-      categoryId: searchParams.get('category') || undefined,
-      priceMin: searchParams.get('priceMin') ? parseFloat(searchParams.get('priceMin')!) : undefined,
-      priceMax: searchParams.get('priceMax') ? parseFloat(searchParams.get('priceMax')!) : undefined,
-      lifecycle: searchParams.get('lifecycle')?.split(',') || undefined,
-      inStock: searchParams.get('inStock') === 'true' ? true : undefined,
-      featured: searchParams.get('featured') === 'true' ? true : undefined,
-      specs: parseSpecFilters(searchParams),
-      certifications: parseCertFilters(searchParams),
+    let products = await getStorefrontProducts()
+    if (q) products = searchProducts(products, q)
+    if (category) products = products.filter((p) => p.category === category)
+    if (brand) products = products.filter((p) => p.brand === brand)
+    if (priceMin !== undefined && !isNaN(priceMin)) products = products.filter((p) => p.price >= priceMin)
+    if (priceMax !== undefined && !isNaN(priceMax)) products = products.filter((p) => p.price <= priceMax)
+    if (sp.get('inStock') === 'true') products = products.filter((p) => (p.stock ?? 0) > 0)
+    if (sp.get('featured') === 'true') products = products.filter((p) => p.featured)
+
+    const page = Math.max(1, parseInt(sp.get('page') || '1', 10) || 1)
+    const pageSize = Math.min(100, Math.max(1, parseInt(sp.get('limit') || sp.get('pageSize') || '24', 10) || 24))
+    const total = products.length
+
+    // lite=1: başlıktaki canlı öneri kutusu için hafif yanıt (+ eşleşen kategoriler)
+    if (sp.get('lite') === '1') {
+      const categories = [...new Set(products.map((p) => p.category).filter(Boolean))].slice(0, 3)
+      return NextResponse.json({
+        total,
+        categories,
+        products: products.slice(0, pageSize).map((p) => ({
+          id: p.id,
+          slug: p.slug,
+          name: p.name,
+          brand: p.brand,
+          image: p.image,
+          price: p.price,
+          oldPrice: (p as { oldPrice?: number }).oldPrice,
+          stock: p.stock,
+        })),
+      })
     }
 
-    const page = parseInt(searchParams.get('page') || '1')
-    const limit = searchParams.get('limit')
-    const pageSize = limit ? parseInt(limit) : parseInt(searchParams.get('pageSize') || '24')
-
-    const result = await searchAdapter.search(filters, page, pageSize)
-
-    return NextResponse.json(result)
+    return NextResponse.json({
+      products: products.slice((page - 1) * pageSize, page * pageSize),
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize),
+    })
   } catch (error) {
     console.error('Search error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
-
-function parseSpecFilters(searchParams: URLSearchParams): Record<string, any> | undefined {
-  const specs: Record<string, any> = {}
-  
-  // Example: ?voltage_min=12&voltage_max=24&current_min=10
-  searchParams.forEach((value, key) => {
-    if (key.endsWith('_min')) {
-      const specKey = key.replace('_min', '')
-      if (!specs[specKey]) specs[specKey] = {}
-      specs[specKey].min = parseFloat(value)
-    } else if (key.endsWith('_max')) {
-      const specKey = key.replace('_max', '')
-      if (!specs[specKey]) specs[specKey] = {}
-      specs[specKey].max = parseFloat(value)
-    } else if (key.startsWith('spec_')) {
-      const specKey = key.replace('spec_', '')
-      specs[specKey] = { value }
-    }
-  })
-
-  return Object.keys(specs).length > 0 ? specs : undefined
-}
-
-function parseCertFilters(searchParams: URLSearchParams): Record<string, boolean> | undefined {
-  const certs: Record<string, boolean> = {}
-  
-  // Example: ?rohs=true&ce=true
-  const certKeys = ['rohs', 'reach', 'ce', 'ip']
-  certKeys.forEach((key) => {
-    const value = searchParams.get(key)
-    if (value === 'true') {
-      certs[key] = true
-    }
-  })
-
-  return Object.keys(certs).length > 0 ? certs : undefined
-}
-
-

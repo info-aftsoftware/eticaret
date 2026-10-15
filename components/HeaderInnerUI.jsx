@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { Manrope } from 'next/font/google'
 import { fmtPrice } from '@/lib/format'
 import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
+import { HEADER_NAV_GROUP_COUNT } from '@/lib/categories'
 import { HeaderWrapper } from './HeaderWrapper'
 import { HeaderTopBar } from './HeaderTopBar'
 import { Logo } from './Logo'
@@ -35,37 +36,24 @@ const CATEGORY_MENU_IMAGE_BY_VALUE = mockProducts.reduce((acc, product) => {
   return acc
 }, {})
 
-const GROUP_MENU_META = {
-  'elektrikli-arac-sarj-urunleri': {
-    badge: 'ELEKTRIKLI ARAC SARJ URUNLERI',
-    eyebrow: 'Premium Sarj Cozumleri',
-    accent: '#2563eb',
-    surface: 'from-blue-50/90 via-white to-slate-50',
-  },
-  'batarya-depolama': {
-    badge: 'AKU VE BATARYALAR',
-    eyebrow: 'Enerji Depolama',
-    accent: '#f4a11a',
-    surface: 'from-amber-50/90 via-white to-slate-50',
-  },
-  inverterler: {
-    badge: 'INVERTERLER',
-    eyebrow: 'Guvenilir Donusum',
-    accent: '#0f766e',
-    surface: 'from-teal-50/90 via-white to-slate-50',
-  },
-  'gunes-enerjisi': {
-    badge: 'GUNES ENERJISI',
-    eyebrow: 'Yuksek Verimlilik',
-    accent: '#65a30d',
-    surface: 'from-lime-50/80 via-white to-slate-50',
-  },
-  'isi-pompasi-hvac': {
-    badge: 'ISI POMPASI VE HVAC',
-    eyebrow: 'Iklimlendirme',
-    accent: '#7c3aed',
-    surface: 'from-violet-50/80 via-white to-slate-50',
-  },
+/** Tablet genişliğinde (md–lg) ayrı gösterilen grup sayısı */
+const HEADER_NAV_GROUP_COUNT_COMPACT = 2
+
+/** Masaüstü menü: ilk `count` grup ayrı açılır menü, kalanlar "Diğer Kategoriler" altında */
+function buildDesktopNavGroups(navGroups, count = HEADER_NAV_GROUP_COUNT) {
+  if (!navGroups || navGroups.length <= count + 1) return navGroups || []
+  const main = navGroups.slice(0, count)
+  const rest = navGroups.slice(count)
+  return [
+    ...main,
+    {
+      id: 'diger-kategoriler',
+      labelKey: 'catGroupMore',
+      navLabelKey: 'catGroupMore',
+      href: '/categories',
+      categories: rest.map((g) => ({ value: g.id, labelKey: g.labelKey, href: g.href })),
+    },
+  ]
 }
 
 function getMenuGridClass(count) {
@@ -78,7 +66,7 @@ function getMenuGridClass(count) {
 function getMenuCards(groupKey, items) {
   return items.map((item) => ({
     title: item.labelKey,
-    href: `/products?category=${encodeURIComponent(item.value)}`,
+    href: item.href || `/products?category=${encodeURIComponent(item.value)}`,
     image: CATEGORY_MENU_IMAGE_BY_VALUE[item.value] || PLACEHOLDER_PRODUCT_IMAGE,
     translate: true,
   }))
@@ -101,6 +89,10 @@ export function HeaderInnerUI(props) {
     setSearchQuery,
     handleSearch,
     searchResults = [],
+    searchCategories = [],
+    searchTotal = 0,
+    activeIndex = -1,
+    handleSearchKeyDown,
     searchLoading = false,
     searchOpen = false,
     setSearchOpen,
@@ -137,25 +129,54 @@ export function HeaderInnerUI(props) {
   }, [searchOpen, setSearchOpen])
 
   const showDropdown = searchOpen && searchQuery.trim().length > 0
-  const renderSearchDropdown = (onResultClick) => (
+  /** Arama kutusu erişilebilirlik özellikleri (combobox) — listbox id'si masaüstü/mobil için ayrı */
+  const comboboxProps = (listId) => ({
+    role: 'combobox',
+    'aria-label': t('searchPlaceholder'),
+    'aria-autocomplete': 'list',
+    'aria-expanded': showDropdown,
+    'aria-controls': listId,
+    'aria-activedescendant': activeIndex >= 0 ? `${listId}-opt-${activeIndex}` : undefined,
+    onKeyDown: handleSearchKeyDown,
+    autoComplete: 'off',
+  })
+  const renderSearchDropdown = (onResultClick, listId = 'search-suggestions') => (
     showDropdown && (
       <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50 overflow-hidden">
         {searchLoading ? (
           <div className="px-4 py-6 text-center text-sm text-slate-500">{t('searching')}</div>
         ) : searchResults.length > 0 ? (
           <>
-            <ul className="max-h-72 overflow-y-auto py-1">
-              {searchResults.map((product) => (
-                <li key={product.id}>
+            {searchCategories?.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 px-4 pt-3 pb-1">
+                {searchCategories.map((c) => (
+                  <Link
+                    key={c}
+                    href={`/products?category=${encodeURIComponent(c)}&q=${encodeURIComponent(searchQuery)}`}
+                    onClick={() => { setSearchOpen(false); onResultClick?.() }}
+                    className="rounded-full border border-slate-200 px-2.5 py-1 text-xs text-slate-600 hover:border-brand hover:text-brand"
+                  >
+                    {c}
+                  </Link>
+                ))}
+              </div>
+            )}
+            <ul id={listId} role="listbox" aria-label={t('searchPlaceholder')} className="max-h-72 overflow-y-auto py-1">
+              {searchResults.map((product, index) => (
+                <li key={product.id} id={`${listId}-opt-${index}`} role="option" aria-selected={index === activeIndex}>
                   <Link
                     href={product.slug ? `/products/${product.slug}` : `/products/${product.id}`}
                     onClick={() => { setSearchOpen(false); onResultClick?.() }}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 text-left transition-colors"
+                    tabIndex={-1}
+                    className={`flex items-center gap-3 px-4 py-3 hover:bg-slate-50 text-left transition-colors ${index === activeIndex ? 'bg-slate-100' : ''}`}
                   >
                     <span className="flex-1 min-w-0 truncate text-sm font-medium text-slate-800">{product.name}</span>
                     {product.price != null && (
-                      <span className="shrink-0 text-sm font-semibold text-brand">
-                        {fmtPrice(product.price, currency, exchangeRates)}
+                      <span className="shrink-0 text-right">
+                        {product.oldPrice != null && product.oldPrice > product.price && (
+                          <span className="block text-[11px] text-slate-400 line-through">{fmtPrice(product.oldPrice, currency, exchangeRates)}</span>
+                        )}
+                        <span className="text-sm font-semibold text-brand">{fmtPrice(product.price, currency, exchangeRates)}</span>
                       </span>
                     )}
                   </Link>
@@ -168,7 +189,7 @@ export function HeaderInnerUI(props) {
                 onClick={() => { setSearchOpen(false); onResultClick?.() }}
                 className="text-sm font-medium text-brand hover:underline"
               >
-                {t('viewAllResults')}
+                {t('viewAllResults')}{searchTotal > searchResults.length ? ` (${searchTotal})` : ''}
               </Link>
             </div>
           </>
@@ -201,40 +222,41 @@ export function HeaderInnerUI(props) {
 
   const menuPanelClass = 'w-[min(520px,calc(100vw-3rem))] max-w-[520px] overflow-hidden rounded-2xl border border-slate-100 bg-white p-0 shadow-[0_8px_32px_rgba(15,23,42,0.08),0_1px_3px_rgba(15,23,42,0.04)] animate-in fade-in slide-in-from-top-1 duration-150'
   const desktopNavItemClass = (isActive) =>
-    `group relative flex items-center justify-center px-3 py-1.5 rounded-lg text-center transition-all duration-200 ${isActive ? 'text-slate-950' : 'text-slate-600 hover:text-slate-950'}`
+    `group relative flex items-center justify-center px-2 xl:px-3 py-1.5 rounded-lg text-center transition-all duration-200 ${isActive ? 'text-slate-950' : 'text-slate-600 hover:text-slate-950'}`
   const desktopNavLabelClass = `${headerDisplay.className} text-[14px] font-bold tracking-[-0.01em] leading-[1.25] text-center whitespace-nowrap`
   const desktopNavSubLabelClass = 'hidden'
 
-  const navDropdown = (labelKey, items, categoryHref, groupKey) => {
+  /** menuKey: aynı grup hem tablet hem masaüstü menüsünde yer aldığından açık menü durumu için ayrı anahtar */
+  const navDropdown = (labelKey, items, categoryHref, groupKey, menuKey = labelKey, wrapperClass = '') => {
     const isGroupPageActive = categoryHref && pathname.startsWith(categoryHref)
     const menuCards = getMenuCards(groupKey, items)
     const featuredCard = menuCards[0]
     const remainingCards = menuCards.slice(0, 8)
     return (
       <div
-        key={groupKey}
-        className="relative shrink-0"
+        key={`${menuKey}-${groupKey}`}
+        className={`relative shrink-0 ${wrapperClass}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <DropdownMenu modal={false} open={openMenu === labelKey} onOpenChange={(open) => {
+        <DropdownMenu modal={false} open={openMenu === menuKey} onOpenChange={(open) => {
           if (open) {
             if (timeoutRef.current) clearTimeout(timeoutRef.current)
-            setOpenMenu(labelKey)
-          } else if (openMenu === labelKey) {
+            setOpenMenu(menuKey)
+          } else if (openMenu === menuKey) {
             setOpenMenu(null)
           }
         }}>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className={`${desktopNavItemClass(isGroupPageActive || openMenu === labelKey)} border-0 outline-none ring-0 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${(isGroupPageActive || openMenu === labelKey) ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-              onMouseEnter={() => { handleMouseEnter(); setOpenMenu(labelKey) }}
+              className={`${desktopNavItemClass(isGroupPageActive || openMenu === menuKey)} border-0 outline-none ring-0 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${(isGroupPageActive || openMenu === menuKey) ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+              onMouseEnter={() => { handleMouseEnter(); setOpenMenu(menuKey) }}
             >
               <span className={desktopNavLabelClass}>
                 {t(labelKey)}
               </span>
-              <ChevronDown className={`ml-1 h-3 w-3 shrink-0 text-slate-400 transition-transform duration-200 ${openMenu === labelKey ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`ml-1 h-3 w-3 shrink-0 text-slate-400 transition-transform duration-200 ${openMenu === menuKey ? 'rotate-180' : ''}`} />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -321,6 +343,7 @@ export function HeaderInnerUI(props) {
                   placeholder={t('searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  {...comboboxProps('search-suggestions-desktop')}
                   className="w-full max-w-full min-w-0 h-11 pl-5 pr-12 rounded-full border border-slate-200/90 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.04)] focus:border-brand focus:ring-2 focus:ring-brand/10 text-sm transition-all placeholder:text-slate-400"
                 />
                 <button
@@ -331,7 +354,7 @@ export function HeaderInnerUI(props) {
                   <Search className="w-4 h-4" />
                 </button>
               </form>
-              {renderSearchDropdown()}
+              {renderSearchDropdown(undefined, 'search-suggestions-desktop')}
             </div>
             <div className="flex items-center gap-2 shrink-0">
               {isAuthenticated && user ? (
@@ -429,7 +452,8 @@ export function HeaderInnerUI(props) {
               <span className={desktopNavLabelClass}>Ana Sayfa</span>
             </Link>
             <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
-            {navGroups.map((g) => navDropdown(g.labelKey, g.categories, g.href, g.id))}
+            {buildDesktopNavGroups(navGroups, HEADER_NAV_GROUP_COUNT_COMPACT).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `md:${g.id}`, 'lg:hidden'))}
+            {buildDesktopNavGroups(navGroups).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `lg:${g.id}`, 'hidden lg:block'))}
             <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
             <Link
               href="/blog"
@@ -495,11 +519,11 @@ export function HeaderInnerUI(props) {
                 placeholder={t('searchPlaceholderMobile')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                {...comboboxProps('search-suggestions-mobile')}
                 className="w-full pl-10 pr-4 h-11 rounded-xl border-slate-200 bg-white text-sm placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-slate-300 touch-manipulation"
-                autoComplete="off"
               />
             </form>
-            {renderSearchDropdown(() => setMobileMenuOpen(false))}
+            {renderSearchDropdown(() => setMobileMenuOpen(false), 'search-suggestions-mobile')}
           </div>
 
           <nav className="flex flex-col flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 pb-4 space-y-6">

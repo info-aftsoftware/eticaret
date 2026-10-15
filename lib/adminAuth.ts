@@ -39,16 +39,11 @@ export type CheckAdminResult =
   | { error: string; status: number }
 
 /**
- * Admin yetkisi: önce admin_session cookie (Firebase ile doğrulanmış), sonra Bearer JWT veya x-user-id.
+ * Admin yetkisi: önce admin_session cookie (Firebase ile doğrulanmış), sonra Bearer JWT (rol Prisma'dan doğrulanır).
  */
 export async function checkAdmin(request: NextRequest): Promise<CheckAdminResult> {
   if (verifyAdminCookie(request)) {
     return { ok: true }
-  }
-  const headerUserId = request.headers.get('x-user-id')
-  if (headerUserId) {
-    const user = await prisma.user.findUnique({ where: { id: headerUserId } })
-    if (user && user.role === 'admin') return { ok: true, userId: user.id }
   }
   const token = request.headers.get('authorization')?.replace('Bearer ', '')
   if (token) {

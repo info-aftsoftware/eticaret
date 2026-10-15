@@ -464,15 +464,27 @@ model Order {
   subtotal        Float
   vatTotal        Float
   shippingCost    Float
-  discount        Float    @default(0)
+  discount        Float    @default(0) // Toplam indirim (kupon + ödeme yöntemi indirimi)
+  couponCode      String?
+  couponDiscount  Float    @default(0)
+  paymentDiscount Float    @default(0) // Havale/EFT indirimi (ara toplamın %3'ü)
   total           Float
   currency        String   @default("TRY")
   // Additional
+  shippingCarrier String?  // lib/shipping/carriers.ts id (yurtici, aras, ...)
   trackingNumber  String?
   eArsivRef       String?  // E-arşiv invoice reference
   invoicePdfUrl   String?  // Generated invoice PDF
   notes           String?
+  customerNote    String?
+  adminNote       String?
+  paidAt          DateTime?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+  cancelledAt     DateTime?
   lines           OrderLine[]
+  events          OrderEvent[]
+  returnRequests  ReturnRequest[]
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -481,6 +493,70 @@ model Order {
   @@index([status])
   @@index([paymentStatus])
   @@index([createdAt])
+}
+
+// İade / cayma talepleri (müşteri "Siparişlerim"den oluşturur, admin onaylar → iade kodu → teslim alındı → ücret iadesi)
+model ReturnRequest {
+  id            String    @id @default(cuid())
+  requestNo     String    @unique // RET-YYYY-NNNNN
+  orderId       String
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  type          String    // withdrawal (14 gün cayma) | defective (ayıplı/hasarlı) | wrong_item (yanlış ürün)
+  status        String    @default("REQUESTED") // REQUESTED | APPROVED | REJECTED | RECEIVED | REFUNDED | CANCELLED
+  items         Json      // [{ lineId, name, quantity }]
+  reason        String?
+  customerNote  String?
+  adminNote     String?
+  rejectReason  String?
+  returnCarrier String?   // lib/shipping/carriers id
+  returnCode    String?   // anlaşmalı kargo iade kodu
+  refundAmount  Float?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  approvedAt    DateTime?
+  receivedAt    DateTime?
+  refundedAt    DateTime?
+
+  @@index([orderId])
+  @@index([status])
+}
+
+// Terk edilen sepet hatırlatması için üye sepeti özeti (yalnızca ticari ileti izni olan üyelere e-posta)
+model CartSnapshot {
+  userId     String    @id
+  email      String
+  items      Json      // [{ id, quantity }] — sepet kalemi id'leri (ürün veya ürün-varyant)
+  updatedAt  DateTime  @updatedAt
+  remindedAt DateTime?
+
+  @@index([updatedAt])
+}
+
+// "Stok gelince haber ver" talepleri (ürün stoğa girince e-posta, bir kez)
+model StockAlert {
+  id         String    @id @default(cuid())
+  productId  String
+  email      String
+  createdAt  DateTime  @default(now())
+  notifiedAt DateTime?
+
+  @@unique([productId, email])
+  @@index([notifiedAt])
+}
+
+// Sipariş zaman çizelgesi (admin ve müşteri sipariş sayfasında gösterilir)
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  type      String   // created | payment | status | shipment | note | email
+  status    String?  // ilgili OrderStatus / PaymentStatus
+  message   String
+  actor     String   @default("system") // system | admin | customer
+  visibleToCustomer Boolean @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
 }
 
 model OrderLine {
@@ -716,6 +792,26 @@ model Discount {
 
   @@index([active])
   @@index([scope])
+}
+
+// Kupon kodları (yönetim paneli > İndirimler > Kupon Kodları). Sepette/ödemede sunucu doğrular.
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique // büyük harf, boşluksuz
+  description String?
+  type        String    // PERCENT | FIXED
+  value       Float     // yüzde veya TL (KDV hariç ara toplamdan düşülür; KDV indirimli tutardan hesaplanır)
+  minAmount   Float?    // en az sepet tutarı (KDV hariç ara toplam)
+  maxDiscount Float?    // yüzde kuponlarda en fazla indirim (TL)
+  usageLimit  Int?      // toplam kullanım sınırı
+  usedCount   Int       @default(0)
+  startDate   DateTime?
+  endDate     DateTime?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([active])
 }
 
 // Site kataloğu override: mock ürün düzenleme veya yeni ürün (admin)

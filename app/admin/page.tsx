@@ -31,9 +31,13 @@ type SiteStats = {
   activeCoupons: number
   todayOrders: number
   pendingOrders: number
+  awaitingPayment?: number
+  toShip?: number
   totalOrders: number
   todayRevenue: number
   monthRevenue: number
+  topProducts?: { productId: string | null; name: string; quantity: number; revenue: number }[]
+  lowStock?: { id: string; name: string; stock: number; waiting: number }[]
 }
 
 type OrderRow = {
@@ -153,7 +157,7 @@ export default function AdminPage() {
         {[
           { label: 'Toplam Sipariş', value: totalOrders, subtext: 'Tüm zamanlar', icon: ShoppingCart, gradient: 'from-blue-600/90 to-indigo-700/90', shadow: 'shadow-blue-500/20' },
           { label: 'Bu Ay Gelir', value: fmtTRY(monthRevenue), subtext: `Bugün: ${fmtTRY(siteStats?.todayRevenue ?? 0)}`, icon: TrendingUp, gradient: 'from-emerald-500/90 to-teal-600/90', shadow: 'shadow-emerald-500/20' },
-          { label: 'Bekleyen', value: pendingOrders, subtext: 'Onay bekliyor', icon: Clock, gradient: pendingOrders > 0 ? 'from-amber-500/90 to-orange-600/90' : 'from-slate-500/90 to-slate-600/90', shadow: pendingOrders > 0 ? 'shadow-amber-500/20' : 'shadow-slate-500/20' },
+          { label: 'Bekleyen', value: pendingOrders, subtext: `Havale bekleyen: ${siteStats?.awaitingPayment ?? 0} · Kargolanacak: ${siteStats?.toShip ?? 0}`, icon: Clock, gradient: pendingOrders > 0 ? 'from-amber-500/90 to-orange-600/90' : 'from-slate-500/90 to-slate-600/90', shadow: pendingOrders > 0 ? 'shadow-amber-500/20' : 'shadow-slate-500/20' },
           { label: 'Bugün', value: todayOrders, subtext: 'Son 24 saat', icon: Calendar, gradient: 'from-violet-600/90 to-fuchsia-700/90', shadow: 'shadow-violet-500/20' }
         ].map((kpi, i) => (
           <div key={i} className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${kpi.gradient} p-6 text-white shadow-xl ${kpi.shadow} backdrop-blur-md border border-white/10 group transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl`}>
@@ -225,6 +229,52 @@ export default function AdminPage() {
           </div>
         </div>
       </div>
+
+      {/* Satış ve stok raporu */}
+      {siteStats && (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/40 p-6">
+            <h2 className="text-lg font-bold text-slate-800 mb-1">En Çok Satanlar</h2>
+            <p className="text-xs text-slate-500 mb-4">Son 30 gün · ödenmiş siparişler</p>
+            {(siteStats.topProducts ?? []).length === 0 ? (
+              <p className="text-sm text-slate-500">Henüz satış yok.</p>
+            ) : (
+              <ol className="space-y-2">
+                {siteStats.topProducts!.map((p, i) => (
+                  <li key={p.productId ?? p.name} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="min-w-0 truncate">
+                      <span className="text-slate-400 mr-2">{i + 1}.</span>
+                      {p.productId ? <Link href={`/products/${p.productId}`} target="_blank" className="hover:underline">{p.name}</Link> : p.name}
+                    </span>
+                    <span className="shrink-0 tabular-nums text-slate-700">{p.quantity} adet · {fmtTRY(p.revenue)}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/40 p-6">
+            <h2 className="text-lg font-bold text-slate-800 mb-1">Düşük Stok</h2>
+            <p className="text-xs text-slate-500 mb-4">Stok ≤ 5 · “Stok gelince haber ver” bekleyen müşteri sayısıyla</p>
+            {(siteStats.lowStock ?? []).length === 0 ? (
+              <p className="text-sm text-slate-500">Düşük stoklu ürün yok.</p>
+            ) : (
+              <ul className="space-y-2">
+                {siteStats.lowStock!.map((p) => (
+                  <li key={p.id} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="min-w-0 truncate">{p.name}</span>
+                    <span className="shrink-0 flex items-center gap-2">
+                      {p.waiting > 0 && <span className="rounded-full bg-blue-100 text-blue-800 px-2 py-0.5 text-xs">{p.waiting} bekleyen</span>}
+                      <span className={`rounded-full px-2 py-0.5 text-xs ${p.stock === 0 ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}`}>
+                        {p.stock === 0 ? 'Tükendi' : `${p.stock} adet`}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Son Siparişler */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/40 overflow-hidden">

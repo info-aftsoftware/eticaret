@@ -11,6 +11,10 @@ import { useAuthStore } from '@/lib/store/useAuthStore'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { Mail, Lock, User, Phone, UserPlus, AlertCircle, Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { setUserProfile } from '@/lib/firebase/firestore'
+import { safeRedirect } from '@/lib/safe-redirect'
+import { getLegalDocument, type LegalSlug } from '@/lib/legal/documents'
+import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 
 function RegisterPageContent() {
   const router = useRouter()
@@ -28,6 +32,9 @@ function RegisterPageContent() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [acceptTerms, setAcceptTerms] = useState(false)
+  // İYS / 6563 sayılı Kanun: ticari ileti izni ayrı ve varsayılan olarak işaretsiz olmalı
+  const [acceptMarketing, setAcceptMarketing] = useState(false)
+  const [legalDoc, setLegalDoc] = useState<LegalSlug | null>(null)
 
   useEffect(() => {
     const email = searchParams.get('email') ?? ''
@@ -53,7 +60,7 @@ function RegisterPageContent() {
     }
 
     if (!acceptTerms) {
-      setError('Kullanım şartlarını kabul etmelisiniz')
+      setError('Üyelik ve Kullanım Koşulları’nı kabul etmelisiniz')
       scrollToTop()
       return
     }
@@ -81,8 +88,23 @@ function RegisterPageContent() {
 
     if (result.success) {
       if (result.message) setError('')
-      const redirect = searchParams.get('redirect')
-      router.push(redirect && redirect.startsWith('/') ? redirect : '/profile')
+      // Onay kayıtları (zaman damgalı) kullanıcı profiline yazılır
+      try {
+        const uid = useAuthStore.getState().user?.id
+        if (uid) {
+          const now = new Date().toISOString()
+          await setUserProfile(uid, {
+            consents: {
+              membershipTerms: { accepted: true, at: now, version: getLegalDocument('uyelik-ve-kullanim-kosullari')?.updated ?? null },
+              kvkkInformed: { at: now, version: getLegalDocument('kvkk')?.updated ?? null },
+              commercialMessages: { accepted: acceptMarketing, at: now, channels: acceptMarketing ? ['email', 'sms'] : [] },
+            },
+          })
+        }
+      } catch (err) {
+        console.error('Consent save error:', err)
+      }
+      router.push(safeRedirect(searchParams.get('redirect')))
     } else {
       setError(result.error || 'Kayıt başarısız')
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -167,9 +189,22 @@ function RegisterPageContent() {
               <label className="flex items-start gap-2 cursor-pointer py-2 touch-manipulation min-h-[44px] items-center">
                 <input type="checkbox" id="terms" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} className="w-5 h-5 min-w-[20px] min-h-[20px] text-brand border-gray-300 rounded focus:ring-brand shrink-0" required />
                 <span className="text-sm text-gray-600">
-                  <Link href="/terms" className="text-brand hover:underline touch-manipulation">Kullanım şartlarını</Link> ve <Link href="/privacy" className="text-brand hover:underline touch-manipulation">gizlilik politikasını</Link> okudum ve kabul ediyorum *
+                  <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı okudum ve kabul ediyorum *
                 </span>
               </label>
+
+              <label className="flex items-start gap-2 cursor-pointer py-1 touch-manipulation">
+                <input type="checkbox" id="marketing" checked={acceptMarketing} onChange={(e) => setAcceptMarketing(e.target.checked)} className="mt-0.5 w-5 h-5 min-w-[20px] min-h-[20px] text-brand border-gray-300 rounded focus:ring-brand shrink-0" />
+                <span className="text-sm text-gray-600">
+                  Kampanya ve duyurulardan haberdar olmak için <LegalLink slug="ticari-elektronik-ileti-onayi" onOpen={setLegalDoc}>ticari elektronik ileti</LegalLink> almayı kabul ediyorum (isteğe bağlı).
+                </span>
+              </label>
+
+              <p className="text-xs text-gray-500">
+                Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> ve{' '}
+                <LegalLink slug="gizlilik-ve-cerez-politikasi" onOpen={setLegalDoc}>Gizlilik ve Çerez Politikası</LegalLink> kapsamında işlenir.
+              </p>
+              <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />
 
               <Button type="submit" className="w-full btn-classic-primary rounded-lg min-h-[48px] touch-manipulation" disabled={loading} size="lg">
                 {loading ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Kayıt yapılıyor...</> : 'Kayıt Ol'}

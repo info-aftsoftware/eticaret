@@ -41,7 +41,7 @@ type CatalogProduct = {
   brand?: string
 }
 
-const allCategoryValues = ['Diğer', ...CATEGORY_GROUPS.flatMap((g) => g.categoryValues)]
+const allCategoryValues: string[] = CATEGORY_GROUPS.flatMap((g) => [...g.categoryValues])
 
 function AdminKatalogContent() {
   const router = useRouter()
@@ -189,7 +189,7 @@ function AdminKatalogContent() {
   }
 
   return (
-    <div className="space-y-8 pb-safe" id="main-content">
+    <div className="space-y-8 pb-safe">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Katalog / Ürün Düzenleme</h1>

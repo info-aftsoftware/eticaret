@@ -236,7 +236,7 @@ export default function GesTeklifDogrulamaPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col" id="main-content">
+      <div className="min-h-screen bg-slate-50 flex flex-col">
         <div className="flex-1 container mx-auto max-w-lg px-4 py-16 space-y-6">
           <div className="text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 mb-5 shadow-inner">
@@ -307,7 +307,7 @@ export default function GesTeklifDogrulamaPage() {
   // ─── RENDER ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-slate-50" id="main-content">
+    <div className="min-h-screen bg-slate-50">
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <div

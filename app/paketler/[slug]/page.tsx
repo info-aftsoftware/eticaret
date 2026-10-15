@@ -278,16 +278,16 @@ export default function PaketDetailPage({ params }: { params: { slug: string } }
             Tüm Ürünler
           </Link>
           <Link
-            href="/category/gunes-enerjisi"
+            href="/category/gunes-paneli"
             className="text-center rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
           >
-            Güneş Enerjisi
+            Güneş Paneli
           </Link>
           <Link
-            href="/category/batarya-depolama"
+            href="/category/enerji-depolama"
             className="text-center rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
           >
-            Batarya ve Depolama
+            Enerji Depolama
           </Link>
         </section>
       </div>

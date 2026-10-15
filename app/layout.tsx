@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
+import { CartSync } from '@/components/CartSync'
 
 const inter = Inter({ subsets: ['latin'] })
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
@@ -115,6 +116,9 @@ const organizationJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'voltekno',
+  legalName: 'AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ',
+  email: 'info@voltekno.com',
+  taxID: '0091882726',
   url: SITE_URL,
   logo: `${SITE_URL}/icon.png`,
   description: 'Güneş paneli, akü, inverter, EV şarj istasyonu ve enerji depolama sistemleri satışı.',
@@ -128,7 +132,9 @@ const organizationJsonLd = {
   },
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Antalya',
+    streetAddress: 'Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17',
+    addressLocality: 'Merkez',
+    addressRegion: 'Elazığ',
     addressCountry: 'TR',
   },
 }
@@ -159,13 +165,10 @@ const localBusinessJsonLd = {
   email: 'info@voltekno.com',
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Antalya',
+    streetAddress: 'Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17',
+    addressLocality: 'Merkez',
+    addressRegion: 'Elazığ',
     addressCountry: 'TR',
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: '36.8969',
-    longitude: '30.7133',
   },
   openingHoursSpecification: [
     {
@@ -195,6 +198,7 @@ export default function RootLayout({
         />
         <IntlProvider>
           <FirebaseAnalyticsInit />
+          <CartSync />
           {children}
         </IntlProvider>
       </body>

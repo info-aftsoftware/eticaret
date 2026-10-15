@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getAdminFirestore, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 import { checkAdmin } from '@/lib/adminAuth'
+import { getAdminOrderDetail, patchAdminOrder } from '@/lib/admin-orders'
 import { sendShipmentNotice, sendPaymentConfirmation } from '@/lib/notifications'
 import type { NotificationData } from '@/lib/notifications'
 import { buildInvoiceDataFromPrisma, buildInvoiceDataFromNormalized } from '@/lib/invoice-data'
@@ -83,57 +84,11 @@ export async function GET(
 
   try {
     if (source === 'prisma') {
-      const order = await prisma.order.findUnique({
-        where: { id },
-        include: { lines: true, user: { select: { email: true, name: true } } },
-      })
-      if (!order) {
+      const detail = await getAdminOrderDetail(id)
+      if (!detail) {
         return NextResponse.json({ error: 'Sipariş bulunamadı' }, { status: 404 })
       }
-      const customer = {
-        name: order.shippingName,
-        email: order.user?.email ?? '',
-        phone: order.shippingPhone,
-        addressLine: order.shippingAddress,
-        city: order.shippingCity,
-        district: order.shippingDistrict,
-        postalCode: order.shippingPostalCode,
-        country: order.shippingCountry,
-        billingType: order.billingType,
-        companyName: order.billingName,
-        taxId: order.billingTaxId,
-        taxOffice: order.billingTaxOffice,
-      }
-      const items = order.lines.map((l) => ({
-        id: l.id,
-        productName: l.productName,
-        name: l.productName,
-        price: l.unitPrice,
-        quantity: l.quantity,
-        unitPrice: l.unitPrice,
-        lineTotal: l.lineTotal,
-      }))
-      const pricing = {
-        subtotal: order.subtotal,
-        tax: order.vatTotal,
-        shipping: order.shippingCost,
-        total: order.total,
-      }
-      return NextResponse.json(
-        normalizeOrderForResponse({
-          id: order.id,
-          source: 'prisma',
-          orderId: order.orderNo,
-          customer,
-          items,
-          pricing,
-          status: order.status,
-          paymentStatus: order.paymentStatus,
-          createdAt: order.createdAt,
-          trackingNumber: order.trackingNumber,
-          userId: order.userId,
-        })
-      )
+      return NextResponse.json(detail)
     }
 
     if (source === 'firestore') {
@@ -199,7 +154,7 @@ export async function PATCH(
     return NextResponse.json({ error: 'Sipariş id gerekli' }, { status: 400 })
   }
 
-  let body: { status?: string; paymentStatus?: string; trackingNumber?: string }
+  let body: Record<string, any>
   try {
     body = await request.json()
   } catch {
@@ -212,154 +167,7 @@ export async function PATCH(
 
   try {
     if (source === 'prisma') {
-      const order = await prisma.order.findUnique({
-        where: { id },
-        include: { lines: true, user: { select: { email: true, name: true } } },
-      })
-      if (!order) {
-        return NextResponse.json({ error: 'Sipariş bulunamadı' }, { status: 404 })
-      }
-
-      const updateData: Record<string, unknown> = {}
-      if (status !== undefined) updateData.status = status as any
-      if (paymentStatus !== undefined) updateData.paymentStatus = paymentStatus as any
-      if (trackingNumber !== undefined) updateData.trackingNumber = trackingNumber
-
-      if (Object.keys(updateData).length > 0) {
-        await prisma.order.update({
-          where: { id },
-          data: updateData as any,
-        })
-      }
-
-      // ── Stok iadesi: İptal / İade durumuna geçilince stoğu geri al ────────
-      if (status === 'CANCELLED' || status === 'RETURNED') {
-        const prevStatus = order.status
-        const isNewCancelOrReturn = prevStatus !== 'CANCELLED' && prevStatus !== 'RETURNED'
-        if (isNewCancelOrReturn) {
-          try {
-            for (const line of order.lines) {
-              if (line.variantId) {
-                // Prisma variant → onHand geri artır, reserved azalt
-                await prisma.stock.updateMany({
-                  where: { variantId: line.variantId },
-                  data: {
-                    onHand: { increment: line.quantity },
-                    reserved: { decrement: line.quantity },
-                  },
-                })
-              } else if (line.variantMatrix) {
-                // Mock ürün → productId variantMatrix'den al, StockOverride artır
-                const matrix = line.variantMatrix as Record<string, unknown>
-                const productId = matrix?.productId as string | undefined
-                if (productId) {
-                  await prisma.stockOverride.updateMany({
-                    where: { productId },
-                    data: { stock: { increment: line.quantity } },
-                  })
-                  await prisma.productOverride.updateMany({
-                    where: { productId },
-                    data: { stock: { increment: line.quantity } },
-                  })
-                }
-              }
-            }
-          } catch (stockErr) {
-            console.error('Stock restore error on cancel/return:', stockErr)
-          }
-        }
-      }
-      // ──────────────────────────────────────────────────────────────────────
-
-      const customer = {
-        name: order.shippingName,
-        email: order.user?.email ?? '',
-        phone: order.shippingPhone,
-        addressLine: order.shippingAddress,
-        city: order.shippingCity,
-        district: order.shippingDistrict,
-        postalCode: order.shippingPostalCode,
-        country: order.shippingCountry,
-      }
-      const notificationData: NotificationData = {
-        orderId: order.orderNo,
-        orderData: {} as any,
-        customer,
-        config: null,
-        choices: null,
-        pricing: {
-          subtotal: order.subtotal,
-          tax: order.vatTotal,
-          shipping: order.shippingCost,
-          total: order.total,
-          items: order.lines.map((l) => ({ id: l.id, name: l.productName, price: l.unitPrice, quantity: l.quantity })),
-        },
-      }
-
-      if (status === 'shipped' && trackingNumber) {
-        await sendShipmentNotice(notificationData, trackingNumber)
-      }
-
-      // Admin "Ödendi" işaretlediyse fatura + ödeme onay e-postası gönder (örn. havale kaydı)
-      if (paymentStatus === 'PAID') {
-        const fullOrder = await prisma.order.findUnique({
-          where: { id },
-          include: { lines: true, user: { select: { email: true, name: true } } },
-        })
-        if (fullOrder) {
-          const invoiceData = buildInvoiceDataFromPrisma(fullOrder)
-          const customerEmail = fullOrder.shippingEmail ?? fullOrder.user?.email ?? ''
-          if (customerEmail) {
-            try {
-              await generateAndSendInvoice(fullOrder.orderNo, invoiceData, customerEmail)
-              await sendPaymentConfirmation({
-                orderId: fullOrder.orderNo,
-                orderData: fullOrder,
-                customer: invoiceData.customer,
-                config: null,
-                choices: null,
-                pricing: invoiceData.pricing,
-              })
-            } catch (e) {
-              console.error('Admin mark PAID: invoice/email error', e)
-            }
-          }
-        }
-      }
-
-      const updated = await prisma.order.findUnique({
-        where: { id },
-        include: { lines: true, user: { select: { email: true, name: true } } },
-      })
-      const items = updated!.lines.map((l) => ({
-        id: l.id,
-        name: l.productName,
-        price: l.unitPrice,
-        quantity: l.quantity,
-        unitPrice: l.unitPrice,
-        lineTotal: l.lineTotal,
-      }))
-      return NextResponse.json({
-        success: true,
-        order: normalizeOrderForResponse({
-          id: updated!.id,
-          source: 'prisma',
-          orderId: updated!.orderNo,
-          customer: { ...customer },
-          items,
-          pricing: {
-            subtotal: updated!.subtotal,
-            tax: updated!.vatTotal,
-            shipping: updated!.shippingCost,
-            total: updated!.total,
-          },
-          status: updated!.status,
-          paymentStatus: updated!.paymentStatus,
-          createdAt: updated!.createdAt,
-          trackingNumber: updated!.trackingNumber,
-          userId: updated!.userId,
-        }),
-      })
+      return await patchAdminOrder(id, body)
     }
 
     if (source === 'firestore') {

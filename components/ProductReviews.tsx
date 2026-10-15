@@ -1,5 +1,6 @@
 'use client'
 
+import { Turnstile } from '@/components/Turnstile'
 import React, { useState, useEffect, useCallback } from 'react'
 import { Star, Loader2, MessageSquare, User, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -39,6 +40,8 @@ function StarRow({
 
 export function ProductReviews({ productId }: { productId: string }) {
   const { user, isAuthenticated, token } = useAuthStore()
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileReset, setTurnstileReset] = useState(0)
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [rating, setRating] = useState(5)
@@ -103,8 +106,10 @@ export function ProductReviews({ productId }: { productId: string }) {
           // Guests provide their own; logged-in users send profile as fallback
           guestName: isAuthenticated ? user?.name : guestName.trim() || undefined,
           guestEmail: isAuthenticated ? user?.email : guestEmail.trim() || undefined,
+          turnstileToken,
         }),
       })
+      setTurnstileReset((n) => n + 1)
 
       const data = await res.json()
       if (!res.ok) {
@@ -146,11 +151,14 @@ export function ProductReviews({ productId }: { productId: string }) {
           <h3 className="font-semibold text-slate-900 mb-4 text-sm">Değerlendirme Yaz</h3>
           <form onSubmit={handleSubmit} className="space-y-3">
             {/* Yıldız seçici */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1" role="radiogroup" aria-label="Puanınız">
               {[1, 2, 3, 4, 5].map((s) => (
                 <button
                   key={s}
                   type="button"
+                  role="radio"
+                  aria-checked={rating === s}
+                  aria-label={`${s} yıldız`}
                   onMouseEnter={() => setHoverRating(s)}
                   onMouseLeave={() => setHoverRating(0)}
                   onClick={() => setRating(s)}
@@ -175,6 +183,7 @@ export function ProductReviews({ productId }: { productId: string }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
                   placeholder="Adınız *"
+                  aria-label="Adınız"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -183,6 +192,7 @@ export function ProductReviews({ productId }: { productId: string }) {
                 <Input
                   type="email"
                   placeholder="E-posta *"
+                  aria-label="E-posta adresiniz"
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -199,12 +209,14 @@ export function ProductReviews({ productId }: { productId: string }) {
 
             <Input
               placeholder="Başlık (opsiyonel)"
+              aria-label="Değerlendirme başlığı"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="rounded-xl border-slate-200 text-sm"
             />
             <Textarea
               placeholder="Ürün hakkında deneyiminizi paylaşın..."
+              aria-label="Değerlendirmeniz"
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
@@ -212,6 +224,7 @@ export function ProductReviews({ productId }: { productId: string }) {
               required
             />
             {error && <p className="text-xs text-red-500">{error}</p>}
+            <Turnstile onToken={setTurnstileToken} resetKey={turnstileReset} />
             <Button
               type="submit"
               disabled={submitting}

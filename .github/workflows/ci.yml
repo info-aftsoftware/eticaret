@@ -27,6 +27,9 @@ jobs:
       - name: Lint
         run: npm run lint -- --no-cache
 
+      - name: Unit tests (fiyat/indirim/kargo hesapları)
+        run: npm run test:unit
+
       - name: SEO and integration audit
         run: npm run audit:site
 

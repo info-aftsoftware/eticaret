@@ -340,7 +340,7 @@ export default function GesPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col" id="main-content">
+      <div className="min-h-screen bg-slate-50 flex flex-col">
         <div className="flex-1 flex items-center justify-center py-20 px-4">
           <Card className="max-w-lg w-full shadow-xl border-0">
             <CardContent className="py-16 text-center px-8">
@@ -403,7 +403,7 @@ export default function GesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50" id="main-content">
+    <div className="min-h-screen bg-slate-50">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
 
       {/* ── HERO ─────────────────────────────────────────────────── */}

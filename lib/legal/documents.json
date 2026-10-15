@@ -1,0 +1,1050 @@
+{
+  "gizlilik-ve-cerez-politikasi": {
+    "title": "Gizlilik ve Çerez Politikası",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "Voltekno (AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ) olarak gizliliğinize önem veriyoruz. Bu politika, www.voltekno.com internet sitesini (\"Site\") ziyaret ettiğinizde ve alışveriş yaptığınızda bilgilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu açıklar. Kişisel verilerinizin işlenmesine ilişkin ayrıntılı bilgi için KVKK Aydınlatma Metni'ni inceleyebilirsiniz."
+      },
+      {
+        "t": "h",
+        "x": "1. Topladığımız Bilgiler"
+      },
+      {
+        "t": "li",
+        "x": "Üyelik, sipariş ve iletişim formlarında paylaştığınız ad-soyad, e-posta, telefon, adres ve fatura bilgileri,"
+      },
+      {
+        "t": "li",
+        "x": "Sipariş geçmişi, sepet ve talep bilgileri,"
+      },
+      {
+        "t": "li",
+        "x": "Site'yi kullanımınıza ilişkin IP adresi, tarayıcı/cihaz bilgisi ve çerez verileri."
+      },
+      {
+        "t": "h",
+        "x": "2. Ödeme Güvenliği"
+      },
+      {
+        "t": "p",
+        "x": "Site'deki ödemeler, BDDK lisanslı ödeme kuruluşları ve bankaların altyapısı üzerinden 256-bit SSL şifreleme ve 3D Secure ile gerçekleştirilir. Kredi kartı bilgileriniz Şirketimiz tarafından görülmez ve saklanmaz."
+      },
+      {
+        "t": "h",
+        "x": "3. Bilgilerin Kullanımı"
+      },
+      {
+        "t": "p",
+        "x": "Bilgileriniz; siparişlerinizi işlemek ve teslim etmek, faturalandırmak, satış sonrası destek sağlamak, yasal yükümlülükleri yerine getirmek, Site güvenliğini sağlamak ve onay vermeniz halinde kampanyalardan haberdar etmek amacıyla kullanılır. Bilgileriniz, KVKK Aydınlatma Metni'nde belirtilen taraflar dışında üçüncü kişilere satılmaz veya kiralanmaz."
+      },
+      {
+        "t": "h",
+        "x": "4. Çerez (Cookie) Politikası"
+      },
+      {
+        "t": "h",
+        "x": "4.1. Çerez Nedir?"
+      },
+      {
+        "t": "p",
+        "x": "Çerezler, Site'yi ziyaret ettiğinizde tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır. Site'nin düzgün çalışmasını, tercihlerinizin hatırlanmasını ve deneyiminizin iyileştirilmesini sağlar."
+      },
+      {
+        "t": "h",
+        "x": "4.2. Kullandığımız Çerez Türleri"
+      },
+      {
+        "t": "p",
+        "x": "Zorunlu Çerezler: Oturum açma, sepet, ödeme adımı ve güvenlik gibi Site'nin temel işlevlerini sağlar. Hukuki Sebep: Sözleşmenin ifası ve meşru menfaat (açık rıza gerekmez)"
+      },
+      {
+        "t": "p",
+        "x": "İşlevsel Çerezler: Dil, bölge ve benzeri tercihlerinizi hatırlar. Hukuki Sebep: Açık rıza"
+      },
+      {
+        "t": "p",
+        "x": "Analitik / Performans Çerezleri: Ziyaretçi sayısı, sayfa görüntüleme ve Site kullanımını analiz ederek Site'yi geliştirmemize yardımcı olur. Hukuki Sebep: Açık rıza"
+      },
+      {
+        "t": "p",
+        "x": "Pazarlama / Hedefleme Çerezleri: İlgi alanlarınıza uygun reklam ve kampanyaların gösterilmesini sağlar. Hukuki Sebep: Açık rıza"
+      },
+      {
+        "t": "h",
+        "x": "4.3. Çerez Tercihlerinizin Yönetimi"
+      },
+      {
+        "t": "p",
+        "x": "Zorunlu çerezler dışındaki çerezler yalnızca onayınızla kullanılır. Tercihinizi dilediğiniz zaman değiştirebilir, tarayıcınızın ayarlarından çerezleri silebilir veya engelleyebilirsiniz:"
+      },
+      {
+        "t": "li",
+        "x": "Google Chrome: Ayarlar > Gizlilik ve güvenlik > Çerezler ve diğer site verileri"
+      },
+      {
+        "t": "li",
+        "x": "Mozilla Firefox: Ayarlar > Gizlilik ve Güvenlik > Çerezler ve Site Verileri"
+      },
+      {
+        "t": "li",
+        "x": "Safari: Tercihler > Gizlilik > Web sitesi verilerini yönet"
+      },
+      {
+        "t": "li",
+        "x": "Microsoft Edge: Ayarlar > Çerezler ve site izinleri"
+      },
+      {
+        "t": "p",
+        "x": "Zorunlu çerezlerin engellenmesi halinde Site'nin bazı bölümleri (sepet, ödeme, üyelik) düzgün çalışmayabilir."
+      },
+      {
+        "t": "h",
+        "x": "4.4. Üçüncü Taraf Çerezleri"
+      },
+      {
+        "t": "p",
+        "x": "Site'de e-ticaret altyapı sağlayıcımız ve onay vermeniz halinde analiz ve reklam hizmet sağlayıcılarına (ör. Google, Meta) ait çerezler kullanılabilir. Bu çerezlerin kullanımı ilgili sağlayıcıların gizlilik politikalarına tabidir."
+      },
+      {
+        "t": "h",
+        "x": "5. Haklarınız"
+      },
+      {
+        "t": "p",
+        "x": "KVKK'nın 11. maddesi kapsamındaki haklarınızı kullanmak için info@voltekno.com adresine veya afetteknoloji@hs01.kep.tr KEP adresimize başvurabilirsiniz. Ayrıntılar KVKK Aydınlatma Metni'nde yer almaktadır."
+      },
+      {
+        "t": "h",
+        "x": "6. Değişiklikler"
+      },
+      {
+        "t": "p",
+        "x": "Bu politika gerektiğinde güncellenebilir. Güncel sürüm her zaman Site'de yayımlanır ve yayım tarihinden itibaren geçerlidir."
+      },
+      {
+        "t": "h",
+        "x": "7. İletişim"
+      },
+      {
+        "t": "p",
+        "x": "AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİÇaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞE-posta: info@voltekno.com · Telefon: +90 551 829 16 13"
+      }
+    ]
+  },
+  "mesafeli-satis-sozlesmesi": {
+    "title": "Mesafeli Satış Sözleşmesi",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "h",
+        "x": "1. TARAFLAR"
+      },
+      {
+        "t": "h",
+        "x": "1.1. SATICI"
+      },
+      {
+        "t": "li",
+        "x": "Ticaret Unvanı: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\")"
+      },
+      {
+        "t": "li",
+        "x": "Adres: Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      },
+      {
+        "t": "li",
+        "x": "MERSİS No: 0009188272600001"
+      },
+      {
+        "t": "li",
+        "x": "Vergi Dairesi / Vergi No: Hazar Vergi Dairesi / 0091882726"
+      },
+      {
+        "t": "li",
+        "x": "Telefon: +90 551 829 16 13"
+      },
+      {
+        "t": "li",
+        "x": "E-posta: info@voltekno.com"
+      },
+      {
+        "t": "li",
+        "x": "KEP Adresi: afetteknoloji@hs01.kep.tr"
+      },
+      {
+        "t": "li",
+        "x": "İnternet Sitesi: www.voltekno.com"
+      },
+      {
+        "t": "h",
+        "x": "1.2. ALICI"
+      },
+      {
+        "t": "p",
+        "x": "Sipariş sırasında beyan edilen ad-soyad/unvan, teslimat ve fatura adresi, telefon ve e-posta bilgilerine sahip kişidir. Alıcı bilgileri, sipariş özetinde ve siparişe ilişkin olarak Alıcı'ya gönderilen e-postada yer alır."
+      },
+      {
+        "t": "h",
+        "x": "2. KONU"
+      },
+      {
+        "t": "p",
+        "x": "İşbu Sözleşme'nin konusu, Alıcı'nın Satıcı'ya ait www.voltekno.com internet sitesi (\"Site\") üzerinden elektronik ortamda siparişini verdiği, nitelikleri ve satış fiyatı sipariş özetinde belirtilen ürünün/ürünlerin satışı ve teslimi ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri uyarınca tarafların hak ve yükümlülüklerinin belirlenmesidir."
+      },
+      {
+        "t": "h",
+        "x": "3. SÖZLEŞME KONUSU ÜRÜN, ÖDEME VE TESLİMAT BİLGİLERİ"
+      },
+      {
+        "t": "p",
+        "x": "3.1. Ürünün/ürünlerin cinsi, türü, marka-modeli, adedi, KDV dahil satış fiyatı, ödeme şekli, kargo/teslimat bedeli ve toplam tutar, siparişin onaylandığı anda sipariş özetinde ve Alıcı'ya gönderilen sipariş onay e-postasında yer aldığı şekildedir. Bu bilgiler işbu Sözleşme'nin ayrılmaz parçasıdır."
+      },
+      {
+        "t": "p",
+        "x": "3.2. Site'de ilan edilen fiyatlar, aksi belirtilmedikçe KDV dahil Türk Lirası fiyatlarıdır. İlan edilen fiyatlar ve vaatler güncelleme yapılana ve değiştirilene kadar geçerlidir. Süreli olarak ilan edilen fiyatlar ise belirtilen süre sonuna kadar geçerlidir."
+      },
+      {
+        "t": "p",
+        "x": "3.3. Kargo/teslimat ücreti, sipariş özetinde ayrıca gösterilir ve Alıcı tarafından ödenir; Site'de ücretsiz kargo kampanyası ilan edilmişse kampanya koşulları uygulanır."
+      },
+      {
+        "t": "p",
+        "x": "3.4. Taksitli ödemeler, ilgili banka ve ödeme kuruluşunun koşullarına tabidir. Taksit tutarları ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
+      },
+      {
+        "t": "h",
+        "x": "4. GENEL HÜKÜMLER"
+      },
+      {
+        "t": "p",
+        "x": "4.1. Alıcı, sözleşme konusu ürünün temel nitelikleri, satış fiyatı, ödeme şekli ve teslimata ilişkin Ön Bilgilendirme Formu'nu okuyup bilgi sahibi olduğunu ve elektronik ortamda gerekli teyidi verdiğini kabul ve beyan eder."
+      },
+      {
+        "t": "p",
+        "x": "4.2. Sözleşme konusu ürün, yasal 30 (otuz) günlük süreyi aşmamak kaydıyla, ürün sayfasında belirtilen süre içinde Alıcı'nın belirttiği teslimat adresine veya gösterdiği kişiye/kuruluşa teslim edilir. Stok veya tedarik kaynaklı bir gecikme olması halinde Alıcı derhal bilgilendirilir."
+      },
+      {
+        "t": "p",
+        "x": "4.3. Ürün, Satıcı'nın çalıştığı kargo firmalarından biri aracılığıyla gönderilir. Teslimat anında Alıcı'nın adreste bulunmaması halinde Satıcı edimini yerine getirmiş sayılır; bu durumda kargo firmasının şubesinden ürünün teslim alınması Alıcı'nın sorumluluğundadır."
+      },
+      {
+        "t": "p",
+        "x": "4.4. Alıcı, ürünü teslim alırken ambalajı kontrol etmeli; ezik, kırık, yırtık veya hasarlı paketleri teslim almamalı ve kargo görevlisine hasar tespit tutanağı tutturmalıdır. Hasarlı olduğu halde tutanaksız teslim alınan ürünler bakımından kargo firmasının sorumluluğuna ilişkin hükümler saklıdır; bu durum Alıcı'nın ayıplı mala ilişkin yasal haklarını ortadan kaldırmaz."
+      },
+      {
+        "t": "p",
+        "x": "4.5. Satıcı, sözleşme konusu ürünü sağlam, eksiksiz, siparişte belirtilen niteliklere uygun ve varsa garanti belgeleri, kullanım kılavuzları ile teslim etmeyi kabul eder."
+      },
+      {
+        "t": "p",
+        "x": "4.6. Satıcı, haklı bir sebebe dayanarak sözleşmeden doğan ifa yükümlülüğünün süresi dolmadan Alıcı'yı bilgilendirmek ve açıkça onayını almak suretiyle eşit kalite ve fiyatta farklı bir ürün tedarik edebilir."
+      },
+      {
+        "t": "p",
+        "x": "4.7. Sipariş konusu ürünün teslimatının imkânsız hale gelmesi halinde Satıcı, bu durumu öğrendiği tarihten itibaren 3 (üç) gün içinde Alıcı'ya bildirir ve teslimat masrafları dahil tahsil edilen tüm bedeli bildirim tarihinden itibaren en geç 14 (on dört) gün içinde iade eder."
+      },
+      {
+        "t": "p",
+        "x": "4.8. Ürün bedeli ödemesinin, kullanılan kart veya ödeme aracının sahibi tarafından haksız ya da hukuka aykırı kullanılması nedeniyle ilgili banka veya ödeme kuruluşunca Satıcı'ya ödenmemesi halinde, Satıcı ürünün teslim yükümlülüğünden kurtulur."
+      },
+      {
+        "t": "p",
+        "x": "4.9. Alıcı, Site'de verdiği bilgilerin doğru ve güncel olduğunu kabul eder. Yanlış bilgi verilmesinden kaynaklanan gecikme ve zararlardan Satıcı sorumlu değildir."
+      },
+      {
+        "t": "p",
+        "x": "4.10. Fatura, Alıcı'nın sipariş sırasında beyan ettiği fatura bilgileri esas alınarak elektronik ortamda (e-Arşiv/e-Fatura) düzenlenir ve Alıcı'nın e-posta adresine gönderilir."
+      },
+      {
+        "t": "h",
+        "x": "5. CAYMA HAKKI"
+      },
+      {
+        "t": "p",
+        "x": "5.1. Alıcı, ürünün kendisine veya gösterdiği üçüncü kişiye teslim tarihinden itibaren 14 (on dört) gün içinde herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin sözleşmeden cayma hakkına sahiptir. Birden fazla ürünün tek siparişte ayrı ayrı teslim edildiği durumlarda süre, son ürünün teslim alındığı tarihte başlar. Alıcı, ürünün teslimine kadar olan süre içinde de cayma hakkını kullanabilir."
+      },
+      {
+        "t": "p",
+        "x": "5.2. Cayma hakkının kullanıldığına dair bildirimin, cayma süresi içinde info@voltekno.com adresine e-posta ile, +90 551 829 16 13 numaralı telefona veya Site'deki \"Hesabım > Siparişlerim\" bölümü üzerinden yapılması yeterlidir. Alıcı, dilerse Yönetmelik ekindeki cayma formunu da kullanabilir."
+      },
+      {
+        "t": "p",
+        "x": "5.3. Alıcı, cayma bildiriminden itibaren 10 (on) gün içinde ürünü, faturası ve varsa tüm aksesuarları, kılavuzları ve hediyeleri ile birlikte aşağıdaki iade adresine göndermekle yükümlüdür:"
+      },
+      {
+        "t": "p",
+        "x": "AFET TEKNOLOJİLERİ TİC. VE SAN. LTD. ŞTİ. – Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      },
+      {
+        "t": "p",
+        "x": "5.4. Satıcı tarafından iade için belirtilen kargo firması ve iade kodu ile yapılan gönderimlerde iade kargo bedeli Satıcı'ya aittir. Satıcı'nın belirttiği kargo firması dışında bir taşıyıcı ile yapılan gönderimlerin bedeli Alıcı'ya aittir."
+      },
+      {
+        "t": "p",
+        "x": "5.5. Satıcı, cayma bildiriminin kendisine ulaştığı tarihten itibaren en geç 14 (on dört) gün içinde, varsa teslimat masrafları da dahil olmak üzere tahsil edilen tüm ödemeleri, Alıcı'nın satın alırken kullandığı ödeme aracına uygun şekilde ve Alıcı'ya herhangi bir masraf veya yükümlülük getirmeden tek seferde iade eder. Kredi kartına yapılan iadelerin hesaba yansıma süresi ilgili bankanın uygulamasına bağlıdır."
+      },
+      {
+        "t": "p",
+        "x": "5.6. Alıcı, cayma süresi içinde ürünü, işleyişine, teknik özelliklerine ve kullanım talimatlarına uygun bir şekilde kullandığı takdirde meydana gelen değişiklik ve bozulmalardan sorumlu değildir. Ürünün olağan kullanımı dışında kullanılması, kurulumunun yapılarak sisteme bağlanıp işletilmesi veya hasar görmesi nedeniyle meydana gelen değer kaybından Alıcı sorumludur."
+      },
+      {
+        "t": "h",
+        "x": "6. CAYMA HAKKININ KULLANILAMAYACAĞI HALLER"
+      },
+      {
+        "t": "p",
+        "x": "Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesi uyarınca aşağıdaki hallerde cayma hakkı kullanılamaz:"
+      },
+      {
+        "t": "p",
+        "x": "a) Alıcı'nın istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan, özel olarak üretilen, kesilen, ölçüye göre hazırlanan veya üzerinde değişiklik yapılan ürünler (ör. Alıcı'nın talebiyle özel uzunlukta kesilen kablolar, özel konfigürasyonla hazırlanan sistemler),"
+      },
+      {
+        "t": "p",
+        "x": "b) Fiyatı finansal piyasalardaki dalgalanmalara bağlı olarak değişen ve Satıcı'nın kontrolünde olmayan mal veya hizmetler,"
+      },
+      {
+        "t": "p",
+        "x": "c) Çabuk bozulabilen veya son kullanma tarihi geçebilecek mallar,"
+      },
+      {
+        "t": "p",
+        "x": "d) Tesliminden sonra ambalaj, bant, mühür, paket gibi koruyucu unsurları açılmış olan mallardan iadesi sağlık ve hijyen açısından uygun olmayanlar,"
+      },
+      {
+        "t": "p",
+        "x": "e) Tesliminden sonra başka ürünlerle karışan ve doğası gereği ayrıştırılması mümkün olmayan mallar,"
+      },
+      {
+        "t": "p",
+        "x": "f) Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayri maddi mallar ile Yönetmelik'te sayılan diğer haller."
+      },
+      {
+        "t": "h",
+        "x": "7. AYIPLI MAL VE GARANTİ"
+      },
+      {
+        "t": "p",
+        "x": "7.1. Teslim edilen ürünün ayıplı olması halinde Alıcı, 6502 sayılı Kanun'un 11. maddesi uyarınca; sözleşmeden dönme, satış bedelinden indirim isteme, ücretsiz onarılmasını isteme veya ayıpsız bir misli ile değiştirilmesini isteme seçimlik haklarından birini Satıcı'ya karşı kullanabilir."
+      },
+      {
+        "t": "p",
+        "x": "7.2. Ayıplı mala ilişkin sorumluluk süresi, daha uzun bir süre öngörülmedikçe malın tesliminden itibaren 2 (iki) yıldır. Garanti belgesi gerektiren ürünler, üretici veya ithalatçı firmanın garanti koşullarına ve en az 2 (iki) yıllık yasal garanti süresine tabidir."
+      },
+      {
+        "t": "p",
+        "x": "7.3. Kullanım hatası, yetkisiz kişilerce yapılan kurulum/müdahale, uygun olmayan elektrik tesisatı, aşırı gerilim, yıldırım, sel, yangın gibi dış etkenlerden kaynaklanan arızalar garanti kapsamı dışındadır. İnverter, akü/batarya, şarj kontrol cihazı ve benzeri elektrikli ürünlerin kurulumunun yetkin bir elektrik teknisyenince, üretici talimatlarına uygun olarak yapılması gerekir."
+      },
+      {
+        "t": "h",
+        "x": "8. KİŞİSEL VERİLER"
+      },
+      {
+        "t": "p",
+        "x": "Alıcı'ya ait kişisel veriler, 6698 sayılı Kişisel Verilerin Korunması Kanunu'na uygun olarak Site'de yayımlanan KVKK Aydınlatma Metni ve Gizlilik ve Çerez Politikası çerçevesinde işlenir."
+      },
+      {
+        "t": "h",
+        "x": "9. UYUŞMAZLIKLARIN ÇÖZÜMÜ"
+      },
+      {
+        "t": "p",
+        "x": "İşbu Sözleşme'den doğan uyuşmazlıklarda, Ticaret Bakanlığı'nca her yıl ilan edilen parasal sınırlar dahilinde Alıcı'nın yerleşim yerindeki veya tüketici işleminin yapıldığı yerdeki Tüketici Hakem Heyetleri, bu sınırları aşan uyuşmazlıklarda Tüketici Mahkemeleri yetkilidir. Başvurular e-Devlet üzerindeki Tüketici Bilgi Sistemi (TÜBİS) aracılığıyla da yapılabilir."
+      },
+      {
+        "t": "h",
+        "x": "10. YÜRÜRLÜK"
+      },
+      {
+        "t": "p",
+        "x": "Alıcı, Site üzerinden verdiği siparişe ait ödemeyi gerçekleştirmesi ve işbu Sözleşme'yi elektronik ortamda onaylaması ile Sözleşme'nin tüm koşullarını kabul etmiş sayılır. Sözleşme, sipariş tarihinde kurulmuş ve yürürlüğe girmiş olur. Sözleşme'nin bir nüshası Alıcı'nın e-posta adresine gönderilir ve Satıcı tarafından en az 3 (üç) yıl süreyle saklanır."
+      },
+      {
+        "t": "p",
+        "x": "SATICI: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ"
+      },
+      {
+        "t": "p",
+        "x": "ALICI: Sipariş sahibi"
+      }
+    ]
+  },
+  "iade-ve-cayma-kosullari": {
+    "title": "İade ve Cayma Koşulları",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "Voltekno (AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ) olarak, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği'ne uygun olarak aşağıdaki iade koşullarını uygulamaktayız."
+      },
+      {
+        "t": "h",
+        "x": "Sipariş İptali"
+      },
+      {
+        "t": "p",
+        "x": "Siparişiniz kargoya teslim edilmeden önce info@voltekno.com adresine e-posta göndererek veya +90 551 829 16 13 numaralı telefondan bize ulaşarak iptal talebinde bulunabilirsiniz. İptal edilen siparişlerin bedeli, iptal tarihinden itibaren en geç 14 gün içinde ödeme yaptığınız karta/hesaba iade edilir. Kargoya verilmiş siparişler için aşağıdaki cayma hakkı süreci uygulanır."
+      },
+      {
+        "t": "h",
+        "x": "14 Gün Cayma Hakkı"
+      },
+      {
+        "t": "li",
+        "x": "Ürünü teslim aldığınız tarihten itibaren 14 gün içinde, herhangi bir gerekçe göstermeden ve cezai şart ödemeden iade edebilirsiniz."
+      },
+      {
+        "t": "li",
+        "x": "Cayma bildiriminizi info@voltekno.com adresine e-posta ile, +90 551 829 16 13 numaralı telefondan veya \"Hesabım > Siparişlerim\" bölümünden iletebilirsiniz."
+      },
+      {
+        "t": "li",
+        "x": "Bildiriminizden itibaren 10 gün içinde ürünü, faturası, kutusu, tüm aksesuarları, kullanım kılavuzu ve varsa hediyeleriyle birlikte aşağıdaki adrese göndermeniz gerekir."
+      },
+      {
+        "t": "p",
+        "x": "İade Adresi: AFET TEKNOLOJİLERİ TİC. VE SAN. LTD. ŞTİ. – Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      },
+      {
+        "t": "h",
+        "x": "İade Kargo Ücreti"
+      },
+      {
+        "t": "li",
+        "x": "Cayma talebinizi ilettiğinizde size iade için anlaşmalı kargo firması ve iade kodu bildirilir. Bu kod ile yapılan gönderimlerde iade kargo ücreti Voltekno'ya aittir."
+      },
+      {
+        "t": "li",
+        "x": "Bildirilen kargo firması ve iade kodu dışında, kendi seçtiğiniz bir taşıyıcı ile gönderim yapmanız halinde kargo ücreti size aittir."
+      },
+      {
+        "t": "li",
+        "x": "Ayıplı, hasarlı veya yanlış gönderilen ürünlerde tüm kargo masrafları Voltekno tarafından karşılanır."
+      },
+      {
+        "t": "h",
+        "x": "Para İadesi"
+      },
+      {
+        "t": "p",
+        "x": "İade edilen ürün tarafımıza ulaştıktan ve kontrol edildikten sonra, cayma bildiriminizin tarafımıza ulaştığı tarihten itibaren en geç 14 gün içinde, teslimat masrafları dahil ödediğiniz tutar, ödeme yaptığınız yönteme tek seferde iade edilir. Kredi kartı iadelerinin hesabınıza yansıma süresi bankanızın uygulamasına bağlıdır."
+      },
+      {
+        "t": "h",
+        "x": "İade Edilecek Ürünün Durumu"
+      },
+      {
+        "t": "li",
+        "x": "Cayma süresi içinde ürünü, işleyişine ve kullanım talimatlarına uygun şekilde incelemeniz nedeniyle oluşan değişikliklerden sorumlu değilsiniz."
+      },
+      {
+        "t": "li",
+        "x": "Ürünün kurulumunun yapılarak sisteme bağlanması, uzun süre çalıştırılması, darbe, sıvı teması, yanlış bağlantı veya aşırı gerilim gibi nedenlerle hasar görmesi halinde oluşan değer kaybından alıcı sorumludur."
+      },
+      {
+        "t": "li",
+        "x": "Ürünler, mümkünse orijinal ambalajında ve taşımada zarar görmeyecek şekilde paketlenerek gönderilmelidir. Güneş paneli, akü ve batarya gibi ağır/kırılgan ürünlerin iadesinden önce lütfen bizimle iletişime geçin; uygun gönderim yöntemi tarafınıza bildirilecektir."
+      },
+      {
+        "t": "h",
+        "x": "Cayma Hakkı Kullanılamayan Ürünler"
+      },
+      {
+        "t": "p",
+        "x": "Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesi uyarınca aşağıdaki ürünlerde cayma hakkı kullanılamaz:"
+      },
+      {
+        "t": "li",
+        "x": "Talebiniz doğrultusunda özel olarak hazırlanan, kesilen, ölçüye göre üretilen veya üzerinde değişiklik yapılan ürünler (ör. özel uzunlukta kesilen kablolar, size özel konfigüre edilen sistemler),"
+      },
+      {
+        "t": "li",
+        "x": "Tesliminden sonra koruyucu ambalajı açılmış olup iadesi sağlık ve hijyen açısından uygun olmayan ürünler,"
+      },
+      {
+        "t": "li",
+        "x": "Yönetmelik'te sayılan diğer haller."
+      },
+      {
+        "t": "h",
+        "x": "Ayıplı ve Hasarlı Ürünler"
+      },
+      {
+        "t": "li",
+        "x": "Kargo teslimi sırasında paketi kontrol ediniz. Hasarlı paketleri teslim almayarak kargo görevlisine hasar tespit tutanağı tutturunuz."
+      },
+      {
+        "t": "li",
+        "x": "Teslim aldığınız ürün ayıplı ise 6502 sayılı Kanun'un 11. maddesi uyarınca; sözleşmeden dönme, bedel indirimi, ücretsiz onarım veya ayıpsız misli ile değişim haklarından birini kullanabilirsiniz."
+      },
+      {
+        "t": "li",
+        "x": "Ayıplı mala ilişkin sorumluluk süresi teslimden itibaren 2 yıldır. Garanti belgeli ürünlerde üretici/ithalatçı garanti koşulları geçerlidir."
+      },
+      {
+        "t": "h",
+        "x": "İletişim"
+      },
+      {
+        "t": "p",
+        "x": "Her türlü iade ve değişim talebiniz için:"
+      },
+      {
+        "t": "li",
+        "x": "E-posta: info@voltekno.com"
+      },
+      {
+        "t": "li",
+        "x": "Telefon: +90 551 829 16 13"
+      },
+      {
+        "t": "li",
+        "x": "Adres: Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      }
+    ]
+  },
+  "on-bilgilendirme-formu": {
+    "title": "Ön Bilgilendirme Formu",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "İşbu Ön Bilgilendirme Formu, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca, mesafeli satış sözleşmesi kurulmadan önce Alıcı'nın bilgilendirilmesi amacıyla düzenlenmiştir."
+      },
+      {
+        "t": "h",
+        "x": "1. SATICI BİLGİLERİ"
+      },
+      {
+        "t": "li",
+        "x": "Ticaret Unvanı: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\")"
+      },
+      {
+        "t": "li",
+        "x": "Adres: Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      },
+      {
+        "t": "li",
+        "x": "MERSİS No: 0009188272600001"
+      },
+      {
+        "t": "li",
+        "x": "Vergi Dairesi / Vergi No: Hazar Vergi Dairesi / 0091882726"
+      },
+      {
+        "t": "li",
+        "x": "Telefon: +90 551 829 16 13"
+      },
+      {
+        "t": "li",
+        "x": "E-posta: info@voltekno.com"
+      },
+      {
+        "t": "li",
+        "x": "KEP Adresi: afetteknoloji@hs01.kep.tr"
+      },
+      {
+        "t": "h",
+        "x": "2. ALICI BİLGİLERİ"
+      },
+      {
+        "t": "p",
+        "x": "Sipariş sırasında Alıcı tarafından beyan edilen ad-soyad/unvan, adres, telefon ve e-posta bilgileridir."
+      },
+      {
+        "t": "h",
+        "x": "3. ÜRÜNÜN TEMEL NİTELİKLERİ VE FİYATI"
+      },
+      {
+        "t": "p",
+        "x": "3.1. Ürünün/ürünlerin temel nitelikleri (cinsi, türü, marka-modeli, teknik özellikleri, adedi) ürün sayfasında ve sipariş özetinde yer almaktadır."
+      },
+      {
+        "t": "p",
+        "x": "3.2. Ürünün KDV dahil satış fiyatı, teslimat/kargo bedeli, varsa indirimler ve ödenecek toplam tutar, ödeme adımında sipariş özetinde gösterilir."
+      },
+      {
+        "t": "p",
+        "x": "3.3. Ödeme; kredi kartı, banka kartı ve ödeme adımında sunulan diğer yöntemlerle yapılabilir. Taksit seçenekleri ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
+      },
+      {
+        "t": "h",
+        "x": "4. TESLİMAT"
+      },
+      {
+        "t": "p",
+        "x": "4.1. Ürün, ürün sayfasında belirtilen süre içinde ve her halükarda yasal 30 (otuz) günlük süreyi aşmamak kaydıyla, Satıcı'nın çalıştığı kargo firmalarından biri ile Alıcı'nın belirttiği teslimat adresine gönderilir."
+      },
+      {
+        "t": "p",
+        "x": "4.2. Hacimli ve ağır ürünlerde (güneş paneli, akü, batarya grupları vb.) teslimat, ambar/nakliye firması aracılığıyla yapılabilir; bu durumda teslimat şekli ve süresi Alıcı'ya ayrıca bildirilir."
+      },
+      {
+        "t": "h",
+        "x": "5. CAYMA HAKKI"
+      },
+      {
+        "t": "p",
+        "x": "5.1. Alıcı, ürünün teslim tarihinden itibaren 14 (on dört) gün içinde hiçbir gerekçe göstermeksizin ve cezai şart ödemeksizin sözleşmeden cayma hakkına sahiptir."
+      },
+      {
+        "t": "p",
+        "x": "5.2. Cayma bildirimi, süre içinde info@voltekno.com adresine e-posta ile, +90 551 829 16 13 numaralı telefona veya Site'deki \"Hesabım > Siparişlerim\" bölümü üzerinden yapılabilir."
+      },
+      {
+        "t": "p",
+        "x": "5.3. Alıcı, cayma bildiriminden itibaren 10 (on) gün içinde ürünü faturası ve tüm aksesuarlarıyla birlikte şu adrese göndermelidir: AFET TEKNOLOJİLERİ TİC. VE SAN. LTD. ŞTİ. – Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      },
+      {
+        "t": "p",
+        "x": "5.4. Satıcı'nın iade için belirttiği kargo firması ve iade kodu ile yapılan gönderimlerde iade kargo bedeli Satıcı'ya aittir; Alıcı'nın kendi seçtiği farklı bir taşıyıcı ile yaptığı gönderimlerin bedeli Alıcı'ya aittir."
+      },
+      {
+        "t": "p",
+        "x": "5.5. Satıcı, cayma bildiriminin kendisine ulaşmasından itibaren 14 (on dört) gün içinde, teslimat masrafları dahil tahsil edilen tüm bedeli Alıcı'nın kullandığı ödeme aracına iade eder."
+      },
+      {
+        "t": "p",
+        "x": "5.6. Alıcı'nın istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan ya da üzerinde değişiklik yapılan ürünler başta olmak üzere, Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinde sayılan hallerde cayma hakkı kullanılamaz."
+      },
+      {
+        "t": "h",
+        "x": "6. ŞİKÂYET VE İTİRAZLAR"
+      },
+      {
+        "t": "p",
+        "x": "Alıcı, talep ve şikâyetlerini yukarıdaki iletişim kanalları aracılığıyla Satıcı'ya iletebilir. Uyuşmazlık halinde Ticaret Bakanlığı'nca her yıl ilan edilen parasal sınırlar dahilinde Tüketici Hakem Heyetlerine, bu sınırları aşan durumlarda Tüketici Mahkemelerine başvurulabilir. Başvurular e-Devlet üzerinden Tüketici Bilgi Sistemi (TÜBİS) ile de yapılabilir."
+      },
+      {
+        "t": "h",
+        "x": "7. DİĞER HUSUSLAR"
+      },
+      {
+        "t": "p",
+        "x": "7.1. Ayıplı mal halinde Alıcı, 6502 sayılı Kanun'un 11. maddesinde düzenlenen seçimlik haklarını kullanabilir. Ürünler, en az 2 (iki) yıllık yasal garanti kapsamındadır."
+      },
+      {
+        "t": "p",
+        "x": "7.2. Sipariş onaylandıktan sonra işbu form ve Mesafeli Satış Sözleşmesi Alıcı'nın e-posta adresine gönderilir ve Satıcı tarafından en az 3 (üç) yıl süreyle saklanır."
+      },
+      {
+        "t": "p",
+        "x": "7.3. Alıcı, işbu Ön Bilgilendirme Formu'nu okuduğunu, anladığını ve siparişi onaylamadan önce elektronik ortamda teyit ettiğini kabul eder."
+      }
+    ]
+  },
+  "uyelik-ve-kullanim-kosullari": {
+    "title": "Üyelik ve Kullanım Koşulları",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "İşbu Üyelik ve Kullanım Koşulları (\"Koşullar\"), AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\") tarafından işletilen www.voltekno.com internet sitesinin (\"Site\") kullanımına ilişkin şartları düzenler. Site'yi kullanarak veya üye olarak bu Koşulları kabul etmiş sayılırsınız."
+      },
+      {
+        "t": "h",
+        "x": "1. Taraflar ve Tanımlar"
+      },
+      {
+        "t": "li",
+        "x": "Voltekno: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ, Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ, MERSİS: 0009188272600001."
+      },
+      {
+        "t": "li",
+        "x": "Kullanıcı / Üye: Site'yi ziyaret eden veya Site'ye üye olan gerçek ya da tüzel kişi."
+      },
+      {
+        "t": "h",
+        "x": "2. Üyelik"
+      },
+      {
+        "t": "p",
+        "x": "2.1. Üyelik için 18 yaşını doldurmuş olmak ve kayıt formunda doğru, eksiksiz ve güncel bilgi vermek gerekir."
+      },
+      {
+        "t": "p",
+        "x": "2.2. Üye, hesap bilgilerinin ve şifresinin gizliliğinden sorumludur. Hesabın yetkisiz kullanımı fark edildiğinde derhal Voltekno'ya bildirilmelidir."
+      },
+      {
+        "t": "p",
+        "x": "2.3. Üye, dilediği zaman info@voltekno.com adresine bildirimde bulunarak veya hesap ayarları üzerinden üyeliğini sonlandırabilir. Üyeliğin sona ermesi, tamamlanmış siparişlerden doğan hak ve yükümlülükleri etkilemez."
+      },
+      {
+        "t": "h",
+        "x": "3. Site'nin Kullanımı"
+      },
+      {
+        "t": "p",
+        "x": "3.1. Kullanıcı, Site'yi hukuka ve bu Koşullara uygun şekilde kullanmayı; Site'nin işleyişini bozacak, güvenliğini tehdit edecek veya üçüncü kişilerin haklarını ihlal edecek davranışlarda bulunmamayı kabul eder."
+      },
+      {
+        "t": "p",
+        "x": "3.2. Site'deki ürün bilgileri, teknik özellikler ve görseller bilgilendirme amaçlıdır. Voltekno, bilgilerin doğruluğu için azami özeni gösterir; olası yazım ve fiyat hatalarında Kullanıcı'yı bilgilendirerek siparişi iptal etme veya düzeltme hakkını saklı tutar. Bu durumda tahsil edilen tutar derhal iade edilir."
+      },
+      {
+        "t": "p",
+        "x": "3.3. Site'de yer alan teknik içerikler, sistem tasarımları ve kurulum önerileri genel bilgi niteliğindedir. Elektrik tesisatı, güneş enerjisi sistemi kurulumu ve bağlantılar, ilgili mevzuata uygun olarak yetkin bir elektrik teknisyeni/mühendisi tarafından yapılmalıdır."
+      },
+      {
+        "t": "h",
+        "x": "4. Siparişler ve Teklif Talepleri"
+      },
+      {
+        "t": "p",
+        "x": "4.1. Site üzerinden verilen siparişler, Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi hükümlerine tabidir."
+      },
+      {
+        "t": "p",
+        "x": "4.2. Anahtar teslim GES (güneş enerjisi sistemi) kurulum hizmetleri Site üzerinden satılmamaktadır; bu hizmetler için Site'deki iletişim/teklif formu aracılığıyla teklif talep edilir. Teklif talebi bağlayıcı bir sözleşme oluşturmaz. Kurulum hizmetleri, taraflar arasında ayrıca düzenlenecek yazılı sözleşmeye tabidir."
+      },
+      {
+        "t": "h",
+        "x": "5. Fikri Mülkiyet"
+      },
+      {
+        "t": "p",
+        "x": "Site'nin tasarımı, logosu, metinleri, görselleri ve yazılımı dahil tüm içerik Voltekno'ya veya lisans verenlere aittir. İzinsiz kopyalanamaz, çoğaltılamaz ve ticari amaçla kullanılamaz. Site'de yer alan üçüncü kişilere ait marka ve logolar ilgili hak sahiplerine aittir."
+      },
+      {
+        "t": "h",
+        "x": "6. Sorumluluğun Sınırlandırılması"
+      },
+      {
+        "t": "p",
+        "x": "Voltekno, Site'nin kesintisiz ve hatasız çalışması için gerekli özeni gösterir; ancak bakım, teknik arıza, internet altyapısı veya mücbir sebeplerden kaynaklanan kesintilerden sorumlu tutulamaz. Bu hüküm, tüketicilerin kanundan doğan haklarını sınırlamaz."
+      },
+      {
+        "t": "h",
+        "x": "7. Kişisel Veriler ve İletişim"
+      },
+      {
+        "t": "p",
+        "x": "Kişisel verileriniz KVKK Aydınlatma Metni ile Gizlilik ve Çerez Politikası'na uygun olarak işlenir. Ticari elektronik iletiler yalnızca onay vermeniz halinde gönderilir; onayınızı dilediğiniz zaman geri alabilirsiniz."
+      },
+      {
+        "t": "h",
+        "x": "8. Değişiklikler"
+      },
+      {
+        "t": "p",
+        "x": "Voltekno, bu Koşulları gerektiğinde güncelleyebilir. Güncel Koşullar Site'de yayımlandığı tarihte yürürlüğe girer."
+      },
+      {
+        "t": "h",
+        "x": "9. Uygulanacak Hukuk ve Yetki"
+      },
+      {
+        "t": "p",
+        "x": "Bu Koşullar Türkiye Cumhuriyeti hukukuna tabidir. Tüketici işlemlerinden doğan uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri, diğer uyuşmazlıklarda Elazığ Mahkemeleri ve İcra Daireleri yetkilidir."
+      },
+      {
+        "t": "h",
+        "x": "10. İletişim"
+      },
+      {
+        "t": "p",
+        "x": "E-posta: info@voltekno.com · Telefon: +90 551 829 16 13 · KEP: afetteknoloji@hs01.kep.tr"
+      }
+    ]
+  },
+  "acik-riza-metni": {
+    "title": "Açık Rıza Metni",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\") tarafından KVKK Aydınlatma Metni kapsamında bilgilendirildim. Bu kapsamda, aşağıda onay verdiğim işlemler için kişisel verilerimin işlenmesine 6698 sayılı Kişisel Verilerin Korunması Kanunu'nun 5. maddesi uyarınca özgür irademle açık rıza veriyorum:"
+      },
+      {
+        "t": "li",
+        "x": "Kimlik, iletişim, alışveriş geçmişi ve çerez verilerimin; bana özel kampanya, indirim, ürün önerisi ve tanıtımların sunulması amacıyla analiz edilmesi ve işlenmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Site'deki zorunlu olmayan (analitik, işlevsel ve pazarlama) çerezler aracılığıyla toplanan verilerimin, Site deneyiminin iyileştirilmesi ve kişiselleştirilmiş reklam gösterimi amacıyla işlenmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Yukarıdaki amaçlarla sınırlı olarak verilerimin, sunucuları yurt dışında bulunabilen analiz ve reklam hizmet sağlayıcılarına (ör. Google, Meta) KVKK'nın 9. maddesine uygun şekilde aktarılması."
+      },
+      {
+        "t": "p",
+        "x": "Açık rıza vermemin herhangi bir ürün veya hizmetin satın alınması için ön koşul olmadığını, onay vermemem halinde de Site'den alışveriş yapabileceğimi biliyorum."
+      },
+      {
+        "t": "p",
+        "x": "Bu onayımı dilediğim zaman info@voltekno.com adresine e-posta göndererek, hesap ayarlarımdan veya çerez tercihlerimi değiştirerek geri alabileceğimi; geri almanın ileriye dönük sonuç doğuracağını biliyorum."
+      }
+    ]
+  },
+  "kvkk": {
+    "title": "KVKK Aydınlatma Metni",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\" veya \"Şirket\") olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (\"KVKK\") uyarınca veri sorumlusu sıfatıyla, kişisel verilerinizin işlenmesine ilişkin sizleri bilgilendirmek isteriz."
+      },
+      {
+        "t": "h",
+        "x": "1. Veri Sorumlusu"
+      },
+      {
+        "t": "li",
+        "x": "Unvan: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ"
+      },
+      {
+        "t": "li",
+        "x": "Adres: Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+      },
+      {
+        "t": "li",
+        "x": "MERSİS No: 0009188272600001"
+      },
+      {
+        "t": "li",
+        "x": "E-posta: info@voltekno.com"
+      },
+      {
+        "t": "li",
+        "x": "KEP: afetteknoloji@hs01.kep.tr"
+      },
+      {
+        "t": "h",
+        "x": "2. İşlenen Kişisel Veriler"
+      },
+      {
+        "t": "li",
+        "x": "Kimlik: Ad, soyad, (fatura için gerekli olması halinde) T.C. kimlik numarası."
+      },
+      {
+        "t": "li",
+        "x": "İletişim: Telefon numarası, e-posta adresi, teslimat ve fatura adresi."
+      },
+      {
+        "t": "li",
+        "x": "Müşteri İşlem: Sipariş, sepet, fatura, iade ve talep/şikâyet bilgileri."
+      },
+      {
+        "t": "li",
+        "x": "Finans: Ödeme ve fatura bilgileri (kart bilgileriniz Şirketimiz tarafından saklanmaz; ödeme kuruluşu tarafından işlenir)."
+      },
+      {
+        "t": "li",
+        "x": "İşlem Güvenliği: IP adresi, oturum ve log kayıtları, tarayıcı bilgileri."
+      },
+      {
+        "t": "li",
+        "x": "Pazarlama: Açık rızanız veya ticari elektronik ileti onayınız olması halinde alışveriş tercihleri ve çerez verileri."
+      },
+      {
+        "t": "li",
+        "x": "Kurumsal Müşteriler İçin: Firma unvanı, vergi dairesi ve vergi numarası, yetkili kişi bilgileri."
+      },
+      {
+        "t": "h",
+        "x": "3. Kişisel Verilerin İşlenme Amaçları"
+      },
+      {
+        "t": "li",
+        "x": "Üyelik kaydının oluşturulması ve hesabın yönetilmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Siparişlerin alınması, ödemenin tahsili, ürünlerin teslimi, faturalandırılması,"
+      },
+      {
+        "t": "li",
+        "x": "İade, değişim, garanti ve satış sonrası destek süreçlerinin yürütülmesi,"
+      },
+      {
+        "t": "li",
+        "x": "GES/teklif taleplerinin değerlendirilmesi ve sizinle iletişime geçilmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Talep ve şikâyetlerin yönetilmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Mesafeli satış, vergi ve ticaret mevzuatından kaynaklanan yükümlülüklerin yerine getirilmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Bilgi güvenliğinin sağlanması, dolandırıcılığın ve hukuka aykırı işlemlerin önlenmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Yetkili kurum ve kuruluşlara mevzuat gereği bilgi verilmesi,"
+      },
+      {
+        "t": "li",
+        "x": "Açık rızanız veya onayınız bulunması halinde kampanya, indirim ve tanıtım faaliyetlerinin yürütülmesi."
+      },
+      {
+        "t": "h",
+        "x": "4. Hukuki Sebepler"
+      },
+      {
+        "t": "p",
+        "x": "Kişisel verileriniz KVKK'nın 5. maddesinde yer alan;"
+      },
+      {
+        "t": "li",
+        "x": "Bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması (m.5/2-c),"
+      },
+      {
+        "t": "li",
+        "x": "Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi (m.5/2-ç),"
+      },
+      {
+        "t": "li",
+        "x": "Bir hakkın tesisi, kullanılması veya korunması (m.5/2-e),"
+      },
+      {
+        "t": "li",
+        "x": "Temel hak ve özgürlüklerinize zarar vermemek kaydıyla meşru menfaatlerimiz (m.5/2-f),"
+      },
+      {
+        "t": "li",
+        "x": "Pazarlama faaliyetleri ve zorunlu olmayan çerezler bakımından açık rızanız (m.5/1)"
+      },
+      {
+        "t": "p",
+        "x": "hukuki sebeplerine dayanılarak işlenmektedir."
+      },
+      {
+        "t": "h",
+        "x": "5. Toplama Yöntemi"
+      },
+      {
+        "t": "p",
+        "x": "Kişisel verileriniz; internet sitemiz, üyelik ve sipariş formları, iletişim/teklif formları, e-posta, telefon, çerezler ve ödeme altyapısı aracılığıyla elektronik ortamda, otomatik veya kısmen otomatik yollarla toplanmaktadır."
+      },
+      {
+        "t": "h",
+        "x": "6. Kişisel Verilerin Aktarılması"
+      },
+      {
+        "t": "p",
+        "x": "Kişisel verileriniz, yukarıdaki amaçlarla sınırlı olmak üzere;"
+      },
+      {
+        "t": "li",
+        "x": "Siparişin teslimi için kargo ve lojistik firmalarına,"
+      },
+      {
+        "t": "li",
+        "x": "Ödemenin alınması için bankalara ve ödeme kuruluşlarına,"
+      },
+      {
+        "t": "li",
+        "x": "E-ticaret altyapı hizmeti aldığımız ikas (İkas Bilişim A.Ş.) ve barındırma/bulut hizmet sağlayıcılarına,"
+      },
+      {
+        "t": "li",
+        "x": "Fatura düzenlenmesi için e-fatura/e-arşiv hizmet sağlayıcılarına ve mali müşavirimize,"
+      },
+      {
+        "t": "li",
+        "x": "Ürün garanti süreçleri için üretici, ithalatçı ve yetkili servislere,"
+      },
+      {
+        "t": "li",
+        "x": "Talep halinde yetkili kamu kurum ve kuruluşlarına ve adli mercilere"
+      },
+      {
+        "t": "p",
+        "x": "KVKK'nın 8. ve 9. maddelerine uygun olarak aktarılabilir. Hizmet sağlayıcılarımızın sunucularının yurt dışında bulunması halinde aktarım, KVKK'nın 9. maddesinde öngörülen güvencelere uygun olarak gerçekleştirilir."
+      },
+      {
+        "t": "h",
+        "x": "7. Saklama Süresi"
+      },
+      {
+        "t": "p",
+        "x": "Kişisel verileriniz, işlenme amacının gerektirdiği süre ve ilgili mevzuatta öngörülen süreler boyunca (ör. ticari defter ve belgeler için 10 yıl, mesafeli sözleşme kayıtları için en az 3 yıl) saklanır; sürenin sona ermesiyle silinir, yok edilir veya anonim hale getirilir."
+      },
+      {
+        "t": "h",
+        "x": "8. KVKK Madde 11 Kapsamındaki Haklarınız"
+      },
+      {
+        "t": "p",
+        "x": "Şirketimize başvurarak;"
+      },
+      {
+        "t": "p",
+        "x": "a) Kişisel verilerinizin işlenip işlenmediğini öğrenme,b) İşlenmişse buna ilişkin bilgi talep etme,c) İşlenme amacını ve amacına uygun kullanılıp kullanılmadığını öğrenme,ç) Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme,d) Eksik veya yanlış işlenmiş olması halinde düzeltilmesini isteme,e) KVKK'nın 7. maddesindeki şartlar çerçevesinde silinmesini veya yok edilmesini isteme,f) (d) ve (e) bentleri uyarınca yapılan işlemlerin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,g) Münhasıran otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,ğ) Kanuna aykırı olarak işlenmesi sebebiyle zarara uğramanız halinde zararın giderilmesini talep etme"
+      },
+      {
+        "t": "p",
+        "x": "haklarına sahipsiniz."
+      },
+      {
+        "t": "h",
+        "x": "9. Başvuru Yöntemi"
+      },
+      {
+        "t": "p",
+        "x": "Taleplerinizi, Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ'e uygun olarak;"
+      },
+      {
+        "t": "li",
+        "x": "Kimliğinizi tespit edici belgelerle birlikte yukarıdaki adresimize yazılı olarak,"
+      },
+      {
+        "t": "li",
+        "x": "afetteknoloji@hs01.kep.tr KEP adresimize güvenli elektronik imza ile,"
+      },
+      {
+        "t": "li",
+        "x": "Sistemimizde kayıtlı e-posta adresinizden info@voltekno.com adresine"
+      },
+      {
+        "t": "p",
+        "x": "iletebilirsiniz. Başvurularınız en geç 30 gün içinde ücretsiz olarak sonuçlandırılır. İşlemin ayrıca bir maliyet gerektirmesi halinde Kişisel Verileri Koruma Kurulu'nca belirlenen tarife uygulanabilir."
+      }
+    ]
+  },
+  "ticari-elektronik-ileti-onayi": {
+    "title": "Ticari Elektronik İleti Onayı",
+    "updated": "02.10.2026",
+    "blocks": [
+      {
+        "t": "p",
+        "x": "6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun ve Ticari İletişim ve Ticari Elektronik İletiler Hakkında Yönetmelik uyarınca;"
+      },
+      {
+        "t": "p",
+        "x": "AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\") tarafından; kampanya, indirim, yeni ürün, etkinlik ve tanıtımlar hakkında bilgilendirme amacıyla, paylaştığım telefon numarama SMS ve arama, e-posta adresime e-posta yoluyla ticari elektronik ileti gönderilmesine onay veriyorum."
+      },
+      {
+        "t": "li",
+        "x": "Onayım, İleti Yönetim Sistemi'ne (İYS) kaydedilecektir."
+      },
+      {
+        "t": "li",
+        "x": "Onay vermem, Site'den alışveriş yapabilmem için zorunlu değildir."
+      },
+      {
+        "t": "li",
+        "x": "Siparişlerime ilişkin bilgilendirme, kargo takibi ve fatura gibi işlem iletileri bu onaydan bağımsız olarak gönderilir."
+      },
+      {
+        "t": "li",
+        "x": "Dilediğim zaman, hiçbir gerekçe göstermeksizin ve ücretsiz olarak; iletilerde yer alan \"abonelikten çık/ret\" bağlantısını kullanarak, info@voltekno.com adresine e-posta göndererek, hesap ayarlarımdan veya İYS (www.iys.org.tr) üzerinden ticari elektronik ileti almayı reddedebilirim. Ret bildirimim, en geç 3 iş günü içinde işleme alınır."
+      },
+      {
+        "t": "p",
+        "x": "Kişisel verilerimin işlenmesine ilişkin ayrıntılı bilgiye KVKK Aydınlatma Metni'nden ulaşabilirim."
+      },
+      {
+        "t": "p",
+        "x": "İleti Göndericisi: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİMERSİS: 0009188272600001 · E-posta: info@voltekno.com · Telefon: +90 551 829 16 13"
+      }
+    ]
+  }
+}

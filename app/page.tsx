@@ -31,12 +31,15 @@ import { useTranslations } from 'next-intl'
 import type { MockProduct } from '@/lib/products-mock'
 
 const HERO_SLIDES: { src: string; href: string }[] = [
-  { src: '/images/hero/hero-4.png', href: '/category/elektrikli-arac-sarj-urunleri' },
-  { src: '/images/hero/hero-2.png', href: '/products?category=' + encodeURIComponent('Araç Şarj Kabloları') },
   { src: '/images/hero/hero-3.png', href: '/products' },
-  { src: '/images/hero/hero-1.png', href: '/products?category=' + encodeURIComponent('Araç Şarj Kabloları') },
 ]
 const HERO_SLIDE_INTERVAL_MS = 5000
+
+/** Banner görseli olmayan kategori kartları için kategorinin öne çıkan ürün görseli */
+const CATEGORY_CARD_PRODUCT_IMAGE: Record<string, string | undefined> = mockProducts.reduce((acc, p) => {
+  if (p.image && (!acc[p.category] || p.featured)) acc[p.category] = p.image
+  return acc
+}, {} as Record<string, string | undefined>)
 
 const FEATURED_ROW_MAX = 10
 
@@ -170,7 +173,7 @@ const BLOG_PLACEHOLDER: { slug: string; title: string; desc: string; category: s
 // Genişletilmiş kategori listesi — gerçek görseller
 const EXTRA_CATEGORY_ITEMS = [
   {
-    href: '/category/inverterler',
+    href: '/category/inverter-ve-guc-elektronigi',
     title: 'Inverter',
     subtitle: 'Hibrit, off-grid ve mikro inverterler',
     image: '/images/categories/inverter.png',
@@ -178,7 +181,7 @@ const EXTRA_CATEGORY_ITEMS = [
     bg: 'from-teal-600 to-teal-800',
   },
   {
-    href: '/category/isi-pompasi-hvac',
+    href: '/category/pompa-ve-surucu',
     title: 'Isı Pompası',
     subtitle: 'İklimlendirme ve ısıtma sistemleri',
     image: '/images/categories/isi-pompasi.png',
@@ -288,10 +291,10 @@ export default function HomePage() {
               {/* Kategori hızlı erişim pilleri */}
               <div className="flex flex-wrap gap-2">
                 {[
-                  { label: 'EV Şarj', href: '/category/elektrikli-arac-sarj-urunleri', icon: Zap },
-                  { label: 'Güneş Paneli', href: '/category/gunes-enerjisi', icon: Sun },
-                  { label: 'Batarya', href: '/category/batarya-depolama', icon: Battery },
-                  { label: 'İnverter', href: '/category/inverterler', icon: Cpu },
+                  { label: 'Güneş Paneli', href: '/category/gunes-paneli', icon: Sun },
+                  { label: 'İnverter', href: '/category/inverter-ve-guc-elektronigi', icon: Cpu },
+                  { label: 'Batarya', href: '/category/enerji-depolama', icon: Battery },
+                  { label: 'Şarj Kontrol', href: '/category/solar-sarj-kontrol', icon: Zap },
                 ].map(({ label, href, icon: Icon }) => (
                   <Link
                     key={label}
@@ -380,13 +383,13 @@ export default function HomePage() {
                 <Link
                   href={slide.href}
                   className="absolute inset-0 block w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-                  aria-label={index === 0 ? t('heroSlideLabelCharge') : (index === 1 || index === 3) ? t('heroSlideLabelCable') : t('heroSlideLabelAll')}
+                  aria-label={t('heroSlideLabelAll')}
                 >
                   <Image
                     src={slide.src}
                     alt=""
                     fill
-                    className={`object-cover pointer-events-none bg-slate-900 ${index === 0 ? 'object-left md:object-[35%_50%]' : 'object-center'}`}
+                    className="object-cover pointer-events-none bg-slate-900 object-center"
                     sizes="(max-width: 768px) 100vw, 100vw"
                     unoptimized={slide.src.startsWith('http')}
                     onError={(e) => { const el = e.target as HTMLImageElement; if (el) el.style.display = 'none' }}
@@ -395,15 +398,22 @@ export default function HomePage() {
               </div>
             ))}
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none z-[2]" aria-hidden />
-            <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-[3] flex gap-1.5">
+            <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-[3] flex gap-0.5">
               {HERO_SLIDES.map((_, i) => (
                 <button
                   key={i}
                   type="button"
                   aria-label={t('slideDotLabel', { n: i + 1 })}
+                  aria-current={i === currentSlide ? 'true' : undefined}
                   onClick={() => setCurrentSlide(i)}
-                  className={`rounded-full transition-all duration-300 touch-manipulation min-w-[10px] min-h-[10px] w-1.5 h-1.5 sm:w-2 sm:h-2 flex items-center justify-center ${i === currentSlide ? 'bg-white ring-2 ring-white/60 shadow-md scale-100' : 'bg-white/60 hover:bg-white/80 active:bg-white backdrop-blur-[1px]'}`}
-                />
+                  // 24×24 dokunma alanı (WCAG 2.5.8); görünen nokta içteki span
+                  className="w-6 h-6 flex items-center justify-center touch-manipulation"
+                >
+                  <span
+                    aria-hidden
+                    className={`block rounded-full transition-all duration-300 w-2.5 h-2.5 ${i === currentSlide ? 'bg-white ring-2 ring-white/60 shadow-md' : 'bg-white/60 hover:bg-white/80'}`}
+                  />
+                </button>
               ))}
             </div>
           </div>
@@ -508,23 +518,23 @@ export default function HomePage() {
           {/* 5 kategori — flex ile son satır ortalı */}
           <div className="flex flex-wrap justify-center gap-4 sm:gap-5">
             {[
-              { href: '/category/elektrikli-arac-sarj-urunleri', title: 'Şarj İstasyonları',  desc: 'AC/DC şarj istasyonu fiyatları ve modeller',    image: '/images/categories/sarj.png' },
-              { href: '/category/batarya-depolama',              title: 'Batarya & Depolama', desc: 'Batarya ve taşınabilir güç çözümleri',            image: '/images/categories/batarya.png' },
-              { href: '/category/gunes-enerjisi',                title: 'Güneş Enerjisi',     desc: 'Güneş enerjisi panel ve sistem fiyatları',       image: '/images/categories/panel.png' },
-              { href: '/category/inverterler',                   title: 'Inverterler',        desc: 'Hibrit ve off-grid inverter çözümleri',          image: '/images/categories/inverter.png' },
-              { href: '/category/isi-pompasi-hvac',              title: 'Isı Pompası',        desc: 'İklimlendirme ve ısıtma çözümleri',             image: '/images/categories/isi-pompasi.png' },
-            ].map((item) => (
+              { href: '/category/gunes-paneli',                title: 'Güneş Paneli',          desc: 'TOPCon, bifacial, esnek ve katlanabilir paneller', image: '/images/categories/panel.png' },
+              { href: '/category/inverter-ve-guc-elektronigi', title: 'İnverterler',           desc: 'On-grid, hibrit ve off-grid inverter çözümleri',   image: '/images/categories/inverter.png' },
+              { href: '/category/enerji-depolama',             title: 'Enerji Depolama',       desc: 'LiFePO4 bataryalar ve güç istasyonları',          image: '/images/categories/batarya.png' },
+              { href: '/category/solar-sarj-kontrol',          title: 'Solar Şarj Kontrol',    desc: 'MPPT ve PWM şarj kontrol cihazları',               image: CATEGORY_CARD_PRODUCT_IMAGE['MPPT/PWM'], contain: true },
+              { href: '/category/pompa-ve-surucu',             title: 'Pompa ve Sürücü',       desc: 'Solar pompa sürücüleri ve ısı pompaları',          image: CATEGORY_CARD_PRODUCT_IMAGE['Solar Pompa/Sürücü'], contain: true },
+            ].filter((item) => !!item.image).map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className="group relative block rounded-2xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 touch-manipulation w-[calc(50%-8px)] sm:w-[calc(33.333%-14px)]"
               >
-                <div className="aspect-[4/3] relative overflow-hidden bg-slate-950">
+                <div className={`aspect-[4/3] relative overflow-hidden ${item.contain ? 'bg-white' : 'bg-slate-950'}`}>
                   <Image
-                    src={item.image}
+                    src={item.image!}
                     alt={item.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className={`${item.contain ? 'object-contain p-4' : 'object-cover'} group-hover:scale-105 transition-transform duration-500`}
                     sizes="(max-width: 640px) 50vw, 33vw"
                   />
                 </div>

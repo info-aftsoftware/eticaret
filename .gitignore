@@ -72,3 +72,6 @@ nul
 .env.local
 .env*.local
 public_html (2).zip
+
+# veritabanı yedekleri (api/cron/backup)
+/backups

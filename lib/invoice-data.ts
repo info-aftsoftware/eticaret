@@ -28,12 +28,16 @@ export interface InvoiceData {
   }
   pricing: {
     subtotal: number
+    /** Kupon + havale indirimi (KDV matrahından düşülmüş) */
+    discount?: number
     tax: number
     shipping: number
     total: number
     items: InvoiceItem[]
   }
   status?: string
+  /** bank_transfer | stripe | paytr */
+  paymentMethod?: string | null
 }
 
 /** Prisma Order (include: { lines: true }) -> InvoiceData */
@@ -52,10 +56,12 @@ export function buildInvoiceDataFromPrisma(order: {
   billingTaxOffice?: string | null
   user?: { email: string | null } | null
   subtotal: number
+  discount?: number
   vatTotal: number
   shippingCost: number
   total: number
   status: string
+  paymentMethod?: string | null
   lines: Array<{
     variantId: string | null
     productName: string
@@ -82,6 +88,7 @@ export function buildInvoiceDataFromPrisma(order: {
     },
     pricing: {
       subtotal: Number(order.subtotal) || 0,
+      discount: Number(order.discount) || 0,
       tax: Number(order.vatTotal) || 0,
       shipping: Number(order.shippingCost) || 0,
       total: Number(order.total) || 0,
@@ -94,6 +101,7 @@ export function buildInvoiceDataFromPrisma(order: {
       })),
     },
     status: order.status,
+    paymentMethod: order.paymentMethod ?? null,
   }
 }
 

@@ -2,7 +2,8 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { sendEmailSMTP } from '@/lib/email-smtp'
-import { isRateLimited } from '@/lib/rate-limit'
+import { isRateLimited, getClientIp } from '@/lib/rate-limit'
+import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
 import { getAdminFirestore } from '@/lib/firebaseAdminServer'
 import { FieldValue } from 'firebase-admin/firestore'
 import React from 'react'
@@ -115,14 +116,23 @@ function ContactFormEmail({ name, email, phone, subject, message }: {
 
 export async function POST(request: NextRequest) {
   try {
-    if (isRateLimited(request, 'contact', 10, 60_000)) {
+    if (isRateLimited(request, 'contact', 5, 10 * 60_000)) {
       return NextResponse.json(
         { success: false, error: 'Çok fazla istek. Lütfen bir dakika sonra tekrar deneyin.' },
         { status: 429 }
       )
     }
-    const body = await request.json()
-    const { name, email, phone, subject, message } = body
+    const body = await request.json().catch(() => ({}))
+    if (!(await verifyTurnstile(body.turnstileToken, getClientIp(request)))) {
+      return NextResponse.json({ success: false, error: TURNSTILE_ERROR }, { status: 400 })
+    }
+    const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
+    const name = str(body.name, 100)
+    const email = str(body.email, 200)
+    const phone = str(body.phone, 30)
+    const subject = str(body.subject, 200)
+    const message = str(body.message, 5000)
+    const productId = str(body.productId, 200) || null
 
     // Validation
     if (!name || !email || !subject || !message) {
@@ -172,6 +182,8 @@ export async function POST(request: NextRequest) {
           phone: phone || null,
           subject,
           message,
+          productId,
+          status: 'new',
           emailSent: emailResult.success,
           createdAt: FieldValue.serverTimestamp(),
         })

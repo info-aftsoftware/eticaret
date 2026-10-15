@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -22,6 +22,11 @@ import { Info, Tag, FileText, Shield } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { getCategoryKey } from '@/lib/categories'
 import { CartRelatedProducts } from '@/components/CartRelatedProducts'
+import { LegalDocumentDialog } from '@/components/LegalDocumentDialog'
+import { CartQuoteNotice } from '@/components/CartQuoteNotice'
+import { trackViewCart, cartItemToGa } from '@/lib/analytics'
+import type { LegalSlug } from '@/lib/legal/documents'
+import { computeOrderTotals, amountToFreeShipping, FREE_SHIPPING_THRESHOLD, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 
 export default function CartPage() {
   const router = useRouter()
@@ -36,6 +41,8 @@ export default function CartPage() {
   const [couponCode, setCouponCode] = useState('')
   const [couponDiscount, setCouponDiscount] = useState(0)
   const [couponError, setCouponError] = useState('')
+  const storedCouponCode = useCartStore((s) => s.couponCode)
+  const setStoredCouponCode = useCartStore((s) => s.setCouponCode)
   const [contractsAccepted, setContractsAccepted] = useState(false)
   const [privacyAccepted, setPrivacyAccepted] = useState(false)
   const [termsAccepted, setTermsAccepted] = useState(false)
@@ -44,19 +51,65 @@ export default function CartPage() {
     privacy: false,
     kvkk: false,
   })
-  const [showModal, setShowModal] = useState<string | null>(null)
+  const [showModal, setShowModal] = useState<'sales' | 'privacy' | 'kvkk' | null>(null)
+  const MODAL_DOCS: Record<'sales' | 'privacy' | 'kvkk', LegalSlug> = {
+    sales: 'mesafeli-satis-sozlesmesi',
+    privacy: 'gizlilik-ve-cerez-politikasi',
+    kvkk: 'kvkk',
+  }
   const [pageReady, setPageReady] = useState(false)
+
+  // GA4: sepet görüntüleme (sepet yüklendikten sonra bir kez)
+  const viewCartSent = React.useRef(false)
+  useEffect(() => {
+    if (!_hasHydrated || viewCartSent.current || items.length === 0) return
+    viewCartSent.current = true
+    void trackViewCart(items.map(cartItemToGa))
+  }, [_hasHydrated, items])
 
   useEffect(() => {
     const timer = setTimeout(() => setPageReady(true), 250)
     return () => clearTimeout(timer)
   }, [])
   
-  const subtotal = getTotalPrice()
-  const tax = subtotal * 0.20 // %20 KDV
-  const shipping = subtotal > 3000 ? 0 : 50 // 3000 TL üzeri ücretsiz kargo
-  const discount = couponDiscount
-  const total = subtotal + tax + shipping - discount
+  // Sunucuyla aynı hesaplayıcı; ödeme yöntemi ödeme adımında seçildiği için havale indirimi burada uygulanmaz
+  const { subtotal, tax, shipping, total } = computeOrderTotals({ subtotal: getTotalPrice(), couponDiscount })
+  const remainingForFreeShipping = amountToFreeShipping(subtotal)
+
+  /** Kupon sunucuda doğrulanır (ödeme sırasında aynı hesaplayıcı kullanılır). */
+  const applyCoupon = useCallback(async (rawCode: string) => {
+    const code = rawCode.trim()
+    if (!code) return
+    setCouponError('')
+    try {
+      const res = await fetch('/api/coupons/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok || !data?.success) {
+        setCouponDiscount(0)
+        setStoredCouponCode(null)
+        setCouponError(data?.error || 'Kupon kontrol edilemedi.')
+        return
+      }
+      setCouponDiscount(Number(data.discount) || 0)
+      setStoredCouponCode(data.couponCode)
+    } catch {
+      setCouponDiscount(0)
+      setCouponError('Kupon kontrol edilemedi.')
+    }
+  }, [items, setStoredCouponCode])
+
+  // Kayıtlı kupon varsa sepet değiştikçe indirimi sunucudan yeniden hesapla
+  useEffect(() => {
+    if (!_hasHydrated || !storedCouponCode || items.length === 0) return
+    setCouponCode((prev) => prev || storedCouponCode)
+    applyCoupon(storedCouponCode)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_hasHydrated, items])
+
   const hasContractErrors = contractErrors.contracts || contractErrors.privacy || contractErrors.kvkk
 
   const handleCheckoutClick = () => {
@@ -120,6 +173,7 @@ export default function CartPage() {
         <div className="lg:col-span-2 space-y-4 min-w-0">
           <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">
               <CardHeader>
+                <CartQuoteNotice />
                 <div className="flex items-center justify-between">
                   <CardTitle>{t('myCart')} ({getTotalItems()} {t('itemsCount')})</CardTitle>
                   <Button
@@ -210,6 +264,7 @@ export default function CartPage() {
                             }}
                             className="w-24 sm:w-20 text-center h-11 sm:h-9 text-base sm:text-sm rounded-xl"
                             min="1"
+                            aria-label={`${item.name} adedi`}
                           />
                           <Button
                             variant="outline"
@@ -262,8 +317,14 @@ export default function CartPage() {
                     <span className="text-slate-600">Ara Toplam</span>
                     <span className="font-medium">{formatPrice(subtotal)}</span>
                   </div>
+                  {couponDiscount > 0 && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>Kupon indirimi</span>
+                      <span className="font-medium">-{formatPrice(couponDiscount)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-600">KDV (%20)</span>
+                    <span className="text-slate-600">KDV (%{VAT_RATE})</span>
                     <span className="font-medium">{formatPrice(tax)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -278,18 +339,28 @@ export default function CartPage() {
                   </div>
                 </div>
 
+                {remainingForFreeShipping > 0 ? (
+                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-xs text-slate-700">
+                    <p>
+                      Ücretsiz kargo için <strong>{formatPrice(remainingForFreeShipping)}</strong> daha ürün ekleyin.
+                    </p>
+                    <div className="mt-2 h-1.5 rounded-full bg-slate-200 overflow-hidden" role="progressbar" aria-valuemin={0} aria-valuemax={FREE_SHIPPING_THRESHOLD} aria-valuenow={Math.round(subtotal)} aria-label="Ücretsiz kargo eşiği">
+                      <div className="h-full bg-green-500" style={{ width: `${Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100)}%` }} />
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs font-medium text-green-700">Ücretsiz kargo kazandınız.</p>
+                )}
+
                 <Separator />
 
-                {couponDiscount > 0 && (
-                  <div className="flex justify-between text-sm text-green-600">
-                    <span>İndirim</span>
-                    <span className="font-medium">-{formatPrice(couponDiscount)}</span>
-                  </div>
-                )}
                 <div className="flex justify-between font-bold text-lg">
                   <span>Toplam</span>
                   <span className="text-slate-900 font-bold">{formatPrice(total)}</span>
                 </div>
+                <p className="text-xs text-emerald-700 -mt-2">
+                  Ödeme adımında Havale/EFT seçerseniz ara toplam üzerinden %{BANK_TRANSFER_DISCOUNT_RATE} indirim uygulanır.
+                </p>
 
                 {/* Coupon Code */}
                 <div className="pt-4 border-t">
@@ -311,51 +382,10 @@ export default function CartPage() {
                       type="button"
                       variant="outline"
                       className="rounded-xl min-h-[44px] min-w-[44px] touch-manipulation shrink-0"
-                      onClick={async () => {
-                        if (!couponCode.trim()) return
-                        setCouponError('')
-                        try {
-                          // Firestore'dan kupon doğrulama (statik hosting - API yok)
-                          const { collection: col, query, where, getDocs } = await import('firebase/firestore')
-                          const { getDb } = await import('@/lib/firebase/config')
-                          const db = getDb()
-                          const q = query(col(db, 'coupons'), where('code', '==', couponCode.trim().toUpperCase()))
-                          const snap = await getDocs(q)
-                          if (snap.empty) {
-                            setCouponDiscount(0)
-                            setCouponError('Geçersiz kupon kodu')
-                            return
-                          }
-                          const coupon = snap.docs[0].data()
-                          // Kupon aktif mi?
-                          if (coupon.active === false) {
-                            setCouponDiscount(0)
-                            setCouponError('Bu kupon artık geçerli değil')
-                            return
-                          }
-                          // Min tutar kontrolü
-                          if (coupon.minAmount && subtotal < coupon.minAmount) {
-                            setCouponDiscount(0)
-                            setCouponError(`Bu kupon en az ${coupon.minAmount} TL alışverişlerde geçerlidir`)
-                            return
-                          }
-                          // İndirim hesapla
-                          let disc = 0
-                          if (coupon.type === 'percent' || coupon.discountType === 'percent') {
-                            disc = Math.round(subtotal * ((coupon.discount || coupon.value || 0) / 100))
-                          } else {
-                            disc = coupon.discount || coupon.value || 0
-                          }
-                          if (coupon.maxDiscount && disc > coupon.maxDiscount) disc = coupon.maxDiscount
-                          setCouponDiscount(disc)
-                          setCouponError('')
-                        } catch {
-                          setCouponDiscount(0)
-                          setCouponError('Kupon kontrol edilemedi.')
-                        }
-                      }}
+                      onClick={() => applyCoupon(couponCode)}
+                      aria-label="Kuponu uygula"
                     >
-                      <Tag className="w-4 h-4" />
+                      <Tag className="w-4 h-4" aria-hidden />
                     </Button>
                   </div>
                   {couponError && (
@@ -401,7 +431,7 @@ export default function CartPage() {
                       className={`w-5 h-5 min-w-[20px] min-h-[20px] text-slate-800 rounded focus:ring-2 focus:ring-slate-400 shrink-0 ${contractErrors.contracts ? 'border-red-400' : 'border-slate-300'}`}
                     />
                     <span className="text-xs text-ink">
-                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('sales'); }} className="font-medium text-slate-800 hover:underline text-left">{'"Uzaktan Sat\u0131\u015f S\u00f6zle\u015fmesi"'}</button>{"'ni okudum ve kabul ediyorum."}
+                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('sales'); }} className="font-medium text-slate-800 hover:underline text-left">{'Mesafeli Satış Sözleşmesi'}</button>{"'ni okudum ve kabul ediyorum."}
                     </span>
                   </label>
 
@@ -416,7 +446,7 @@ export default function CartPage() {
                       className={`w-5 h-5 min-w-[20px] min-h-[20px] text-slate-800 rounded focus:ring-2 focus:ring-slate-400 shrink-0 ${contractErrors.privacy ? 'border-red-400' : 'border-slate-300'}`}
                     />
                     <span className="text-xs text-ink">
-                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('privacy'); }} className="font-medium text-slate-800 hover:underline text-left">{'"Gizlilik S\u00f6zle\u015fmesi"'}</button>{"'ni okudum ve kabul ediyorum."}
+                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('privacy'); }} className="font-medium text-slate-800 hover:underline text-left">{'Gizlilik ve Çerez Politikası'}</button>{"'nı okudum."}
                     </span>
                   </label>
 
@@ -431,7 +461,7 @@ export default function CartPage() {
                       className={`w-5 h-5 min-w-[20px] min-h-[20px] text-slate-800 rounded focus:ring-2 focus:ring-slate-400 shrink-0 ${contractErrors.kvkk ? 'border-red-400' : 'border-slate-300'}`}
                     />
                     <span className="text-xs text-ink">
-                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('kvkk'); }} className="font-medium text-slate-800 hover:underline text-left">{'"KVKK Ayd\u0131nlatma Metni"'}</button>{"'ni okudum ve kabul ediyorum."}
+                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('kvkk'); }} className="font-medium text-slate-800 hover:underline text-left">{'KVKK Aydınlatma Metni'}</button>{"'ni okudum, kişisel verilerimin işlenmesi hakkında bilgilendirildim."}
                     </span>
                   </label>
 
@@ -464,102 +494,8 @@ export default function CartPage() {
           </div>
         </div>
 
-        {/* Sozlesme Modali */}
-        {showModal && (
-          <div
-            className="fixed z-50 inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-            onClick={() => setShowModal(null)}
-          >
-            <div
-              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between p-6 border-b border-slate-200 bg-slate-50">
-                <h3 className="text-xl font-bold text-ink">
-                  {showModal === 'sales' && 'Uzaktan Satış Sözleşmesi'}
-                  {showModal === 'privacy' && 'Gizlilik Sözleşmesi'}
-                  {showModal === 'kvkk' && 'KVKK Aydınlatma Metni'}
-                </h3>
-                <button
-                  className="p-3 -mr-2 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-muted rounded-lg transition-colors touch-manipulation"
-                  onClick={() => setShowModal(null)}
-                  aria-label="Kapat"
-                >
-                  <span className="text-2xl text-slate-500 hover:text-slate-900">×</span>
-                </button>
-              </div>
-              <div className="p-6 overflow-y-auto flex-1">
-                <div className="prose prose-sm max-w-none text-ink whitespace-pre-line leading-relaxed">
-                  {showModal === 'sales' && `UZAKTAN SATIŞ SÖZLEŞMESİ
-
-1. Taraflar
-Bu sözleşme, sipariş veren müşteri ile satıcı arasında elektronik ortamda kurulmuştur.
-
-2. Konu
-Sözleşmenin konusu, internet sitesi üzerinden verilen siparişin satış, ödeme, teslimat ve iade şartlarının belirlenmesidir.
-
-3. Sipariş ve Ödeme
-Sipariş, müşteri tarafından onaylandığında yürürlüğe girer. Ürün bedeli ve varsa kargo ücreti ödeme adımında açıkça gösterilir.
-
-4. Teslimat
-Siparişler, stok ve operasyon durumuna göre hazırlanır ve müşterinin teslimat adresine gönderilir. Teslimat sırasında hasarlı paket tespit edilirse kargo görevlisine tutanak tutturulmalıdır.
-
-5. Cayma Hakkı
-Tüketici, yasal istisnalar dışında ürünü teslim aldığı tarihten itibaren 14 gün içinde cayma hakkını kullanabilir.
-
-6. Genel Hükümler
-Müşteri, sipariş vermeden önce ön bilgilendirme metnini, mesafeli satış sözleşmesini ve ödeme koşullarını okuyup kabul ettiğini beyan eder.
-
-Sözleşme Tarihi: ${new Date().toLocaleDateString('tr-TR')}
-Satıcı: Voltekno Enerji Sistemleri`}
-                  {showModal === 'privacy' && `GİZLİLİK SÖZLEŞMESİ
-
-1. Toplanan Veriler
-Sipariş sürecinde ad, soyad, e-posta, telefon, teslimat ve fatura bilgileri alınır.
-
-2. Kullanım Amacı
-Bu bilgiler siparişin hazırlanması, teslim edilmesi, faturalandırılması, müşteri desteği sağlanması ve yasal yükümlülüklerin yerine getirilmesi için kullanılır.
-
-3. Veri Paylaşımı
-Bilgileriniz yalnızca ödeme, kargo ve yasal süreçlerde ihtiyaç duyulan hizmet sağlayıcılarla sınırlı olarak paylaşılır.
-
-4. Güvenlik
-Kişisel verileriniz teknik ve idari güvenlik tedbirleri ile korunur. Yetkisiz erişime karşı gerekli önlemler uygulanır.
-
-5. Haklarınız
-KVKK kapsamında verilerinize erişme, düzeltme, silme ve işlenmesine itiraz etme hakkına sahipsiniz.
-
-Son Güncelleme: ${new Date().toLocaleDateString('tr-TR')}`}
-                  {showModal === 'kvkk' && `KVKK AYDINLATMA METNİ
-
-6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, sipariş ve müşteri ilişkileri süreçlerinde paylaştığınız kişisel veriler veri sorumlusu tarafından işlenmektedir.
-
-İşlenen veriler:
-- Kimlik ve iletişim bilgileri
-- Teslimat ve fatura bilgileri
-- Sipariş ve ödeme bilgileri
-
-İşleme amaçları:
-- Siparişin alınması ve tamamlanması
-- Fatura düzenlenmesi
-- Teslimat operasyonunun yürütülmesi
-- Müşteri destek süreçlerinin yürütülmesi
-- Yasal yükümlülüklerin yerine getirilmesi
-
-Haklarınız için bizimle iletişime geçebilirsiniz: info@voltekno.com`}
-                </div>
-              </div>
-              <div className="p-4 border-t border-slate-200 bg-slate-50 pb-safe">
-                <Button
-                  onClick={() => setShowModal(null)}
-                  className="w-full rounded-xl min-h-[48px] touch-manipulation bg-brand hover:bg-brand-hover text-white"
-                >
-                  Kapat
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Sözleşme penceresi: metinler lib/legal/documents.json (voltekno.com ile aynı) */}
+        <LegalDocumentDialog slug={showModal ? MODAL_DOCS[showModal] : null} onClose={() => setShowModal(null)} />
     </ClassicPageShell>
   )
 }

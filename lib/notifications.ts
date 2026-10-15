@@ -7,6 +7,10 @@ import RFQAdminNotification from '../emails/RFQAdminNotification'
 import RFQCustomerConfirmation from '../emails/RFQCustomerConfirmation'
 import QuoteReady from '../emails/QuoteReady'
 
+/** HTML e-posta gövdesine yerleştirilen kullanıcı girdisini kaçışlar (HTML enjeksiyonuna karşı). */
+const esc = (v: unknown) =>
+  String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
+
 export interface NotificationData {
   orderId: string
   orderData: any
@@ -110,7 +114,7 @@ export async function sendOrderStatusUpdate(data: NotificationData, newStatus: s
       `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Sipariş Durumu Güncellendi</h2>
-          <p>Merhaba ${data.customer.name},</p>
+          <p>Merhaba ${esc(data.customer.name)},</p>
           <p>${statusInfo.message}</p>
           <p><strong>Sipariş No:</strong> ${data.orderId}</p>
           <p><strong>Yeni Durum:</strong> ${newStatus}</p>
@@ -135,7 +139,7 @@ export async function sendPaymentConfirmation(data: NotificationData): Promise<b
       `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Ödemeniz Onaylandı</h2>
-          <p>Merhaba ${data.customer.name},</p>
+          <p>Merhaba ${esc(data.customer.name)},</p>
           <p>Siparişiniz için yapılan ödeme başarıyla onaylanmıştır.</p>
           <p><strong>Sipariş No:</strong> ${data.orderId}</p>
           <p><strong>Ödeme Tutarı:</strong> ${data.pricing?.total || 0} ₺</p>
@@ -160,7 +164,7 @@ export async function sendPaymentFailureNotification(data: NotificationData): Pr
       `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>Ödeme İşlemi Başarısız</h2>
-          <p>Merhaba ${data.customer.name},</p>
+          <p>Merhaba ${esc(data.customer.name)},</p>
           <p>Siparişiniz için yapılan ödeme işlemi başarısız olmuştur.</p>
           <p><strong>Sipariş No:</strong> ${data.orderId}</p>
           <p>Lütfen ödeme bilgilerinizi kontrol ederek tekrar deneyiniz.</p>
@@ -185,7 +189,7 @@ export async function sendRefundNotification(data: NotificationData, refundAmoun
       `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2>İade İşlemi Tamamlandı</h2>
-          <p>Merhaba ${data.customer.name},</p>
+          <p>Merhaba ${esc(data.customer.name)},</p>
           <p>Siparişiniz için iade işlemi başarıyla tamamlanmıştır.</p>
           <p><strong>Sipariş No:</strong> ${data.orderId}</p>
           <p><strong>İade Tutarı:</strong> ${refundAmount} ₺</p>

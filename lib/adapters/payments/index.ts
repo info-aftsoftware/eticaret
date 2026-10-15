@@ -4,16 +4,13 @@
  */
 
 import { PaymentAdapter } from './base'
-import { StripeAdapter } from './stripe'
 import { PayTRAdapter } from './paytr'
 import { IyzicoAdapter } from './iyzico'
 
-export type PaymentProvider = 'stripe' | 'paytr' | 'iyzico'
+export type PaymentProvider = 'paytr' | 'iyzico'
 
 export function getPaymentAdapter(provider: PaymentProvider): PaymentAdapter {
   switch (provider) {
-    case 'stripe':
-      return new StripeAdapter()
     case 'paytr':
       return new PayTRAdapter()
     case 'iyzico':

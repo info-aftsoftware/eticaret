@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-surface pb-safe" id="main-content">
+    <div className="min-h-screen bg-surface pb-safe">
       <div className="bg-surface-elevated border-b border-palette">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 md:px-8 lg:px-8 py-4 md:py-5">
           <nav className="flex items-center gap-2 text-xs font-medium text-ink-muted mb-2 min-h-[44px]" aria-label="Breadcrumb">

@@ -2,6 +2,8 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto'
+import { isRateLimited } from '@/lib/rate-limit'
 import { getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN
@@ -9,8 +11,23 @@ const JWT_SECRET = process.env.JWT_SECRET
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7 // 7 gün
 const ADMIN_UID = 'admin-panel-user'
 
+/** Sabit zamanlı karşılaştırma (zamanlama saldırısına karşı). */
+function safeEqual(a: string, b: string): boolean {
+  const ha = crypto.createHash('sha256').update(a).digest()
+  const hb = crypto.createHash('sha256').update(b).digest()
+  return crypto.timingSafeEqual(ha, hb)
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Kaba kuvvet denemelerine karşı: IP başına 15 dakikada en fazla 5 deneme
+    if (isRateLimited(request, 'admin-auth', 5, 15 * 60_000)) {
+      return NextResponse.json(
+        { success: false, error: 'Çok fazla deneme. Lütfen 15 dakika sonra tekrar deneyin.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const password = typeof body?.password === 'string' ? body.password.trim() : ''
 
@@ -22,7 +39,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Sunucu yapılandırma hatası.' }, { status: 503 })
     }
 
-    if (password !== ADMIN_TOKEN) {
+    if (!safeEqual(password, ADMIN_TOKEN)) {
       return NextResponse.json({ success: false, error: 'Şifre hatalı.' }, { status: 401 })
     }
 

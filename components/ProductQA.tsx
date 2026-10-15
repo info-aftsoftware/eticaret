@@ -1,5 +1,6 @@
 'use client'
 
+import { Turnstile } from '@/components/Turnstile'
 import React, { useState, useEffect, useCallback } from 'react'
 import { HelpCircle, ChevronDown, ChevronUp, Loader2, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -23,6 +24,8 @@ export function ProductQA({
   productName: string
 }) {
   const { user, isAuthenticated, token } = useAuthStore()
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileReset, setTurnstileReset] = useState(0)
   const [qas, setQas] = useState<QAItem[]>([])
   const [loading, setLoading] = useState(true)
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
@@ -86,8 +89,10 @@ export function ProductQA({
           // Guests provide their own; logged-in users send profile as fallback
           guestName: isAuthenticated ? user?.name : guestName.trim() || undefined,
           guestEmail: isAuthenticated ? user?.email : guestEmail.trim() || undefined,
+          turnstileToken,
         }),
       })
+      setTurnstileReset((n) => n + 1)
 
       const data = await res.json()
       if (!res.ok) {
@@ -138,7 +143,7 @@ export function ProductQA({
       {submitted && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-sm text-green-700 flex items-center gap-2">
           <span className="font-bold">✓</span>
-          Sorunuz alındı! Ekibimiz en kısa sürede yanıtlayacak.
+          Sorunuz alındı! Ekibimiz yanıtladığında soru ve yanıt bu sayfada yayınlanacak.
         </div>
       )}
 
@@ -152,6 +157,7 @@ export function ProductQA({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
                   placeholder="Adınız *"
+                  aria-label="Adınız"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -160,6 +166,7 @@ export function ProductQA({
                 <Input
                   type="email"
                   placeholder="E-posta *"
+                  aria-label="E-posta adresiniz"
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -176,6 +183,7 @@ export function ProductQA({
 
             <Textarea
               placeholder={`"${productName}" hakkında sorunuzu yazın...`}
+              aria-label="Sorunuz"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               rows={3}
@@ -183,6 +191,7 @@ export function ProductQA({
               required
             />
             {error && <p className="text-xs text-red-500">{error}</p>}
+            <Turnstile onToken={setTurnstileToken} resetKey={turnstileReset} />
             <Button type="submit" disabled={submitting} size="sm" className="rounded-xl">
               <Send className="w-3.5 h-3.5 mr-1.5" />
               {submitting ? 'Gönderiliyor...' : 'Soruyu Gönder'}

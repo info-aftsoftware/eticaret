@@ -11,6 +11,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { invalidateCampaignCache } from '@/lib/discounts'
+import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProducts } from '@/lib/catalog-merge'
@@ -57,22 +59,25 @@ export async function PATCH(request: NextRequest) {
       if (typeof value !== 'number' || value <= 0 || value >= 100) {
         return NextResponse.json({ error: 'value: 1-99 arası indirim oranı gerekli.' }, { status: 400 })
       }
-      // Mevcut fiyatları bul (mock + override)
+      // Fiyatı kalıcı değiştirmek yerine geri alınabilir bir kampanya oluşturulur (Admin > İndirimler'den
+      // kapatılabilir/silinebilir; üst üste uygulanınca indirimler birikmez, en avantajlısı geçerlidir).
       const allProducts = await getMergedProducts()
       const idSet = new Set(ids)
-      const toUpdate = allProducts.filter((p) => idSet.has(p.id))
-
-      await prisma.$transaction(
-        toUpdate.map((p) => {
-          const discountedPrice = Math.round(p.price * (1 - value / 100))
-          return prisma.productOverride.upsert({
-            where: { productId: p.id },
-            update: { price: discountedPrice },
-            create: { productId: p.id, name: p.name, price: discountedPrice, category: p.category ?? 'Diğer' },
-          })
+      const productIds = allProducts.filter((p) => idSet.has(p.id)).map((p) => p.id)
+      if (productIds.length > 0) {
+        await prisma.discount.create({
+          data: {
+            name: `Toplu indirim %${value} (${productIds.length} ürün, ${new Date().toLocaleDateString('tr-TR')})`,
+            scope: 'PRODUCT',
+            productIds,
+            type: 'PERCENT',
+            value,
+            active: true,
+          },
         })
-      )
-      affected = toUpdate.length
+        invalidateCampaignCache()
+      }
+      affected = productIds.length
     }
 
     else if (action === 'reset_stock') {
@@ -106,6 +111,8 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Bilinmeyen action.' }, { status: 400 })
     }
 
+    // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
+    processStockAlerts(ids.map(String)).catch((e) => console.error('Stock alert error:', e))
     return NextResponse.json({ success: true, affected })
   } catch (error) {
     console.error('Admin bulk PATCH error:', error)

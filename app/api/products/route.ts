@@ -6,12 +6,12 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getMergedProducts } from '@/lib/catalog-merge'
-import { productMatchesQuery } from '@/lib/search-product'
+import { getStorefrontProducts } from '@/lib/discounts'
+import { searchProducts } from '@/lib/search-product'
 
 export async function GET(request: NextRequest) {
   try {
-    const products = await getMergedProducts()
+    const products = await getStorefrontProducts()
     const { searchParams } = request.nextUrl
     const category = searchParams.get('category')
     const q = searchParams.get('q')?.trim()
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (q) {
-      result = result.filter((p) => productMatchesQuery(p, q))
+      result = searchProducts(result, q)
     }
 
     return NextResponse.json(result)

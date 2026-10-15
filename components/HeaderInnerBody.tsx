@@ -26,20 +26,22 @@ function buildNavGroups(categoriesWithProducts: Set<string> | null) {
     return {
       id: group.id,
       labelKey: group.labelKey,
+      navLabelKey: 'navLabelKey' in group ? group.navLabelKey : group.labelKey,
       href: `/category/${group.id}`,
       categories: values.map((value) => ({
         value,
-        labelKey: getCategoryKey(value) ?? 'categorySmartEnergyAccessories',
+        labelKey: getCategoryKey(value) ?? 'catGeneral',
       })),
     }
   }).filter((g) => g.categories.length > 0)
   return groups.length > 0 ? groups : CATEGORY_GROUPS.map((group) => ({
     id: group.id,
     labelKey: group.labelKey,
+    navLabelKey: 'navLabelKey' in group ? group.navLabelKey : group.labelKey,
     href: `/category/${group.id}`,
     categories: group.categoryValues.map((value) => ({
       value,
-      labelKey: getCategoryKey(value) ?? 'categorySmartEnergyAccessories',
+      labelKey: getCategoryKey(value) ?? 'catGeneral',
     })),
   }))
 }
@@ -64,7 +66,11 @@ export function HeaderInnerBody() {
   const { rates } = useExchangeRates()
   const { user, isAuthenticated, logout } = useAuthStore()
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<Array<{ id: string; name: string; price?: number }>>([])
+  const [searchResults, setSearchResults] = useState<Array<{ id: string; slug?: string; name: string; price?: number; oldPrice?: number }>>([])
+  const [searchCategories, setSearchCategories] = useState<string[]>([])
+  const [searchTotal, setSearchTotal] = useState(0)
+  /** Klavyeyle seçili öneri (-1: yok) */
+  const [activeIndex, setActiveIndex] = useState(-1)
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const searchAbortRef = useRef<AbortController | null>(null)
@@ -90,16 +96,23 @@ export function HeaderInnerBody() {
       setSearchLoading(true)
       setSearchOpen(true)
       try {
+        // Hafif yanıt: yalnızca öneri kutusunun ihtiyaç duyduğu alanlar + eşleşen kategoriler (puanlı sıralı)
         const res = await fetch(
-          `/api/products?q=${encodeURIComponent(q)}`,
+          `/api/search?lite=1&limit=${LIVE_SEARCH_LIMIT}&q=${encodeURIComponent(q)}`,
           { signal: searchAbortRef.current.signal }
         )
         if (!res.ok) throw new Error('Search failed')
         const data = await res.json()
-        const list = Array.isArray(data) ? data : []
-        setSearchResults(list.slice(0, LIVE_SEARCH_LIMIT))
+        setSearchResults(Array.isArray(data?.products) ? data.products : [])
+        setSearchCategories(Array.isArray(data?.categories) ? data.categories : [])
+        setSearchTotal(Number(data?.total) || 0)
+        setActiveIndex(-1)
       } catch (err) {
-        if ((err as Error).name !== 'AbortError') setSearchResults([])
+        if ((err as Error).name !== 'AbortError') {
+          setSearchResults([])
+          setSearchCategories([])
+          setSearchTotal(0)
+        }
       } finally {
         setSearchLoading(false)
       }
@@ -107,13 +120,35 @@ export function HeaderInnerBody() {
     return () => clearTimeout(t)
   }, [searchQuery])
 
+  /** Öneri kutusunda klavye: ↑/↓ gezinme, Enter ile seçili ürüne git, Esc kapat */
+  const handleSearchKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!searchOpen || searchResults.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setActiveIndex((i) => (i + 1) % searchResults.length)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setActiveIndex((i) => (i <= 0 ? searchResults.length - 1 : i - 1))
+    } else if (e.key === 'Escape') {
+      setSearchOpen(false)
+      setActiveIndex(-1)
+    }
+  }, [searchOpen, searchResults.length])
+
   const handleSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault()
+    const active = activeIndex >= 0 ? searchResults[activeIndex] : null
+    if (active) {
+      setSearchOpen(false)
+      setActiveIndex(-1)
+      router.push(`/products/${active.slug ?? active.id}`)
+      return
+    }
     if (searchQuery.trim()) {
       setSearchOpen(false)
       router.push(`/products?q=${encodeURIComponent(searchQuery)}`)
     }
-  }, [searchQuery, router])
+  }, [searchQuery, router, activeIndex, searchResults])
 
   return React.createElement(HeaderInnerUI, {
     t,
@@ -133,6 +168,10 @@ export function HeaderInnerBody() {
     setSearchQuery,
     handleSearch,
     searchResults,
+    searchCategories,
+    searchTotal,
+    activeIndex,
+    handleSearchKeyDown,
     searchLoading,
     searchOpen,
     setSearchOpen,
