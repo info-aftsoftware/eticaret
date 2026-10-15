@@ -39,6 +39,19 @@ type CatalogProduct = {
   image?: string
   sku?: string
   brand?: string
+  /** Kargo desisi (import: ürün açıklaması + üretici kaynakları); varyantlıda varyant bazında */
+  desi?: number
+  variants?: { desi?: number }[]
+}
+
+/** Desi gösterimi: varyantlı üründe en düşük–en yüksek, bilinmiyorsa "–" */
+function desiLabel(p: CatalogProduct): string {
+  const values = (p.variants?.length ? p.variants.map((v) => v.desi) : [p.desi]).filter((d): d is number => typeof d === 'number')
+  if (values.length === 0) return '–'
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  const missing = (p.variants?.length ?? 0) > values.length ? '*' : ''
+  return (min === max ? String(min) : `${min}–${max}`) + missing
 }
 
 const allCategoryValues: string[] = CATEGORY_GROUPS.flatMap((g) => [...g.categoryValues])
@@ -236,6 +249,7 @@ function AdminKatalogContent() {
                     <th className="text-left py-3 px-2 font-medium text-slate-700">Kategori</th>
                     <th className="text-left py-3 px-2 font-medium text-slate-700">Fiyat</th>
                     <th className="text-left py-3 px-2 font-medium text-slate-700">Stok</th>
+                    <th className="text-left py-3 px-2 font-medium text-slate-700" title="Kargo desisi; * bazı varyantlarda ölçü eksik (scripts/data/desi-raporu.csv)">Desi</th>
                     <th className="text-left py-3 px-2 font-medium text-slate-700">Öne çıkan</th>
                     <th className="text-right py-3 px-2 font-medium text-slate-700">İşlem</th>
                   </tr>
@@ -256,6 +270,7 @@ function AdminKatalogContent() {
                       </td>
                       <td className="py-3 px-2 tabular-nums">{fmtTRY(p.price)}</td>
                       <td className="py-3 px-2">{p.stock}</td>
+                      <td className="py-3 px-2 tabular-nums text-slate-600">{desiLabel(p)}</td>
                       <td className="py-3 px-2">
                         {p.featured ? (
                           <Badge className="bg-green-100 text-green-800 border-0">Evet</Badge>

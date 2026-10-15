@@ -13,6 +13,7 @@ import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { FavoriteButton } from '@/components/FavoriteButton'
 import { StockAlertForm } from '@/components/StockAlertForm'
+import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { CompareButton } from '@/components/CompareButton'
 import { Turnstile } from '@/components/Turnstile'
 import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds } from '@/lib/products-mock'
@@ -441,6 +442,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     {tProduct('inStock')}
                   </span>
                 )}
+                {!outOfStock && <DeliveryEstimate className="mt-3" />}
               </div>
 
               {outOfStock && <StockAlertForm productId={product.id} />}

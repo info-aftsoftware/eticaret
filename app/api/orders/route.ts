@@ -118,7 +118,8 @@ export async function POST(request: NextRequest) {
         paymentStatus: 'PENDING',
         paymentMethod: paymentMethod === 'card' ? 'card' : 'bank_transfer',
         shippingName: name,
-        shippingEmail: email,
+        // Küçük harfle saklanır: üyelikten sonra doğrulanmış e-postayla hesaba bağlanabilsin
+        shippingEmail: email.toLowerCase(),
         shippingPhone: phone,
         shippingAddress: addressLine,
         shippingCity: city,
@@ -268,12 +269,25 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    const userId = (await getCustomerFromRequest(request))?.userId ?? null
+    const customer = await getCustomerFromRequest(request)
+    const userId = customer?.userId ?? null
     if (!userId) {
       return NextResponse.json(
         { success: false, error: 'Giriş yapmanız gerekiyor' },
         { status: 401 }
       )
+    }
+
+    // Üye olmadan verilen siparişler, e-posta adresi DOĞRULANMIŞ hesapla eşleşiyorsa hesaba bağlanır
+    // (doğrulanmamış e-postayla başkasının siparişleri görülemesin diye)
+    if (customer?.emailVerified && customer.email) {
+      const email = customer.email.trim()
+      await prisma.order
+        .updateMany({
+          where: { userId: null, shippingEmail: { in: Array.from(new Set([email, email.toLowerCase()])) } },
+          data: { userId },
+        })
+        .catch((e) => console.error('Misafir siparişi bağlama hatası:', e))
     }
 
     const { searchParams } = new URL(request.url)

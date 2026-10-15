@@ -31,12 +31,25 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [x] **Fatura PDF'i** "SİPARİŞ ÖZETİ / PROFORMA" oldu (mali değeri olmadığı yazıyor); e-posta ve indirme etiketleri buna göre.
 - [x] **Performans:** ürün görselleri 51 MB → ~36 MB (1200 px üstü küçültüldü, ağır PNG fotoğraflar JPEG'e çevrildi).
 - [x] **Repo temizliği:** zip paketleri, `public_html/`, `build_output.txt` depodan çıkarıldı (diskte duruyor, `.gitignore`'da); bozuk `.claude/worktrees` kayıtları silindi (`git status` artık hatasız); `nul`, `dev.log` silindi.
-- [x] **Testler:** birim testleri (kur yuvarlama dahil) ve E2E (Chrome ile `PW_CHANNEL=chrome`, 47 geçti / 4 kampanya nedeniyle atlandı).
+- [x] **Testler:** birim testleri (kur yuvarlama, TOTP, teslim tarihi dahil 35) ve E2E (Chrome ile `PW_CHANNEL=chrome`: 50 geçti, 1 atlandı — aktif kampanya gerektiren test).
+
+### ✅ Faz 9 — devam (15.10.2026)
+
+- [x] **İstemci katalog boyutu:** teknik özellikler, döviz fiyatı, ölçü/desi ve SEO başlığı `lib/catalog/product-details.json`'a ayrıldı (yalnızca sunucu, `lib/catalog-details.ts`); her sayfaya giden katalog 530 KB → 316 KB. `/api/products` listesi varyant özelliklerini taşımıyor (detay API'sinde var).
+- [x] **Görseller WebP:** `npm run images:optimize` (sharp) — ürün görselleri ~36 MB → 17 MB. Yeni Excel import'undan sonra bu komut ve ardından import tekrar çalıştırılmalı.
+- [x] **Yerel "yeni10" kampanyası pasife alındı** (silinmedi; admin panelinden açılabilir).
+- [x] **Admin iki adımlı doğrulama (TOTP):** `ADMIN_TOTP_SECRET` tanımlıysa şifreden sonra Authenticator kodu isteniyor. Kurulum: `node scripts/admin-2fa-setup.mjs` → çıktıdaki anahtarı sunucu ortamına girin, otpauth bağlantısını uygulamaya ekleyin.
+- [x] **Misafir siparişleri hesaba bağlanıyor:** e-postası doğrulanmış üye "Siparişlerim"i açtığında aynı e-postayla verilmiş misafir siparişleri hesabına eklenir (yeni siparişlerde e-posta küçük harfle saklanıyor).
+- [x] **Tahmini teslim tarihi** ürün sayfasında (stokta ise) ve sepette: iş günü 15:00'e kadar aynı gün kargo, 1–3 iş günü teslim (JSON-LD ile aynı kural; resmî tatiller hesaba katılmıyor).
+- [x] **Meta (Facebook) Pixel:** `NEXT_PUBLIC_META_PIXEL_ID` tanımlıysa yalnızca çerez onayı verenlerde ViewContent, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase gönderiliyor; CSP'ye connect.facebook.net eklendi.
+- [x] **Admin katalog tablosunda Desi sütunu** (varyantlıda aralık; `*` bazı varyantlarda ölçü eksik).
 
 ### 🔴 P0 — Yayından önce (sizde)
 
 - [ ] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi.
-- [ ] **"yeni10" kampanyası** (tüm ürünlere %10, süresiz) yerelde aktif; canlıda da varsa Admin > İndirimler'den kapatın.
+- [ ] **"yeni10" kampanyası** yerelde kapatıldı; canlıda da varsa Admin > İndirimler'den kapatın.
+- [ ] **Admin 2FA'yı açın:** `node scripts/admin-2fa-setup.mjs` → `ADMIN_TOTP_SECRET` (canlı ortam).
+- [ ] **Meta Pixel kullanılacaksa:** `NEXT_PUBLIC_META_PIXEL_ID` girin ve çerez politikasına (lib/legal/documents.json) Meta pikselini ekletin.
 - [ ] **Gerçek stok:** Excel'de tüm ürünlerin stoğu 17; varyantlar ürün stoğunu paylaşıyor.
 - [ ] **Kargo ücreti kuralı** (siz verecektiniz): şu an 50 TL, 3.000 TL üstü ücretsiz. Desi verisi hazır; kural gelince `lib/store-config.ts`'e desi bazlı hesap eklenir.
 - [ ] **Yayın yöntemi:** statik `public_html` yerine Node (standalone) yayın — canlı kur, sepet, sipariş ve ödeme sunucu ister; eski URL yönlendirmeleri de yalnızca Node yayında çalışır.
@@ -59,9 +72,9 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 ### 🟡 P2 ve sonrası
 
 - [ ] Ürün adları/açıklamaları yalnızca Türkçe (İngilizce arayüz).
-- [ ] Görsel optimizasyonu için Next image optimizasyonu (sharp) / WebP; istemci paketine giren tüm katalog (~370 KB) için hafif liste.
 - [ ] Ana sayfa için yeni banner/slayt tasarımları (şu an tek slayt).
-- [ ] Kargo firması API, SMS, stok rezervasyonu, taksit ve ORDERSTATUS, mutabakat raporu, PayTR (entegre et ya da kaldır), admin 2FA, Redis rate limit, Sentry, Turnstile anahtarları, ETBİS bağlantısı, İYS kaydı, misafir siparişi hesaba bağlama, staging, tahmini teslim, kurumsal müşteri, Meta Pixel/Ads, ERP, X al Y öde, sadakat, kâr/huni raporları.
+- [ ] **Hesap/sağlayıcı gerektirenler:** kargo firması API (gönderi oluşturma), SMS sağlayıcı, bankadan taksit tablosu ve ORDERSTATUS sorgusu, Sentry (DSN), Redis/Upstash (yalnızca çok sunuculu kurulumda gerekli), Turnstile anahtarları, ETBİS bağlantısı, İYS kaydı, Google Ads dönüşüm etiketi, ERP/muhasebe, staging ortamı.
+- [ ] **İş kararı gerektirenler:** PayTR (entegre et ya da kaldır — şu an ödeme başlatma yok), kapıda ödeme, kurumsal müşteri (vergi no profili, bayi fiyatı), X al Y öde ve sadakat puanı, kâr marjı raporu (ürün maliyetleri gerekli), sonuçlanmamış kart siparişlerinin otomatik iptali (ORDERSTATUS gelmeden önerilmez).
 
 
 ## ✅ P0 uygulama durumu (12.10.2026)

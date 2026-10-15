@@ -7,6 +7,7 @@ import { mockProducts, type MockProduct } from '@/lib/products-mock'
 import { prisma } from '@/lib/prisma'
 import { applyTryRates, getTryRates, type TryRates } from '@/lib/fx-rates'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
+import { withDetails } from '@/lib/catalog-details'
 
 export type MergedProduct = MockProduct & { id: string; slug?: string }
 
@@ -59,7 +60,7 @@ function applyOverride(base: MergedProduct, override: {
 /** Katalog ürününden MergedProduct kopyası (override uygulanmamış); TL fiyat güncel kurla hesaplanır. */
 function mockToMerged(p: MockProduct, rates: TryRates): MergedProduct {
   return {
-    ...applyTryRates(p, rates),
+    ...applyTryRates(withDetails(p), rates),
     id: p.id,
   }
 }

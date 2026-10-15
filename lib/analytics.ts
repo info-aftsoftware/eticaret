@@ -26,8 +26,68 @@ export type GaItem = {
 
 const CURRENCY = 'TRY'
 
+/** Meta (Facebook) Pixel — yalnızca NEXT_PUBLIC_META_PIXEL_ID tanımlıysa ve çerez onayı verilmişse yüklenir */
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID
+/** GA4 olayı → Meta standart olayı */
+const META_EVENTS: Record<string, string> = {
+  view_item: 'ViewContent',
+  add_to_cart: 'AddToCart',
+  begin_checkout: 'InitiateCheckout',
+  add_payment_info: 'AddPaymentInfo',
+  purchase: 'Purchase',
+}
+
+type Fbq = ((...args: unknown[]) => void) & { queue?: unknown[][]; loaded?: boolean; version?: string; callMethod?: (...a: unknown[]) => void; push?: unknown }
+
+function getFbq(): Fbq | null {
+  if (!META_PIXEL_ID || typeof window === 'undefined') return null
+  const w = window as unknown as { fbq?: Fbq; _fbq?: Fbq }
+  if (!w.fbq) {
+    // Meta'nın resmî yükleyicisinin eşdeğeri: çağrılar betik yüklenene kadar kuyruğa alınır
+    const fbq: Fbq = function (...args: unknown[]) {
+      if (fbq.callMethod) fbq.callMethod(...args)
+      else fbq.queue!.push(args)
+    } as Fbq
+    fbq.queue = []
+    fbq.loaded = true
+    fbq.version = '2.0'
+    fbq.push = fbq
+    w.fbq = fbq
+    w._fbq = fbq
+    const script = document.createElement('script')
+    script.async = true
+    script.src = 'https://connect.facebook.net/en_US/fbevents.js'
+    document.head.appendChild(script)
+    fbq('init', META_PIXEL_ID)
+    fbq('track', 'PageView')
+  }
+  return w.fbq!
+}
+
+function sendMeta(name: string, params: Record<string, unknown>) {
+  const event = META_EVENTS[name]
+  if (!event) return
+  const fbq = getFbq()
+  if (!fbq) return
+  const items = (params.items as GaItem[] | undefined) ?? []
+  fbq('track', event, {
+    currency: CURRENCY,
+    value: params.value,
+    content_type: 'product',
+    content_ids: items.map((i) => i.item_id),
+    contents: items.map((i) => ({ id: i.item_id, quantity: i.quantity ?? 1, item_price: i.price })),
+    num_items: items.reduce((n, i) => n + (i.quantity ?? 1), 0),
+  }, name === 'purchase' && params.transaction_id ? { eventID: String(params.transaction_id) } : undefined)
+}
+
 async function send(name: string, params: Record<string, unknown>) {
-  if (typeof window === 'undefined' || !isFirebaseConfigured || !hasAnalyticsConsent()) return
+  if (typeof window === 'undefined' || !hasAnalyticsConsent()) return
+  try {
+    sendMeta(name, params)
+  } catch {
+    // ölçüm hatası alışverişi etkilemez
+  }
+  if (!isFirebaseConfigured) return
   try {
     const analytics = await getAnalytics()
     if (analytics) logEvent(analytics, name as never, params as never)

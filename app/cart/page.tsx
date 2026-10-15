@@ -27,6 +27,7 @@ import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import { trackViewCart, cartItemToGa } from '@/lib/analytics'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { computeOrderTotals, amountToFreeShipping, FREE_SHIPPING_THRESHOLD, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 
 export default function CartPage() {
   const router = useRouter()
@@ -351,6 +352,7 @@ export default function CartPage() {
                 ) : (
                   <p className="text-xs font-medium text-green-700">Ücretsiz kargo kazandınız.</p>
                 )}
+                <DeliveryEstimate />
 
                 <Separator />
 

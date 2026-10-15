@@ -6,6 +6,7 @@ Kullanım:
 
 Üretilen dosyalar:
   lib/catalog/products.json      – hafif katalog (liste, filtre, sepet; istemciye de gider)
+  lib/catalog/product-details.json – özellikler, döviz fiyatı, ölçü/desi, SEO başlığı (yalnızca sunucu)
   lib/catalog/descriptions.json  – ürün id -> HTML açıklama (yalnızca sunucuda yüklenir)
   lib/catalog/fx-snapshot.json   – TCMB kur anlık görüntüsü (API'siz/statik ortam yedeği)
 
@@ -539,9 +540,26 @@ def main():
                 p['imagesByVariant'] = [[best['image']] if i == [PLACEHOLDER] else i for i in p['imagesByVariant']]
             print(f'Görselsiz ürün "{p["name"]}" için benzer ürün görseli kullanıldı: {best["name"]}')
 
+    # İstemciye giden hafif katalog / yalnızca sunucuda yüklenen ayrıntılar.
+    # products.json her sayfanın JS paketine girdiğinden (başlık menüsü, öneriler) özellikler, döviz fiyatı,
+    # ölçü/desi ve SEO başlığı product-details.json'a ayrılır; sunucu (lib/catalog-details.ts) ikisini birleştirir.
+    detail_keys = ('specifications', 'basePrice', 'metaTitle', 'dimensionsCm', 'weightKg', 'desi', 'desiSource')
+    variant_detail_keys = ('specifications', 'basePrice', 'dimensionsCm', 'weightKg', 'desi', 'desiSource')
+    lite, details = [], {}
+    for p in products:
+        d = {k: p[k] for k in detail_keys if k in p}
+        lp = {k: v for k, v in p.items() if k not in detail_keys}
+        if p.get('variants'):
+            d['variants'] = {v['key']: {k: v[k] for k in variant_detail_keys if k in v} for v in p['variants']}
+            lp['variants'] = [{k: val for k, val in v.items() if k not in variant_detail_keys} for v in p['variants']]
+        lite.append(lp)
+        details[p['id']] = d
+
     os.makedirs(OUT_DIR, exist_ok=True)
     with open(os.path.join(OUT_DIR, 'products.json'), 'w', encoding='utf-8') as f:
-        json.dump(products, f, ensure_ascii=False, separators=(',', ':'))
+        json.dump(lite, f, ensure_ascii=False, separators=(',', ':'))
+    with open(os.path.join(OUT_DIR, 'product-details.json'), 'w', encoding='utf-8') as f:
+        json.dump(details, f, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(OUT_DIR, 'descriptions.json'), 'w', encoding='utf-8') as f:
         json.dump(descriptions, f, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(OUT_DIR, 'fx-snapshot.json'), 'w', encoding='utf-8') as f:

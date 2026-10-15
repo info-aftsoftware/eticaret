@@ -13,6 +13,9 @@ export default function AdminAuthPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  /** İki adımlı doğrulama açıksa (ADMIN_TOTP_SECRET) şifreden sonra kod alanı gösterilir */
+  const [otpRequired, setOtpRequired] = useState(false)
+  const [otp, setOtp] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,11 +25,19 @@ export default function AdminAuthPage() {
       const res = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify(otpRequired ? { password, otp } : { password }),
         credentials: 'include',
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok || !data.success) {
+        if (data.requiresOtp) {
+          // İlk adımda (kod henüz istenmemişken) uyarı yerine kod alanını göster
+          if (!otpRequired) {
+            setOtpRequired(true)
+            return
+          }
+          setOtp('')
+        }
         setError(data.error || 'Giriş başarısız.')
         return
       }
@@ -99,6 +110,30 @@ export default function AdminAuthPage() {
                 </button>
               </div>
             </div>
+            {otpRequired && (
+              <div className="space-y-1.5">
+                <label htmlFor="admin-otp" className="block text-white/60 text-xs font-semibold uppercase tracking-wider">
+                  Doğrulama kodu
+                </label>
+                <input
+                  id="admin-otp"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  placeholder="123456"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                  style={{ background: 'rgba(255,255,255,0.08)', color: 'white' }}
+                  className="w-full h-11 px-4 rounded-xl border border-white/15 text-sm tracking-[0.4em] outline-none focus:border-[#f4a11a] placeholder-white/25 transition-colors"
+                  required
+                  disabled={loading}
+                  autoFocus
+                />
+                <p className="text-white/40 text-xs">Doğrulama uygulamanızdaki (Google/Microsoft Authenticator) 6 haneli kod.</p>
+              </div>
+            )}
             <Button
               type="submit"
               className="w-full h-11 rounded-xl bg-[#f4a11a] hover:bg-[#e09510] text-white font-semibold gap-2 shadow-lg shadow-amber-500/20 transition-all"

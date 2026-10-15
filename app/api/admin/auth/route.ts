@@ -4,12 +4,15 @@ import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { isRateLimited } from '@/lib/rate-limit'
+import { verifyTotp } from '@/lib/totp'
 import { getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN
 const JWT_SECRET = process.env.JWT_SECRET
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7 // 7 gün
 const ADMIN_UID = 'admin-panel-user'
+/** Tanımlıysa şifreye ek olarak doğrulama uygulaması kodu istenir (iki adımlı doğrulama) */
+const ADMIN_TOTP_SECRET = process.env.ADMIN_TOTP_SECRET
 
 /** Sabit zamanlı karşılaştırma (zamanlama saldırısına karşı). */
 function safeEqual(a: string, b: string): boolean {
@@ -41,6 +44,16 @@ export async function POST(request: NextRequest) {
 
     if (!safeEqual(password, ADMIN_TOKEN)) {
       return NextResponse.json({ success: false, error: 'Şifre hatalı.' }, { status: 401 })
+    }
+
+    if (ADMIN_TOTP_SECRET) {
+      const otp = typeof body?.otp === 'string' ? body.otp.trim() : ''
+      if (!otp) {
+        return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama uygulamasındaki 6 haneli kodu girin.' }, { status: 401 })
+      }
+      if (!verifyTotp(ADMIN_TOTP_SECRET, otp)) {
+        return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı veya süresi dolmuş.' }, { status: 401 })
+      }
     }
 
     const sessionToken = jwt.sign(

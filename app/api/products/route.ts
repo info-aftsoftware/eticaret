@@ -6,8 +6,16 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getStorefrontProducts } from '@/lib/discounts'
+import { getStorefrontProducts, type StorefrontProduct } from '@/lib/discounts'
 import { searchProducts } from '@/lib/search-product'
+
+function toListItem(p: StorefrontProduct) {
+  const { basePrice: _basePrice, desiSource: _desiSource, dimensionsCm: _dims, ...rest } = p
+  return {
+    ...rest,
+    variants: p.variants?.map(({ specifications: _s, basePrice: _b, desiSource: _d, dimensionsCm: _dm, ...v }) => v),
+  }
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -32,7 +40,8 @@ export async function GET(request: NextRequest) {
       result = searchProducts(result, q)
     }
 
-    return NextResponse.json(result)
+    // Liste yanıtı hafif tutulur: varyant özellikleri, döviz fiyatı ve kargo kaynağı yalnızca ürün detay API'sinde
+    return NextResponse.json(result.map(toListItem))
   } catch (error) {
     console.error('Products GET error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

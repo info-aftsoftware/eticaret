@@ -55,8 +55,8 @@ const nextConfig = {
               key: 'Content-Security-Policy',
               value: [
                 "default-src 'self'",
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' https://voltekno.com https://*.voltekno.com https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com https://*.googleapis.com chrome-extension:",
-                "script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' https://voltekno.com https://*.voltekno.com https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com https://*.googleapis.com chrome-extension:",
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' https://voltekno.com https://*.voltekno.com https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com https://*.googleapis.com https://connect.facebook.net chrome-extension:",
+                "script-src-elem 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' 'inline-speculation-rules' https://voltekno.com https://*.voltekno.com https://www.googletagmanager.com https://www.google-analytics.com https://www.google.com https://*.googleapis.com https://connect.facebook.net chrome-extension:",
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
                 "img-src 'self' data: https: blob:",
                 "font-src 'self' data: https://fonts.gstatic.com",

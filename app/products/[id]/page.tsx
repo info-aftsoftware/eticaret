@@ -7,6 +7,7 @@ import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discount
 import { computeOrderTotals, VAT_RATE } from '@/lib/store-config'
 import { SELLER } from '@/lib/legal/company'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
+import { withDetails } from '@/lib/catalog-details'
 import legacyProductRedirects from '@/lib/legacy-product-redirects.json'
 
 const LEGACY_PRODUCT_REDIRECTS = legacyProductRedirects as Record<string, string>
@@ -35,7 +36,7 @@ async function loadProduct(id: string): Promise<StorefrontProduct | null> {
     console.error('Product load error:', e)
   }
   const mock = mockProducts.find((p) => p.id === id)
-  return mock ? { ...mock, id: mock.id, descriptionHtml: getProductDescriptionHtml(mock.id) } : null
+  return mock ? { ...withDetails(mock), id: mock.id, descriptionHtml: getProductDescriptionHtml(mock.id) } : null
 }
 
 const SITE_NAME = 'voltekno'
