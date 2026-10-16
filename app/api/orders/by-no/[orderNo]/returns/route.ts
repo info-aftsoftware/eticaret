@@ -40,7 +40,8 @@ function errorResponse(e: unknown) {
   return NextResponse.json({ success: false, error: 'İşlem yapılamadı.' }, { status: 500 })
 }
 
-export async function POST(request: NextRequest, { params }: { params: { orderNo: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ orderNo: string }> }) {
+  const params = await props.params;
   if (isRateLimited(request, 'order-return', 5, 10 * 60_000)) {
     return NextResponse.json({ success: false, error: 'Çok fazla istek.' }, { status: 429 })
   }
@@ -60,7 +61,8 @@ export async function POST(request: NextRequest, { params }: { params: { orderNo
   }
 }
 
-export async function PATCH(request: NextRequest, { params }: { params: { orderNo: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ orderNo: string }> }) {
+  const params = await props.params;
   const body = await request.json().catch(() => ({}))
   const order = await authorize(request, params.orderNo, body)
   if (!order) return NextResponse.json({ success: false, error: 'Sipariş bulunamadı' }, { status: 404 })

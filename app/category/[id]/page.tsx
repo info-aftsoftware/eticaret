@@ -15,7 +15,8 @@ function getCategoryTitle(id: string) {
   return CATEGORY_META[id]?.title ?? CATEGORY_GROUPS.find((group) => group.id === id)?.id ?? 'Kategori'
 }
 
-export function generateMetadata({ params }: { params: { id: string } }): Metadata {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const meta = CATEGORY_META[params.id]
   const title = getCategoryTitle(params.id)
   const description =
@@ -52,7 +53,8 @@ export function generateMetadata({ params }: { params: { id: string } }): Metada
   }
 }
 
-export default function CategoryPage({ params }: { params: { id: string } }) {
+export default async function CategoryPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   // Eski kategori URL'leri yeni Excel kategorilerine yönlendirilir (karşılığı yoksa tüm ürünler)
   if (params.id in LEGACY_CATEGORY_REDIRECTS) {
     const target = LEGACY_CATEGORY_REDIRECTS[params.id]

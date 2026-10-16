@@ -14,10 +14,8 @@ export function generateStaticParams() {
  * Müşterinin kendi siparişi (id ile). Auth zorunlu; yalnızca sipariş sahibi görebilir.
  * Durum güncelleme yalnızca admin API'sinden yapılır: PATCH /api/admin/orders/[id].
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const userId = (await getCustomerFromRequest(request))?.userId ?? null
     if (!userId) {

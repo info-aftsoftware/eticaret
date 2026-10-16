@@ -66,12 +66,13 @@ export const metadata: Metadata = {
   authors: [{ name: 'voltekno', url: SITE_URL }],
   creator: 'voltekno',
   publisher: 'voltekno',
+  // NEXT_PUBLIC_NOINDEX=true: test/geçici alan adı arama sonuçlarına girmesin
   robots: {
-    index: true,
-    follow: true,
+    index: process.env.NEXT_PUBLIC_NOINDEX !== 'true',
+    follow: process.env.NEXT_PUBLIC_NOINDEX !== 'true',
     googleBot: {
-      index: true,
-      follow: true,
+      index: process.env.NEXT_PUBLIC_NOINDEX !== 'true',
+      follow: process.env.NEXT_PUBLIC_NOINDEX !== 'true',
       'max-image-preview': 'large',
       'max-snippet': -1,
       'max-video-preview': -1,

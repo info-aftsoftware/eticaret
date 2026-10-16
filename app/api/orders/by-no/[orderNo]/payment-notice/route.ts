@@ -20,7 +20,8 @@ import PaymentNoticeEmail from '@/emails/order/PaymentNoticeEmail'
 
 const str = (v: unknown, max: number) => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
-export async function POST(request: NextRequest, { params }: { params: { orderNo: string } }) {
+export async function POST(request: NextRequest, props: { params: Promise<{ orderNo: string }> }) {
+  const params = await props.params;
   if (isRateLimited(request, 'payment-notice', 5, 10 * 60_000)) {
     return NextResponse.json({ success: false, error: 'Çok fazla istek.' }, { status: 429 })
   }

@@ -7,7 +7,8 @@ import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { generatePackingSlipPdf } from '@/lib/packing-slip'
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await checkAdmin(request)
   if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status })
 

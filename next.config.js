@@ -37,7 +37,6 @@ const nextConfig = {
   // Production optimizasyonları
   compress: true,
   poweredByHeader: false,
-  swcMinify: true,
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: false,
@@ -82,9 +81,9 @@ const nextConfig = {
   ...(isProduction && !isStaticExport && {
     output: 'standalone',
   }),
-  experimental: {
-    serverComponentsExternalPackages: ['undici'],
-  },
+  serverExternalPackages: ['undici'],
+  // Üst klasörlerdeki başka lockfile'lar kök dizini yanlış seçtirmesin (standalone çıktı yolu)
+  outputFileTracingRoot: __dirname,
   // Development'ta output belirtilmemeli (Next.js default kullanır)
   webpack: (config, { isServer }) => {
     // Client bundle'da undici kullanma; #target parse hatası veriyor. Tarayıcıda native fetch kullan.

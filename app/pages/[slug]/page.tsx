@@ -10,12 +10,14 @@ export function generateStaticParams() {
   return LEGAL_SLUGS.map((slug) => ({ slug }))
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const { slug } = params
   return (LEGAL_SLUGS as readonly string[]).includes(slug) ? legalMetadata(slug as LegalSlug) : {}
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const { slug } = params
   if (!(LEGAL_SLUGS as readonly string[]).includes(slug)) notFound()
   return <LegalPage slug={slug as LegalSlug} />

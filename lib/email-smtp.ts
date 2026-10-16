@@ -5,12 +5,12 @@
  */
 
 import nodemailer from 'nodemailer'
-import type { Transporter } from 'nodemailer'
+import type { Transporter, TransportOptions, SendMailOptions, SentMessageInfo } from 'nodemailer'
 import { render } from '@react-email/render'
 import React from 'react'
 
 // Cache transporter to avoid recreating it on every call
-let cachedTransporter: nodemailer.Transporter | null = null
+let cachedTransporter: Transporter | null = null
 
 // Create reusable transporter with connection pooling
 const createTransporter = () => {
@@ -46,7 +46,7 @@ const createTransporter = () => {
       attempts: 3,
       delay: 2000, // 2 seconds between retries
     },
-  } as nodemailer.TransportOptions
+  } as TransportOptions
 
   cachedTransporter = nodemailer.createTransport(smtpConfig)
   return cachedTransporter
@@ -97,7 +97,7 @@ export async function sendEmailSMTP(
       ])
     }
 
-    const mailOptions: nodemailer.SendMailOptions = {
+    const mailOptions: SendMailOptions = {
       from: process.env.SMTP_FROM || `"Voltekno" <${process.env.SMTP_USER}>`,
       to: to,
       subject: subject,
@@ -114,7 +114,7 @@ export async function sendEmailSMTP(
 
     const info = await Promise.race([
       sendPromise,
-      new Promise<nodemailer.SentMessageInfo>((_, reject) =>
+      new Promise<SentMessageInfo>((_, reject) =>
         setTimeout(() => reject(new Error('SMTP send timeout')), 30000)
       )
     ])

@@ -12,10 +12,8 @@ export function generateStaticParams() {
   return []
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await checkAdmin(request)
   if ('error' in auth) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })
@@ -46,10 +44,8 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await checkAdmin(request)
   if ('error' in auth) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })
@@ -79,10 +75,8 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await checkAdmin(request)
   if ('error' in auth) {
     return NextResponse.json({ error: auth.error }, { status: auth.status })

@@ -47,7 +47,8 @@ function truncate(str: string, max: number) {
   return str.slice(0, max).trim() + '…'
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const product = await loadProduct(params.id)
   if (!product) return { title: 'Ürün Bulunamadı' }
 
@@ -163,7 +164,8 @@ function buildProductJsonLd(product: StorefrontProduct) {
   }
 }
 
-export default async function ProductPage({ params }: { params: { id: string } }) {
+export default async function ProductPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const product = await loadProduct(params.id)
   if (!product) {
     // Eski katalogdaki ürün: yeni ürüne/kategoriye kalıcı yönlendirme (next.config.js redirects ile aynı liste;

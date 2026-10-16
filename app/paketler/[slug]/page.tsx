@@ -16,7 +16,8 @@ export function generateStaticParams() {
   return PACKAGE_CATEGORIES.map((item) => ({ slug: item.slug }))
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const item = getPackageCategory(params.slug)
   if (!item) return { title: 'Paket Bulunamadı | voltekno' }
 
@@ -69,7 +70,8 @@ function buildFaqSchema(item: NonNullable<ReturnType<typeof getPackageCategory>>
   }
 }
 
-export default function PaketDetailPage({ params }: { params: { slug: string } }) {
+export default async function PaketDetailPage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const item = getPackageCategory(params.slug)
   if (!item) notFound()
 

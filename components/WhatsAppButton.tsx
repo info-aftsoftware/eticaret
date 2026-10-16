@@ -22,10 +22,13 @@ export function WhatsAppIcon({ className = 'w-5 h-5' }: { className?: string }) 
  */
 export function WhatsAppButton() {
   const pathname = usePathname() ?? ''
+  // Sayfa adresi yüklemeden sonra eklenir: sunucu ve istemci HTML'i aynı kalsın (hydration uyumsuzluğu olmasın)
+  const [origin, setOrigin] = React.useState('')
+  React.useEffect(() => setOrigin(window.location.origin), [])
   if (pathname.startsWith('/checkout') || pathname.startsWith('/admin')) return null
   const onProduct = pathname.startsWith('/products/')
   const text = onProduct
-    ? `Merhaba, bu ürün hakkında bilgi almak istiyorum: ${typeof window !== 'undefined' ? window.location.href : ''}`
+    ? `Merhaba, bu ürün hakkında bilgi almak istiyorum: ${origin}${pathname}`
     : 'Merhaba, voltekno.com üzerinden yazıyorum.'
   return (
     <a

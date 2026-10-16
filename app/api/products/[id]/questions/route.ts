@@ -29,10 +29,8 @@ async function getUserFromToken(request: NextRequest): Promise<{ userId: string;
   }
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     if (!isFirebaseAdminConfigured()) {
       return NextResponse.json({ questions: [] })
@@ -70,10 +68,8 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function POST(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     if (isRateLimited(request, 'product-question', 5, 10 * 60_000)) {
       return NextResponse.json({ error: 'Çok fazla soru gönderdiniz. Lütfen daha sonra tekrar deneyin.' }, { status: 429 })

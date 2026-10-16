@@ -11,7 +11,8 @@ import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { parseCouponInput } from '@/lib/coupon-input'
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await checkAdmin(request)
   if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status })
   const body = await request.json().catch(() => null)
@@ -41,7 +42,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const auth = await checkAdmin(request)
   if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status })
   try {

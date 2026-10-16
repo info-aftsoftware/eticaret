@@ -44,6 +44,17 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [x] **Meta (Facebook) Pixel:** `NEXT_PUBLIC_META_PIXEL_ID` tanımlıysa yalnızca çerez onayı verenlerde ViewContent, AddToCart, InitiateCheckout, AddPaymentInfo, Purchase gönderiliyor; CSP'ye connect.facebook.net eklendi.
 - [x] **Admin katalog tablosunda Desi sütunu** (varyantlıda aralık; `*` bazı varyantlarda ölçü eksik).
 
+### 🌐 Canlı ortam durumu (Hostinger, 15.10.2026)
+
+- **voltekno.com alan adı şu an ikas'a yönleniyor** (DNS 75.2.120.200, yanıtlar `Server: ikas`). Ziyaretçiler ikas mağazasını görüyor; Hostinger'daki bu Next.js uygulaması yalnızca geçici adreste yayında: https://purple-goose-825288.hostingersite.com. Alan adı Hostinger'a ancak uygulama hazır olunca (aşağıdaki veritabanı düzeltmesinden sonra) yönlendirilmeli.
+- Hostinger'da uygulama kaydı voltekno.com (kullanıcı u718952521) adına; daha önce GitHub `web-projelerim/eticaret` → `main` ile yayın alıyordu (son 16.04.2026, `9b6045e`).
+- [x] Çalışmalar `main`'e push edildi (`31f0184`); Hostinger GitHub'a bağlı olmadığı için 16.10.2026'da **arşivle (MCP) yayınlandı** (build `01a143b9`). Arşiv `git archive` ile yalnızca kaynak dosyalardan oluşturuldu (`public_html_standalone/`, `docs/`, `.claude/` hariç).
+- [ ] **Veritabanı tabloları çalışan uygulamada yok (16.10 yayını sonrası, ÖNEMLİ):** derlemede `prisma db push` tabloları bir `dev.db`'de oluşturuyor, çalışan uygulama (`hbuilds/versions/<sürüm>/nodejs`) göreli `file:./dev.db` yüzünden başka bir dosyayı açıyor → `/api/products`, sepet fiyatı ve sipariş 500 veriyor (sayfalar koddaki katalogla açılıyor). **Çözüm:** hPanel > voltekno.com > Node.js > Ortam değişkenleri'nde `DATABASE_URL=file:/home/u718952521/domains/voltekno.com/voltekno.db` (mutlak yol, `public_html` ve `hbuilds` dışında) yapın, ardından yeniden yayınlayın. Bu aynı zamanda verilerin yayınlar arasında korunmasını sağlar.
+- [ ] **Canlı veritabanı kalıcı değil:** `DATABASE_URL=file:./dev.db` derleme klasöründe; her yayında sıfırdan oluşturuluyor. 16.10 öncesi canlı veritabanında sipariş tablosu bile yoktu (yalnızca eski 8 tablo; loglarda sipariş kaydı yok), bu yüzden bu yayında veri kaybı olmadı. **Bundan sonraki her yayın siparişleri, kuponları, kampanyaları siler** → hPanel > Node.js > Ortam değişkenleri'nde `DATABASE_URL`'i derleme dışında kalıcı bir yola alın (ör. `file:/home/u718952521/voltekno-data/voltekno.db`) ya da PostgreSQL'e geçin; bir sonraki yayından **önce** yapılmalı.
+- [ ] `public_html_standalone/` (eski derleme çıktısı, 2056 dosya) hâlâ git'te; depodan çıkarılmalı.
+- [ ] **Canlıda eksik ortam değişkenleri** (hPanel > Node.js > Ortam değişkenleri): `CRON_SECRET`, `ADMIN_EMAIL`, `POS_BANK_NAME` / `POS_CLIENT_ID` / `POS_STORE_KEY` / `POS_GATEWAY_URL` (banka gelince), `ADMIN_TOTP_SECRET` (önerilir), `BACKUP_DIR`, isteğe bağlı `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_ETBIS_VERIFY_URL`, `NEXT_PUBLIC_SITE_URL`. Eskiden kalan `NEXTAUTH_URL` / `NEXTAUTH_SECRET` artık kullanılmıyor.
+- [ ] **Cron görevi yok** (hesapta yalnızca başka bir siteye ait PHP görevi var): `expire-orders` (6 saatte bir) ve `backup` (günde bir) kurulmalı — önce `CRON_SECRET` girilmeli.
+
 ### 🔴 P0 — Yayından önce (sizde)
 
 - [ ] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi.

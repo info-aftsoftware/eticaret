@@ -14,7 +14,8 @@ import { generateContractPdf } from '@/lib/legal/contract-pdf'
 import { generateInvoicePDF } from '@/lib/pdf'
 import { buildInvoiceDataFromPrisma } from '@/lib/invoice-data'
 
-export async function GET(request: NextRequest, { params }: { params: { orderNo: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ orderNo: string }> }) {
+  const params = await props.params;
   if (isRateLimited(request, 'order-documents', 20, 60_000)) {
     return NextResponse.json({ error: 'Çok fazla istek.' }, { status: 429 })
   }
