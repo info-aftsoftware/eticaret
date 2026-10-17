@@ -10,13 +10,17 @@ import { prisma } from '@/lib/prisma'
 import { getAllCarriers, getCarrier } from '@/lib/shipping/carriers'
 import {
   allowedNextStatuses,
+  approveCancellationRequest,
   changeOrderStatus,
+  getCancellationRequest,
+  rejectCancellationRequest,
   logOrderEvent,
   markOrderPaid,
   updateShipment,
   OrderTransitionError,
   ORDER_STATUS_LABELS_TR,
 } from '@/lib/order-service'
+import { customerKeyForOrder, userKey } from '@/lib/admin-customers'
 import { updateReturnRequest, suggestedRefund, RETURN_TYPES, RETURN_STATUS_LABELS, type ReturnType } from '@/lib/return-service'
 
 const ORDER_STATUSES: OrderStatus[] = ['PENDING', 'CONFIRMED', 'PROCESSING', 'PAID', 'PICKING', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'RETURNED']
@@ -50,7 +54,14 @@ export async function getAdminOrderDetail(id: string) {
   })
   if (!order) return null
   const carrier = order.shippingCarrier ? getCarrier(order.shippingCarrier) : undefined
+  // Müşteri kartı: misafir siparişi üye e-postasıyla eşleşiyorsa üyenin kartı
+  let customerKey = customerKeyForOrder(order)
+  if (!order.userId && order.shippingEmail) {
+    const u = await prisma.user.findUnique({ where: { email: order.shippingEmail.toLowerCase() }, select: { id: true } })
+    if (u) customerKey = userKey(u.id)
+  }
   return {
+    customerKey,
     id: order.id,
     source: 'prisma' as const,
     orderId: order.orderNo,
@@ -96,6 +107,7 @@ export async function getAdminOrderDetail(id: string) {
     status: order.status,
     statusLabel: ORDER_STATUS_LABELS_TR[order.status],
     paymentStatus: order.paymentStatus,
+    cancelRequest: getCancellationRequest(order),
     allowedNextStatuses: allowedNextStatuses(order.status).map((s) => ({ value: s, label: ORDER_STATUS_LABELS_TR[s] })),
     shippingCarrier: order.shippingCarrier,
     shippingCarrierName: carrier?.name ?? null,
@@ -153,6 +165,7 @@ export async function getAdminOrderDetail(id: string) {
  *  { action: 'status', status, carrier?, trackingNumber?, reason?, notifyCustomer? }
  *  { action: 'shipment', carrier, trackingNumber, notifyCustomer? }
  *  { action: 'note', adminNote }
+ *  { action: 'cancel_request', op: 'approve' | 'reject', reason? (ret için zorunlu), note? }
  *  { action: 'return', returnId, op: 'approve' | 'reject' | 'receive' | 'refund', carrier?, code?, reason?, amount? }
  * Geriye dönük: { status?, paymentStatus?: 'PAID', trackingNumber?, carrier? }
  */
@@ -206,6 +219,18 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
           amount: body.amount !== undefined && body.amount !== '' ? Number(body.amount) : undefined,
           adminNote: typeof body.adminNote === 'string' ? body.adminNote : undefined,
         })
+        break
+      }
+      case 'cancel_request': {
+        if (body.op === 'approve') {
+          await approveCancellationRequest(id, { actor: 'admin', note: typeof body.note === 'string' ? body.note.slice(0, 500) : null })
+        } else if (body.op === 'reject') {
+          const reason = typeof body.reason === 'string' ? body.reason.trim() : ''
+          if (!reason) return NextResponse.json({ error: 'Ret gerekçesi yazılmalıdır.' }, { status: 400 })
+          await rejectCancellationRequest(id, { reason, actor: 'admin' })
+        } else {
+          return NextResponse.json({ error: 'Geçersiz iptal talebi işlemi.' }, { status: 400 })
+        }
         break
       }
       case 'note': {

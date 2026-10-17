@@ -1,15 +1,36 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useCartStore } from '@/lib/store/useCartStore'
+import { useCartStore, handleCartAuthChange, getCartOwner } from '@/lib/store/useCartStore'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
+import { handleFavoritesAuthChange } from '@/lib/useFavorites'
+
+const uidOf = (s: { isAuthenticated: boolean; user: { id: string } | null }) => (s.isAuthenticated && s.user?.id ? s.user.id : null)
 
 /**
- * Giriş yapmış üyenin sepet özetini sunucuya gönderir (terk edilen sepet hatırlatması için).
- * Sepet içeriği değiştikten 5 sn sonra tek istek; misafirlerde hiçbir şey göndermez.
+ * Oturum değişimini izler: girişte misafir sepeti/favorileri üye hesabına taşınır, çıkışta sepet boşalır.
+ * Ayrıca giriş yapmış üyenin sepet özetini sunucuya gönderir (terk edilen sepet hatırlatması için):
+ * sepet içeriği değiştikten 5 sn sonra tek istek; misafirlerde hiçbir şey göndermez.
  */
 export function CartSync() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+
+  useEffect(() => {
+    // Abonelik senkron çalışır: sepet, oturum değişiminden sonraki ilk yazımdan önce doğru depoya taşınır
+    // Sepet yüklendiği andaki oturumla şimdiki farklıysa (ör. oturum süresi dolmuş) önce o geçiş uygulanır
+    let prevUid = uidOf(useAuthStore.getState())
+    const owner = getCartOwner()
+    if (owner !== prevUid && owner !== '') handleCartAuthChange(owner, prevUid)
+    if (useAuthStore.getState().authReady) void handleFavoritesAuthChange(prevUid)
+    return useAuthStore.subscribe((state) => {
+      const uid = uidOf(state)
+      if (state.authReady) void handleFavoritesAuthChange(uid)
+      if (uid === prevUid) return
+      const before = prevUid
+      prevUid = uid
+      handleCartAuthChange(before, uid)
+    })
+  }, [])
 
   useEffect(() => {
     if (!isAuthenticated) return

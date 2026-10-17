@@ -1,132 +1,172 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Mail, ArrowLeft, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { ClassicPageShell } from '@/components/ClassicPageShell'
+import { useSearchParams } from 'next/navigation'
+import { Mail, KeyRound, ArrowLeft, MailCheck, Loader2 } from 'lucide-react'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
+import { authErrorCode, authErrorMessage, EMAIL_RE } from '@/lib/auth-errors'
+import { ClassicPageShell } from '@/components/ClassicPageShell'
+import { AuthLayout, TextField, PrimaryButton, SecondaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
 
-export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('')
+const COOLDOWN = 60
+
+/** Önce sunucu (markalı e-posta, bağlantı doğrudan /reset-password), olmazsa Firebase'in kendi e-postası. */
+async function requestReset(email: string): Promise<void> {
+  try {
+    const res = await fetch('/api/account/password-reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    })
+    const data = await res.json().catch(() => ({}))
+    if (res.ok && data.success) return
+    if (res.status === 429 || res.status === 400) throw Object.assign(new Error(data.error), { userMessage: data.error })
+  } catch (e) {
+    if ((e as { userMessage?: string }).userMessage) throw e
+    // sunucuya ulaşılamadı → Firebase
+  }
+  if (!isFirebaseConfigured) throw new Error('Firebase yapılandırılmamış.')
+  const auth = getAuth()
+  try {
+    await sendPasswordResetEmail(auth, email, { url: `${window.location.origin}/login?reset=true` })
+  } catch (err) {
+    const code = authErrorCode(err)
+    if (code === 'auth/unauthorized-continue-uri' || code === 'auth/invalid-continue-uri') {
+      await sendPasswordResetEmail(auth, email)
+      return
+    }
+    // Hesap yoksa da aynı yanıtı ver (e-posta numaralandırmaya karşı)
+    if (code === 'auth/user-not-found') return
+    throw err
+  }
+}
+
+function ForgotPasswordContent() {
+  const searchParams = useSearchParams()
+  const [email, setEmail] = useState(searchParams.get('email') ?? '')
+  const [fieldError, setFieldError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [sentTo, setSentTo] = useState('')
   const [error, setError] = useState('')
+  const [remaining, setRemaining] = useState(0)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  useEffect(() => {
+    if (remaining <= 0) return
+    const t = setTimeout(() => setRemaining((r) => r - 1), 1000)
+    return () => clearTimeout(t)
+  }, [remaining])
+
+  const submit = async (address: string) => {
     setError('')
     setLoading(true)
-
     try {
-      if (!isFirebaseConfigured) throw new Error('Firebase yapılandırılmamış.')
-      const auth = getAuth()
-      await sendPasswordResetEmail(auth, email)
-      setSuccess(true)
-    } catch (err: any) {
-      const code = err?.code || ''
-      const message =
-        code === 'auth/user-not-found'
-          ? 'Bu e-posta ile kayıtlı kullanıcı bulunamadı.'
-          : code === 'auth/invalid-email'
-            ? 'Geçersiz e-posta adresi.'
-            : err?.message || 'Bir hata oluştu. Lütfen tekrar deneyin.'
-      setError(message)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      await requestReset(address)
+      setSentTo(address)
+      setRemaining(COOLDOWN)
+    } catch (err) {
+      setError((err as { userMessage?: string }).userMessage || authErrorMessage(err))
     } finally {
       setLoading(false)
     }
   }
 
-  if (success) {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const value = email.trim()
+    if (!value) return setFieldError('E-posta adresinizi girin.')
+    if (!EMAIL_RE.test(value)) return setFieldError('Geçerli bir e-posta adresi girin (örn. ad@ornek.com).')
+    setFieldError('')
+    submit(value)
+  }
+
+  if (sentTo) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: 'Şifremi Unuttum' }]} noTitle>
-        <div className="flex justify-center py-8">
-          <div className="w-full max-w-md">
-            <Card className="classic-card rounded-lg overflow-hidden">
-              <CardHeader className="space-y-1 text-center pb-4">
-                <div className="flex justify-center mb-4">
-                  <div className="w-14 h-14 bg-brand rounded-lg flex items-center justify-center">
-                  <CheckCircle2 className="w-7 h-7 text-white" />
-                </div>
-              </div>
-              <CardTitle className="text-2xl font-bold text-ink">E-posta Gönderildi</CardTitle>
-              <CardDescription className="text-ink-muted">Şifre sıfırlama bağlantısı e-posta adresinize gönderildi</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Alert className="rounded-xl">
-                <Mail className="h-4 w-4" />
-                <AlertDescription>
-                  <strong>{email}</strong> adresine şifre sıfırlama bağlantısı gönderildi. E-posta kutunuzu ve spam klasörünü kontrol edin.
-                </AlertDescription>
-              </Alert>
-              <div className="text-center text-sm text-ink-muted py-2">
-                E-posta gelmedi mi?{' '}
-                <button type="button" onClick={() => { setSuccess(false); setEmail('') }} className="text-brand hover:text-brand-hover font-semibold py-2 touch-manipulation min-h-[44px] inline-flex items-center">Tekrar dene</button>
-              </div>
-              <Button asChild variant="outline" className="w-full rounded-lg font-bold border-2 border-palette min-h-[48px] touch-manipulation">
-                <Link href="/login" className="flex items-center justify-center gap-2">
-                  <ArrowLeft className="w-4 h-4" />
-                  Giriş Sayfasına Dön
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+      <AuthLayout
+        breadcrumb="Şifremi Unuttum"
+        icon={MailCheck}
+        title="E-postanızı kontrol edin"
+        subtitle="Bu adrese kayıtlı bir hesap varsa şifre sıfırlama bağlantısını gönderdik."
+        showBenefits={false}
+      >
+        <div className="space-y-5">
+          <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">
+            <p className="text-[13px] text-[#6b7c8f]">Gönderilen adres</p>
+            <p className="mt-0.5 break-all text-[15px] font-semibold text-[#121926]">{sentTo}</p>
+            <ul className="mt-3 space-y-1.5 text-[13.5px] leading-relaxed text-[#20384e]">
+              <li>• Bağlantı yaklaşık 1 saat geçerlidir ve bir kez kullanılabilir.</li>
+              <li>• E-posta gelmediyse spam / gereksiz klasörünü kontrol edin.</li>
+            </ul>
           </div>
+          {error && <FormAlert>{error}</FormAlert>}
+          <div className="space-y-3">
+            <SecondaryButton type="button" onClick={() => submit(sentTo)} disabled={loading || remaining > 0}>
+              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {remaining > 0 ? `Tekrar gönder (${remaining} sn)` : 'Bağlantıyı tekrar gönder'}
+            </SecondaryButton>
+            <SecondaryButton type="button" onClick={() => { setSentTo(''); setError('') }} disabled={loading}>
+              Farklı bir e-posta adresi gir
+            </SecondaryButton>
+          </div>
+          <p className="text-center text-[14.5px]">
+            <Link href="/login" className={`${linkClass} inline-flex items-center gap-1.5`}>
+              <ArrowLeft className="h-4 w-4" /> Giriş sayfasına dön
+            </Link>
+          </p>
         </div>
-      </ClassicPageShell>
+      </AuthLayout>
     )
   }
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: 'Şifremi Unuttum' }]} noTitle>
-      <div className="flex justify-center py-8">
-        <div className="w-full max-w-md">
-          <Card className="classic-card rounded-lg overflow-hidden">
-            <CardHeader className="space-y-1 text-center pb-4">
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 bg-brand rounded-lg flex items-center justify-center">
-                <Mail className="w-8 h-8 text-white" />
-              </div>
-            </div>
-            <CardTitle className="text-2xl font-bold text-ink">Şifremi Unuttum</CardTitle>
-            <CardDescription className="text-ink-muted">E-posta adresinize şifre sıfırlama bağlantısı göndereceğiz</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert variant="destructive" className="rounded-xl">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              <div className="space-y-2">
-                <Label htmlFor="email">E-posta Adresi</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted w-5 h-5 z-10 pointer-events-none shrink-0" />
-                  <Input id="email" type="email" placeholder="ornek@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-12 rounded-xl min-w-0" required disabled={loading} autoComplete="email" />
-                </div>
-              </div>
-              <Button type="submit" className="w-full btn-classic-primary rounded-lg min-h-[48px] touch-manipulation" disabled={loading} size="lg">
-                {loading ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Gönderiliyor...</> : 'Şifre Sıfırlama Bağlantısı Gönder'}
-              </Button>
-              <div className="text-center text-sm text-ink-muted py-2">
-                <Link href="/login" className="text-brand hover:text-brand-hover font-semibold flex items-center justify-center gap-2 py-2 touch-manipulation min-h-[44px]">
-                  <ArrowLeft className="w-4 h-4" />
-                  Giriş Sayfasına Dön
-                </Link>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-        </div>
-      </div>
-    </ClassicPageShell>
+    <AuthLayout
+      breadcrumb="Şifremi Unuttum"
+      icon={KeyRound}
+      title="Şifremi unuttum"
+      subtitle="Hesabınıza kayıtlı e-posta adresini girin; şifrenizi yenilemeniz için bir bağlantı gönderelim."
+      showBenefits={false}
+    >
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        {error && <FormAlert>{error}</FormAlert>}
+        <TextField
+          label="E-posta"
+          icon={Mail}
+          type="email"
+          inputMode="email"
+          placeholder="ornek@email.com"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); if (fieldError) setFieldError('') }}
+          error={fieldError}
+          autoComplete="email"
+          disabled={loading}
+          autoFocus
+        />
+        <PrimaryButton type="submit" loading={loading} loadingText="Gönderiliyor…">
+          Sıfırlama bağlantısı gönder
+        </PrimaryButton>
+        <p className="pt-1 text-center text-[14.5px]">
+          <Link href="/login" className={`${linkClass} inline-flex items-center gap-1.5`}>
+            <ArrowLeft className="h-4 w-4" /> Giriş sayfasına dön
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
   )
 }
 
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense
+      fallback={
+        <ClassicPageShell noTitle>
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-[#0b2540]" />
+          </div>
+        </ClassicPageShell>
+      }
+    >
+      <ForgotPasswordContent />
+    </Suspense>
+  )
+}

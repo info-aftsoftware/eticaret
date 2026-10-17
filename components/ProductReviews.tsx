@@ -6,7 +6,7 @@ import { Star, Loader2, MessageSquare, User, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import { useAuthStore } from '@/lib/store/useAuthStore'
+import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 
 type Review = {
   id: string
@@ -39,7 +39,7 @@ function StarRow({
 }
 
 export function ProductReviews({ productId }: { productId: string }) {
-  const { user, isAuthenticated, token } = useAuthStore()
+  const { user, isAuthenticated } = useAuthStore()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const [reviews, setReviews] = useState<Review[]>([])
@@ -94,6 +94,7 @@ export function ProductReviews({ productId }: { productId: string }) {
     setError('')
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      const token = isAuthenticated ? await getAuthToken() : null
       if (token) headers['Authorization'] = `Bearer ${token}`
 
       const res = await fetch(`/api/products/${productId}/reviews`, {

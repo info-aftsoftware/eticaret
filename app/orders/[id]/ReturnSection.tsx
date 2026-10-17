@@ -66,7 +66,7 @@ export function ReturnSection({
   }
 
   return (
-    <Card className="classic-card rounded-lg">
+    <Card className="rounded-xl border border-[#e6ebf1] shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
       <CardHeader className="border-b"><CardTitle className="text-base flex items-center gap-2"><RotateCcw className="w-4 h-4" />İade ve Cayma</CardTitle></CardHeader>
       <CardContent className="pt-4 space-y-4 text-sm">
         {requests.map((r) => (

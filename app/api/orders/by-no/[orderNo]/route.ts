@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { toCustomerOrder } from '@/lib/customer-order'
+import { toCustomerOrder, canAccessOrder } from '@/lib/customer-order'
 import { getCustomerFromRequest } from '@/lib/customerAuth'
 import { isRateLimited } from '@/lib/rate-limit'
 
@@ -8,20 +8,19 @@ import { isRateLimited } from '@/lib/rate-limit'
  * Sipariş detayı – orderNo ile. Sipariş numaraları sıralı olduğu için tek başına yetki sayılmaz.
  * Erişim yolları:
  *  1) Bearer token ile sipariş sahibi → tam sipariş
- *  2) ?email=&phone= ikisi de siparişle eşleşirse (misafir takibi) → tam sipariş
- *  3) ?session_id= ödeme sağlayıcısı referansıyla eşleşirse (ödeme dönüş sayfası) → yalnızca durum
+ *  2) e-posta + telefon ikisi de siparişle eşleşirse (misafir takibi) → tam sipariş
+ *  3) session_id ödeme dönüş anahtarıyla eşleşirse (ödeme dönüş sayfası) → yalnızca durum
+ * Tercih edilen: POST { email, phone } / { session_id } (kişisel veri URL'de, sunucu kayıtlarında ve
+ * tarayıcı geçmişinde kalmasın). GET ?email=&phone=&session_id= eski istemciler için korunur.
  */
-function normalizePhone(s: string | null | undefined): string {
-  if (!s || typeof s !== 'string') return ''
-  return s.replace(/\D/g, '').replace(/^90/, '').replace(/^0/, '')
-}
 
 const notFound = () =>
   NextResponse.json({ success: false, error: 'Sipariş bulunamadı' }, { status: 404 })
 
-export async function GET(
+async function lookup(
   request: NextRequest,
-  { params }: { params: Promise<{ orderNo: string }> }
+  orderNo: string,
+  creds: { email?: string | null; phone?: string | null; sessionId?: string | null }
 ) {
   try {
     if (isRateLimited(request, 'order-by-no', 20, 60_000)) {
@@ -30,8 +29,6 @@ export async function GET(
         { status: 429 }
       )
     }
-
-    const { orderNo } = await params
     if (!orderNo) {
       return NextResponse.json({ error: 'orderNo gerekli' }, { status: 400 })
     }
@@ -47,9 +44,7 @@ export async function GET(
       return NextResponse.json({ success: true, order: toCustomerOrder(order) })
     }
 
-    const sp = request.nextUrl.searchParams
-
-    const sessionId = sp.get('session_id')
+    const sessionId = creds.sessionId
     if (sessionId && order.paymentProviderRef && sessionId === order.paymentProviderRef) {
       return NextResponse.json({
         success: true,
@@ -62,11 +57,7 @@ export async function GET(
       })
     }
 
-    const email = sp.get('email')?.trim().toLowerCase()
-    const phone = normalizePhone(sp.get('phone'))
-    const emailMatch = !!email && !!order.shippingEmail && order.shippingEmail.trim().toLowerCase() === email
-    const phoneMatch = phone.length >= 10 && normalizePhone(order.shippingPhone) === phone
-    if (emailMatch && phoneMatch) {
+    if (canAccessOrder(order, null, { email: creds.email, phone: creds.phone })) {
       return NextResponse.json({ success: true, order: toCustomerOrder(order) })
     }
 
@@ -79,4 +70,18 @@ export async function GET(
       { status: 500 }
     )
   }
+}
+
+const s = (v: unknown, max = 200) => (typeof v === 'string' ? v.slice(0, max) : null)
+
+export async function POST(request: NextRequest, { params }: { params: Promise<{ orderNo: string }> }) {
+  const { orderNo } = await params
+  const body = await request.json().catch(() => ({}))
+  return lookup(request, orderNo, { email: s(body?.email), phone: s(body?.phone, 40), sessionId: s(body?.session_id) })
+}
+
+export async function GET(request: NextRequest, { params }: { params: Promise<{ orderNo: string }> }) {
+  const { orderNo } = await params
+  const sp = request.nextUrl.searchParams
+  return lookup(request, orderNo, { email: sp.get('email'), phone: sp.get('phone'), sessionId: sp.get('session_id') })
 }

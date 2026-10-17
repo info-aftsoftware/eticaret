@@ -1,189 +1,188 @@
 'use client'
 
-import React, { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Lock, ArrowLeft, CheckCircle2, AlertCircle, Eye, EyeOff, Loader2 } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { ClassicPageShell } from '@/components/ClassicPageShell'
-import { confirmPasswordReset } from 'firebase/auth'
+import { Lock, KeyRound, CheckCircle2, XCircle, Loader2, ArrowLeft } from 'lucide-react'
+import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
+import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
+import { ClassicPageShell } from '@/components/ClassicPageShell'
+import { AuthLayout, PasswordField, PasswordStrength, PrimaryButton, SecondaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
+
+const MIN_PASSWORD = 8
+
+type CodeState = 'checking' | 'valid' | 'expired' | 'invalid'
 
 function ResetPasswordForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const token = searchParams.get('oobCode') || searchParams.get('token')
+  const oobCode = searchParams.get('oobCode') || searchParams.get('token')
 
+  const [codeState, setCodeState] = useState<CodeState>('checking')
+  const [accountEmail, setAccountEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [errors, setErrors] = useState<{ password?: string; confirm?: string }>({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const checked = useRef(false)
+
+  // Bağlantıyı baştan kontrol et: süresi dolmuşsa form gösterilmez
+  useEffect(() => {
+    if (checked.current) return
+    checked.current = true
+    if (!oobCode || !isFirebaseConfigured) {
+      setCodeState('invalid')
+      return
+    }
+    verifyPasswordResetCode(getAuth(), oobCode)
+      .then((email) => {
+        setAccountEmail(email)
+        setCodeState('valid')
+      })
+      .catch((err) => setCodeState(authErrorCode(err) === 'auth/expired-action-code' ? 'expired' : 'invalid'))
+  }, [oobCode])
 
   useEffect(() => {
-    if (!token) {
-      setError('Geçersiz veya eksik şifre sıfırlama bağlantısı')
-    }
-  }, [token])
+    if (!success) return
+    const t = setTimeout(() => router.push('/login?reset=true'), 4000)
+    return () => clearTimeout(t)
+  }, [success, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-
-    if (password !== confirmPassword) {
-      setError('Şifreler eşleşmiyor')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      return
-    }
-
-    if (password.length < 6) {
-      setError('Şifre en az 6 karakter olmalıdır')
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      return
-    }
-
-    if (!token) {
-      setError('Geçersiz şifre sıfırlama bağlantısı')
-      return
-    }
+    const next: typeof errors = {}
+    if (!password) next.password = 'Yeni şifrenizi girin.'
+    else if (password.length < MIN_PASSWORD) next.password = `Şifre en az ${MIN_PASSWORD} karakter olmalıdır.`
+    if (!confirmPassword) next.confirm = 'Şifrenizi tekrar girin.'
+    else if (password !== confirmPassword) next.confirm = 'Şifreler eşleşmiyor.'
+    setErrors(next)
+    if (Object.keys(next).length || !oobCode) return
 
     setLoading(true)
-
     try {
-      if (!isFirebaseConfigured) {
-        setError('Firebase yapılandırılmamış. Lütfen yöneticiyle iletişime geçin.')
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-        return
-      }
-      const auth = getAuth()
-      // Firebase oobCode (token) ile şifre sıfırlama
-      await confirmPasswordReset(auth, token, password)
+      await confirmPasswordReset(getAuth(), oobCode, password)
       setSuccess(true)
-      setTimeout(() => {
-        router.push('/login')
-      }, 3000)
-    } catch (error: any) {
-      console.error('Reset password error:', error)
-      if (error?.code === 'auth/expired-action-code') {
-        setError('Şifre sıfırlama bağlantısının süresi dolmuş. Lütfen yeni bir istek gönderin.')
-      } else if (error?.code === 'auth/invalid-action-code') {
-        setError('Geçersiz veya kullanılmış şifre sıfırlama bağlantısı.')
-      } else if (error?.code === 'auth/weak-password') {
-        setError('Şifre çok zayıf. Daha güçlü bir şifre seçin.')
-      } else {
-        setError('Bir hata oluştu. Lütfen tekrar deneyin.')
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (err) {
+      const code = authErrorCode(err)
+      if (code === 'auth/expired-action-code') setCodeState('expired')
+      else if (code === 'auth/invalid-action-code') setCodeState('invalid')
+      else setError(authErrorMessage(err))
     } finally {
       setLoading(false)
     }
   }
 
+  if (codeState === 'checking') {
+    return (
+      <AuthLayout breadcrumb="Şifre Sıfırla" icon={KeyRound} title="Bağlantı kontrol ediliyor" showBenefits={false}>
+        <div className="flex flex-col items-center py-8 text-[#6b7c8f]">
+          <Loader2 className="mb-3 h-8 w-8 animate-spin text-[#0b2540]" />
+          Lütfen bekleyin…
+        </div>
+      </AuthLayout>
+    )
+  }
+
   if (success) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: 'Şifre Sıfırla' }]} noTitle>
-        <div className="flex justify-center py-8">
-          <div className="w-full max-w-md">
-            <Card className="classic-card rounded-lg overflow-hidden">
-              <CardHeader className="space-y-1 text-center pb-4">
-                <div className="flex justify-center mb-4">
-                  <div className="w-14 h-14 bg-brand rounded-lg flex items-center justify-center">
-                    <CheckCircle2 className="w-7 h-7 text-white" />
-                  </div>
-                </div>
-                <CardTitle className="text-2xl font-bold text-gray-900">Şifre Başarıyla Sıfırlandı</CardTitle>
-                <CardDescription className="text-gray-600">Yeni şifrenizle giriş yapabilirsiniz</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Alert className="rounded-xl">
-                  <CheckCircle2 className="h-4 w-4" />
-                  <AlertDescription>Şifreniz başarıyla değiştirildi. 3 saniye sonra giriş sayfasına yönlendirileceksiniz.</AlertDescription>
-                </Alert>
-                <Button asChild className="w-full btn-classic-primary rounded-lg">
-                  <Link href="/login" className="flex items-center justify-center gap-2">Giriş Yap</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+      <AuthLayout
+        breadcrumb="Şifre Sıfırla"
+        icon={CheckCircle2}
+        title="Şifreniz güncellendi"
+        subtitle="Yeni şifrenizle giriş yapabilirsiniz. Birkaç saniye içinde giriş sayfasına yönlendirileceksiniz."
+        showBenefits={false}
+      >
+        <PrimaryButton type="button" onClick={() => router.push('/login?reset=true')}>Giriş yap</PrimaryButton>
+      </AuthLayout>
+    )
+  }
+
+  if (codeState === 'expired' || codeState === 'invalid') {
+    return (
+      <AuthLayout
+        breadcrumb="Şifre Sıfırla"
+        icon={XCircle}
+        title={codeState === 'expired' ? 'Bağlantının süresi dolmuş' : 'Bağlantı geçersiz'}
+        subtitle={
+          codeState === 'expired'
+            ? 'Şifre sıfırlama bağlantıları güvenlik nedeniyle yaklaşık 1 saat geçerlidir. Yeni bir bağlantı isteyin.'
+            : 'Bu bağlantı daha önce kullanılmış ya da eksik kopyalanmış olabilir. En son gönderilen e-postadaki bağlantıyı kullanın veya yeni bir bağlantı isteyin.'
+        }
+        showBenefits={false}
+      >
+        <div className="space-y-3">
+          <PrimaryButton type="button" onClick={() => router.push('/forgot-password')}>Yeni bağlantı iste</PrimaryButton>
+          <SecondaryButton type="button" onClick={() => router.push('/login')}>Giriş sayfasına dön</SecondaryButton>
         </div>
-      </ClassicPageShell>
+      </AuthLayout>
     )
   }
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: 'Şifre Sıfırla' }]} noTitle>
-      <div className="flex justify-center py-8">
-        <div className="w-full max-w-md">
-          <Card className="classic-card rounded-lg overflow-hidden">
-            <CardHeader className="space-y-1 text-center pb-4">
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 bg-brand rounded-lg flex items-center justify-center">
-                  <Lock className="w-7 h-7 text-white" />
-                </div>
-              </div>
-            <CardTitle className="text-2xl font-bold text-gray-900">Yeni Şifre Belirle</CardTitle>
-            <CardDescription className="text-gray-600">Yeni şifrenizi girin</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert variant="destructive" className="rounded-xl">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
-              <div className="space-y-2">
-                <Label htmlFor="password">Yeni Şifre</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 z-10 pointer-events-none shrink-0" />
-                  <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="En az 6 karakter" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-12 pr-12 rounded-xl min-w-0" required minLength={6} disabled={loading} autoComplete="new-password" />
-                  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowPassword(!showPassword) }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10 p-1 rounded" aria-label={showPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}>{showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}</button>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Şifre Tekrar</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 z-10 pointer-events-none shrink-0" />
-                  <Input id="confirmPassword" type={showConfirmPassword ? 'text' : 'password'} placeholder="Şifrenizi tekrar girin" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="pl-12 pr-12 rounded-xl min-w-0" required minLength={6} disabled={loading} autoComplete="new-password" />
-                  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowConfirmPassword(!showConfirmPassword) }} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10 p-1 rounded" aria-label={showConfirmPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}>{showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}</button>
-                </div>
-              </div>
-              <Button type="submit" className="w-full btn-classic-primary rounded-lg" disabled={loading || !token} size="lg">
-                {loading ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Şifre Sıfırlanıyor...</> : 'Şifreyi Sıfırla'}
-              </Button>
-              <div className="text-center text-sm text-gray-600">
-                <Link href="/login" className="text-brand hover:text-brand-hover font-semibold flex items-center justify-center gap-2">
-                  <ArrowLeft className="w-4 h-4" />
-                  Giriş Sayfasına Dön
-                </Link>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-        </div>
-      </div>
-    </ClassicPageShell>
+    <AuthLayout
+      breadcrumb="Şifre Sıfırla"
+      icon={KeyRound}
+      title="Yeni şifre belirleyin"
+      subtitle={accountEmail ? <>Hesap: <span className="break-all font-semibold text-[#20384e]">{accountEmail}</span></> : 'Hesabınız için yeni bir şifre belirleyin.'}
+      showBenefits={false}
+    >
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        {error && <FormAlert>{error}</FormAlert>}
+        {/* Parola yöneticileri için gizli kullanıcı adı alanı */}
+        <input type="email" name="username" autoComplete="username" value={accountEmail} readOnly hidden />
+        <PasswordField
+          label="Yeni şifre"
+          required
+          icon={Lock}
+          placeholder={`En az ${MIN_PASSWORD} karakter`}
+          value={password}
+          onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors({ ...errors, password: undefined }) }}
+          error={errors.password}
+          autoComplete="new-password"
+          disabled={loading}
+          autoFocus
+          hint={<PasswordStrength password={password} />}
+        />
+        <PasswordField
+          label="Yeni şifre (tekrar)"
+          required
+          icon={Lock}
+          placeholder="Şifrenizi tekrar girin"
+          value={confirmPassword}
+          onChange={(e) => { setConfirmPassword(e.target.value); if (errors.confirm) setErrors({ ...errors, confirm: undefined }) }}
+          error={errors.confirm}
+          autoComplete="new-password"
+          disabled={loading}
+        />
+        <PrimaryButton type="submit" loading={loading} loadingText="Kaydediliyor…">
+          Şifremi güncelle
+        </PrimaryButton>
+        <p className="pt-1 text-center text-[14.5px]">
+          <Link href="/login" className={`${linkClass} inline-flex items-center gap-1.5`}>
+            <ArrowLeft className="h-4 w-4" /> Giriş sayfasına dön
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
   )
 }
 
 export default function ResetPasswordPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50/80 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-brand border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600">Yükleniyor...</p>
-        </div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <ClassicPageShell noTitle>
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-[#0b2540]" />
+          </div>
+        </ClassicPageShell>
+      }
+    >
       <ResetPasswordForm />
     </Suspense>
   )
 }
-

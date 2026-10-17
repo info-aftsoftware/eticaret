@@ -4,44 +4,210 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { useCartStore } from '@/lib/store/useCartStore'
+import { useCartStore, type CartItem } from '@/lib/store/useCartStore'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
-import { Trash2, Plus, Minus, ArrowLeft, Package, CreditCard } from 'lucide-react'
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Heart,
+  Info,
+  Lock,
+  Minus,
+  Package,
+  Plus,
+  Shield,
+  ShoppingBag,
+  Tag,
+  Trash2,
+  Truck,
+  X,
+} from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useAuthStore } from '@/lib/store/useAuthStore'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Info, Tag, FileText, Shield } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import { getCategoryKey } from '@/lib/categories'
 import { CartRelatedProducts } from '@/components/CartRelatedProducts'
 import { LegalDocumentDialog } from '@/components/LegalDocumentDialog'
-import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import { trackViewCart, cartItemToGa } from '@/lib/analytics'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { computeOrderTotals, amountToFreeShipping, FREE_SHIPPING_THRESHOLD, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
+import { useCartValidation, type CartLineStatus } from '@/lib/useCartValidation'
+
+const productIdOf = (item: CartItem, status?: CartLineStatus) => status?.productId ?? item.productId ?? item.id
+
+function CartLine({
+  item,
+  status,
+  priceChange,
+  productQty,
+  formatPrice,
+}: {
+  item: CartItem
+  status?: CartLineStatus
+  priceChange?: { from: number; to: number }
+  productQty: number
+  formatPrice: (n: number) => string
+}) {
+  const removeItem = useCartStore((s) => s.removeItem)
+  const updateQuantity = useCartStore((s) => s.updateQuantity)
+  const [draft, setDraft] = useState(String(item.quantity))
+  const [imgError, setImgError] = useState(false)
+  useEffect(() => setDraft(String(item.quantity)), [item.quantity])
+
+  const max = status?.stock ?? item.maxQuantity
+  // Bu kalemin alabileceği en fazla adet (aynı ürünün diğer seçenekleri stoğu paylaşır)
+  const lineMax = max != null ? Math.max(0, max - (productQty - item.quantity)) : undefined
+  const atMax = lineMax != null && item.quantity >= lineMax
+  const unavailable = status && !status.available
+  const href = `/products/${productIdOf(item, status)}`
+  const needsVariant = unavailable && /seçenek/i.test(status?.error ?? '')
+  const canFixQty = unavailable && !needsVariant && lineMax != null && lineMax > 0 && item.quantity > lineMax
+
+  const commitDraft = () => {
+    const n = parseInt(draft, 10)
+    if (!Number.isFinite(n) || n < 1) {
+      setDraft(String(item.quantity))
+      return
+    }
+    updateQuantity(item.id, lineMax != null ? Math.min(n, Math.max(1, lineMax)) : n)
+    if (lineMax != null && n > lineMax) setDraft(String(Math.max(1, lineMax)))
+  }
+
+  return (
+    <li className={`py-4 first:pt-0 last:pb-0 ${unavailable ? 'opacity-100' : ''}`}>
+      <div className="flex gap-3 sm:gap-4">
+        <Link
+          href={href}
+          className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#e6ebf1] bg-white sm:h-24 sm:w-24"
+        >
+          {item.image && !imgError ? (
+            <Image src={item.image} alt={item.name || 'Ürün'} fill sizes="96px" className="object-contain p-1.5" onError={() => setImgError(true)} />
+          ) : (
+            <Package className="h-8 w-8 text-slate-300" />
+          )}
+        </Link>
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <Link href={href} className="line-clamp-2 text-sm font-semibold leading-snug text-[#121926] hover:text-[#0b2540] hover:underline sm:text-[15px]">
+                {item.name || 'Ürün'}
+              </Link>
+              <p className="mt-1 text-xs text-[#6b7c8f]">
+                {formatPrice(item.price)} / adet <span className="text-[#9aa8b6]">· KDV hariç</span>
+              </p>
+              {status?.campaign && <p className="mt-0.5 text-xs font-medium text-[#b42318]">{status.campaign}</p>}
+              {item.isCustom && (
+                <span className="mt-1 inline-block rounded bg-[#0b2540] px-1.5 py-0.5 text-[10px] font-semibold text-white">Özel konfigürasyon</span>
+              )}
+            </div>
+            <button
+              type="button"
+              onClick={() => removeItem(item.id)}
+              className="-mr-1 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#6b7c8f] transition-colors hover:bg-red-50 hover:text-[#b42318] touch-manipulation"
+              aria-label={`${item.name} sepetten kaldır`}
+              title="Sepetten kaldır"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center rounded-lg border border-[#d3d9e1] bg-white">
+              <button
+                type="button"
+                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                className="flex h-10 w-10 items-center justify-center text-[#20384e] transition-colors hover:bg-[#f5f7fa] disabled:opacity-40 touch-manipulation sm:h-9 sm:w-9"
+                aria-label="Miktarı azalt"
+                disabled={item.quantity <= 1}
+              >
+                <Minus className="h-4 w-4" />
+              </button>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={lineMax || undefined}
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                onBlur={commitDraft}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
+                }}
+                className="h-10 w-14 !min-h-0 border-x border-[#e6ebf1] bg-transparent !px-1 !py-0 text-center text-sm font-semibold tabular-nums text-[#121926] [appearance:textfield] focus:outline-none sm:h-9 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                aria-label={`${item.name} adedi`}
+              />
+              <button
+                type="button"
+                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                className="flex h-10 w-10 items-center justify-center text-[#20384e] transition-colors hover:bg-[#f5f7fa] disabled:opacity-40 touch-manipulation sm:h-9 sm:w-9"
+                aria-label="Miktarı artır"
+                disabled={atMax}
+                title={atMax ? `Stokta ${max} adet var` : undefined}
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="text-right">
+              <p className="text-base font-bold tabular-nums text-[#121926]">{formatPrice(item.price * item.quantity)}</p>
+              {max != null && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">Son {max} adet</p>}
+            </div>
+          </div>
+
+          {priceChange && !unavailable && (
+            <p className="mt-2 flex items-start gap-1.5 rounded-md bg-[#eef4fb] px-2.5 py-1.5 text-xs text-[#20384e]">
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+              <span>
+                Fiyat güncellendi: <span className="line-through">{formatPrice(priceChange.from)}</span> → <strong>{formatPrice(priceChange.to)}</strong>
+              </span>
+            </p>
+          )}
+
+          {unavailable && (
+            <div role="alert" className="mt-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-2 text-xs text-red-900">
+              <p className="flex items-start gap-1.5">
+                <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+                <span>{status?.error ?? 'Bu ürün şu anda satılamıyor.'}</span>
+              </p>
+              <div className="mt-1 flex flex-wrap items-center gap-x-4 pl-5">
+                {canFixQty && (
+                  <button type="button" onClick={() => updateQuantity(item.id, lineMax!)} className="inline-flex min-h-8 items-center font-semibold underline underline-offset-2">
+                    Adedi {lineMax} yap
+                  </button>
+                )}
+                {needsVariant && (
+                  <Link href={href} className="inline-flex min-h-8 items-center font-semibold underline underline-offset-2">
+                    Seçenek seç
+                  </Link>
+                )}
+                <button type="button" onClick={() => removeItem(item.id)} className="inline-flex min-h-8 items-center font-semibold underline underline-offset-2">
+                  Sepetten çıkar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </li>
+  )
+}
 
 export default function CartPage() {
   const router = useRouter()
   const t = useTranslations('cart')
-  const tHome = useTranslations('home')
-  const tHeader = useTranslations('header')
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
-  const { items, removeItem, updateQuantity, clearCart, getTotalPrice, getTotalItems, _hasHydrated } = useCartStore()
+  const { items, clearCart, getTotalPrice, getTotalItems, _hasHydrated } = useCartStore()
   const { isAuthenticated } = useAuthStore()
+  const { status, priceChanges, blocking } = useCartValidation()
   const [couponCode, setCouponCode] = useState('')
   const [couponDiscount, setCouponDiscount] = useState(0)
   const [couponError, setCouponError] = useState('')
+  const [couponBusy, setCouponBusy] = useState(false)
   const storedCouponCode = useCartStore((s) => s.couponCode)
   const setStoredCouponCode = useCartStore((s) => s.setCouponCode)
   const [contractsAccepted, setContractsAccepted] = useState(false)
@@ -53,6 +219,7 @@ export default function CartPage() {
     kvkk: false,
   })
   const [showModal, setShowModal] = useState<'sales' | 'privacy' | 'kvkk' | null>(null)
+  const [confirmClear, setConfirmClear] = useState(false)
   const MODAL_DOCS: Record<'sales' | 'privacy' | 'kvkk', LegalSlug> = {
     sales: 'mesafeli-satis-sozlesmesi',
     privacy: 'gizlilik-ve-cerez-politikasi',
@@ -72,16 +239,18 @@ export default function CartPage() {
     const timer = setTimeout(() => setPageReady(true), 250)
     return () => clearTimeout(timer)
   }, [])
-  
+
   // Sunucuyla aynı hesaplayıcı; ödeme yöntemi ödeme adımında seçildiği için havale indirimi burada uygulanmaz
   const { subtotal, tax, shipping, total } = computeOrderTotals({ subtotal: getTotalPrice(), couponDiscount })
   const remainingForFreeShipping = amountToFreeShipping(subtotal)
+  const freeShippingProgress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100)
 
   /** Kupon sunucuda doğrulanır (ödeme sırasında aynı hesaplayıcı kullanılır). */
   const applyCoupon = useCallback(async (rawCode: string) => {
     const code = rawCode.trim()
     if (!code) return
     setCouponError('')
+    setCouponBusy(true)
     try {
       const res = await fetch('/api/coupons/preview', {
         method: 'POST',
@@ -100,8 +269,17 @@ export default function CartPage() {
     } catch {
       setCouponDiscount(0)
       setCouponError('Kupon kontrol edilemedi.')
+    } finally {
+      setCouponBusy(false)
     }
   }, [items, setStoredCouponCode])
+
+  const removeCoupon = () => {
+    setCouponDiscount(0)
+    setStoredCouponCode(null)
+    setCouponCode('')
+    setCouponError('')
+  }
 
   // Kayıtlı kupon varsa sepet değiştikçe indirimi sunucudan yeniden hesapla
   useEffect(() => {
@@ -112,8 +290,10 @@ export default function CartPage() {
   }, [_hasHydrated, items])
 
   const hasContractErrors = contractErrors.contracts || contractErrors.privacy || contractErrors.kvkk
+  const hasBlocking = blocking.length > 0
 
   const handleCheckoutClick = () => {
+    if (hasBlocking) return
     const nextErrors = {
       contracts: !contractsAccepted,
       privacy: !privacyAccepted,
@@ -129,14 +309,17 @@ export default function CartPage() {
     router.push('/checkout')
   }
 
+  const productQtyOf = (item: CartItem) => {
+    const pid = productIdOf(item, status[item.id])
+    return items.filter((i) => productIdOf(i, status[i.id]) === pid).reduce((n, i) => n + i.quantity, 0)
+  }
+
   if (!pageReady && !_hasHydrated) {
     return (
       <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description="">
-        <div className="max-w-lg mx-auto text-center py-12">
-          <div className="w-24 h-24 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-8 shadow-sm">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
-          </div>
-          <p className="text-slate-600">Sepet yükleniyor...</p>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_360px]" aria-busy="true">
+          <div className="h-64 animate-pulse rounded-xl border border-[#e6ebf1] bg-white" />
+          <div className="h-80 animate-pulse rounded-xl border border-[#e6ebf1] bg-white" />
         </div>
       </ClassicPageShell>
     )
@@ -144,362 +327,312 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('emptyTitle')} description={t('emptyDesc')}>
-        <div className="max-w-lg mx-auto text-center py-12">
-          <div className="w-24 h-24 rounded-2xl bg-white border border-slate-200 flex items-center justify-center mx-auto mb-8 shadow-sm">
-            <Package className="w-12 h-12 text-slate-400" />
-          </div>
-          <p className="text-slate-600 mb-6 leading-relaxed">
-            {t('browseAndContact')}{' '}
-            <Link href="/contact" className="text-brand font-semibold hover:underline">{tHome('contactUs')}</Link>.
-          </p>
-          <Button asChild size="lg" className="rounded-xl min-h-[48px] w-full sm:w-auto touch-manipulation bg-brand hover:bg-brand-hover text-white">
-            <Link href="/products" className="flex items-center justify-center gap-2">
-              <ArrowLeft className="w-5 h-5" />
-              {t('goToProducts')}
+      <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} noTitle>
+        <div className="mx-auto flex max-w-lg flex-col items-center py-10 text-center sm:py-16">
+          <span className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#f1f4f8]">
+            <ShoppingBag className="h-9 w-9 text-[#0b2540]" />
+          </span>
+          <h2 className="text-xl font-bold text-[#121926] sm:text-2xl">{t('emptyTitle')}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-[#6b7c8f] sm:text-base">
+            Güneş paneli, inverter, akü ve aksesuarlarda aradığınızı keşfedin. B2B ve proje siparişleri için{' '}
+            <Link href="/contact" className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">
+              bize ulaşın
             </Link>
-          </Button>
+            .
+          </p>
+          <div className="mt-7 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <Link
+              href="/products"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#0b2540] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#12335a]"
+            >
+              {t('goToProducts')}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/favorites"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-[#d3d9e1] bg-white px-6 text-sm font-semibold text-[#20384e] transition-colors hover:border-[#0b2540]"
+            >
+              <Heart className="h-4 w-4" />
+              Favorilerim
+            </Link>
+          </div>
         </div>
       </ClassicPageShell>
     )
   }
 
+  const checkboxClass = (err: boolean) =>
+    `mt-0.5 h-5 w-5 shrink-0 rounded border-[#d3d9e1] text-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/30 ${err ? 'border-red-400' : ''}`
+
   return (
-    <ClassicPageShell
-      breadcrumbs={[{ label: t('title') }]}
-      title={t('cartTitle')}
-      description={`${getTotalItems()} ${t('itemsCount')}`}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 pb-safe min-w-0 max-w-full">
-        <div className="lg:col-span-2 space-y-4 min-w-0">
-          <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">
-              <CardHeader>
-                <CartQuoteNotice />
-                <div className="flex items-center justify-between">
-                  <CardTitle>{t('myCart')} ({getTotalItems()} {t('itemsCount')})</CardTitle>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearCart}
-                    className="text-destructive hover:text-destructive/90"
-                  >
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    {t('clearCart')}
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex flex-col sm:flex-row gap-3 sm:gap-4 pb-4 border-b last:border-0">
-                    {/* Product Image */}
-                    <div className="w-full sm:w-24 h-40 sm:h-24 bg-muted rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
-                      {item.image ? (
-                        <Image
-                          src={item.image}
-                          alt={item.name || 'Ürün'}
-                          width={96}
-                          height={96}
-                          className="rounded-xl object-cover w-full h-full"
-                          onError={(e) => {
-                            // Fallback to package icon on error
-                            e.currentTarget.style.display = 'none'
-                          }}
-                        />
-                      ) : (
-                        <Package className="w-12 h-12 text-slate-400" />
-                      )}
-                    </div>
-
-                    {/* Product Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-slate-900 mb-1 text-base sm:text-lg">{item.name || 'Ürün'}</h3>
-                          {item.description && (
-                            <p className="text-sm text-slate-600 line-clamp-2 mb-2">
-                              {item.description}
-                            </p>
-                          )}
-                          <div className="flex flex-wrap gap-2">
-                            {item.category && (
-                              <Badge variant="secondary" className="text-xs">
-                                {getCategoryKey(item.category) ? tHeader(getCategoryKey(item.category)!) : item.category}
-                              </Badge>
-                            )}
-                            {item.isCustom && (
-                              <Badge className="text-xs bg-brand text-white">
-                                Özel Konfigürasyon
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                        <div className="text-left sm:text-right w-full sm:w-auto">
-                          <div className="font-bold text-slate-900 mb-1 text-lg sm:text-xl">
-                            {formatPrice(item.price * item.quantity)}
-                          </div>
-                          <div className="text-sm text-slate-600">
-                            {formatPrice(item.price)} / adet
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Quantity Controls */}
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-11 w-11 sm:h-9 sm:w-9 p-0 touch-manipulation rounded-xl"
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            aria-label="Miktarı azalt"
-                          >
-                            <Minus className="w-5 h-5 sm:w-4 sm:h-4" />
-                          </Button>
-                          <Input
-                            type="number"
-                            value={item.quantity}
-                            onChange={(e) => {
-                              const raw = parseInt(e.target.value)
-                              const qty = isNaN(raw) ? 1 : Math.max(1, raw)
-                              updateQuantity(item.id, qty)
-                            }}
-                            className="w-24 sm:w-20 text-center h-11 sm:h-9 text-base sm:text-sm rounded-xl"
-                            min="1"
-                            aria-label={`${item.name} adedi`}
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-11 w-11 sm:h-9 sm:w-9 p-0 touch-manipulation rounded-xl"
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            aria-label="Miktarı artır"
-                          >
-                            <Plus className="w-5 h-5 sm:w-4 sm:h-4" />
-                          </Button>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeItem(item.id)}
-                          className="text-destructive hover:text-destructive/90 w-full sm:w-auto h-11 sm:h-9 touch-manipulation"
-                        >
-                          <Trash2 className="w-5 h-5 sm:w-4 sm:h-4 mr-2" />
-                          Kaldır
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* Tamamlayıcı / Birlikte alınan ürünler */}
-            <CartRelatedProducts
-              cartItemIds={items.map((i) => i.id)}
-              cartCategories={[...new Set(items.map((i) => i.category).filter((c): c is string => !!c))]}
-            />
-
-            <Button asChild variant="outline" className="w-full rounded-xl min-h-[48px] touch-manipulation">
-              <Link href="/products" className="flex items-center justify-center gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                Alışverişe Devam Et
-              </Link>
-            </Button>
+    <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={`${getTotalItems()} ${t('itemsCount')}`}>
+      <div className="grid min-w-0 max-w-full grid-cols-1 gap-5 pb-safe lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
+        <div className="min-w-0 space-y-5">
+          {/* Ücretsiz kargo ilerlemesi */}
+          <div className="rounded-xl border border-[#e6ebf1] bg-white p-4">
+            <div className="flex items-center gap-2 text-sm text-[#20384e]">
+              <Truck className={`h-4 w-4 shrink-0 ${remainingForFreeShipping > 0 ? 'text-[#0b2540]' : 'text-emerald-600'}`} aria-hidden />
+              {remainingForFreeShipping > 0 ? (
+                <span>
+                  Ücretsiz kargo için <strong className="text-[#121926]">{formatPrice(remainingForFreeShipping)}</strong> daha ekleyin.
+                </span>
+              ) : (
+                <span className="font-semibold text-emerald-700">Kargo ücretsiz!</span>
+              )}
+            </div>
+            <div
+              className="mt-2.5 h-2 overflow-hidden rounded-full bg-[#f1f4f8]"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={FREE_SHIPPING_THRESHOLD}
+              aria-valuenow={Math.round(Math.min(subtotal, FREE_SHIPPING_THRESHOLD))}
+              aria-label="Ücretsiz kargo eşiği"
+            >
+              <div
+                className={`h-full rounded-full transition-[width] duration-500 ${remainingForFreeShipping > 0 ? 'bg-[#f5b400]' : 'bg-emerald-500'}`}
+                style={{ width: `${freeShippingProgress}%` }}
+              />
+            </div>
           </div>
 
-          <div className="lg:col-span-1">
-            <Card className="rounded-2xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-24">
-              <CardHeader>
-                <CardTitle>Sipariş Özeti</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-600">Ara Toplam</span>
-                    <span className="font-medium">{formatPrice(subtotal)}</span>
-                  </div>
-                  {couponDiscount > 0 && (
-                    <div className="flex justify-between text-sm text-green-600">
-                      <span>Kupon indirimi</span>
-                      <span className="font-medium">-{formatPrice(couponDiscount)}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-600">KDV (%{VAT_RATE})</span>
-                    <span className="font-medium">{formatPrice(tax)}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-600">Kargo</span>
-                    <span className="font-medium">
-                      {shipping === 0 ? (
-                        <span className="text-green-600">Ücretsiz</span>
-                      ) : (
-                        formatPrice(shipping)
-                      )}
-                    </span>
-                  </div>
+          <section className="rounded-xl border border-[#e6ebf1] bg-white" aria-labelledby="cart-items-heading">
+            <div className="flex items-center justify-between gap-3 border-b border-[#f1f4f8] px-4 py-3 sm:px-5">
+              <h2 id="cart-items-heading" className="text-base font-semibold text-[#121926]">
+                Ürünler <span className="font-normal text-[#6b7c8f]">({getTotalItems()})</span>
+              </h2>
+              {confirmClear ? (
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-[#6b7c8f]">Sepet boşaltılsın mı?</span>
+                  <button type="button" onClick={() => { clearCart(); setConfirmClear(false) }} className="rounded-md bg-[#b42318] px-2.5 py-1.5 font-semibold text-white">
+                    Evet
+                  </button>
+                  <button type="button" onClick={() => setConfirmClear(false)} className="rounded-md border border-[#d3d9e1] px-2.5 py-1.5 font-semibold text-[#20384e]">
+                    Vazgeç
+                  </button>
                 </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setConfirmClear(true)}
+                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium text-[#6b7c8f] transition-colors hover:bg-red-50 hover:text-[#b42318]"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  {t('clearCart')}
+                </button>
+              )}
+            </div>
+            {Object.keys(priceChanges).length > 0 && (
+              <p role="status" className="mx-4 mt-4 flex items-start gap-2 rounded-lg border border-[#cfe0f2] bg-[#eef4fb] p-3 text-sm text-[#20384e] sm:mx-5">
+                <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                Bazı ürünlerin fiyatı güncellendi (kampanya veya fiyat değişikliği). Tutarlar güncel fiyatlarla gösteriliyor.
+              </p>
+            )}
+            <ul className="divide-y divide-[#f1f4f8] px-4 py-4 sm:px-5">
+              {items.map((item) => (
+                <CartLine
+                  key={item.id}
+                  item={item}
+                  status={status[item.id]}
+                  priceChange={priceChanges[item.id]}
+                  productQty={productQtyOf(item)}
+                  formatPrice={formatPrice}
+                />
+              ))}
+            </ul>
+          </section>
 
-                {remainingForFreeShipping > 0 ? (
-                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-3 text-xs text-slate-700">
-                    <p>
-                      Ücretsiz kargo için <strong>{formatPrice(remainingForFreeShipping)}</strong> daha ürün ekleyin.
-                    </p>
-                    <div className="mt-2 h-1.5 rounded-full bg-slate-200 overflow-hidden" role="progressbar" aria-valuemin={0} aria-valuemax={FREE_SHIPPING_THRESHOLD} aria-valuenow={Math.round(subtotal)} aria-label="Ücretsiz kargo eşiği">
-                      <div className="h-full bg-green-500" style={{ width: `${Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100)}%` }} />
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-xs font-medium text-green-700">Ücretsiz kargo kazandınız.</p>
-                )}
-                <DeliveryEstimate />
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 text-sm font-semibold text-[#0b2540] underline-offset-2 hover:underline"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Alışverişe devam et
+          </Link>
 
-                <Separator />
+          {/* Tamamlayıcı / Birlikte alınan ürünler */}
+          <CartRelatedProducts
+            cartItemIds={items.map((i) => i.id)}
+            cartCategories={[...new Set(items.map((i) => i.category).filter((c): c is string => !!c))]}
+          />
+        </div>
 
-                <div className="flex justify-between font-bold text-lg">
-                  <span>Toplam</span>
-                  <span className="text-slate-900 font-bold">{formatPrice(total)}</span>
+        <aside className="min-w-0">
+          <div className="rounded-xl border border-[#e6ebf1] bg-white p-4 sm:p-5 lg:sticky lg:top-24">
+            <h2 className="text-base font-semibold text-[#121926]">Sipariş özeti</h2>
+
+            <dl className="mt-4 space-y-2.5 text-sm">
+              <div className="flex justify-between gap-3">
+                <dt className="text-[#6b7c8f]">Ara toplam</dt>
+                <dd className="font-medium tabular-nums text-[#121926]">{formatPrice(subtotal)}</dd>
+              </div>
+              {couponDiscount > 0 && (
+                <div className="flex justify-between gap-3 text-emerald-700">
+                  <dt>Kupon indirimi</dt>
+                  <dd className="font-medium tabular-nums">-{formatPrice(couponDiscount)}</dd>
                 </div>
-                <p className="text-xs text-emerald-700 -mt-2">
-                  Ödeme adımında Havale/EFT seçerseniz ara toplam üzerinden %{BANK_TRANSFER_DISCOUNT_RATE} indirim uygulanır.
-                </p>
+              )}
+              <div className="flex justify-between gap-3">
+                <dt className="text-[#6b7c8f]">KDV (%{VAT_RATE})</dt>
+                <dd className="font-medium tabular-nums text-[#121926]">{formatPrice(tax)}</dd>
+              </div>
+              <div className="flex justify-between gap-3">
+                <dt className="text-[#6b7c8f]">Kargo</dt>
+                <dd className="font-medium tabular-nums text-[#121926]">
+                  {shipping === 0 ? <span className="text-emerald-700">Ücretsiz</span> : formatPrice(shipping)}
+                </dd>
+              </div>
+            </dl>
 
-                {/* Coupon Code */}
-                <div className="pt-4 border-t">
-                  <Label htmlFor="coupon" className="text-sm font-medium mb-2 block">
-                    Kupon Kodu
-                  </Label>
+            <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-4">
+              <span className="text-base font-semibold text-[#121926]">Toplam</span>
+              <span className="text-xl font-bold tabular-nums text-[#121926]">{formatPrice(total)}</span>
+            </div>
+            <p className="mt-1 text-xs text-[#6b7c8f]">
+              Havale/EFT ile ödemede ara toplam üzerinden <strong className="text-emerald-700">%{BANK_TRANSFER_DISCOUNT_RATE} indirim</strong>.
+            </p>
+
+            {/* Kupon */}
+            <div className="mt-5">
+              {storedCouponCode && couponDiscount > 0 ? (
+                <div className="flex items-center justify-between gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm">
+                  <span className="flex items-center gap-2 font-medium text-emerald-800">
+                    <Tag className="h-4 w-4" aria-hidden />
+                    {storedCouponCode}
+                  </span>
+                  <button type="button" onClick={removeCoupon} className="inline-flex h-7 w-7 items-center justify-center rounded-md text-emerald-800 hover:bg-emerald-100" aria-label="Kuponu kaldır">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    applyCoupon(couponCode)
+                  }}
+                >
+                  <label htmlFor="coupon" className="mb-1.5 block text-xs font-medium text-[#20384e]">
+                    Kupon kodu
+                  </label>
                   <div className="flex gap-2">
-                    <Input
+                    <input
                       id="coupon"
-                      placeholder="Kupon kodunuzu girin"
+                      placeholder="Kodunuzu girin"
                       value={couponCode}
                       onChange={(e) => {
                         setCouponCode(e.target.value)
                         setCouponError('')
                       }}
-                      className="flex-1 rounded-xl"
+                      className="h-10 min-w-0 flex-1 rounded-lg border border-[#d3d9e1] px-3 text-sm uppercase placeholder:normal-case focus:border-[#0b2540] focus:outline-none focus:ring-2 focus:ring-[#0b2540]/15"
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="rounded-xl min-h-[44px] min-w-[44px] touch-manipulation shrink-0"
-                      onClick={() => applyCoupon(couponCode)}
-                      aria-label="Kuponu uygula"
+                    <button
+                      type="submit"
+                      disabled={!couponCode.trim() || couponBusy}
+                      className="h-10 shrink-0 rounded-lg border border-[#0b2540] px-4 text-sm font-semibold text-[#0b2540] transition-colors hover:bg-[#0b2540] hover:text-white disabled:opacity-50"
                     >
-                      <Tag className="w-4 h-4" aria-hidden />
-                    </Button>
+                      Uygula
+                    </button>
                   </div>
-                  {couponError && (
-                    <p className="text-xs text-destructive mt-1">{couponError}</p>
-                  )}
-                  {couponDiscount > 0 && (
-                    <p className="text-xs text-green-600 mt-1">Kupon uygulandı!</p>
-                  )}
-                </div>
+                  {couponError && <p className="mt-1.5 text-xs text-[#b42318]">{couponError}</p>}
+                </form>
+              )}
+            </div>
 
-                {!isAuthenticated && (
-                  <Alert className="mb-4">
-                    <Info className="h-4 w-4" />
-                    <AlertDescription>
-                      {'H\u0131zl\u0131 \u00f6deme i\u00e7in'}{' '}
-                      <Link href="/login" className="text-brand hover:underline font-semibold">
-                        {'giri\u015f yap\u0131n'}
-                      </Link>
-                      {' '}veya{' '}
-                      <Link href="/register" className="text-brand hover:underline font-semibold">
-                        {'kay\u0131t olun'}
-                      </Link>
-                      {'. Hesap olmadan da '}<Link href="/checkout" className="text-brand hover:underline font-semibold">{'\u00d6demeye Ge\u00e7'}</Link>{' ile sipari\u015f verebilirsiniz.'}
-                    </AlertDescription>
-                  </Alert>
-                )}
+            <DeliveryEstimate className="mt-5" />
 
-                {/* Sozlesme ve Sartlar */}
-                <div className={`pt-4 border-t space-y-3 rounded-2xl transition-colors ${hasContractErrors ? 'border-red-200 bg-red-50/70 p-4' : ''}`}>
-                  <h4 className="text-sm font-semibold text-ink flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-slate-600" />
-                    {'S\u00f6zle\u015fme ve \u015eartlar'}
-                  </h4>
-                  
-                  <label className={`flex items-start gap-2 cursor-pointer py-2 px-2 touch-manipulation min-h-[44px] items-center rounded-xl transition-colors ${contractErrors.contracts ? 'border border-red-200 bg-white' : ''}`}>
-                    <input
-                      type="checkbox"
-                      checked={contractsAccepted}
-                      onChange={(e) => {
-                        setContractsAccepted(e.target.checked)
-                        setContractErrors((prev) => ({ ...prev, contracts: false }))
-                      }}
-                      className={`w-5 h-5 min-w-[20px] min-h-[20px] text-slate-800 rounded focus:ring-2 focus:ring-slate-400 shrink-0 ${contractErrors.contracts ? 'border-red-400' : 'border-slate-300'}`}
-                    />
-                    <span className="text-xs text-ink">
-                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('sales'); }} className="font-medium text-slate-800 hover:underline text-left">{'Mesafeli Satış Sözleşmesi'}</button>{"'ni okudum ve kabul ediyorum."}
-                    </span>
-                  </label>
+            {/* Sözleşme ve şartlar */}
+            <fieldset className={`mt-5 space-y-1 rounded-lg border p-3 transition-colors ${hasContractErrors ? 'border-red-200 bg-red-50/70' : 'border-[#e6ebf1] bg-[#f5f7fa]'}`}>
+              <legend className="sr-only">Sözleşme ve şartlar</legend>
+              <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-[#20384e]">
+                <Shield className="h-3.5 w-3.5" aria-hidden />
+                Sözleşme ve şartlar
+              </p>
+              <label className="flex cursor-pointer items-start gap-2.5 py-1.5 touch-manipulation">
+                <input
+                  type="checkbox"
+                  checked={contractsAccepted}
+                  onChange={(e) => {
+                    setContractsAccepted(e.target.checked)
+                    setContractErrors((prev) => ({ ...prev, contracts: false }))
+                  }}
+                  className={checkboxClass(contractErrors.contracts)}
+                />
+                <span className="text-xs leading-relaxed text-[#20384e]">
+                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('sales') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">Mesafeli Satış Sözleşmesi</button>
+                  {"'ni okudum ve kabul ediyorum."}
+                </span>
+              </label>
+              <label className="flex cursor-pointer items-start gap-2.5 py-1.5 touch-manipulation">
+                <input
+                  type="checkbox"
+                  checked={privacyAccepted}
+                  onChange={(e) => {
+                    setPrivacyAccepted(e.target.checked)
+                    setContractErrors((prev) => ({ ...prev, privacy: false }))
+                  }}
+                  className={checkboxClass(contractErrors.privacy)}
+                />
+                <span className="text-xs leading-relaxed text-[#20384e]">
+                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('privacy') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">Gizlilik ve Çerez Politikası</button>
+                  {"'nı okudum."}
+                </span>
+              </label>
+              <label className="flex cursor-pointer items-start gap-2.5 py-1.5 touch-manipulation">
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => {
+                    setTermsAccepted(e.target.checked)
+                    setContractErrors((prev) => ({ ...prev, kvkk: false }))
+                  }}
+                  className={checkboxClass(contractErrors.kvkk)}
+                />
+                <span className="text-xs leading-relaxed text-[#20384e]">
+                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('kvkk') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">KVKK Aydınlatma Metni</button>
+                  {"'ni okudum, kişisel verilerimin işlenmesi hakkında bilgilendirildim."}
+                </span>
+              </label>
+              {hasContractErrors && (
+                <p className="pt-1 text-xs font-medium text-[#b42318]">Devam etmek için tüm onayları işaretleyin.</p>
+              )}
+            </fieldset>
 
-                  <label className={`flex items-start gap-2 cursor-pointer py-2 px-2 touch-manipulation min-h-[44px] items-center rounded-xl transition-colors ${contractErrors.privacy ? 'border border-red-200 bg-white' : ''}`}>
-                    <input
-                      type="checkbox"
-                      checked={privacyAccepted}
-                      onChange={(e) => {
-                        setPrivacyAccepted(e.target.checked)
-                        setContractErrors((prev) => ({ ...prev, privacy: false }))
-                      }}
-                      className={`w-5 h-5 min-w-[20px] min-h-[20px] text-slate-800 rounded focus:ring-2 focus:ring-slate-400 shrink-0 ${contractErrors.privacy ? 'border-red-400' : 'border-slate-300'}`}
-                    />
-                    <span className="text-xs text-ink">
-                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('privacy'); }} className="font-medium text-slate-800 hover:underline text-left">{'Gizlilik ve Çerez Politikası'}</button>{"'nı okudum."}
-                    </span>
-                  </label>
+            {hasBlocking && (
+              <p role="alert" className="mt-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-900">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                Devam etmek için uyarı olan {blocking.length > 1 ? `${blocking.length} ürünü` : 'ürünü'} düzenleyin veya sepetten çıkarın.
+              </p>
+            )}
 
-                  <label className={`flex items-start gap-2 cursor-pointer py-2 px-2 touch-manipulation min-h-[44px] items-center rounded-xl transition-colors ${contractErrors.kvkk ? 'border border-red-200 bg-white' : ''}`}>
-                    <input
-                      type="checkbox"
-                      checked={termsAccepted}
-                      onChange={(e) => {
-                        setTermsAccepted(e.target.checked)
-                        setContractErrors((prev) => ({ ...prev, kvkk: false }))
-                      }}
-                      className={`w-5 h-5 min-w-[20px] min-h-[20px] text-slate-800 rounded focus:ring-2 focus:ring-slate-400 shrink-0 ${contractErrors.kvkk ? 'border-red-400' : 'border-slate-300'}`}
-                    />
-                    <span className="text-xs text-ink">
-                      <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('kvkk'); }} className="font-medium text-slate-800 hover:underline text-left">{'KVKK Aydınlatma Metni'}</button>{"'ni okudum, kişisel verilerimin işlenmesi hakkında bilgilendirildim."}
-                    </span>
-                  </label>
+            <button
+              type="button"
+              onClick={handleCheckoutClick}
+              disabled={hasBlocking}
+              className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#f5b400] text-[15px] font-bold text-[#111] transition-colors hover:bg-[#e0a500] disabled:cursor-not-allowed disabled:opacity-50 touch-manipulation"
+            >
+              {t('checkout')}
+              <ArrowRight className="h-4 w-4" />
+            </button>
 
-                  {hasContractErrors && (
-                    <p className="text-xs font-medium text-red-600">
-                      {'\u00d6demeye ge\u00e7mek i\u00e7in t\u00fcm s\u00f6zle\u015fme ve ayd\u0131nlatma onaylar\u0131n\u0131 i\u015faretlemelisiniz.'}
-                    </p>
-                  )}
-                </div>
+            {!isAuthenticated && (
+              <p className="mt-3 text-center text-xs text-[#6b7c8f]">
+                Üye olmadan da sipariş verebilirsiniz.{' '}
+                <Link href="/login?redirect=/cart" className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">
+                  Giriş yapın
+                </Link>
+                , sepetiniz hesabınıza taşınsın.
+              </p>
+            )}
 
-                <Button 
-                  size="lg" 
-                  className="w-full rounded-xl min-h-[48px] touch-manipulation bg-brand hover:bg-brand-hover text-white"
-                  onClick={handleCheckoutClick}
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    <CreditCard className="w-5 h-5" />
-                    {'Sat\u0131n Al'}
-                  </span>
-                </Button>
-                <div className="text-xs text-slate-500 text-center space-y-1">
-                  <div className="flex items-center justify-center gap-1">
-                    <Package className="w-3 h-3" />
-                    <span>{'G\u00fcvenli \u00d6deme'}</span>
-                  </div>
-                  <div>{'7/24 M\u00fc\u015fteri Deste\u011fi'}</div>
-                </div>
-              </CardContent>
-            </Card>
+            <p className="mt-4 flex items-center justify-center gap-1.5 border-t border-[#f1f4f8] pt-4 text-xs text-[#6b7c8f]">
+              <Lock className="h-3.5 w-3.5" aria-hidden />
+              Güvenli ödeme · Kişisel verileriniz korunur
+            </p>
           </div>
-        </div>
+        </aside>
+      </div>
 
-        {/* Sözleşme penceresi: metinler lib/legal/documents.json (voltekno.com ile aynı) */}
-        <LegalDocumentDialog slug={showModal ? MODAL_DOCS[showModal] : null} onClose={() => setShowModal(null)} />
+      {/* Sözleşme penceresi: metinler lib/legal/documents.json (voltekno.com ile aynı) */}
+      <LegalDocumentDialog slug={showModal ? MODAL_DOCS[showModal] : null} onClose={() => setShowModal(null)} />
     </ClassicPageShell>
   )
 }
-
-

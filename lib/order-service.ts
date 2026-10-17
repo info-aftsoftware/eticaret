@@ -6,6 +6,14 @@
  * Durum akışı:
  *   PENDING ──(ödeme)──> PAID ──> PICKING (Hazırlanıyor) ──> SHIPPED ──> DELIVERED
  *      └──────────────> CANCELLED (ödeme öncesi/sonrası)        DELIVERED ──> RETURNED
+ *
+ * Ödeme durumu: ödenmiş sipariş iptal edildiğinde (veya doğrudan "İade" durumuna alındığında) ücret iadesi
+ * o anda başlatılmış sayılır → paymentStatus REFUNDED + "refund" olayı + müşteriye iade bilgili e-posta.
+ * İptal edilmiş bir sipariş hiçbir zaman PAID kalmaz. (Kısmi iadeler lib/return-service üzerinden yürür.)
+ *
+ * Müşteri iptal talebi (ödenmiş, henüz kargoya verilmemiş sipariş): requestOrderCancellation →
+ * admin approveCancellationRequest (iptal + ücret iadesi) / rejectCancellationRequest (gerekçeli ret).
+ * Talep durumu Order.notes JSON'unda (cancelRequest) ve "cancel_request" zaman çizelgesi olaylarında tutulur.
  */
 
 import React from 'react'
@@ -16,12 +24,13 @@ import { prisma } from '@/lib/prisma'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
 import { generateContractPdf } from '@/lib/legal/contract-pdf'
 import { getCarrier } from '@/lib/shipping/carriers'
+import { SELLER } from '@/lib/legal/company'
 import { BANK_TRANSFER_PAYMENT_DAYS, STORE_CONTACT } from '@/lib/store-config'
 import { buildInvoiceDataFromPrisma } from '@/lib/invoice-data'
 import { generateAndSendInvoice } from '@/lib/invoice-send'
 import OrderReceivedEmail from '@/emails/order/OrderReceivedEmail'
 import OrderStatusEmail, { ORDER_EMAIL_SUBJECTS, type OrderEmailKind } from '@/emails/order/OrderStatusEmail'
-import AdminOrderEmail from '@/emails/order/AdminOrderEmail'
+import AdminOrderEmail, { ADMIN_ORDER_EMAIL_SUBJECTS, type AdminOrderEvent } from '@/emails/order/AdminOrderEmail'
 import type { OrderEmailData } from '@/emails/order/shared'
 
 export type OrderWithLines = Order & { lines: OrderLine[] }
@@ -101,12 +110,22 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     carrierName: carrier?.name ?? order.shippingCarrier,
     trackingNumber: order.trackingNumber,
     trackingUrl: carrier && order.trackingNumber ? carrier.trackingUrl(order.trackingNumber) : null,
+    trackingHint: carrier?.trackingHint ?? null,
     customerNote: parseCustomerNote(order),
     orderUrl: `${siteUrl()}/orders/${order.orderNo}`,
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,
+    siteUrl: siteUrl(),
     paymentDueDate: due.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' }),
+    billingAddress: order.billingAddress
+      ? [order.billingAddress, [order.billingDistrict, order.billingCity].filter(Boolean).join(' / '), order.billingPostalCode]
+          .filter(Boolean)
+          .join(', ')
+      : null,
+    refundAmount: order.paymentStatus === 'REFUNDED' ? order.total : null,
   }
 }
+
+const fmtTRY = (n: number) => n.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })
 
 export async function logOrderEvent(
   orderId: string,
@@ -151,8 +170,14 @@ async function send(
   }
 }
 
-export async function sendCustomerStatusEmail(order: OrderWithLines, kind: OrderEmailKind, reason?: string | null) {
+export async function sendCustomerStatusEmail(
+  order: OrderWithLines,
+  kind: OrderEmailKind,
+  reason?: string | null,
+  extra?: { refundAmount?: number | null }
+) {
   const data = toOrderEmailData(order)
+  if (extra?.refundAmount != null) data.refundAmount = extra.refundAmount
   return send(
     order.id,
     order.shippingEmail,
@@ -180,10 +205,10 @@ async function sendOrderReceived(order: OrderWithLines) {
   await send(order.id, order.shippingEmail, subject, React.createElement(OrderReceivedEmail, { order: data }), subject, attachments)
 }
 
-async function sendAdmin(order: OrderWithLines, event: 'new_order' | 'payment_received') {
+async function sendAdmin(order: OrderWithLines, event: AdminOrderEvent, reason?: string | null) {
   const data = toOrderEmailData(order)
-  const subject = event === 'new_order' ? `Yeni sipariş - ${order.orderNo}` : `Ödeme alındı - ${order.orderNo}`
-  await send(order.id, adminEmail(), subject, React.createElement(AdminOrderEmail, { order: data, event }), `Admin: ${subject}`)
+  const subject = ADMIN_ORDER_EMAIL_SUBJECTS[event](order.orderNo)
+  await send(order.id, adminEmail(), subject, React.createElement(AdminOrderEmail, { order: data, event, reason }), `Admin: ${subject}`)
 }
 
 async function load(orderId: string): Promise<OrderWithLines> {
@@ -262,8 +287,18 @@ export async function markOrderPaid(orderId: string, opts: { actor: Actor; note?
 export async function markPaymentFailed(orderId: string, note: string) {
   const order = await load(orderId)
   if (order.paymentStatus === 'PAID') return
-  await prisma.order.update({ where: { id: orderId }, data: { paymentStatus: 'FAILED' } })
-  await logOrderEvent(orderId, { type: 'payment', status: 'FAILED', message: note, actor: 'system' })
+  // Idempotent: aynı başarısızlık için (banka dönüşü + webhook) müşteriye ikinci e-posta gitmez
+  const res = await prisma.order.updateMany({
+    where: { id: orderId, paymentStatus: { notIn: ['PAID', 'FAILED'] } },
+    data: { paymentStatus: 'FAILED' },
+  })
+  // Bankanın ham hata mesajı yalnızca iç kayıtta; müşteriye genel bilgi gösterilir
+  await logOrderEvent(orderId, { type: 'payment', status: 'FAILED', message: note, actor: 'system', visibleToCustomer: false })
+  if (res.count === 0) return
+  await logOrderEvent(orderId, { type: 'payment', status: 'FAILED', message: 'Kart ödemesi tamamlanamadı.', actor: 'system' })
+  if (order.paymentMethod !== 'bank_transfer') {
+    await sendCustomerStatusEmail(await load(orderId), 'payment_failed')
+  }
 }
 
 async function restoreStock(order: OrderWithLines) {
@@ -320,6 +355,13 @@ export async function changeOrderStatus(
 
   const now = new Date()
   const data: Record<string, unknown> = { status: next }
+  // Ödenmiş sipariş iptal / iade: ücret iadesi başlatılır, ödeme durumu PAID kalmaz
+  const wasPaid = order.paymentStatus === 'PAID' || order.paymentStatus === 'PARTIALLY_REFUNDED'
+  let refundAmount: number | null = null
+  if ((next === 'CANCELLED' || next === 'RETURNED') && wasPaid) {
+    refundAmount = Math.max(0, Math.round((order.total - (await refundedSoFar(order.id))) * 100) / 100)
+    data.paymentStatus = 'REFUNDED'
+  }
   if (next === 'SHIPPED') {
     data.shippingCarrier = opts.carrier
     data.trackingNumber = opts.trackingNumber!.trim()
@@ -357,6 +399,36 @@ export async function changeOrderStatus(
     message: messages[next] ?? `Durum: ${ORDER_STATUS_LABELS_TR[next]}`,
     actor: opts.actor,
   })
+  if (refundAmount !== null) {
+    await logOrderEvent(orderId, {
+      type: 'refund',
+      status: 'REFUNDED',
+      message: `Ücret iadesi başlatıldı: ${fmtTRY(refundAmount)} (${order.paymentMethod === 'bank_transfer' ? 'ödemenin yapıldığı hesaba' : 'ödemede kullanılan karta'}).`,
+      actor: opts.actor,
+    })
+    await logOrderEvent(orderId, {
+      type: 'note',
+      message:
+        order.paymentMethod === 'bank_transfer'
+          ? `İADE YAPILMALI: ${fmtTRY(refundAmount)} tutarı müşterinin havale yaptığı hesaba iade edin.`
+          : `İADE YAPILMALI: ${fmtTRY(refundAmount)} tutarı banka sanal POS panelinden iptal/iade edin.`,
+      actor: 'system',
+      visibleToCustomer: false,
+    })
+  }
+
+  // Açık iptal talebi: iptalde onaylanmış, kargoya verilince kapanmış sayılır
+  const req = getCancellationRequest(order)
+  if (req?.status === 'REQUESTED' && (next === 'CANCELLED' || next === 'SHIPPED')) {
+    await resolveCancellationRequest(updated, next === 'CANCELLED' ? 'APPROVED' : 'REJECTED', {
+      actor: opts.actor,
+      rejectReason: next === 'SHIPPED' ? 'Sipariş, talep incelenmeden kargoya verildi.' : null,
+    })
+  }
+
+  if (opts.actor === 'customer' && next === 'CANCELLED') {
+    await sendAdmin(updated, 'customer_cancelled', opts.reason)
+  }
 
   if (opts.notifyCustomer !== false) {
     const kind: OrderEmailKind | null =
@@ -364,9 +436,139 @@ export async function changeOrderStatus(
         : next === 'SHIPPED' ? 'shipped'
           : next === 'DELIVERED' ? 'delivered'
             : next === 'CANCELLED' ? 'cancelled'
-              : null
-    if (kind) await sendCustomerStatusEmail(updated, kind, opts.reason)
+              : next === 'RETURNED' ? 'returned'
+                : null
+    if (kind) await sendCustomerStatusEmail(updated, kind, opts.reason, { refundAmount })
   }
+  return updated
+}
+
+/** İade talepleri (lib/return-service) üzerinden daha önce iade edilmiş tutar. */
+async function refundedSoFar(orderId: string): Promise<number> {
+  const rows = await prisma.returnRequest.findMany({ where: { orderId, status: 'REFUNDED' }, select: { refundAmount: true } })
+  return rows.reduce((sum, r) => sum + (r.refundAmount ?? 0), 0)
+}
+
+// ── Müşteri iptal talebi (ödenmiş, kargoya verilmemiş sipariş) ──────────────────────────────
+
+export type CancellationRequest = {
+  status: 'REQUESTED' | 'APPROVED' | 'REJECTED'
+  reason: string | null
+  requestedAt: string
+  resolvedAt?: string | null
+  rejectReason?: string | null
+  resolvedBy?: Actor | null
+}
+
+/** Talep edilebilen durumlar: ödeme alınmış, henüz kargoya verilmemiş */
+const CANCEL_REQUESTABLE: OrderStatus[] = ['PAID', 'PICKING', 'CONFIRMED', 'PROCESSING']
+
+function parseNotes(order: Pick<Order, 'notes'>): Record<string, unknown> {
+  try {
+    const n = order.notes ? JSON.parse(order.notes) : {}
+    return n && typeof n === 'object' && !Array.isArray(n) ? n : {}
+  } catch {
+    return {}
+  }
+}
+
+/** Siparişin iptal talebi (yoksa null). Admin paneli bunu gösterir. */
+export function getCancellationRequest(order: Pick<Order, 'notes'>): CancellationRequest | null {
+  const r = parseNotes(order).cancelRequest as CancellationRequest | undefined
+  return r && typeof r === 'object' && typeof r.status === 'string' ? r : null
+}
+
+/** Müşteri bu sipariş için iptal talebi oluşturabilir mi? */
+export function canRequestCancellation(order: Pick<Order, 'status' | 'paymentStatus' | 'notes'>): boolean {
+  return (
+    order.paymentStatus === 'PAID' &&
+    CANCEL_REQUESTABLE.includes(order.status) &&
+    !getCancellationRequest(order)
+  )
+}
+
+async function saveCancellationRequest(orderId: string, req: CancellationRequest) {
+  const fresh = await prisma.order.findUnique({ where: { id: orderId }, select: { notes: true } })
+  const notes = parseNotes({ notes: fresh?.notes ?? null })
+  await prisma.order.update({ where: { id: orderId }, data: { notes: JSON.stringify({ ...notes, cancelRequest: req }) } })
+}
+
+/**
+ * Müşteri, ödemesi alınmış ve henüz kargoya verilmemiş siparişi için iptal talebi oluşturur.
+ * Admin'e e-posta, müşteriye "talebiniz alındı" e-postası gider; sipariş durumu değişmez.
+ */
+export async function requestOrderCancellation(orderId: string, opts: { reason?: string | null; actor?: Actor } = {}) {
+  const order = await load(orderId)
+  const existing = getCancellationRequest(order)
+  if (existing?.status === 'REQUESTED') throw new OrderTransitionError('Bu sipariş için iptal talebiniz zaten inceleniyor.')
+  if (existing?.status === 'REJECTED') {
+    throw new OrderTransitionError(`İptal talebiniz daha önce değerlendirildi. Lütfen bizimle iletişime geçin: ${SELLER.phone}`)
+  }
+  if (order.paymentStatus !== 'PAID' || !CANCEL_REQUESTABLE.includes(order.status)) {
+    throw new OrderTransitionError(
+      order.status === 'SHIPPED' || order.status === 'DELIVERED'
+        ? 'Kargoya verilmiş sipariş iptal edilemez. Teslim aldıktan sonra iade talebi oluşturabilirsiniz.'
+        : 'Bu sipariş için iptal talebi oluşturulamıyor.'
+    )
+  }
+  const reason = opts.reason?.trim().slice(0, 500) || null
+  await saveCancellationRequest(orderId, { status: 'REQUESTED', reason, requestedAt: new Date().toISOString() })
+  await logOrderEvent(orderId, {
+    type: 'cancel_request',
+    status: 'REQUESTED',
+    message: `İptal talebi alındı${reason ? ` (Neden: ${reason})` : ''}. Talep incelendikten sonra bilgilendirileceksiniz.`,
+    actor: opts.actor ?? 'customer',
+  })
+  const updated = await load(orderId)
+  await sendAdmin(updated, 'cancel_request', reason)
+  await sendCustomerStatusEmail(updated, 'cancel_requested', reason)
+  return updated
+}
+
+async function resolveCancellationRequest(
+  order: Order,
+  status: 'APPROVED' | 'REJECTED',
+  opts: { actor: Actor; rejectReason?: string | null }
+) {
+  const req = getCancellationRequest(order)
+  if (!req) return
+  await saveCancellationRequest(order.id, {
+    ...req,
+    status,
+    resolvedAt: new Date().toISOString(),
+    resolvedBy: opts.actor,
+    rejectReason: status === 'REJECTED' ? opts.rejectReason ?? null : null,
+  })
+  await logOrderEvent(order.id, {
+    type: 'cancel_request',
+    status,
+    message: status === 'APPROVED'
+      ? 'İptal talebiniz onaylandı.'
+      : `İptal talebiniz kabul edilemedi.${opts.rejectReason ? ` ${opts.rejectReason}` : ''}`,
+    actor: opts.actor,
+  })
+}
+
+/** Admin: iptal talebini onaylar → sipariş iptal, stok/kupon iadesi, ücret iadesi (REFUNDED), müşteriye e-posta. */
+export async function approveCancellationRequest(orderId: string, opts: { actor?: Actor; note?: string | null } = {}) {
+  const order = await load(orderId)
+  const req = getCancellationRequest(order)
+  if (req?.status !== 'REQUESTED') throw new OrderTransitionError('Bekleyen bir iptal talebi yok.')
+  const reason = [req.reason ? `Müşteri talebi: ${req.reason}` : 'Müşteri talebi', opts.note?.trim()].filter(Boolean).join(' — ')
+  // changeOrderStatus açık talebi "onaylandı" olarak kapatır
+  return changeOrderStatus(orderId, 'CANCELLED', { actor: opts.actor ?? 'admin', reason })
+}
+
+/** Admin: iptal talebini gerekçeyle reddeder; sipariş akışı değişmez, müşteriye e-posta gider. */
+export async function rejectCancellationRequest(orderId: string, opts: { reason: string; actor?: Actor }) {
+  const order = await load(orderId)
+  const req = getCancellationRequest(order)
+  if (req?.status !== 'REQUESTED') throw new OrderTransitionError('Bekleyen bir iptal talebi yok.')
+  const reason = opts.reason?.trim().slice(0, 500)
+  if (!reason) throw new OrderTransitionError('Ret gerekçesi yazılmalıdır.')
+  await resolveCancellationRequest(order, 'REJECTED', { actor: opts.actor ?? 'admin', rejectReason: reason })
+  const updated = await load(orderId)
+  await sendCustomerStatusEmail(updated, 'cancel_rejected', reason)
   return updated
 }
 

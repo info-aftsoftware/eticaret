@@ -3,11 +3,25 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Package, Truck, Banknote, CheckCircle, XCircle, Clock, ExternalLink, Loader2, FileText } from 'lucide-react'
+import {
+  AlertCircle,
+  Banknote,
+  Check,
+  CheckCircle2,
+  Clock,
+  Copy,
+  CreditCard,
+  ExternalLink,
+  FileText,
+  Loader2,
+  MapPin,
+  Package,
+  PackageCheck,
+  ReceiptText,
+  RotateCcw,
+  Truck,
+  XCircle,
+} from 'lucide-react'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { getDb } from '@/lib/firebase/config'
@@ -16,19 +30,30 @@ import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { toOrderView, ORDER_STATUS_LABELS } from '@/lib/order-view'
+import { getAllCarriers } from '@/lib/shipping/carriers'
+import { SELLER } from '@/lib/legal/company'
 import { ReturnSection } from './ReturnSection'
 import { PaymentNoticeForm } from './PaymentNoticeForm'
-import { BankAccountsList } from '@/components/BankAccountsList'
+import { BankTransferDetails } from '@/components/order/BankTransferDetails'
 import { BANK_TRANSFER_DISCOUNT_RATE, BANK_TRANSFER_PAYMENT_DAYS, VAT_RATE } from '@/lib/store-config'
 
-/** Durum adımları (iptal/iade hariç) */
-const STEPS: { key: string; label: string }[] = [
-  { key: 'received', label: 'Sipariş alındı' },
-  { key: 'paid', label: 'Ödeme onaylandı' },
-  { key: 'preparing', label: 'Hazırlanıyor' },
-  { key: 'shipped', label: 'Kargoda' },
-  { key: 'delivered', label: 'Teslim edildi' },
-]
+type Creds = { email: string; phone: string }
+type OrderEvent = { id: string; type: string; status: string | null; message: string; createdAt: Date }
+
+const fmtDateTime = (d: Date) =>
+  d.toLocaleString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+const fmtDay = (d: Date) => d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' })
+
+/** Sipariş (Prisma) için POST ile misafir sorgusu: e-posta + telefon URL'ye yazılmaz */
+async function fetchGuestOrder(orderNo: string, creds: Creds) {
+  const res = await fetch(`/api/orders/by-no/${encodeURIComponent(orderNo)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(creds),
+  })
+  const data = await res.json().catch(() => null)
+  return { ok: res.ok, status: res.status, data }
+}
 
 function stepIndex(order: any): number {
   if (order.status === 'delivered' || order.status === 'returned') return 4
@@ -38,13 +63,104 @@ function stepIndex(order: any): number {
   return 0
 }
 
-const fmtDateTime = (d: Date) =>
-  d.toLocaleString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+function Card({ title, icon: Icon, children, aside, className = '' }: {
+  title?: string
+  icon?: React.ComponentType<{ className?: string }>
+  children: React.ReactNode
+  aside?: React.ReactNode
+  className?: string
+}) {
+  return (
+    <section className={`rounded-xl border border-[#e6ebf1] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] ${className}`}>
+      {title && (
+        <header className="flex flex-wrap items-center gap-2 border-b border-[#eef1f5] px-4 py-3.5 sm:px-5">
+          {Icon && <Icon className="h-[18px] w-[18px] text-[#6b7c8f]" aria-hidden />}
+          <h2 className="text-[15px] font-semibold text-[#121926]">{title}</h2>
+          {aside && <div className="ml-auto">{aside}</div>}
+        </header>
+      )}
+      <div className="px-4 py-4 sm:px-5">{children}</div>
+    </section>
+  )
+}
+
+const btnOutline = 'inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-[#d3d9e1] bg-white px-3.5 text-sm font-medium text-[#20384e] hover:bg-[#f5f7fa] disabled:opacity-60'
+const btnPrimary = 'inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-[#0b2540] px-4 text-sm font-semibold text-white hover:bg-[#12335a] disabled:opacity-60'
+
+function StatusBadge({ order }: { order: any }) {
+  const st = order.status as string
+  const label = order.awaitingTransfer ? 'Ödeme bekleniyor' : ORDER_STATUS_LABELS[st] || st
+  const cls =
+    st === 'delivered' ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+      : st === 'shipped' ? 'bg-[#eaf1fb] text-[#0b2540] ring-[#c9d8ee]'
+        : st === 'cancelled' || st === 'returned' ? 'bg-red-50 text-red-700 ring-red-200'
+          : order.awaitingTransfer ? 'bg-[#fff8e1] text-[#8a6400] ring-[#f5d97a]'
+            : 'bg-[#f1f4f8] text-[#20384e] ring-[#d3d9e1]'
+  return <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-semibold ring-1 ${cls}`}>{label}</span>
+}
+
+function ProgressTimeline({ order }: { order: any }) {
+  const current = stepIndex(order)
+  const events: OrderEvent[] = order.events ?? []
+  const pickingAt = events.find((e) => e.status === 'PICKING')?.createdAt
+  const steps = [
+    { label: 'Sipariş alındı', icon: ReceiptText, date: order.createdAt as Date },
+    { label: 'Ödeme onaylandı', icon: CreditCard, date: order.dates?.paidAt as Date | null },
+    { label: 'Hazırlanıyor', icon: Package, date: pickingAt ?? null },
+    { label: 'Kargoda', icon: Truck, date: order.dates?.shippedAt as Date | null },
+    { label: 'Teslim edildi', icon: PackageCheck, date: order.dates?.deliveredAt as Date | null },
+  ]
+  return (
+    <ol className="grid grid-cols-1 gap-0 sm:grid-cols-5 sm:gap-2" aria-label="Sipariş durumu">
+      {steps.map((s, i) => {
+        const done = i <= current
+        const active = i === current
+        return (
+          <li key={s.label} className="relative flex gap-3 pb-4 last:pb-0 sm:flex-col sm:items-center sm:gap-2 sm:pb-0 sm:text-center" aria-current={active ? 'step' : undefined}>
+            {/* bağlantı çizgisi */}
+            {i < steps.length - 1 && (
+              <span
+                aria-hidden
+                className={`absolute left-[17px] top-9 h-[calc(100%-36px)] w-0.5 sm:left-[calc(50%+22px)] sm:top-[17px] sm:h-0.5 sm:w-[calc(100%-36px)] ${i < current ? 'bg-[#0b2540]' : 'bg-[#e6ebf1]'}`}
+              />
+            )}
+            <span
+              className={`relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
+                active ? 'bg-[#f5b400] text-[#111] ring-4 ring-[#fff3cc]' : done ? 'bg-[#0b2540] text-white' : 'bg-[#f1f4f8] text-[#9aa8b6]'
+              }`}
+            >
+              {done && !active ? <Check className="h-4 w-4" aria-hidden /> : <s.icon className="h-4 w-4" aria-hidden />}
+            </span>
+            <span className="min-w-0 pt-1.5 sm:pt-0">
+              <span className={`block text-sm leading-tight ${done ? 'font-semibold text-[#121926]' : 'text-[#6b7c8f]'}`}>{s.label}</span>
+              <span className="block text-xs text-[#6b7c8f]">{done && s.date ? fmtDay(new Date(s.date)) : active ? 'Şu an' : ''}</span>
+            </span>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
+
+function CopyInline({ value }: { value: string }) {
+  const [done, setDone] = useState(false)
+  return (
+    <button
+      type="button"
+      onClick={async () => { try { await navigator.clipboard.writeText(value); setDone(true); setTimeout(() => setDone(false), 2000) } catch {} }}
+      className="inline-flex h-8 items-center gap-1 rounded-md border border-[#d3d9e1] bg-white px-2 text-xs font-medium text-[#20384e] hover:bg-[#f5f7fa]"
+      aria-label="Takip numarasını kopyala"
+    >
+      {done ? <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
+      {done ? 'Kopyalandı' : 'Kopyala'}
+    </button>
+  )
+}
 
 export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const id = params.id as string
+  const id = decodeURIComponent(params.id as string)
   const { user, isAuthenticated, authReady } = useAuthStore()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -56,9 +172,13 @@ export default function OrderDetailPage() {
   const [lookupPhone, setLookupPhone] = useState('')
   const [lookupError, setLookupError] = useState('')
   const [lookupLoading, setLookupLoading] = useState(false)
-  const [guestCreds, setGuestCreds] = useState<{ email: string; phone: string } | null>(null)
+  const [guestCreds, setGuestCreds] = useState<Creds | null>(null)
+  const [cancelOpen, setCancelOpen] = useState(false)
+  const [cancelReason, setCancelReason] = useState('')
   const [cancelling, setCancelling] = useState(false)
   const [actionError, setActionError] = useState('')
+  const [actionNotice, setActionNotice] = useState('')
+  const [downloading, setDownloading] = useState<string | null>(null)
 
   /** Misafir sipariş takibi: sipariş no + e-posta + telefon birlikte doğrulanır. */
   const lookupGuestOrder = async (e: React.FormEvent) => {
@@ -66,15 +186,15 @@ export default function OrderDetailPage() {
     setLookupError('')
     setLookupLoading(true)
     try {
-      const params = new URLSearchParams({ email: lookupEmail.trim(), phone: lookupPhone.trim() })
-      const res = await fetch(`/api/orders/by-no/${encodeURIComponent(id)}?${params.toString()}`)
-      const data = await res.json().catch(() => null)
-      if (res.ok && data?.order?.orderNo) {
+      const creds = { email: lookupEmail.trim(), phone: lookupPhone.trim() }
+      const { ok, status, data } = await fetchGuestOrder(id, creds)
+      if (ok && data?.order?.orderNo) {
         setOrder(toOrderView(data.order))
         setIsPrismaOrder(true)
-        setGuestCreds({ email: lookupEmail.trim(), phone: lookupPhone.trim() })
+        setGuestCreds(creds)
+        try { sessionStorage.setItem('order-lookup', JSON.stringify({ orderNo: id, ...creds })) } catch {}
       } else {
-        setLookupError(data?.error || 'Bu bilgilerle eşleşen sipariş bulunamadı.')
+        setLookupError(status === 429 ? 'Çok fazla deneme yaptınız. Lütfen biraz sonra tekrar deneyin.' : 'Bu bilgilerle eşleşen sipariş bulunamadı.')
       }
     } catch {
       setLookupError('Sipariş sorgulanamadı. Lütfen tekrar deneyin.')
@@ -83,17 +203,16 @@ export default function OrderDetailPage() {
     }
   }
 
-  const [downloading, setDownloading] = useState<string | null>(null)
-
-  /** Sözleşme / fatura PDF'ini indirir (üye: token, misafir: e-posta + telefon) */
+  /** Sözleşme / fatura PDF'ini indirir (üye: token, misafir: e-posta + telefon gövdede) */
   const downloadDocument = async (type: 'contract' | 'invoice') => {
     setDownloading(type)
     setActionError('')
     try {
-      const qs = new URLSearchParams({ type, ...(guestCreds ?? {}) })
       const authToken = isAuthenticated ? await getAuthToken() : null
-      const res = await fetch(`/api/orders/by-no/${encodeURIComponent(order.orderId)}/documents?${qs.toString()}`, {
-        headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+      const res = await fetch(`/api/orders/by-no/${encodeURIComponent(order.orderId)}/documents`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}) },
+        body: JSON.stringify({ type, ...(guestCreds ?? {}) }),
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
@@ -113,7 +232,7 @@ export default function OrderDetailPage() {
   }
 
   /** Sipariş alt uç noktası çağrısı (üye: token, misafir: e-posta + telefon). Hata mesajı veya null döner. */
-  const orderAction = async (path: 'returns' | 'payment-notice', method: 'POST' | 'PATCH', body: Record<string, unknown>): Promise<string | null> => {
+  const orderAction = async (path: 'returns' | 'payment-notice' | 'cancel', method: 'POST' | 'PATCH', body: Record<string, unknown>): Promise<{ error: string | null; data?: any }> => {
     try {
       const authToken = isAuthenticated ? await getAuthToken() : null
       const res = await fetch(`/api/orders/by-no/${encodeURIComponent(order.orderId)}/${path}`, {
@@ -122,36 +241,28 @@ export default function OrderDetailPage() {
         body: JSON.stringify({ ...body, ...(guestCreds ?? {}) }),
       })
       const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.order) return data?.error || 'İşlem yapılamadı.'
+      if (!res.ok || !data?.order) return { error: data?.error || 'İşlem yapılamadı.' }
       setOrder(toOrderView(data.order))
-      return null
+      return { error: null, data }
     } catch {
-      return 'İşlem yapılamadı. Lütfen tekrar deneyin.'
+      return { error: 'İşlem yapılamadı. Lütfen tekrar deneyin.' }
     }
   }
+  const simpleAction = async (path: 'returns' | 'payment-notice', method: 'POST' | 'PATCH', body: Record<string, unknown>) =>
+    (await orderAction(path, method, body)).error
 
-  const cancelOrder = async () => {
-    if (!window.confirm('Siparişinizi iptal etmek istediğinize emin misiniz?')) return
+  const submitCancel = async () => {
     setCancelling(true)
     setActionError('')
-    try {
-      const authToken = isAuthenticated ? await getAuthToken() : null
-      const res = await fetch(`/api/orders/by-no/${encodeURIComponent(order.orderId)}/cancel`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-        },
-        body: JSON.stringify(guestCreds ?? {}),
-      })
-      const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.order) throw new Error(data?.error || 'Sipariş iptal edilemedi.')
-      setOrder(toOrderView(data.order))
-    } catch (e) {
-      setActionError(e instanceof Error ? e.message : 'Sipariş iptal edilemedi.')
-    } finally {
-      setCancelling(false)
-    }
+    setActionNotice('')
+    const { error, data } = await orderAction('cancel', 'POST', { reason: cancelReason.trim() || undefined })
+    setCancelling(false)
+    if (error) return setActionError(error)
+    setCancelOpen(false)
+    setCancelReason('')
+    setActionNotice(data?.requested
+      ? 'İptal talebiniz alındı. Talebiniz incelendikten sonra e-posta ile bilgilendirileceksiniz.'
+      : 'Siparişiniz iptal edildi.')
   }
 
   useEffect(() => {
@@ -197,17 +308,16 @@ export default function OrderDetailPage() {
               return
             }
           }
-          // Sipariş takip sayfasından gelindiyse (aynı sekme) kayıtlı e-posta + telefonla aç
+          // Sipariş takip / ödeme sonrası sayfasından gelindiyse (aynı sekme) kayıtlı e-posta + telefonla aç
           try {
             const saved = JSON.parse(sessionStorage.getItem('order-lookup') || 'null')
             if (saved?.orderNo === id && saved.email && saved.phone) {
-              const qs = new URLSearchParams({ email: saved.email, phone: saved.phone })
-              const res = await fetch(`/api/orders/by-no/${encodeURIComponent(id)}?${qs.toString()}`)
-              const data = res.ok ? await res.json().catch(() => null) : null
+              const creds = { email: saved.email, phone: saved.phone }
+              const { data } = await fetchGuestOrder(id, creds)
               if (data?.order?.orderNo) {
                 setOrder(toOrderView(data.order))
                 setIsPrismaOrder(true)
-                setGuestCreds({ email: saved.email, phone: saved.phone })
+                setGuestCreds(creds)
                 return
               }
             }
@@ -246,7 +356,7 @@ export default function OrderDetailPage() {
 
     // Eski Firestore siparişi (doküman id ile, giriş gerekli)
     if (!isAuthenticated || !user?.id) {
-      router.push('/login?redirect=/orders/' + id)
+      router.push('/login?redirect=/orders/' + encodeURIComponent(id))
       return
     }
     getDoc(doc(getDb(), 'users', user.id, 'orders', id))
@@ -272,8 +382,9 @@ export default function OrderDetailPage() {
   if (loading) {
     return (
       <ClassicPageShell breadcrumbs={[{ label: 'Sipariş Detayı' }]} noTitle>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-10 w-10 border-2 border-brand border-t-transparent" />
+        <div className="flex items-center justify-center gap-3 py-20 text-[#20384e]">
+          <Loader2 className="h-6 w-6 animate-spin" aria-hidden />
+          <span>Siparişiniz yükleniyor…</span>
         </div>
       </ClassicPageShell>
     )
@@ -283,244 +394,314 @@ export default function OrderDetailPage() {
 
   if (!order) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: 'Sipariş Takibi' }]} noTitle>
-        <div className="flex justify-center py-8">
-          <Card className="max-w-md w-full p-8 text-center classic-card rounded-lg">
+      <ClassicPageShell breadcrumbs={[{ label: 'Sipariş Takibi', href: '/siparis-takip' }, { label: id }]} noTitle>
+        <div className="flex justify-center py-4">
+          <div className="w-full max-w-md rounded-xl border border-[#e6ebf1] bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-8">
             {isGuestOrderId ? (
               <>
-                <div className="inline-flex h-14 w-14 rounded-lg bg-red-100 items-center justify-center mb-4">
-                  <Package className="w-7 h-7 text-brand" />
-                </div>
-                <h2 className="text-lg font-bold text-gray-900 mb-1">Sipariş Takibi</h2>
-                <p className="font-mono font-semibold text-brand mb-4">{id}</p>
-                <p className="text-sm text-gray-500 mb-4">
-                  Sipariş detayını görmek için siparişte kullandığınız e-posta ve telefon numarasını girin.
+                <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#f1f4f8]">
+                  <Package className="h-6 w-6 text-[#0b2540]" aria-hidden />
+                </span>
+                <h2 className="text-lg font-semibold text-[#121926]">Siparişinizi görüntüleyin</h2>
+                <p className="mt-1 font-mono text-sm font-semibold text-[#0b2540]">{id}</p>
+                <p className="mb-5 mt-2 text-sm text-[#6b7c8f]">
+                  Güvenliğiniz için siparişte kullandığınız e-posta adresi ve telefon numarasını girin.
                   {!isAuthenticated && (
-                    <> Üye iseniz <Link href={`/login?redirect=/orders/${id}`} className="text-brand hover:underline">giriş yapın</Link>.</>
+                    <> Üye iseniz <Link href={`/login?redirect=/orders/${encodeURIComponent(id)}`} className="font-medium text-[#0b2540] underline-offset-2 hover:underline">giriş yapın</Link>.</>
                   )}
                 </p>
-                <form onSubmit={lookupGuestOrder} className="space-y-3 text-left mb-6">
-                  <Input type="email" required placeholder="E-posta adresi" value={lookupEmail} onChange={(e) => setLookupEmail(e.target.value)} aria-label="E-posta adresi" />
-                  <Input type="tel" required placeholder="Telefon (5xx xxx xx xx)" value={lookupPhone} onChange={(e) => setLookupPhone(e.target.value)} aria-label="Telefon numarası" />
-                  {lookupError && <p className="text-xs text-destructive">{lookupError}</p>}
-                  <Button type="submit" variant="outline" className="w-full" disabled={lookupLoading}>
-                    {lookupLoading ? 'Sorgulanıyor...' : 'Siparişi Görüntüle'}
-                  </Button>
+                <form onSubmit={lookupGuestOrder} className="space-y-3" noValidate>
+                  <div>
+                    <label htmlFor="lookup-email" className="mb-1.5 block text-sm font-medium text-[#20384e]">E-posta</label>
+                    <input id="lookup-email" type="email" required autoComplete="email" value={lookupEmail} onChange={(e) => setLookupEmail(e.target.value)}
+                      className="h-12 w-full rounded-lg border border-[#d3d9e1] px-3.5 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
+                  </div>
+                  <div>
+                    <label htmlFor="lookup-phone" className="mb-1.5 block text-sm font-medium text-[#20384e]">Telefon</label>
+                    <input id="lookup-phone" type="tel" required autoComplete="tel" placeholder="5xx xxx xx xx" value={lookupPhone} onChange={(e) => setLookupPhone(e.target.value)}
+                      className="h-12 w-full rounded-lg border border-[#d3d9e1] px-3.5 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
+                  </div>
+                  {lookupError && <p role="alert" className="flex items-start gap-1.5 text-sm text-red-600"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />{lookupError}</p>}
+                  <button type="submit" className={`${btnPrimary} h-12 w-full`} disabled={lookupLoading || !lookupEmail || !lookupPhone}>
+                    {lookupLoading ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden />Sorgulanıyor…</> : 'Siparişi görüntüle'}
+                  </button>
                 </form>
               </>
             ) : (
-              <p className="text-gray-600 mb-4">Sipariş bulunamadı.</p>
+              <p className="text-[#20384e]">Sipariş bulunamadı.</p>
             )}
-            <Button asChild className="btn-classic-primary">
-              <Link href={isAuthenticated ? '/profile?tab=orders' : '/'}>{isAuthenticated ? 'Siparişlerime Dön' : 'Ana Sayfaya Dön'}</Link>
-            </Button>
-          </Card>
+            <Link href={isAuthenticated ? '/profile?tab=orders' : '/'} className="mt-5 inline-block text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">
+              {isAuthenticated ? '← Siparişlerime dön' : '← Ana sayfaya dön'}
+            </Link>
+          </div>
         </div>
       </ClassicPageShell>
     )
   }
 
-  const isClosed = order.status === 'cancelled' || order.status === 'returned'
-  const current = stepIndex(order)
   const p = order.pricing || {}
+  const events: OrderEvent[] = order.events ?? []
+  const isCancelled = order.status === 'cancelled'
+  const isReturned = order.status === 'returned'
   const dueDate = new Date(new Date(order.createdAt).getTime() + BANK_TRANSFER_PAYMENT_DAYS * 86_400_000)
+  const lastCancelReq = [...events].reverse().find((e) => e.type === 'cancel_request')
+  const cancelReqStatus = lastCancelReq?.status ?? null
+  // Ödenmiş ve henüz kargoya verilmemiş sipariş → iptal talebi (reddedilmiş talep tekrar açılamaz)
+  const canRequestCancel =
+    isPrismaOrder && order.paymentStatus === 'PAID' && ['paid', 'confirmed', 'processing'].includes(order.status) && !cancelReqStatus
+  const canCancelNow = !!order.canCancel
+  const refunded = order.paymentStatus === 'REFUNDED' || order.paymentStatus === 'PARTIALLY_REFUNDED'
+  const carrier = order.carrierName ? getAllCarriers().find((c) => c.name === order.carrierName) : undefined
 
   return (
     <ClassicPageShell
       breadcrumbs={[
-        ...(isAuthenticated ? [{ label: 'Hesabım', href: '/profile' }, { label: 'Siparişlerim', href: '/profile?tab=orders' }] : []),
-        { label: `Sipariş #${order.orderId}` },
+        ...(isAuthenticated ? [{ label: 'Hesabım', href: '/profile' }, { label: 'Siparişlerim', href: '/profile?tab=orders' }] : [{ label: 'Sipariş Takibi', href: '/siparis-takip' }]),
+        { label: order.orderId },
       ]}
-      title={`Sipariş #${order.orderId}`}
-      description={fmtDateTime(new Date(order.createdAt))}
+      noTitle
     >
-      <div className="max-w-3xl space-y-6">
-        {/* Durum */}
-        <Card className="classic-card rounded-lg">
-          <CardContent className="pt-6">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Durum:</span>
-                <Badge className={
-                  order.status === 'delivered' ? 'bg-green-100 text-green-800'
-                    : order.status === 'shipped' ? 'bg-blue-100 text-blue-800'
-                      : isClosed ? 'bg-red-100 text-red-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                }>
-                  {order.awaitingTransfer ? 'Ödeme bekleniyor' : ORDER_STATUS_LABELS[order.status] || order.status}
-                </Badge>
-              </div>
-              {order.canCancel && (
-                <Button variant="outline" size="sm" className="border-red-300 text-red-700 hover:bg-red-50" onClick={cancelOrder} disabled={cancelling}>
-                  {cancelling ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <XCircle className="w-4 h-4 mr-1" />}
-                  Siparişi İptal Et
-                </Button>
-              )}
-            </div>
-            {actionError && <p role="alert" className="text-sm text-destructive mb-3">{actionError}</p>}
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">Sipariş <span className="font-mono">{order.orderId}</span></h1>
+            <p className="mt-1 text-sm text-[#6b7c8f]">{fmtDateTime(new Date(order.createdAt))}</p>
+          </div>
+          <StatusBadge order={order} />
+        </div>
 
-            {isClosed ? (
-              <p className="flex items-center gap-2 text-sm text-red-700">
-                <XCircle className="w-5 h-5" />
-                {order.status === 'cancelled' ? 'Bu sipariş iptal edildi.' : 'Bu sipariş iade alındı.'}
-              </p>
+        {(actionError || actionNotice) && (
+          <div role={actionError ? 'alert' : 'status'} className={`mb-5 flex items-start gap-2 rounded-xl border px-4 py-3 text-sm ${actionError ? 'border-red-200 bg-red-50 text-red-800' : 'border-emerald-200 bg-emerald-50 text-emerald-800'}`}>
+            {actionError ? <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden /> : <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />}
+            {actionError || actionNotice}
+          </div>
+        )}
+
+        <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="min-w-0 space-y-5">
+            {/* Durum */}
+            {isCancelled || isReturned ? (
+              <Card>
+                <div className="flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600"><XCircle className="h-5 w-5" aria-hidden /></span>
+                  <div className="text-sm">
+                    <p className="text-base font-semibold text-[#121926]">{isCancelled ? 'Bu sipariş iptal edildi' : 'Bu sipariş iade alındı'}</p>
+                    {order.dates?.cancelledAt && isCancelled && <p className="text-[#6b7c8f]">{fmtDateTime(new Date(order.dates.cancelledAt))}</p>}
+                    {refunded ? (
+                      <p className="mt-2 rounded-lg bg-emerald-50 px-3 py-2 text-emerald-800">
+                        Ücret iadeniz başlatıldı ({formatPrice(p.total || 0)}). {order.paymentMethod === 'bank_transfer'
+                          ? 'Tutar, havale yaptığınız hesaba gönderilir.'
+                          : 'Tutarın kartınıza yansıması bankanıza bağlı olarak 2–10 iş günü sürebilir.'}
+                      </p>
+                    ) : isCancelled && order.paymentStatus !== 'PAID' ? (
+                      <p className="mt-1 text-[#6b7c8f]">Ödeme alınmadığından yapmanız gereken bir işlem yok.</p>
+                    ) : null}
+                  </div>
+                </div>
+              </Card>
             ) : isPrismaOrder ? (
-              <ol className="grid grid-cols-5 gap-1" aria-label="Sipariş durumu adımları">
-                {STEPS.map((step, i) => {
-                  const done = i <= current
-                  return (
-                    <li key={step.key} className="flex flex-col items-center text-center gap-1" aria-current={i === current ? 'step' : undefined}>
-                      <span className={`flex h-8 w-8 items-center justify-center rounded-full border-2 ${done ? 'bg-brand border-brand text-white' : 'border-gray-300 text-gray-400'}`}>
-                        {done ? <CheckCircle className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
-                      </span>
-                      <span className={`text-[11px] sm:text-xs leading-tight ${done ? 'text-gray-900 font-medium' : 'text-gray-500'}`}>{step.label}</span>
-                    </li>
-                  )
-                })}
-              </ol>
-            ) : null}
-          </CardContent>
-        </Card>
-
-        {/* Havale ödeme talimatı */}
-        {order.awaitingTransfer && (
-          <Card className="rounded-lg border-amber-200 bg-amber-50">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base flex items-center gap-2 text-amber-900"><Banknote className="w-5 h-5" />Ödemenizi bekliyoruz</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-amber-900 space-y-3">
-              <p>
-                Siparişinizin onaylanması için <strong>{dueDate.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })}</strong> tarihine
-                kadar aşağıdaki hesaplardan birine havale/EFT yapın. Açıklama alanına yalnızca sipariş numaranızı yazın.
-              </p>
-              <BankAccountsList />
-              <dl className="bg-white rounded-lg border border-amber-200 p-3 space-y-1.5">
-                <div className="flex justify-between gap-2"><dt className="font-medium">Tutar</dt><dd className="font-bold">{formatPrice(p.total || 0)}</dd></div>
-                <div className="flex justify-between gap-2"><dt className="font-medium">Açıklama</dt><dd className="font-bold">{order.orderId}</dd></div>
-              </dl>
-              <PaymentNoticeForm
-                total={p.total || 0}
-                alreadyNotified={(order.events ?? []).some((e: { type: string }) => e.type === 'payment_notice')}
-                onSubmit={(body) => orderAction('payment-notice', 'POST', body)}
-              />
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Kargo */}
-        {order.trackingNumber && (
-          <Card className="classic-card rounded-lg">
-            <CardContent className="pt-6 flex flex-wrap items-center gap-3 text-sm">
-              <Truck className="w-5 h-5 text-gray-500" />
-              <span>
-                {order.carrierName ? `${order.carrierName} · ` : ''}Takip no: <strong className="font-mono">{order.trackingNumber}</strong>
-              </span>
-              {order.trackingUrl && (
-                <Button asChild size="sm" variant="outline" className="ml-auto">
-                  <a href={order.trackingUrl} target="_blank" rel="noopener noreferrer">
-                    Kargomu Takip Et <ExternalLink className="w-3.5 h-3.5 ml-1" />
-                  </a>
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Ürünler ve tutar */}
-        <Card className="classic-card rounded-lg">
-          <CardHeader className="border-b"><CardTitle className="text-base">Ürünler</CardTitle></CardHeader>
-          <CardContent className="pt-4 space-y-4">
-            <ul className="space-y-2">
-              {(order.items || []).map((item: any, i: number) => (
-                <li key={item.id ?? i} className="flex justify-between gap-4 text-sm py-2 border-b border-gray-100 last:border-0">
-                  <span className="text-gray-800">
-                    {item.productId ? <Link href={`/products/${item.productId}`} className="hover:underline">{item.name}</Link> : item.name}
-                    {' '}× {item.quantity}
-                  </span>
-                  <span className="font-medium whitespace-nowrap">{formatPrice((item.price || 0) * (item.quantity || 1))}</span>
-                </li>
-              ))}
-            </ul>
-            {isPrismaOrder ? (
-              <dl className="text-sm space-y-1 border-t pt-3">
-                <div className="flex justify-between"><dt className="text-gray-600">Ara toplam (KDV hariç)</dt><dd>{formatPrice(p.subtotal)}</dd></div>
-                {p.couponDiscount > 0 && (
-                  <div className="flex justify-between text-green-700"><dt>Kupon {p.couponCode ? `(${p.couponCode})` : ''}</dt><dd>-{formatPrice(p.couponDiscount)}</dd></div>
+              <Card title="Sipariş durumu" icon={Clock}>
+                <ProgressTimeline order={order} />
+                {cancelReqStatus === 'REQUESTED' && (
+                  <p className="mt-4 flex items-start gap-2 rounded-lg border border-[#f5d97a] bg-[#fff8e1] px-3 py-2.5 text-sm text-[#5c4300]">
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                    İptal talebiniz inceleniyor. Sonuç e-posta ile bildirilecek.
+                  </p>
                 )}
-                {p.paymentDiscount > 0 && (
-                  <div className="flex justify-between text-green-700"><dt>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</dt><dd>-{formatPrice(p.paymentDiscount)}</dd></div>
+                {cancelReqStatus === 'REJECTED' && (
+                  <p className="mt-4 rounded-lg border border-[#e6ebf1] bg-[#f5f7fa] px-3 py-2.5 text-sm text-[#20384e]">{lastCancelReq?.message}</p>
                 )}
-                <div className="flex justify-between"><dt className="text-gray-600">KDV (%{VAT_RATE})</dt><dd>{formatPrice(p.tax)}</dd></div>
-                <div className="flex justify-between"><dt className="text-gray-600">Kargo</dt><dd>{p.shipping > 0 ? formatPrice(p.shipping) : 'Ücretsiz'}</dd></div>
-                <div className="flex justify-between font-bold text-lg pt-1"><dt>Toplam</dt><dd className="text-brand">{formatPrice(p.total)}</dd></div>
-                <p className="text-xs text-gray-500 pt-1">
-                  Ödeme yöntemi: {order.paymentMethod === 'bank_transfer' ? 'Havale / EFT' : order.paymentMethod === 'card' ? 'Kredi / Banka Kartı' : '—'}
-                </p>
-                <div className="flex flex-wrap gap-2 pt-3">
-                  <Button variant="outline" size="sm" onClick={() => downloadDocument('contract')} disabled={downloading !== null}>
-                    {downloading === 'contract' ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <FileText className="w-4 h-4 mr-1" />}
-                    Sözleşmeyi İndir
-                  </Button>
-                  {order.paymentStatus === 'PAID' && (
-                    <Button variant="outline" size="sm" onClick={() => downloadDocument('invoice')} disabled={downloading !== null}>
-                      {downloading === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <FileText className="w-4 h-4 mr-1" />}
-                      Sipariş Özetini İndir (Proforma)
-                    </Button>
+              </Card>
+            ) : (
+              <Card>
+                <p className="text-sm text-[#20384e]">Durum: <strong>{ORDER_STATUS_LABELS[order.status] || order.status}</strong></p>
+              </Card>
+            )}
+
+            {/* Havale ödeme talimatı */}
+            {order.awaitingTransfer && (
+              <section className="rounded-xl border border-[#f5d97a] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+                <header className="flex items-center gap-2 rounded-t-xl border-b border-[#f5e4a6] bg-[#fff8e1] px-4 py-3.5 sm:px-5">
+                  <Banknote className="h-5 w-5 text-[#8a6400]" aria-hidden />
+                  <h2 className="text-[15px] font-semibold text-[#5c4300]">Ödemenizi bekliyoruz</h2>
+                </header>
+                <div className="space-y-4 px-4 py-4 sm:px-5">
+                  <p className="text-sm leading-relaxed text-[#20384e]">
+                    Siparişinizin onaylanması için <strong>{dueDate.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })}</strong> tarihine kadar
+                    aşağıdaki hesaplardan birine havale/EFT yapın. Açıklama alanına yalnızca sipariş numaranızı yazın.
+                  </p>
+                  <BankTransferDetails
+                    orderNo={order.orderId}
+                    amount={formatPrice(p.total || 0)}
+                    dueDate={dueDate.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                  />
+                  <PaymentNoticeForm
+                    total={p.total || 0}
+                    alreadyNotified={events.some((e) => e.type === 'payment_notice')}
+                    onSubmit={(body) => simpleAction('payment-notice', 'POST', body)}
+                  />
+                </div>
+              </section>
+            )}
+
+            {/* Kargo */}
+            {order.trackingNumber && (
+              <Card title="Kargo bilgisi" icon={Truck}>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <div>
+                    <p className="text-xs text-[#6b7c8f]">Kargo firması</p>
+                    <p className="text-sm font-semibold text-[#121926]">{order.carrierName || '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[#6b7c8f]">Takip numarası</p>
+                    <p className="flex items-center gap-2 font-mono text-sm font-semibold text-[#121926]">
+                      {order.trackingNumber}
+                      <CopyInline value={order.trackingNumber} />
+                    </p>
+                  </div>
+                  {order.trackingUrl && (
+                    <a href={order.trackingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#f5b400] px-4 text-sm font-semibold text-[#111] hover:bg-[#e0a500] sm:ml-auto">
+                      Kargomu takip et <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                    </a>
                   )}
                 </div>
-              </dl>
-            ) : (
-              <div className="pt-4 border-t flex justify-between items-center">
-                <span className="font-semibold text-gray-900">Toplam</span>
-                <span className="text-xl font-bold text-brand">{formatPrice(p.total || 0)}</span>
-              </div>
+                {carrier?.trackingHint && <p className="mt-3 text-[13px] text-[#6b7c8f]">{carrier.trackingHint}</p>}
+              </Card>
             )}
-          </CardContent>
-        </Card>
 
-        {isPrismaOrder && (
-          <ReturnSection
-            order={order}
-            onSubmit={(body) => orderAction('returns', 'POST', body)}
-            onCancel={(returnId) => orderAction('returns', 'PATCH', { returnId, op: 'cancel' })}
-          />
-        )}
-
-        {order.customer && (
-          <Card className="classic-card rounded-lg">
-            <CardContent className="pt-6 text-sm">
-              <h2 className="font-semibold text-gray-900 mb-2">Teslimat adresi</h2>
-              <p className="text-gray-600">
-                {order.customer.name}<br />
-                {order.customer.addressLine}, {order.customer.district} / {order.customer.city} {order.customer.postalCode}<br />
-                {order.customer.phone}
-              </p>
-              {order.customerNote && <p className="text-gray-600 mt-3"><span className="font-medium text-gray-900">Notunuz:</span> {order.customerNote}</p>}
-            </CardContent>
-          </Card>
-        )}
-
-        {(order.events ?? []).length > 0 && (
-          <Card className="classic-card rounded-lg">
-            <CardHeader className="border-b"><CardTitle className="text-base">Sipariş Geçmişi</CardTitle></CardHeader>
-            <CardContent className="pt-4">
-              <ol className="relative border-l border-gray-200 ml-2 space-y-4">
-                {[...order.events].reverse().map((e: any) => (
-                  <li key={e.id} className="ml-4">
-                    <span className="absolute -left-1.5 mt-1.5 h-3 w-3 rounded-full bg-brand" />
-                    <p className="text-sm text-gray-800">{e.message}</p>
-                    <p className="text-xs text-gray-500">{fmtDateTime(new Date(e.createdAt))}</p>
+            {/* Ürünler */}
+            <Card title={`Ürünler (${(order.items || []).length})`} icon={Package}>
+              <ul className="divide-y divide-[#eef1f5]">
+                {(order.items || []).map((item: any, i: number) => (
+                  <li key={item.id ?? i} className="flex items-start justify-between gap-4 py-3 text-sm first:pt-0 last:pb-0">
+                    <span className="min-w-0 text-[#121926]">
+                      {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{item.name}</Link> : <span className="font-medium">{item.name}</span>}
+                      <span className="block text-xs text-[#6b7c8f]">{item.quantity} adet</span>
+                    </span>
+                    <span className="shrink-0 font-semibold tabular-nums text-[#121926]">{formatPrice((item.price || 0) * (item.quantity || 1))}</span>
                   </li>
                 ))}
-              </ol>
-            </CardContent>
-          </Card>
-        )}
+              </ul>
+            </Card>
 
-        <p className="text-xs text-gray-500">
-          Sorularınız için <Link href="/contact" className="text-brand hover:underline">iletişim</Link> sayfamızdan bize ulaşabilirsiniz.
-          İade ve cayma koşulları için <Link href="/returns" className="text-brand hover:underline">İade Politikası</Link>.
-        </p>
+            {isPrismaOrder && (
+              <ReturnSection
+                order={order}
+                onSubmit={(body) => simpleAction('returns', 'POST', body)}
+                onCancel={(returnId) => simpleAction('returns', 'PATCH', { returnId, op: 'cancel' })}
+              />
+            )}
+
+            {events.length > 0 && (
+              <Card title="Sipariş geçmişi" icon={ReceiptText}>
+                <ol className="relative ml-1.5 space-y-4 border-l-2 border-[#eef1f5]">
+                  {[...events].reverse().map((e, i) => (
+                    <li key={e.id} className="ml-4">
+                      <span className={`absolute -left-[7px] mt-1.5 h-3 w-3 rounded-full ring-2 ring-white ${i === 0 ? 'bg-[#f5b400]' : 'bg-[#0b2540]'}`} />
+                      <p className="text-sm text-[#121926]">{e.message}</p>
+                      <p className="text-xs text-[#6b7c8f]">{fmtDateTime(new Date(e.createdAt))}</p>
+                    </li>
+                  ))}
+                </ol>
+              </Card>
+            )}
+          </div>
+
+          {/* Sağ sütun */}
+          <aside className="min-w-0 space-y-5">
+            <Card title="Ödeme özeti" icon={CreditCard}>
+              {isPrismaOrder ? (
+                <dl className="space-y-2 text-sm">
+                  <div className="flex justify-between gap-3"><dt className="text-[#6b7c8f]">Ara toplam (KDV hariç)</dt><dd className="tabular-nums">{formatPrice(p.subtotal)}</dd></div>
+                  {p.couponDiscount > 0 && (
+                    <div className="flex justify-between gap-3 text-emerald-700"><dt>Kupon {p.couponCode ? `(${p.couponCode})` : ''}</dt><dd className="tabular-nums">−{formatPrice(p.couponDiscount)}</dd></div>
+                  )}
+                  {p.paymentDiscount > 0 && (
+                    <div className="flex justify-between gap-3 text-emerald-700"><dt>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</dt><dd className="tabular-nums">−{formatPrice(p.paymentDiscount)}</dd></div>
+                  )}
+                  <div className="flex justify-between gap-3"><dt className="text-[#6b7c8f]">KDV (%{VAT_RATE})</dt><dd className="tabular-nums">{formatPrice(p.tax)}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#6b7c8f]">Kargo</dt><dd>{p.shipping > 0 ? formatPrice(p.shipping) : <span className="text-emerald-700">Ücretsiz</span>}</dd></div>
+                  <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-2.5">
+                    <dt className="font-semibold text-[#121926]">Toplam</dt>
+                    <dd className="text-lg font-bold tabular-nums text-[#0b2540]">{formatPrice(p.total)}</dd>
+                  </div>
+                  <div className="flex justify-between gap-3 pt-1 text-xs text-[#6b7c8f]">
+                    <dt>Ödeme yöntemi</dt>
+                    <dd>{order.paymentMethod === 'bank_transfer' ? 'Havale / EFT' : order.paymentMethod === 'card' ? 'Kredi / banka kartı' : '—'}</dd>
+                  </div>
+                </dl>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-[#121926]">Toplam</span>
+                  <span className="text-lg font-bold text-[#0b2540]">{formatPrice(p.total || 0)}</span>
+                </div>
+              )}
+              {isPrismaOrder && (
+                <div className="mt-4 flex flex-col gap-2">
+                  <button type="button" className={btnOutline} onClick={() => downloadDocument('contract')} disabled={downloading !== null}>
+                    {downloading === 'contract' ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <FileText className="h-4 w-4" aria-hidden />}
+                    Sözleşmeyi indir
+                  </button>
+                  {order.paymentStatus === 'PAID' && (
+                    <button type="button" className={btnOutline} onClick={() => downloadDocument('invoice')} disabled={downloading !== null}>
+                      {downloading === 'invoice' ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <FileText className="h-4 w-4" aria-hidden />}
+                      Sipariş özeti (proforma)
+                    </button>
+                  )}
+                </div>
+              )}
+            </Card>
+
+            {order.customer && (
+              <Card title="Teslimat adresi" icon={MapPin}>
+                <p className="text-sm leading-relaxed text-[#20384e]">
+                  <span className="font-semibold text-[#121926]">{order.customer.name}</span><br />
+                  {order.customer.addressLine}<br />
+                  {order.customer.district} / {order.customer.city} {order.customer.postalCode}<br />
+                  {order.customer.phone}
+                </p>
+                {order.customerNote && <p className="mt-3 rounded-lg bg-[#f5f7fa] px-3 py-2 text-sm text-[#20384e]"><span className="font-medium">Notunuz:</span> {order.customerNote}</p>}
+              </Card>
+            )}
+
+            {(canCancelNow || canRequestCancel) && (
+              <Card title={canCancelNow ? 'Siparişi iptal et' : 'İptal talebi'} icon={RotateCcw}>
+                {!cancelOpen ? (
+                  <>
+                    <p className="text-sm text-[#6b7c8f]">
+                      {canCancelNow
+                        ? 'Ödemesi henüz alınmamış siparişinizi hemen iptal edebilirsiniz.'
+                        : 'Siparişiniz kargoya verilmeden iptal talebi oluşturabilirsiniz. Onaylanırsa ödemenizin tamamı iade edilir.'}
+                    </p>
+                    <button type="button" onClick={() => { setCancelOpen(true); setActionNotice(''); setActionError('') }} className={`${btnOutline} mt-3 w-full border-red-200 text-red-700 hover:bg-red-50`}>
+                      <XCircle className="h-4 w-4" aria-hidden />
+                      {canCancelNow ? 'Siparişi iptal et' : 'İptal talebi oluştur'}
+                    </button>
+                  </>
+                ) : (
+                  <div className="space-y-3">
+                    <label htmlFor="cancel-reason" className="block text-sm font-medium text-[#20384e]">İptal nedeni <span className="font-normal text-[#6b7c8f]">(isteğe bağlı)</span></label>
+                    <textarea id="cancel-reason" rows={3} maxLength={500} value={cancelReason} onChange={(e) => setCancelReason(e.target.value)}
+                      className="w-full rounded-lg border border-[#d3d9e1] px-3 py-2 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
+                    <div className="flex gap-2">
+                      <button type="button" onClick={submitCancel} disabled={cancelling} className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-600 px-3 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-60">
+                        {cancelling && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
+                        {canCancelNow ? 'İptal et' : 'Talebi gönder'}
+                      </button>
+                      <button type="button" onClick={() => setCancelOpen(false)} className={btnOutline} disabled={cancelling}>Vazgeç</button>
+                    </div>
+                  </div>
+                )}
+              </Card>
+            )}
+
+            <p className="px-1 text-xs leading-relaxed text-[#6b7c8f]">
+              Sorularınız için <a href={SELLER.phoneHref} className="font-medium text-[#0b2540]">{SELLER.phone}</a> veya{' '}
+              <Link href="/contact" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">iletişim</Link> sayfamız.
+              İade koşulları: <Link href="/returns" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">İade ve cayma</Link>.
+            </p>
+          </aside>
+        </div>
       </div>
     </ClassicPageShell>
   )

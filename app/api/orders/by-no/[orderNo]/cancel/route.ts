@@ -1,16 +1,18 @@
 export const dynamic = 'force-dynamic'
 
 /**
- * Müşteri sipariş iptali — yalnızca ödemesi alınmamış, "Beklemede" durumundaki sipariş.
+ * Müşteri sipariş iptali.
+ *  - Ödemesi alınmamış, "Beklemede" sipariş → hemen iptal (stok + kupon iadesi, admin'e bildirim)
+ *  - Ödemesi alınmış, henüz kargoya verilmemiş sipariş → iptal TALEBİ (admin onaylar/reddeder)
  * Yetki: sipariş sahibi (Bearer token) veya misafir için body.email + body.phone eşleşmesi.
- * Body: { email?, phone?, reason? }
+ * Body: { email?, phone?, reason? } → { success, order, requested? }
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCustomerFromRequest } from '@/lib/customerAuth'
 import { isRateLimited } from '@/lib/rate-limit'
-import { changeOrderStatus, OrderTransitionError } from '@/lib/order-service'
+import { changeOrderStatus, requestOrderCancellation, OrderTransitionError } from '@/lib/order-service'
 import { toCustomerOrder } from '@/lib/customer-order'
 
 const normalizePhone = (s: unknown) =>
@@ -39,20 +41,30 @@ export async function POST(
       phone.length >= 10 && normalizePhone(order.shippingPhone) === phone
     if (!isOwner && !isGuestMatch) return notFound
 
-    if (order.status !== 'PENDING' || order.paymentStatus === 'PAID') {
+    const reason = typeof body?.reason === 'string' ? body.reason.trim().slice(0, 500) : null
+    let requested = false
+    if (order.status === 'PENDING' && order.paymentStatus !== 'PAID') {
+      await changeOrderStatus(order.id, 'CANCELLED', { actor: 'customer', reason })
+    } else if (order.paymentStatus === 'PAID' && order.status !== 'SHIPPED' && order.status !== 'DELIVERED') {
+      // Talep kuralları (açık/reddedilmiş talep, durum) requestOrderCancellation içinde; hata mesajı 409 ile döner
+      await requestOrderCancellation(order.id, { reason, actor: 'customer' })
+      requested = true
+    } else {
       return NextResponse.json(
-        { success: false, error: 'Bu sipariş artık iptal edilemiyor. Lütfen bizimle iletişime geçin.' },
+        {
+          success: false,
+          error: order.status === 'SHIPPED' || order.status === 'DELIVERED'
+            ? 'Kargoya verilmiş sipariş iptal edilemez. Teslim aldıktan sonra iade talebi oluşturabilirsiniz.'
+            : 'Bu sipariş artık iptal edilemiyor. Lütfen bizimle iletişime geçin.',
+        },
         { status: 409 }
       )
     }
-
-    const reason = typeof body?.reason === 'string' ? body.reason.trim().slice(0, 500) : null
-    await changeOrderStatus(order.id, 'CANCELLED', { actor: 'customer', reason })
     const updated = await prisma.order.findUnique({
       where: { id: order.id },
       include: { lines: true, events: { where: { visibleToCustomer: true }, orderBy: { createdAt: 'asc' } }, returnRequests: { orderBy: { createdAt: 'asc' } } },
     })
-    return NextResponse.json({ success: true, order: updated ? toCustomerOrder(updated) : null })
+    return NextResponse.json({ success: true, requested, order: updated ? toCustomerOrder(updated) : null })
   } catch (e) {
     if (e instanceof OrderTransitionError) {
       return NextResponse.json({ success: false, error: e.message }, { status: 409 })

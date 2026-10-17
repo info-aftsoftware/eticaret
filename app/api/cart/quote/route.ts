@@ -1,15 +1,27 @@
 export const dynamic = 'force-dynamic'
 
 /**
- * Sepet fiyat teklifi: her kalem için güncel (kampanyalı) birim fiyat ve satılabilirlik.
+ * Sepet fiyat teklifi: her kalem için güncel (kampanyalı) birim fiyat, stok ve satılabilirlik.
  * Sepet/ödeme sayfası bununla tarayıcıdaki fiyatları tazeler; sipariş POST /api/orders aynı hesaplayıcıyı kullanır.
  * Body: { items: [{ id, quantity }] }
+ * Yanıt: { lines: [{ id, available, unitPrice?, campaign?, productId?, stock?, error? }] }
+ * Aynı ürünün varyantları stoğu paylaştığı için adet aşımı ürün bazında kontrol edilir.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { priceOrder, PricingError } from '@/lib/order-pricing'
+import { priceOrder, PricingError, type PricedLine } from '@/lib/order-pricing'
 import { getStorefrontProductById } from '@/lib/discounts'
 import { isRateLimited } from '@/lib/rate-limit'
+
+type QuoteLine = {
+  id: string
+  available: boolean
+  unitPrice?: number
+  campaign?: string | null
+  productId?: string
+  stock?: number
+  error?: string
+}
 
 export async function POST(request: NextRequest) {
   if (isRateLimited(request, 'cart-quote', 60, 60_000)) {
@@ -18,23 +30,36 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => ({}))
   const items = (Array.isArray(body.items) ? body.items : []).slice(0, 100) as { id?: unknown; quantity?: unknown }[]
 
-  const lines = []
+  const priced: { id: string; quantity: number; line?: PricedLine; result: QuoteLine }[] = []
   for (const raw of items) {
     const id = typeof raw?.id === 'string' ? raw.id : ''
     if (!id) continue
+    const quantity = Math.max(1, Math.floor(Number(raw.quantity)) || 1)
     try {
-      const priced = await priceOrder([{ id, quantity: raw.quantity }])
-      const l = priced.lines[0]
+      // Adet 1 ile fiyatlandırılır; stok aşımı aşağıda ürün bazında değerlendirilir
+      const l = (await priceOrder([{ id, quantity: 1 }])).lines[0]
       const product = await getStorefrontProductById(l.productId)
-      lines.push({
+      priced.push({
         id,
-        available: true,
-        unitPrice: l.unitPrice,
-        campaign: product?.campaign?.name ?? null,
+        quantity,
+        line: l,
+        result: { id, available: true, unitPrice: l.unitPrice, campaign: product?.campaign?.name ?? null, productId: l.productId, stock: l.stock },
       })
     } catch (e) {
-      lines.push({ id, available: false, error: e instanceof PricingError ? e.message : 'Ürün fiyatlandırılamadı.' })
+      priced.push({ id, quantity, result: { id, available: false, error: e instanceof PricingError ? e.message : 'Ürün fiyatlandırılamadı.' } })
     }
   }
-  return NextResponse.json({ lines })
+
+  const perProduct = new Map<string, number>()
+  for (const p of priced) if (p.line) perProduct.set(p.line.productId, (perProduct.get(p.line.productId) ?? 0) + p.quantity)
+  for (const p of priced) {
+    const stock = p.line?.stock
+    if (!p.line || typeof stock !== 'number') continue
+    if ((perProduct.get(p.line.productId) ?? 0) > stock) {
+      p.result.available = false
+      p.result.error = `"${p.line.productName}" için stokta yalnızca ${stock} adet var. Lütfen adedi azaltın.`
+    }
+  }
+
+  return NextResponse.json({ lines: priced.map((p) => p.result) })
 }

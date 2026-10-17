@@ -245,10 +245,17 @@ export async function updateReturnRequest(
       // İade gelen ürünler stoğa geri eklenir
       for (const i of itemsOf(r)) {
         const line = order.lines.find((l) => l.id === i.lineId)
-        const productId = (line?.variantMatrix as { productId?: string } | null)?.productId
+        const vm = line?.variantMatrix as { productId?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
+        const productId = vm?.productId
         if (!productId) continue
-        await prisma.stockOverride.updateMany({ where: { productId }, data: { stock: { increment: i.quantity } } })
-        await prisma.productOverride.updateMany({ where: { productId, stock: { not: null } }, data: { stock: { increment: i.quantity } } })
+        // order-service restoreStock ile aynı kural: yeni siparişlerde yalnızca gerçekten düşülen stok kaynağına geri eklenir
+        const hasFlags = typeof vm?.stockDecremented === 'boolean'
+        if (!hasFlags || vm?.stockDecremented) {
+          await prisma.stockOverride.updateMany({ where: { productId }, data: { stock: { increment: i.quantity } } })
+        }
+        if (!hasFlags || vm?.productStockDecremented) {
+          await prisma.productOverride.updateMany({ where: { productId, stock: { not: null } }, data: { stock: { increment: i.quantity } } })
+        }
       }
       await logOrderEvent(orderId, { type: 'return', status: 'RECEIVED', message: `İade edilen ürünler teslim alındı (${r.requestNo}), stoğa eklendi.`, actor: opts.actor })
       break

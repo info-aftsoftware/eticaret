@@ -1,215 +1,61 @@
 export const dynamic = 'force-dynamic'
 
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import jwt from 'jsonwebtoken'
+/**
+ * Favori ürün özetleri (favoriler sayfası / profil sekmesi).
+ * Favori listesi tarayıcıda tutulur (üye: Firestore, misafir: localStorage); bu uç yalnızca güncel
+ * katalog bilgisini (kampanyalı fiyat, stok, görsel, varyantlar) döner.
+ * GET ?ids=a,b,c  →  { products: [...], missing: [...] }
+ */
 
-function getUserIdFromToken(request: NextRequest): string | null {
-  const authHeader = request.headers.get('authorization')
-  const token = authHeader?.replace('Bearer ', '')
-  
-  if (!token) return null
-  
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET ?? '') as { userId?: string }
-    return decoded.userId ?? null
-  } catch {
-    return null
-  }
-}
+import { NextRequest, NextResponse } from 'next/server'
+import { getStorefrontProducts } from '@/lib/discounts'
+import { isRateLimited } from '@/lib/rate-limit'
 
 export async function GET(request: NextRequest) {
-  try {
-    const userId = getUserIdFromToken(request)
-    
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    const favorites = await prisma.favorite.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
-      include: {
-        // Try to get product details if Product model exists
-      },
-    })
-
-    // Get product details for each favorite
-    const favoritesWithProducts = await Promise.all(
-      favorites.map(async (favorite) => {
-        try {
-          // Try to get product from Product model if it exists
-          const product = await prisma.product.findUnique({
-            where: { id: favorite.productId },
-            select: {
-              id: true,
-              slug: true,
-              name: true,
-              description: true,
-              images: true,
-              category: {
-                select: {
-                  id: true,
-                  name: true,
-                },
-              },
-              variants: {
-                where: { isActive: true },
-                select: {
-                  id: true,
-                  price: true,
-                  stock: {
-                    select: {
-                      onHand: true,
-                      reserved: true,
-                    },
-                  },
-                },
-                take: 1,
-                orderBy: { price: 'asc' },
-              },
-            },
-          }).catch(() => null)
-
-          if (product) {
-            // Get first image from images JSON
-            const images = product.images as any
-            const firstImage = images && Array.isArray(images) && images.length > 0 
-              ? images[0].url 
-              : null
-
-            // Get price from first variant
-            const firstVariant = product.variants && product.variants.length > 0 
-              ? product.variants[0] 
-              : null
-            const price = firstVariant ? Number(firstVariant.price) : 0
-            const stock = firstVariant?.stock 
-              ? firstVariant.stock.onHand - firstVariant.stock.reserved 
-              : 0
-
-            return {
-              ...favorite,
-              product: {
-                id: product.id,
-                slug: product.slug,
-                name: product.name,
-                description: product.description,
-                price,
-                image: firstImage,
-                category: product.category?.name || null,
-                stock,
-              },
-            }
-          }
-
-          return {
-            ...favorite,
-            product: null,
-          }
-        } catch {
-          return {
-            ...favorite,
-            product: null,
-          }
-        }
-      })
-    )
-
-    return NextResponse.json({
-      success: true,
-      favorites: favoritesWithProducts,
-    })
-  } catch (error) {
-    console.error('Error fetching favorites:', error)
-    return NextResponse.json(
-      { success: false, error: 'Bir hata oluştu' },
-      { status: 500 }
-    )
+  if (isRateLimited(request, 'favorites', 60, 60_000)) {
+    return NextResponse.json({ error: 'Çok fazla istek.' }, { status: 429 })
   }
-}
+  const ids = Array.from(
+    new Set(
+      (request.nextUrl.searchParams.get('ids') || '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean)
+    )
+  ).slice(0, 200)
+  if (ids.length === 0) return NextResponse.json({ products: [], missing: [] })
 
-export async function POST(request: NextRequest) {
   try {
-    const userId = getUserIdFromToken(request)
-    
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    const { productId } = await request.json()
-
-    // Check if already favorited
-    const existing = await prisma.favorite.findFirst({
-      where: { userId, productId },
-    })
-
-    if (existing) {
-      return NextResponse.json({
-        success: false,
-        error: 'Ürün zaten favorilerinizde',
+    const all = await getStorefrontProducts()
+    const byId = new Map(all.map((p) => [p.id, p]))
+    const products = []
+    const missing: string[] = []
+    for (const id of ids) {
+      const p = byId.get(id) ?? all.find((x) => x.slug === id)
+      if (!p) {
+        missing.push(id)
+        continue
+      }
+      products.push({
+        id: p.id,
+        slug: p.slug ?? null,
+        name: p.name,
+        description: p.description,
+        brand: p.brand ?? null,
+        category: p.category,
+        price: p.price,
+        oldPrice: p.oldPrice ?? null,
+        discount: p.discount ?? null,
+        campaign: p.campaign?.name ?? null,
+        image: p.images?.[0] ?? p.image ?? null,
+        stock: typeof p.stock === 'number' ? p.stock : null,
+        variants: (p.variants ?? []).map((v) => ({ key: v.key, label: v.label, price: v.price })),
+        defaultVariantKey: p.defaultVariantKey ?? null,
       })
     }
-
-    const favorite = await prisma.favorite.create({
-      data: {
-        userId,
-        productId,
-      },
-    })
-
-    return NextResponse.json({
-      success: true,
-      favorite,
-    })
+    return NextResponse.json({ products, missing })
   } catch (error) {
-    console.error('Error adding favorite:', error)
-    return NextResponse.json(
-      { success: false, error: 'Bir hata oluştu' },
-      { status: 500 }
-    )
+    console.error('Favorites GET error:', error)
+    return NextResponse.json({ error: 'Ürün bilgileri alınamadı.' }, { status: 500 })
   }
 }
-
-export async function DELETE(request: NextRequest) {
-  try {
-    const userId = getUserIdFromToken(request)
-    
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    const { searchParams } = new URL(request.url)
-    const productId = searchParams.get('productId')
-
-    if (!productId) {
-      return NextResponse.json(
-        { success: false, error: 'Product ID required' },
-        { status: 400 }
-      )
-    }
-
-    await prisma.favorite.deleteMany({
-      where: { userId, productId },
-    })
-
-    return NextResponse.json({
-      success: true,
-    })
-  } catch (error) {
-    console.error('Error removing favorite:', error)
-    return NextResponse.json(
-      { success: false, error: 'Bir hata oluştu' },
-      { status: 500 }
-    )
-  }
-}
-

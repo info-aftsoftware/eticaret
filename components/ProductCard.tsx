@@ -3,15 +3,14 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Card } from '@/components/ui/card'
-import { Heart, Minus, Package, Plus } from 'lucide-react'
+import { ChevronRight, Heart, Minus, Package, Plus, ShoppingCart } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import type { ProductVariant } from '@/components/AddToCartButton'
-import { ShoppingCart } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
+import { useFavorites } from '@/lib/useFavorites'
 
 export interface ProductCardProduct {
   id: string
@@ -21,6 +20,10 @@ export interface ProductCardProduct {
   image?: string
   category?: string
   brand?: string
+  /** Bazı listeler ürünü olduğu gibi verir; prop verilmezse bu alanlar kullanılır */
+  stock?: number
+  isVariantProduct?: boolean
+  variants?: unknown[]
 }
 
 export interface ProductCardProps {
@@ -42,19 +45,20 @@ export function ProductCard({
   selectedVariant,
   variant = 'full',
   className = '',
-  stock,
+  stock: stockProp,
   isVariantProduct,
   oldPrice,
   discount,
 }: ProductCardProps) {
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
-  const { addItem, updateQuantity, getItemQuantity } = useCartStore()
+  const addItem = useCartStore((s) => s.addItem)
+  const updateQuantity = useCartStore((s) => s.updateQuantity)
   const { addToast } = useToast()
+  const { isFavorite, toggle } = useFavorites()
   const isCompact = variant === 'compact'
   const [imageError, setImageError] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [isFavorited, setIsFavorited] = useState(false)
 
   useEffect(() => {
     setImageError(false)
@@ -64,61 +68,95 @@ export function ProductCard({
     setMounted(true)
   }, [])
 
+  const stock = stockProp ?? product.stock
+  const hasVariants = !selectedVariant && Boolean(isVariantProduct ?? product.isVariantProduct ?? (product.variants?.length ?? 0) > 0)
+  const variantCount = product.variants?.length ?? 0
+  const outOfStock = typeof stock === 'number' && stock <= 0
+  const lowStock = typeof stock === 'number' && stock > 0 && stock <= 5
+
   const cartId = selectedVariant ? `${product.id}-${selectedVariant.key}` : product.id
   const displayName = selectedVariant ? `${product.name} (${selectedVariant.label})` : product.name
-  const quantity = mounted ? getItemQuantity(cartId) : 0
+  const quantity = useCartStore((s) => (mounted ? s.items.find((i) => i.id === cartId)?.quantity ?? 0 : 0))
+  const productQty = useCartStore((s) =>
+    mounted ? s.items.filter((i) => (i.productId ?? i.id) === product.id || i.id === cartId).reduce((n, i) => n + i.quantity, 0) : 0
+  )
   const isInCart = quantity > 0
+  const atMax = typeof stock === 'number' && productQty >= stock
+  const favorited = mounted && isFavorite(product.id)
+  const href = `/products/${product.id}`
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const stop = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+  }
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    stop(e)
+    if (outOfStock || hasVariants) return
     const price = selectedVariant ? selectedVariant.price : product.price
-    addItem({ id: cartId, name: displayName, description: product.description, price, image: product.image, category: product.category })
-    addToast({ type: 'success', title: 'Sepete eklendi', description: `${displayName} sepete eklendi.` })
+    const added = addItem({
+      id: cartId,
+      productId: product.id,
+      maxQuantity: typeof stock === 'number' ? stock : undefined,
+      name: displayName,
+      description: product.description,
+      price,
+      image: product.image,
+      category: product.category,
+    })
+    if (added > 0) addToast({ type: 'success', title: 'Sepete eklendi', description: `${displayName} sepete eklendi.` })
+    else addToast({ type: 'info', title: 'Stok sınırı', description: `Bu üründen en fazla ${stock} adet alabilirsiniz.` })
   }
 
   const handleIncrease = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    stop(e)
+    if (atMax) {
+      addToast({ type: 'info', title: 'Stok sınırı', description: `Bu üründen en fazla ${stock} adet alabilirsiniz.` })
+      return
+    }
     updateQuantity(cartId, quantity + 1)
   }
 
   const handleDecrease = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
+    stop(e)
     updateQuantity(cartId, quantity - 1)
   }
 
-  const handleFavorite = (e: React.MouseEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsFavorited((prev) => !prev)
-    addToast({
-      type: 'success',
-      title: isFavorited ? 'Favorilerden çıkarıldı' : 'Favorilere eklendi',
-      description: displayName,
-    })
+  const handleFavorite = async (e: React.MouseEvent) => {
+    stop(e)
+    try {
+      const added = await toggle(product.id)
+      addToast({ type: 'success', title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı', description: product.name })
+    } catch {
+      addToast({ type: 'error', title: 'Favori kaydedilemedi', description: 'Lütfen tekrar deneyin.' })
+    }
   }
 
   const hasRealImage = Boolean(product.image && !imageError && !product.image.includes('placeholder'))
   const displayPrice = selectedVariant ? selectedVariant.price : product.price
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const showOldPrice = !selectedVariant && !!oldPrice && oldPrice > displayPrice
+
+  const btnBase = `inline-flex w-full items-center justify-center gap-1.5 rounded-lg font-semibold transition-colors touch-manipulation ${
+    isCompact ? 'h-9 text-xs' : 'h-10 text-xs sm:text-sm'
+  }`
+  const icon = isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4'
 
   return (
-    <Link href={`/products/${product.id}`} className="block h-full">
-      <Card
-        className={`group bg-white rounded-xl border border-slate-200 shadow-sm hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col h-full ${className}`}
-      >
-        {/* Resim — sabit oran, sıfır iç padding */}
+    <div
+      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-[#e6ebf1] bg-white transition-all duration-200 hover:border-[#d3d9e1] hover:shadow-[0_8px_24px_rgba(11,37,64,0.08)] ${className}`}
+    >
+      <Link href={href} className="flex flex-1 flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2540]/30 rounded-t-xl">
+        {/* Görsel — sabit oran */}
         <div className="relative aspect-square overflow-hidden bg-white">
-          <div className={`absolute inset-0 flex items-center justify-center ${hasRealImage ? 'bg-white' : 'bg-slate-50'}`}>
+          <div className={`absolute inset-0 flex items-center justify-center ${hasRealImage ? 'bg-white' : 'bg-[#f5f7fa]'}`}>
             {hasRealImage ? (
               <Image
                 src={product.image!}
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                className="object-contain p-3 group-hover:scale-105 transition-transform duration-300"
+                className={`object-contain p-3 transition-transform duration-300 group-hover:scale-[1.04] ${outOfStock ? 'opacity-60' : ''}`}
                 onError={() => setImageError(true)}
               />
             ) : (
@@ -126,92 +164,106 @@ export function ProductCard({
             )}
           </div>
 
-          {/* Kampanya rozeti */}
-          {!!discount && discount > 0 && (
-            <span className="absolute top-2 left-2 z-10 rounded-md bg-brand px-1.5 py-0.5 text-[11px] font-bold text-white shadow-sm">
-              %{discount} İndirim
-            </span>
-          )}
-
-          {/* Favori butonu — hover'da görünür */}
-          <button
-            type="button"
-            onClick={handleFavorite}
-            aria-label={isFavorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}
-            className={`absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full border transition-all duration-200 shadow-sm z-10
-              ${isFavorited
-                ? 'bg-brand border-brand text-white opacity-100'
-                : 'bg-white border-slate-200 text-slate-400 hover:border-brand hover:text-brand opacity-0 group-hover:opacity-100'}
-            `}
-          >
-            <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'fill-white' : ''}`} />
-          </button>
+          <div className="absolute left-2 top-2 z-10 flex flex-col items-start gap-1">
+            {!!discount && discount > 0 && !outOfStock && (
+              <span className="rounded-md bg-[#f5b400] px-1.5 py-0.5 text-[11px] font-bold text-[#111]">%{discount} İndirim</span>
+            )}
+            {outOfStock && (
+              <span className="rounded-md bg-[#121926]/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">Tükendi</span>
+            )}
+          </div>
         </div>
 
-        {/* Bilgi alanı — içerik kadar uzar */}
-        <div className={`${isCompact ? 'p-2 sm:p-3' : 'p-3'} border-t border-slate-100 flex flex-col`}>
+        {/* Bilgi alanı */}
+        <div className={`flex flex-1 flex-col border-t border-[#f1f4f8] ${isCompact ? 'p-2.5 sm:p-3' : 'p-3'}`}>
           {product.brand && (
-            <p className={`text-brand font-semibold uppercase tracking-wide mb-1 ${isCompact ? 'text-[10px]' : 'text-[10px] sm:text-xs'}`}>
+            <p className={`mb-1 font-semibold uppercase tracking-wide text-[#6b7c8f] ${isCompact ? 'text-[10px]' : 'text-[10px] sm:text-[11px]'}`}>
               {product.brand}
             </p>
           )}
-          <h3 className={`font-medium text-slate-900 line-clamp-2 leading-tight ${isCompact ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+          <h3 className={`line-clamp-2 font-medium leading-snug text-[#121926] ${isCompact ? 'text-xs' : 'text-xs sm:text-sm'}`}>
             {product.name}
           </h3>
-          <div className="flex items-center justify-between mt-1.5">
-            <p className={`font-bold text-slate-900 ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
-              {!selectedVariant && oldPrice && oldPrice > displayPrice && (
-                <span className="block text-[11px] font-normal text-slate-400 line-through">{formatPrice(oldPrice)}</span>
+          <div className="mt-auto flex items-end justify-between gap-2 pt-2">
+            <p className={`font-bold leading-tight text-[#121926] ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
+              {showOldPrice && (
+                <span className="block text-[11px] font-normal text-[#6b7c8f] line-through">{formatPrice(oldPrice!)}</span>
               )}
-              <span className={!selectedVariant && oldPrice && oldPrice > displayPrice ? 'text-brand' : ''}>{formatPrice(displayPrice)}</span>
+              <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(displayPrice)}</span>
             </p>
-            {stock !== undefined && stock <= 5 && stock > 0 && (
-              <span className="text-[10px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">
-                Son {stock} adet
-              </span>
-            )}
-          </div>
-
-          {/* Sepet butonu — hover'da açılır */}
-          <div className="mt-2 overflow-hidden">
-            {isInCart ? (
-              <div
-                className={`flex w-full items-center overflow-hidden rounded-xl border border-brand/20 bg-white text-brand shadow-sm opacity-0 max-h-0 translate-y-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:max-h-12 group-hover:translate-y-0 group-hover:pointer-events-auto ${isCompact ? 'h-9' : 'h-10'}`}
-              >
-                <button
-                  type="button"
-                  onClick={handleDecrease}
-                  className="flex h-full w-10 items-center justify-center transition-colors hover:bg-brand/5"
-                  aria-label="Adet azalt"
-                >
-                  <Minus className={`${isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
-                </button>
-                <span className={`flex-1 text-center font-semibold tabular-nums ${isCompact ? 'text-xs' : 'text-sm'}`}>
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={handleIncrease}
-                  className="flex h-full w-10 items-center justify-center transition-colors hover:bg-brand/5"
-                  aria-label="Adet artır"
-                >
-                  <Plus className={`${isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4'}`} />
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className={`inline-flex w-full items-center justify-center gap-2 rounded-xl border border-brand/20 bg-white text-brand shadow-sm opacity-0 max-h-0 translate-y-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:max-h-12 group-hover:translate-y-0 group-hover:pointer-events-auto hover:border-brand hover:shadow-md active:translate-y-0 ${isCompact ? 'h-9 text-xs font-semibold' : 'h-10 text-xs sm:text-sm font-semibold'}`}
-                aria-label="Sepete ekle"
-              >
-                <ShoppingCart className={`${isCompact ? 'w-3.5 h-3.5' : 'w-4 h-4'} shrink-0`} />
-                <span>Sepete Ekle</span>
-              </button>
-            )}
+            {hasVariants && variantCount > 1 ? (
+              <span className="shrink-0 rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[10px] font-semibold text-[#20384e]">{variantCount} seçenek</span>
+            ) : lowStock ? (
+              <span className="shrink-0 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">Son {stock} adet</span>
+            ) : null}
           </div>
         </div>
-      </Card>
-    </Link>
+      </Link>
+
+      {/* Favori — dokunmatikte her zaman görünür */}
+      <button
+        type="button"
+        onClick={handleFavorite}
+        aria-label={favorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+        aria-pressed={favorited}
+        className={`absolute right-2 top-2 z-10 flex h-9 w-9 !min-h-0 !min-w-0 items-center justify-center rounded-full border shadow-sm transition-colors touch-manipulation ${
+          favorited
+            ? 'border-[#f5b400] bg-[#f5b400] text-[#111]'
+            : 'border-[#e6ebf1] bg-white/95 text-[#6b7c8f] hover:border-[#0b2540] hover:text-[#0b2540]'
+        }`}
+      >
+        <Heart className={`h-4 w-4 ${favorited ? 'fill-current' : ''}`} />
+      </button>
+
+      {/* Sepet aksiyonu — her cihazda görünür; masaüstünde kart üzerine gelince vurgulanır */}
+      <div className={isCompact ? 'px-2.5 pb-2.5 sm:px-3 sm:pb-3' : 'px-3 pb-3'}>
+        {outOfStock ? (
+          <button type="button" disabled aria-disabled="true" className={`${btnBase} cursor-not-allowed bg-[#f1f4f8] text-[#6b7c8f]`}>
+            Stokta yok
+          </button>
+        ) : hasVariants ? (
+          <Link
+            href={href}
+            className={`${btnBase} border border-[#d3d9e1] bg-white text-[#0b2540] hover:border-[#0b2540] hover:bg-[#0b2540] hover:text-white [@media(hover:hover)]:group-hover:border-[#0b2540]`}
+          >
+            <span>Seçenekleri Gör</span>
+            <ChevronRight className={`${icon} shrink-0`} />
+          </Link>
+        ) : isInCart ? (
+          <div className={`flex w-full items-center overflow-hidden rounded-lg bg-[#0b2540] text-white ${isCompact ? 'h-9' : 'h-10'}`}>
+            <button
+              type="button"
+              onClick={handleDecrease}
+              className="flex h-full w-10 items-center justify-center transition-colors hover:bg-white/10 touch-manipulation"
+              aria-label="Adet azalt"
+            >
+              <Minus className={icon} />
+            </button>
+            <span className={`flex-1 min-w-0 truncate text-center font-semibold tabular-nums ${isCompact ? 'text-xs' : 'text-sm'}`} aria-live="polite">
+              {quantity}<span className="hidden min-[420px]:inline font-normal text-white/70"> sepette</span>
+            </span>
+            <button
+              type="button"
+              onClick={handleIncrease}
+              aria-disabled={atMax}
+              className={`flex h-full w-10 items-center justify-center transition-colors touch-manipulation ${atMax ? 'opacity-40' : 'hover:bg-white/10'}`}
+              aria-label="Adet artır"
+            >
+              <Plus className={icon} />
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            className={`${btnBase} border border-[#d3d9e1] bg-white text-[#0b2540] hover:border-[#0b2540] hover:bg-[#0b2540] hover:text-white [@media(hover:hover)]:group-hover:border-[#0b2540]`}
+            aria-label={`${product.name} sepete ekle`}
+          >
+            <ShoppingCart className={`${icon} shrink-0`} />
+            <span>Sepete Ekle</span>
+          </button>
+        )}
+      </div>
+    </div>
   )
 }

@@ -68,7 +68,11 @@ export async function getCustomerFromRequest(request: NextRequest): Promise<Auth
     const emailVerified = decoded.email_verified ?? false
     const name = (decoded.name as string | undefined) || (email ? email.split('@')[0] : 'Müşteri')
 
-    const existing = await prisma.user.findUnique({ where: { id: decoded.uid }, select: { id: true } })
+    const existing = await prisma.user.findUnique({ where: { id: decoded.uid }, select: { id: true, emailVerified: true } })
+    if (existing && emailVerified && !existing.emailVerified) {
+      // E-posta sonradan doğrulandı (Firebase) → Prisma kaydını eşitle
+      await prisma.user.update({ where: { id: decoded.uid }, data: { emailVerified: true } }).catch(() => {})
+    }
     if (!existing) {
       // Aynı e-postayla başka bir Prisma kaydı varsa (eski e-posta/şifre hesabı) e-postayı çakıştırma
       const emailTaken = email ? await prisma.user.findUnique({ where: { email }, select: { id: true } }) : null

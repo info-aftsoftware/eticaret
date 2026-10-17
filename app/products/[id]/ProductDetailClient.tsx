@@ -79,11 +79,13 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const tProduct = useTranslations('productDetail')
   const tCart = useTranslations('addToCart')
   const tCommon = useTranslations('common')
-  const { addItem, removeItem, updateQuantity } = useCartStore()
+  const addItem = useCartStore((s) => s.addItem)
+  const updateQuantity = useCartStore((s) => s.updateQuantity)
+  const [cartMounted, setCartMounted] = useState(false)
+  useEffect(() => setCartMounted(true), [])
   const { addToast } = useToast()
   const router = useRouter()
   const [quantity, setQuantity] = useState(1)
-  const [cartQty, setCartQty] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
   /** Varyantlı ürünlerde seçilen seçenek (model/kapasite); yoksa ilk varyant veya null */
@@ -134,6 +136,15 @@ export default function ProductDetailClient({ initialProduct, productId: product
 
   /** Varyant seçiliyse ve üründe imagesByVariant varsa o varyantın görselleri; yoksa product.images */
   const effectiveVariant = selectedVariant ?? product?.variants?.[0] ?? null
+  /** Sepet adedi doğrudan sepetten okunur (varyant değişince / başka sayfada eklenince doğru kalır) */
+  const cartLineId = product ? (effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id) : ''
+  const cartQty = useCartStore((s) => (cartMounted ? s.items.find((i) => i.id === cartLineId)?.quantity ?? 0 : 0))
+  // Varyantlar ürün stoğunu paylaşır
+  const productCartQty = useCartStore((s) =>
+    cartMounted && product
+      ? s.items.filter((i) => (i.productId ?? i.id) === product.id || i.id === cartLineId).reduce((n, i) => n + i.quantity, 0)
+      : 0
+  )
   const images = React.useMemo(() => {
     if (!product) return []
     if (product.imagesByVariant && effectiveVariant && product.variants?.length) {
@@ -229,6 +240,29 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const isLowStock = stock > 0 && stock <= 5
   const maxQuantity = Math.max(1, stock)
   const displayQuantity = outOfStock ? 0 : Math.min(quantity, maxQuantity)
+
+  /** Seçili seçeneği 1 adet sepete ekler (stok sınırı aşılırsa eklemez); eklendiyse true */
+  const addCurrentToCart = (silent = false): boolean => {
+    if (outOfStock) return false
+    const displayName = effectiveVariant ? `${product.name} (${effectiveVariant.label})` : product.name
+    const added = addItem({
+      id: cartLineId,
+      productId: product.id,
+      maxQuantity: stock,
+      name: displayName,
+      description: product.description,
+      price: effectiveVariant ? effectiveVariant.price : product.price,
+      image: images[0] ?? product.image,
+      category: product.category,
+      quantity: 1,
+    })
+    if (added <= 0) {
+      addToast({ type: 'info', title: tCart('stockLimit'), description: tCart('stockLimitDesc', { maxQty: stock }) })
+      return false
+    }
+    if (!silent) addToast({ type: 'success', title: tCart('addedToCart'), description: `${displayName} sepete eklendi.` })
+    return true
+  }
 
   return (
     <ProductPageShell
@@ -451,49 +485,37 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 {cartQty === 0 ? (
                   <Button
                     disabled={outOfStock}
-                    onClick={() => {
-                      if (outOfStock) return
-                      const cartId = effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id
-                      const displayName = effectiveVariant ? `${product.name} (${effectiveVariant.label})` : product.name
-                      const price = effectiveVariant ? effectiveVariant.price : product.price
-                      addItem({ id: cartId, name: displayName, description: product.description, price, image: product.image, category: product.category, quantity: 1 })
-                      setCartQty(1)
-                    }}
+                    onClick={() => addCurrentToCart()}
                     className="flex-1 rounded-xl min-h-12 h-auto py-3 px-4 sm:px-5 bg-brand hover:bg-brand-hover text-white font-semibold text-sm sm:text-base disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
                   >
                     <ShoppingCart className="w-4 h-4 mr-2 shrink-0" />
                     {outOfStock ? tCart('outOfStock') : tCart('addToCart')}
                   </Button>
                 ) : (
-                  <div className="flex-1 flex items-center h-[52px] rounded-xl border-2 border-brand bg-brand/5 overflow-hidden">
+                  <div className="flex-1 flex items-center h-12 rounded-xl border-2 border-brand bg-brand/5 overflow-hidden">
                     <button
                       type="button"
-                      onClick={() => {
-                        const newQty = cartQty - 1
-                        const cartId = effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id
-                        if (newQty === 0) {
-                          removeItem(cartId)
-                        } else {
-                          updateQuantity(cartId, newQty)
-                        }
-                        setCartQty(newQty)
-                      }}
-                      className="flex items-center justify-center h-12 w-12 text-brand hover:bg-brand/10 transition-colors"
+                      onClick={() => updateQuantity(cartLineId, cartQty - 1)}
+                      className="flex items-center justify-center h-full w-12 text-brand hover:bg-brand/10 transition-colors touch-manipulation"
+                      aria-label={tCart('decreaseQty')}
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="flex-1 flex items-center justify-center text-brand font-bold text-base tabular-nums select-none">
+                    <span className="flex-1 flex items-center justify-center text-brand font-bold text-base tabular-nums select-none" aria-live="polite">
                       {cartQty}
                     </span>
                     <button
                       type="button"
                       onClick={() => {
-                        const newQty = Math.min(cartQty + 1, maxQuantity)
-                        const cartId = effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id
-                        updateQuantity(cartId, newQty)
-                        setCartQty(newQty)
+                        if (productCartQty >= stock) {
+                          addToast({ type: 'info', title: tCart('stockLimit'), description: tCart('stockLimitDesc', { maxQty: stock }) })
+                          return
+                        }
+                        updateQuantity(cartLineId, cartQty + 1)
                       }}
-                      className="flex items-center justify-center h-12 w-12 text-brand hover:bg-brand/10 transition-colors"
+                      aria-disabled={productCartQty >= stock}
+                      className={`flex items-center justify-center h-full w-12 text-brand transition-colors touch-manipulation ${productCartQty >= stock ? 'opacity-40' : 'hover:bg-brand/10'}`}
+                      aria-label={tCart('increaseQty')}
                     >
                       <Plus className="w-4 h-4" />
                     </button>
@@ -503,11 +525,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   disabled={outOfStock}
                   onClick={() => {
                     if (outOfStock) return
-                    const cartId = effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id
-                    const displayName = effectiveVariant ? `${product.name} (${effectiveVariant.label})` : product.name
-                    const price = effectiveVariant ? effectiveVariant.price : product.price
-                    const qty = cartQty > 0 ? cartQty : 1
-                    addItem({ id: cartId, name: displayName, description: product.description, price, image: product.image, category: product.category, quantity: qty })
+                    // Sepette zaten varsa adet değişmez; yoksa 1 adet eklenir
+                    if (cartQty === 0 && !addCurrentToCart(true)) return
                     router.push('/cart')
                   }}
                   variant="destructive"

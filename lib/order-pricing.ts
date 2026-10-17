@@ -13,12 +13,18 @@ export { VAT_RATE }
 const MAX_QTY_PER_LINE = 999
 
 export class PricingError extends Error {}
+/** Stok yetersiz: sipariş API'si 409 döner */
+export class StockError extends PricingError {}
 
 export type PricedLine = {
   cartId: string
   productId: string
   variantKey?: string
   name: string
+  /** Varyant eki olmadan ürün adı */
+  productName: string
+  /** Ürünün güncel stoğu (varyantlar paylaşır); takip yoksa undefined */
+  stock?: number
   unitPrice: number
   quantity: number
   lineSubtotal: number
@@ -34,10 +40,16 @@ const round2 = (n: number) => Math.round(n * 100) / 100
 /**
  * Sepet id'si `productId` veya `productId-variantKey` biçimindedir.
  * Ürün id'leri de tire içerebildiği için sondan başa doğru bölme noktaları denenir.
+ * Varyantlı ürün taban id'siyle satılamaz (fiyat seçeneğe göre değişir): PricingError fırlatır.
  */
-async function resolveCartId(cartId: string): Promise<{ product: MergedProduct; variantKey?: string } | null> {
+export async function resolveCartId(cartId: string): Promise<{ product: MergedProduct; variantKey?: string } | null> {
   const direct = await getStorefrontProductById(cartId)
-  if (direct) return { product: direct }
+  if (direct) {
+    if (direct.variants?.length) {
+      throw new PricingError(`"${direct.name}" için bir seçenek (model) seçmelisiniz. Lütfen ürünü sepetten çıkarıp seçenekle yeniden ekleyin.`)
+    }
+    return { product: direct }
+  }
 
   let idx = cartId.lastIndexOf('-')
   while (idx > 0) {
@@ -123,10 +135,10 @@ export async function priceOrder(
     if (typeof product.stock === 'number') {
       const alreadyInCart = lines.filter((l) => l.productId === product.id).reduce((n, l) => n + l.quantity, 0)
       if (product.stock <= 0) {
-        throw new PricingError(`"${product.name}" şu anda stokta yok. Lütfen sepetinizden çıkarın.`)
+        throw new StockError(`"${product.name}" şu anda stokta yok. Lütfen sepetinizden çıkarın.`)
       }
       if (alreadyInCart + quantity > product.stock) {
-        throw new PricingError(`"${product.name}" için stokta yalnızca ${product.stock} adet var.`)
+        throw new StockError(`"${product.name}" için stokta yalnızca ${product.stock} adet var.`)
       }
     }
     const variant = variantKey ? product.variants?.find((v) => v.key === variantKey) : undefined
@@ -140,6 +152,8 @@ export async function priceOrder(
       productId: product.id,
       variantKey,
       name: variant ? `${product.name} - ${variant.label}` : product.name,
+      productName: product.name,
+      stock: typeof product.stock === 'number' ? product.stock : undefined,
       unitPrice,
       quantity,
       lineSubtotal: round2(unitPrice * quantity),

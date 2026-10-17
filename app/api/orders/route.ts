@@ -8,10 +8,21 @@ import crypto from 'node:crypto'
 import { getBankPosConfig, buildPosForm, type PosForm } from '@/lib/payments/bank-pos'
 import { getNextOrderNo, getNextCustomerNo } from '@/lib/sequence'
 import { getCustomerFromRequest } from '@/lib/customerAuth'
-import { priceOrder, PricingError, VAT_RATE, reserveCouponUse, releaseCouponUse } from '@/lib/order-pricing'
+import { priceOrder, PricingError, StockError, VAT_RATE, reserveCouponUse, releaseCouponUse } from '@/lib/order-pricing'
+import { reserveStock, InsufficientStockError } from '@/lib/stock-reservation'
+import { notifyLowStockAfterOrder } from '@/lib/low-stock'
 import { onOrderCreated, changeOrderStatus } from '@/lib/order-service'
 import { toCustomerOrder } from '@/lib/customer-order'
 import { getLegalDocument } from '@/lib/legal/documents'
+import {
+  clientIpFromHeaders,
+  formatTrPhone,
+  isValidEmail,
+  isValidTrPhone,
+  normalizeTrPhone,
+  onlyDigits,
+  validateBilling,
+} from '@/lib/checkout-validation'
 
 const str = (v: unknown, max = 500): string => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
@@ -55,24 +66,47 @@ export async function POST(request: NextRequest) {
     const c = customer && typeof customer === 'object' ? customer : {}
     const name = str(c.name, 200)
     const email = str(c.email, 200)
-    const phone = str(c.phone, 30)
+    const phoneDigits = normalizeTrPhone(str(c.phone, 30))
     const addressLine = str(c.addressLine)
     const city = str(c.city, 100)
     const district = str(c.district, 100)
-    if (!name || !phone || !addressLine || !city || !district || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!name || !phoneDigits || !addressLine || !city || !district || !isValidEmail(email)) {
       return NextResponse.json(
         { success: false, error: 'Ad, e-posta, telefon ve adres bilgileri zorunludur.' },
         { status: 400 }
       )
     }
+    if (!isValidTrPhone(phoneDigits)) {
+      return NextResponse.json({ success: false, error: 'Geçerli bir telefon numarası girin (5xx xxx xx xx).' }, { status: 400 })
+    }
+    // 5xx xxx xx xx biçiminde saklanır (e-posta, kargo etiketi ve misafir takibi aynı biçimi kullanır)
+    const phone = formatTrPhone(phoneDigits)
     const billingType = c.billingType === 'company' ? 'company' : 'individual'
+    const idNumber = onlyDigits(str(c.idNumber, 20))
+    const taxId = onlyDigits(str(c.taxId, 20))
+    const taxOffice = str(c.taxOffice, 100)
+    const billingErrors = validateBilling({ billingType, idNumber, companyName: str(c.billingName, 200), taxId, taxOffice })
+    if (Object.keys(billingErrors).length > 0) {
+      return NextResponse.json(
+        { success: false, error: Object.values(billingErrors)[0], fields: billingErrors },
+        { status: 400 }
+      )
+    }
+    const postalCode = onlyDigits(str(c.postalCode, 10)).slice(0, 5)
+    // Fatura adresi ayrıysa kendi posta kodu kullanılır (teslimat posta kodu kopyalanmaz)
+    const separateBilling = !!str(c.billingAddress)
+    const billingPostalCode = separateBilling ? onlyDigits(str(c.billingPostalCode, 10)).slice(0, 5) : postalCode
 
     let pricing
     try {
       pricing = await priceOrder(items, typeof couponCode === 'string' ? couponCode : null, paymentMethod)
     } catch (e) {
       if (e instanceof PricingError) {
-        return NextResponse.json({ success: false, error: e.message }, { status: 400 })
+        const outOfStock = e instanceof StockError
+        return NextResponse.json(
+          { success: false, ...(outOfStock ? { code: 'OUT_OF_STOCK' } : {}), error: e.message },
+          { status: outOfStock ? 409 : 400 }
+        )
       }
       throw e
     }
@@ -108,7 +142,7 @@ export async function POST(request: NextRequest) {
       await releaseCouponUse(pricing.couponCode)
       throw e
     })
-    const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || null
+    const ip = clientIpFromHeaders(request.headers)
 
     const order = await prisma.order.create({
       data: {
@@ -124,16 +158,16 @@ export async function POST(request: NextRequest) {
         shippingAddress: addressLine,
         shippingCity: city,
         shippingDistrict: district,
-        shippingPostalCode: str(c.postalCode, 10),
+        shippingPostalCode: postalCode,
         shippingCountry: str(c.country, 100) || 'Türkiye',
         billingType,
         billingName: str(c.billingName, 200) || name,
-        billingTaxId: (billingType === 'company' ? str(c.taxId, 11) : str(c.idNumber, 11)) || null,
-        billingTaxOffice: billingType === 'company' ? str(c.taxOffice, 100) || null : null,
-        billingAddress: str(c.billingAddress) || addressLine,
-        billingCity: str(c.billingCity, 100) || city,
-        billingDistrict: str(c.billingDistrict, 100) || district,
-        billingPostalCode: str(c.postalCode, 10) || null,
+        billingTaxId: (billingType === 'company' ? taxId : idNumber) || null,
+        billingTaxOffice: billingType === 'company' ? taxOffice || null : null,
+        billingAddress: separateBilling ? str(c.billingAddress) : addressLine,
+        billingCity: (separateBilling && str(c.billingCity, 100)) || city,
+        billingDistrict: (separateBilling && str(c.billingDistrict, 100)) || district,
+        billingPostalCode: billingPostalCode || null,
         billingCountry: str(c.country, 100) || 'Türkiye',
         subtotal: pricing.subtotal,
         vatTotal: pricing.tax,
@@ -177,37 +211,36 @@ export async function POST(request: NextRequest) {
     })
 
     // ── Stok düşme ─────────────────────────────────────────────────────────
-    // Atomik koşullu azaltma: stok yetersizse satır güncellenmez (eksiye düşmez).
-    // Hata olursa sipariş iptal edilmez, sadece loglanır.
-    const decremented: { productId: string; qty: number; stock: boolean; product: boolean }[] = []
+    // Tüm kalemler tek transaction'da koşullu düşülür (StockOverride; satır yoksa katalog stoğundan tohumlanır).
+    // Stok yetmezse (eşzamanlı sipariş) hiçbir stok değişmez, sipariş geri alınır ve 409 döner.
+    let decremented: Set<string>
     try {
-      for (const line of pricing.lines) {
-        const s1 = await prisma.stockOverride.updateMany({
-          where: { productId: line.productId, stock: { gte: line.quantity } },
-          data: { stock: { decrement: line.quantity } },
-        })
-        const s2 = await prisma.productOverride.updateMany({
-          where: { productId: line.productId, stock: { gte: line.quantity } },
-          data: { stock: { decrement: line.quantity } },
-        })
-        decremented.push({ productId: line.productId, qty: line.quantity, stock: s1.count > 0, product: s2.count > 0 })
-      }
+      decremented = await reserveStock(pricing.lines.map((l) => ({ productId: l.productId, productName: l.productName, quantity: l.quantity })))
     } catch (stockErr) {
-      console.error('Stock decrement error (order still created):', stockErr)
+      await prisma.order.delete({ where: { id: order.id } }).catch((e) => console.error('Sipariş geri alma hatası:', e))
+      await releaseCouponUse(pricing.couponCode)
+      if (stockErr instanceof InsufficientStockError) {
+        return NextResponse.json({ success: false, code: 'OUT_OF_STOCK', error: stockErr.message }, { status: 409 })
+      }
+      throw stockErr
     }
     // Hangi satırın stoğu gerçekten düşüldü: iptal/iadede yalnızca bunlar geri eklenir (hayali stok oluşmaz)
     try {
       for (const line of order.lines) {
         const vm = (line.variantMatrix ?? {}) as { productId?: string; variantKey?: string }
-        const d = decremented.find((x) => x.productId === vm.productId)
+        const done = !!vm.productId && decremented.has(vm.productId)
         await prisma.orderLine.update({
           where: { id: line.id },
-          data: { variantMatrix: { ...vm, stockDecremented: !!d?.stock, productStockDecremented: !!d?.product } },
+          data: { variantMatrix: { ...vm, stockDecremented: done, productStockDecremented: false } },
         })
       }
     } catch (flagErr) {
       console.error('Stock flag error:', flagErr)
     }
+    // Eşik altına düşen ürünler için yöneticiye uyarı (yanıtı bekletmez)
+    void notifyLowStockAfterOrder(
+      pricing.lines.filter((l) => decremented.has(l.productId)).map((l) => ({ productId: l.productId, quantity: l.quantity }))
+    ).catch((e) => console.error('Düşük stok uyarısı:', e))
     // ───────────────────────────────────────────────────────────────────────
 
     // Üyenin sepet özeti (terk edilen sepet hatırlatması) artık gereksiz

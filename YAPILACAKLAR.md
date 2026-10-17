@@ -74,7 +74,26 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [x] **Yanlış ürün görselleri (16/28 düzeltildi):** 10 Deye on-grid, Apex 80A ATS (2 görsel), TommaTech batarya alt tabanı, TommaTech SPI 2,2 kW, Victron BMS CL kablosu — resmî kaynaklardan. Excel'i yeniden import etseniz de korunur: `scripts/data/image-overrides.json` (SKU → `public/images/products/override/`), yeni görsel `node scripts/prepare-override-image.mjs` ile hazırlanır.
 - [ ] **Kalan 12 yanlış görsel — sizden fotoğraf gerekiyor:** TommaTech diyot modülleri (MDK25A/55A/70A/90A/110A, MDC150-16; 7 ürün) ve R32 Split Isı Pompası İç Ünite. Üreticinin (TommaTech/CW Enerji) sitesinde ve kataloglarında bu ürünlerin görseli yok.
 - [ ] **Düşük kaliteli görseller (232 kayıt, 187 ürün)** ve şüpheli 17 görsel: rapor `docs/urun-gorsel-denetimi.md`.
-- [ ] `/products?category=Panel` gibi **eski alt kategori filtre linkleri** artık boş liste gösterir (dış sitelerde/reklamlarda kullanılıyorsa yönlendirme eklenmeli).
+- [x] **Eski alt kategori filtre linkleri** (`/products?category=Panel`, `MPPT/PWM`, `Lityum Batarya` …) yeni kategoriye eşleniyor (`LEGACY_SUBCATEGORY_MAP`, lib/categories.ts). Ana sayfadaki görünmeyen SSS yapılandırılmış verisi kaldırıldı (Google kuralı: işaretlenen SSS sayfada görünmeli).
+
+### ✅ Faz 12 — e-ticaret altyapısı uçtan uca (18.10.2026)
+
+- [x] **Ürün görselleri:** 238 SKU resmî üretici görselleriyle yenilendi; katalogda yanlış/şüpheli/filigranlı/500 px altı görsel kalmadı. Doğru resmî görseli hiç olmayan 24 SKU'da yanlış görsel yerine markalı "Ürün görseli hazırlanıyor" kartı (Merchant akışına girmez). Liste: `scripts/data/image-overrides.json` (`pending: true`).
+- [x] **Stok:** sipariş artık stoğu tek transaction'da koşullu düşüyor (eşzamanlı siparişte aşırı satış yok, 409 OUT_OF_STOCK); iptal/iade doğru kaynağa geri ekliyor; eşik altına düşünce yöneticiye e-posta (`LOW_STOCK_THRESHOLD`, varsayılan 5).
+- [x] **Sepet/ürün kartı/favoriler:** varyantlı ürün seçim yapılmadan sepete eklenemiyor ("Seçenekleri Gör"), stok sınırı her yerde, mobilde sepete ekle çalışıyor, "Hemen Al" adedi ikilemiyor, misafir sepeti girişte birleşiyor / çıkışta temizleniyor; favoriler misafir için de çalışıyor ve girişte hesaba taşınıyor; sepet sayfası yenilendi.
+- [x] **Üyelik:** kayıt sonrası markalı doğrulama e-postası + tekrar gönder, hoş geldiniz e-postası, markalı şifre sıfırlama, "Beni hatırla", Türkçe hata mesajları, yenilenen giriş/kayıt sayfaları, Google ile giriş (Console'da açılınca).
+- [x] **Ödeme:** il/ilçe listeleri, TCKN/vergi no/telefon doğrulaması (sunucuda da), bireysel/kurumsal fatura, ayrı fatura adresi, yenilenen ödeme ve başarı sayfaları; sipariş sonrası "hesap oluştur" önerisi (bilgiler doldurulmuş gelir).
+- [x] **Sipariş takibi ve e-postalar:** takip POST ile (kişisel veri URL'de değil), yeni sipariş detay sayfası; tüm sipariş e-postaları yeni markalı tasarımda (alındı, ödeme, hazırlanıyor, kargoda + takip, teslim, iptal/iade + ücret iadesi, ödeme hatası, iptal talebi); kargo takip linkleri güncel (Aras, DHL eCommerce/MNG, PTT, UPS, DHL).
+- [x] **İptal talebi:** ödenmiş/hazırlanan siparişte müşteri iptal talep eder, admin onaylar/reddeder; ödenmiş sipariş iptalinde ödeme durumu "iade edildi" olur ve müşteriye tutarlı e-posta gider.
+- [x] **Admin paneli:** yeni Genel Bakış (KPI, yapılacaklar, hızlı işlemler), sayfalı/filtreli sipariş listesi, canlı bildirimler (30 sn: rozet, bildirim, ses, sekme sayacı), Prisma tabanlı müşteriler sayfası (misafirler dahil), tek ürün yöneticisi (varyant fiyatı düzenleme, çoklu görsel yükleme), soru yanıtında müşteriye e-posta, iptal talebi kartı. Güvenlik: kullanıcıların yazabildiği eski Firestore sipariş yolu kapatıldı.
+- [x] Doğrulama: `tsc` temiz, 42 birim testi, 50 E2E testi geçti, production build başarılı. Yerelde e-postalar `.env.development.local` → `EMAIL_CAPTURE_DIR` ile gönderilmeden `.data/mail-outbox`'a yazılıyor.
+
+**Sizin yapmanız gerekenler:**
+- [ ] `firebase deploy --only firestore:rules` (eski sipariş yolu kilidi).
+- [ ] Firebase Console → Authentication → Authorized domains: `voltekno.com`, `www.voltekno.com`, `nextfirststep.com`. Google ile giriş isteniyorsa Sign-in method → Google → Enable ve ortama `NEXT_PUBLIC_GOOGLE_SIGNIN_ENABLED=true`.
+- [ ] Canlıda `MEDIA_DIR` (admin'den yüklenen görseller için kalıcı klasör; varsayılan SQLite dosyasının yanındaki `media/`).
+- [ ] 24 "görsel hazırlanıyor" ürünü için fotoğraf (TommaTech diyot modülleri, R32 split iç/dış ünite, Frecon 315–450 kW, Exelon PMAX, Havensis 20AES/MPS 3A vb.).
+- [ ] Desi bazlı kargo ücreti kuralı (şu an sabit 50 TL, 3.000 TL üstü ücretsiz) ve taksit tablosu: bilgiler gelince eklenecek.
 
 ### 🔴 P0 — Yayından önce (sizde)
 

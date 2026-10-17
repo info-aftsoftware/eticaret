@@ -1,15 +1,71 @@
 export const dynamic = 'force-dynamic'
 
 /**
- * Admin: Sipariş listesi
- * - Prisma Order (misafir / variant siparişleri)
- * - Firestore: users/{uid}/orders — collectionGroup('orders') ile tüm üye siparişleri listelenir
+ * Admin: Sipariş listesi (yalnızca Prisma siparişleri).
+ * Eski Firestore users/{uid}/orders yolu artık listelenmez (istemciden yazılabildiği için güvenilir değil).
+ *
+ * Query: page, pageSize (≤100), q (sipariş no, ad, e-posta, telefon), tab, paymentStatus,
+ *        paymentMethod, from, to (YYYY-MM-DD), sort (createdAt_desc | createdAt_asc | total_desc | total_asc)
+ * Yanıt: { orders, total, page, pageSize, counts }
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import type { Prisma, OrderStatus, PaymentStatus } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
-import { getAdminFirestore, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 import { checkAdmin } from '@/lib/adminAuth'
+import { allowedNextStatuses, getCancellationRequest } from '@/lib/order-service'
+
+const OPEN_RETURN_STATUSES = ['REQUESTED', 'APPROVED', 'RECEIVED']
+/** Açık müşteri iptal talebi (lib/order-service: notes.cancelRequest.status === 'REQUESTED') */
+const OPEN_CANCEL_REQUEST_WHERE: Prisma.OrderWhereInput = { notes: { contains: '"cancelRequest":{"status":"REQUESTED"' } }
+const PAYMENT_STATUSES: PaymentStatus[] = ['PENDING', 'PAID', 'FAILED', 'REFUNDED', 'PARTIALLY_REFUNDED']
+
+/** Durum sekmeleri → Prisma koşulu */
+const TABS: Record<string, Prisma.OrderWhereInput> = {
+  all: {},
+  awaiting_payment: { status: 'PENDING', paymentStatus: { not: 'PAID' } },
+  to_prepare: { paymentStatus: 'PAID', status: { in: ['PENDING', 'PAID', 'CONFIRMED', 'PROCESSING'] } },
+  picking: { status: 'PICKING' },
+  shipped: { status: 'SHIPPED' },
+  delivered: { status: 'DELIVERED' },
+  cancelled: { status: 'CANCELLED' },
+  returned: { status: 'RETURNED' },
+  cancel_requests: OPEN_CANCEL_REQUEST_WHERE,
+  open_returns: { returnRequests: { some: { status: { in: OPEN_RETURN_STATUSES } } } },
+}
+
+function parseDay(s: string | null, endOfDay = false): Date | undefined {
+  if (!s || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return undefined
+  const d = new Date(`${s}T${endOfDay ? '23:59:59.999' : '00:00:00.000'}`)
+  return Number.isNaN(d.getTime()) ? undefined : d
+}
+
+function baseWhere(sp: URLSearchParams): Prisma.OrderWhereInput {
+  const and: Prisma.OrderWhereInput[] = []
+  const q = (sp.get('q') || '').trim().slice(0, 100)
+  if (q) {
+    const digits = q.replace(/\D/g, '')
+    const or: Prisma.OrderWhereInput[] = [
+      { orderNo: { contains: q.toUpperCase() } },
+      { shippingName: { contains: q } },
+      { shippingEmail: { contains: q.toLowerCase() } },
+      { user: { email: { contains: q.toLowerCase() } } },
+      { shippingPhone: { contains: q } },
+    ]
+    // Telefon "0532 123 45 67" ↔ "5321234567" gibi yazımlar: son 7+ hane ile ara
+    if (digits.length >= 7) or.push({ shippingPhone: { contains: digits.slice(-7) } })
+    and.push({ OR: or })
+  }
+  const ps = (sp.get('paymentStatus') || '').toUpperCase()
+  if (PAYMENT_STATUSES.includes(ps as PaymentStatus)) and.push({ paymentStatus: ps as PaymentStatus })
+  const pm = sp.get('paymentMethod')
+  if (pm === 'bank_transfer') and.push({ paymentMethod: 'bank_transfer' })
+  else if (pm === 'card') and.push({ paymentMethod: { in: ['card', 'stripe', 'paytr'] } })
+  const from = parseDay(sp.get('from'))
+  const to = parseDay(sp.get('to'), true)
+  if (from || to) and.push({ createdAt: { ...(from && { gte: from }), ...(to && { lte: to }) } })
+  return and.length ? { AND: and } : {}
+}
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -18,69 +74,76 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const { searchParams } = new URL(request.url)
-    const limit = Math.min(parseInt(searchParams.get('limit') || '100', 10), 500)
-    const status = searchParams.get('status') || undefined
-    const source = searchParams.get('source') || 'all' // 'prisma' | 'firestore' | 'all'
+    const sp = new URL(request.url).searchParams
+    const pageSize = Math.min(Math.max(parseInt(sp.get('pageSize') || '25', 10) || 25, 1), 100)
+    const page = Math.max(parseInt(sp.get('page') || '1', 10) || 1, 1)
+    const tab = sp.get('tab') && TABS[sp.get('tab')!] ? sp.get('tab')! : 'all'
+    // Geriye dönük: ?status=PENDING
+    const rawStatus = (sp.get('status') || '').toUpperCase()
+    const base = baseWhere(sp)
+    const statusWhere: Prisma.OrderWhereInput = rawStatus ? { status: rawStatus as OrderStatus } : TABS[tab]
+    const where: Prisma.OrderWhereInput = { AND: [base, statusWhere] }
 
-    const result: { prisma: any[]; firestore: any[] } = { prisma: [], firestore: [] }
+    const sort = sp.get('sort') || 'createdAt_desc'
+    const orderBy: Prisma.OrderOrderByWithRelationInput =
+      sort === 'createdAt_asc' ? { createdAt: 'asc' } : sort === 'total_desc' ? { total: 'desc' } : sort === 'total_asc' ? { total: 'asc' } : { createdAt: 'desc' }
 
-    if (source === 'all' || source === 'prisma') {
-      const where = status ? { status: status as any } : {}
-      result.prisma = await prisma.order.findMany({
+    const [total, rows, countEntries] = await Promise.all([
+      prisma.order.count({ where }),
+      prisma.order.findMany({
         where,
-        include: {
-          lines: true,
-          user: { select: { id: true, email: true, name: true, customerNo: true } },
-          returnRequests: { where: { status: { in: ['REQUESTED', 'APPROVED', 'RECEIVED'] } }, select: { id: true, status: true } },
-          events: { where: { type: 'payment_notice' }, select: { id: true } },
+        orderBy,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        select: {
+          id: true,
+          orderNo: true,
+          createdAt: true,
+          userId: true,
+          shippingName: true,
+          shippingEmail: true,
+          shippingPhone: true,
+          shippingCity: true,
+          total: true,
+          status: true,
+          paymentStatus: true,
+          paymentMethod: true,
+          trackingNumber: true,
+          notes: true,
+          user: { select: { email: true, customerNo: true } },
+          _count: { select: { lines: true } },
+          returnRequests: { where: { status: { in: OPEN_RETURN_STATUSES } }, select: { id: true } },
+          events: { where: { type: 'payment_notice' }, select: { id: true }, take: 1 },
         },
-        orderBy: { createdAt: 'desc' },
-        take: limit,
-      })
-    }
+      }),
+      Promise.all(Object.entries(TABS).map(async ([key, w]) => [key, await prisma.order.count({ where: { AND: [base, w] } })] as const)),
+    ])
 
-    if (source === 'all' || source === 'firestore') {
-      try {
-        const db = isFirebaseAdminConfigured() ? getAdminFirestore() : null
-        if (db) {
-          const snapshot = await db.collectionGroup('orders').orderBy('createdAt', 'desc').limit(limit).get()
-          result.firestore = snapshot.docs.map((d) => {
-            const data = d.data()
-            const createdAt = data.createdAt
-            const createdAtDate =
-              createdAt && typeof (createdAt as { toDate?: () => Date }).toDate === 'function'
-                ? (createdAt as { toDate: () => Date }).toDate()
-                : createdAt instanceof Date
-                  ? createdAt
-                  : new Date()
-            const parentUserId = d.ref.parent?.parent?.id ?? null
-            return {
-              id: d.id,
-              userId: parentUserId,
-              source: 'firestore',
-              orderId: data.orderId || d.id,
-              customer: data.customer || {},
-              items: data.items || [],
-              pricing: data.pricing || {},
-              status: data.status || 'pending',
-              paymentStatus: data.paymentStatus || 'pending',
-              createdAt: createdAtDate,
-            }
-          })
-        }
-      } catch (firestoreErr) {
-        console.warn('Firestore orders query failed (index missing?):', (firestoreErr as Error).message)
-        result.firestore = []
-      }
-    }
+    const orders = rows.map((o) => ({
+      id: o.id,
+      orderNo: o.orderNo,
+      createdAt: o.createdAt.toISOString(),
+      userId: o.userId,
+      customerNo: o.user?.customerNo ?? null,
+      customerName: o.shippingName,
+      customerEmail: o.shippingEmail || o.user?.email || null,
+      phone: o.shippingPhone,
+      city: o.shippingCity,
+      total: o.total,
+      status: o.status,
+      paymentStatus: o.paymentStatus,
+      paymentMethod: o.paymentMethod,
+      trackingNumber: o.trackingNumber,
+      itemCount: o._count.lines,
+      openReturns: o.returnRequests.length,
+      paymentNotified: o.events.length > 0,
+      cancelRequested: getCancellationRequest(o)?.status === 'REQUESTED',
+      allowed: allowedNextStatuses(o.status),
+    }))
 
-    return NextResponse.json(result)
+    return NextResponse.json({ orders, total, page, pageSize, counts: Object.fromEntries(countEntries) })
   } catch (error) {
     console.error('Admin orders list error:', error)
-    return NextResponse.json(
-      { error: 'Siparişler getirilirken bir hata oluştu' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Siparişler getirilirken bir hata oluştu' }, { status: 500 })
   }
 }

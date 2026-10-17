@@ -6,7 +6,7 @@ import { HelpCircle, ChevronDown, ChevronUp, Loader2, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import { useAuthStore } from '@/lib/store/useAuthStore'
+import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 
 type QAItem = {
   id: string
@@ -23,7 +23,7 @@ export function ProductQA({
   productId: string
   productName: string
 }) {
-  const { user, isAuthenticated, token } = useAuthStore()
+  const { user, isAuthenticated } = useAuthStore()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const [qas, setQas] = useState<QAItem[]>([])
@@ -78,6 +78,7 @@ export function ProductQA({
     setError('')
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+      const token = isAuthenticated ? await getAuthToken() : null
       if (token) headers['Authorization'] = `Bearer ${token}`
 
       const res = await fetch(`/api/products/${productId}/questions`, {

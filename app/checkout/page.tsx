@@ -1,55 +1,263 @@
 ﻿'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import {
+  AlertCircle,
+  ArrowLeft,
+  Banknote,
+  Building2,
+  Check,
+  ChevronDown,
+  CreditCard,
+  Loader2,
+  Lock,
+  MapPin,
+  Package,
+  RotateCcw,
+  ShieldCheck,
+  ShoppingCart,
+  Truck,
+  User,
+} from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { trackBeginCheckout, trackAddPaymentInfo, cartItemToGa } from '@/lib/analytics'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { CheckCircle, Package, Truck, CreditCard, ArrowLeft, AlertCircle, Phone, Mail, MapPin, Building2, User, ShoppingCart } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { getAddresses } from '@/lib/firebase/firestore'
-import { computeOrderTotals, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import {
+  computeOrderTotals,
+  amountToFreeShipping,
+  BANK_TRANSFER_DISCOUNT_RATE,
+  BANK_TRANSFER_PAYMENT_DAYS,
+  VAT_RATE,
+} from '@/lib/store-config'
+import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
+import {
+  formatTrPhone,
+  isValidEmail,
+  isValidPostalCode,
+  isValidTrPhone,
+  onlyDigits,
+  validateBilling,
+} from '@/lib/checkout-validation'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import type { LegalSlug } from '@/lib/legal/documents'
 
-function onlyDigits(value: string) {
-  return value.replace(/\D/g, '')
+type FormState = {
+  name: string
+  email: string
+  phone: string
+  addressLine: string
+  city: string
+  district: string
+  postalCode: string
+  country: string
+  billingType: 'individual' | 'company'
+  idNumber: string
+  companyName: string
+  taxId: string
+  taxOffice: string
+  notes: string
+  useDifferentBillingAddress: boolean
+  billingAddressLine: string
+  billingCity: string
+  billingDistrict: string
+  billingPostalCode: string
 }
 
-function formatPhoneNumber(value: string) {
-  const digits = onlyDigits(value).slice(0, 10)
-  const parts = [
-    digits.slice(0, 3),
-    digits.slice(3, 6),
-    digits.slice(6, 8),
-    digits.slice(8, 10),
-  ].filter(Boolean)
-  return parts.join(' ')
+type SavedAddress = {
+  id: string
+  title?: string
+  name: string
+  phone: string
+  addressLine: string
+  city: string
+  district: string
+  postalCode: string
+  country?: string
+  isDefault?: boolean
 }
 
-function readPersistedCartItems() {
-  if (typeof window === 'undefined') return []
-  try {
-    const raw = window.localStorage.getItem('cart-storage') || window.sessionStorage.getItem('cart-storage')
-    if (!raw) return []
-    const parsed = JSON.parse(raw)
-    return Array.isArray(parsed?.state?.items) ? parsed.state.items : []
-  } catch {
-    return []
-  }
+/** Kayıtlı adresteki il adını listedeki yazımla eşleştirir (büyük/küçük harf farkı vb.) */
+function matchCity(value: string): string {
+  if (!value) return ''
+  const v = value.trim().toLocaleLowerCase('tr-TR')
+  return TR_CITIES.find((c) => c.name.toLocaleLowerCase('tr-TR') === v)?.name ?? value.trim()
 }
+
+function matchDistrict(city: string, value: string): string {
+  if (!value) return ''
+  const v = value.trim().toLocaleLowerCase('tr-TR')
+  return getDistrictsByCity(city).find((d) => d.toLocaleLowerCase('tr-TR') === v) ?? value.trim()
+}
+
+const inputCls = (invalid?: boolean) =>
+  `w-full h-12 rounded-lg border bg-white px-3.5 text-base text-[#121926] placeholder:text-[#8a99a8] outline-none transition-colors focus:ring-2 disabled:bg-[#f5f7fa] disabled:text-[#6b7c8f] ${
+    invalid ? 'border-red-500 focus:border-red-500 focus:ring-red-500/15' : 'border-[#d3d9e1] hover:border-[#b8c2ce] focus:border-[#0b2540] focus:ring-[#0b2540]/15'
+  }`
+
+function Field({
+  id,
+  label,
+  required,
+  error,
+  hint,
+  className = '',
+  children,
+}: {
+  id: string
+  label: string
+  required?: boolean
+  error?: string
+  hint?: React.ReactNode
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className={`min-w-0 ${className}`}>
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[#20384e]">
+        {label}
+        {required ? <span className="text-red-600"> *</span> : <span className="font-normal text-[#6b7c8f]"> (isteğe bağlı)</span>}
+      </label>
+      {children}
+      {error ? (
+        <p id={`${id}-error`} className="mt-1.5 flex items-start gap-1 text-[13px] text-red-600">
+          <AlertCircle className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden />
+          {error}
+        </p>
+      ) : hint ? (
+        <p id={`${id}-hint`} className="mt-1.5 text-[13px] text-[#6b7c8f]">{hint}</p>
+      ) : null}
+    </div>
+  )
+}
+
+function Section({ step, title, icon: Icon, children, aside }: {
+  step: number
+  title: string
+  icon: React.ComponentType<{ className?: string }>
+  children: React.ReactNode
+  aside?: React.ReactNode
+}) {
+  return (
+    <section className="rounded-xl border border-[#e6ebf1] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]" aria-labelledby={`step-${step}`}>
+      <header className="flex flex-wrap items-center gap-3 border-b border-[#eef1f5] px-4 py-3.5 sm:px-6">
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0b2540] text-[13px] font-semibold text-white">{step}</span>
+        <h2 id={`step-${step}`} className="flex items-center gap-2 text-base font-semibold text-[#121926] sm:text-[17px]">
+          <Icon className="h-[18px] w-[18px] text-[#6b7c8f]" aria-hidden />
+          {title}
+        </h2>
+        {aside && <div className="ml-auto text-sm">{aside}</div>}
+      </header>
+      <div className="px-4 py-5 sm:px-6">{children}</div>
+    </section>
+  )
+}
+
+function CitySelect({ id, value, onChange, invalid, describedBy }: {
+  id: string
+  value: string
+  onChange: (city: string) => void
+  invalid?: boolean
+  describedBy?: string
+}) {
+  const known = TR_CITIES.some((c) => c.name === value)
+  return (
+    <div className="relative">
+      <select
+        id={id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
+        autoComplete="address-level1"
+        className={`${inputCls(invalid)} appearance-none pr-10 ${value ? '' : 'text-[#8a99a8]'}`}
+      >
+        <option value="">İl seçin</option>
+        {!known && value && <option value={value}>{value}</option>}
+        {TR_CITIES.map((c) => (
+          <option key={c.name} value={c.name} className="text-[#121926]">{c.name}</option>
+        ))}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7c8f]" aria-hidden />
+    </div>
+  )
+}
+
+function DistrictSelect({ id, city, value, onChange, invalid, describedBy }: {
+  id: string
+  city: string
+  value: string
+  onChange: (d: string) => void
+  invalid?: boolean
+  describedBy?: string
+}) {
+  const districts = getDistrictsByCity(city)
+  const known = districts.includes(value)
+  return (
+    <div className="relative">
+      <select
+        id={id}
+        value={value}
+        disabled={!city}
+        onChange={(e) => onChange(e.target.value)}
+        aria-invalid={invalid || undefined}
+        aria-describedby={describedBy}
+        autoComplete="address-level2"
+        className={`${inputCls(invalid)} appearance-none pr-10 ${value ? '' : 'text-[#8a99a8]'}`}
+      >
+        <option value="">{city ? 'İlçe seçin' : 'Önce il seçin'}</option>
+        {!known && value && <option value={value}>{value}</option>}
+        {districts.map((d) => (
+          <option key={d} value={d} className="text-[#121926]">{d}</option>
+        ))}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7c8f]" aria-hidden />
+    </div>
+  )
+}
+
+function Stepper() {
+  const steps = [
+    { label: 'Sepet', href: '/cart', state: 'done' as const },
+    { label: 'Bilgiler ve ödeme', state: 'current' as const },
+    { label: 'Onay', state: 'todo' as const },
+  ]
+  return (
+    <ol className="flex items-center gap-2 text-[13px] sm:text-sm" aria-label="Sipariş adımları">
+      {steps.map((s, i) => (
+        <li key={s.label} className="flex min-w-0 items-center gap-2" aria-current={s.state === 'current' ? 'step' : undefined}>
+          {i > 0 && <span className="h-px w-4 bg-[#d3d9e1] sm:w-8" aria-hidden />}
+          <span
+            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
+              s.state === 'done' ? 'bg-[#0b2540] text-white' : s.state === 'current' ? 'bg-[#f5b400] text-[#111]' : 'bg-[#e6ebf1] text-[#6b7c8f]'
+            }`}
+          >
+            {s.state === 'done' ? <Check className="h-3.5 w-3.5" aria-hidden /> : i + 1}
+          </span>
+          {s.href ? (
+            <Link href={s.href} className="hidden truncate text-[#20384e] hover:underline sm:inline">{s.label}</Link>
+          ) : (
+            <span className={`truncate ${s.state === 'current' ? 'font-semibold text-[#121926]' : 'hidden text-[#6b7c8f] sm:inline'}`}>{s.label}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+/** Hata alanlarının sayfadaki sırası (ilk hatalı alana odaklanmak için) */
+const FIELD_ORDER = [
+  'name', 'email', 'phone', 'city', 'district', 'postalCode', 'addressLine',
+  'idNumber', 'companyName', 'taxId', 'taxOffice',
+  'billingCity', 'billingDistrict', 'billingPostalCode', 'billingAddressLine', 'terms',
+]
 
 export default function CheckoutPage() {
   const router = useRouter()
@@ -61,42 +269,45 @@ export default function CheckoutPage() {
   const clearCart = useCartStore((state) => state.clearCart)
   const couponCode = useCartStore((state) => state.couponCode)
   const cartHydrated = useCartStore((state) => state._hasHydrated)
-  const { user, isAuthenticated, token } = useAuthStore()
-  
+  const { user, isAuthenticated } = useAuthStore()
+
   const isFromCart = cartItems.length > 0
 
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     name: user?.name || '',
     email: user?.email || '',
-    phone: user?.phone || '',
+    phone: user?.phone ? formatTrPhone(user.phone) : '',
     addressLine: '',
     city: '',
     district: '',
     postalCode: '',
     country: 'Türkiye',
-    billingType: 'individual' as 'individual' | 'company',
+    billingType: 'individual',
     idNumber: '',
     companyName: '',
     taxId: '',
     taxOffice: '',
     notes: '',
-    createAccount: false,
-    password: '',
-    confirmPassword: '',
     useDifferentBillingAddress: false,
     billingAddressLine: '',
     billingCity: '',
     billingDistrict: '',
+    billingPostalCode: '',
   })
 
-  const [savedAddresses, setSavedAddresses] = useState<any[]>([])
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([])
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null)
-  const [checkoutErrors, setCheckoutErrors] = useState<Record<string, string>>({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [generalError, setGeneralError] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<'havale' | 'card'>('havale')
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [legalDoc, setLegalDoc] = useState<LegalSlug | null>(null)
   const [couponDiscount, setCouponDiscount] = useState(0)
+  const [showNote, setShowNote] = useState(false)
+  const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false)
+  const errorBannerRef = useRef<HTMLDivElement>(null)
+
   // Fiyatlar sunucuda katalogdan hesaplanır; istemci yalnızca kalem id + adet gönderir
   const orderItems = useMemo(
     () => cartItems.map((i) => ({ id: i.id, quantity: i.quantity })),
@@ -121,45 +332,57 @@ export default function CheckoutPage() {
     return () => { cancelled = true }
   }, [couponCode, orderItems])
 
-  // Load saved addresses from Firestore when user is authenticated
+  const applyAddress = React.useCallback((address: SavedAddress) => {
+    const city = matchCity(address.city)
+    setFormData((prev) => ({
+      ...prev,
+      name: address.name || prev.name,
+      phone: address.phone ? formatTrPhone(address.phone) : prev.phone,
+      addressLine: address.addressLine,
+      city,
+      district: matchDistrict(city, address.district),
+      postalCode: onlyDigits(address.postalCode || '').slice(0, 5),
+      country: address.country || 'Türkiye',
+    }))
+    setErrors({})
+  }, [])
+
+  // Üyenin kayıtlı adresleri (varsayılan adres otomatik seçilir)
   React.useEffect(() => {
-    if (isAuthenticated && user?.id) {
-      getAddresses(user.id)
-        .then((addresses) => {
-          setSavedAddresses(addresses)
-          const defaultAddress = addresses.find((a) => a.isDefault)
-          if (defaultAddress) {
-            setSelectedAddressId(defaultAddress.id)
-            setFormData(prev => ({
-              ...prev,
-              name: defaultAddress.name,
-              phone: defaultAddress.phone,
-              addressLine: defaultAddress.addressLine,
-              city: defaultAddress.city,
-              district: defaultAddress.district,
-              postalCode: defaultAddress.postalCode,
-              country: defaultAddress.country || 'Türkiye',
-            }))
-          }
-        })
-        .catch((err) => console.error('Error loading addresses:', err))
-    }
-  }, [isAuthenticated, user?.id])
+    if (!isAuthenticated || !user?.id) return
+    getAddresses(user.id)
+      .then((addresses) => {
+        const list = addresses as SavedAddress[]
+        setSavedAddresses(list)
+        const def = list.find((a) => a.isDefault) ?? list[0]
+        if (def) {
+          setSelectedAddressId(def.id)
+          applyAddress(def)
+        }
+      })
+      .catch((err) => console.error('Error loading addresses:', err))
+  }, [isAuthenticated, user?.id, applyAddress])
+
+  // Oturum sonradan yüklenirse iletişim bilgilerini doldur (kullanıcının yazdıklarının üzerine yazmadan)
+  React.useEffect(() => {
+    if (!user) return
+    setFormData((prev) => ({
+      ...prev,
+      name: prev.name || user.name || '',
+      email: prev.email || user.email || '',
+      phone: prev.phone || (user.phone ? formatTrPhone(user.phone) : ''),
+    }))
+  }, [user])
+
   React.useEffect(() => {
     if (cartHydrated) return
-
     try {
       useCartStore.persist?.rehydrate?.()
     } catch {}
-
+    // Yedek: rehydrate tamamlanmazsa yalnızca bayrak açılır; sepet içeriği (üye/misafir ayrımı) store'da kalır
     const timer = window.setTimeout(() => {
-      const persistedItems = readPersistedCartItems()
-      useCartStore.setState({
-        items: persistedItems,
-        _hasHydrated: true,
-      })
+      if (!useCartStore.getState()._hasHydrated) useCartStore.setState({ _hasHydrated: true })
     }, 900)
-
     return () => window.clearTimeout(timer)
   }, [cartHydrated])
 
@@ -170,34 +393,90 @@ export default function CheckoutPage() {
     paymentMethod: paymentMethod === 'havale' ? 'bank_transfer' : 'card',
   })
   const { subtotal, tax, shipping, total, paymentDiscount } = totals
+  const toFreeShipping = amountToFreeShipping(subtotal)
+  const itemCount = cartItems.reduce((n, i) => n + i.quantity, 0)
+
+  /** Sipariş oluştu ve sayfadan ayrılınıyor (banka / başarı sayfası): sepet boşalınca /cart'a atlamasın */
+  const leavingRef = useRef(false)
 
   React.useEffect(() => {
-    if (!cartHydrated) return
+    if (!cartHydrated || leavingRef.current) return
     if (!isFromCart) router.push('/cart')
   }, [cartHydrated, isFromCart, router])
 
   // GA4: ödeme adımına başlama (sayfa başına bir kez)
-  const beginCheckoutSent = React.useRef(false)
+  const beginCheckoutSent = useRef(false)
   React.useEffect(() => {
     if (!cartHydrated || !isFromCart || beginCheckoutSent.current) return
     beginCheckoutSent.current = true
     void trackBeginCheckout(cartItems.map(cartItemToGa), couponCode)
   }, [cartHydrated, isFromCart, cartItems, couponCode])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    let nextValue = value
-    if (name === 'phone') nextValue = formatPhoneNumber(value)
-    if (name === 'idNumber') nextValue = onlyDigits(value).slice(0, 11)
-    if (name === 'taxId') nextValue = onlyDigits(value).slice(0, 10)
-    if (name === 'postalCode') nextValue = onlyDigits(value).slice(0, 5)
-    setFormData(prev => ({ ...prev, [name]: nextValue }))
-    if (checkoutErrors[name]) setCheckoutErrors(prev => ({ ...prev, [name]: '' }))
+  const setField = <K extends keyof FormState>(name: K, value: FormState[K]) => {
+    setFormData((prev) => ({ ...prev, [name]: value }))
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
-  const createOrderWithApi = async (options: { paymentMethod: 'bank_transfer' | 'card' }) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const name = e.target.name as keyof FormState
+    let value = e.target.value
+    if (name === 'phone') value = formatTrPhone(value)
+    if (name === 'idNumber') value = onlyDigits(value).slice(0, 11)
+    if (name === 'taxId') value = onlyDigits(value).slice(0, 10)
+    if (name === 'postalCode' || name === 'billingPostalCode') value = onlyDigits(value).slice(0, 5)
+    // Kayıtlı adres seçiliyken adres alanı değişirse "yeni adres" sayılır
+    if (selectedAddressId && ['addressLine', 'postalCode'].includes(name)) setSelectedAddressId(null)
+    setField(name, value as never)
+  }
+
+  /** Tek alan doğrulaması (alandan çıkınca); boş zorunlu alanlar yalnızca gönderimde işaretlenir */
+  const validateField = (name: string, value: string) => {
+    let msg = ''
+    if (name === 'email' && value && !isValidEmail(value)) msg = 'Geçerli bir e-posta adresi girin.'
+    if (name === 'phone' && value && !isValidTrPhone(value)) msg = 'Telefon numarası 10 haneli olmalı (5xx xxx xx xx).'
+    if ((name === 'postalCode' || name === 'billingPostalCode') && value && !isValidPostalCode(value)) msg = 'Geçerli bir posta kodu girin (5 hane).'
+    if (['idNumber', 'taxId'].includes(name) && value) {
+      msg = validateBilling({ ...formData, [name]: value })[name] ?? ''
+    }
+    setErrors((prev) => ({ ...prev, [name]: msg }))
+  }
+
+  const validateAll = (): Record<string, string> => {
+    const f = formData
+    const err: Record<string, string> = {}
+    if (!f.name.trim() || f.name.trim().length < 3) err.name = 'Ad ve soyadınızı girin.'
+    if (!f.email.trim()) err.email = 'E-posta zorunludur.'
+    else if (!isValidEmail(f.email)) err.email = 'Geçerli bir e-posta adresi girin.'
+    if (!f.phone.trim()) err.phone = 'Telefon zorunludur.'
+    else if (!isValidTrPhone(f.phone)) err.phone = 'Telefon numarası 10 haneli olmalı (5xx xxx xx xx).'
+    if (!f.city) err.city = 'İl seçin.'
+    if (!f.district) err.district = 'İlçe seçin.'
+    if (f.postalCode && !isValidPostalCode(f.postalCode)) err.postalCode = 'Geçerli bir posta kodu girin (5 hane).'
+    if (f.addressLine.trim().length < 10) err.addressLine = f.addressLine.trim() ? 'Adresinizi mahalle, sokak ve kapı no ile eksiksiz yazın.' : 'Adres zorunludur.'
+    Object.assign(err, validateBilling(f))
+    if (f.useDifferentBillingAddress) {
+      if (!f.billingCity) err.billingCity = 'İl seçin.'
+      if (!f.billingDistrict) err.billingDistrict = 'İlçe seçin.'
+      if (f.billingPostalCode && !isValidPostalCode(f.billingPostalCode)) err.billingPostalCode = 'Geçerli bir posta kodu girin (5 hane).'
+      if (f.billingAddressLine.trim().length < 10) err.billingAddressLine = 'Fatura adresini eksiksiz yazın.'
+    }
+    if (!acceptedTerms) err.terms = "Siparişi tamamlamak için Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi'ni onaylamalısınız."
+    return err
+  }
+
+  const focusFirstError = (err: Record<string, string>) => {
+    const first = FIELD_ORDER.find((k) => err[k])
+    const el = first ? document.getElementById(first === 'terms' ? 'acceptTerms' : first) : null
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      window.setTimeout(() => (el as HTMLElement).focus({ preventScroll: true }), 300)
+    }
+  }
+
+  const createOrderWithApi = async (method: 'bank_transfer' | 'card') => {
     // Üye siparişi hesaba bağlansın diye güncel (yenilenmiş) Firebase token gönderilir
     const authToken = isAuthenticated ? await getAuthToken() : null
+    const f = formData
     const response = await fetch('/api/orders', {
       method: 'POST',
       headers: {
@@ -206,36 +485,39 @@ export default function CheckoutPage() {
       },
       body: JSON.stringify({
         customer: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          addressLine: formData.addressLine,
-          city: formData.city,
-          district: formData.district,
-          postalCode: formData.postalCode,
-          country: formData.country || 'Türkiye',
-          billingType: formData.billingType,
-          idNumber: formData.idNumber,
-          billingName: formData.billingType === 'company' ? formData.companyName : formData.name,
-          taxId: formData.taxId,
-          taxOffice: formData.taxOffice,
-          billingAddress: formData.useDifferentBillingAddress ? formData.billingAddressLine : formData.addressLine,
-          billingCity: formData.useDifferentBillingAddress ? formData.billingCity : formData.city,
-          billingDistrict: formData.useDifferentBillingAddress ? formData.billingDistrict : formData.district,
+          name: f.name.trim(),
+          email: f.email.trim(),
+          phone: f.phone,
+          addressLine: f.addressLine.trim(),
+          city: f.city,
+          district: f.district,
+          postalCode: f.postalCode,
+          country: f.country || 'Türkiye',
+          billingType: f.billingType,
+          idNumber: f.billingType === 'individual' ? f.idNumber : '',
+          billingName: f.billingType === 'company' ? f.companyName.trim() : f.name.trim(),
+          taxId: f.billingType === 'company' ? f.taxId : '',
+          taxOffice: f.billingType === 'company' ? f.taxOffice.trim() : '',
+          billingAddress: f.useDifferentBillingAddress ? f.billingAddressLine.trim() : '',
+          billingCity: f.useDifferentBillingAddress ? f.billingCity : '',
+          billingDistrict: f.useDifferentBillingAddress ? f.billingDistrict : '',
+          billingPostalCode: f.useDifferentBillingAddress ? f.billingPostalCode : '',
         },
         items: orderItems,
         couponCode: couponCode || undefined,
-        notes: formData.notes || undefined,
+        notes: f.notes.trim() || undefined,
         acceptedTerms,
-        paymentMethod: options.paymentMethod,
+        paymentMethod: method,
       }),
     })
 
     const data = await response.json().catch(() => null)
     if (!response.ok || !data?.success) {
-      throw new Error(data?.error || 'Sipariş oluşturulamadı.')
+      const e = new Error(data?.error || 'Sipariş oluşturulamadı.') as Error & { code?: string; fields?: Record<string, string> }
+      e.code = data?.code
+      e.fields = data?.fields
+      throw e
     }
-
     return data as {
       success: true
       orderId: string
@@ -261,579 +543,517 @@ export default function CheckoutPage() {
     el.submit()
   }
 
-  /** Sipariş oluştu ve sayfadan ayrılınıyor (banka / başarı sayfası): ikinci tıklama yeni sipariş açmasın */
-  const leavingRef = React.useRef(false)
+  const showGeneralError = (message: string) => {
+    setGeneralError(message)
+    window.setTimeout(() => errorBannerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (leavingRef.current || isSubmitting) return
-    
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+    setGeneralError('')
 
-    const err: Record<string, string> = {}
-    if (!formData.name?.trim()) err.name = 'Ad Soyad zorunludur.'
-    if (!formData.email?.trim()) err.email = 'E-posta zorunludur.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) err.email = 'Geçerli bir e-posta adresi girin.'
-    if (!formData.phone?.trim()) err.phone = 'Telefon zorunludur.'
-    if (!formData.addressLine?.trim()) err.addressLine = 'Adres zorunludur.'
-    if (!formData.city?.trim()) err.city = 'Şehir zorunludur.'
-    if (!formData.district?.trim()) err.district = 'İlçe zorunludur.'
-    if (!acceptedTerms) err.terms = "Siparişi tamamlamak için Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi'ni onaylamalısınız."
-    if (Object.keys(err).length > 0) {
-      setCheckoutErrors(err)
-      if (!err.terms || Object.keys(err).length > 1) scrollToTop()
+    const err = validateAll()
+    if (Object.values(err).some(Boolean)) {
+      setErrors(err)
+      focusFirstError(err)
       return
     }
-    setCheckoutErrors({})
-
-    if (formData.createAccount) {
-      if (!formData.password || formData.password.length < 6) {
-        setCheckoutErrors(prev => ({ ...prev, password: 'Şifre en az 6 karakter olmalıdır' }))
-        scrollToTop()
-        return
-      }
-      if (formData.password !== formData.confirmPassword) {
-        setCheckoutErrors(prev => ({ ...prev, confirmPassword: 'Şifreler eşleşmiyor' }))
-        scrollToTop()
-        return
-      }
-    }
+    setErrors({})
 
     const gaItems = cartItems.map(cartItemToGa)
     void trackAddPaymentInfo(gaItems, paymentMethod === 'card' ? 'card' : 'bank_transfer')
+    const lastOrder = (orderNo: string, pricing?: { total: number; tax?: number; shipping?: number }) => {
+      try {
+        sessionStorage.setItem('last-order', JSON.stringify({
+          orderNo,
+          total: pricing?.total ?? total,
+          tax: pricing?.tax ?? tax,
+          shipping: pricing?.shipping ?? shipping,
+          coupon: couponCode,
+          gaItems,
+          paymentMethod: paymentMethod === 'card' ? 'card' : 'bank_transfer',
+          // Başarı sayfasındaki "hesap oluştur" önerisi için (URL'ye kişisel veri yazılmaz)
+          guest: !isAuthenticated ? { name: formData.name.trim(), email: formData.email.trim(), phone: formData.phone } : null,
+        }))
+      } catch {}
+    }
+
     try {
       setIsSubmitting(true)
       if (paymentMethod === 'card') {
-        const data = await createOrderWithApi({ paymentMethod: 'card' })
+        const data = await createOrderWithApi('card')
         if (!data.payment?.form) {
-          setCheckoutErrors(prev => ({ ...prev, payment: 'Banka ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.' }))
-          scrollToTop()
+          showGeneralError('Banka ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.')
           return
         }
-        // GA4 satın alma olayı ödeme onaylanınca başarı sayfasında gönderilir
-        try {
-          sessionStorage.setItem('last-order', JSON.stringify({ orderNo: data.orderId, total: data.pricing?.total ?? total, tax: data.pricing?.tax ?? tax, shipping: data.pricing?.shipping ?? shipping, coupon: couponCode, gaItems }))
-        } catch {}
-        // Sepet burada temizlenmez: ödeme iptal edilirse müşteri sepetine geri döner.
-        // Ödeme onaylanınca /checkout/success sayfası sepeti temizler.
+        lastOrder(data.orderId, data.pricing)
+        // Sepet burada temizlenmez: ödeme tamamlanmazsa müşteri sepetine döner. Başarı sayfası temizler.
         leavingRef.current = true
         submitToBank(data.payment.form)
         return
       }
 
-      const data = await createOrderWithApi({ paymentMethod: 'bank_transfer' })
-      // Başarı sayfası havale tutarını göstersin (misafir siparişi API'den okunamaz)
-      try {
-        sessionStorage.setItem('last-order', JSON.stringify({ orderNo: data.orderId, total: data.pricing?.total ?? total, tax: data.pricing?.tax ?? tax, shipping: data.pricing?.shipping ?? shipping, coupon: couponCode, email: formData.email, gaItems }))
-      } catch {}
+      const data = await createOrderWithApi('bank_transfer')
+      lastOrder(data.orderId, data.pricing)
       leavingRef.current = true
+      router.push(`/checkout/success?order_id=${encodeURIComponent(data.orderId)}&payment=bank_transfer`)
       if (isFromCart) clearCart()
-      if (formData.createAccount) {
-        const params = new URLSearchParams({
-          email: formData.email || '',
-          name: formData.name || '',
-          from_order: '1',
-          redirect: `/checkout/success?order_id=${data.orderId}&payment=bank_transfer`,
-        })
-        if (formData.phone) params.set('phone', formData.phone)
-        router.push(`/register?${params.toString()}`)
-      } else {
-        router.push(`/checkout/success?order_id=${data.orderId}&payment=bank_transfer`)
-      }
     } catch (error) {
-      console.error('Order creation error:', error)
-      const message = error instanceof Error && error.message ? error.message : 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.'
-      setCheckoutErrors(prev => ({ ...prev, general: message }))
-      scrollToTop()
+      const ex = error as Error & { code?: string; fields?: Record<string, string> }
+      if (ex.code === 'CARD_UNAVAILABLE') {
+        setPaymentMethod('havale')
+        showGeneralError('Kartla ödeme şu anda kullanılamıyor. Ödeme yöntemi Havale/EFT olarak değiştirildi; siparişi bu şekilde tamamlayabilirsiniz.')
+      } else if (ex.fields && Object.keys(ex.fields).length > 0) {
+        setErrors(ex.fields)
+        focusFirstError(ex.fields)
+      } else {
+        showGeneralError(ex?.message || 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.')
+      }
     } finally {
       // Yönlendirme sürerken düğme kilitli kalır
       if (!leavingRef.current) setIsSubmitting(false)
     }
   }
 
-  if (!cartHydrated) {
+  if (!cartHydrated || (!isFromCart && leavingRef.current)) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
-        <Card className="rounded-2xl border border-palette shadow-lg p-8 max-w-md text-center">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-light mb-4">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-slate-700" />
-          </div>
-          <h2 className="text-xl font-bold text-ink">Yükleniyor...</h2>
-          <p className="text-ink-muted mt-2">Sepet bilgileri alınıyor.</p>
-        </Card>
+      <div className="flex min-h-[60vh] items-center justify-center bg-[#f5f7fa] px-4">
+        <div className="flex items-center gap-3 text-[#20384e]">
+          <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+          <span>{leavingRef.current ? 'Siparişiniz tamamlanıyor…' : 'Sepetiniz yükleniyor…'}</span>
+        </div>
       </div>
     )
   }
 
   if (!isFromCart) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
-        <Card className="rounded-2xl border border-palette shadow-lg p-8 max-w-md text-center">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-light mb-4">
-            <AlertCircle className="w-8 h-8 text-brand" />
+      <div className="flex min-h-[60vh] items-center justify-center bg-[#f5f7fa] px-4">
+        <div className="w-full max-w-md rounded-xl border border-[#e6ebf1] bg-white p-8 text-center">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#f1f4f8]">
+            <ShoppingCart className="h-7 w-7 text-[#0b2540]" aria-hidden />
           </div>
-          <h2 className="text-xl font-bold text-ink">Sepetiniz Boş</h2>
-          <p className="text-ink-muted mt-2 mb-2">Lütfen önce ürün ekleyin. B2B siparişler için <Link href="/contact" className="text-brand hover:underline font-medium">iletişime geçiniz</Link>.</p>
-          <div className="mt-6 flex justify-center">
-            <Button onClick={() => router.push('/products')} variant="outline" className="rounded-full min-h-[48px] w-full sm:w-auto touch-manipulation">
-              Ürünlere Git
-            </Button>
-          </div>
-        </Card>
+          <h1 className="text-xl font-semibold text-[#121926]">Sepetiniz boş</h1>
+          <p className="mt-2 text-sm text-[#6b7c8f]">Ödeme adımına geçmek için önce sepetinize ürün ekleyin.</p>
+          <Link href="/products" className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">
+            Ürünlere göz atın
+          </Link>
+        </div>
       </div>
     )
   }
 
+  const errorCount = Object.values(errors).filter(Boolean).length
+  const f = formData
+  const describe = (id: string) => (errors[id] ? `${id}-error` : undefined)
+
+  const summaryLines = (
+    <dl className="space-y-2.5 text-sm">
+      <div className="flex justify-between gap-3">
+        <dt className="text-[#6b7c8f]">Ara toplam <span className="text-xs">(KDV hariç)</span></dt>
+        <dd className="font-medium text-[#121926] tabular-nums">{formatPrice(subtotal)}</dd>
+      </div>
+      {couponDiscount > 0 && (
+        <div className="flex justify-between gap-3 text-emerald-700">
+          <dt>Kupon <span className="rounded bg-emerald-50 px-1.5 py-0.5 font-mono text-xs">{couponCode}</span></dt>
+          <dd className="font-medium tabular-nums">−{formatPrice(couponDiscount)}</dd>
+        </div>
+      )}
+      {paymentDiscount > 0 && (
+        <div className="flex justify-between gap-3 text-emerald-700">
+          <dt>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</dt>
+          <dd className="font-medium tabular-nums">−{formatPrice(paymentDiscount)}</dd>
+        </div>
+      )}
+      <div className="flex justify-between gap-3">
+        <dt className="text-[#6b7c8f]">KDV (%{VAT_RATE})</dt>
+        <dd className="font-medium text-[#121926] tabular-nums">{formatPrice(tax)}</dd>
+      </div>
+      <div className="flex justify-between gap-3">
+        <dt className="text-[#6b7c8f]">Kargo</dt>
+        <dd className="font-medium tabular-nums">
+          {shipping === 0 ? <span className="text-emerald-700">Ücretsiz</span> : <span className="text-[#121926]">{formatPrice(shipping)}</span>}
+        </dd>
+      </div>
+      {toFreeShipping > 0 && (
+        <p className="rounded-lg bg-[#fff8e1] px-3 py-2 text-[13px] text-[#6b5200]">
+          <strong className="font-semibold">{formatPrice(toFreeShipping)}</strong> daha ekleyin, kargo ücretsiz olsun.
+        </p>
+      )}
+      <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-3">
+        <dt className="text-base font-semibold text-[#121926]">Toplam <span className="text-xs font-normal text-[#6b7c8f]">(KDV dahil)</span></dt>
+        <dd className="text-xl font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</dd>
+      </div>
+    </dl>
+  )
+
+  const itemList = (
+    <ul className="divide-y divide-[#eef1f5]">
+      {cartItems.map((item) => (
+        <li key={item.id} className="flex items-center gap-3 py-3 first:pt-0">
+          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-[#e6ebf1] bg-white">
+            {item.image ? (
+              <Image src={item.image} alt="" fill className="object-contain p-1" sizes="56px" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center"><Package className="h-6 w-6 text-[#b8c2ce]" aria-hidden /></div>
+            )}
+            <span className="absolute -right-0 -top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-md bg-[#0b2540] px-1 text-[11px] font-semibold text-white">{item.quantity}</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="line-clamp-2 text-sm font-medium leading-snug text-[#121926]">{item.name}</p>
+            {item.selectedVariant?.label && <p className="mt-0.5 text-xs text-[#6b7c8f]">{item.selectedVariant.label}</p>}
+            <p className="mt-0.5 text-xs text-[#6b7c8f]">{item.quantity} adet × {formatPrice(item.price)}</p>
+          </div>
+          <span className="shrink-0 text-sm font-semibold text-[#121926] tabular-nums">{formatPrice(item.price * item.quantity)}</span>
+        </li>
+      ))}
+    </ul>
+  )
+
   return (
-    <div className="min-h-screen bg-surface pb-safe">
-      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-8 py-5 sm:py-6 md:py-8">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-4 sm:mb-6 rounded-xl min-h-[44px] touch-manipulation -ml-2 pl-2">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Geri Dön
-        </Button>
+    <div className="min-h-screen bg-[#f5f7fa] pb-safe">
+      <div className="border-b border-[#e6ebf1] bg-white">
+        <div className="container mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div className="flex items-center gap-3">
+            <Link href="/cart" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e6ebf1] text-[#20384e] hover:bg-[#f5f7fa]" aria-label="Sepete dön">
+              <ArrowLeft className="h-4 w-4" aria-hidden />
+            </Link>
+            <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">Güvenli Ödeme</h1>
+            <span className="hidden items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 sm:inline-flex">
+              <Lock className="h-3 w-3" aria-hidden /> SSL korumalı
+            </span>
+          </div>
+          <Stepper />
+        </div>
+      </div>
 
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-ink mb-5 sm:mb-6 md:mb-8">Ödeme</h1>
+      <div className="container mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8">
+        {/* Mobil: daraltılabilir sipariş özeti */}
+        <div className="mb-4 overflow-hidden rounded-xl border border-[#e6ebf1] bg-white lg:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileSummaryOpen((v) => !v)}
+            aria-expanded={mobileSummaryOpen}
+            className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left"
+          >
+            <span className="flex items-center gap-2 text-sm font-medium text-[#20384e]">
+              <ShoppingCart className="h-4 w-4" aria-hidden />
+              Sipariş özeti ({itemCount} ürün)
+              <ChevronDown className={`h-4 w-4 transition-transform ${mobileSummaryOpen ? 'rotate-180' : ''}`} aria-hidden />
+            </span>
+            <span className="text-base font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</span>
+          </button>
+          {mobileSummaryOpen && (
+            <div className="space-y-4 border-t border-[#eef1f5] px-4 py-4">
+              {itemList}
+              {summaryLines}
+            </div>
+          )}
+        </div>
 
-        {(checkoutErrors.general || checkoutErrors.payment) && (
-          <div className="mb-4 p-4 bg-destructive/10 border border-destructive/30 rounded-xl text-sm text-destructive">
-            <div className="flex items-start gap-2">
-              <AlertCircle className="w-5 h-5 mt-0.5 shrink-0" />
-              <span>{checkoutErrors.general || checkoutErrors.payment}</span>
+        {(generalError || errorCount > 0) && (
+          <div ref={errorBannerRef} role="alert" className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden />
+            <div>
+              {generalError ? <p>{generalError}</p> : <p>Lütfen işaretli {errorCount > 1 ? `${errorCount} alanı` : 'alanı'} kontrol edin.</p>}
             </div>
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 min-w-0 max-w-full">
-            {/* Left Column - Order & Customer Info */}
-            <div className="lg:col-span-2 space-y-6 min-w-0">
-              {/* Order Items */}
-              {isFromCart && (
-                <Card className="rounded-2xl border border-palette shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <ShoppingCart className="w-5 h-5" />
-                      Sipariş Özeti
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {cartItems.map((item) => (
-                        <div key={item.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b last:border-0">
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="w-16 h-16 bg-muted rounded-xl overflow-hidden flex-shrink-0 relative">
-                              {item.image ? (
-                                <Image src={item.image} alt={item.name} fill className="object-cover" sizes="64px" />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                  <Package className="w-8 h-8 text-ink-muted" />
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-ink text-sm sm:text-base">{item.name}</h3>
-                              <p className="text-sm text-ink-muted">Adet: {item.quantity}</p>
-                            </div>
-                          </div>
-                          <div className="text-left sm:text-right w-full sm:w-auto">
-                            <div className="font-bold text-base sm:text-lg">{formatPrice(item.price * item.quantity)}</div>
-                          </div>
-                        </div>
-                      ))}
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-8">
+            <div className="min-w-0 space-y-5">
+              {/* 1. İletişim */}
+              <Section
+                step={1}
+                title="İletişim bilgileri"
+                icon={User}
+                aside={!isAuthenticated ? (
+                  <span className="text-[#6b7c8f]">Üye misiniz? <Link href="/login?redirect=/checkout" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Giriş yapın</Link></span>
+                ) : undefined}
+              >
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <Field id="name" label="Ad Soyad" required error={errors.name} className="sm:col-span-2">
+                    <input id="name" name="name" autoComplete="name" value={f.name} onChange={handleInputChange}
+                      aria-invalid={!!errors.name || undefined} aria-describedby={describe('name')} className={inputCls(!!errors.name)} />
+                  </Field>
+                  <Field id="email" label="E-posta" required error={errors.email} hint="Sipariş onayı ve kargo bilgisi bu adrese gönderilir.">
+                    <input id="email" name="email" type="email" autoComplete="email" inputMode="email" value={f.email} onChange={handleInputChange}
+                      onBlur={(e) => validateField('email', e.target.value)}
+                      aria-invalid={!!errors.email || undefined} aria-describedby={errors.email ? 'email-error' : 'email-hint'} className={inputCls(!!errors.email)} />
+                  </Field>
+                  <Field id="phone" label="Cep telefonu" required error={errors.phone} hint="Kargo firması teslimat için arayabilir.">
+                    <div className="relative">
+                      <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-base text-[#6b7c8f]">+90</span>
+                      <input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="5xx xxx xx xx"
+                        value={f.phone} onChange={handleInputChange} onBlur={(e) => validateField('phone', e.target.value)}
+                        aria-invalid={!!errors.phone || undefined} aria-describedby={errors.phone ? 'phone-error' : 'phone-hint'} className={`${inputCls(!!errors.phone)} pl-12`} />
                     </div>
-                  </CardContent>
-                </Card>
-              )}
+                  </Field>
+                </div>
+              </Section>
 
-              <Card className="rounded-2xl border border-palette shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="w-5 h-5" />
-                    Müşteri Bilgileri
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {isAuthenticated && savedAddresses.length > 0 && (
-                    <div className="mb-4 p-4 bg-brand-light rounded-xl border border-palette">
-                      <Label className="text-sm font-semibold mb-2 block">Kayıtlı Adreslerim</Label>
-                      <div className="space-y-2">
-                        {savedAddresses.map((address) => (
-                          <label
-                            key={address.id}
-                            className={`flex items-start gap-3 p-3 min-h-[52px] border rounded-xl cursor-pointer transition-colors touch-manipulation ${
-                              selectedAddressId === address.id
-                                ? 'border-brand bg-brand-light'
-                                : 'border-palette hover:border-ink-muted/30'
-                            }`}
-                          >
+              {/* 2. Teslimat adresi */}
+              <Section
+                step={2}
+                title="Teslimat adresi"
+                icon={MapPin}
+                aside={isAuthenticated && savedAddresses.length > 0 ? (
+                  <Link href="/profile?tab=addresses" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Adreslerim</Link>
+                ) : undefined}
+              >
+                {isAuthenticated && savedAddresses.length > 0 && (
+                  <fieldset className="mb-5">
+                    <legend className="mb-2 text-sm font-medium text-[#20384e]">Kayıtlı adreslerim</legend>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                      {savedAddresses.map((address) => {
+                        const active = selectedAddressId === address.id
+                        return (
+                          <label key={address.id} className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${active ? 'border-[#0b2540] bg-[#f1f4f8] ring-1 ring-[#0b2540]' : 'border-[#d3d9e1] hover:border-[#b8c2ce]'}`}>
                             <input
                               type="radio"
-                              name="address"
-                              checked={selectedAddressId === address.id}
-                              onChange={() => {
-                                setSelectedAddressId(address.id)
-                                setFormData(prev => ({
-                                  ...prev,
-                                  name: address.name,
-                                  phone: address.phone,
-                                  addressLine: address.addressLine,
-                                  city: address.city,
-                                  district: address.district,
-                                  postalCode: address.postalCode,
-                                  country: address.country
-                                }))
-                              }}
-                              className="mt-1"
+                              name="savedAddress"
+                              checked={active}
+                              onChange={() => { setSelectedAddressId(address.id); applyAddress(address) }}
+                              className="mt-1 h-4 w-4 accent-[#0b2540]"
                             />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className="font-medium text-sm">{address.title}</span>
-                                {address.isDefault && (
-                                  <Badge variant="outline" className="text-xs">Varsayılan</Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-ink-muted">{address.addressLine}</p>
-                              <p className="text-xs text-ink-muted">
-                                {address.district} / {address.city} {address.postalCode}
-                              </p>
-                            </div>
+                            <span className="min-w-0 text-sm">
+                              <span className="flex items-center gap-2 font-medium text-[#121926]">
+                                {address.title || 'Adres'}
+                                {address.isDefault && <span className="rounded bg-[#e6ebf1] px-1.5 py-0.5 text-[11px] font-medium text-[#20384e]">Varsayılan</span>}
+                              </span>
+                              <span className="mt-0.5 block truncate text-[#6b7c8f]">{address.addressLine}</span>
+                              <span className="block text-xs text-[#6b7c8f]">{address.district} / {address.city}</span>
+                            </span>
                           </label>
-                        ))}
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="mt-2 text-brand min-h-[44px] touch-manipulation"
-                        onClick={() => router.push('/profile?tab=addresses')}
-                      >
-                        <MapPin className="w-4 h-4 mr-2" />
-                        Adres Yönetimi
-                      </Button>
+                        )
+                      })}
                     </div>
+                  </fieldset>
+                )}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
+                  <Field id="city" label="İl" required error={errors.city} className="sm:col-span-2">
+                    <CitySelect id="city" value={f.city} invalid={!!errors.city} describedBy={describe('city')}
+                      onChange={(city) => { setSelectedAddressId(null); setFormData((p) => ({ ...p, city, district: '' })); setErrors((p) => ({ ...p, city: '', district: '' })) }} />
+                  </Field>
+                  <Field id="district" label="İlçe" required error={errors.district} className="sm:col-span-2">
+                    <DistrictSelect id="district" city={f.city} value={f.district} invalid={!!errors.district} describedBy={describe('district')}
+                      onChange={(d) => { setSelectedAddressId(null); setField('district', d) }} />
+                  </Field>
+                  <Field id="postalCode" label="Posta kodu" error={errors.postalCode} className="sm:col-span-2">
+                    <input id="postalCode" name="postalCode" inputMode="numeric" autoComplete="postal-code" placeholder="34000"
+                      value={f.postalCode} onChange={handleInputChange} onBlur={(e) => validateField('postalCode', e.target.value)}
+                      aria-invalid={!!errors.postalCode || undefined} aria-describedby={describe('postalCode')} className={inputCls(!!errors.postalCode)} />
+                  </Field>
+                  <Field id="addressLine" label="Açık adres" required error={errors.addressLine} hint="Mahalle, cadde/sokak, bina ve daire numarası" className="sm:col-span-6">
+                    <textarea id="addressLine" name="addressLine" autoComplete="street-address" rows={3} value={f.addressLine} onChange={handleInputChange}
+                      aria-invalid={!!errors.addressLine || undefined} aria-describedby={errors.addressLine ? 'addressLine-error' : 'addressLine-hint'}
+                      className={`${inputCls(!!errors.addressLine)} h-auto min-h-[88px] py-3 leading-relaxed`} />
+                  </Field>
+                </div>
+                <div className="mt-4">
+                  {showNote || f.notes ? (
+                    <Field id="notes" label="Sipariş notu">
+                      <textarea id="notes" name="notes" rows={2} maxLength={2000} value={f.notes} onChange={handleInputChange}
+                        placeholder="Teslimat veya sipariş ile ilgili eklemek istedikleriniz"
+                        className={`${inputCls(false)} h-auto py-3`} />
+                    </Field>
+                  ) : (
+                    <button type="button" onClick={() => setShowNote(true)} className="text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">
+                      + Sipariş notu ekle
+                    </button>
                   )}
+                </div>
+              </Section>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <Label htmlFor="name">Ad Soyad *</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        autoComplete="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className={`rounded-xl ${checkoutErrors.name ? 'border-destructive' : ''}`}
-                      />
-                      {checkoutErrors.name && <p className="text-sm text-destructive">{checkoutErrors.name}</p>}
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="email">E-posta *</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className={`rounded-xl ${checkoutErrors.email ? 'border-destructive' : ''}`}
-                      />
-                      {checkoutErrors.email && <p className="text-sm text-destructive">{checkoutErrors.email}</p>}
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="phone">Telefon *</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        inputMode="numeric"
-                        autoComplete="tel"
-                        placeholder="5xx xxx xx xx"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className={`rounded-xl ${checkoutErrors.phone ? 'border-destructive' : ''}`}
-                      />
-                      {checkoutErrors.phone && <p className="text-sm text-destructive">{checkoutErrors.phone}</p>}
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="city">Şehir *</Label>
-                      <Input
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={handleInputChange}
-                        className={`rounded-xl ${checkoutErrors.city ? 'border-destructive' : ''}`}
-                      />
-                      {checkoutErrors.city && <p className="text-sm text-destructive">{checkoutErrors.city}</p>}
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="district">İlçe *</Label>
-                      <Input
-                        id="district"
-                        name="district"
-                        value={formData.district}
-                        onChange={handleInputChange}
-                        className={`rounded-xl ${checkoutErrors.district ? 'border-destructive' : ''}`}
-                      />
-                      {checkoutErrors.district && <p className="text-sm text-destructive">{checkoutErrors.district}</p>}
-                    </div>
-                    <div>
-                      <Label htmlFor="postalCode">Posta Kodu</Label>
-                      <Input
-                        id="postalCode"
-                        name="postalCode"
-                        inputMode="numeric"
-                        placeholder="34000"
-                        value={formData.postalCode}
-                        onChange={handleInputChange}
-                        className="rounded-xl"
-                      />
-                    </div>
+              {/* 3. Fatura */}
+              <Section step={3} title="Fatura bilgileri" icon={Building2}>
+                <div role="radiogroup" aria-label="Fatura türü" className="mb-5 inline-flex rounded-lg border border-[#d3d9e1] bg-[#f5f7fa] p-1">
+                  {([
+                    ['individual', 'Bireysel'],
+                    ['company', 'Kurumsal'],
+                  ] as const).map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      role="radio"
+                      aria-checked={f.billingType === value}
+                      onClick={() => { setField('billingType', value); setErrors((p) => ({ ...p, idNumber: '', companyName: '', taxId: '', taxOffice: '' })) }}
+                      className={`h-9 rounded-md px-4 text-sm font-medium transition-colors ${f.billingType === value ? 'bg-white text-[#0b2540] shadow-sm ring-1 ring-[#d3d9e1]' : 'text-[#6b7c8f] hover:text-[#20384e]'}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+
+                {f.billingType === 'individual' ? (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field id="idNumber" label="T.C. kimlik no" error={errors.idNumber} hint="E-arşiv faturanız için; boş bırakabilirsiniz.">
+                      <input id="idNumber" name="idNumber" inputMode="numeric" autoComplete="off" placeholder="11 haneli"
+                        value={f.idNumber} onChange={handleInputChange} onBlur={(e) => validateField('idNumber', e.target.value)}
+                        aria-invalid={!!errors.idNumber || undefined} aria-describedby={errors.idNumber ? 'idNumber-error' : 'idNumber-hint'} className={inputCls(!!errors.idNumber)} />
+                    </Field>
                   </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="addressLine">Adres *</Label>
-                      <Textarea
-                        id="addressLine"
-                        name="addressLine"
-                        autoComplete="street-address"
-                        value={formData.addressLine}
-                        onChange={handleInputChange}
-                        rows={3}
-                      className={`rounded-xl ${checkoutErrors.addressLine ? 'border-destructive' : ''}`}
-                    />
-                    {checkoutErrors.addressLine && <p className="text-sm text-destructive">{checkoutErrors.addressLine}</p>}
+                ) : (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <Field id="companyName" label="Firma ünvanı" required error={errors.companyName} className="sm:col-span-2">
+                      <input id="companyName" name="companyName" autoComplete="organization" value={f.companyName} onChange={handleInputChange}
+                        aria-invalid={!!errors.companyName || undefined} aria-describedby={describe('companyName')} className={inputCls(!!errors.companyName)} />
+                    </Field>
+                    <Field id="taxId" label="Vergi numarası" required error={errors.taxId}>
+                      <input id="taxId" name="taxId" inputMode="numeric" autoComplete="off" placeholder="10 haneli"
+                        value={f.taxId} onChange={handleInputChange} onBlur={(e) => validateField('taxId', e.target.value)}
+                        aria-invalid={!!errors.taxId || undefined} aria-describedby={describe('taxId')} className={inputCls(!!errors.taxId)} />
+                    </Field>
+                    <Field id="taxOffice" label="Vergi dairesi" required error={errors.taxOffice}>
+                      <input id="taxOffice" name="taxOffice" autoComplete="off" value={f.taxOffice} onChange={handleInputChange}
+                        aria-invalid={!!errors.taxOffice || undefined} aria-describedby={describe('taxOffice')} className={inputCls(!!errors.taxOffice)} />
+                    </Field>
                   </div>
+                )}
 
-                  {/* Billing address toggle */}
-                  <div className="flex items-center gap-2 mt-4">
-                    <input
-                      type="checkbox"
-                      id="diffBilling"
-                      checked={formData.useDifferentBillingAddress || false}
-                      onChange={e => setFormData(prev => ({ ...prev, useDifferentBillingAddress: e.target.checked }))}
-                      className="w-4 h-4 rounded border-gray-300 text-brand"
-                    />
-                    <label htmlFor="diffBilling" className="text-sm text-ink-muted cursor-pointer">
-                      Fatura adresi teslimat adresinden farklı
-                    </label>
+                <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-lg border border-[#e6ebf1] bg-[#f5f7fa] p-3">
+                  <input
+                    type="checkbox"
+                    checked={!f.useDifferentBillingAddress}
+                    onChange={(e) => setField('useDifferentBillingAddress', !e.target.checked)}
+                    className="mt-0.5 h-4 w-4 accent-[#0b2540]"
+                  />
+                  <span className="text-sm text-[#20384e]">Fatura adresim teslimat adresiyle aynı</span>
+                </label>
+
+                {f.useDifferentBillingAddress && (
+                  <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-6">
+                    <Field id="billingCity" label="Fatura ili" required error={errors.billingCity} className="sm:col-span-2">
+                      <CitySelect id="billingCity" value={f.billingCity} invalid={!!errors.billingCity} describedBy={describe('billingCity')}
+                        onChange={(city) => { setFormData((p) => ({ ...p, billingCity: city, billingDistrict: '' })); setErrors((p) => ({ ...p, billingCity: '', billingDistrict: '' })) }} />
+                    </Field>
+                    <Field id="billingDistrict" label="Fatura ilçesi" required error={errors.billingDistrict} className="sm:col-span-2">
+                      <DistrictSelect id="billingDistrict" city={f.billingCity} value={f.billingDistrict} invalid={!!errors.billingDistrict} describedBy={describe('billingDistrict')}
+                        onChange={(d) => setField('billingDistrict', d)} />
+                    </Field>
+                    <Field id="billingPostalCode" label="Posta kodu" error={errors.billingPostalCode} className="sm:col-span-2">
+                      <input id="billingPostalCode" name="billingPostalCode" inputMode="numeric" autoComplete="billing postal-code" placeholder="34000"
+                        value={f.billingPostalCode} onChange={handleInputChange} onBlur={(e) => validateField('billingPostalCode', e.target.value)}
+                        aria-invalid={!!errors.billingPostalCode || undefined} aria-describedby={describe('billingPostalCode')} className={inputCls(!!errors.billingPostalCode)} />
+                    </Field>
+                    <Field id="billingAddressLine" label="Fatura adresi" required error={errors.billingAddressLine} className="sm:col-span-6">
+                      <textarea id="billingAddressLine" name="billingAddressLine" autoComplete="billing street-address" rows={3} value={f.billingAddressLine} onChange={handleInputChange}
+                        aria-invalid={!!errors.billingAddressLine || undefined} aria-describedby={describe('billingAddressLine')}
+                        className={`${inputCls(!!errors.billingAddressLine)} h-auto min-h-[88px] py-3 leading-relaxed`} />
+                    </Field>
                   </div>
+                )}
+              </Section>
 
-                  {formData.useDifferentBillingAddress && (
-                    <div className="mt-4 space-y-3 p-4 rounded-xl border border-palette bg-surface/50">
-                      <p className="text-sm font-semibold text-ink">Fatura Adresi</p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <Label htmlFor="billingCity">Şehir</Label>
-                          <Input
-                            id="billingCity"
-                            name="billingCity"
-                            value={formData.billingCity}
-                            onChange={handleInputChange}
-                            className="rounded-xl"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <Label htmlFor="billingDistrict">İlçe</Label>
-                          <Input
-                            id="billingDistrict"
-                            name="billingDistrict"
-                            value={formData.billingDistrict}
-                            onChange={handleInputChange}
-                            className="rounded-xl"
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="billingAddressLine">Fatura Adresi</Label>
-                        <Textarea
-                          id="billingAddressLine"
-                          name="billingAddressLine"
-                          value={formData.billingAddressLine}
-                          onChange={handleInputChange}
-                          rows={3}
-                          className="rounded-xl"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Create Account Option - Only show if not authenticated */}
-                  {!isAuthenticated && (
-                    <div className="pt-4 border-t space-y-2">
-                      <p className="text-xs text-ink-muted">
-                        Hesap olmadan devam etmek için aşağıdaki kutuyu işaretlemeyin; zorunlu bilgileri doldurup siparişi tamamlayabilirsiniz.
-                      </p>
-                      <label className="flex items-start gap-3 cursor-pointer py-2 touch-manipulation">
-                        <input
-                          type="checkbox"
-                          checked={formData.createAccount}
-                          onChange={(e) => setFormData(prev => ({ ...prev, createAccount: e.target.checked }))}
-                          className="mt-1 w-5 h-5 min-w-[20px] min-h-[20px] text-brand border-palette rounded focus:ring-2 focus:ring-brand"
-                        />
-                        <div className="flex-1">
-                          <div className="text-sm font-medium text-ink">
-                            Hesap oluştur
-                          </div>
-                          <div className="text-xs text-ink-muted mt-1">
-                            Siparişlerinizi takip edin ve gelecekteki alışverişlerinizde hızlıca ödeme yapın.
-                          </div>
-                        </div>
+              {/* 4. Ödeme */}
+              <Section step={4} title="Ödeme yöntemi" icon={CreditCard}>
+                <div role="radiogroup" aria-label="Ödeme yöntemi" className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  {([
+                    {
+                      value: 'havale' as const,
+                      title: 'Havale / EFT',
+                      icon: Banknote,
+                      badge: `%${BANK_TRANSFER_DISCOUNT_RATE} indirim`,
+                      text: `Sipariş sonrası IBAN bilgileri gösterilir. ${BANK_TRANSFER_PAYMENT_DAYS} gün içinde ödeme yapmanız yeterli.`,
+                    },
+                    {
+                      value: 'card' as const,
+                      title: 'Kredi / banka kartı',
+                      icon: CreditCard,
+                      badge: '3D Secure',
+                      text: 'Bankanın güvenli ödeme sayfasına yönlendirilirsiniz; kart bilgileriniz sitemizde saklanmaz.',
+                    },
+                  ]).map((m) => {
+                    const active = paymentMethod === m.value
+                    return (
+                      <label key={m.value} className={`relative flex cursor-pointer flex-col gap-2 rounded-lg border p-4 transition-colors ${active ? 'border-[#0b2540] bg-[#f1f4f8] ring-1 ring-[#0b2540]' : 'border-[#d3d9e1] bg-white hover:border-[#b8c2ce]'}`}>
+                        <span className="flex items-center gap-3">
+                          <input type="radio" name="paymentMethod" checked={active} onChange={() => setPaymentMethod(m.value)} className="h-4 w-4 accent-[#0b2540]" />
+                          <m.icon className="h-5 w-5 text-[#20384e]" aria-hidden />
+                          <span className="text-[15px] font-semibold text-[#121926]">{m.title}</span>
+                          <span className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${m.value === 'havale' ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' : 'bg-white text-[#20384e] ring-1 ring-[#d3d9e1]'}`}>{m.badge}</span>
+                        </span>
+                        <span className="pl-7 text-[13px] leading-relaxed text-[#6b7c8f]">{m.text}</span>
                       </label>
-                      
-                      {formData.createAccount && (
-                        <div className="mt-4 space-y-3 pl-8">
-                          <div>
-                            <Label htmlFor="password">Şifre *</Label>
-                            <Input
-                              id="password"
-                              name="password"
-                              type="password"
-                              value={formData.password}
-                              onChange={handleInputChange}
-                              required={formData.createAccount}
-                              minLength={6}
-                              autoComplete="new-password"
-                              className="rounded-xl"
-                            />
-                            {checkoutErrors.password && <p className="text-sm text-destructive mt-1">{checkoutErrors.password}</p>}
-                          </div>
-                          <div>
-                            <Label htmlFor="confirmPassword">Şifre Tekrar *</Label>
-                            <Input
-                              id="confirmPassword"
-                              name="confirmPassword"
-                              type="password"
-                              value={formData.confirmPassword}
-                              onChange={handleInputChange}
-                              required={formData.createAccount}
-                              minLength={6}
-                              autoComplete="new-password"
-                              className="rounded-xl"
-                            />
-                            {checkoutErrors.confirmPassword && <p className="text-sm text-destructive mt-1">{checkoutErrors.confirmPassword}</p>}
-                          </div>
-                        </div>
+                    )
+                  })}
+                </div>
+              </Section>
+            </div>
+
+            {/* Sağ sütun: özet + onay */}
+            <aside className="min-w-0">
+              <div className="space-y-4 lg:sticky lg:top-24">
+                <div className="rounded-xl border border-[#e6ebf1] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
+                  <div className="flex items-center justify-between border-b border-[#eef1f5] px-5 py-3.5">
+                    <h2 className="text-base font-semibold text-[#121926]">Sipariş özeti</h2>
+                    <Link href="/cart" className="text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">Sepeti düzenle</Link>
+                  </div>
+                  <div className="space-y-4 px-5 py-4">
+                    <CartQuoteNotice />
+                    <div className="hidden max-h-[300px] overflow-y-auto pr-1 lg:block">{itemList}</div>
+                    <div className="hidden lg:block">{summaryLines}</div>
+                    <div className="lg:hidden">{summaryLines}</div>
+
+                    <div>
+                      <label className="flex cursor-pointer items-start gap-3">
+                        <input
+                          id="acceptTerms"
+                          type="checkbox"
+                          checked={acceptedTerms}
+                          onChange={(e) => {
+                            setAcceptedTerms(e.target.checked)
+                            if (errors.terms) setErrors((prev) => ({ ...prev, terms: '' }))
+                          }}
+                          className="mt-0.5 h-[18px] w-[18px] shrink-0 accent-[#0b2540]"
+                          aria-invalid={!!errors.terms || undefined}
+                          aria-describedby={errors.terms ? 'terms-error' : undefined}
+                        />
+                        <span className="text-[13px] leading-relaxed text-[#20384e] [&_button]:inline [&_button]:min-h-0 [&_button]:p-0 [&_button]:align-baseline">
+                          <LegalLink slug="on-bilgilendirme-formu" onOpen={setLegalDoc}>Ön Bilgilendirme Formu</LegalLink>{"'nu ve "}
+                          <LegalLink slug="mesafeli-satis-sozlesmesi" onOpen={setLegalDoc}>Mesafeli Satış Sözleşmesi</LegalLink>
+                          {"'ni okudum, onaylıyorum."}
+                        </span>
+                      </label>
+                      {errors.terms && (
+                        <p id="terms-error" className="mt-1.5 flex items-start gap-1 text-[13px] text-red-600">
+                          <AlertCircle className="mt-px h-3.5 w-3.5 shrink-0" aria-hidden />
+                          {errors.terms}
+                        </p>
                       )}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            </div>
 
-            <div className="lg:col-span-1">
-              <Card className="rounded-2xl border border-palette shadow-lg lg:sticky lg:top-4">
-                <CardHeader>
-                  <CardTitle>Sipariş Özeti</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <CartQuoteNotice />
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-ink-muted">Ara Toplam</span>
-                      <span className="font-medium">{formatPrice(subtotal)}</span>
-                    </div>
-                    {couponDiscount > 0 && (
-                      <div className="flex justify-between text-sm text-green-600">
-                        <span>Kupon ({couponCode})</span>
-                        <span className="font-medium">-{formatPrice(couponDiscount)}</span>
-                      </div>
-                    )}
-                    {paymentDiscount > 0 && (
-                      <div className="flex justify-between text-sm text-green-600">
-                        <span>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</span>
-                        <span className="font-medium">-{formatPrice(paymentDiscount)}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between text-sm">
-                      <span className="text-ink-muted">KDV (%{VAT_RATE})</span>
-                      <span className="font-medium">{formatPrice(tax)}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-ink-muted">Kargo</span>
-                      <span className="font-medium">
-                        {shipping === 0 ? (
-                          <span className="text-green-600">Ücretsiz</span>
-                        ) : (
-                          formatPrice(shipping)
-                        )}
-                      </span>
-                    </div>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      aria-busy={isSubmitting}
+                      className="flex h-[52px] w-full items-center justify-center gap-2 rounded-lg bg-[#f5b400] px-4 text-base font-semibold text-[#111] shadow-sm transition-colors hover:bg-[#e0a500] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2540] focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
+                    >
+                      {isSubmitting ? (
+                        <><Loader2 className="h-5 w-5 animate-spin" aria-hidden />{paymentMethod === 'card' ? 'Bankaya yönlendiriliyor…' : 'Sipariş oluşturuluyor…'}</>
+                      ) : paymentMethod === 'card' ? (
+                        <><Lock className="h-[18px] w-[18px]" aria-hidden />Kartla öde · {formatPrice(total)}</>
+                      ) : (
+                        <><Check className="h-5 w-5" aria-hidden />Siparişi onayla · {formatPrice(total)}</>
+                      )}
+                    </button>
+                    <p className="text-center text-xs text-[#6b7c8f]">
+                      {paymentMethod === 'card'
+                        ? 'Ödeme, bankanızın 3D Secure sayfasında tamamlanır.'
+                        : 'Siparişiniz oluşturulur; ödeme bilgileri ekranda ve e-postanızda yer alır.'}
+                    </p>
                   </div>
+                </div>
 
-                  <Separator />
-
-                  <div className="flex justify-between font-bold text-lg">
-                    <span>Toplam</span>
-                    <span className="text-brand">{formatPrice(total)}</span>
-                  </div>
-
-                  <div className="space-y-2">
-                    <span className="text-sm font-medium text-ink">Ödeme yöntemi</span>
-                    <div className="flex flex-col gap-2">
-                      <label className={`flex items-center gap-3 p-3 min-h-[48px] rounded-xl border-2 cursor-pointer transition-colors touch-manipulation ${paymentMethod === 'havale' ? 'border-brand bg-brand-light' : 'border-palette hover:border-ink-muted/30'}`}>
-                        <input type="radio" name="paymentMethod" checked={paymentMethod === 'havale'} onChange={() => setPaymentMethod('havale')} className="text-brand w-5 h-5" />
-                        <span className="text-sm font-medium">Havale / EFT</span>
-                        <span className="ml-auto shrink-0 text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-2 py-0.5">%{BANK_TRANSFER_DISCOUNT_RATE} İndirim</span>
-                      </label>
-                      <label className={`flex items-center gap-3 p-3 min-h-[48px] rounded-xl border-2 cursor-pointer transition-colors touch-manipulation ${paymentMethod === 'card' ? 'border-brand bg-brand-light' : 'border-palette hover:border-ink-muted/30'}`}>
-                        <input type="radio" name="paymentMethod" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} className="text-brand w-5 h-5" />
-                        <span className="text-sm font-medium">Kredi / banka kartı ile öde</span>
-                        <span className="ml-auto shrink-0 text-[11px] font-semibold text-ink-muted border border-palette rounded-full px-2 py-0.5">3D Secure</span>
-                      </label>
-                    </div>
-                    {paymentMethod === 'card' ? (
-                      <p className="text-xs text-ink-muted">
-                        Siparişi onayladığınızda bankanın 3D Secure güvenli ödeme sayfasına yönlendirilirsiniz; kart bilgileriniz yalnızca bankaya iletilir, sitemizde saklanmaz.
-                        Ödeme onaylanınca siparişiniz hazırlanmaya alınır.
-                      </p>
-                    ) : (
-                      <p className="text-xs text-ink-muted">
-                        Sipariş sonrası IBAN bilgileri ekranda ve e-postanızda yer alır. Siparişiniz ödemeniz hesabımıza geçtiğinde onaylanır.
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="flex items-start gap-3 cursor-pointer touch-manipulation">
-                      <input
-                        type="checkbox"
-                        checked={acceptedTerms}
-                        onChange={(e) => {
-                          setAcceptedTerms(e.target.checked)
-                          if (checkoutErrors.terms) setCheckoutErrors(prev => ({ ...prev, terms: '' }))
-                        }}
-                        className="mt-0.5 w-5 h-5 min-w-[20px] rounded border-palette text-brand"
-                        aria-invalid={!!checkoutErrors.terms}
-                        aria-label="Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi onayı"
-                      />
-                      <span className="text-xs text-ink-muted leading-relaxed">
-                        <LegalLink slug="on-bilgilendirme-formu" onOpen={setLegalDoc}>Ön Bilgilendirme Formu</LegalLink>{"'nu ve "}
-                        <LegalLink slug="mesafeli-satis-sozlesmesi" onOpen={setLegalDoc}>Mesafeli Satış Sözleşmesi</LegalLink>
-                        {"'ni okudum, onaylıyorum. Sözleşme ve sipariş özeti e-posta adresime gönderilecektir."}
-                      </span>
-                    </label>
-                    {checkoutErrors.terms && (
-                      <p className="text-xs text-destructive">{checkoutErrors.terms}</p>
-                    )}
-                  </div>
-
-                  <Button type="submit" disabled={isSubmitting} size="lg" className="w-full rounded-full bg-brand hover:bg-brand-hover font-semibold shadow-lg min-h-[48px] touch-manipulation">
-                    {isSubmitting ? (
-                      <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />İşleniyor...</>
-                    ) : (
-                      <><CreditCard className="w-5 h-5 mr-2" />Ödemeye Geç</>
-                    )}
-                  </Button>
-
-                  <div className="text-xs text-ink-muted text-center space-y-1">
-                    <div className="flex items-center justify-center gap-1">
-                      <Truck className="w-3 h-3" />
-                      <span>Güvenli Ödeme</span>
-                    </div>
-                    <div>7/24 Müşteri Desteği</div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                <ul className="grid grid-cols-3 gap-2 text-center text-[11px] leading-tight text-[#20384e] sm:text-xs">
+                  <li className="flex flex-col items-center gap-1.5 rounded-lg border border-[#e6ebf1] bg-white px-2 py-3"><ShieldCheck className="h-5 w-5 text-[#0b2540]" aria-hidden />Güvenli ödeme</li>
+                  <li className="flex flex-col items-center gap-1.5 rounded-lg border border-[#e6ebf1] bg-white px-2 py-3"><Truck className="h-5 w-5 text-[#0b2540]" aria-hidden />Hızlı kargo</li>
+                  <li className="flex flex-col items-center gap-1.5 rounded-lg border border-[#e6ebf1] bg-white px-2 py-3"><RotateCcw className="h-5 w-5 text-[#0b2540]" aria-hidden />14 gün cayma hakkı</li>
+                </ul>
+              </div>
+            </aside>
           </div>
         </form>
         <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />
@@ -841,5 +1061,3 @@ export default function CheckoutPage() {
     </div>
   )
 }
-
-

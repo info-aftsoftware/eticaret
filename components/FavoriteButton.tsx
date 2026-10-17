@@ -1,112 +1,60 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
-import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useToast } from '@/components/ui/toast'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
-import { getFavorites, addFavorite, removeFavorite } from '@/lib/firebase/firestore'
+import { useFavorites } from '@/lib/useFavorites'
 
 interface FavoriteButtonProps {
   productId: string
+  productName?: string
   className?: string
 }
 
-export function FavoriteButton({ productId, className = '' }: FavoriteButtonProps) {
-  const { isAuthenticated, user } = useAuthStore()
+/** Ürün sayfası favori butonu — ürün kartı ve favoriler sayfasıyla aynı durumu kullanır (lib/useFavorites). */
+export function FavoriteButton({ productId, productName, className = '' }: FavoriteButtonProps) {
+  const { isFavorite, toggle, isMember } = useFavorites()
   const { addToast } = useToast()
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [showLoginDialog, setShowLoginDialog] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [busy, setBusy] = useState(false)
 
-  const checkFavoriteStatus = useCallback(async () => {
-    if (!user?.id) return
-    try {
-      const list = await getFavorites(user.id)
-      setIsFavorite(list.some((f) => f.productId === productId))
-    } catch (error) {
-      console.error('Error checking favorite status:', error)
-    }
-  }, [user?.id, productId])
+  useEffect(() => setMounted(true), [])
+  const active = mounted && isFavorite(productId)
 
-  useEffect(() => {
-    if (isAuthenticated && user?.id) {
-      checkFavoriteStatus()
-    } else {
-      setIsFavorite(false)
-    }
-  }, [isAuthenticated, user?.id, productId, checkFavoriteStatus])
-
-  const handleToggleFavorite = async (e: React.MouseEvent) => {
+  const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-
-    if (!isAuthenticated) {
-      setShowLoginDialog(true)
-      return
-    }
-    if (!user?.id) return
-
-    setLoading(true)
+    if (busy) return
+    setBusy(true)
     try {
-      if (isFavorite) {
-        await removeFavorite(user.id, productId)
-        setIsFavorite(false)
-        addToast({ type: 'success', title: 'Favorilerden Kaldırıldı', description: 'Ürün favorilerinizden kaldırıldı.' })
-      } else {
-        await addFavorite(user.id, productId)
-        setIsFavorite(true)
-        addToast({ type: 'success', title: 'Favorilere Eklendi', description: 'Ürün favorilerinize eklendi.' })
-      }
-    } catch (error) {
-      console.error('Error toggling favorite:', error)
-      addToast({ type: 'error', title: 'Hata', description: 'Bir hata oluştu. Lütfen tekrar deneyin.' })
+      const added = await toggle(productId)
+      addToast({
+        type: 'success',
+        title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı',
+        description: added && !isMember ? 'Favorileriniz bu cihazda saklanır; tüm cihazlarda görmek için giriş yapın.' : productName,
+      })
+    } catch {
+      addToast({ type: 'error', title: 'Favori kaydedilemedi', description: 'Lütfen tekrar deneyin.' })
     } finally {
-      setLoading(false)
+      setBusy(false)
     }
   }
 
   return (
-    <>
-      <button
-        onClick={handleToggleFavorite}
-        disabled={loading}
-        className={`p-0.5 sm:p-1.5 bg-white rounded-full shadow-sm hover:bg-brand-light transition-colors z-30 relative ${className} ${
-          isFavorite ? 'text-brand' : 'text-ink-muted hover:text-brand'
-        }`}
-        title={isFavorite ? 'Favorilerden kaldır' : 'Favorilere ekle'}
-      >
-        <Heart className={`w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 ${isFavorite ? 'fill-current' : ''}`} />
-      </button>
-
-      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
-        <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
-          <DialogHeader>
-            <DialogTitle>Giriş Yapmalısınız</DialogTitle>
-            <DialogDescription>
-              Ürünleri favorilerinize eklemek için lütfen giriş yapın.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowLoginDialog(false)}>
-              İptal
-            </Button>
-            <Button asChild>
-              <Link href="/login">Giriş Yap</Link>
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+    <button
+      type="button"
+      onClick={handleToggle}
+      disabled={busy}
+      aria-pressed={active}
+      aria-label={active ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+      title={active ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+      className={`relative z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors touch-manipulation disabled:opacity-60 ${
+        active
+          ? 'border-[#f5b400] bg-[#f5b400] text-[#111]'
+          : 'border-[#e6ebf1] bg-white text-[#6b7c8f] hover:border-[#0b2540] hover:text-[#0b2540]'
+      } ${className}`}
+    >
+      <Heart className={`h-4 w-4 ${active ? 'fill-current' : ''}`} />
+    </button>
   )
 }
-

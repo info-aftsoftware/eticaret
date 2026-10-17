@@ -4,14 +4,24 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Button as UiButton, type ButtonProps } from '@/components/ui/button'
+import { Pill } from '@/components/admin/ui'
+import { ORDER_STATUS_TONE, PAYMENT_STATUS_TONE } from '@/components/admin/order-meta'
+import { cn } from '@/lib/utils'
+import { useToast } from '@/components/admin/toast'
+import { useAdminLive } from '@/components/admin/AdminLiveProvider'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Loader2, Package, FileText, Truck, CreditCard, Banknote, Clock, StickyNote, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Loader2, Package, FileText, Truck, CreditCard, Banknote, Clock, StickyNote, ExternalLink, UserRound } from 'lucide-react'
 import { fmtTRY } from '@/lib/format'
 import { ReturnRequestsCard, type AdminReturnRequest } from './ReturnRequestsCard'
+import { CancelRequestCard, type AdminCancelRequest } from './CancelRequestCard'
+
+/** Panelde ölçeklenen hover efekti istenmez */
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button({ className, ...props }, ref) {
+  return <UiButton ref={ref} className={cn('hover:scale-100 active:scale-100 hover:shadow-none shadow-none', className)} {...props} />
+})
 
 type OrderEvent = {
   id: string
@@ -29,6 +39,8 @@ type OrderDetail = {
   orderId: string
   userId?: string
   customerNo?: string | null
+  customerKey?: string
+  readOnly?: boolean
   customer: Record<string, string | null | undefined>
   items: Array<{ id?: string; name: string; productId?: string | null; price: number; quantity: number; lineTotal?: number }>
   pricing: {
@@ -61,6 +73,7 @@ type OrderDetail = {
   cancelledAt?: string | null
   events?: OrderEvent[]
   returnRequests?: AdminReturnRequest[]
+  cancelRequest?: AdminCancelRequest | null
 }
 
 const STATUS_LABELS: Record<string, string> = {
@@ -88,15 +101,6 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
   paytr: 'Kredi / Banka Kartı (PayTR)',
 }
 
-const LEGACY_STATUS_OPTIONS = [
-  { value: 'PENDING', label: 'Beklemede' },
-  { value: 'PICKING', label: 'Hazırlanıyor' },
-  { value: 'SHIPPED', label: 'Kargoya Verildi' },
-  { value: 'DELIVERED', label: 'Teslim Edildi' },
-  { value: 'CANCELLED', label: 'İptal' },
-  { value: 'RETURNED', label: 'İade' },
-]
-
 const fmtDate = (s?: string | null) =>
   s ? new Date(s).toLocaleString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'
 
@@ -107,6 +111,8 @@ export default function AdminOrderDetailPage() {
   const source = searchParams.get('source') || 'prisma'
   const userId = searchParams.get('userId') || ''
 
+  const toast = useToast()
+  const { refresh: refreshLive } = useAdminLive()
   const [order, setOrder] = useState<OrderDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState<string | null>(null)
@@ -118,7 +124,6 @@ export default function AdminOrderDetailPage() {
   const [reason, setReason] = useState('')
   const [notifyCustomer, setNotifyCustomer] = useState(true)
   const [adminNote, setAdminNote] = useState('')
-  const [legacyStatus, setLegacyStatus] = useState('')
 
   const apiUrl = source === 'firestore' && userId
     ? `/api/admin/orders/${id}?source=firestore&userId=${userId}`
@@ -129,7 +134,6 @@ export default function AdminOrderDetailPage() {
     setCarrier(data.shippingCarrier || data.carriers?.[0]?.id || '')
     setTrackingNumber(data.trackingNumber || '')
     setAdminNote(data.adminNote || '')
-    setLegacyStatus(data.status)
   }, [])
 
   useEffect(() => {
@@ -142,8 +146,8 @@ export default function AdminOrderDetailPage() {
       .finally(() => setLoading(false))
   }, [id, apiUrl, applyOrder])
 
-  const patch = async (key: string, body: Record<string, unknown>, successText: string, confirmText?: string) => {
-    if (confirmText && !window.confirm(confirmText)) return
+  const patch = async (key: string, body: Record<string, unknown>, successText: string, confirmText?: string): Promise<boolean> => {
+    if (confirmText && !window.confirm(confirmText)) return false
     setBusy(key)
     setMessage(null)
     try {
@@ -158,8 +162,14 @@ export default function AdminOrderDetailPage() {
       if (data?.order) applyOrder({ ...order!, ...data.order })
       setReason('')
       setMessage({ type: 'success', text: successText })
+      toast.success(successText)
+      refreshLive()
+      return true
     } catch (err) {
-      setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Güncelleme sırasında bir hata oluştu.' })
+      const text = err instanceof Error ? err.message : 'Güncelleme sırasında bir hata oluştu.'
+      setMessage({ type: 'error', text })
+      toast.error('İşlem yapılamadı', text)
+      return false
     } finally {
       setBusy(null)
     }
@@ -220,19 +230,29 @@ export default function AdminOrderDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <Button asChild variant="ghost" size="sm" className="w-fit">
-          <Link href="/admin/orders"><ArrowLeft className="w-4 h-4 mr-2" />Siparişlere Dön</Link>
-        </Button>
-        <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-slate-900">Sipariş {order.orderId}</h1>
-          <p className="text-sm text-slate-600">{fmtDate(order.createdAt)}{order.customerNo ? ` · Müşteri ${order.customerNo}` : order.userId ? ' · Üye' : ' · Misafir'}</p>
-        </div>
-        <div className="flex gap-2 flex-wrap">
-          <Badge variant="secondary">{order.statusLabel ?? STATUS_LABELS[order.status] ?? order.status}</Badge>
-          <Badge className={isPaid ? 'bg-green-100 text-green-800 border-0' : 'bg-amber-100 text-amber-800 border-0'}>
-            {PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}
-          </Badge>
+      <div className="space-y-2">
+        <Link href="/admin/orders" className="inline-flex items-center gap-1 text-[13px] text-[#6b7c8f] hover:text-[#0b2540]">
+          <ArrowLeft className="w-4 h-4" />
+          Siparişler
+        </Link>
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold text-[#121926] tracking-tight flex flex-wrap items-center gap-2">
+              <span className="font-mono">{order.orderId}</span>
+              <Pill tone={ORDER_STATUS_TONE[order.status] ?? 'slate'} dot>{order.statusLabel ?? STATUS_LABELS[order.status] ?? order.status}</Pill>
+              <Pill tone={PAYMENT_STATUS_TONE[order.paymentStatus] ?? 'slate'}>{PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}</Pill>
+            </h1>
+            <p className="text-sm text-[#6b7c8f] mt-1">
+              {fmtDate(order.createdAt)} · {c.name}
+              {order.customerNo ? ` · ${order.customerNo}` : order.userId ? ' · Üye' : ' · Misafir'}
+            </p>
+          </div>
+          {order.customerKey && (
+            <Link href={`/admin/musteriler/detay?key=${encodeURIComponent(order.customerKey)}`} className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg border border-[#d3d9e1] bg-white text-[13px] font-medium text-[#20384e] hover:bg-[#f5f7fa] w-fit">
+              <UserRound className="w-4 h-4" />
+              Müşteri kartı
+            </Link>
+          )}
         </div>
       </div>
 
@@ -245,10 +265,14 @@ export default function AdminOrderDetailPage() {
         </div>
       )}
 
+      {isPrisma && order.cancelRequest?.status === 'REQUESTED' && (
+        <CancelRequestCard request={order.cancelRequest} total={p.total ?? 0} paymentMethod={order.paymentMethod} busy={busy} onAction={patch} />
+      )}
+
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Sol: sipariş içeriği */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="border-slate-200/80 bg-white shadow-sm">
+          <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
             <CardHeader><CardTitle className="text-base">Ürünler</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               <ul className="divide-y divide-slate-100">
@@ -281,7 +305,7 @@ export default function AdminOrderDetailPage() {
           </Card>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <Card className="border-slate-200/80 bg-white shadow-sm">
+            <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
               <CardHeader><CardTitle className="text-base">Müşteri ve Teslimat</CardTitle></CardHeader>
               <CardContent className="text-sm text-slate-700 space-y-1">
                 <p className="font-medium text-slate-900">{c.name}</p>
@@ -291,7 +315,7 @@ export default function AdminOrderDetailPage() {
                 <p>{[c.district, c.city, c.postalCode].filter(Boolean).join(' / ')}</p>
               </CardContent>
             </Card>
-            <Card className="border-slate-200/80 bg-white shadow-sm">
+            <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
               <CardHeader><CardTitle className="text-base">Sipariş Özeti (Proforma)</CardTitle></CardHeader>
               <CardContent className="text-sm text-slate-700 space-y-1">
                 <p className="font-medium text-slate-900">{c.billingName || c.companyName || c.name}</p>
@@ -304,7 +328,7 @@ export default function AdminOrderDetailPage() {
           </div>
 
           {(order.customerNote || order.consents) && (
-            <Card className="border-slate-200/80 bg-white shadow-sm">
+            <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
               <CardContent className="pt-6 text-sm space-y-2">
                 {order.customerNote && (
                   <p><span className="font-medium text-slate-900">Müşteri notu:</span> {order.customerNote}</p>
@@ -320,7 +344,7 @@ export default function AdminOrderDetailPage() {
           )}
 
           {isPrisma && (
-            <Card className="border-slate-200/80 bg-white shadow-sm">
+            <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
               <CardHeader><CardTitle className="text-base flex items-center gap-2"><Clock className="w-4 h-4" />Zaman Çizelgesi</CardTitle></CardHeader>
               <CardContent>
                 {(order.events ?? []).length === 0 ? (
@@ -346,6 +370,15 @@ export default function AdminOrderDetailPage() {
 
         {/* Sağ: işlemler */}
         <div className="space-y-6">
+          {isPrisma && order.cancelRequest && order.cancelRequest.status !== 'REQUESTED' && (
+            <CancelRequestCard
+              request={order.cancelRequest}
+              total={p.total ?? 0}
+              paymentMethod={order.paymentMethod}
+              busy={busy}
+              onAction={patch}
+            />
+          )}
           {isPrisma && (
             <ReturnRequestsCard
               requests={order.returnRequests ?? []}
@@ -354,7 +387,7 @@ export default function AdminOrderDetailPage() {
               onAction={patch}
             />
           )}
-          <Card className="border-slate-200/80 bg-white shadow-sm">
+          <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 {order.paymentMethod === 'bank_transfer' ? <Banknote className="w-4 h-4" /> : <CreditCard className="w-4 h-4" />}
@@ -368,13 +401,13 @@ export default function AdminOrderDetailPage() {
                 {order.paidAt ? ` · ${fmtDate(order.paidAt)}` : ''}
               </p>
               {order.paymentProviderRef && <p className="text-xs text-slate-500 break-all">Ref: {order.paymentProviderRef}</p>}
-              {!isPaid && order.status !== 'CANCELLED' && (
+              {isPrisma && !isPaid && order.status !== 'CANCELLED' && (
                 <Button
                   className="w-full bg-green-600 hover:bg-green-700"
                   disabled={busy !== null}
                   onClick={() => patch(
                     'paid',
-                    isPrisma ? { action: 'mark_paid' } : { paymentStatus: 'PAID' },
+                    { action: 'mark_paid' },
                     'Ödeme onaylandı. Müşteriye ödeme onayı ve fatura e-postası gönderildi.',
                     `${fmtTRY(p.total ?? 0)} tutarındaki ödeme hesaba geçti mi?`
                   )}
@@ -391,16 +424,18 @@ export default function AdminOrderDetailPage() {
                   </a>
                 </Button>
               )}
-              <Button variant="outline" className="w-full" onClick={handleSendInvoice} disabled={busy !== null}>
-                {busy === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
-                Faturayı E-postayla Gönder
-              </Button>
+              {isPrisma && (
+                <Button variant="outline" className="w-full" onClick={handleSendInvoice} disabled={busy !== null}>
+                  {busy === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
+                  Faturayı E-postayla Gönder
+                </Button>
+              )}
             </CardContent>
           </Card>
 
           {isPrisma ? (
             <>
-              <Card id="kargo" className="border-slate-200/80 bg-white shadow-sm">
+              <Card id="kargo" className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
                 <CardHeader><CardTitle className="text-base flex items-center gap-2"><Truck className="w-4 h-4" />Kargo</CardTitle></CardHeader>
                 <CardContent className="space-y-3 text-sm">
                   {order.trackingNumber && (
@@ -434,7 +469,7 @@ export default function AdminOrderDetailPage() {
                       </div>
                       {canShip ? (
                         <Button
-                          className="w-full bg-purple-600 hover:bg-purple-700"
+                          className="w-full bg-[#f5b400] text-[#111] hover:bg-[#e0a500]"
                           disabled={busy !== null || !trackingNumber.trim()}
                           onClick={() => patch('ship', { action: 'status', status: 'SHIPPED', carrier, trackingNumber, notifyCustomer },
                             'Sipariş kargoya verildi olarak işaretlendi.')}
@@ -463,7 +498,7 @@ export default function AdminOrderDetailPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-slate-200/80 bg-white shadow-sm">
+              <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
                 <CardHeader><CardTitle className="text-base">Sipariş Durumu</CardTitle></CardHeader>
                 <CardContent className="space-y-3 text-sm">
                   {otherNext.length === 0 ? (
@@ -475,6 +510,11 @@ export default function AdminOrderDetailPage() {
                           <Label htmlFor="reason">İptal / iade gerekçesi (müşteriye gönderilir)</Label>
                           <Input id="reason" value={reason} onChange={(e) => setReason(e.target.value)} placeholder="İsteğe bağlı" />
                         </div>
+                      )}
+                      {isPaid && otherNext.some((s) => s.value === 'CANCELLED' || s.value === 'RETURNED') && (
+                        <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-md px-2.5 py-2">
+                          Ödemesi alınmış sipariş iptal/iade edilirse ücret iadesi ({fmtTRY(p.total ?? 0)}) başlatılmış sayılır ve müşteriye iade bilgili e-posta gönderilir.
+                        </p>
                       )}
                       <div className="flex flex-col gap-2">
                         {otherNext.map((s) => {
@@ -489,7 +529,13 @@ export default function AdminOrderDetailPage() {
                                 s.value,
                                 { action: 'status', status: s.value, reason: reason || undefined, notifyCustomer },
                                 `Sipariş durumu “${s.label}” olarak güncellendi.`,
-                                danger ? `Sipariş “${s.label}” durumuna alınacak ve stok geri eklenecek. Emin misiniz?` : undefined
+                                danger
+                                  ? `Sipariş “${s.label}” durumuna alınacak ve stok geri eklenecek.${isPaid ? `
+
+Ödeme alınmış olduğu için ücret iadesi (${fmtTRY(p.total ?? 0)}) başlatılmış sayılır ve müşteriye iade bilgili e-posta gönderilir. Kart iadesini POS panelinden, havale iadesini ödemenin geldiği hesaba yapın.` : ''}
+
+Emin misiniz?`
+                                  : undefined
                               )}
                             >
                               {busy === s.value ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
@@ -507,7 +553,7 @@ export default function AdminOrderDetailPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-slate-200/80 bg-white shadow-sm">
+              <Card className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
                 <CardHeader><CardTitle className="text-base flex items-center gap-2"><StickyNote className="w-4 h-4" />Admin Notu</CardTitle></CardHeader>
                 <CardContent className="space-y-2">
                   <Textarea value={adminNote} onChange={(e) => setAdminNote(e.target.value)} rows={4} placeholder="Yalnızca panelde görünür" aria-label="Admin notu" />
@@ -524,25 +570,11 @@ export default function AdminOrderDetailPage() {
               </Card>
             </>
           ) : (
-            <Card className="border-slate-200/80 bg-white shadow-sm">
-              <CardHeader><CardTitle className="text-base">Durum (eski sipariş)</CardTitle></CardHeader>
-              <CardContent className="space-y-3">
-                <select
-                  value={legacyStatus}
-                  onChange={(e) => setLegacyStatus(e.target.value)}
-                  className="w-full h-10 rounded-md border border-slate-200 px-3 text-sm bg-white"
-                  aria-label="Sipariş durumu"
-                >
-                  {LEGACY_STATUS_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                </select>
-                <Input value={trackingNumber} onChange={(e) => setTrackingNumber(e.target.value)} placeholder="Kargo takip no" aria-label="Kargo takip numarası" />
-                <Button
-                  className="w-full"
-                  disabled={busy !== null}
-                  onClick={() => patch('legacy', { status: legacyStatus, ...(trackingNumber ? { trackingNumber } : {}) }, 'Sipariş güncellendi.')}
-                >
-                  Güncelle
-                </Button>
+            <Card className="border-amber-200 bg-amber-50/60 shadow-sm">
+              <CardHeader><CardTitle className="text-base">Eski sipariş kaydı (salt okunur)</CardTitle></CardHeader>
+              <CardContent className="text-sm text-amber-900 space-y-2">
+                <p>Bu kayıt eski Firestore sipariş yolundan gelir ve müşteri tarafından değiştirilebilir olduğu için güvenilir değildir.</p>
+                <p>Üzerinde durum değişikliği, ödeme onayı veya e-posta gönderimi yapılamaz. Gerekirse siparişi müşteriyle doğrulayıp yeni sipariş olarak oluşturun.</p>
               </CardContent>
             </Card>
           )}

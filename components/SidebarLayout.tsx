@@ -15,6 +15,11 @@ const SIDEBAR_EXCLUDE_PREFIXES = [
   '/verify-email',
   '/admin',
   '/ges',
+  '/orders',
+  '/siparis-takip',
+  '/profile',
+  '/cart',
+  '/favorites',
 ]
 
 /** Tam genişlik (full-bleed) sayfalar — header/footer dışında container sarmalanmaz */

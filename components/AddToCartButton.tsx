@@ -44,7 +44,8 @@ export function AddToCartButton({
   disabled = false,
   showQuantitySelector = true,
 }: AddToCartButtonProps) {
-  const { addItem, updateQuantity, getItemQuantity } = useCartStore()
+  const addItem = useCartStore((s) => s.addItem)
+  const updateQuantity = useCartStore((s) => s.updateQuantity)
   const { addToast } = useToast()
   const t = useTranslations('addToCart')
   const [mounted, setMounted] = useState(false)
@@ -60,7 +61,11 @@ export function AddToCartButton({
     setMounted(true)
   }, [])
 
-  const quantity = mounted ? getItemQuantity(cartId) : 0
+  const quantity = useCartStore((s) => (mounted ? s.items.find((i) => i.id === cartId)?.quantity ?? 0 : 0))
+  // Varyantlar ürün stoğunu paylaşır: sınır ürünün sepetteki toplam adedine göre
+  const productQty = useCartStore((s) =>
+    mounted ? s.items.filter((i) => (i.productId ?? i.id) === product.id || i.id === cartId).reduce((n, i) => n + i.quantity, 0) : 0
+  )
   const isInCart = mounted && quantity > 0
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -70,14 +75,20 @@ export function AddToCartButton({
     if (selectedVariant && !selectedVariant.key) return
 
     try {
-      addItem({
+      const added = addItem({
         id: cartId,
+        productId: product.id,
+        maxQuantity: maxQty,
         name: displayName,
         description: product.description,
         price,
         image: product.image,
         category: product.category,
       })
+      if (added <= 0) {
+        addToast({ type: 'info', title: t('stockLimit'), description: t('stockLimitDesc', { maxQty: maxQty ?? 0 }) })
+        return
+      }
       addToast({
         type: 'success',
         title: t('addedToCart'),
@@ -95,7 +106,7 @@ export function AddToCartButton({
   const handleIncrease = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (maxQty != null && quantity >= maxQty) {
+    if (maxQty != null && productQty >= maxQty) {
       addToast({
         type: 'info',
         title: t('stockLimit'),
@@ -141,7 +152,6 @@ export function AddToCartButton({
     const isSm = size === 'sm'
     const isLg = size === 'lg'
     const iconClass = isLg ? 'w-4 h-4' : isSm ? 'w-3 h-3' : 'w-3.5 h-3.5'
-    const atMax = maxQty != null && quantity >= maxQty
     return (
       <div
         className={`flex items-center w-full max-w-full rounded-md overflow-hidden bg-brand hover:bg-brand-hover transition-colors ${className}`}

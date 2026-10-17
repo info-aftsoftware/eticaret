@@ -81,6 +81,8 @@ const nextConfig = {
   ...(isProduction && !isStaticExport && {
     output: 'standalone',
   }),
+  // Dev sunucusu çalışırken ayrı klasöre derleme denemesi için (ör. NEXT_DIST_DIR=.next-build)
+  ...(process.env.NEXT_DIST_DIR && { distDir: process.env.NEXT_DIST_DIR }),
   serverExternalPackages: ['undici'],
   // Üst klasörlerdeki başka lockfile'lar kök dizini yanlış seçtirmesin (standalone çıktı yolu)
   outputFileTracingRoot: __dirname,

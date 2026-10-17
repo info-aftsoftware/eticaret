@@ -144,7 +144,7 @@ export default function ComparePage() {
                         <Button
                           size="sm"
                           disabled={(p.stock ?? 0) <= 0}
-                          onClick={() => addItem({ id: p.id, name: p.name, price: p.price, image: p.image, category: p.category })}
+                          onClick={() => addItem({ id: p.id, productId: p.id, maxQuantity: p.stock, name: p.name, price: p.price, image: p.image, category: p.category })}
                         >
                           Sepete Ekle
                         </Button>

@@ -9,6 +9,12 @@ import { persist } from 'zustand/middleware'
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  sendEmailVerification,
+  setPersistence,
+  browserLocalPersistence,
+  browserSessionPersistence,
   signOut as firebaseSignOut,
   onAuthStateChanged,
   type User as FirebaseUser,
@@ -16,6 +22,7 @@ import {
 import { getAuth } from '@/lib/firebase/config'
 import { getUserProfile, setUserProfile } from '@/lib/firebase/firestore'
 import { isFirebaseConfigured } from '@/lib/firebase/config'
+import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
 
 export interface User {
   id: string
@@ -33,7 +40,9 @@ interface AuthState {
   rememberMe: boolean
   authReady: boolean
   login: (email: string, password: string, rememberMe?: boolean) => Promise<{ success: boolean; error?: string }>
-  register: (email: string, password: string, name: string, phone?: string) => Promise<{ success: boolean; error?: string; message?: string }>
+  register: (email: string, password: string, name: string, phone?: string) => Promise<{ success: boolean; error?: string; message?: string; verificationSent?: boolean }>
+  /** Google ile giriş/kayıt. İlk girişte Firestore profili register ile aynı şekilde oluşturulur. */
+  loginWithGoogle: () => Promise<{ success: boolean; isNewUser?: boolean; error?: string; code?: string }>
   logout: () => void
   setUser: (user: User | null) => void
   setToken: (token: string | null) => void
@@ -66,7 +75,9 @@ export const useFirebaseAuthStore = create<AuthState>()(
         }
         try {
           const auth = getAuth()
-          const cred = await signInWithEmailAndPassword(auth, email, password)
+          // "Beni hatırla": işaretliyse oturum tarayıcı kapansa da sürer, değilse tarayıcı oturumu bitince kapanır
+          await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence)
+          const cred = await signInWithEmailAndPassword(auth, email.trim(), password)
           // Static hosting: Firebase ID token'ı doğrudan kullan (backend session yok)
           const firebaseToken = await cred.user.getIdToken()
           const profile = await getUserProfile(cred.user.uid)
@@ -78,15 +89,8 @@ export const useFirebaseAuthStore = create<AuthState>()(
             rememberMe,
           })
           return { success: true }
-        } catch (err: any) {
-          const code = err?.code || ''
-          const message =
-            code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/wrong-password'
-              ? 'E-posta veya şifre hatalı.'
-              : code === 'auth/invalid-email'
-                ? 'Geçersiz e-posta.'
-                : err?.message || 'Giriş başarısız.'
-          return { success: false, error: message }
+        } catch (err) {
+          return { success: false, error: authErrorMessage(err, 'Giriş yapılamadı. Lütfen tekrar deneyin.') }
         }
       },
 
@@ -96,7 +100,8 @@ export const useFirebaseAuthStore = create<AuthState>()(
         }
         try {
           const auth = getAuth()
-          const cred = await createUserWithEmailAndPassword(auth, email, password)
+          await setPersistence(auth, browserLocalPersistence)
+          const cred = await createUserWithEmailAndPassword(auth, email.trim(), password)
           await setUserProfile(cred.user.uid, {
             email: cred.user.email || email,
             name,
@@ -119,16 +124,50 @@ export const useFirebaseAuthStore = create<AuthState>()(
             isAuthenticated: true,
             rememberMe: true,
           })
-          return { success: true, message: 'Hesabınız oluşturuldu.' }
-        } catch (err: any) {
-          const code = err?.code || ''
-          const message =
-            code === 'auth/email-already-in-use'
-              ? 'Bu e-posta adresi zaten kullanılıyor.'
-              : code === 'auth/weak-password'
-                ? 'Şifre en az 6 karakter olmalıdır.'
-                : err?.message || 'Kayıt başarısız.'
-          return { success: false, error: message }
+          // Doğrulama e-postası: hatası kaydı engellemez (profilden / doğrulama sayfasından tekrar gönderilebilir)
+          const verification = await sendVerificationEmail().catch(() => ({ success: false }))
+          return { success: true, message: 'Hesabınız oluşturuldu.', verificationSent: verification.success }
+        } catch (err) {
+          return { success: false, error: authErrorMessage(err, 'Kayıt tamamlanamadı. Lütfen tekrar deneyin.') }
+        }
+      },
+
+      loginWithGoogle: async () => {
+        if (!isFirebaseConfigured) {
+          return { success: false, error: 'Firebase yapılandırılmamış.' }
+        }
+        try {
+          const auth = getAuth()
+          await setPersistence(auth, browserLocalPersistence)
+          const provider = new GoogleAuthProvider()
+          provider.setCustomParameters({ prompt: 'select_account' })
+          const cred = await signInWithPopup(auth, provider)
+          let profile = await getUserProfile(cred.user.uid)
+          const isNewUser = !profile
+          if (!profile) {
+            const data = {
+              email: cred.user.email || '',
+              name: cred.user.displayName || (cred.user.email ? cred.user.email.split('@')[0] : ''),
+              phone: cred.user.phoneNumber || undefined,
+              role: 'customer' as const,
+            }
+            await setUserProfile(cred.user.uid, data)
+            profile = { ...data, createdAt: { seconds: 0, nanoseconds: 0 } }
+          }
+          const firebaseToken = await cred.user.getIdToken()
+          set({
+            user: mapFirebaseUser(cred.user, profile),
+            token: firebaseToken,
+            isAuthenticated: true,
+            rememberMe: true,
+          })
+          return { success: true, isNewUser }
+        } catch (err) {
+          return {
+            success: false,
+            code: authErrorCode(err),
+            error: authErrorMessage(err, 'Google ile giriş yapılamadı. Lütfen tekrar deneyin.'),
+          }
         }
       },
 
@@ -207,12 +246,97 @@ if (typeof window !== 'undefined' && isFirebaseConfigured) {
 export async function getAuthToken(): Promise<string | null> {
   if (typeof window === 'undefined' || !isFirebaseConfigured) return null
   try {
-    const current = getAuth().currentUser
+    const auth = getAuth()
+    // Sayfa yeni açıldıysa Firebase oturumu geri yükleyene kadar bekle (eski token'a düşmemek için)
+    await auth.authStateReady()
+    const current = auth.currentUser
     if (!current) return useFirebaseAuthStore.getState().token
     const token = await current.getIdToken()
     if (token !== useFirebaseAuthStore.getState().token) useFirebaseAuthStore.setState({ token })
     return token
   } catch {
     return null
+  }
+}
+
+/** Oturum açık kullanıcı için kimlik doğrulamalı JSON isteği (taze ID token ile). */
+async function authedPost(path: string, body?: unknown): Promise<Response | null> {
+  const token = await getAuthToken()
+  if (!token) return null
+  return fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: body ? JSON.stringify(body) : undefined,
+  })
+}
+
+/**
+ * Doğrulama e-postası gönderir. Önce sunucu (markalı e-posta, bağlantı doğrudan /verify-email sayfasına);
+ * sunucu kullanılamazsa Firebase'in kendi e-postası (sendEmailVerification, dönüş adresi /verify-email).
+ */
+export async function sendVerificationEmail(): Promise<{ success: boolean; alreadyVerified?: boolean; error?: string }> {
+  if (typeof window === 'undefined' || !isFirebaseConfigured) return { success: false, error: 'Firebase yapılandırılmamış.' }
+  const auth = getAuth()
+  await auth.authStateReady()
+  const current = auth.currentUser
+  if (!current) return { success: false, error: 'Oturum bulunamadı. Lütfen giriş yapın.' }
+  if (current.emailVerified) return { success: true, alreadyVerified: true }
+
+  try {
+    const res = await authedPost('/api/account/verification-email')
+    if (res) {
+      const data = await res.json().catch(() => ({}))
+      if (res.ok && data.success) return { success: true, alreadyVerified: !!data.alreadyVerified }
+      if (res.status === 429) return { success: false, error: data.error || 'Çok fazla istek. Lütfen biraz sonra tekrar deneyin.' }
+    }
+  } catch {
+    // sunucuya ulaşılamadı → Firebase e-postasına düş
+  }
+
+  try {
+    await sendEmailVerification(current, { url: `${window.location.origin}/verify-email`, handleCodeInApp: false })
+    return { success: true }
+  } catch (err) {
+    const code = authErrorCode(err)
+    // Dönüş adresi Firebase'de yetkili alan adı değilse varsayılan (dönüşsüz) e-postayı gönder
+    if (code === 'auth/unauthorized-continue-uri' || code === 'auth/invalid-continue-uri') {
+      try {
+        await sendEmailVerification(current)
+        return { success: true }
+      } catch (e) {
+        return { success: false, error: authErrorMessage(e) }
+      }
+    }
+    return { success: false, error: authErrorMessage(err) }
+  }
+}
+
+/**
+ * Kullanıcıyı Firebase'den yeniden okur; e-posta doğrulandıysa ID token'ı yeniler (email_verified claim'i
+ * sunucuya — örn. misafir siparişlerinin hesaba bağlanması — hemen yansısın diye) ve store'u günceller.
+ */
+export async function refreshEmailVerified(): Promise<boolean> {
+  if (typeof window === 'undefined' || !isFirebaseConfigured) return false
+  const auth = getAuth()
+  try {
+    await auth.authStateReady()
+    const current = auth.currentUser
+    if (!current) return false
+    await current.reload()
+    if (!current.emailVerified) return false
+    const token = await current.getIdToken(true)
+    useFirebaseAuthStore.setState((s) => ({ token, user: s.user ? { ...s.user, emailVerified: true } : s.user }))
+    return true
+  } catch {
+    return false
+  }
+}
+
+/** Hoş geldiniz e-postası (sunucuda kullanıcı başına bir kez gönderilir). Hata kullanıcı akışını etkilemez. */
+export async function requestWelcomeEmail(): Promise<void> {
+  try {
+    await authedPost('/api/account/welcome')
+  } catch {
+    // sessiz
   }
 }

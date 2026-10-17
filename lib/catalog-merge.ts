@@ -30,7 +30,7 @@ function applyOverride(base: MergedProduct, override: {
   tags?: unknown
   slogan?: string | null
   warranty?: string | null
-}): void {
+}, rates?: TryRates): void {
   if (override.name != null) {
     base.name = override.name
     // Excel'deki SEO başlığı eski isme ait; admin ismi değiştirdiyse başlık isimden üretilir
@@ -43,13 +43,24 @@ function applyOverride(base: MergedProduct, override: {
   if (override.fullDescription?.trim()) base.descriptionHtml = undefined
   if (override.price != null) base.price = override.price
   if (override.image != null) base.image = override.image
-  if (override.images != null) base.images = override.images as string[] | undefined
+  if (override.images != null) {
+    base.images = override.images as string[] | undefined
+    // Panelde düzenlenen galeri varyant seçildiğinde de görünsün (Excel'in varyant görselleri devre dışı)
+    base.imagesByVariant = undefined
+  }
   if (override.category != null) base.category = override.category
   if (override.stock != null) base.stock = override.stock
   if (override.featured != null) base.featured = override.featured
   if (override.specifications != null) base.specifications = override.specifications as Record<string, string> | undefined
   if (override.features != null) base.features = override.features as string[] | undefined
-  if (override.variants != null) base.variants = override.variants as MockProduct['variants']
+  if (override.variants != null) {
+    base.variants = override.variants as MockProduct['variants']
+    // Fiyatı panelde değiştirilmeyen varyantlar (basePrice korunur) güncel kurla yeniden hesaplanır;
+    // aksi hâlde kayıt anındaki TL fiyatında donarlardı. Panelde fiyatı değişen varyant TL olarak sabit kalır.
+    if (rates && base.variants && base.priceCurrency && base.priceCurrency !== 'TRY') {
+      base.variants = applyTryRates({ ...base, variants: base.variants }, rates).variants
+    }
+  }
   if (override.brand != null) base.brand = override.brand
   if (override.sku != null) base.sku = override.sku
   if (override.tags != null) base.tags = override.tags as string[] | undefined
@@ -132,7 +143,7 @@ export async function getMergedProducts(): Promise<MergedProduct[]> {
     const merged = mockToMerged(mock, rates)
     const override = overrideMap.get(mock.id)
     if (override) {
-      applyOverride(merged, override)
+      applyOverride(merged, override, rates)
       overrideMap.delete(mock.id)
     }
     const stockOverride = stockMap.get(mock.id)
@@ -166,7 +177,7 @@ export async function getMergedProductById(productId: string): Promise<MergedPro
     const merged = mockToMerged(mock, rates)
     const descriptionHtml = getProductDescriptionHtml(mock.id)
     if (descriptionHtml) merged.descriptionHtml = descriptionHtml
-    if (override) applyOverride(merged, override)
+    if (override) applyOverride(merged, override, rates)
     if (stockRow != null) merged.stock = stockRow.stock
     return merged
   }
@@ -178,4 +189,19 @@ export async function getMergedProductById(productId: string): Promise<MergedPro
   }
 
   return null
+}
+
+type ProductOverrideReader = { productOverride: Pick<typeof prisma.productOverride, 'findUnique'> }
+
+/**
+ * StockOverride satırı yokken geçerli olan stok: ProductOverride.stock, yoksa katalog stoğu.
+ * Sipariş stoğu düşerken StockOverride satırını tohumlamak için kullanılır (transaction istemcisi verilebilir).
+ * Ürün hiç yoksa veya stok takibi yoksa null.
+ */
+export async function getBaseStock(productId: string, db: ProductOverrideReader = prisma): Promise<number | null> {
+  const override = await db.productOverride.findUnique({ where: { productId }, select: { stock: true } })
+  if (override?.stock != null) return override.stock
+  const mock = mockProducts.find((p) => p.id === productId)
+  if (mock) return typeof mock.stock === 'number' ? mock.stock : null
+  return override ? 0 : null
 }

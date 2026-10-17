@@ -1,288 +1,263 @@
 'use client'
 
-import React, { useEffect, useState, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { CheckCircle, XCircle, Loader2, Mail, AlertCircle } from 'lucide-react'
+/**
+ * E-posta doğrulama ve Firebase e-posta işlemleri.
+ * - ?mode=verifyEmail&oobCode=…  → applyActionCode, ardından token yenilenir (email_verified sunucuya yansır)
+ * - ?mode=resetPassword&oobCode=… → /reset-password'e yönlendirilir (Console'da özel işlem URL'si bu sayfaysa)
+ * - ?mode=recoverEmail&oobCode=…  → e-posta değişikliği geri alınır
+ * - kod yoksa: kayıt sonrası "e-postanızı kontrol edin" ekranı / tekrar gönder / doğrulama durumu
+ */
+
+import React, { useEffect, useRef, useState, Suspense } from 'react'
 import Link from 'next/link'
-import { ClassicPageShell } from '@/components/ClassicPageShell'
-import { applyActionCode } from 'firebase/auth'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { applyActionCode, checkActionCode } from 'firebase/auth'
+import { MailCheck, CheckCircle2, XCircle, Loader2, Mail, RefreshCw, ArrowRight } from 'lucide-react'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
+import { refreshEmailVerified } from '@/lib/store/useFirebaseAuth'
+import { useAuthStore } from '@/lib/store/useAuthStore'
+import { authErrorCode } from '@/lib/auth-errors'
+import { safeRedirect } from '@/lib/safe-redirect'
+import { ClassicPageShell } from '@/components/ClassicPageShell'
+import { AuthLayout, FormAlert, PrimaryButton, SecondaryButton } from '@/components/auth/AuthUI'
+import { useEmailVerification } from '@/components/EmailVerifyBanner'
+
+type Status = 'loading' | 'verified' | 'recovered' | 'expired' | 'invalid' | 'pending' | 'signed-out'
 
 function VerifyEmailContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
-  const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'code'>('loading')
-  const [message, setMessage] = useState('')
-  const [code, setCode] = useState('')
-  const [email, setEmail] = useState('')
-  const [verifying, setVerifying] = useState(false)
+  const authReady = useAuthStore((s) => s.authReady)
+  const user = useAuthStore((s) => s.user)
+  const oobCode = searchParams.get('oobCode') || searchParams.get('token')
+  const mode = searchParams.get('mode') || 'verifyEmail'
+  const sent = searchParams.get('sent')
+  const target = safeRedirect(searchParams.get('redirect'))
+  const [status, setStatus] = useState<Status>('loading')
+  const [restoredEmail, setRestoredEmail] = useState('')
+  const handled = useRef(false)
+  const { remaining, sending, checking, message, resend, check, markSent } = useEmailVerification()
+
+  // Bağlantıdaki kodu işle (React geliştirme modunda efekt iki kez çalışır; kod tek kullanımlık → ref ile koru)
+  useEffect(() => {
+    if (!oobCode || handled.current) return
+    if (mode === 'resetPassword') {
+      handled.current = true
+      router.replace(`/reset-password?mode=resetPassword&oobCode=${encodeURIComponent(oobCode)}`)
+      return
+    }
+    if (!isFirebaseConfigured) {
+      setStatus('invalid')
+      return
+    }
+    handled.current = true
+    const auth = getAuth()
+    ;(async () => {
+      try {
+        if (mode === 'recoverEmail') {
+          const info = await checkActionCode(auth, oobCode)
+          await applyActionCode(auth, oobCode)
+          setRestoredEmail(info.data.email ?? '')
+          setStatus('recovered')
+          return
+        }
+        await applyActionCode(auth, oobCode)
+        await auth.authStateReady()
+        await refreshEmailVerified()
+        setStatus('verified')
+      } catch (err) {
+        // Kod daha önce kullanıldıysa ama hesap zaten doğrulanmışsa başarı göster
+        await auth.authStateReady().catch(() => {})
+        if (mode !== 'recoverEmail' && (await refreshEmailVerified())) {
+          setStatus('verified')
+          return
+        }
+        setStatus(authErrorCode(err) === 'auth/expired-action-code' ? 'expired' : 'invalid')
+      }
+    })()
+  }, [oobCode, mode, router])
+
+  // Kod yoksa: oturum durumuna göre ekran
+  useEffect(() => {
+    if (oobCode || !authReady) return
+    if (!user) {
+      setStatus('signed-out')
+      return
+    }
+    if (user.emailVerified) {
+      setStatus('verified')
+      return
+    }
+    // Firebase'in kendi sayfasında doğrulayıp buraya dönen kullanıcı için durumu tazele
+    let cancelled = false
+    refreshEmailVerified().then((ok) => {
+      if (cancelled) return
+      setStatus(ok ? 'verified' : 'pending')
+    })
+    return () => { cancelled = true }
+  }, [oobCode, authReady, user])
 
   useEffect(() => {
-    const token = searchParams.get('oobCode') || searchParams.get('token')
-    const verified = searchParams.get('verified')
-    const emailParam = searchParams.get('email')
-    const codeParam = searchParams.get('code')
+    if (sent === '1') markSent()
+  }, [sent, markSent])
 
-    if (verified === 'true') {
-      setStatus('success')
-      setMessage('E-posta adresiniz başarıyla doğrulandı! Giriş yapabilirsiniz.')
-      return
-    }
+  const loginForResend = `/login?redirect=${encodeURIComponent('/verify-email')}`
 
-    if (token) {
-      verifyWithToken(token)
-    } else if (emailParam) {
-      // Email from registration - pre-fill it
-      setEmail(emailParam)
-      if (codeParam) {
-        setCode(codeParam)
-        setStatus('code')
-      } else {
-        setStatus('code')
-      }
-    } else {
-      setStatus('code')
-    }
-  }, [searchParams])
-
-  const verifyWithToken = async (token: string) => {
-    try {
-      if (!isFirebaseConfigured) {
-        setStatus('error')
-        setMessage('Firebase yapılandırılmamış.')
-        return
-      }
-      const auth = getAuth()
-      // Firebase oobCode ile e-posta doğrulama
-      await applyActionCode(auth, token)
-      setStatus('success')
-      setMessage('E-posta adresiniz başarıyla doğrulandı!')
-      setTimeout(() => {
-        router.push('/login?verified=true')
-      }, 2000)
-    } catch (error: any) {
-      console.error('Verify email error:', error)
-      if (error?.code === 'auth/expired-action-code') {
-        setStatus('error')
-        setMessage('Doğrulama bağlantısının süresi dolmuş. Lütfen yeni kayıt olun.')
-      } else if (error?.code === 'auth/invalid-action-code') {
-        setStatus('error')
-        setMessage('Geçersiz veya kullanılmış doğrulama bağlantısı.')
-      } else {
-        setStatus('error')
-        setMessage('Doğrulama başarısız oldu. Lütfen tekrar deneyin.')
-      }
-    }
-  }
-
-  const verifyWithCode = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!code || !email) {
-      setMessage('Lütfen e-posta ve doğrulama kodunu girin')
-      return
-    }
-
-    setVerifying(true)
-    setMessage('')
-
-    try {
-      // Firebase uses oobCode (token) for verification, not short codes
-      // If code looks like an oobCode, use applyActionCode
-      if (!isFirebaseConfigured) {
-        setStatus('error')
-        setMessage('Firebase yapılandırılmamış.')
-        return
-      }
-      const auth = getAuth()
-      await applyActionCode(auth, code)
-      setStatus('success')
-      setMessage('E-posta adresiniz başarıyla doğrulandı!')
-      setTimeout(() => {
-        router.push('/login?verified=true')
-      }, 2000)
-    } catch (error: any) {
-      console.error('Verify email error:', error)
-      setStatus('error')
-      setMessage('Doğrulama kodu geçersiz veya süresi dolmuş. Lütfen yeni bir doğrulama e-postası isteyin.')
-    } finally {
-      setVerifying(false)
-    }
-  }
-
-  return (
-    <ClassicPageShell breadcrumbs={[{ label: 'E-posta Doğrulama' }]} noTitle>
-      <div className="flex justify-center py-8">
-        <div className="w-full max-w-md">
-          <Card className="classic-card rounded-lg overflow-hidden bg-white">
-            <CardHeader className="space-y-1 text-center pb-4">
-              <div className="flex justify-center mb-4">
-                <div className={`w-14 h-14 rounded-lg flex items-center justify-center ${
-                  status === 'success' ? 'bg-green-100' : 
-                  status === 'error' ? 'bg-red-100' : 
-                  'bg-red-100'
-                }`}>
-                  {status === 'success' ? (
-                    <CheckCircle className="w-7 h-7 text-green-600" />
-                  ) : status === 'error' ? (
-                    <XCircle className="w-7 h-7 text-brand" />
-                  ) : (
-                    <Mail className="w-7 h-7 text-brand" />
-                  )}
-              </div>
-            </div>
-            <CardTitle className="text-2xl font-bold text-gray-900">
-              {status === 'success' ? 'E-posta Doğrulandı' : 
-               status === 'error' ? 'Doğrulama Başarısız' : 
-               'E-posta Doğrulama'}
-            </CardTitle>
-            <CardDescription className="text-gray-600">
-              {status === 'success' ? 'Hesabınız aktifleştirildi' : 
-               status === 'error' ? 'Lütfen tekrar deneyin' : 
-               'E-posta adresinizi doğrulayın'}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {status === 'loading' && (
-              <div className="flex flex-col items-center justify-center py-8">
-                <Loader2 className="w-8 h-8 text-brand animate-spin mb-4" />
-                <p className="text-gray-600">Doğrulanıyor...</p>
-              </div>
-            )}
-
-            {status === 'success' && (
-              <div className="space-y-4">
-                <Alert className="rounded-xl">
-                  <CheckCircle className="h-4 w-4" />
-                  <AlertDescription>{message}</AlertDescription>
-                </Alert>
-                <Button asChild className="w-full btn-classic-primary rounded-lg" size="lg">
-                  <Link href="/login">Giriş Yap</Link>
-                </Button>
-              </div>
-            )}
-
-            {status === 'error' && (
-              <div className="space-y-4">
-                <Alert variant="destructive" className="rounded-xl">
-                  <XCircle className="h-4 w-4" />
-                  <AlertDescription>{message}</AlertDescription>
-                </Alert>
-                <Button asChild variant="outline" className="w-full rounded-lg font-bold border-2 border-gray-200">
-                  <Link href="/register">Yeniden Kayıt Ol</Link>
-                </Button>
-              </div>
-            )}
-
-            {status === 'code' && (
-              <form onSubmit={verifyWithCode} className="space-y-4">
-                {email ? (
-                  <div className="space-y-2">
-                    <Label htmlFor="email">E-posta Adresi</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 z-10 pointer-events-none shrink-0" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="ornek@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled
-                        className="bg-gray-50 pl-12 rounded-xl min-w-0"
-                      />
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      E-posta adresiniz kayıt sırasında verdiğiniz adres
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-2">
-                    <Label htmlFor="email">E-posta Adresi</Label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 z-10 pointer-events-none shrink-0" />
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="ornek@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled={verifying}
-                        className="pl-12 rounded-xl min-w-0"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <Label htmlFor="code">Doğrulama Kodu</Label>
-                  <Input
-                    id="code"
-                    type="text"
-                    placeholder="6 haneli kod"
-                    value={code}
-                    onChange={(e) => setCode(e.target.value.toUpperCase())}
-                    maxLength={6}
-                    required
-                    disabled={verifying}
-                    className="text-center text-2xl font-mono tracking-widest rounded-xl"
-                  />
-                  <p className="text-xs text-gray-500">
-                    E-posta adresinize gönderilen 6 haneli kodu girin
-                  </p>
-                </div>
-
-                {message && (
-                  <Alert variant={message.includes('başarı') ? 'default' : 'destructive'} className="rounded-xl">
-                    {!message.includes('başarı') && <AlertCircle className="h-4 w-4" />}
-                    <AlertDescription>{message}</AlertDescription>
-                  </Alert>
-                )}
-
-                <Button type="submit" className="w-full btn-classic-primary rounded-lg" size="lg" disabled={verifying}>
-                  {verifying ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Doğrulanıyor...
-                    </>
-                  ) : (
-                    'Doğrula'
-                  )}
-                </Button>
-
-                <div className="text-center text-sm text-gray-600">
-                  <Link href="/login" className="text-brand hover:text-brand-hover font-semibold">
-                    Giriş sayfasına dön
-                  </Link>
-                </div>
-              </form>
-            )}
-          </CardContent>
-        </Card>
+  if (status === 'loading') {
+    return (
+      <AuthLayout breadcrumb="E-posta Doğrulama" icon={Mail} title="E-posta doğrulanıyor" showBenefits={false}>
+        <div className="flex flex-col items-center py-8 text-[#6b7c8f]">
+          <Loader2 className="mb-3 h-8 w-8 animate-spin text-[#0b2540]" />
+          Lütfen bekleyin…
         </div>
+      </AuthLayout>
+    )
+  }
+
+  if (status === 'verified' || status === 'recovered') {
+    return (
+      <AuthLayout
+        breadcrumb="E-posta Doğrulama"
+        icon={CheckCircle2}
+        title={status === 'recovered' ? 'E-posta adresiniz geri yüklendi' : 'E-posta adresiniz doğrulandı'}
+        subtitle={
+          status === 'recovered'
+            ? `Hesabınızın e-posta adresi ${restoredEmail || 'önceki adresinize'} geri alındı. Güvenliğiniz için şifrenizi değiştirmenizi öneririz.`
+            : 'Teşekkürler! Hesabınız tamamen etkin. Siparişlerinizi ve üye olmadan verdiğiniz siparişleri hesabınızdan takip edebilirsiniz.'
+        }
+        showBenefits={false}
+      >
+        <div className="space-y-3">
+          {user ? (
+            <PrimaryButton type="button" onClick={() => router.push(target)}>
+              {target === '/profile' ? 'Hesabıma git' : 'Devam et'} <ArrowRight className="h-4 w-4" />
+            </PrimaryButton>
+          ) : (
+            <PrimaryButton type="button" onClick={() => router.push('/login?verified=true')}>
+              Giriş yap <ArrowRight className="h-4 w-4" />
+            </PrimaryButton>
+          )}
+          {status === 'recovered' && (
+            <SecondaryButton type="button" onClick={() => router.push('/forgot-password')}>Şifremi değiştir</SecondaryButton>
+          )}
+          <SecondaryButton type="button" onClick={() => router.push('/products')}>Alışverişe devam et</SecondaryButton>
+        </div>
+      </AuthLayout>
+    )
+  }
+
+  if (status === 'expired' || status === 'invalid') {
+    return (
+      <AuthLayout
+        breadcrumb="E-posta Doğrulama"
+        icon={XCircle}
+        title={status === 'expired' ? 'Bağlantının süresi dolmuş' : 'Bağlantı geçersiz'}
+        subtitle={
+          status === 'expired'
+            ? 'Güvenlik nedeniyle doğrulama bağlantıları sınırlı süre geçerlidir. Yeni bir bağlantı isteyebilirsiniz.'
+            : 'Bu bağlantı daha önce kullanılmış ya da eksik kopyalanmış olabilir. En son gönderilen e-postadaki bağlantıyı kullanın veya yeni bir bağlantı isteyin.'
+        }
+        showBenefits={false}
+      >
+        <div className="space-y-3">
+          {message && <FormAlert tone={message.tone}>{message.text}</FormAlert>}
+          {user && !user.emailVerified ? (
+            <PrimaryButton type="button" onClick={resend} loading={sending} disabled={remaining > 0} loadingText="Gönderiliyor…">
+              {remaining > 0 ? `Yeni bağlantı gönder (${remaining} sn)` : 'Yeni doğrulama bağlantısı gönder'}
+            </PrimaryButton>
+          ) : (
+            <PrimaryButton type="button" onClick={() => router.push(loginForResend)}>
+              Giriş yapıp yeni bağlantı iste
+            </PrimaryButton>
+          )}
+          <SecondaryButton type="button" onClick={() => router.push('/')}>Ana sayfaya dön</SecondaryButton>
+        </div>
+      </AuthLayout>
+    )
+  }
+
+  if (status === 'signed-out') {
+    return (
+      <AuthLayout
+        breadcrumb="E-posta Doğrulama"
+        icon={Mail}
+        title="E-posta doğrulama"
+        subtitle="Doğrulama için e-posta adresinize gönderdiğimiz bağlantıya tıklayın. Bağlantı ulaşmadıysa giriş yapıp yeni bir bağlantı isteyebilirsiniz."
+        showBenefits={false}
+      >
+        <div className="space-y-3">
+          <PrimaryButton type="button" onClick={() => router.push(loginForResend)}>Giriş yap</PrimaryButton>
+          <p className="text-center text-[14px] text-[#6b7c8f]">
+            Hesabınız yok mu? <Link href="/register" className="font-semibold text-[#0b2540] hover:underline">Üye olun</Link>
+          </p>
+        </div>
+      </AuthLayout>
+    )
+  }
+
+  // pending: oturum açık, doğrulanmamış
+  return (
+    <AuthLayout
+      breadcrumb="E-posta Doğrulama"
+      icon={MailCheck}
+      title={sent ? 'Hesabınız oluşturuldu' : 'E-posta adresinizi doğrulayın'}
+      subtitle={
+        sent === '0'
+          ? 'Doğrulama e-postası şu anda gönderilemedi. Aşağıdan tekrar deneyebilirsiniz.'
+          : 'Son bir adım kaldı: e-posta adresinize gönderdiğimiz doğrulama bağlantısına tıklayın.'
+      }
+      showBenefits={false}
+    >
+      <div className="space-y-5">
+        <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">
+          <p className="text-[13px] text-[#6b7c8f]">Doğrulama bağlantısının gönderildiği adres</p>
+          <p className="mt-0.5 break-all text-[15px] font-semibold text-[#121926]">{user?.email}</p>
+          <ul className="mt-3 space-y-1.5 text-[13.5px] leading-relaxed text-[#20384e]">
+            <li>• E-posta birkaç dakika içinde ulaşır; gelmezse spam / gereksiz klasörünü kontrol edin.</li>
+            <li>• Bağlantıya tıkladıktan sonra bu sayfada &quot;Doğruladım&quot; düğmesine basın.</li>
+            <li>• Doğrulamadan da alışverişe devam edebilirsiniz.</li>
+          </ul>
+        </div>
+
+        {message && <FormAlert tone={message.tone}>{message.text}</FormAlert>}
+
+        <div className="space-y-3">
+          <PrimaryButton
+            type="button"
+            loading={checking}
+            loadingText="Kontrol ediliyor…"
+            onClick={async () => { if (await check()) setStatus('verified') }}
+          >
+            <RefreshCw className="h-4 w-4" /> Doğruladım
+          </PrimaryButton>
+          <SecondaryButton type="button" onClick={resend} disabled={sending || remaining > 0}>
+            {sending && <Loader2 className="h-4 w-4 animate-spin" />}
+            {remaining > 0 ? `Tekrar gönder (${remaining} sn)` : 'Doğrulama e-postasını tekrar gönder'}
+          </SecondaryButton>
+        </div>
+
+        <p className="text-center text-[14.5px]">
+          <Link href={target} className="font-semibold text-[#0b2540] hover:underline underline-offset-2">
+            Şimdilik geç, {target === '/profile' ? 'hesabıma git' : 'devam et'} →
+          </Link>
+        </p>
       </div>
-    </ClassicPageShell>
+    </AuthLayout>
   )
 }
 
 export default function VerifyEmailPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gray-50/80 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-brand border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600">Yükleniyor…</p>
-        </div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <ClassicPageShell noTitle>
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-[#0b2540]" />
+          </div>
+        </ClassicPageShell>
+      }
+    >
       <VerifyEmailContent />
     </Suspense>
   )
 }
-

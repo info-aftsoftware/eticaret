@@ -23,8 +23,11 @@ service cloud.firestore {
       match /addresses/{addressId} {
         allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == uid);
       }
+      // Eski sipariş kayıtları: yalnızca okunur. Siparişler sunucuda (Prisma) oluşturulur;
+      // istemciden yazma, sahte sipariş/e-posta adresi enjeksiyonuna yol açtığı için kapalı.
       match /orders/{orderId} {
-        allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == uid);
+        allow read: if isAdmin() || isOwner(uid);
+        allow write: if false;
       }
       match /favorites/{productId} {
         allow read, write: if isAdmin() || (request.auth != null && request.auth.uid == uid);

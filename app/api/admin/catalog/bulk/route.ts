@@ -16,6 +16,7 @@ import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProducts } from '@/lib/catalog-merge'
+import { notifyLowStockTransitions, readStocks } from '@/lib/low-stock'
 
 export async function PATCH(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -39,6 +40,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     let affected = 0
+    // Düşük stok uyarısı için değişiklik öncesi stoklar
+    const before = action === 'reset_stock' || action === 'set_stock' ? await readStocks(ids.map(String)) : null
 
     if (action === 'feature' || action === 'unfeature') {
       const featured = action === 'feature'
@@ -48,7 +51,7 @@ export async function PATCH(request: NextRequest) {
           prisma.productOverride.upsert({
             where: { productId },
             update: { featured },
-            create: { productId, name: productId, price: 0, category: 'Diğer', featured },
+            create: { productId, featured },
           })
         )
       )
@@ -113,6 +116,10 @@ export async function PATCH(request: NextRequest) {
 
     // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
     processStockAlerts(ids.map(String)).catch((e) => console.error('Stock alert error:', e))
+    if (before) {
+      const after = action === 'reset_stock' ? 0 : typeof value === 'number' && value >= 0 ? Math.floor(value) : 0
+      void notifyLowStockTransitions(ids.map((id) => ({ productId: id, before: before.get(id)?.stock, after, name: before.get(id)?.name })))
+    }
     return NextResponse.json({ success: true, affected })
   } catch (error) {
     console.error('Admin bulk PATCH error:', error)

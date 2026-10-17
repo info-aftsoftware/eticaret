@@ -3,32 +3,43 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Mail, Lock, User, Phone, UserPlus, Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
+import { requestWelcomeEmail } from '@/lib/store/useFirebaseAuth'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
-import { Mail, Lock, User, Phone, UserPlus, AlertCircle, Eye, EyeOff, Loader2 } from 'lucide-react'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { setUserProfile } from '@/lib/firebase/firestore'
 import { safeRedirect } from '@/lib/safe-redirect'
-import { getLegalDocument, type LegalSlug } from '@/lib/legal/documents'
+import { EMAIL_RE } from '@/lib/auth-errors'
+import type { LegalSlug } from '@/lib/legal/documents'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
+import { AuthLayout, TextField, PasswordField, PasswordStrength, Checkbox, PrimaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton'
+import { saveSignupConsents } from '@/components/auth/consents'
+
+const MIN_PASSWORD = 8
+
+type Errors = Partial<Record<'name' | 'email' | 'phone' | 'password' | 'confirmPassword' | 'terms', string>>
 
 function RegisterPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const register = useAuthStore((state) => state.register)
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const redirectParam = searchParams.get('redirect')
+  const target = safeRedirect(redirectParam)
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '' })
+  // Sipariş sonrası "hesap oluştur": ödeme sayfası ad/e-posta/telefonu URL yerine sessionStorage'a bırakır
+  useEffect(() => {
+    if (searchParams.get('from_order') !== '1') return
+    try {
+      const raw = sessionStorage.getItem('register-prefill')
+      if (!raw) return
+      const p = JSON.parse(raw) as { name?: string; email?: string; phone?: string }
+      setFormData((prev) => ({ ...prev, name: prev.name || p.name || '', email: prev.email || p.email || '', phone: prev.phone || p.phone || '' }))
+      sessionStorage.removeItem('register-prefill')
+    } catch {
+      /* depolama kapalıysa form boş kalır */
+    }
+  }, [searchParams])
+  const [errors, setErrors] = useState<Errors>({})
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [acceptTerms, setAcceptTerms] = useState(false)
@@ -41,198 +52,167 @@ function RegisterPageContent() {
     const name = searchParams.get('name') ?? ''
     const phone = searchParams.get('phone') ?? ''
     if (email || name || phone) {
-      setFormData((prev) => ({
-        ...prev,
-        email: email || prev.email,
-        name: name || prev.name,
-        phone: phone || prev.phone,
-      }))
+      setFormData((prev) => ({ ...prev, email: email || prev.email, name: name || prev.name, phone: phone || prev.phone }))
     }
   }, [searchParams])
+
+  const update = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }))
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }))
+  }
+
+  const validate = (): Errors => {
+    const next: Errors = {}
+    const name = formData.name.trim()
+    if (!name) next.name = 'Adınızı ve soyadınızı girin.'
+    else if (name.length < 3) next.name = 'Ad soyad en az 3 karakter olmalıdır.'
+    const email = formData.email.trim()
+    if (!email) next.email = 'E-posta adresinizi girin.'
+    else if (!EMAIL_RE.test(email)) next.email = 'Geçerli bir e-posta adresi girin (örn. ad@ornek.com).'
+    const digits = formData.phone.replace(/\D/g, '')
+    if (formData.phone.trim() && (digits.length < 10 || digits.length > 13)) next.phone = 'Geçerli bir telefon numarası girin (örn. 0555 123 45 67).'
+    if (!formData.password) next.password = 'Bir şifre belirleyin.'
+    else if (formData.password.length < MIN_PASSWORD) next.password = `Şifre en az ${MIN_PASSWORD} karakter olmalıdır.`
+    if (!formData.confirmPassword) next.confirmPassword = 'Şifrenizi tekrar girin.'
+    else if (formData.password !== formData.confirmPassword) next.confirmPassword = 'Şifreler eşleşmiyor.'
+    if (!acceptTerms) next.terms = 'Devam etmek için Üyelik ve Kullanım Koşulları’nı kabul etmelisiniz.'
+    return next
+  }
+
+  const afterSignup = (verificationSent: boolean) => {
+    requestWelcomeEmail()
+    const q = new URLSearchParams({ sent: verificationSent ? '1' : '0' })
+    if (redirectParam) q.set('redirect', target)
+    router.push(`/verify-email?${q.toString()}`)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-
-    // Scroll to top on error
-    const scrollToTop = () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
-
-    if (!acceptTerms) {
-      setError('Üyelik ve Kullanım Koşulları’nı kabul etmelisiniz')
-      scrollToTop()
-      return
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Şifreler eşleşmiyor')
-      scrollToTop()
-      return
-    }
-
-    if (formData.password.length < 6) {
-      setError('Şifre en az 6 karakter olmalıdır')
-      scrollToTop()
+    const next = validate()
+    setErrors(next)
+    if (Object.keys(next).length) {
+      const first = Object.keys(next)[0]
+      document.querySelector<HTMLElement>(`[data-field="${first}"] input`)?.focus()
       return
     }
 
     setLoading(true)
+    const result = await register(formData.email.trim(), formData.password, formData.name.trim(), formData.phone.trim() || undefined)
 
-    const result = await register(
-      formData.email,
-      formData.password,
-      formData.name,
-      formData.phone || undefined
-    )
-
-    if (result.success) {
-      if (result.message) setError('')
-      // Onay kayıtları (zaman damgalı) kullanıcı profiline yazılır
-      try {
-        const uid = useAuthStore.getState().user?.id
-        if (uid) {
-          const now = new Date().toISOString()
-          await setUserProfile(uid, {
-            consents: {
-              membershipTerms: { accepted: true, at: now, version: getLegalDocument('uyelik-ve-kullanim-kosullari')?.updated ?? null },
-              kvkkInformed: { at: now, version: getLegalDocument('kvkk')?.updated ?? null },
-              commercialMessages: { accepted: acceptMarketing, at: now, channels: acceptMarketing ? ['email', 'sms'] : [] },
-            },
-          })
-        }
-      } catch (err) {
-        console.error('Consent save error:', err)
-      }
-      router.push(safeRedirect(searchParams.get('redirect')))
-    } else {
-      setError(result.error || 'Kayıt başarısız')
+    if (!result.success) {
+      setError(result.error || 'Kayıt tamamlanamadı.')
+      setLoading(false)
       window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
     }
-
-    setLoading(false)
+    // Onay kayıtları (zaman damgalı) kullanıcı profiline yazılır
+    const uid = useAuthStore.getState().user?.id
+    if (uid) await saveSignupConsents(uid, acceptMarketing).catch((err) => console.error('Consent save error:', err))
+    afterSignup(!!result.verificationSent)
   }
 
+  const fromOrder = searchParams.get('from_order') === '1'
+  const loginHref = redirectParam ? `/login?redirect=${encodeURIComponent(target)}` : '/login'
+
   return (
-    <ClassicPageShell breadcrumbs={[{ label: 'Kayıt Ol' }]} noTitle>
-      <div className="flex justify-center py-6">
-        <div className="w-full max-w-md">
-          <Card className="classic-card rounded-lg border border-gray-200 overflow-hidden">
-            <CardHeader className="space-y-1 text-center pb-4 bg-white">
-              <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 bg-brand rounded-lg flex items-center justify-center">
-                  <UserPlus className="w-7 h-7 text-white" />
-                </div>
-              </div>
-              <CardTitle className="text-xl font-bold text-gray-900 uppercase tracking-tight">Kayıt Ol</CardTitle>
-              <CardDescription className="text-gray-600 text-sm">
-                {searchParams.get('from_order') === '1' ? 'Siparişiniz oluşturuldu. Hesabınızı aktifleştirmek için şifre belirleyin.' : 'Yeni hesap oluşturun ve alışverişe başlayın'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="bg-white">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert variant="destructive" className="rounded-xl">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+    <AuthLayout
+      breadcrumb="Kayıt Ol"
+      icon={UserPlus}
+      title="Üye Ol"
+      subtitle={fromOrder ? 'Siparişiniz oluşturuldu. Siparişlerinizi takip etmek için hesabınızı oluşturun.' : 'Birkaç adımda hesabınızı oluşturun, siparişlerinizi kolayca takip edin.'}
+    >
+      <div className="space-y-5">
+        {error && (
+          <FormAlert>
+            {error}
+            {error.includes('zaten var') && (
+              <span className="mt-1 block">
+                <Link href={`/login?email=${encodeURIComponent(formData.email.trim())}${redirectParam ? `&redirect=${encodeURIComponent(target)}` : ''}`} className="font-semibold underline">Giriş yap</Link>
+                {' · '}
+                <Link href={`/forgot-password?email=${encodeURIComponent(formData.email.trim())}`} className="font-semibold underline">Şifremi unuttum</Link>
+              </span>
+            )}
+          </FormAlert>
+        )}
 
-              <div className="space-y-2">
-                <Label htmlFor="name">Ad Soyad *</Label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-0 flex h-full w-12 items-center justify-center text-gray-400 pointer-events-none shrink-0">
-                    <User className="w-5 h-5" />
-                  </span>
-                  <Input id="name" type="text" placeholder="Adınız Soyadınız" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="rounded-xl pl-12 pr-4 min-w-0" required disabled={loading} />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">E-posta *</Label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-0 flex h-full w-12 items-center justify-center text-gray-400 pointer-events-none shrink-0">
-                    <Mail className="w-5 h-5" />
-                  </span>
-                  <Input id="email" type="email" placeholder="ornek@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="rounded-xl pl-12 pr-4 min-w-0" required disabled={loading} autoComplete="username" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="phone">Telefon</Label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-0 flex h-full w-12 items-center justify-center text-gray-400 pointer-events-none shrink-0">
-                    <Phone className="w-5 h-5" />
-                  </span>
-                  <Input id="phone" type="tel" placeholder="+90 555 123 4567" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} className="rounded-xl pl-12 pr-4 min-w-0" disabled={loading} autoComplete="tel" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Şifre *</Label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-0 flex h-full w-12 items-center justify-center text-gray-400 pointer-events-none shrink-0">
-                    <Lock className="w-5 h-5" />
-                  </span>
-                  <Input id="password" type={showPassword ? 'text' : 'password'} placeholder="En az 6 karakter" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} className="rounded-xl pl-12 pr-12 min-w-0" required minLength={6} disabled={loading} autoComplete="new-password" />
-                  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowPassword(!showPassword) }} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded touch-manipulation" aria-label={showPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}>{showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}</button>
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Şifre Tekrar *</Label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-0 flex h-full w-12 items-center justify-center text-gray-400 pointer-events-none shrink-0">
-                    <Lock className="w-5 h-5" />
-                  </span>
-                  <Input id="confirmPassword" type={showConfirmPassword ? 'text' : 'password'} placeholder="Şifrenizi tekrar girin" value={formData.confirmPassword} onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })} className="rounded-xl pl-12 pr-12 min-w-0" required minLength={6} disabled={loading} autoComplete="new-password" />
-                  <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowConfirmPassword(!showConfirmPassword) }} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded touch-manipulation" aria-label={showConfirmPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}>{showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}</button>
-                </div>
-              </div>
+        <GoogleSignInButton
+          onSuccess={() => router.push(target)}
+          onError={setError}
+          acceptMarketing={acceptMarketing}
+          disabled={loading}
+          dividerText="veya e-posta ile"
+          canStart={() => {
+            if (acceptTerms) return true
+            setErrors((prev) => ({ ...prev, terms: 'Google ile devam etmeden önce Üyelik ve Kullanım Koşulları’nı kabul edin.' }))
+            document.querySelector<HTMLElement>('[data-field="terms"] input')?.focus()
+            return false
+          }}
+        />
 
-              <label className="flex items-start gap-2 cursor-pointer py-2 touch-manipulation min-h-[44px] items-center">
-                <input type="checkbox" id="terms" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} className="w-5 h-5 min-w-[20px] min-h-[20px] text-brand border-gray-300 rounded focus:ring-brand shrink-0" required />
-                <span className="text-sm text-gray-600">
-                  <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı okudum ve kabul ediyorum *
-                </span>
-              </label>
+        <form onSubmit={handleSubmit} noValidate className="space-y-4">
+          <div data-field="name">
+            <TextField label="Ad Soyad" required icon={User} placeholder="Adınız Soyadınız" value={formData.name} onChange={update('name')} error={errors.name} autoComplete="name" disabled={loading} />
+          </div>
+          <div data-field="email">
+            <TextField label="E-posta" required icon={Mail} type="email" inputMode="email" placeholder="ornek@email.com" value={formData.email} onChange={update('email')} error={errors.email} autoComplete="email" disabled={loading} hint="Sipariş ve fatura bildirimleri bu adrese gönderilir." />
+          </div>
+          <div data-field="phone">
+            <TextField label="Telefon" icon={Phone} type="tel" inputMode="tel" placeholder="0555 123 45 67" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint="İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için." />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div data-field="password">
+              <PasswordField label="Şifre" required icon={Lock} placeholder={`En az ${MIN_PASSWORD} karakter`} value={formData.password} onChange={update('password')} error={errors.password} autoComplete="new-password" disabled={loading} />
+            </div>
+            <div data-field="confirmPassword">
+              <PasswordField label="Şifre Tekrar" required icon={Lock} placeholder="Şifrenizi tekrar girin" value={formData.confirmPassword} onChange={update('confirmPassword')} error={errors.confirmPassword} autoComplete="new-password" disabled={loading} />
+            </div>
+          </div>
+          <div className="-mt-1 text-[13px] text-[#6b7c8f]">
+            <PasswordStrength password={formData.password} />
+          </div>
 
-              <label className="flex items-start gap-2 cursor-pointer py-1 touch-manipulation">
-                <input type="checkbox" id="marketing" checked={acceptMarketing} onChange={(e) => setAcceptMarketing(e.target.checked)} className="mt-0.5 w-5 h-5 min-w-[20px] min-h-[20px] text-brand border-gray-300 rounded focus:ring-brand shrink-0" />
-                <span className="text-sm text-gray-600">
-                  Kampanya ve duyurulardan haberdar olmak için <LegalLink slug="ticari-elektronik-ileti-onayi" onOpen={setLegalDoc}>ticari elektronik ileti</LegalLink> almayı kabul ediyorum (isteğe bağlı).
-                </span>
-              </label>
+          <div className="space-y-3 rounded-[10px] bg-[#f5f7fa] p-4">
+            <div data-field="terms">
+              <Checkbox checked={acceptTerms} onChange={(v) => { setAcceptTerms(v); if (v) setErrors((p) => ({ ...p, terms: undefined })) }} error={errors.terms} disabled={loading}>
+                <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı okudum ve kabul ediyorum. <span className="text-red-500">*</span>
+              </Checkbox>
+            </div>
+            <Checkbox checked={acceptMarketing} onChange={setAcceptMarketing} disabled={loading}>
+              Kampanya ve duyurulardan haberdar olmak için <LegalLink slug="ticari-elektronik-ileti-onayi" onOpen={setLegalDoc}>ticari elektronik ileti</LegalLink> almayı kabul ediyorum (isteğe bağlı).
+            </Checkbox>
+            <p className="pl-8 text-[12.5px] leading-relaxed text-[#6b7c8f] [&_button]:min-h-0 [&_button]:min-w-0">
+              Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> ve{' '}
+              <LegalLink slug="gizlilik-ve-cerez-politikasi" onOpen={setLegalDoc}>Gizlilik ve Çerez Politikası</LegalLink> kapsamında işlenir.
+            </p>
+          </div>
+          <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />
 
-              <p className="text-xs text-gray-500">
-                Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> ve{' '}
-                <LegalLink slug="gizlilik-ve-cerez-politikasi" onOpen={setLegalDoc}>Gizlilik ve Çerez Politikası</LegalLink> kapsamında işlenir.
-              </p>
-              <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />
+          <PrimaryButton type="submit" loading={loading} loadingText="Hesabınız oluşturuluyor…">
+            Üye Ol
+          </PrimaryButton>
+        </form>
 
-              <Button type="submit" className="w-full btn-classic-primary rounded-lg min-h-[48px] touch-manipulation" disabled={loading} size="lg">
-                {loading ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Kayıt yapılıyor...</> : 'Kayıt Ol'}
-              </Button>
-
-              <div className="text-center text-sm text-gray-600 py-2">
-                Zaten hesabınız var mı? <Link href="/login" className="text-brand hover:text-brand-hover font-semibold py-2 inline-block touch-manipulation">Giriş yapın</Link>
-              </div>
-            </form>
-            </CardContent>
-          </Card>
-        </div>
+        <p className="text-center text-[14.5px] text-[#6b7c8f]">
+          Zaten hesabınız var mı? <Link href={loginHref} className={linkClass}>Giriş yapın</Link>
+        </p>
       </div>
-    </ClassicPageShell>
+    </AuthLayout>
   )
 }
 
 export default function RegisterPage() {
   return (
-    <Suspense fallback={
-      <ClassicPageShell noTitle>
-        <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-2 border-slate-800 border-t-transparent mx-auto" />
-        </div>
-      </ClassicPageShell>
-    }>
+    <Suspense
+      fallback={
+        <ClassicPageShell noTitle>
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-[#0b2540]" />
+          </div>
+        </ClassicPageShell>
+      }
+    >
       <RegisterPageContent />
     </Suspense>
   )
 }
-

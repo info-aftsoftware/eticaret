@@ -1,255 +1,209 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Users, Search, Loader2, RefreshCw, ShoppingBag, Mail } from 'lucide-react'
+import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { Users, RefreshCw, ChevronRight } from 'lucide-react'
+import { Avatar, ConsentPill, type CustomerRow } from '@/components/admin/customer-bits'
 import { fmtTRY } from '@/lib/format'
+import { Btn, EmptyState, PageHeader, Pagination, Panel, SearchInput, SelectInput, Spinner, TabStrip, fmtDate } from '@/components/admin/ui'
 
-type CustomerRow = {
-  uid: string
-  email: string
-  displayName?: string
-  phone?: string
-  role?: string
-  createdAt?: string
-  orderCount: number
-  totalSpent: number
-}
+type ListResponse = { customers: CustomerRow[]; total: number; page: number; pageSize: number; counts: Record<string, number> }
 
-export default function AdminMusterilerPage() {
+const PAGE_SIZE = 25
+
+function CustomersContent() {
   const router = useRouter()
-  const [customers, setCustomers] = useState<CustomerRow[]>([])
+  const pathname = usePathname()
+  const sp = useSearchParams()
+  const filter = sp.get('filter') || 'all'
+  const sort = sp.get('sort') || 'last_order'
+  const q = sp.get('q') || ''
+  const page = Math.max(1, Number(sp.get('page')) || 1)
+
+  const [data, setData] = useState<ListResponse | null>(null)
   const [loading, setLoading] = useState(true)
-  const [refreshing, setRefreshing] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [search, setSearch] = useState(q)
+  const debounce = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const fetchCustomers = async (silent = false) => {
-    if (!silent) setLoading(true)
-    else setRefreshing(true)
-    try {
-      const { collection: col, getDocs } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-
-      const usersSnap = await getDocs(col(db, 'users'))
-      const rows: CustomerRow[] = []
-
-      for (const userDoc of usersSnap.docs) {
-        const data = userDoc.data()
-        const createdAt = data.createdAt as { seconds: number } | null
-
-        // Sipariş sayısını ve toplam harcamayı hesapla
-        let orderCount = 0
-        let totalSpent = 0
-        try {
-          const ordersSnap = await getDocs(col(db, 'users', userDoc.id, 'orders'))
-          orderCount = ordersSnap.size
-          ordersSnap.docs.forEach((od) => {
-            const pricing = od.data().pricing || {}
-            totalSpent += pricing.total ?? 0
-          })
-        } catch {}
-
-        rows.push({
-          uid: userDoc.id,
-          email: data.email || '',
-          displayName: data.displayName || data.name || undefined,
-          phone: data.phone || data.phoneNumber || undefined,
-          role: data.role || 'user',
-          createdAt: createdAt?.seconds
-            ? new Date(createdAt.seconds * 1000).toISOString()
-            : undefined,
-          orderCount,
-          totalSpent,
-        })
+  const setParams = useCallback(
+    (patch: Record<string, string | number | null>) => {
+      const next = new URLSearchParams(sp.toString())
+      for (const [k, v] of Object.entries(patch)) {
+        if (v === null || v === '' || (k === 'filter' && v === 'all') || (k === 'sort' && v === 'last_order')) next.delete(k)
+        else next.set(k, String(v))
       }
+      if (!('page' in patch)) next.delete('page')
+      const qs = next.toString()
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
+    },
+    [sp, router, pathname]
+  )
 
-      rows.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
-      setCustomers(rows)
-    } catch (err) {
-      console.error('Customers load error:', err)
-      setCustomers([])
+  const query = useMemo(() => {
+    const p = new URLSearchParams({ page: String(page), pageSize: String(PAGE_SIZE), filter, sort })
+    if (q) p.set('q', q)
+    return p.toString()
+  }, [page, filter, sort, q])
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch(`/api/admin/customers?${query}`, { credentials: 'include', cache: 'no-store' })
+      const json = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(json?.error || `Liste alınamadı (${res.status})`)
+      setData(json)
+      setError(null)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Liste alınamadı')
     } finally {
       setLoading(false)
-      setRefreshing(false)
     }
-  }
+  }, [query])
 
   useEffect(() => {
-    fetchCustomers()
-  }, [router])
+    load()
+  }, [load])
+  useEffect(() => setSearch(q), [q])
 
-  const filtered = customers.filter((c) => {
-    const q = searchQuery.toLowerCase()
-    return (
-      !q ||
-      (c.email || '').toLowerCase().includes(q) ||
-      (c.displayName || '').toLowerCase().includes(q) ||
-      (c.phone || '').includes(q) ||
-      c.uid.toLowerCase().includes(q)
-    )
-  })
+  const onSearch = (v: string) => {
+    setSearch(v)
+    if (debounce.current) clearTimeout(debounce.current)
+    debounce.current = setTimeout(() => setParams({ q: v.trim() || null }), 350)
+  }
 
-  const adminCount = customers.filter((c) => c.role === 'admin').length
-  const totalRevenue = customers.reduce((s, c) => s + c.totalSpent, 0)
+  const counts = data?.counts ?? {}
+  const rows = data?.customers ?? []
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Müşteriler</h1>
-          <p className="text-slate-600 mt-1">
-            {loading ? 'Yükleniyor...' : `${customers.length} kayıtlı kullanıcı · ${fmtTRY(totalRevenue)} toplam harcama`}
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => fetchCustomers(true)}
-          disabled={refreshing || loading}
-          className="w-fit"
-        >
-          <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-          Yenile
-        </Button>
-      </div>
+    <div className="space-y-5">
+      <PageHeader
+        title="Müşteriler"
+        description="Üyeler ve misafir alışveriş yapanlar (e-postaya göre gruplanır)"
+        actions={
+          <Btn variant="outline" onClick={load} loading={loading && !!data}>
+            {!(loading && data) && <RefreshCw />}
+            Yenile
+          </Btn>
+        }
+      />
 
-      {/* Özet kartları */}
-      {!loading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          <Card className="border-slate-200/80 shadow-sm">
-            <CardContent className="pt-5 pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Toplam</p>
-                  <p className="text-2xl font-bold text-slate-900 mt-1">{customers.length}</p>
-                </div>
-                <Users className="w-8 h-8 text-slate-300" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="border-slate-200/80 shadow-sm">
-            <CardContent className="pt-5 pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Sipariş Veren</p>
-                  <p className="text-2xl font-bold text-slate-900 mt-1">
-                    {customers.filter((c) => c.orderCount > 0).length}
-                  </p>
-                </div>
-                <ShoppingBag className="w-8 h-8 text-slate-300" />
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="border-slate-200/80 shadow-sm col-span-2 sm:col-span-1">
-            <CardContent className="pt-5 pb-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-wide">Toplam Gelir</p>
-                  <p className="text-xl font-bold text-slate-900 mt-1">{fmtTRY(totalRevenue)}</p>
-                </div>
-                <Mail className="w-8 h-8 text-slate-300" />
-              </div>
-            </CardContent>
-          </Card>
+      <Panel className="overflow-hidden">
+        <div className="px-2 sm:px-3 border-b border-[#e6ebf1]">
+          <TabStrip
+            tabs={[
+              { value: 'all', label: 'Tümü', count: counts.all },
+              { value: 'with_orders', label: 'Sipariş verenler', count: counts.with_orders },
+              { value: 'registered', label: 'Üyeler', count: counts.registered },
+              { value: 'guest', label: 'Misafirler', count: counts.guest },
+            ]}
+            value={filter}
+            onChange={(v) => setParams({ filter: v })}
+          />
         </div>
-      )}
+        <div className="p-3 sm:p-4 flex flex-col sm:flex-row gap-2 border-b border-[#e6ebf1] bg-[#fafbfd]">
+          <SearchInput value={search} onChange={onSearch} placeholder="Ad, e-posta, telefon, müşteri no veya sipariş no" className="flex-1" />
+          <SelectInput value={sort} onChange={(e) => setParams({ sort: e.target.value })} className="sm:w-56" aria-label="Sıralama">
+            <option value="last_order">Son sipariş tarihi</option>
+            <option value="spend">Toplam harcama</option>
+            <option value="orders">Sipariş sayısı</option>
+            <option value="newest">En yeni müşteri</option>
+            <option value="name">Ada göre (A–Z)</option>
+          </SelectInput>
+        </div>
 
-      <Card className="border-slate-200/80 bg-white shadow-sm">
-        <CardHeader className="border-b border-slate-200/80 pb-4">
-          <CardTitle className="text-lg font-semibold">Kayıtlı Kullanıcılar</CardTitle>
-          <CardDescription>
-            {filtered.length} kullanıcı görüntüleniyor
-            {adminCount > 0 && ` · ${adminCount} admin`}
-          </CardDescription>
-          <div className="relative pt-2">
-            <Search className="absolute left-3 top-1/2 translate-y-[-30%] text-slate-400 w-4 h-4 pointer-events-none shrink-0" />
-            <Input
-              placeholder="E-posta, ad veya telefon ara..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 min-w-0 border-slate-200 text-sm"
-            />
+        {error && (
+          <div role="alert" className="m-4 rounded-lg border border-red-200 bg-red-50 text-red-800 text-sm px-4 py-3">
+            {error}
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-brand" />
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="text-center py-16 text-slate-500">
-              <Users className="w-14 h-14 mx-auto mb-3 text-slate-300" />
-              <p className="font-medium">
-                {searchQuery ? 'Kullanıcı bulunamadı.' : 'Henüz kayıtlı kullanıcı yok.'}
-              </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[680px]">
-                <thead className="bg-slate-50/80 border-b border-slate-200/80 text-left text-sm">
-                  <tr>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Kullanıcı</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Telefon</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Rol</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Siparişler</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Harcama</th>
-                    <th className="py-3 px-4 font-semibold text-slate-700">Kayıt</th>
+        )}
+
+        {!data && loading ? (
+          <Spinner />
+        ) : rows.length === 0 ? (
+          <EmptyState icon={Users} title={q ? 'Aramaya uyan müşteri yok' : 'Henüz müşteri yok'} />
+        ) : (
+          <div className={loading ? 'opacity-60' : ''}>
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full text-left text-[13px]">
+                <thead>
+                  <tr className="text-[11px] uppercase tracking-wider text-[#6b7c8f] border-b border-[#e6ebf1]">
+                    <th className="font-semibold px-5 py-2.5">Müşteri</th>
+                    <th className="font-semibold px-3 py-2.5">İletişim</th>
+                    <th className="font-semibold px-3 py-2.5 text-right">Sipariş</th>
+                    <th className="font-semibold px-3 py-2.5 text-right">Ödenen toplam</th>
+                    <th className="font-semibold px-3 py-2.5">Son sipariş</th>
+                    <th className="font-semibold px-3 py-2.5">Pazarlama izni</th>
+                    <th className="px-3 py-2.5" />
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {filtered.map((c) => (
-                    <tr key={c.uid} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="py-3 px-4">
-                        <div className="font-medium text-slate-900 text-sm">
-                          {c.displayName || '—'}
+                <tbody className="divide-y divide-[#eef2f6]">
+                  {rows.map((c) => (
+                    <tr key={c.key} className="hover:bg-[#fafbfd] cursor-pointer" onClick={() => router.push(`/admin/musteriler/detay?key=${c.key}`)}>
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <Avatar name={c.name} guest={c.type === 'guest'} />
+                          <div className="min-w-0">
+                            <Link href={`/admin/musteriler/detay?key=${c.key}`} className="font-medium text-[#121926] hover:underline truncate block" onClick={(e) => e.stopPropagation()}>
+                              {c.name}
+                            </Link>
+                            <p className="text-xs text-[#6b7c8f]">
+                              {c.type === 'registered' ? (c.customerNo ?? 'Üye') : 'Misafir'}
+                              {c.registeredAt && ` · ${fmtDate(c.registeredAt)}`}
+                            </p>
+                          </div>
                         </div>
-                        <a
-                          href={`mailto:${c.email}`}
-                          className="text-xs text-brand hover:underline"
-                        >
-                          {c.email}
-                        </a>
                       </td>
-                      <td className="py-3 px-4 text-sm text-slate-600">
-                        {c.phone
-                          ? <a href={`tel:${c.phone}`} className="hover:underline">{c.phone}</a>
-                          : <span className="text-slate-400">—</span>}
+                      <td className="px-3 py-3 max-w-[240px]">
+                        <p className="truncate text-[#20384e]">{c.email ?? '—'}</p>
+                        <p className="text-xs text-[#6b7c8f] truncate">{[c.phone, c.city].filter(Boolean).join(' · ') || '—'}</p>
                       </td>
-                      <td className="py-3 px-4">
-                        {c.role === 'admin' ? (
-                          <Badge className="bg-brand/10 text-brand border-0 text-xs">Admin</Badge>
-                        ) : (
-                          <Badge variant="secondary" className="text-xs">Kullanıcı</Badge>
-                        )}
+                      <td className="px-3 py-3 text-right tabular-nums">
+                        <span className="font-semibold text-[#121926]">{c.orderCount}</span>
+                        {c.orderCount > c.paidOrderCount && <span className="text-xs text-[#9aa8b6]"> ({c.paidOrderCount} ödendi)</span>}
                       </td>
-                      <td className="py-3 px-4 text-sm font-semibold text-slate-900">
-                        {c.orderCount > 0 ? c.orderCount : <span className="text-slate-400 font-normal">—</span>}
-                      </td>
-                      <td className="py-3 px-4 text-sm font-semibold text-slate-900 tabular-nums">
-                        {c.totalSpent > 0 ? fmtTRY(c.totalSpent) : <span className="text-slate-400 font-normal">—</span>}
-                      </td>
-                      <td className="py-3 px-4 text-xs text-slate-500 whitespace-nowrap">
-                        {c.createdAt
-                          ? new Date(c.createdAt).toLocaleDateString('tr-TR', {
-                              day: '2-digit',
-                              month: 'short',
-                              year: 'numeric',
-                            })
-                          : '—'}
-                      </td>
+                      <td className="px-3 py-3 text-right font-semibold tabular-nums text-[#121926]">{fmtTRY(c.paidTotal)}</td>
+                      <td className="px-3 py-3 text-[#20384e] whitespace-nowrap">{c.lastOrderAt ? fmtDate(c.lastOrderAt) : '—'}</td>
+                      <td className="px-3 py-3"><ConsentPill value={c.marketingConsent} /></td>
+                      <td className="px-3 py-3 text-right"><ChevronRight className="w-4 h-4 text-[#b9c3cf] inline" /></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          )}
-        </CardContent>
-      </Card>
+            <ul className="lg:hidden divide-y divide-[#eef2f6]">
+              {rows.map((c) => (
+                <li key={c.key}>
+                  <Link href={`/admin/musteriler/detay?key=${c.key}`} className="flex items-center gap-3 px-4 py-3 hover:bg-[#fafbfd]">
+                    <Avatar name={c.name} guest={c.type === 'guest'} />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[13px] font-medium text-[#121926] truncate">
+                        {c.name} <span className="text-[11px] font-normal text-[#9aa8b6]">{c.type === 'registered' ? c.customerNo ?? 'Üye' : 'Misafir'}</span>
+                      </p>
+                      <p className="text-xs text-[#6b7c8f] truncate">{c.email ?? c.phone}</p>
+                      <div className="mt-1"><ConsentPill value={c.marketingConsent} /></div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-[13px] font-semibold tabular-nums text-[#121926]">{fmtTRY(c.paidTotal)}</p>
+                      <p className="text-xs text-[#6b7c8f]">{c.orderCount} sipariş</p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {data && <Pagination page={data.page} pageSize={data.pageSize} total={data.total} onPage={(p) => setParams({ page: p })} />}
+      </Panel>
     </div>
+  )
+}
+
+export default function AdminMusterilerPage() {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <CustomersContent />
+    </Suspense>
   )
 }

@@ -1,5 +1,6 @@
 import { Resend } from 'resend'
 import { sendEmailSMTP } from './email-smtp'
+import { captureEmail, emailCaptureEnabled } from './email-capture'
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_demo')
 
@@ -26,6 +27,8 @@ export async function sendEmail(
     console.error('Invalid email address:', to)
     return { success: false, error: 'Invalid email address' }
   }
+
+  if (emailCaptureEnabled()) return captureEmail(to, subject, content, attachments?.map((a) => a.filename))
 
   // Priority: SMTP > Resend
   if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {

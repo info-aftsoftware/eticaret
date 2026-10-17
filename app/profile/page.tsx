@@ -12,25 +12,24 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useFirebaseAuthStore } from '@/lib/store/useFirebaseAuth'
 import { useCartStore } from '@/lib/store/useCartStore'
-import { getAddresses, addAddress, updateAddress, deleteAddress, getOrders, setUserProfile, getFavorites, removeFavorite, getUserProfile } from '@/lib/firebase/firestore'
+import { getAddresses, addAddress, updateAddress, deleteAddress, getOrders, setUserProfile, getUserProfile } from '@/lib/firebase/firestore'
+import { FavoritesGrid } from '@/components/FavoritesGrid'
 import { getAuth } from '@/lib/firebase/config'
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth'
-import { User, ShoppingCart, Settings, Trash2, MapPin, Heart, Package, Truck, CheckCircle2, Clock, XCircle, Plus, Pencil as Edit } from 'lucide-react'
+import { User, ShoppingCart, Settings, Trash2, MapPin, Package, Truck, CheckCircle2, Clock, XCircle, Plus, Pencil as Edit } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import Link from 'next/link'
 import { useToast } from '@/components/ui/toast'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
-import { useTranslations } from 'next-intl'
-import { getCategoryKey } from '@/lib/categories'
 import { toOrderView, ORDER_STATUS_LABELS } from '@/lib/order-view'
 import { getAuthToken } from '@/lib/store/useAuthStore'
 import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard'
 import { MarketingConsentCard } from '@/components/profile/MarketingConsentCard'
+import { EmailVerifyBanner } from '@/components/EmailVerifyBanner'
 
 function ProfilePageContent() {
-  const tHeader = useTranslations('header')
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, isAuthenticated, token } = useAuthStore()
@@ -42,7 +41,6 @@ function ProfilePageContent() {
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
   const [orders, setOrders] = useState<any[]>([])
   const [addresses, setAddresses] = useState<any[]>([])
-  const [favorites, setFavorites] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [profileEdit, setProfileEdit] = useState({ name: '', phone: '' })
   const [addressDialogOpen, setAddressDialogOpen] = useState(false)
@@ -113,41 +111,6 @@ function ProfilePageContent() {
     }
   }, [user?.id])
 
-  const loadFavorites = useCallback(async () => {
-    if (!user?.id) {
-      setFavorites([])
-      return
-    }
-    try {
-      const list = await getFavorites(user.id)
-      // Static hosting: ürün verisi mock'tan alınır (API yok)
-      const { mockProducts } = await import('@/lib/products-mock')
-      const enriched = list.map((f) => {
-        const product = mockProducts.find((p) => p.id === f.productId) ?? null
-        if (!product) return { id: f.id, productId: f.productId, product: null }
-        const firstVariant = product.variants?.[0]
-        const price = firstVariant ? Number(firstVariant.price) : 0
-        const images = product.images as { url?: string }[] | null
-        return {
-          id: f.id,
-          productId: f.productId,
-          product: {
-            image: images?.[0]?.url ?? null,
-            name: product.name,
-            description: product.description,
-            price,
-            category: null,
-            slug: product.id,
-          },
-        }
-      })
-      setFavorites(enriched)
-    } catch (error) {
-      console.error('Error loading favorites:', error)
-      setFavorites([])
-    }
-  }, [user?.id])
-
   useEffect(() => {
     if (!authReady) {
       setLoading(true)
@@ -156,14 +119,12 @@ function ProfilePageContent() {
     if (user?.id) {
       loadOrders()
       loadAddresses()
-      loadFavorites()
       getUserProfile(user.id).then((p) => setProfileCustomerNo(p?.customerNo ?? null))
     } else {
-      setFavorites([])
       setProfileCustomerNo(null)
     }
     setLoading(false)
-  }, [authReady, user?.id, loadOrders, loadAddresses, loadFavorites])
+  }, [authReady, user?.id, loadOrders, loadAddresses])
 
   const resetAddressForm = () => {
     setAddressForm({
@@ -305,18 +266,6 @@ function ProfilePageContent() {
     }
   }
 
-  const handleDeleteFavorite = async (productId: string) => {
-    if (!user?.id) return
-    try {
-      await removeFavorite(user.id, productId)
-      addToast({ type: 'success', title: 'Başarılı', description: 'Ürün favorilerden kaldırıldı.' })
-      setFavorites((prev) => prev.filter((f) => f.productId !== productId))
-    } catch (error) {
-      console.error('Error deleting favorite:', error)
-      addToast({ type: 'error', title: 'Hata', description: 'Favori kaldırılırken bir hata oluştu.' })
-    }
-  }
-
   if (!authReady) {
     return (
       <ClassicPageShell breadcrumbs={[{ label: 'Hesabım' }]} noTitle>
@@ -329,6 +278,7 @@ function ProfilePageContent() {
 
   return (
     <ClassicPageShell breadcrumbs={[{ label: 'Hesabım' }]} title="Hesabım" description="Siparişler, adresler ve ayarlar">
+      <EmailVerifyBanner className="mb-6" />
       <Tabs value={activeTab} onValueChange={(value) => router.push(`/profile?tab=${value}`)} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto rounded-lg bg-surface p-1 min-w-0">
           <TabsTrigger value="orders" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">Siparişlerim</TabsTrigger>
@@ -701,76 +651,7 @@ function ProfilePageContent() {
             </TabsContent>
 
             <TabsContent value="favorites" className="space-y-4">
-              {favorites.length === 0 ? (
-                <Card className="classic-card rounded-lg">
-                  <CardContent className="py-12 text-center">
-                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-surface mb-4">
-                      <Heart className="w-8 h-8 text-ink-muted" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-ink mb-2">Henüz favori yok</h3>
-                    <p className="text-ink-muted mb-4">
-                      Beğendiğiniz ürünleri favorilerinize ekleyin.
-                    </p>
-                    <Button asChild className="btn-classic-primary rounded-lg">
-                      <Link href="/products">
-                        Ürünlere Git
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {favorites.map((favorite) => (
-                    <Card key={favorite.id} className="classic-card rounded-lg hover:shadow-md transition-shadow">
-                      <CardContent className="p-4">
-                        {favorite.product && (
-                          <>
-                            {favorite.product.image && (
-                              <div className="relative h-48 bg-surface rounded-xl mb-4 overflow-hidden">
-                                <img
-                                  src={favorite.product.image}
-                                  alt={favorite.product.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            )}
-                            <h4 className="font-semibold text-lg mb-2">{favorite.product.name}</h4>
-                            {favorite.product.description && (
-                              <p className="text-sm text-ink-muted mb-3 line-clamp-2">{favorite.product.description}</p>
-                            )}
-                            <div className="flex items-center justify-between mb-3">
-                              <div className="text-xl font-bold text-brand">
-                                {favorite.product.price > 0 ? formatPrice(favorite.product.price) : 'Fiyat bilgisi yok'}
-                              </div>
-                              {favorite.product.category && (
-                                <Badge variant="outline">
-                                  {getCategoryKey(favorite.product.category) ? tHeader(getCategoryKey(favorite.product.category)!) : favorite.product.category}
-                                </Badge>
-                              )}
-                            </div>
-                          </>
-                        )}
-                        {!favorite.product && (
-                          <div className="mb-2">
-                            <h4 className="font-semibold">Ürün #{favorite.productId}</h4>
-                            <p className="text-sm text-ink-muted">Ürün bilgisi yüklenemedi</p>
-                          </div>
-                        )}
-                        <div className="flex gap-2">
-                          <Button asChild variant="outline" size="sm" className="flex-1 rounded-xl">
-                            <Link href={favorite.product?.slug ? `/products/${favorite.product.slug}` : `/products/${favorite.productId}`}>
-                              Detaylar
-                            </Link>
-                          </Button>
-                          <Button variant="ghost" size="sm" className="rounded-xl text-brand hover:text-brand-hover hover:bg-brand-light" onClick={() => handleDeleteFavorite(favorite.productId)}>
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
+              <FavoritesGrid compact />
             </TabsContent>
 
             <TabsContent value="settings" className="space-y-4">

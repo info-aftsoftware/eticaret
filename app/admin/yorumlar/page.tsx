@@ -16,6 +16,8 @@ import {
   ChevronUp,
   User,
 } from 'lucide-react'
+import { useToast } from '@/components/admin/toast'
+import { useAdminLive } from '@/components/admin/AdminLiveProvider'
 
 type Review = {
   id: string
@@ -55,6 +57,8 @@ function StatusBadge({ status }: { status: Review['status'] }) {
 }
 
 export default function AdminYorumlarPage() {
+  const toast = useToast()
+  const { refresh: refreshLive } = useAdminLive()
   const [reviews, setReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -93,7 +97,10 @@ export default function AdminYorumlarPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: review.id, status: newStatus }),
       })
+      if (!res.ok) toast.error('Yorum güncellenemedi')
       if (res.ok) {
+        toast.success(newStatus === 'approved' ? 'Yorum onaylandı ve yayında' : 'Yorum yayından kaldırıldı')
+        refreshLive()
         setReviews((prev) =>
           prev.map((r) => (r.id === review.id ? { ...r, status: newStatus } : r))
         )
@@ -113,7 +120,9 @@ export default function AdminYorumlarPage() {
         method: 'DELETE',
         credentials: 'include',
       })
+      if (!res.ok) toast.error('Yorum silinemedi')
       if (res.ok) {
+        refreshLive()
         setReviews((prev) => prev.filter((r) => r.id !== id))
         if (expandedId === id) setExpandedId(null)
       }

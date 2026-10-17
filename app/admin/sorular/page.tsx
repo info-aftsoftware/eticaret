@@ -17,6 +17,8 @@ import {
   ChevronUp,
   User,
 } from 'lucide-react'
+import { useToast } from '@/components/admin/toast'
+import { useAdminLive } from '@/components/admin/AdminLiveProvider'
 
 type Question = {
   id: string
@@ -38,6 +40,8 @@ function AnswerBadge({ answered }: { answered: boolean }) {
 }
 
 export default function AdminSorularPage() {
+  const toast = useToast()
+  const { refresh: refreshLive } = useAdminLive()
   const [questions, setQuestions] = useState<Question[]>([])
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
@@ -78,7 +82,15 @@ export default function AdminSorularPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, answer }),
       })
-      if (res.ok) {
+      const data = await res.json().catch(() => null)
+      if (!res.ok) {
+        toast.error('Yanıt kaydedilemedi', data?.error)
+      } else {
+        toast.success(
+          'Yanıt yayınlandı',
+          data?.emailed ? 'Soruyu soran kişiye e-posta ile bildirildi.' : data?.hadEmail ? 'Yanıt değişmediği için e-posta gönderilmedi.' : 'Soruda e-posta adresi yok; bildirim gönderilmedi.'
+        )
+        refreshLive()
         setQuestions((prev) =>
           prev.map((q) => (q.id === id ? { ...q, answer } : q))
         )
@@ -103,7 +115,9 @@ export default function AdminSorularPage() {
         method: 'DELETE',
         credentials: 'include',
       })
+      if (!res.ok) toast.error('Soru silinemedi')
       if (res.ok) {
+        refreshLive()
         setQuestions((prev) => prev.filter((q) => q.id !== id))
         if (expandedId === id) setExpandedId(null)
       }

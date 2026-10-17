@@ -150,26 +150,36 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
                     <div className="text-[11px] text-slate-400 line-through">{formatPrice(product.oldPrice)}</div>
                   )}
                 </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-8 w-8 p-0 rounded-lg border-brand/30 hover:bg-brand hover:text-white hover:border-brand transition-colors flex-shrink-0"
-                  onClick={() =>
-                    addItem({
-                      id: product.id,
-                      name: product.name,
-                      price: product.price,
-                      quantity: 1,
-                      image: product.image,
-                      category: product.category,
-                      description: product.description,
-                    })
-                  }
-                  aria-label={`${product.name} sepete ekle`}
-                  title="Sepete ekle"
-                >
-                  <Plus className="w-4 h-4" />
-                </Button>
+                {product.variants?.length ? (
+                  // Varyantlı ürün sepete taban id ile eklenemez; seçenek ürün sayfasında seçilir
+                  <Button asChild size="sm" variant="outline" className="h-8 px-2.5 rounded-lg border-brand/30 text-xs font-semibold hover:bg-brand hover:text-white hover:border-brand transition-colors flex-shrink-0">
+                    <Link href={`/products/${product.id}`}>Seç</Link>
+                  </Button>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={product.stock <= 0}
+                    className="h-8 w-8 p-0 rounded-lg border-brand/30 hover:bg-brand hover:text-white hover:border-brand transition-colors flex-shrink-0"
+                    onClick={() =>
+                      addItem({
+                        id: product.id,
+                        productId: product.id,
+                        maxQuantity: product.stock,
+                        name: product.name,
+                        price: product.price,
+                        quantity: 1,
+                        image: product.image,
+                        category: product.category,
+                        description: product.description,
+                      })
+                    }
+                    aria-label={`${product.name} sepete ekle`}
+                    title="Sepete ekle"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                )}
               </div>
             </div>
           </div>

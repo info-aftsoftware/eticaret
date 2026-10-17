@@ -1,145 +1,37 @@
 import React from 'react'
-import {
-  Html,
-  Head,
-  Body,
-  Container,
-  Section,
-  Text,
-  Button,
-  Hr,
-} from '@react-email/components'
+import { Text, Section, Link } from '@react-email/components'
+import { EmailLayout, CtaButton, s } from './order/shared'
 
 interface PasswordResetEmailProps {
   name: string
   resetUrl: string
 }
 
-export default function PasswordResetEmail({
-  name,
-  resetUrl,
-}: PasswordResetEmailProps) {
+/** Şifre sıfırlama bağlantısı (bağlantı doğrudan /reset-password sayfasına gider). */
+export default function PasswordResetEmail({ name, resetUrl }: PasswordResetEmailProps) {
   return (
-    <Html>
-      <Head />
-      <Body style={main}>
-        <Container style={container}>
-          <Section style={header}>
-            <Text style={logo}>⚡ Voltekno</Text>
-          </Section>
-          
-          <Section style={content}>
-            <Text style={title}>Şifre Sıfırlama</Text>
-            
-            <Text style={text}>
-              Merhaba <strong>{name}</strong>,
-            </Text>
-            
-            <Text style={text}>
-              Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın. Bu bağlantı 1 saat süreyle geçerlidir.
-            </Text>
-
-            <Section style={buttonContainer}>
-              <Button style={button} href={resetUrl}>
-                Şifremi Sıfırla
-              </Button>
-            </Section>
-
-            <Text style={text}>
-              Eğer bu isteği siz yapmadıysanız, bu e-postayı görmezden gelebilirsiniz. Şifreniz değişmeyecektir.
-            </Text>
-
-            <Hr style={hr} />
-
-            <Text style={footer}>
-              Bu bağlantı 1 saat süreyle geçerlidir. Bağlantıyı kopyalayıp tarayıcınıza yapıştırabilirsiniz:
-            </Text>
-            <Text style={linkText}>
-              {resetUrl}
-            </Text>
-          </Section>
-        </Container>
-      </Body>
-    </Html>
+    <EmailLayout
+      preview="Şifre sıfırlama talebiniz — yeni şifrenizi belirleyin"
+      title="Şifre Sıfırlama"
+      subtitle="Hesabınız için şifre sıfırlama talebi aldık"
+    >
+      <Text style={s.p}>Merhaba {name || 'Değerli Müşterimiz'},</Text>
+      <Text style={s.p}>
+        Hesabınız için şifre sıfırlama talebinde bulunuldu. Yeni şifrenizi belirlemek için aşağıdaki düğmeye tıklayın.
+      </Text>
+      <CtaButton href={resetUrl}>Yeni Şifre Belirle</CtaButton>
+      <Section style={s.box}>
+        <Text style={s.row}>Düğme çalışmıyorsa aşağıdaki bağlantıyı tarayıcınıza yapıştırın:</Text>
+        <Text style={{ ...s.note, wordBreak: 'break-all' as const }}>
+          <Link href={resetUrl} style={s.link}>{resetUrl}</Link>
+        </Text>
+      </Section>
+      <Section style={s.boxAmber}>
+        <Text style={s.row}>
+          Bu talebi siz yapmadıysanız bu e-postayı dikkate almayın; şifreniz değişmez. Bağlantı güvenlik nedeniyle
+          yaklaşık 1 saat geçerlidir ve yalnızca bir kez kullanılabilir.
+        </Text>
+      </Section>
+    </EmailLayout>
   )
 }
-
-const main = {
-  backgroundColor: '#f6f9fc',
-  fontFamily: '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif',
-}
-
-const container = {
-  backgroundColor: '#ffffff',
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  marginBottom: '64px',
-}
-
-const header = {
-  padding: '32px 24px 0',
-  textAlign: 'center' as const,
-}
-
-const logo = {
-  color: '#2563eb',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '0 0 8px',
-}
-
-const content = {
-  padding: '0 24px',
-}
-
-const title = {
-  color: '#1f2937',
-  fontSize: '24px',
-  fontWeight: 'bold',
-  margin: '0 0 16px',
-  textAlign: 'center' as const,
-}
-
-const text = {
-  color: '#374151',
-  fontSize: '16px',
-  lineHeight: '24px',
-  margin: '0 0 16px',
-}
-
-const buttonContainer = {
-  textAlign: 'center' as const,
-  margin: '24px 0',
-}
-
-const button = {
-  backgroundColor: '#2563eb',
-  borderRadius: '6px',
-  color: '#ffffff',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  textDecoration: 'none',
-  textAlign: 'center' as const,
-  display: 'inline-block',
-  padding: '12px 24px',
-}
-
-const hr = {
-  borderColor: '#e5e7eb',
-  margin: '24px 0',
-}
-
-const footer = {
-  color: '#6b7280',
-  fontSize: '14px',
-  lineHeight: '20px',
-  margin: '0 0 8px',
-}
-
-const linkText = {
-  color: '#2563eb',
-  fontSize: '12px',
-  wordBreak: 'break-all' as const,
-  margin: '0',
-}
-

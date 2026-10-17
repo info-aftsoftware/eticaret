@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
+import { notifyLowStockTransitions, readStocks } from '@/lib/low-stock'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -37,6 +38,7 @@ export async function PATCH(request: NextRequest) {
     }
     const value = typeof stock === 'number' ? Math.max(0, Math.floor(stock)) : 0
 
+    const before = (await readStocks([productId.trim()])).get(productId.trim())
     const row = await prisma.stockOverride.upsert({
       where: { productId: productId.trim() },
       update: { stock: value },
@@ -44,6 +46,7 @@ export async function PATCH(request: NextRequest) {
     })
     // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
     if (value > 0) processStockAlerts([row.productId]).catch((e) => console.error('Stock alert error:', e))
+    void notifyLowStockTransitions([{ productId: row.productId, before: before?.stock, after: value, name: before?.name }])
     return NextResponse.json(row)
   } catch (error) {
     console.error('Admin stock-overrides PATCH error:', error)

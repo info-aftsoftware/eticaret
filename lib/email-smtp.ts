@@ -8,6 +8,7 @@ import nodemailer from 'nodemailer'
 import type { Transporter, TransportOptions, SendMailOptions, SentMessageInfo } from 'nodemailer'
 import { render } from '@react-email/render'
 import React from 'react'
+import { captureEmail, emailCaptureEnabled } from './email-capture'
 
 // Cache transporter to avoid recreating it on every call
 let cachedTransporter: Transporter | null = null
@@ -72,6 +73,8 @@ export async function sendEmailSMTP(
   content: React.ReactElement | string,
   attachments?: EmailAttachment[]
 ): Promise<{ success: boolean; error?: string; data?: any }> {
+  if (emailCaptureEnabled()) return captureEmail(to, subject, content, attachments?.map((a) => a.filename))
+
   // Check if SMTP is configured
   if (!process.env.SMTP_USER || !process.env.SMTP_PASSWORD) {
     console.warn('SMTP credentials not set, skipping email send')
