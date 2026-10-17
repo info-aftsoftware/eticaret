@@ -75,6 +75,22 @@
     animation-play-state: paused;
   }
 
+  /* Ana sayfa markalar şeridi – kendiliğinden kayma (liste iki kez render edilir) */
+  @keyframes brand-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-brand-scroll {
+    animation: brand-scroll 40s linear infinite;
+  }
+  .group\/scroll:hover .animate-brand-scroll,
+  .group\/scroll:focus-within .animate-brand-scroll {
+    animation-play-state: paused;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-brand-scroll { animation: none; }
+  }
+
   /* Ürün detay: alttaki galeri şeridi sola kayan, bitince başa sarar (sonsuz döngü) */
   @keyframes product-gallery-slide {
     0% { transform: translateX(0); }

@@ -29,7 +29,7 @@ export function Logo({ size = 'md', className, href, asDiv = false, align = 'lef
       )}
     >
       <Image
-        src="/voltekno-logo-transparent.png"
+        src="/images/voltekno-logo.webp"
         alt="Voltekno Enerji Sistemleri"
         fill
         priority={size === 'lg' || size === 'xl'}

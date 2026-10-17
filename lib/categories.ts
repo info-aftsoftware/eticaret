@@ -1,80 +1,73 @@
 /**
- * Ürün kategorileri – filtre, URL ve çeviri anahtarları için tek kaynak.
- * Yapı, ikas ürün Excel'indeki "Ana Kategori > Alt Kategori" hiyerarşisini birebir izler:
- * grup = ana kategori (URL: /category/<id>), categoryValues = product.category değerleri (alt kategori).
+ * Ürün kategorileri – filtre, URL, menü ve çeviri anahtarları için tek kaynak.
+ * Yapı gunesenerjisistemi.com menüsünü izler: ana kategori (grup, URL: /category/<id>) > alt kategori
+ * (product.category değeri) > marka (filtre: /products?category=<alt>&brand=<marka>).
+ * Ürünler alt kategorilere import sırasında ürün adı/markasına göre atanır (scripts/import-ikas-excel.py → classify_category).
  *
- * Yeni bir Excel kategorisi eklenirse: buraya grup/değer, messages/tr.json + en.json (header) içine
- * çeviri anahtarları ve gerekirse app/category/[id]/category-meta.ts içine SEO metni eklenir.
+ * Yeni alt kategori eklenirse: buraya değer + CATEGORY_KEYS, messages/tr.json + en.json (header) çevirisi,
+ * gerekirse app/category/[id]/category-meta.ts SEO metni ve import scriptindeki kural.
  */
 
 export const CATEGORY_GROUPS = [
   {
+    id: 'solar-aku',
+    labelKey: 'catGroupSolarBattery', // Solar Akü
+    categoryValues: ['Lityum Akü', 'Jel Akü', 'Batarya Yönetimi ve Aksesuar', 'Taşınabilir Güç İstasyonu'],
+  },
+  {
+    id: 'solar-inverter',
+    labelKey: 'catGroupSolarInverter', // Solar İnverter
+    categoryValues: [
+      'Tam Sinüs MPPT Akıllı İnverter',
+      'Hibrit İnverter',
+      'On-Grid İnverter',
+      'Tam Sinüs İnverter',
+      'Şarjlı Tam Sinüs İnverter',
+      'Modifiye Sinüs İnverter',
+      'Solar Pompa Sürücüsü',
+      'Solar Sürücü Aksesuarı',
+      'İnverter Aksesuarı',
+    ],
+  },
+  {
     id: 'gunes-paneli',
     labelKey: 'catGroupSolarPanel', // Güneş Paneli
-    navLabelKey: 'catGroupSolarPanel',
-    categoryValues: ['Panel'],
-  },
-  {
-    id: 'inverter-ve-guc-elektronigi',
-    labelKey: 'catGroupInverterPower', // İnverter ve Güç Elektroniği
-    navLabelKey: 'catNavInverter',
-    categoryValues: ['İnverter'],
-  },
-  {
-    id: 'enerji-depolama',
-    labelKey: 'catGroupEnergyStorage', // Enerji Depolama
-    navLabelKey: 'catGroupEnergyStorage',
-    categoryValues: ['Lityum Batarya', 'Taşınabilir Güç İstasyonu'],
+    categoryValues: ['TopCon Güneş Paneli', 'Monokristal Güneş Paneli', 'Esnek ve Katlanabilir Panel'],
   },
   {
     id: 'solar-sarj-kontrol',
-    labelKey: 'catGroupSolarChargeControl', // Solar Şarj Kontrol
-    navLabelKey: 'catNavChargeControl',
-    categoryValues: ['MPPT/PWM'],
+    labelKey: 'catGroupSolarChargeControl', // Solar Şarj Kontrol Cihazı
+    navLabelKey: 'catNavChargeControl', // üst menüde kısa: Şarj Kontrol
+    categoryValues: ['MPPT Şarj Kontrol Cihazı', 'PWM Şarj Kontrol Cihazı', 'Akü Şarj Cihazı', 'Şarj Kontrol Aksesuarı'],
   },
   {
-    id: 'pompa-ve-surucu',
-    labelKey: 'catGroupPumpDrive', // Pompa ve Sürücü
-    navLabelKey: 'catNavSolarPump',
-    categoryValues: ['Solar Pompa/Sürücü'],
+    id: 'solar-baglanti-ekipmani',
+    labelKey: 'catGroupSolarConnection', // Solar Bağlantı Ekipmanı
+    navLabelKey: 'catNavConnection', // üst menüde kısa: Bağlantı Ekipmanı
+    categoryValues: ['Solar Transfer Switch', 'Sigorta ve Dağıtım', 'Kablo ve Konnektör'],
   },
   {
-    // Excel'de "Pompa ve Sürücü" altında duran ısı pompaları import sırasında buraya taşınır (scripts/import-ikas-excel.py)
+    id: 'aksesuar',
+    labelKey: 'catGroupAccessories', // Aksesuar
+    categoryValues: ['İzleme ve Kontrol'],
+  },
+  {
+    id: 'ruzgar-enerjisi',
+    labelKey: 'catGroupWindEnergy', // Rüzgar Enerjisi
+    categoryValues: ['Rüzgar Türbini', 'Rüzgar Türbini Aksesuarı', 'Rüzgar Şarj Kontrol Cihazı'],
+  },
+  {
     id: 'isi-pompasi',
     labelKey: 'catGroupHeatPump', // Isı Pompası
     categoryValues: ['Isı Pompası'],
   },
   {
-    id: 'akuler',
-    labelKey: 'catGroupBatteries', // Aküler
-    categoryValues: ['Kurşun/Jel Akü'],
-  },
-  {
-    id: 'ruzgar-enerjisi',
-    labelKey: 'catGroupWindEnergy', // Rüzgar Enerjisi
-    categoryValues: ['Türbin ve Aksesuar'],
-  },
-  {
-    id: 'sarj-cihazlari',
-    labelKey: 'catGroupChargers', // Şarj Cihazları
-    categoryValues: ['AC/DC Şarj'],
-  },
-  {
     id: 'elektrikli-arac-sarj',
     labelKey: 'catGroupEVCharging', // Elektrikli Araç Şarj
-    categoryValues: ['İstasyon ve Aksesuar'],
+    categoryValues: ['Elektrikli Araç Şarj İstasyonu', 'Şarj İstasyonu Aksesuarı'],
   },
   {
-    id: 'kablolar-ve-baglanti',
-    labelKey: 'catGroupCables', // Kablolar ve Bağlantı
-    categoryValues: ['Güç ve Veri Kabloları'],
-  },
-  {
-    id: 'aksesuar-ve-koruma',
-    labelKey: 'catGroupAccessories', // Aksesuar ve Koruma
-    categoryValues: ['Sistem Bileşenleri', 'İzleme ve Kontrol'],
-  },
-  {
+    // Sınıflandırılamayan ürünler için (normalde boş; menüde ürünü olmayan grup gizlenir)
     id: 'diger',
     labelKey: 'catGroupOther', // Diğer
     categoryValues: ['Genel'],
@@ -84,23 +77,31 @@ export const CATEGORY_GROUPS = [
 export type CategoryGroupId = (typeof CATEGORY_GROUPS)[number]['id']
 
 /** Masaüstü üst menüde ayrı açılır menü olarak gösterilen grup sayısı; kalanlar "Diğer Kategoriler" altında toplanır. */
-export const HEADER_NAV_GROUP_COUNT = 5
+export const HEADER_NAV_GROUP_COUNT = 6
 
-/** Eski kategori URL'leri → yeni grup (SEO için kalıcı yönlendirme) */
+/** Eski kategori URL'leri → yeni grup (SEO için kalıcı yönlendirme; null = tüm ürünler) */
 export const LEGACY_CATEGORY_REDIRECTS: Record<string, CategoryGroupId | null> = {
+  // 15.10.2026 Excel yapısı
+  'inverter-ve-guc-elektronigi': 'solar-inverter',
+  'enerji-depolama': 'solar-aku',
+  akuler: 'solar-aku',
+  'pompa-ve-surucu': 'solar-inverter',
+  'sarj-cihazlari': 'solar-sarj-kontrol',
+  'kablolar-ve-baglanti': 'solar-baglanti-ekipmani',
+  'aksesuar-ve-koruma': 'aksesuar',
+  // Eski katalog
   'elektrikli-arac-sarj-urunleri': 'elektrikli-arac-sarj',
   'ev-sarj': 'elektrikli-arac-sarj',
   'ev-sarj-istasyonlari': 'elektrikli-arac-sarj',
   'ev-sarj-kablolari': 'elektrikli-arac-sarj',
   'ev-sarj-aksesuarlari': 'elektrikli-arac-sarj',
-  'batarya-depolama': 'enerji-depolama',
-  'enerji-depolama-sistemleri': 'enerji-depolama',
-  'enerji-yonetimi': 'aksesuar-ve-koruma',
-  inverterler: 'inverter-ve-guc-elektronigi',
-  'akilli-enerji': 'inverter-ve-guc-elektronigi',
+  'batarya-depolama': 'solar-aku',
+  'enerji-depolama-sistemleri': 'solar-aku',
+  'enerji-yonetimi': 'aksesuar',
+  inverterler: 'solar-inverter',
+  'akilli-enerji': 'solar-inverter',
   'gunes-enerjisi': 'gunes-paneli',
   'gunes-panelleri': 'gunes-paneli',
-  // Isı pompaları Excel'de "Pompa ve Sürücü > Solar Pompa/Sürücü" altında
   'isi-pompasi-hvac': 'isi-pompasi',
   'isi-pompalari': 'isi-pompasi',
 }
@@ -122,22 +123,39 @@ export function getCategoryValuesByGroupId(groupId: string): string[] {
   return group ? [...group.categoryValues] : []
 }
 
+/** Alt kategori değeri → çeviri anahtarı (messages/*.json "header") */
 const CATEGORY_KEYS: Record<string, string> = {
-  Panel: 'catSolarPanel',
-  'İnverter': 'catInverter',
-  'Lityum Batarya': 'catLithiumBattery',
-  'MPPT/PWM': 'catMpptPwm',
-  'Solar Pompa/Sürücü': 'catSolarPumpDrive',
-  'Kurşun/Jel Akü': 'catLeadGelBattery',
-  'Türbin ve Aksesuar': 'catTurbineAccessories',
-  'AC/DC Şarj': 'catAcDcCharger',
-  'İstasyon ve Aksesuar': 'catEVStationAccessories',
-  'Güç ve Veri Kabloları': 'catPowerDataCables',
-  'Sistem Bileşenleri': 'catSystemComponents',
-  Genel: 'catGeneral',
-  'Isı Pompası': 'catHeatPump',
+  'Lityum Akü': 'catLithiumBattery',
+  'Jel Akü': 'catGelBattery',
+  'Batarya Yönetimi ve Aksesuar': 'catBatteryManagement',
   'Taşınabilir Güç İstasyonu': 'catPortablePowerStation',
+  'Tam Sinüs MPPT Akıllı İnverter': 'catSmartMpptInverter',
+  'Hibrit İnverter': 'catHybridInverter',
+  'On-Grid İnverter': 'catOnGridInverter',
+  'Tam Sinüs İnverter': 'catPureSineInverter',
+  'Şarjlı Tam Sinüs İnverter': 'catChargerInverter',
+  'Modifiye Sinüs İnverter': 'catModifiedSineInverter',
+  'Solar Pompa Sürücüsü': 'catSolarPumpDrive',
+  'Solar Sürücü Aksesuarı': 'catSolarDriveAccessory',
+  'İnverter Aksesuarı': 'catInverterAccessory',
+  'TopCon Güneş Paneli': 'catTopconPanel',
+  'Monokristal Güneş Paneli': 'catMonoPanel',
+  'Esnek ve Katlanabilir Panel': 'catFlexiblePanel',
+  'MPPT Şarj Kontrol Cihazı': 'catMpptController',
+  'PWM Şarj Kontrol Cihazı': 'catPwmController',
+  'Akü Şarj Cihazı': 'catBatteryCharger',
+  'Şarj Kontrol Aksesuarı': 'catControllerAccessory',
+  'Solar Transfer Switch': 'catTransferSwitch',
+  'Sigorta ve Dağıtım': 'catFuseDistribution',
+  'Kablo ve Konnektör': 'catCableConnector',
   'İzleme ve Kontrol': 'catMonitoringControl',
+  'Rüzgar Türbini': 'catWindTurbine',
+  'Rüzgar Türbini Aksesuarı': 'catWindTurbineAccessory',
+  'Rüzgar Şarj Kontrol Cihazı': 'catWindController',
+  'Isı Pompası': 'catHeatPump',
+  'Elektrikli Araç Şarj İstasyonu': 'catEVStation',
+  'Şarj İstasyonu Aksesuarı': 'catEVStationAccessory',
+  Genel: 'catGeneral',
 }
 
 function getCategoryKeyFromValue(value: string): string | undefined {

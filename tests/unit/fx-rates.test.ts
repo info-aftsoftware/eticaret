@@ -6,7 +6,7 @@ import type { MockProduct } from '../../lib/products-mock'
 const rates: TryRates = { USD: 40, EUR: 45, updatedAt: '2026-01-01T00:00:00.000Z', source: 'TCMB' }
 
 const product = (over: Partial<MockProduct> = {}): MockProduct => ({
-  id: 'p', sku: 'P-1', name: 'Ürün', description: '', price: 1, category: 'Panel', stock: 5,
+  id: 'p', sku: 'P-1', name: 'Ürün', description: '', price: 1, category: 'TopCon Güneş Paneli', stock: 5,
   featured: false, isVariantProduct: false, priceCurrency: 'USD', basePrice: 100, ...over,
 })
 

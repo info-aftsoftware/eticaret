@@ -10,6 +10,7 @@
  */
 
 import catalog from './catalog/products.json'
+import { CATEGORY_GROUPS } from './categories'
 
 export type PriceCurrency = 'TRY' | 'USD' | 'EUR'
 
@@ -96,64 +97,64 @@ export const PLACEHOLDER_PRODUCT_IDS: string[] = []
 
 export const mockProducts: MockProduct[] = catalog as MockProduct[]
 
-/** Kategoriye göre tamamlayıcı ürün kategorileri (detay sayfası "Uyumlu Ürünler" ve öneriler) */
-const COMPLEMENTARY_CATEGORIES: Record<string, { title: string; description: string; categories: string[] }> = {
-  Panel: {
+/** Ana kategoriye göre tamamlayıcı alt kategoriler (detay sayfası "Uyumlu Ürünler" ve öneriler) */
+const COMPLEMENTARY_BY_GROUP: Record<string, { title: string; description: string; categories: string[] }> = {
+  'gunes-paneli': {
     title: 'Bu ürünle birlikte alın',
-    description: 'Güneş panelinizi şarj kontrol cihazı, inverter ve lityum batarya ile eksiksiz bir sisteme dönüştürün.',
-    categories: ['MPPT/PWM', 'İnverter', 'Lityum Batarya', 'Güç ve Veri Kabloları'],
+    description: 'Güneş panelinizi şarj kontrol cihazı, inverter ve lityum akü ile eksiksiz bir sisteme dönüştürün.',
+    categories: ['MPPT Şarj Kontrol Cihazı', 'Tam Sinüs MPPT Akıllı İnverter', 'Lityum Akü', 'Kablo ve Konnektör'],
   },
-  'İnverter': {
+  'solar-inverter': {
     title: 'Birlikte alınanlar',
-    description: 'İnverterinizi batarya, güneş paneli ve bağlantı ekipmanlarıyla tamamlayabilirsiniz.',
-    categories: ['Lityum Batarya', 'Panel', 'Güç ve Veri Kabloları', 'Sistem Bileşenleri'],
+    description: 'İnverterinizi akü, güneş paneli ve bağlantı ekipmanlarıyla tamamlayabilirsiniz.',
+    categories: ['Lityum Akü', 'TopCon Güneş Paneli', 'Sigorta ve Dağıtım', 'İnverter Aksesuarı'],
   },
-  'Lityum Batarya': {
+  'solar-aku': {
     title: 'Birlikte alınanlar',
-    description: 'Bataryanızı inverter, şarj kontrol cihazı ve sistem bileşenleriyle birlikte kullanın.',
-    categories: ['İnverter', 'MPPT/PWM', 'Sistem Bileşenleri', 'AC/DC Şarj'],
+    description: 'Akünüzü inverter, şarj kontrol cihazı ve batarya yönetim ekipmanlarıyla birlikte kullanın.',
+    categories: ['Tam Sinüs MPPT Akıllı İnverter', 'MPPT Şarj Kontrol Cihazı', 'Batarya Yönetimi ve Aksesuar', 'Akü Şarj Cihazı'],
   },
-  'Kurşun/Jel Akü': {
+  'solar-sarj-kontrol': {
     title: 'Birlikte alınanlar',
-    description: 'Akünüzü uygun şarj cihazı, şarj kontrol cihazı ve inverter ile tamamlayın.',
-    categories: ['AC/DC Şarj', 'MPPT/PWM', 'İnverter'],
+    description: 'Şarj kontrol cihazınızı güneş paneli ve akü ile eksiksiz bir sisteme dönüştürün.',
+    categories: ['TopCon Güneş Paneli', 'Lityum Akü', 'Jel Akü', 'Şarj Kontrol Aksesuarı'],
   },
-  'MPPT/PWM': {
+  'solar-baglanti-ekipmani': {
     title: 'Birlikte alınanlar',
-    description: 'Şarj kontrol cihazınızı güneş paneli ve akü/batarya ile eksiksiz bir sisteme dönüştürün.',
-    categories: ['Panel', 'Lityum Batarya', 'Kurşun/Jel Akü'],
+    description: 'Bağlantı ekipmanlarını inverter, akü ve izleme ürünleriyle birlikte kullanın.',
+    categories: ['Tam Sinüs MPPT Akıllı İnverter', 'Lityum Akü', 'İzleme ve Kontrol'],
   },
-  'Isı Pompası': {
+  aksesuar: {
+    title: 'Birlikte alınanlar',
+    description: 'İzleme ve kontrol ürünlerini inverter, akü ve şarj kontrol cihazlarıyla birlikte kullanın.',
+    categories: ['Şarjlı Tam Sinüs İnverter', 'Lityum Akü', 'MPPT Şarj Kontrol Cihazı', 'Batarya Yönetimi ve Aksesuar'],
+  },
+  'ruzgar-enerjisi': {
+    title: 'Birlikte alınanlar',
+    description: 'Rüzgar türbininizi şarj kontrol cihazı, akü ve inverter ile tamamlayın.',
+    categories: ['Rüzgar Şarj Kontrol Cihazı', 'Rüzgar Türbini Aksesuarı', 'Lityum Akü', 'Tam Sinüs İnverter'],
+  },
+  'isi-pompasi': {
     title: 'Birlikte alınanlar',
     description: 'Isı pompanızı güneş paneli ve inverter ile besleyerek işletme maliyetini düşürebilirsiniz.',
-    categories: ['Panel', 'İnverter', 'Sistem Bileşenleri'],
+    categories: ['TopCon Güneş Paneli', 'On-Grid İnverter', 'Hibrit İnverter'],
   },
-  'Taşınabilir Güç İstasyonu': {
+  'elektrikli-arac-sarj': {
     title: 'Birlikte alınanlar',
-    description: 'Güç istasyonunuzu katlanabilir güneş panelleri ve bağlantı kablolarıyla doğada şarj edin.',
-    categories: ['Panel', 'Güç ve Veri Kabloları'],
-  },
-  'Solar Pompa/Sürücü': {
-    title: 'Birlikte alınanlar',
-    description: 'Solar pompa sürücünüz için güneş paneli ve bağlantı kablolarını inceleyin.',
-    categories: ['Panel', 'Güç ve Veri Kabloları'],
-  },
-  'Türbin ve Aksesuar': {
-    title: 'Birlikte alınanlar',
-    description: 'Rüzgar türbininizi şarj kontrol cihazı, batarya ve inverter ile tamamlayın.',
-    categories: ['MPPT/PWM', 'Lityum Batarya', 'İnverter'],
-  },
-  'AC/DC Şarj': {
-    title: 'Birlikte alınanlar',
-    description: 'Şarj cihazınıza uygun akü ve bataryaları inceleyin.',
-    categories: ['Lityum Batarya', 'Kurşun/Jel Akü'],
-  },
-  'Sistem Bileşenleri': {
-    title: 'Birlikte alınanlar',
-    description: 'Sisteminizi inverter, batarya ve kablolama ürünleriyle tamamlayın.',
-    categories: ['İnverter', 'Lityum Batarya', 'Güç ve Veri Kabloları'],
+    description: 'Şarj istasyonunuzu aksesuarları ve güneş enerjisi sistemiyle tamamlayın.',
+    categories: ['Şarj İstasyonu Aksesuarı', 'TopCon Güneş Paneli', 'Hibrit İnverter'],
   },
 }
+
+/** Alt kategori (product.category) → tamamlayıcı ayarı; kendi alt kategorisi listeden çıkarılır. */
+const COMPLEMENTARY_CATEGORIES: Record<string, { title: string; description: string; categories: string[] }> =
+  Object.fromEntries(
+    CATEGORY_GROUPS.flatMap((g) => {
+      const config = COMPLEMENTARY_BY_GROUP[g.id]
+      if (!config) return []
+      return g.categoryValues.map((value) => [value, { ...config, categories: config.categories.filter((c) => c !== value) }])
+    })
+  )
 
 /** Tamamlayıcı kategorilerden sırayla (her kategoriden birer) en fazla 8 ürün seçer */
 function pickComplementaryIds(categories: string[]): string[] {

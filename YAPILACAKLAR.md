@@ -64,6 +64,15 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [ ] **Test ortamında bilinmesi gerekenler:** e-postalar yerel ayardaki `info@bataryakit.com` / "Batarya Kit" adıyla gidiyor (SMTP_FROM); Firebase ile giriş için Firebase Console > Authentication > Yetkili alan adlarına `nextfirststep.com` eklenmeli; `ADMIN_TOKEN` zayıf — değiştirin ve `ADMIN_TOTP_SECRET` ile 2FA açın.
 - [ ] **voltekno.com'a geçiş:** Hostinger'daki voltekno.com uygulamasında `DATABASE_URL`'i mutlak yola alın (yukarıda), ortam değişkenlerini nextfirststep'teki gibi tamamlayın (`NEXT_PUBLIC_NOINDEX` olmadan), Node 22 seçin, yayınlayın; en son alan adının DNS'ini ikas'tan Hostinger'a çevirin.
 
+### ✅ Faz 11 — menü, header, hero ve markalar (17.10.2026)
+
+- [x] **Kategori yapısı gunesenerjisistemi.com menüsüne göre** (`lib/categories.ts`): Solar Akü, Solar İnverter, Güneş Paneli, Solar Şarj Kontrol Cihazı, Solar Bağlantı Ekipmanı, Aksesuar, Rüzgar Enerjisi, Isı Pompası, Elektrikli Araç Şarj; 30 alt kategori. Ürünler import sırasında ürün adından sınıflandırılıyor (`scripts/import-ikas-excel.py` → `CATEGORY_RULES`); 340 ürünün hiçbiri "Genel"de kalmadı. Eski grup adresleri (`enerji-depolama`, `pompa-ve-surucu`, `akuler` …) yeni gruplara yönleniyor.
+- [x] **Header voltekno.com yapısında:** lacivert üst şerit (Teklif Al, Sipariş Takibi, Hakkımızda, S.S.S., Blog, İletişim, telefon, e-posta), yeni logo, "TÜM KATEGORİLER" mega menüsü (ana kategori > alt kategori > marka, Hazır Solar Paket, Solar Teklif Al), sarı butonlu geniş arama, kategori şeridi.
+- [x] **Hero:** voltekno.com'un 3 slaytı (Yenilenebilir Enerji / Lityum Depolama / Tarımsal Sulama); eski banner slider kaldırıldı.
+- [x] **Markalar şeridi:** voltekno.com'daki 10 marka + katalogdaki TommaTech, Victron ve Mexxsun (logolar resmi sitelerinden, `public/images/brands/`); her logo marka filtresine gidiyor.
+- [ ] **Ürün görseli denetimi:** 28 yanlış (5 kesin, 23 olası), 17 şüpheli görsel ve başka mağaza filigranları tespit edildi; doğru görsellerin sağlanması gerekiyor (rapor: `docs/urun-gorsel-denetimi.md`).
+- [ ] `/products?category=Panel` gibi **eski alt kategori filtre linkleri** artık boş liste gösterir (dış sitelerde/reklamlarda kullanılıyorsa yönlendirme eklenmeli).
+
 ### 🔴 P0 — Yayından önce (sizde)
 
 - [ ] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi.

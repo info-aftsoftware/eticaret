@@ -21,19 +21,14 @@ import {
   MapPin,
   ArrowRight,
   Clock,
-  Cpu,
-  Flame,
 } from 'lucide-react'
 import { ProductCard } from '@/components/ProductCard'
 import { mockProducts } from '@/lib/products-mock'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { useTranslations } from 'next-intl'
+import { HeroSlider } from '@/components/home/HeroSlider'
+import { BrandStrip } from '@/components/home/BrandStrip'
 import type { MockProduct } from '@/lib/products-mock'
-
-const HERO_SLIDES: { src: string; href: string }[] = [
-  { src: '/images/hero/hero-3.png', href: '/products' },
-]
-const HERO_SLIDE_INTERVAL_MS = 5000
 
 /** Banner görseli olmayan kategori kartları için kategorinin öne çıkan ürün görseli */
 const CATEGORY_CARD_PRODUCT_IMAGE: Record<string, string | undefined> = mockProducts.reduce((acc, p) => {
@@ -170,31 +165,10 @@ const BLOG_PLACEHOLDER: { slug: string; title: string; desc: string; category: s
   },
 ]
 
-// Genişletilmiş kategori listesi — gerçek görseller
-const EXTRA_CATEGORY_ITEMS = [
-  {
-    href: '/category/inverter-ve-guc-elektronigi',
-    title: 'Inverter',
-    subtitle: 'Hibrit, off-grid ve mikro inverterler',
-    image: '/images/categories/inverter.png',
-    icon: Cpu,
-    bg: 'from-teal-600 to-teal-800',
-  },
-  {
-    href: '/category/isi-pompasi',
-    title: 'Isı Pompası',
-    subtitle: 'İklimlendirme ve ısıtma sistemleri',
-    image: '/images/categories/isi-pompasi.png',
-    icon: Flame,
-    bg: 'from-red-600 to-orange-700',
-  },
-]
-
 export default function HomePage() {
   const t = useTranslations('home')
   const [allProducts, setAllProducts] = useState(mockProducts)
   const featuredRowProducts = useMemo(() => getFeaturedRowProducts(allProducts), [allProducts])
-  const [currentSlide, setCurrentSlide] = useState(0)
 
 
   useEffect(() => {
@@ -204,12 +178,6 @@ export default function HomePage() {
       .catch(() => {})
   }, [])
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length)
-    }, HERO_SLIDE_INTERVAL_MS)
-    return () => clearTimeout(timer)
-  }, [currentSlide])
 
   const sectionPadding = 'py-8 sm:py-12 md:py-16 lg:py-20'
   const containerClass = 'container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1440px] min-w-0'
@@ -240,93 +208,11 @@ export default function HomePage() {
     <div className="w-full max-w-full min-w-0 overflow-x-hidden">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
-      {/* ─── 1. HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-white" aria-label="Ana başlık">
+      {/* ─── 1. HERO SLIDER (voltekno.com yapısı) ─────────────────────────── */}
+      <HeroSlider />
 
-        {/* Arka plan: çok hafif gradient */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[700px] h-[700px] rounded-full bg-brand/[0.05] blur-[120px]" />
-          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-blue-50 blur-[100px]" />
-        </div>
-
-        <div className="relative z-10 container mx-auto max-w-[1440px] px-6 sm:px-10 lg:px-16 xl:px-20">
-          <div className="grid lg:grid-cols-2 gap-8 xl:gap-16 items-center py-8 lg:py-6">
-
-            {/* ─ Sol: metin ─ */}
-            <div className="order-2 lg:order-1">
-
-              {/* Rozet */}
-              <div className="inline-flex items-center gap-2 bg-brand/8 border border-brand/15 rounded-full px-3.5 py-1.5 mb-8">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse shrink-0" />
-                <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-brand">1.500+ Ürün Stokta</span>
-              </div>
-
-              {/* Başlık */}
-              <h1 className="text-[clamp(2rem,3.4vw,3.2rem)] font-black text-slate-900 tracking-[-0.025em] leading-[1.08] mb-5 max-w-[480px]">
-                Enerji Ürünleri,<br />
-                <span className="text-brand">Tek Adreste.</span>
-              </h1>
-
-              <p className="text-sm text-slate-500 mb-8 leading-relaxed max-w-[380px]">
-                EV şarj, güneş paneli, batarya ve inverter — stokta hazır, hızlı teslimat.
-              </p>
-
-              {/* CTA butonları */}
-              <div className="flex flex-wrap gap-3 mb-7">
-                <Button asChild className="bg-brand hover:bg-brand-hover text-white font-bold rounded-xl h-11 px-6 text-sm shadow-md shadow-brand/20">
-                  <Link href="/products" className="flex items-center gap-2">
-                    <ShoppingBag className="w-4 h-4 shrink-0" />
-                    Ürünleri İncele
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 rounded-xl h-11 px-6 text-sm">
-                  <Link href="/ges" className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 shrink-0" />
-                    Teklif Al
-                  </Link>
-                </Button>
-              </div>
-
-              {/* Kategori hızlı erişim pilleri */}
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { label: 'Güneş Paneli', href: '/category/gunes-paneli', icon: Sun },
-                  { label: 'İnverter', href: '/category/inverter-ve-guc-elektronigi', icon: Cpu },
-                  { label: 'Batarya', href: '/category/enerji-depolama', icon: Battery },
-                  { label: 'Şarj Kontrol', href: '/category/solar-sarj-kontrol', icon: Zap },
-                ].map(({ label, href, icon: Icon }) => (
-                  <Link
-                    key={label}
-                    href={href}
-                    className="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-brand/10 hover:text-brand border border-slate-200 hover:border-brand/30 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors"
-                  >
-                    <Icon className="w-3 h-3 shrink-0" />
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* ─ Sağ: tek büyük görsel ─ */}
-            <div className="order-1 lg:order-2 relative">
-              <div className="relative overflow-hidden rounded-3xl aspect-[4/3] lg:aspect-[16/10] shadow-xl shadow-slate-200/60">
-                <Image
-                  src="/images/ges/solar-hero-premium.png"
-                  alt="Enerji sistemleri"
-                  fill
-                  priority
-                  className="object-cover object-[center_62%]"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent" />
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </section>
+      {/* ─── 2. MARKALAR ─────────────────────────────────────────────────── */}
+      <BrandStrip />
 
       {/* ─── 4. POPÜLER ÜRÜNLER ──────────────────────────────────────────── */}
       <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in animate-section-in-delay-1`} aria-labelledby="popular-products-heading">
@@ -367,56 +253,6 @@ export default function HomePage() {
               </div>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* ─── 5. BANNER SLİDER ────────────────────────────────────────────── */}
-      <section className="pt-0 pb-8 sm:pb-12 px-4 sm:px-6 md:px-8 lg:px-10" aria-label={t('heroTitle2')}>
-        <div className="w-full max-w-[1600px] mx-auto min-w-0">
-          <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-slate-900 shadow-xl aspect-[3/1] ring-1 ring-slate-200/30 overflow-hidden">
-            {HERO_SLIDES.map((slide, index) => (
-              <div
-                key={slide.src + index}
-                className="absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out"
-                style={{ opacity: index === currentSlide ? 1 : 0, zIndex: index === currentSlide ? 1 : 0 }}
-              >
-                <Link
-                  href={slide.href}
-                  className="absolute inset-0 block w-full h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-                  aria-label={t('heroSlideLabelAll')}
-                >
-                  <Image
-                    src={slide.src}
-                    alt=""
-                    fill
-                    className="object-cover pointer-events-none bg-slate-900 object-center"
-                    sizes="(max-width: 768px) 100vw, 100vw"
-                    unoptimized={slide.src.startsWith('http')}
-                    onError={(e) => { const el = e.target as HTMLImageElement; if (el) el.style.display = 'none' }}
-                  />
-                </Link>
-              </div>
-            ))}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none z-[2]" aria-hidden />
-            <div className={`absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-[3] flex gap-0.5 ${HERO_SLIDES.length < 2 ? 'hidden' : ''}`}>
-              {HERO_SLIDES.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  aria-label={t('slideDotLabel', { n: i + 1 })}
-                  aria-current={i === currentSlide ? 'true' : undefined}
-                  onClick={() => setCurrentSlide(i)}
-                  // 24×24 dokunma alanı (WCAG 2.5.8); görünen nokta içteki span
-                  className="w-6 h-6 flex items-center justify-center touch-manipulation"
-                >
-                  <span
-                    aria-hidden
-                    className={`block rounded-full transition-all duration-300 w-2.5 h-2.5 ${i === currentSlide ? 'bg-white ring-2 ring-white/60 shadow-md' : 'bg-white/60 hover:bg-white/80'}`}
-                  />
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
@@ -519,10 +355,10 @@ export default function HomePage() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-5">
             {[
               { href: '/category/gunes-paneli',                title: 'Güneş Paneli',          desc: 'TOPCon, bifacial, esnek ve katlanabilir paneller', image: '/images/categories/panel.png' },
-              { href: '/category/inverter-ve-guc-elektronigi', title: 'İnverterler',           desc: 'On-grid, hibrit ve off-grid inverter çözümleri',   image: '/images/categories/inverter.png' },
-              { href: '/category/enerji-depolama',             title: 'Enerji Depolama',       desc: 'LiFePO4 bataryalar ve güç istasyonları',          image: '/images/categories/batarya.png' },
-              { href: '/category/solar-sarj-kontrol',          title: 'Solar Şarj Kontrol',    desc: 'MPPT ve PWM şarj kontrol cihazları',               image: CATEGORY_CARD_PRODUCT_IMAGE['MPPT/PWM'], contain: true },
-              { href: '/category/pompa-ve-surucu',             title: 'Pompa ve Sürücü',       desc: 'Solar pompa sürücüleri ve diyot modülleri',          image: CATEGORY_CARD_PRODUCT_IMAGE['Solar Pompa/Sürücü'], contain: true },
+              { href: '/category/solar-inverter',             title: 'Solar İnverter',        desc: 'Akıllı MPPT, hibrit, on-grid ve tam sinüs inverterler', image: '/images/categories/inverter.png' },
+              { href: '/category/solar-aku',                  title: 'Solar Akü',             desc: 'Lityum ve jel aküler, güç istasyonları',           image: '/images/categories/batarya.png' },
+              { href: '/category/solar-sarj-kontrol',          title: 'Solar Şarj Kontrol',    desc: 'MPPT, PWM ve DC-DC akü şarj cihazları',          image: CATEGORY_CARD_PRODUCT_IMAGE['MPPT Şarj Kontrol Cihazı'], contain: true },
+              { href: `/products?category=${encodeURIComponent('Solar Pompa Sürücüsü')}`, title: 'Solar Pompa Sürücüsü', desc: 'Tarımsal sulama için solar pompa sürücüleri', image: CATEGORY_CARD_PRODUCT_IMAGE['Solar Pompa Sürücüsü'], contain: true },
             ].filter((item) => !!item.image).map((item) => (
               <Link
                 key={item.href}

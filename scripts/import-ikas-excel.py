@@ -174,26 +174,61 @@ def ceil_try(value):
 
 
 # ---------------------------------------------------------------------------
-# Kategori düzeltmeleri: Excel'de yanlış/genel kategoride duran ürünler.
-# (ürün adı regex'i, mevcut kategori koşulu (None = her kategori), yeni alt kategori)
-# Yeni alt kategoriler lib/categories.ts CATEGORY_GROUPS içinde tanımlı olmalıdır.
-CATEGORY_CORRECTIONS = [
-    (r'Isı Pompası', None, 'Isı Pompası'),
-    (r'Taşınabilir Güç İstasyonu', 'Genel', 'Taşınabilir Güç İstasyonu'),
-    (r'İnverter', 'Genel', 'İnverter'),
-    (r'Şarj Kontrol Cihazı|MiniSolar|Harici Ekran', 'Genel', 'MPPT/PWM'),
-    (r'DC-DC Şarj', 'Genel', 'AC/DC Şarj'),
-    (r'Transfer Switch|Shunt', 'Genel', 'Sistem Bileşenleri'),
-    (r'^İstabreeze', 'Genel', 'Türbin ve Aksesuar'),
-    (r'^Victron', 'Genel', 'İzleme ve Kontrol'),
+# Kategori sınıflandırması (gunesenerjisistemi.com menü yapısı; lib/categories.ts CATEGORY_GROUPS).
+# Excel'deki kategoriler tutarsız olduğu için (ör. MPPT akıllı inverterler "MPPT/PWM", rüzgar türbinleri
+# "İnverter" altında) alt kategori ürün adından belirlenir. Kurallar SIRAYLA denenir; ilk eşleşen kazanır.
+# Yeni alt kategori lib/categories.ts'e ve messages/*.json çevirilerine de eklenmelidir.
+CATEGORY_RULES = [
+    # Rüzgar (rüzgar şarj kontrolü, solar şarj kontrolünden önce)
+    (r'Rüzgar Türbini (Montaj Direği|Direk|Direği|Manuel Fren|Ses Düşürücü|Alternatör|Küçük Burun|Büyük Burun|5 Kollu|Kuyru)'
+     r'|Rüzgar Türbini Kanad|Direk Uzatma|Kanat Flanşı|Heli Serisi Rüzgar Türbini Alternatörü|i-700 Rüzgar', 'Rüzgar Türbini Aksesuarı'),
+    (r'Rüzgar Şarj Kontrol|Rüzgar-Güneş Hibrit Şarj', 'Rüzgar Şarj Kontrol Cihazı'),
+    (r'Rüzgar Türbini', 'Rüzgar Türbini'),
+    (r'Isı Pompası', 'Isı Pompası'),
+    # Elektrikli araç şarj
+    (r'Şarj İstasyonu .*Stand|Araç Şarj Kablosu|RFID|Şarj Yönetimi Yazılımı', 'Şarj İstasyonu Aksesuarı'),
+    (r'Araç Şarj İstasyonu', 'Elektrikli Araç Şarj İstasyonu'),
+    # Güneş paneli (güç istasyonu bağlantı kablosu "Panel Bağlantı" olduğu için eşleşmez)
+    (r'(Güneş|Şarj) Paneli.*(Esnek|Flexible)|(Esnek|Flexible).*Güneş Paneli|Katlanabilir.*Paneli|Taşınabilir Güneş Şarj Paneli', 'Esnek ve Katlanabilir Panel'),
+    (r'TOPCon.*Güneş Paneli|Güneş Paneli.*TOPCon', 'TopCon Güneş Paneli'),
+    (r'Güneş Paneli', 'Monokristal Güneş Paneli'),
+    (r'Taşınabilir Güç İstasyonu', 'Taşınabilir Güç İstasyonu'),
+    # Solar pompa sürücüleri
+    (r'Pompa Sürücüsü (Diyot Modülü|4G)|Sürücüsü Diyot Modülü', 'Solar Sürücü Aksesuarı'),
+    (r'Pompa Sürücüsü', 'Solar Pompa Sürücüsü'),
+    # İnverter aksesuarları (şarj kontrol aksesuarlarından önce: Alpex Wi-Fi modülü inverter içindir)
+    (r'İnverter Kumandası|İnverter Uzaktan Kontrol|Inverter Control|Charger Control|Skylla-i Control|^Alpex Wi-Fi', 'İnverter Aksesuarı'),
+    # Şarj kontrol
+    (r'Harici Ekran|Bluetooth Kiti|Uzaktan İzleme Modülü|PWM-Pro (Uzaktan|Sıcaklık|- USB)|Takılabilir Ekran|WireBox|MPPT Control', 'Şarj Kontrol Aksesuarı'),
+    (r'DC-DC|DualCharger|Akü Şarj Cihazı|Batarya Şarj Ünitesi', 'Akü Şarj Cihazı'),
+    (r'PWM Şarj Kontrol', 'PWM Şarj Kontrol Cihazı'),
+    (r'MPPT Şarj Kontrol|Boost MPPT|Kullandıkça Öde', 'MPPT Şarj Kontrol Cihazı'),
+    # İnverterler
+    (r'Modifiye Sinüs', 'Modifiye Sinüs İnverter'),
+    (r'Şebeke Şarjlı|Şarjlı Tam Sinüs|UPS|İnverter/Şarj Cihazı', 'Şarjlı Tam Sinüs İnverter'),
+    (r'Akıllı İnverter|On-Grid/Off-Grid', 'Tam Sinüs MPPT Akıllı İnverter'),
+    (r'Hibrit İnverter', 'Hibrit İnverter'),
+    (r'On-Grid İnverter', 'On-Grid İnverter'),
+    (r'Tam Sinüs İnverter', 'Tam Sinüs İnverter'),
+    # Akü
+    (r'Jel Akü', 'Jel Akü'),
+    (r'BMS(?! CL 12/100 Bağlantı)|Battery Balancer|Battery Sense|Akü Alarm|Akü Birleştirici|SolidSwitch|Akü Kutusu|Smart Shunt'
+     r'|Batarya (Paralel|Seri) .*Kablo|Batarya Güç Kablosu|Batarya Alt Taban', 'Batarya Yönetimi ve Aksesuar'),
+    (r'Lityum|LiFePO4|SuperPack|Peak Power Pack', 'Lityum Akü'),
+    # Bağlantı ekipmanı ve aksesuar
+    (r'Transfer Switch', 'Solar Transfer Switch'),
+    (r'Sigorta|DC Dağıtım|Lynx', 'Sigorta ve Dağıtım'),
+    (r'Smart Meter|Enerji Sayacı|Akım Sensörü|Sıcaklık Sensörü|Arayüz|Dönüştürücü|Dongle|\bGX\b|Ekrano|Venus|CCGX|GMDSS'
+     r'|Tank Seviye|Digital Multi Control|GPS Anteni|DIN35|Ada Modu', 'İzleme ve Kontrol'),
+    (r'Kablo', 'Kablo ve Konnektör'),
 ]
 
 
-def corrected_category(name, category):
-    for pattern, only_from, target in CATEGORY_CORRECTIONS:
-        if (only_from is None or only_from == category) and re.search(pattern, name):
+def classify_category(name):
+    for pattern, target in CATEGORY_RULES:
+        if re.search(pattern, name):
             return target
-    return category
+    return 'Genel'
 
 
 def variant_labels(rows):
@@ -448,7 +483,7 @@ def main():
             name = strip_brand_suffix(head[COL_META_TITLE])
         else:
             name = head[COL_SEO_NAME] or head[COL_NAME]
-        category = corrected_category(name, (child or parent).strip())
+        category = classify_category(name)
         desc_html = sanitize_html(head[COL_DESC])
         p = {
             'id': pid,

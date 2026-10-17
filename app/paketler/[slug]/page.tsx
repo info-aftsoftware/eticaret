@@ -286,10 +286,10 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
             Güneş Paneli
           </Link>
           <Link
-            href="/category/enerji-depolama"
+            href="/category/solar-aku"
             className="text-center rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
           >
-            Enerji Depolama
+            Solar Akü
           </Link>
         </section>
       </div>

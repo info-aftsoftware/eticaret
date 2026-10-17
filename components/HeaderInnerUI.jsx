@@ -9,6 +9,7 @@ import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { HEADER_NAV_GROUP_COUNT } from '@/lib/categories'
 import { HeaderWrapper } from './HeaderWrapper'
 import { HeaderTopBar } from './HeaderTopBar'
+import { AllCategoriesMenu } from './header/AllCategoriesMenu'
 import { Logo } from './Logo'
 import { Button } from './ui/button'
 import { Badge } from './ui/badge'
@@ -38,6 +39,8 @@ const CATEGORY_MENU_IMAGE_BY_VALUE = mockProducts.reduce((acc, product) => {
 
 /** Tablet genişliğinde (md–lg) ayrı gösterilen grup sayısı */
 const HEADER_NAV_GROUP_COUNT_COMPACT = 2
+/** Küçük masaüstünde (lg–xl) ayrı gösterilen grup sayısı */
+const HEADER_NAV_GROUP_COUNT_MEDIUM = 4
 
 /** Masaüstü menü: ilk `count` grup ayrı açılır menü, kalanlar "Diğer Kategoriler" altında */
 function buildDesktopNavGroups(navGroups, count = HEADER_NAV_GROUP_COUNT) {
@@ -222,7 +225,7 @@ export function HeaderInnerUI(props) {
 
   const menuPanelClass = 'w-[min(520px,calc(100vw-3rem))] max-w-[520px] overflow-hidden rounded-2xl border border-slate-100 bg-white p-0 shadow-[0_8px_32px_rgba(15,23,42,0.08),0_1px_3px_rgba(15,23,42,0.04)] animate-in fade-in slide-in-from-top-1 duration-150'
   const desktopNavItemClass = (isActive) =>
-    `group relative flex items-center justify-center px-2 xl:px-3 py-1.5 rounded-lg text-center transition-all duration-200 ${isActive ? 'text-slate-950' : 'text-slate-600 hover:text-slate-950'}`
+    `group relative flex items-center justify-center px-2 2xl:px-3 py-1.5 rounded-lg text-center transition-all duration-200 ${isActive ? 'text-slate-950' : 'text-slate-600 hover:text-slate-950'}`
   const desktopNavLabelClass = `${headerDisplay.className} text-[14px] font-bold tracking-[-0.01em] leading-[1.25] text-center whitespace-nowrap`
   const desktopNavSubLabelClass = 'hidden'
 
@@ -256,7 +259,7 @@ export function HeaderInnerUI(props) {
               <span className={desktopNavLabelClass}>
                 {t(labelKey)}
               </span>
-              <ChevronDown className={`ml-1 h-3 w-3 shrink-0 text-slate-400 transition-transform duration-200 ${openMenu === menuKey ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`ml-0.5 h-3 w-3 shrink-0 text-slate-400 transition-transform duration-200 ${openMenu === menuKey ? 'rotate-180' : ''}`} />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -336,25 +339,29 @@ export function HeaderInnerUI(props) {
             <div className="flex-shrink-0 flex items-center pr-2">
               <Logo size="xl" href="/" />
             </div>
-            <div ref={desktopSearchRef} className="flex-1 min-w-0 max-w-xl mx-auto relative">
-              <form onSubmit={handleSearch} className="relative">
-                <Input
-                  type="text"
-                  placeholder={t('searchPlaceholder')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  {...comboboxProps('search-suggestions-desktop')}
-                  className="w-full max-w-full min-w-0 h-11 pl-5 pr-12 rounded-full border border-slate-200/90 bg-white shadow-[0_8px_24px_rgba(15,23,42,0.04)] focus:border-brand focus:ring-2 focus:ring-brand/10 text-sm transition-all placeholder:text-slate-400"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center text-slate-500 hover:text-brand rounded-full transition-colors"
-                  aria-label={t('searchPlaceholder')}
-                >
-                  <Search className="w-4 h-4" />
-                </button>
-              </form>
-              {renderSearchDropdown(undefined, 'search-suggestions-desktop')}
+            {/* voltekno.com yapısı: "Tüm Kategoriler" butonu + geniş arama kutusu + sarı arama butonu */}
+            <div className="flex-1 min-w-0 flex items-stretch max-w-3xl mx-auto">
+              <AllCategoriesMenu navGroups={navGroups} t={t} />
+              <div ref={desktopSearchRef} className="flex-1 min-w-0 relative">
+                <form onSubmit={handleSearch} className="relative flex">
+                  <Input
+                    type="text"
+                    placeholder={t('searchPlaceholder')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    {...comboboxProps('search-suggestions-desktop')}
+                    className="flex-1 min-w-0 h-11 pl-4 pr-3 rounded-none border border-l-0 border-slate-200 bg-white focus:border-brand focus-visible:ring-0 focus-visible:ring-offset-0 text-sm transition-all placeholder:text-slate-400"
+                  />
+                  <button
+                    type="submit"
+                    className="h-11 w-14 shrink-0 flex items-center justify-center rounded-r-md bg-amber-400 hover:bg-amber-500 text-brand transition-colors"
+                    aria-label={t('searchPlaceholder')}
+                  >
+                    <Search className="w-5 h-5" />
+                  </button>
+                </form>
+                {renderSearchDropdown(undefined, 'search-suggestions-desktop')}
+              </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               {isAuthenticated && user ? (
@@ -446,26 +453,26 @@ export function HeaderInnerUI(props) {
         <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 min-w-0 overflow-x-hidden">
           <nav className="flex items-center gap-0.5 h-[52px] min-w-0 overflow-hidden" aria-label="Ana menu">
             <Link
-              href="/"
-              className={`${desktopNavItemClass(pathname === '/')} ${pathname === '/' ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+              href="/products"
+              className={`${desktopNavItemClass(pathname === '/products' && !currentCategory)} ${pathname === '/products' && !currentCategory ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
             >
-              <span className={desktopNavLabelClass}>Ana Sayfa</span>
+              <span className={desktopNavLabelClass}>{t('catNavAllProducts')}</span>
             </Link>
             <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
             {buildDesktopNavGroups(navGroups, HEADER_NAV_GROUP_COUNT_COMPACT).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `md:${g.id}`, 'lg:hidden'))}
-            {buildDesktopNavGroups(navGroups).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `lg:${g.id}`, 'hidden lg:block'))}
-            <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
+            {buildDesktopNavGroups(navGroups, HEADER_NAV_GROUP_COUNT_MEDIUM).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `lg:${g.id}`, 'hidden lg:block xl:hidden'))}
+            {buildDesktopNavGroups(navGroups).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `xl:${g.id}`, 'hidden xl:block'))}
             <Link
-              href="/blog"
-              className={`${desktopNavItemClass(pathname === '/blog' || pathname?.startsWith('/blog/'))} ${pathname === '/blog' || pathname?.startsWith('/blog/') ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+              href="/paketler"
+              className={`${desktopNavItemClass(pathname?.startsWith('/paketler'))} hidden xl:flex ${pathname?.startsWith('/paketler') ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
             >
-              <span className={desktopNavLabelClass}>Blog</span>
+              <span className={desktopNavLabelClass}>{t('catGroupReadyPackages')}</span>
             </Link>
             <Link
-              href="/contact"
-              className={`${desktopNavItemClass(pathname === '/contact')} ${pathname === '/contact' ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
+              href="/ges"
+              className="ml-auto shrink-0 hidden lg:inline-flex items-center gap-1.5 h-9 px-4 rounded-md bg-amber-400 hover:bg-amber-500 text-brand text-[13px] font-bold whitespace-nowrap transition-colors"
             >
-              <span className={desktopNavLabelClass}>İletişim</span>
+              {t('catNavSolarQuote')}
             </Link>
           </nav>
         </div>

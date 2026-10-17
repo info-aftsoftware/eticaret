@@ -2,9 +2,9 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { ChevronDown, Zap } from 'lucide-react'
+import { ChevronDown, Mail, Phone } from 'lucide-react'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
+import { SELLER } from '@/lib/legal/company'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,41 +19,56 @@ const CURRENCIES = [
   { code: 'EUR' as const, label: 'EUR' },
 ]
 
+/** Üst lacivert şerit (voltekno.com yapısı): solda kurumsal linkler, sağda iletişim + dil/para birimi. */
+const TOP_LINKS = [
+  { href: '/ges', label: 'Teklif Al', highlight: true },
+  { href: '/siparis-takip', label: 'Sipariş Takibi' },
+  { href: '/hakkimizda', label: 'Hakkımızda' },
+  { href: '/faq', label: 'S.S.S.' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contact', label: 'İletişim' },
+]
+
 export function HeaderTopBar() {
-  const t = useTranslations('headerTopBar')
   const currency = useCurrencyStore((s) => s.currency)
   const setCurrency = useCurrencyStore((s) => s.setCurrency)
 
   return (
-    <div className="bg-slate-900 border-b border-slate-800">
+    <div className="bg-brand text-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-9 text-xs font-medium">
-          {/* Sol: GES & Teklif */}
-          <div className="flex items-center gap-5">
-            <Link
-              href="/ges"
-              className="flex items-center gap-1.5 text-yellow-400 hover:text-yellow-300 font-semibold transition-colors"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              {t('gesButton')}
-            </Link>
-            <Link
-              href="/ges/teklif-dogrulama"
-              className="text-slate-400 hover:text-white transition-colors hidden sm:block"
-            >
-              {t('gesQuoteButton')}
-            </Link>
-          </div>
+        <div className="flex items-center justify-between h-9 text-xs font-medium gap-4">
+          <nav aria-label="Kurumsal" className="flex items-center gap-4 lg:gap-5 min-w-0">
+            {TOP_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`whitespace-nowrap transition-colors ${link.highlight ? 'text-amber-300 hover:text-amber-200 font-semibold' : 'text-white/80 hover:text-white'}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
 
-          {/* Sağ: Dil + Para Birimi */}
-          <div className="flex items-center gap-4">
-            <LanguageSwitcher />
-            <span className="w-px h-3.5 bg-slate-700" aria-hidden />
+          <div className="flex items-center gap-4 shrink-0">
+            <a href={SELLER.phoneHref} className="hidden lg:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors">
+              <Phone className="w-3.5 h-3.5" aria-hidden />
+              {SELLER.phone.replace('+90 ', '0')}
+            </a>
+            <a href={`mailto:${SELLER.email}`} className="hidden xl:flex items-center gap-1.5 text-white/80 hover:text-white transition-colors">
+              <Mail className="w-3.5 h-3.5" aria-hidden />
+              {SELLER.email}
+            </a>
+            <span className="hidden lg:block w-px h-3.5 bg-white/20" aria-hidden />
+            <div className="[&_button]:text-white/80 [&_button:hover]:text-white">
+              <LanguageSwitcher />
+            </div>
+            <span className="w-px h-3.5 bg-white/20" aria-hidden />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
                   type="button"
-                  className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors"
+                  className="flex items-center gap-1 text-white/80 hover:text-white transition-colors"
+                  aria-label="Para birimi"
                 >
                   {CURRENCIES.find((c) => c.code === currency)?.label ?? 'TL'}
                   <ChevronDown className="w-3 h-3" />

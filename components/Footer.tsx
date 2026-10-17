@@ -88,10 +88,10 @@ export function Footer() {
               {[
                 { href: '/products', label: 'Tüm Ürünler' },
                 { href: '/category/gunes-paneli', label: 'Güneş Panelleri' },
-                { href: '/category/inverter-ve-guc-elektronigi', label: 'İnverterler' },
-                { href: '/category/enerji-depolama', label: 'Enerji Depolama' },
+                { href: '/category/solar-inverter', label: 'Solar İnverterler' },
+                { href: '/category/solar-aku', label: 'Solar Aküler' },
                 { href: '/category/solar-sarj-kontrol', label: 'Şarj Kontrol Cihazları' },
-                { href: '/category/pompa-ve-surucu', label: 'Solar Pompa ve Sürücüler' },
+                { href: '/category/solar-baglanti-ekipmani', label: 'Solar Bağlantı Ekipmanı' },
                 { href: '/paketler', label: 'Enerji Paketleri' },
               ].map((item) => (
                 <li key={item.href}>

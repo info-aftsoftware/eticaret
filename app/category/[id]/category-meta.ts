@@ -25,39 +25,32 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     imagePosition: 'center center',
     imageScale: 0.78,
   },
-  'inverter-ve-guc-elektronigi': {
-    title: 'İnverter ve Güç Elektroniği',
-    description: 'On-grid, hibrit ve off-grid inverterler, tam sinüs inverterler, akıllı sayaçlar ve izleme cihazları.',
+  'solar-inverter': {
+    title: 'Solar İnverter',
+    description: 'Tam sinüs MPPT akıllı inverterler, hibrit ve on-grid inverterler, şarjlı ve modifiye sinüs inverterler, solar pompa sürücüleri.',
     seoDescription:
-      'İnverter fiyatları: on-grid (şebeke bağlantılı), hibrit ve off-grid inverterler, tam sinüs ve modifiye sinüs inverterler, Smart Meter ve izleme aksesuarları. TommaTech, Deye, Victron ve daha fazlası voltekno\'da.',
-    keywords: ['inverter', 'hibrit inverter', 'on-grid inverter', 'off-grid inverter', 'tam sinüs inverter', 'solar inverter fiyatları', 'smart meter'],
+      "Solar inverter fiyatları: tam sinüs MPPT akıllı inverter, hibrit inverter, on-grid inverter, şebeke şarjlı tam sinüs ve modifiye sinüs inverterler, solar pompa sürücüleri. TommaTech, Deye, Victron ve daha fazlası voltekno'da.",
+    keywords: ['solar inverter', 'akıllı inverter', 'hibrit inverter', 'on-grid inverter', 'tam sinüs inverter', 'solar pompa sürücüsü', 'inverter fiyatları'],
     image: '/images/categories/inverter.png',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
-  'enerji-depolama': {
-    title: 'Enerji Depolama',
-    description: 'LiFePO4 lityum bataryalar, yüksek voltaj batarya modülleri ve taşınabilir güç istasyonları.',
+  'solar-aku': {
+    title: 'Solar Akü',
+    description: 'LiFePO4 lityum aküler, jel aküler, batarya yönetim ekipmanları ve taşınabilir güç istasyonları.',
     seoDescription:
-      'Lityum batarya fiyatları: LiFePO4 aküler, yüksek ve düşük voltaj enerji depolama modülleri, marin aküler ve taşınabilir güç istasyonları. Güneş enerjisi sistemleri için enerji depolama çözümleri voltekno\'da.',
-    keywords: ['lityum batarya', 'lifepo4 akü', 'enerji depolama', 'solar batarya', 'taşınabilir güç istasyonu', 'lityum akü fiyatları'],
+      "Solar akü fiyatları: LiFePO4 lityum aküler, yüksek ve düşük voltaj batarya modülleri, jel aküler, BMS ve batarya aksesuarları, taşınabilir güç istasyonları voltekno'da.",
+    keywords: ['solar akü', 'lityum akü', 'lifepo4 akü', 'jel akü', 'enerji depolama', 'taşınabilir güç istasyonu', 'akü fiyatları'],
     image: '/images/categories/batarya.png',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
   'solar-sarj-kontrol': {
     title: 'Solar Şarj Kontrol Cihazları',
-    description: 'MPPT ve PWM solar şarj kontrol cihazları, uzaktan izleme modülleri ve ekranlar.',
+    description: 'MPPT ve PWM solar şarj kontrol cihazları, DC-DC ve AC akü şarj cihazları, uzaktan izleme modülleri ve ekranlar.',
     seoDescription:
       'MPPT ve PWM solar şarj kontrol cihazı fiyatları. Güneş paneli ile akü/batarya arasında verimli şarj yönetimi için Victron, Havensis, TommaTech ve diğer markalar voltekno\'da.',
     keywords: ['mppt şarj kontrol', 'pwm şarj kontrol', 'solar şarj kontrol cihazı', 'şarj regülatörü', 'mppt fiyatları'],
-  },
-  'pompa-ve-surucu': {
-    title: 'Solar Pompa ve Sürücüler',
-    description: 'Güneş enerjili tarımsal sulama için solar pompa sürücüleri ve pompa inverterleri.',
-    seoDescription:
-      'Solar pompa sürücüsü fiyatları: monofaze ve trifaze solar pompa inverterleri, tarımsal sulama için güneş enerjili pompa sistemleri. Frecon, TommaTech ve daha fazlası voltekno\'da.',
-    keywords: ['solar pompa sürücüsü', 'solar pompa inverteri', 'güneş enerjili sulama', 'tarımsal sulama', 'solar pompa'],
   },
   'isi-pompasi': {
     title: 'Isı Pompası',
@@ -69,26 +62,12 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     imagePosition: 'center center',
     imageScale: 0.78,
   },
-  akuler: {
-    title: 'Aküler',
-    description: 'Kurşun asit ve jel aküler; solar sistemler, UPS ve karavan uygulamaları için.',
-    seoDescription:
-      'Jel akü ve kurşun asit akü fiyatları. Güneş enerjisi sistemleri, UPS ve karavan uygulamaları için derin döngü aküler voltekno\'da.',
-    keywords: ['jel akü', 'kurşun asit akü', 'solar akü', 'derin döngü akü', 'akü fiyatları'],
-  },
   'ruzgar-enerjisi': {
     title: 'Rüzgar Enerjisi',
-    description: 'Rüzgar türbinleri, direk setleri, kanatlar ve türbin aksesuarları.',
+    description: 'Rüzgar türbinleri, rüzgar şarj kontrol cihazları, direk setleri, kanatlar ve türbin aksesuarları.',
     seoDescription:
       'Rüzgar türbini fiyatları ve aksesuarları: ev tipi rüzgar türbinleri, direk setleri, kanatlar, burun ve kuyruk parçaları. İstabreeze ürünleri voltekno\'da.',
     keywords: ['rüzgar türbini', 'ev tipi rüzgar türbini', 'rüzgar jeneratörü', 'türbin kanadı', 'rüzgar enerjisi'],
-  },
-  'sarj-cihazlari': {
-    title: 'Şarj Cihazları',
-    description: 'Akü ve batarya şarj cihazları; AC/DC şarj üniteleri.',
-    seoDescription:
-      'Akü şarj cihazı fiyatları: kurşun asit, jel ve lityum aküler için AC/DC şarj cihazları voltekno\'da.',
-    keywords: ['akü şarj cihazı', 'lityum şarj cihazı', 'ac dc şarj', 'batarya şarj cihazı'],
   },
   'elektrikli-arac-sarj': {
     title: 'Elektrikli Araç Şarj',
@@ -97,19 +76,19 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
       'Elektrikli araç şarj istasyonu fiyatları ve aksesuarları. Ev ve işletmeler için AC şarj çözümleri voltekno\'da.',
     keywords: ['elektrikli araç şarj istasyonu', 'ev şarj istasyonu', 'ev şarj cihazı', 'wallbox'],
   },
-  'kablolar-ve-baglanti': {
-    title: 'Kablolar ve Bağlantı',
-    description: 'Güç ve veri kabloları, BMS ve iletişim kabloları, panel bağlantı kabloları.',
+  'solar-baglanti-ekipmani': {
+    title: 'Solar Bağlantı Ekipmanı',
+    description: 'Solar transfer switch, sigorta ve DC dağıtım ürünleri, solar kablolar ve bağlantı kabloları.',
     seoDescription:
-      'Güç ve veri kabloları: VE.Direct, VE.Can, BMS ve panel bağlantı kabloları. Solar ve enerji depolama sistemleri için bağlantı ürünleri voltekno\'da.',
-    keywords: ['solar kablo', 've.direct kablo', 'bms kablosu', 'panel bağlantı kablosu', 'veri kablosu'],
+      "Solar bağlantı ekipmanları: otomatik transfer switch, DC sigorta ve dağıtım (Lynx), solar kablo, VE.Direct ve uzaktan aç/kapa kabloları voltekno'da.",
+    keywords: ['solar transfer switch', 'dc sigorta', 'solar kablo', 'lynx distributor', 'solar bağlantı ekipmanı'],
   },
-  'aksesuar-ve-koruma': {
-    title: 'Aksesuar ve Koruma',
-    description: 'Sistem bileşenleri, koruma ekipmanları, izleme ve kontrol cihazları.',
+  aksesuar: {
+    title: 'Aksesuar',
+    description: 'İzleme ve kontrol cihazları: GX sistem izleme, akıllı sayaçlar, sensörler ve arayüzler.',
     seoDescription:
-      'Solar ve enerji depolama sistemleri için sistem bileşenleri, koruma ekipmanları ve aksesuarlar voltekno\'da.',
-    keywords: ['solar aksesuar', 'sistem bileşenleri', 'koruma ekipmanı', 'enerji sistemi aksesuarı'],
+      "Solar sistem aksesuarları: Victron GX izleme cihazları, Smart Meter ve enerji sayaçları, akım ve sıcaklık sensörleri, arayüz ve dönüştürücüler voltekno'da.",
+    keywords: ['solar aksesuar', 'smart meter', 'victron gx', 'enerji sayacı', 'izleme ve kontrol'],
   },
   diger: {
     title: 'Diğer Ürünler',

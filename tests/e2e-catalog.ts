@@ -16,7 +16,7 @@ export async function createE2EProduct() {
       description: 'Otomatik testler için geçici ürün',
       price: 450,
       stock: 100,
-      category: 'Panel',
+      category: 'TopCon Güneş Paneli',
       brand: 'TommaTech',
       sku: 'E2E-TEST-10W',
       // Merchant akışı görselsiz ürünü almaz; katalogdaki bir panel görseli kullanılır
