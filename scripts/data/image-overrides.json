@@ -1,0 +1,17 @@
+{
+  "_aciklama": "Excel'deki görseli yanlış ürünü gösteren SKU'lar için doğru görseller. Dosyalar public/images/products/override/ altında; yeni görsel scripts/prepare-override-image.mjs ile hazırlanır. Import (scripts/import-ikas-excel.py) bu SKU'larda Excel görselleri yerine bunları kullanır.",
+  "DEYE-00402": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "5 kW trifaze on-grid; önceki görsel hibrit inverterdi" },
+  "DEYE-00403": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "8 kW" },
+  "DEYE-00404": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "10 kW" },
+  "DEYE-00405": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "12 kW" },
+  "DEYE-00408": { "images": ["deye-sun-18-25k-g05.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun18-20-25kg04-1825kw-three-phase-2-mppt-237.html", "note": "25 kW" },
+  "DEYE-00409": { "images": ["deye-sun-30-36k-g04.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun30-33-36kg04-3036kw-three-phase-2-mppt.html", "note": "30 kW" },
+  "DEYE-00411": { "images": ["deye-sun-40-50k-g04.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html", "note": "40 kW" },
+  "DEYE-00412": { "images": ["deye-sun-40-50k-g04.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html", "note": "50 kW" },
+  "DEYE-00413": { "images": ["deye-sun-60-80k-g04p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html", "note": "60 kW" },
+  "DEYE-00414": { "images": ["deye-sun-60-80k-g04p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html", "note": "80 kW" },
+  "TOMMAT-KSAMTLTBN256V512V-00203": { "images": ["tommatech-moduler-batarya-alt-taban.webp"], "source": "https://cw-enerji.com/tr/urun/tommatech-modular-series-256-512v-lityum-batarya-metal-alt-taban-1384.html", "note": "önceki görsel sokak lambasıydı" },
+  "TOMMAT-SPITT0222MF-00286": { "images": ["tommatech-spi-2-2kw-monofaze.webp"], "source": "https://cw-enerji.com/en/product/tommatech-22-kw-450vdc-1-phase220vac-irrigation-pump-inverter-591.html", "note": "önceki görsel hibrit inverter gövdesiydi" },
+  "APEX-00528": { "images": ["apex-80a-ats-1.webp", "apex-80a-ats-2.webp"], "source": "https://electrozirve.com/apex-80a-transfer-switch/", "note": "Apex distribütörü; önceki görseller dalgıç pompa setiydi" },
+  "VICTRO-ASS070200100-02116": { "images": ["victron-ass070200100.webp"], "source": "https://www.victronenergy.com/cables/cable-for-smart-bms-cl-12-100-multiplus", "note": "önceki görsel BMS cihazı / başka kabloydu" }
+}

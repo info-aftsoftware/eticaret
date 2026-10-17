@@ -11,7 +11,8 @@ Kullanım:
   lib/catalog/fx-snapshot.json   – TCMB kur anlık görüntüsü (API'siz/statik ortam yedeği)
 
 Görseller: public/images/products/voltekno/<driveId>.<ext> altında aranır;
-eksik olanlar Google Drive'dan indirilir.
+eksik olanlar Google Drive'dan indirilir. Excel'deki görseli yanlış olan SKU'lar için
+scripts/data/image-overrides.json → public/images/products/override/ altındaki doğru görseller kullanılır.
 
 Yalnızca Python standart kütüphanesi kullanılır.
 """
@@ -23,6 +24,8 @@ OUT_DIR = os.path.join(ROOT, 'lib', 'catalog')
 IMG_DIR = os.path.join(ROOT, 'public', 'images', 'products', 'voltekno')
 IMG_URL = '/images/products/voltekno'
 PLACEHOLDER = '/images/products/placeholder.png'
+OVERRIDE_DIR = os.path.join(ROOT, 'public', 'images', 'products', 'override')
+OVERRIDE_URL = '/images/products/override'
 M = '{http://schemas.openxmlformats.org/spreadsheetml/2006/main}'
 
 COL_GROUP = 'Ürün Grup ID'
@@ -120,7 +123,31 @@ def local_image(drive_id):
     return None
 
 
+_image_overrides = None
+
+
+def image_overrides():
+    """SKU -> doğru görsel dosya adları (Excel'deki görsel yanlış ürünü gösteriyorsa).
+    scripts/data/image-overrides.json: { "<SKU>": { "images": ["dosya.webp", ...], "source": "kaynak URL", "note": "..." } }"""
+    global _image_overrides
+    if _image_overrides is None:
+        path = os.path.join(ROOT, 'scripts', 'data', 'image-overrides.json')
+        data = {}
+        if os.path.exists(path):
+            with open(path, encoding='utf-8') as f:
+                data = {k: v for k, v in json.load(f).items() if not k.startswith('_')}
+        _image_overrides = data
+    return _image_overrides
+
+
 def images_of(row, missing):
+    override = image_overrides().get(row[COL_SKU])
+    if override:
+        files = [f for f in override['images'] if os.path.exists(os.path.join(OVERRIDE_DIR, f))]
+        if len(files) != len(override['images']):
+            print(f'  ! {row[COL_SKU]}: image-overrides.json içindeki bazı dosyalar yok: {override["images"]}')
+        if files:
+            return [f'{OVERRIDE_URL}/{f}' for f in files]
     out = []
     for u in row[COL_IMG].split(';'):
         m = re.search(r'id=([\w-]+)', u.strip())

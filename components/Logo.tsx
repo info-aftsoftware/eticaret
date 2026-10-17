@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 
 interface LogoProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'header' | 'headerSm'
   className?: string
   href?: string
   asDiv?: boolean
@@ -19,6 +19,9 @@ export function Logo({ size = 'md', className, href, asDiv = false, align = 'lef
     md: 'h-12 w-[204px]',
     lg: 'h-16 w-[252px]',
     xl: 'h-[54px] w-[226px]',
+    /** Site başlığı (voltekno.com ölçüleri) */
+    header: 'h-[44px] w-[139px]',
+    headerSm: 'h-[40px] w-[125px] max-[359px]:w-[100px]',
   }
 
   const logoElement = (
@@ -32,7 +35,7 @@ export function Logo({ size = 'md', className, href, asDiv = false, align = 'lef
         src="/images/voltekno-logo.webp"
         alt="Voltekno Enerji Sistemleri"
         fill
-        priority={size === 'lg' || size === 'xl'}
+        priority={size === 'lg' || size === 'xl' || size === 'header' || size === 'headerSm'}
         sizes="(max-width: 768px) 184px, (max-width: 1280px) 252px, 368px"
         className={cn('object-contain', align === 'center' ? 'object-center' : 'object-left')}
       />

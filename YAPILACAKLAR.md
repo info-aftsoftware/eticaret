@@ -70,7 +70,10 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [x] **Header voltekno.com yapısında:** lacivert üst şerit (Teklif Al, Sipariş Takibi, Hakkımızda, S.S.S., Blog, İletişim, telefon, e-posta), yeni logo, "TÜM KATEGORİLER" mega menüsü (ana kategori > alt kategori > marka, Hazır Solar Paket, Solar Teklif Al), sarı butonlu geniş arama, kategori şeridi.
 - [x] **Hero:** voltekno.com'un 3 slaytı (Yenilenebilir Enerji / Lityum Depolama / Tarımsal Sulama); eski banner slider kaldırıldı.
 - [x] **Markalar şeridi:** voltekno.com'daki 10 marka + katalogdaki TommaTech, Victron ve Mexxsun (logolar resmi sitelerinden, `public/images/brands/`); her logo marka filtresine gidiyor.
-- [ ] **Ürün görseli denetimi:** 28 yanlış (5 kesin, 23 olası), 17 şüpheli görsel ve başka mağaza filigranları tespit edildi; doğru görsellerin sağlanması gerekiyor (rapor: `docs/urun-gorsel-denetimi.md`).
+- [x] **Header ve hero voltekno.com ile birebir** (ölçüler voltekno.com'dan alındı): üst şerit, logo + arama + hesap/sepet satırı, "TÜM KATEGORİLER" açılır listesi + 7 kategori linki, mobilde kategori butonu + arama + kaydırmalı kategori hapları; yatay kayan hero ve alta binen 4 güven kartı. Dil/para birimi seçimi footer'a taşındı.
+- [x] **Yanlış ürün görselleri (16/28 düzeltildi):** 10 Deye on-grid, Apex 80A ATS (2 görsel), TommaTech batarya alt tabanı, TommaTech SPI 2,2 kW, Victron BMS CL kablosu — resmî kaynaklardan. Excel'i yeniden import etseniz de korunur: `scripts/data/image-overrides.json` (SKU → `public/images/products/override/`), yeni görsel `node scripts/prepare-override-image.mjs` ile hazırlanır.
+- [ ] **Kalan 12 yanlış görsel — sizden fotoğraf gerekiyor:** TommaTech diyot modülleri (MDK25A/55A/70A/90A/110A, MDC150-16; 7 ürün) ve R32 Split Isı Pompası İç Ünite. Üreticinin (TommaTech/CW Enerji) sitesinde ve kataloglarında bu ürünlerin görseli yok.
+- [ ] **Düşük kaliteli görseller (232 kayıt, 187 ürün)** ve şüpheli 17 görsel: rapor `docs/urun-gorsel-denetimi.md`.
 - [ ] `/products?category=Panel` gibi **eski alt kategori filtre linkleri** artık boş liste gösterir (dış sitelerde/reklamlarda kullanılıyorsa yönlendirme eklenmeli).
 
 ### 🔴 P0 — Yayından önce (sizde)

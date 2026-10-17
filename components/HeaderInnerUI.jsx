@@ -1,80 +1,29 @@
-﻿'use client'
+'use client'
 
 import React, { useEffect, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { Manrope } from 'next/font/google'
 import { fmtPrice } from '@/lib/format'
-import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { HEADER_NAV_GROUP_COUNT } from '@/lib/categories'
 import { HeaderWrapper } from './HeaderWrapper'
 import { HeaderTopBar } from './HeaderTopBar'
-import { AllCategoriesMenu } from './header/AllCategoriesMenu'
+import { AllCategoriesMenu, CategoryGridIcon } from './header/AllCategoriesMenu'
 import { Logo } from './Logo'
-import { Button } from './ui/button'
 import { Badge } from './ui/badge'
 import { Input } from './ui/input'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTitle } from './ui/sheet'
-import { ShoppingCart, Heart, User, Search, Menu, ChevronDown, ChevronRight, Home, Phone } from 'lucide-react'
+import { ShoppingBag, ShoppingCart, Heart, User, Search, Menu, ChevronDown, ChevronRight, Home, Phone } from 'lucide-react'
 
-const headerDisplay = Manrope({
-  subsets: ['latin'],
-  weight: ['700', '800'],
-})
-
-
-const CATEGORY_MENU_IMAGE_BY_VALUE = mockProducts.reduce((acc, product) => {
-  if (!product.category || !product.image || product.image === PLACEHOLDER_PRODUCT_IMAGE) return acc
-  if (!acc[product.category]) acc[product.category] = product.image
-  return acc
-}, {})
-
-/** Tablet genişliğinde (md–lg) ayrı gösterilen grup sayısı */
-const HEADER_NAV_GROUP_COUNT_COMPACT = 2
-/** Küçük masaüstünde (lg–xl) ayrı gösterilen grup sayısı */
-const HEADER_NAV_GROUP_COUNT_MEDIUM = 4
-
-/** Masaüstü menü: ilk `count` grup ayrı açılır menü, kalanlar "Diğer Kategoriler" altında */
-function buildDesktopNavGroups(navGroups, count = HEADER_NAV_GROUP_COUNT) {
-  if (!navGroups || navGroups.length <= count + 1) return navGroups || []
-  const main = navGroups.slice(0, count)
-  const rest = navGroups.slice(count)
-  return [
-    ...main,
-    {
-      id: 'diger-kategoriler',
-      labelKey: 'catGroupMore',
-      navLabelKey: 'catGroupMore',
-      href: '/categories',
-      categories: rest.map((g) => ({ value: g.id, labelKey: g.labelKey, href: g.href })),
-    },
-  ]
-}
-
-function getMenuGridClass(count) {
-  if (count <= 2) return 'grid grid-cols-2 gap-5 border-b border-slate-100 pb-7'
-  if (count <= 4) return 'grid grid-cols-2 gap-5 border-b border-slate-100 pb-7 xl:grid-cols-4'
-  if (count <= 6) return 'grid grid-cols-2 gap-5 border-b border-slate-100 pb-7 lg:grid-cols-3'
-  return 'grid grid-cols-2 gap-5 border-b border-slate-100 pb-7 lg:grid-cols-4'
-}
-
-function getMenuCards(groupKey, items) {
-  return items.map((item) => ({
-    title: item.labelKey,
-    href: item.href || `/products?category=${encodeURIComponent(item.value)}`,
-    image: CATEGORY_MENU_IMAGE_BY_VALUE[item.value] || PLACEHOLDER_PRODUCT_IMAGE,
-    translate: true,
-  }))
-}
-
+/**
+ * Site başlığı — voltekno.com ile birebir yapı:
+ * lacivert üst şerit · logo + geniş arama (sarı buton) + hesap / sepet · "TÜM KATEGORİLER" + kategori linkleri.
+ * Kategoriler gunesenerjisistemi.com kırılımında (lib/categories.ts).
+ */
 export function HeaderInnerUI(props) {
   const {
     t,
@@ -84,7 +33,6 @@ export function HeaderInnerUI(props) {
     mobileMenuOpen,
     setMobileMenuOpen,
     cartItemsCount,
-    cartTotalFormatted,
     user,
     isAuthenticated,
     logout,
@@ -102,14 +50,12 @@ export function HeaderInnerUI(props) {
     currency = 'TRY',
     exchangeRates = null,
     navGroups,
-    navLinks,
   } = props
 
-  const [openMenu, setOpenMenu] = React.useState(null)
   const [expandedGroups, setExpandedGroups] = React.useState(new Set())
-  const timeoutRef = React.useRef(null)
   const desktopSearchRef = useRef(null)
   const mobileSearchRef = useRef(null)
+  const mobileSearchInputRef = useRef(null)
 
   useEffect(() => {
     if (!searchOpen) return
@@ -143,6 +89,7 @@ export function HeaderInnerUI(props) {
     onKeyDown: handleSearchKeyDown,
     autoComplete: 'off',
   })
+
   const renderSearchDropdown = (onResultClick, listId = 'search-suggestions') => (
     showDropdown && (
       <div className="absolute left-0 right-0 top-full mt-1 z-50 rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50 overflow-hidden">
@@ -212,171 +159,68 @@ export function HeaderInnerUI(props) {
     })
   }
 
-  /** İmleç trigger ile content arasında gezerken kapanmayı geciktirmek için. */
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
-  }
+  /** Masaüstü kategori satırı: "Tüm Ürünler" + ilk ana kategoriler (voltekno.com'daki 7 link düzeni) */
+  const navRowGroups = navGroups.slice(0, HEADER_NAV_GROUP_COUNT)
+  const isAllProducts = pathname === '/products' && !currentCategory
+  const navLinkClass = (active) =>
+    `px-2.5 py-2.5 rounded-lg text-[13.5px] leading-[14px] font-medium whitespace-nowrap transition-colors ${active ? 'bg-[#f1f4f8] text-[#0b2540]' : 'text-[#3b4a5a] hover:bg-[#f1f4f8] hover:text-[#0b2540]'}`
+  const pillClass = (active) =>
+    `shrink-0 inline-flex items-center h-[29px] !min-h-0 px-3 rounded-full border text-[13px] font-medium whitespace-nowrap transition-colors ${active ? 'border-[#0b2540] bg-[#0b2540] text-white' : 'border-[#d3d9e1] bg-white text-[#3b4a5a]'}`
 
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      setOpenMenu(null)
-    }, 200)
-  }
-
-  const menuPanelClass = 'w-[min(520px,calc(100vw-3rem))] max-w-[520px] overflow-hidden rounded-2xl border border-slate-100 bg-white p-0 shadow-[0_8px_32px_rgba(15,23,42,0.08),0_1px_3px_rgba(15,23,42,0.04)] animate-in fade-in slide-in-from-top-1 duration-150'
-  const desktopNavItemClass = (isActive) =>
-    `group relative flex items-center justify-center px-2 2xl:px-3 py-1.5 rounded-lg text-center transition-all duration-200 ${isActive ? 'text-slate-950' : 'text-slate-600 hover:text-slate-950'}`
-  const desktopNavLabelClass = `${headerDisplay.className} text-[14px] font-bold tracking-[-0.01em] leading-[1.25] text-center whitespace-nowrap`
-  const desktopNavSubLabelClass = 'hidden'
-
-  /** menuKey: aynı grup hem tablet hem masaüstü menüsünde yer aldığından açık menü durumu için ayrı anahtar */
-  const navDropdown = (labelKey, items, categoryHref, groupKey, menuKey = labelKey, wrapperClass = '') => {
-    const isGroupPageActive = categoryHref && pathname.startsWith(categoryHref)
-    const menuCards = getMenuCards(groupKey, items)
-    const featuredCard = menuCards[0]
-    const remainingCards = menuCards.slice(0, 8)
-    return (
-      <div
-        key={`${menuKey}-${groupKey}`}
-        className={`relative shrink-0 ${wrapperClass}`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+  const searchForm = (listId, inputRef) => (
+    <form onSubmit={handleSearch} className="flex h-[44px] min-[1025px]:h-[46px] rounded-md border border-[#d3d9e1] bg-[#f7f8fa] overflow-hidden focus-within:border-[#0b2540] transition-colors">
+      <Input
+        ref={inputRef}
+        type="text"
+        placeholder="Ürün, marka veya model arayın"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        {...comboboxProps(listId)}
+        className="flex-1 min-w-0 h-full px-4 rounded-none border-0 bg-transparent text-sm text-[#26394b] placeholder:text-[#26394b] shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+      />
+      <button
+        type="submit"
+        className="w-[58px] shrink-0 flex items-center justify-center bg-[#f5b400] hover:bg-[#e0a500] text-[#142b40] transition-colors"
+        aria-label={t('searchPlaceholder')}
       >
-        <DropdownMenu modal={false} open={openMenu === menuKey} onOpenChange={(open) => {
-          if (open) {
-            if (timeoutRef.current) clearTimeout(timeoutRef.current)
-            setOpenMenu(menuKey)
-          } else if (openMenu === menuKey) {
-            setOpenMenu(null)
-          }
-        }}>
-          <DropdownMenuTrigger asChild>
-            <button
-              type="button"
-              className={`${desktopNavItemClass(isGroupPageActive || openMenu === menuKey)} border-0 outline-none ring-0 focus:outline-none focus-visible:outline-none focus:ring-0 focus-visible:ring-0 ${(isGroupPageActive || openMenu === menuKey) ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-              onMouseEnter={() => { handleMouseEnter(); setOpenMenu(menuKey) }}
-            >
-              <span className={desktopNavLabelClass}>
-                {t(labelKey)}
-              </span>
-              <ChevronDown className={`ml-0.5 h-3 w-3 shrink-0 text-slate-400 transition-transform duration-200 ${openMenu === menuKey ? 'rotate-180' : ''}`} />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="center"
-            collisionPadding={24}
-            sideOffset={2}
-            className={menuPanelClass}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            {/* Üst accent çizgisi */}
-            <div className="h-[3px] bg-gradient-to-r from-brand via-brand/70 to-transparent" />
+        <Search className="w-5 h-5" strokeWidth={2.25} />
+      </button>
+    </form>
+  )
 
-            <div className="px-5 pt-4 pb-5">
-              {/* Başlık satırı */}
-              <div className="flex items-center justify-between mb-4">
-                <span className={`${headerDisplay.className} text-[10.5px] font-black uppercase tracking-[0.16em] text-brand`}>
-                  {t(labelKey)}
-                </span>
-                <Link
-                  href={categoryHref || '/products'}
-                  onClick={() => setOpenMenu(null)}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 hover:text-brand transition-colors"
-                >
-                  Tümünü Gör
-                  <ChevronRight className="h-3 w-3" />
-                </Link>
-              </div>
-
-              {/* Kategoriler */}
-              <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
-                {remainingCards.map((card, index) => (
-                  <DropdownMenuItem
-                    key={`${groupKey}-${card.href}-${index}`}
-                    asChild
-                    className="m-0 rounded-none border-0 bg-transparent p-0 outline-none focus:bg-transparent data-[highlighted]:bg-transparent"
-                  >
-                    <Link
-                      href={card.href}
-                      onClick={() => setOpenMenu(null)}
-                      className="group flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-slate-50 transition-colors"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-brand transition-colors shrink-0" />
-                      <span className="text-[13px] font-medium text-slate-600 group-hover:text-slate-900 transition-colors leading-tight truncate">
-                        {card.translate ? t(card.title) : card.title}
-                      </span>
-                      <ChevronRight className="h-3 w-3 ml-auto shrink-0 text-slate-200 opacity-0 group-hover:opacity-100 group-hover:text-brand transition-all duration-150" />
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </div>
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    )
-  }
-
-  const renderDesktopLink = (href, label, active, helper) => (
-    <Link
-      href={href}
-      className={`${desktopNavItemClass(active)} flex-1 min-w-0 ${active ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-    >
-      <span className={desktopNavLabelClass}>{label}</span>
+  const cartLink = (
+    <Link href="/cart" className="flex items-center gap-2.5 text-[#142b40] hover:text-[#0b2540] shrink-0" aria-label={t('cartAria')}>
+      <span className="relative inline-flex">
+        <ShoppingBag className="w-[22px] h-[22px]" strokeWidth={1.75} />
+        <Badge className="absolute -top-2.5 -right-2.5 h-[18px] min-w-[18px] px-1 rounded-full bg-[#ff0000] hover:bg-[#ff0000] text-white border-0 text-[11px] font-medium flex items-center justify-center shadow-none">
+          {cartItemsCount}
+        </Badge>
+      </span>
+      <span className="hidden min-[1025px]:inline text-[13px] font-semibold">Sepetim</span>
     </Link>
   )
 
   return (
     <HeaderWrapper>
-      <div className="hidden md:block shrink-0">
-        <HeaderTopBar />
-      </div>
-      {/* Ana satır: Logo, Arama, Hesap / Favoriler / Sepet */}
-      <div className="hidden md:block bg-white shadow-[0_2px_16px_rgba(15,23,42,0.07)] border-b border-slate-100 shrink-0">
-        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 min-w-0">
-          <div className="flex items-center h-[80px] gap-6 sm:gap-8 min-w-0">
-            <div className="flex-shrink-0 flex items-center pr-2">
-              <Logo size="xl" href="/" />
-            </div>
-            {/* voltekno.com yapısı: "Tüm Kategoriler" butonu + geniş arama kutusu + sarı arama butonu */}
-            <div className="flex-1 min-w-0 flex items-stretch max-w-3xl mx-auto">
-              <AllCategoriesMenu navGroups={navGroups} t={t} />
-              <div ref={desktopSearchRef} className="flex-1 min-w-0 relative">
-                <form onSubmit={handleSearch} className="relative flex">
-                  <Input
-                    type="text"
-                    placeholder={t('searchPlaceholder')}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    {...comboboxProps('search-suggestions-desktop')}
-                    className="flex-1 min-w-0 h-11 pl-4 pr-3 rounded-none border border-l-0 border-slate-200 bg-white focus:border-brand focus-visible:ring-0 focus-visible:ring-offset-0 text-sm transition-all placeholder:text-slate-400"
-                  />
-                  <button
-                    type="submit"
-                    className="h-11 w-14 shrink-0 flex items-center justify-center rounded-r-md bg-amber-400 hover:bg-amber-500 text-brand transition-colors"
-                    aria-label={t('searchPlaceholder')}
-                  >
-                    <Search className="w-5 h-5" />
-                  </button>
-                </form>
-                {renderSearchDropdown(undefined, 'search-suggestions-desktop')}
-              </div>
-            </div>
-            <div className="flex items-center gap-2 shrink-0">
+      <HeaderTopBar />
+
+      {/* ── Masaüstü: logo + arama + hesap / sepet ─────────────────────────── */}
+      <div className="hidden min-[1025px]:block bg-white shadow-[0_1px_0_#e3e8ee]">
+        <div className="flex items-center h-[101px] pt-6 px-6 gap-11 min-w-0 max-w-[1514px] mx-auto">
+          <Logo size="header" href="/" />
+          <div ref={desktopSearchRef} className="relative flex-1 min-w-0 max-w-[910px]">
+            {searchForm('search-suggestions-desktop')}
+            {renderSearchDropdown(undefined, 'search-suggestions-desktop')}
+          </div>
+          <div className="ml-auto w-[331px] flex items-center justify-end gap-8 shrink-0">
               {isAuthenticated && user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-11 px-3.5 gap-2 text-slate-700 hover:bg-white hover:text-ink rounded-full border border-slate-200/80 bg-white/90 shadow-[0_8px_20px_rgba(15,23,42,0.04)] transition-colors">
-                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                        <User className="w-4 h-4 text-slate-500" />
-                      </div>
-                      <div className="hidden xl:block text-left min-w-0">
-                        <p className="text-xs text-slate-500 font-medium leading-tight truncate">{t('myAccount')}</p>
-                        <p className="text-sm font-semibold text-ink leading-tight truncate max-w-[72px]">{user.name.split(' ')[0]}</p>
-                      </div>
-                      <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                    </Button>
+                    <button type="button" className="flex items-center gap-3 text-[#142b40] hover:text-[#0b2540] text-[13px] font-semibold whitespace-nowrap outline-none">
+                      <User className="w-[18px] h-[18px]" strokeWidth={1.75} />
+                      <span className="max-w-[120px] truncate">{user.name.split(' ')[0]}</span>
+                      <ChevronDown className="w-3.5 h-3.5 text-[#6b7c8f]" />
+                    </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" sideOffset={6} className="w-72 p-0 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
                     <div className="px-5 pt-5 pb-4 bg-slate-50/80">
@@ -417,89 +261,92 @@ export function HeaderInnerUI(props) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button asChild variant="ghost" className="h-11 px-3.5 gap-2 text-slate-700 hover:bg-white rounded-full border border-slate-200/80 bg-white/90 shadow-[0_8px_20px_rgba(15,23,42,0.04)] transition-colors">
-                  <Link href="/login">
-                    <User className="w-4 h-4 text-slate-500" />
-                    <div className="hidden xl:block text-left">
-                      <p className="text-xs text-slate-500 font-medium leading-tight">{t('login')}</p>
-                      <p className="text-sm font-semibold leading-tight">{t('orRegister')}</p>
-                    </div>
-                  </Link>
-                </Button>
-              )}
-              <Link href="/favorites" className="hidden sm:flex h-11 w-11 items-center justify-center text-slate-500 hover:text-brand hover:bg-white rounded-full border border-slate-200/80 bg-white/90 shadow-[0_8px_20px_rgba(15,23,42,0.04)] transition-colors shrink-0" aria-label={t('favorites')}>
-                <Heart className="w-4 h-4" />
-              </Link>
-              <Button asChild className="h-11 px-4 gap-2 bg-brand hover:bg-brand-hover text-white rounded-full transition-colors relative shrink-0 shadow-[0_14px_30px_rgba(127,29,29,0.18)]">
-                <Link href="/cart">
-                  <ShoppingCart className="w-4 h-4 shrink-0" />
-                  <div className="hidden xl:block text-left whitespace-nowrap">
-                    <p className="text-xs text-white/90 font-medium leading-tight">{t('cart')}</p>
-                    <p className="text-sm font-bold leading-tight">{cartTotalFormatted}</p>
-                  </div>
-                  {cartItemsCount > 0 && (
-                    <Badge className="absolute -top-0.5 -right-0.5 h-5 min-w-5 px-1.5 bg-white text-brand border border-brand/30 rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm">
-                      {cartItemsCount}
-                    </Badge>
-                  )}
+                <Link href="/login" className="flex items-center gap-3 text-[#142b40] hover:text-[#0b2540] text-[13px] font-semibold whitespace-nowrap">
+                  <User className="w-[18px] h-[18px]" strokeWidth={1.75} />
+                  Giriş Yap / Üye Ol
                 </Link>
-              </Button>
-            </div>
+              )}
+              {cartLink}
           </div>
         </div>
       </div>
-      {/* Şerit 2: Ana menü */}
-      <div className="relative hidden md:block bg-white border-b border-slate-100 shrink-0">
-        <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 min-w-0 overflow-x-hidden">
-          <nav className="flex items-center gap-0.5 h-[52px] min-w-0 overflow-hidden" aria-label="Ana menu">
-            <Link
-              href="/products"
-              className={`${desktopNavItemClass(pathname === '/products' && !currentCategory)} ${pathname === '/products' && !currentCategory ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-            >
-              <span className={desktopNavLabelClass}>{t('catNavAllProducts')}</span>
+
+      {/* ── Masaüstü: TÜM KATEGORİLER + kategori linkleri ─────────────────── */}
+      <div className="hidden min-[1025px]:block bg-white shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
+        <div className="flex items-center h-[65px] px-6 min-w-0 max-w-[1454px] mx-auto">
+          <AllCategoriesMenu navGroups={navGroups} t={t} />
+          <nav className="flex-1 min-w-0 flex items-center justify-evenly gap-1 overflow-hidden pl-4" aria-label="Ana menu">
+            <Link href="/products" className={navLinkClass(isAllProducts)}>
+              {t('catNavAllProducts')}
             </Link>
-            <div className="w-px h-5 bg-slate-200 mx-1 shrink-0" />
-            {buildDesktopNavGroups(navGroups, HEADER_NAV_GROUP_COUNT_COMPACT).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `md:${g.id}`, 'lg:hidden'))}
-            {buildDesktopNavGroups(navGroups, HEADER_NAV_GROUP_COUNT_MEDIUM).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `lg:${g.id}`, 'hidden lg:block xl:hidden'))}
-            {buildDesktopNavGroups(navGroups).map((g) => navDropdown(g.navLabelKey || g.labelKey, g.categories, g.href, g.id, `xl:${g.id}`, 'hidden xl:block'))}
-            <Link
-              href="/paketler"
-              className={`${desktopNavItemClass(pathname?.startsWith('/paketler'))} hidden xl:flex ${pathname?.startsWith('/paketler') ? 'bg-slate-100' : 'hover:bg-slate-100'}`}
-            >
-              <span className={desktopNavLabelClass}>{t('catGroupReadyPackages')}</span>
-            </Link>
-            <Link
-              href="/ges"
-              className="ml-auto shrink-0 hidden lg:inline-flex items-center gap-1.5 h-9 px-4 rounded-md bg-amber-400 hover:bg-amber-500 text-brand text-[13px] font-bold whitespace-nowrap transition-colors"
-            >
-              {t('catNavSolarQuote')}
-            </Link>
+            {navRowGroups.map((g) => (
+              <Link key={g.id} href={g.href} className={navLinkClass(pathname?.startsWith(g.href))}>
+                {t(g.navLabelKey || g.labelKey)}
+              </Link>
+            ))}
           </nav>
         </div>
       </div>
 
-      {/* Mobil: menü + logo + sepet (safe area wrapper'dan gelir) */}
-      <div className="md:hidden flex items-center justify-between min-h-[60px] h-[60px] px-4 gap-2 bg-white border-b border-slate-200/70 shrink-0">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setMobileMenuOpen(true)}
-          className="min-h-[44px] min-w-[44px] h-11 w-11 shrink-0 rounded-xl touch-manipulation text-slate-700 hover:bg-slate-100 hover:text-ink transition-colors"
-          aria-label={t('openMenu')}
-        >
-          <Menu className="w-5 h-5" />
-        </Button>
-        <div className="flex-1 flex justify-center min-w-0 py-1">
-          <Logo size="sm" href="/" />
+      {/* ── Mobil (≤900) ve tablet (901–1024): menü + logo + simgeler, kategori + arama, kategori hapları ── */}
+      <div className="min-[1025px]:hidden bg-white">
+        <div className="flex items-center h-[78px] min-[901px]:h-[85px] px-3.5 min-[901px]:px-6 gap-2">
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="w-8 min-[901px]:w-[22px] !min-w-0 !min-h-0 h-10 flex items-center justify-start text-[#14141a] touch-manipulation"
+            aria-label={t('openMenu')}
+          >
+            <Menu className="w-6 h-6" strokeWidth={1.75} />
+          </button>
+          <Logo size="headerSm" href="/" />
+          <div className="ml-auto flex items-center gap-1">
+            <button
+              type="button"
+              onClick={() => mobileSearchInputRef.current?.focus()}
+              className="w-10 max-[359px]:w-8 h-10 flex items-center justify-center text-[#14141a] touch-manipulation"
+              aria-label={t('searchPlaceholder')}
+            >
+              <Search className="w-[22px] h-[22px]" strokeWidth={1.75} />
+            </button>
+            <Link
+              href={isAuthenticated ? '/profile' : '/login'}
+              className="w-10 max-[359px]:w-8 h-10 flex items-center justify-center text-[#14141a] touch-manipulation"
+              aria-label={isAuthenticated ? t('myAccount') : t('login')}
+            >
+              <User className="w-[22px] h-[22px]" strokeWidth={1.75} />
+            </Link>
+            <div className="w-10 max-[359px]:w-8 h-10 flex items-center justify-center">{cartLink}</div>
+          </div>
         </div>
-        <Link href="/cart" className="relative flex min-h-[44px] min-w-[44px] h-11 w-11 items-center justify-center shrink-0 rounded-xl hover:bg-slate-100 text-slate-700 transition-colors touch-manipulation" aria-label={t('cartAria')}>
-          <ShoppingCart className="w-5 h-5" />
-          {cartItemsCount > 0 && (
-            <Badge className="absolute top-1 right-1 min-h-5 min-w-5 px-1.5 bg-brand text-white rounded-full text-[11px] font-bold flex items-center justify-center border-0 shadow-sm">
-              {cartItemsCount}
-            </Badge>
-          )}
-        </Link>
+        <div className="border-t border-[#e3e8ee] px-3.5 min-[901px]:px-6 pt-2.5 pb-[13px] min-[901px]:pb-[15px] space-y-3 min-[901px]:space-y-5 shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
+          <div className="flex items-stretch gap-2.5 min-[901px]:gap-[18px]">
+            <div className="hidden min-[901px]:block">
+              <AllCategoriesMenu navGroups={navGroups} t={t} />
+            </div>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="min-[901px]:hidden shrink-0 flex items-center justify-center gap-2 h-[42px] !min-h-0 w-[66px] self-center rounded-[10px] bg-[#0b2540] text-white touch-manipulation"
+              aria-label={t('catNavAllCategories')}
+            >
+              <CategoryGridIcon className="w-[13px] h-[13px]" />
+              <ChevronDown className="w-4 h-4" aria-hidden />
+            </button>
+            <div ref={mobileSearchRef} className="relative flex-1 min-w-0">
+              {searchForm('search-suggestions-mobile', mobileSearchInputRef)}
+              {renderSearchDropdown(undefined, 'search-suggestions-mobile')}
+            </div>
+          </div>
+          <nav className="flex gap-2 overflow-x-auto -mx-3.5 px-3.5 min-[901px]:-mx-6 min-[901px]:px-6 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Kategoriler">
+            <Link href="/products" className={pillClass(isAllProducts)}>{t('catNavAllProducts')}</Link>
+            {navGroups.map((g) => (
+              <Link key={g.id} href={g.href} className={pillClass(pathname?.startsWith(g.href))}>
+                {t(g.navLabelKey || g.labelKey)}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
 
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>

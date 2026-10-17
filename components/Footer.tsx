@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import { Logo } from './Logo'
 import { PaymentBadges } from './PaymentBadges'
+import { LocaleCurrencySwitcher } from './LocaleCurrencySwitcher'
 import { SELLER } from '@/lib/legal/company'
 import { whatsappHref, WhatsAppIcon } from '@/components/WhatsAppButton'
 import { legalHref } from '@/lib/legal/documents'
@@ -191,6 +192,7 @@ export function Footer() {
             )}
           </div>
           <PaymentBadges className="justify-center" />
+          <LocaleCurrencySwitcher />
           <nav className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-xs">
             {[
               { href: legalHref('gizlilik-ve-cerez-politikasi'), labelKey: 'privacy' as const },
