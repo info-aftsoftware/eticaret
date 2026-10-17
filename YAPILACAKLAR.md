@@ -55,6 +55,15 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [ ] **Canlıda eksik ortam değişkenleri** (hPanel > Node.js > Ortam değişkenleri): `CRON_SECRET`, `ADMIN_EMAIL`, `POS_BANK_NAME` / `POS_CLIENT_ID` / `POS_STORE_KEY` / `POS_GATEWAY_URL` (banka gelince), `ADMIN_TOTP_SECRET` (önerilir), `BACKUP_DIR`, isteğe bağlı `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_ETBIS_VERIFY_URL`, `NEXT_PUBLIC_SITE_URL`. Eskiden kalan `NEXTAUTH_URL` / `NEXTAUTH_SECRET` artık kullanılmıyor.
 - [ ] **Cron görevi yok** (hesapta yalnızca başka bir siteye ait PHP görevi var): `expire-orders` (6 saatte bir) ve `backup` (günde bir) kurulmalı — önce `CRON_SECRET` girilmeli.
 
+### ✅ Faz 10 — güvenlik ve test ortamı (16.10.2026)
+
+- [x] **Bağımlılık güvenliği:** Next.js 14.2.35 → 15.5.28 (kritik RCE, SSRF, DoS açıkları), React 19, firebase 12, firebase-admin 14, nodemailer 10, next-intl 4.14, @react-pdf/renderer 4, lucide-react 0.577, sharp 0.35.5; kullanılmayan next-auth, @auth/prisma-adapter, bcryptjs, pdfkit, papaparse, @tanstack/react-table, cheerio kaldırıldı; dolaylı paketler `overrides` ile (postcss, postcss-selector-parser, deepmerge-ts, @grpc/grpc-js). npm audit: 81 paket (7 kritik) → **0 kritik, 0 orta/düşük; 7 yüksek** kaldı.
+- [ ] **Kalan 7 yüksek açık:** hepsi `braces` paketinden (yaması henüz yayımlanmadı) ve yalnızca derleme araçlarında (Tailwind 3 dosya izleyicisi, ESLint Next eklentisi). Yama çıkınca `npm update`; ya da Tailwind 4'e geçiş + ESLint'i derlemeden çıkarma ile sıfırlanabilir.
+- [x] **Node.js 22+ zorunlu** (`package.json` engines; firebase-admin 14). Hostinger derleme ayarında Node 22 seçili olmalı.
+- [x] **Test ortamı: https://nextfirststep.com** (geçici) — Hostinger'a eklendi, ortam değişkenleri yerel `.env.local`'dan + `DATABASE_URL=file:/home/u718952521/domains/nextfirststep.com/voltekno.db` (kalıcı), `NEXT_PUBLIC_SITE_URL=https://nextfirststep.com`, `NEXT_PUBLIC_NOINDEX=true` (arama motorlarına kapalı), yeni `CRON_SECRET`. MCP ile arşivden yayınlanıyor (`git archive HEAD`, `public_html_standalone/`, `docs/`, `.claude/` hariç).
+- [ ] **Test ortamında bilinmesi gerekenler:** e-postalar yerel ayardaki `info@bataryakit.com` / "Batarya Kit" adıyla gidiyor (SMTP_FROM); Firebase ile giriş için Firebase Console > Authentication > Yetkili alan adlarına `nextfirststep.com` eklenmeli; `ADMIN_TOKEN` zayıf — değiştirin ve `ADMIN_TOTP_SECRET` ile 2FA açın.
+- [ ] **voltekno.com'a geçiş:** Hostinger'daki voltekno.com uygulamasında `DATABASE_URL`'i mutlak yola alın (yukarıda), ortam değişkenlerini nextfirststep'teki gibi tamamlayın (`NEXT_PUBLIC_NOINDEX` olmadan), Node 22 seçin, yayınlayın; en son alan adının DNS'ini ikas'tan Hostinger'a çevirin.
+
 ### 🔴 P0 — Yayından önce (sizde)
 
 - [ ] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi.
