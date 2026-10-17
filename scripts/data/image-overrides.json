@@ -1,17 +1,1928 @@
 {
   "_aciklama": "Excel'deki görseli yanlış ürünü gösteren SKU'lar için doğru görseller. Dosyalar public/images/products/override/ altında; yeni görsel scripts/prepare-override-image.mjs ile hazırlanır. Import (scripts/import-ikas-excel.py) bu SKU'larda Excel görselleri yerine bunları kullanır.",
-  "DEYE-00402": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "5 kW trifaze on-grid; önceki görsel hibrit inverterdi" },
-  "DEYE-00403": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "8 kW" },
-  "DEYE-00404": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "10 kW" },
-  "DEYE-00405": { "images": ["deye-sun-3-15k-g06p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html", "note": "12 kW" },
-  "DEYE-00408": { "images": ["deye-sun-18-25k-g05.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun18-20-25kg04-1825kw-three-phase-2-mppt-237.html", "note": "25 kW" },
-  "DEYE-00409": { "images": ["deye-sun-30-36k-g04.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun30-33-36kg04-3036kw-three-phase-2-mppt.html", "note": "30 kW" },
-  "DEYE-00411": { "images": ["deye-sun-40-50k-g04.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html", "note": "40 kW" },
-  "DEYE-00412": { "images": ["deye-sun-40-50k-g04.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html", "note": "50 kW" },
-  "DEYE-00413": { "images": ["deye-sun-60-80k-g04p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html", "note": "60 kW" },
-  "DEYE-00414": { "images": ["deye-sun-60-80k-g04p3.webp"], "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html", "note": "80 kW" },
-  "TOMMAT-KSAMTLTBN256V512V-00203": { "images": ["tommatech-moduler-batarya-alt-taban.webp"], "source": "https://cw-enerji.com/tr/urun/tommatech-modular-series-256-512v-lityum-batarya-metal-alt-taban-1384.html", "note": "önceki görsel sokak lambasıydı" },
-  "TOMMAT-SPITT0222MF-00286": { "images": ["tommatech-spi-2-2kw-monofaze.webp"], "source": "https://cw-enerji.com/en/product/tommatech-22-kw-450vdc-1-phase220vac-irrigation-pump-inverter-591.html", "note": "önceki görsel hibrit inverter gövdesiydi" },
-  "APEX-00528": { "images": ["apex-80a-ats-1.webp", "apex-80a-ats-2.webp"], "source": "https://electrozirve.com/apex-80a-transfer-switch/", "note": "Apex distribütörü; önceki görseller dalgıç pompa setiydi" },
-  "VICTRO-ASS070200100-02116": { "images": ["victron-ass070200100.webp"], "source": "https://www.victronenergy.com/cables/cable-for-smart-bms-cl-12-100-multiplus", "note": "önceki görsel BMS cihazı / başka kabloydu" }
+  "DEYE-00402": {
+    "images": [
+      "deye-sun-3-15k-g06p3.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "5 kW trifaze on-grid; önceki görsel hibrit inverterdi"
+  },
+  "DEYE-00403": {
+    "images": [
+      "deye-sun-3-15k-g06p3.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "8 kW"
+  },
+  "DEYE-00404": {
+    "images": [
+      "deye-sun-3-15k-g06p3.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "10 kW"
+  },
+  "DEYE-00405": {
+    "images": [
+      "deye-sun-3-15k-g06p3.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "12 kW"
+  },
+  "DEYE-00408": {
+    "images": [
+      "deye-sun-18-25k-g05.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun18-20-25kg04-1825kw-three-phase-2-mppt-237.html",
+    "note": "25 kW"
+  },
+  "DEYE-00409": {
+    "images": [
+      "deye-sun-30-36k-g04.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun30-33-36kg04-3036kw-three-phase-2-mppt.html",
+    "note": "30 kW"
+  },
+  "DEYE-00411": {
+    "images": [
+      "deye-sun-40-50k-g04.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html",
+    "note": "40 kW"
+  },
+  "DEYE-00412": {
+    "images": [
+      "deye-sun-40-50k-g04.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun40-45-50kg04-4050kw-three-phase-4-mppt.html",
+    "note": "50 kW"
+  },
+  "DEYE-00413": {
+    "images": [
+      "deye-sun-60-80k-g04p3.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html",
+    "note": "60 kW"
+  },
+  "DEYE-00414": {
+    "images": [
+      "deye-sun-60-80k-g04p3.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun60-70-75-80kg04p3euam4-6080kw-three-phase-4-mppt.html",
+    "note": "80 kW"
+  },
+  "TOMMAT-KSAMTLTBN256V512V-00203": {
+    "images": [
+      "tommatech-moduler-batarya-alt-taban.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-modular-series-256-512v-lityum-batarya-metal-alt-taban-1384.html",
+    "note": "önceki görsel sokak lambasıydı"
+  },
+  "TOMMAT-SPITT0222MF-00286": {
+    "images": [
+      "tommatech-spi-2-2kw-monofaze.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-22-kw-450vdc-1-phase220vac-irrigation-pump-inverter-591.html",
+    "note": "önceki görsel hibrit inverter gövdesiydi"
+  },
+  "APEX-00528": {
+    "images": [
+      "apex-80a-ats-1.webp",
+      "apex-80a-ats-2.webp"
+    ],
+    "source": "https://electrozirve.com/apex-80a-transfer-switch/",
+    "note": "Apex distribütörü; önceki görseller dalgıç pompa setiydi"
+  },
+  "VICTRO-ASS070200100-02116": {
+    "images": [
+      "victron-ass070200100.webp"
+    ],
+    "source": "https://www.victronenergy.com/cables/cable-for-smart-bms-cl-12-100-multiplus",
+    "note": "önceki görsel BMS cihazı / başka kabloydu"
+  },
+  "ELECTR-00496": {
+    "images": [
+      "diger-electr-00496-1.webp",
+      "diger-electr-00496-2.webp",
+      "diger-electr-00496-3.webp"
+    ],
+    "source": "https://electrozirve.com/urun/electrozirve-mc2450-50a-mppt-solar-charge-controller-12-24v-ekransiz/",
+    "note": "Resmi beyaz zeminli MC2450 fotoğrafları (ön, alt klemens, arka soğutucu); kaynak 800x533, kare kırpıldı (533-623 px). Minimumda ama keskin."
+  },
+  "ELECTR-00499": {
+    "images": [
+      "diger-electr-00499-1.webp",
+      "diger-electr-00499-2.webp",
+      "diger-electr-00499-3.webp"
+    ],
+    "source": "https://electrozirve.com/urun/electrozirve-mc48100n25-100a-mppt-solar-charge-controlller-12-24-36-48v-ekranli/",
+    "note": "Resmi beyaz zeminli MC48100N25 fotoğrafları (ön, açılı, alt klemens); 533-707 px kare."
+  },
+  "ELECTR-00519": {
+    "images": [
+      "diger-electr-00519-1.webp",
+      "diger-electr-00519-2.webp"
+    ],
+    "source": "https://electrozirve.com/urun/30a-dc-dc-charger-aku-sarj-kontrolekran/",
+    "note": "DİKKAT: mevcut görsel yanlış ürün (üzerinde \"30A ÇİFT YÖNLÜ\" yazıyor). Yeni görseller \"30A TEK YÖNLÜ\" etiketli resmi fotoğraflar (937 ve 1126 px)."
+  },
+  "ELECTR-00520": {
+    "images": [
+      "diger-electr-00520-1.webp",
+      "diger-electr-00520-2.webp",
+      "diger-electr-00520-3.webp",
+      "diger-electr-00520-4.webp"
+    ],
+    "source": "https://electrozirve.com/urun/30a-dc-dc-bidirection-charger-aku-sarj-kontrolekran/",
+    "note": "Resmi \"30A ÇİFT YÖNLÜ\" fotoğrafları: ekranlı set, ön, iki açılı görünüm (937-1104 px)."
+  },
+  "APEX-00444": {
+    "images": [
+      "diger-apex-00444-1.webp",
+      "diger-apex-00444-2.webp",
+      "diger-apex-00444-3.webp"
+    ],
+    "source": "",
+    "note": "Kırpık ana görsel çıkarıldı; sorunsuz 3 mevcut görsel tutuldu. Resmi sitede APX 8.5 Pro yok (yalnız APX6200 PRO)."
+  },
+  "APEX-00466": {
+    "images": [
+      "diger-apex-00466-1.webp",
+      "diger-apex-00466-2.webp",
+      "diger-apex-00466-3.webp",
+      "diger-apex-00466-4.webp"
+    ],
+    "source": "https://electrozirve.com/urun/fs2000-12-apex-2000w-tam-sinus-inverter-12v/",
+    "note": "Resmi FS2000-12 sayfası; etikette \"FS2000D\" yazdığı doğrulandı. Ön, açılı, yan, DC klemens (576-758 px)."
+  },
+  "APEX-00509": {
+    "images": [
+      "diger-apex-00509-1.webp",
+      "diger-apex-00509-2.webp",
+      "diger-apex-00509-3.webp",
+      "diger-apex-00509-4.webp"
+    ],
+    "source": "https://electrozirve.com/urun/apx1280-apex-12v-80a-smart-aku-sarj-cihazi/",
+    "note": "Resmi APX1280 fotoğrafları (etikette 12V-80A APX1280), 4 açı, 662-706 px."
+  },
+  "EXELON-EXS420024-00530": {
+    "images": [
+      "diger-exelon-exs420024-00530-1.webp",
+      "diger-exelon-exs420024-00530-2.webp",
+      "diger-exelon-exs420024-00530-3.webp"
+    ],
+    "source": "https://exelon.com.tr/magaza/?product=exelon-exs-4200-24-akilli-invertor",
+    "note": "Exelon resmi EXS-4200/24 sayfasındaki render görseller, 1600 px, filigransız."
+  },
+  "EXELON-00547": {
+    "images": [
+      "diger-exelon-00547-1.webp",
+      "diger-exelon-00547-2.webp",
+      "diger-exelon-00547-3.webp"
+    ],
+    "source": "https://exelon.com.tr/magaza/?product=exelon-xtreme-12v-100ah-solar-jel-aku",
+    "note": "Resmi render, etikette 12V 100AH; 1600 px."
+  },
+  "EXELON-00548": {
+    "images": [
+      "diger-exelon-00548-1.webp",
+      "diger-exelon-00548-2.webp",
+      "diger-exelon-00548-3.webp"
+    ],
+    "source": "https://exelon.com.tr/magaza/?product=exelon-xtreme-12v-150ah-solar-jel-aku",
+    "note": "Resmi render, etikette 12V 150AH; 1600 px."
+  },
+  "EXELON-00549": {
+    "images": [
+      "diger-exelon-00549-1.webp",
+      "diger-exelon-00549-2.webp",
+      "diger-exelon-00549-3.webp"
+    ],
+    "source": "https://exelon.com.tr/magaza/?product=exelon-xtreme-12v-200ah-solar-jel-aku",
+    "note": "Resmi render, etikette 12V 200AH; 1600 px."
+  },
+  "MEXXSU-RG06018MPMX005-00809": {
+    "images": [
+      "diger-mexxsu-rg06018mpmx005-00809-1.webp",
+      "diger-mexxsu-rg06018mpmx005-00809-2.webp",
+      "diger-mexxsu-rg06018mpmx005-00809-3.webp",
+      "diger-mexxsu-rg06018mpmx005-00809-4.webp"
+    ],
+    "source": "https://www.mexxsun.com/tr/urun/mpk8-60a-mppt-12-24-48v-3111",
+    "note": "Mexxsun resmi 6000x4000 orijinaller (250V rozetsiz): ön, açılı, klemens, kutu (MPPT-60A); 1600 px kare."
+  },
+  "İSTABR-I500-00639": {
+    "images": [
+      "ruzgar-i-stabr-i500-00639-1.webp",
+      "ruzgar-i-stabr-i500-00639-2.webp",
+      "ruzgar-i-stabr-i500-00639-3.webp",
+      "ruzgar-i-stabr-i500-00639-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/i500-12V-24V-Ruzgar-Turbini-iSTA-BREEZE",
+    "note": "Resmi TR sitesi (istabreeze.com.tr) i-500 sayfasının orijinal 1500px fotoğrafları; siyah kanatlı i-500, beyaz zemin. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-I700-00641": {
+    "images": [
+      "ruzgar-i-stabr-i700-00641-1.webp",
+      "ruzgar-i-stabr-i700-00641-2.webp",
+      "ruzgar-i-stabr-i700-00641-3.webp",
+      "ruzgar-i-stabr-i700-00641-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/i700-12V-24V-48V-IstaBreeze-Ruzgar-Turbini",
+    "note": "Almanca metinli kolaj yerine resmi TR i-700 sayfasının beyaz zeminli 1500px ürün fotoğrafları. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-I1000-00642": {
+    "images": [
+      "ruzgar-i-stabr-i1000-00642-1.webp",
+      "ruzgar-i-stabr-i1000-00642-2.webp",
+      "ruzgar-i-stabr-i1000-00642-3.webp",
+      "ruzgar-i-stabr-i1000-00642-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/IstaBreeze-i1000-24V-48V-Ruzgar-Turbini",
+    "note": "Resmi TR i-1000 sayfası orijinalleri. Not: resmi site i-1000/i-1500/i-2000 için aynı fotoğraf setini kullanıyor. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-I1500-00643": {
+    "images": [
+      "ruzgar-i-stabr-i1500-00643-1.webp",
+      "ruzgar-i-stabr-i1500-00643-2.webp",
+      "ruzgar-i-stabr-i1500-00643-3.webp",
+      "ruzgar-i-stabr-i1500-00643-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/IstaBreeze-i1500-24V-48V-Ruzgar-Turbini",
+    "note": "Kolaj yerine resmi TR i-1500 sayfası orijinalleri. Not: i-1000/i-2000 ile aynı resmi fotoğraf seti. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-I2000-00644": {
+    "images": [
+      "ruzgar-i-stabr-i2000-00644-1.webp",
+      "ruzgar-i-stabr-i2000-00644-2.webp",
+      "ruzgar-i-stabr-i2000-00644-3.webp",
+      "ruzgar-i-stabr-i2000-00644-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/i-2000-24V-48V-iSTA-Breeze-ruzgar-turbini-jeneratoru-2KW",
+    "note": "Resmi TR i-2000 sayfası orijinalleri. Not: i-1000/i-1500 ile aynı resmi fotoğraf seti. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00645": {
+    "images": [
+      "ruzgar-i-stabr-00645-1.webp",
+      "ruzgar-i-stabr-00645-2.webp",
+      "ruzgar-i-stabr-00645-3.webp",
+      "ruzgar-i-stabr-00645-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/i1500-24V-48V-Korumali-Ruzgar-Turbini-IstaBreeze%C2%AE",
+    "note": "Resmi TR 'Windsafe 1500W' sayfası (siyah kanatlı korumalı model) orijinalleri. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00646": {
+    "images": [
+      "ruzgar-i-stabr-00646-1.webp",
+      "ruzgar-i-stabr-00646-2.webp",
+      "ruzgar-i-stabr-00646-3.webp",
+      "ruzgar-i-stabr-00646-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini/Ruzgar-Turbini-Windsafe-Korumali-iSTA-BREEZE",
+    "note": "Kolaj yerine resmi TR 'Windsafe 2000W' sayfası orijinalleri. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00647": {
+    "images": [
+      "ruzgar-i-stabr-00647-1.webp",
+      "ruzgar-i-stabr-00647-2.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-Turbini?product_id=220 | https://istabreeze.store/products/istabreeze-heli2-offgrid-netz",
+    "note": "Heli 2.0 (gövdede HELI 2.0 yazısı doğrulandı): TR sayfası 1700px + resmi DE mağaza fotoğrafı. [1700x1728, 1254x1254]"
+  },
+  "İSTABR-00648": {
+    "images": [
+      "ruzgar-i-stabr-00648-1.webp",
+      "ruzgar-i-stabr-00648-2.webp",
+      "ruzgar-i-stabr-00648-3.webp"
+    ],
+    "source": "https://istabreeze.store/products/istabreeze-heli4-offgrid-netz",
+    "note": "Kolaj yerine resmi DE mağazasının Heli 4.0 fotoğrafları (gövdede HELI 4.0 yazısı doğrulandı); TR sayfasındaki görseller yalnızca 600px. [1254x1254, 2000x1717, 2000x1617]"
+  },
+  "İSTABR-00649": {
+    "images": [
+      "ruzgar-i-stabr-00649-1.webp",
+      "ruzgar-i-stabr-00649-2.webp",
+      "ruzgar-i-stabr-00649-3.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Kontrol-cihazlari/650W-12V-24V-Hibrit-Sarj-Kontrol-Cihazi-iSTA-BREEZE | https://istabreeze.store/products/hybrid-laderegler-ihcc650",
+    "note": "Resmi TR 650 sayfası 1500px + DE mağazası etiket görünümü (650W 12-24V yazısı). [1500x1500, 1500x1500, 1254x1254]"
+  },
+  "İSTABR-00650": {
+    "images": [
+      "ruzgar-i-stabr-00650-1.webp",
+      "ruzgar-i-stabr-00650-2.webp",
+      "ruzgar-i-stabr-00650-3.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Kontrol-cihazlari/850W-12V-24V-48V-Hibrit-Sarj-Kontrol-Cihazi-iSTA-BREEZE",
+    "note": "Resmi TR 850 sayfası orijinalleri; etikette 700W rüzgar + 150W güneş (=850W) doğrulandı. [1500x1500, 1500x1500, 1200x1200]"
+  },
+  "İSTABR-00653": {
+    "images": [
+      "ruzgar-i-stabr-00653-1.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Kontrol-cihazlari/4KW-48V-sarj-kontrol-iSTA-BREEZE",
+    "note": "Resmi TR 'Pro Wind 48V/4000W' sayfasının orijinali (mevcut görselin 1280px hali; mavi kutu + 3 dump load). Sitede başka görsel yok. [1280x1037]"
+  },
+  "İSTABR-00655": {
+    "images": [
+      "ruzgar-i-stabr-00655-1.webp",
+      "ruzgar-i-stabr-00655-2.webp",
+      "ruzgar-i-stabr-00655-3.webp"
+    ],
+    "source": "https://istabreeze.store/products/mastturm-zubehoer-15kg-windgenerator",
+    "note": "Resmi DE mağazasının 15 kg direk ürününün fotoğrafları. Not: resmi kaynaklar 15 kg ve 40 kg direk için aynı boru/plaka fotoğraflarını kullanıyor; 00656 ile benzer kareler. [1500x1500, 1254x1254, 1500x1500]"
+  },
+  "İSTABR-00656": {
+    "images": [
+      "ruzgar-i-stabr-00656-1.webp",
+      "ruzgar-i-stabr-00656-2.webp",
+      "ruzgar-i-stabr-00656-3.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Direk-setleri/Ruzgar-turbini-icin-direk-seti-4-metre-45-kg-tasima-kapasiteli | https://istabreeze.store/products/mast-zubehoer-40kg-angebot",
+    "note": "Resmi TR direk seti sayfası (4 m, 45 kg) 1500px + DE mağazasının 40 kg direk ürünü fotoğrafları. 15 kg setle benzer resmi fotoğraflar. [1500x1500, 1254x1254, 1500x1500]"
+  },
+  "İSTABR-00658": {
+    "images": [
+      "ruzgar-i-stabr-00658-1.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Direk-setleri?product_id=227",
+    "note": "Resmi TR 'Direk Uzatma Ek Boru 1 Metre' sayfasının orijinali (1280px). İnce uzun boru olduğu için kanvas doğal olarak boş görünüyor; sitede alternatif yok. [1280x1249]"
+  },
+  "İSTABR-00659": {
+    "images": [
+      "ruzgar-i-stabr-00659-1.webp",
+      "ruzgar-i-stabr-00659-2.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Direk-setleri/Mekanik-ses-dusurucu",
+    "note": "Resmi TR 'Amortisör (Titreşim Sönümleyici)' sayfası 1500px foto + ölçü çizimi. [1500x1500, 1500x1500]"
+  },
+  "İSTABR-00660": {
+    "images": [
+      "ruzgar-i-stabr-00660-1.webp",
+      "ruzgar-i-stabr-00660-2.webp",
+      "ruzgar-i-stabr-00660-3.webp",
+      "ruzgar-i-stabr-00660-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Alternator?product_id=90",
+    "note": "Resmi TR G-500 alternatör sayfası 1500px orijinalleri. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00662": {
+    "images": [
+      "ruzgar-i-stabr-00662-1.webp",
+      "ruzgar-i-stabr-00662-2.webp",
+      "ruzgar-i-stabr-00662-3.webp",
+      "ruzgar-i-stabr-00662-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Alternator/iSTABREEZE-Alternator-G-1000-24-48V",
+    "note": "Resmi TR G-1000 alternatör sayfası 1500px orijinalleri (G-1500/G-2000 ile çok benzer resmi fotoğraflar). [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00663": {
+    "images": [
+      "ruzgar-i-stabr-00663-1.webp",
+      "ruzgar-i-stabr-00663-2.webp",
+      "ruzgar-i-stabr-00663-3.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Alternator/Alternator-G-1500-24-48V",
+    "note": "Resmi TR G-1500 alternatör sayfası 1500px orijinalleri (sayfada 3 görsel). [1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00664": {
+    "images": [
+      "ruzgar-i-stabr-00664-1.webp",
+      "ruzgar-i-stabr-00664-2.webp",
+      "ruzgar-i-stabr-00664-3.webp",
+      "ruzgar-i-stabr-00664-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Alternator/istabreeze-Alternator-G-2000-48V",
+    "note": "Resmi TR G-2000 alternatör sayfası 1500px orijinalleri. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00665": {
+    "images": [
+      "ruzgar-i-stabr-00665-1.webp",
+      "ruzgar-i-stabr-00665-2.webp",
+      "ruzgar-i-stabr-00665-3.webp",
+      "ruzgar-i-stabr-00665-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Alternator/iSTA-Breeze-2000-48V-Alternator-Heli2-Offgride-d%C3%BC%C5%9F%C3%BCkdevir",
+    "note": "Resmi TR 'Heli 2.0 Alternatör' sayfası 1500px orijinalleri. [1500x1500, 1500x1500, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00666": {
+    "images": [
+      "ruzgar-i-stabr-00666-1.webp",
+      "ruzgar-i-stabr-00666-2.webp",
+      "ruzgar-i-stabr-00666-3.webp",
+      "ruzgar-i-stabr-00666-4.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Alternator/iSTA-Breeze-4000G-48V-Alternator-Heli4-Turbin-icin",
+    "note": "Resmi TR 'Heli 4.0 Alternatör' sayfası orijinalleri. [1500x1500, 991x1010, 1500x1500, 1500x1500]"
+  },
+  "İSTABR-00667": {
+    "images": [
+      "ruzgar-i-stabr-00667-1.webp",
+      "ruzgar-i-stabr-00667-2.webp"
+    ],
+    "source": "https://istabreeze.store/products/50cm-rotorblaetter-micro-wind",
+    "note": "Bulanık görseller yerine resmi DE mağazasının 50 cm kanat ürününden siyah ve beyaz 3'lü set fotoğrafları (1296px kısa kenar). [1944x1296, 1880x1296]"
+  },
+  "İSTABR-00668": {
+    "images": [
+      "ruzgar-i-stabr-00668-1.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-turbin-kanatlari?product_id=223",
+    "note": "Resmi TR '56 cm Karbon Kanat 3'lü set' sayfası orijinali (900x874). Sayfadaki ikinci görsel aynı fotoğraf. [900x874]"
+  },
+  "İSTABR-00669": {
+    "images": [
+      "ruzgar-i-stabr-00669-1.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-turbin-kanatlari?product_id=221",
+    "note": "Resmi TR '57 cm Kompozit Kanat 3'lü Set' sayfası orijinali (825x825); sayfadaki tek görsel. [825x825]"
+  },
+  "İSTABR-00670": {
+    "images": [
+      "ruzgar-i-stabr-00670-1.webp",
+      "ruzgar-i-stabr-00670-2.webp",
+      "ruzgar-i-stabr-00670-3.webp"
+    ],
+    "source": "https://istabreeze.store/products/60cm-highperf-rotorblaetter-litzenschutz | https://www.istabreeze.com.tr/online/Ruzgar-turbin-kanatlari/3-adet-performans-kanat-60cm-marin-i-500-iSTA-Breeze-ruzgar-turbini-jeneratoru",
+    "note": "60 cm siyah (DE mağazası 1368x912) + beyaz (TR orijinali 1000px) + ölçü çizimi (DE). [1368x912, 1000x1000, 1056x738]"
+  },
+  "İSTABR-00672": {
+    "images": [
+      "ruzgar-i-stabr-00672-1.webp",
+      "ruzgar-i-stabr-00672-2.webp",
+      "ruzgar-i-stabr-00672-3.webp"
+    ],
+    "source": "https://istabreeze.store/products/107cm-rotorblaetter-highperf",
+    "note": "107 cm siyah ve beyaz 3'lü set + ölçü çizimi, resmi DE mağazası (1692/1716px). [1824x1692, 1716x1780, 1600x977]"
+  },
+  "İSTABR-00671": {
+    "images": [
+      "ruzgar-i-stabr-00671-1.webp",
+      "ruzgar-i-stabr-00671-2.webp"
+    ],
+    "source": "https://istabreeze.store/products/90cm-highperf-rotorblaetter | https://www.istabreeze.com.tr/online/Ruzgar-turbin-kanatlari?product_id=216",
+    "note": "90 cm beyaz 3'lü set; eski setteki siyah kanat görseli (yanlış renk) çıkarıldı. DE mağazası + TR orijinali. [1231x1277, 850x1332]"
+  },
+  "İSTABR-00673": {
+    "images": [
+      "ruzgar-i-stabr-00673-1.webp",
+      "ruzgar-i-stabr-00673-2.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-turbini-yedek-parca/Burun-i-500-iSTA-Breeze-Ruzgar-turbini-jeneratoru | https://istabreeze.store/products/kleine-nase-fur-windkraftanlage-ista-breeze",
+    "note": "Resmi TR '500w Modelleri İçin Burun' orijinali (858x738) + DE mağazası 1600px foto. [858x738, 1600x1066]"
+  },
+  "İSTABR-00674": {
+    "images": [
+      "ruzgar-i-stabr-00674-1.webp",
+      "ruzgar-i-stabr-00674-2.webp"
+    ],
+    "source": "https://istabreeze.store/products/grosse-nase-fur-windkraftanlage-ista-breeze",
+    "note": "Resmi DE mağazası '3-Flügel Nase (700W-2000W)' fotoğrafları (1254px / 1368x912). [1254x1254, 1368x912]"
+  },
+  "İSTABR-00675": {
+    "images": [
+      "ruzgar-i-stabr-00675-1.webp",
+      "ruzgar-i-stabr-00675-2.webp"
+    ],
+    "source": "https://istabreeze.store/products/5er-nase-istabreeze®-repellerblatter-windrad-windgenerator",
+    "note": "DÜZELTME: mevcut görsel 3 kollu kubbe burundu (00674 ile aynı) - yanlış parça. Resmi DE '5er Nase' / TR '5 Kollu Burun' ürünündeki 5 kollu beyaz burun ile değiştirildi. [1254x1254, 1890x1417]"
+  },
+  "İSTABR-00676": {
+    "images": [
+      "ruzgar-i-stabr-00676-1.webp",
+      "ruzgar-i-stabr-00676-2.webp"
+    ],
+    "source": "https://istabreeze.store/products/ersatzteile-fur-windkraftanlage | https://www.istabreeze.com.tr/online/Ruzgar-turbini-yedek-parca/700w-ve-2000w-aras%C4%B1-%C3%BCr%C3%BCnler-i%C3%A7in-kuyruk",
+    "note": "Resmi DE mağazası kuyruk fotoğrafı (1254px) + resmi TR '700w-2000w Kuyruk' orijinali (899x965). [1254x1254, 899x965]"
+  },
+  "İSTABR-00677": {
+    "images": [
+      "ruzgar-i-stabr-00677-1.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-turbini-yedek-parca/i700-i2000-kuyruk",
+    "note": "Resmi TR 'İ-700 Kuyruk Borusu' orijinali 640x142; ölçeklenmeden beyaz zeminle 640x640 kareye tamamlandı. Daha büyük resmi görsel yok. [640x640]"
+  },
+  "İSTABR-00678": {
+    "images": [
+      "ruzgar-i-stabr-00678-1.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-turbini-yedek-parca?product_id=229",
+    "note": "Resmi TR 'İ-1000/İ-2000 Kuyruk Borusu' orijinali 640x132; ölçeklenmeden beyaz zeminle 640x640 kareye tamamlandı. Daha büyük resmi görsel yok. [640x640]"
+  },
+  "İSTABR-00679": {
+    "images": [
+      "ruzgar-i-stabr-00679-1.webp",
+      "ruzgar-i-stabr-00679-2.webp",
+      "ruzgar-i-stabr-00679-3.webp"
+    ],
+    "source": "https://www.istabreeze.com.tr/online/Ruzgar-turbini-yedek-parca/Rotor-kanatlari-icin-hub | https://istabreeze.store/products/windblatt-aluminium-nabe-fur-300w-500w-windkraftanlage",
+    "note": "Resmi TR '500w Modelleri İçin Kanat Flanşı' orijinali 1600px + DE mağazası 'Windblatt Aluminium Nabe' fotoğrafları. [1600x1302, 1254x1254, 1600x1302]"
+  },
+  "İSTABR-00681": {
+    "images": [
+      "ruzgar-i-stabr-00681-1.webp",
+      "ruzgar-i-stabr-00681-2.webp"
+    ],
+    "source": "https://istabreeze.store/products/5er-nabe-fur-windrad-flugel-windgenerator-windturbine-reppeler-istabreeze®",
+    "note": "Resmi DE mağazası '5er Nabe' fotoğrafları (1254px / 1157x1280). [1254x1254, 1157x1280]"
+  },
+  "ALTECH-00384": {
+    "images": [
+      "ruzgar-altech-00384-1.webp",
+      "ruzgar-altech-00384-2.webp",
+      "ruzgar-altech-00384-3.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/boreas-2000-2-kw-yatay-ruzgar-turbini",
+    "note": "Resmi Altech sitesi (altechturbine.com) Boreas 2000 renderları (kuyrukta 'BOREAS 2000 / 2000 W' doğrulandı); şeffaf PNG beyaza düzleştirildi. 3. görsel stüdyo sahnesi (gri zemin). [1920x1920, 1920x1920, 1920x1920]"
+  },
+  "ALTECH-00385": {
+    "images": [
+      "ruzgar-altech-00385-1.webp",
+      "ruzgar-altech-00385-2.webp",
+      "ruzgar-altech-00385-3.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/boreas-2000-2-kw-yatay-ruzgar-turbini",
+    "note": "Boreas 2000 resmi renderları (24V/48V aynı ürün sayfası); 00384 ile aynı set. [1920x1920, 1920x1920, 1920x1920]"
+  },
+  "ALTECH-00387": {
+    "images": [
+      "ruzgar-altech-00387-1.webp",
+      "ruzgar-altech-00387-2.webp",
+      "ruzgar-altech-00387-3.webp",
+      "ruzgar-altech-00387-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/boreas-4000-4-kw-yatay-ruzgar-turbini",
+    "note": "Resmi Altech Boreas 4000 renderları ('BOREAS 4000 / 4000 W' doğrulandı). [1920x1920, 1920x1920, 1920x1920, 1920x1920]"
+  },
+  "ALTECH-00388": {
+    "images": [
+      "ruzgar-altech-00388-1.webp",
+      "ruzgar-altech-00388-2.webp",
+      "ruzgar-altech-00388-3.webp",
+      "ruzgar-altech-00388-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/boreas-4000-4-kw-yatay-ruzgar-turbini",
+    "note": "Resmi Altech Boreas 4000 renderları; 00387 ile aynı set (24V/48V aynı sayfa). [1920x1920, 1920x1920, 1920x1920, 1920x1920]"
+  },
+  "ALTECH-00390": {
+    "images": [
+      "ruzgar-altech-00390-1.webp",
+      "ruzgar-altech-00390-2.webp",
+      "ruzgar-altech-00390-3.webp",
+      "ruzgar-altech-00390-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/boreas-6000-6-kw-yatay-ruzgar-turbini",
+    "note": "Resmi Altech Boreas 6000 renderları ('BOREAS 6000' doğrulandı). [1920x1920, 1920x1920, 1920x1920, 1920x1920]"
+  },
+  "ALTECH-00391": {
+    "images": [
+      "ruzgar-altech-00391-1.webp",
+      "ruzgar-altech-00391-2.webp",
+      "ruzgar-altech-00391-3.webp",
+      "ruzgar-altech-00391-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/kafes-tipi-r%C3%BCzgar-t%C3%BCrbini-montaj-dire%C4%9Fi",
+    "note": "Resmi Altech 'Kafes Tipi Rüzgar Türbini Montaj Direği' sayfası renderları (1920px). [1920x1920, 1920x1920, 1920x1637, 1920x1920]"
+  },
+  "ALTECH-AT3KWNOVA3000-00392": {
+    "images": [
+      "ruzgar-altech-at3kwnova3000-00392-1.webp",
+      "ruzgar-altech-at3kwnova3000-00392-2.webp",
+      "ruzgar-altech-at3kwnova3000-00392-3.webp",
+      "ruzgar-altech-at3kwnova3000-00392-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/altech-turbine-nova-3000-3-kw-r%C3%BCzgar-t%C3%BCrbini-yeni-%C3%BCr%C3%BCn",
+    "note": "Resmi Altech Nova 3000 renderları (kuyrukta NOVA 3000 / 3000W). [2000x1705, 2000x1705, 2000x1705, 2000x1705]"
+  },
+  "ALTECH-AT5KWNOVA5000-00393": {
+    "images": [
+      "ruzgar-altech-at5kwnova5000-00393-1.webp",
+      "ruzgar-altech-at5kwnova5000-00393-2.webp",
+      "ruzgar-altech-at5kwnova5000-00393-3.webp",
+      "ruzgar-altech-at5kwnova5000-00393-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/nova-5000-5-kw-r%C3%BCzgar-t%C3%BCrbini-yeni-%C3%BCr%C3%BCn",
+    "note": "Resmi Altech Nova 5000 renderları (NOVA 5000 / 5000W). [2000x1705, 2000x1705, 2000x1705, 2000x1705]"
+  },
+  "ALTECH-AT12KWNOVAPRE-00395": {
+    "images": [
+      "ruzgar-altech-at12kwnovapre-00395-1.webp",
+      "ruzgar-altech-at12kwnovapre-00395-2.webp",
+      "ruzgar-altech-at12kwnovapre-00395-3.webp",
+      "ruzgar-altech-at12kwnovapre-00395-4.webp"
+    ],
+    "source": "https://www.altechturbine.com/product-page/nova-premium-12-kw-r%C3%BCzgar-t%C3%BCrbini-yeni-%C3%BCr%C3%BCn-kopyas%C4%B1",
+    "note": "Resmi Altech Nova Premium 12 kW renderları (NOVA 12000 / 12000W doğrulandı). [2000x1705, 2000x1705, 2000x1705, 2000x1705]"
+  },
+  "TOMMAT-TT450108TNFB10-00072": {
+    "images": [
+      "tommatech-tommat-tt450108tnfb10-00072-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-450wp-108tnfb-m10-topcon-dark-series-gunes-paneli-1416.html",
+    "note": "Resmi 1200px tam siyah Dark Series görseli; eski görsel gümüş çerçeveli farklı panel gösteriyordu"
+  },
+  "TOMMAT-TT600144TNB10-00074": {
+    "images": [
+      "tommatech-tommat-tt600144tnb10-00074-1.webp",
+      "tommatech-tommat-tt600144tnb10-00074-2.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-600wp-144tnb-m10-topcon-gunes-paneli-1753.html",
+    "note": "Resmi 1200px görseller (600Wp 144TNB M10 TOPCon)"
+  },
+  "TOMMAT-TTFSC15-00088": {
+    "images": [
+      "tommatech-tommat-ttfsc15-00088-1.webp",
+      "tommatech-tommat-ttfsc15-00088-2.webp",
+      "tommatech-tommat-ttfsc15-00088-3.webp",
+      "tommatech-tommat-ttfsc15-00088-4.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-easy-life-15wp-mobil-solar-sarj-paneli-1313.html",
+    "note": "Resmi 1200px ön/açılı/yatay/arka görseller"
+  },
+  "TOMMAT-TTFSC25-00089": {
+    "images": [
+      "tommatech-tommat-ttfsc25-00089-1.webp",
+      "tommatech-tommat-ttfsc25-00089-2.webp",
+      "tommatech-tommat-ttfsc25-00089-3.webp",
+      "tommatech-tommat-ttfsc25-00089-4.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-easy-life-25wp-katlanabilir-gunes-paneli-1314.html",
+    "note": "Resmi 1200px lacivert çanta görselleri. Eski açık-panel görseli (12kCGC...) kamuflaj desenli eski versiyon olduğundan renk tutarlılığı için çıkarıldı"
+  },
+  "TOMMAT-TT15036TN10PRT-00091": {
+    "images": [
+      "tommatech-tommat-tt15036tn10prt-00091-1.webp",
+      "tommatech-tommat-tt15036tn10prt-00091-2.webp",
+      "tommatech-tommat-tt15036tn10prt-00091-3.webp",
+      "tommatech-tommat-tt15036tn10prt-00091-4.webp"
+    ],
+    "source": "https://tommatech.de/tr/urun/tommatech-150w-tasinabilir-gunes-paneli-1671.html",
+    "note": "Boş kanvaslı yan görsel çıkarıldı; resmi açık panel görseli (4x9=36 hücre, 150W ile uyumlu) ve gri açılı görsel eklendi. Resmi sayfada gri ve lacivert iki renk birlikte yer alıyor"
+  },
+  "TOMMAT-BTRPMRN1128V100AHS-00098": {
+    "images": [
+      "tommatech-tommat-btrpmrn1128v100ahs-00098-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-abspc-kasa-128v-100ah-marine-batarya-2077.html",
+    "note": "Resmi 1200px görsel, etiket BTR-MRN1-12.8V-100AH-S (birebir). Eski 2. görsel (1_ZV5C..., LCD ekranlı gri kutu) akü değil, farklı ürün; çıkarıldı"
+  },
+  "TOMMAT-BTRPMRN1128V200AH-00099": {
+    "images": [
+      "tommatech-tommat-btrpmrn1128v200ah-00099-1.webp",
+      "tommatech-tommat-btrpmrn1128v200ah-00099-2.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-abspc-kasa-128v-200ah-marine-batarya-2078.html",
+    "note": "Üreticinin 12.8V 200Ah ABS+PC marine akü sayfasındaki resmi görseller; DİKKAT etikette BTR-MRN3-12.8V-200AH yazıyor (MRN1 etiketli resmi görsel yok, gövde aynı). Eski 25.6V banner ve 25.6V etiketli düşük çözünürlüklü görsel yanlış varyant olduğu için çıkarıldı"
+  },
+  "TOMMAT-BTRPMRN1256V200AH-00103": {
+    "images": [
+      "tommatech-tommat-btrpmrn1256v200ah-00103-1.webp",
+      "tommatech-tommat-btrpmrn1256v200ah-00103-2.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-abspc-kasa-256v-200ah-marine-batarya-2080.html",
+    "note": "Üreticinin 25.6V 200Ah sayfasındaki resmi görseller, ancak DİKKAT etikette BTR-MRN3-12.8V-200AH yazıyor (üretici aynı render kullanıyor). Birebir etiketli (MRN1-25.6V-200AH) görsel yalnızca düşük çözünürlükte mevcut (1H_eq... ürün küçük; 1AYZxo... 535x337); tercih size kalmış"
+  },
+  "TOMMAT-BTRPMRN3256V100AH-00102": {
+    "images": [
+      "tommatech-tommat-btrpmrn3256v100ah-00102-1.webp",
+      "tommatech-tommat-btrpmrn3256v100ah-00102-2.webp"
+    ],
+    "source": "https://tommatech.de/tr/urun/tommatech-abspc-kasa-256v-100ah-marine-batarya-1646.html",
+    "note": "Üreticinin 25.6V 100Ah sayfasındaki resmi 1200px görseller; etikette MRN3-12.8V-200AH yazıyor (eski görselde de aynı etiket vardı, üretici aynı render kullanıyor)"
+  },
+  "TOMMAT-BTRP256V204AH-00104": {
+    "images": [
+      "tommatech-tommat-btrp256v204ah-00104-1.webp",
+      "tommatech-tommat-btrp256v204ah-00104-2.webp",
+      "tommatech-tommat-btrp256v204ah-00104-3.webp",
+      "tommatech-tommat-btrp256v204ah-00104-4.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-moduler-serisi-256v-204ah-g2-lityum-batarya-1658.html",
+    "note": "Datasheet ana görsel kaldırıldı; resmi 1200px gri G2 modül görselleri (açılı, arka, tekerlekli, yığın)"
+  },
+  "TOMMAT-BTRP512V102AH-00198": {
+    "images": [
+      "tommatech-tommat-btrp512v102ah-00198-1.webp",
+      "tommatech-tommat-btrp512v102ah-00198-2.webp",
+      "tommatech-tommat-btrp512v102ah-00198-3.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-moduler-serisi-51-2v-102ah-g2-lityum-batarya-1659.html",
+    "note": "Resmi 51.2V 102Ah G2 görselleri beyaz gövde; eski gri görseller 25.6V modele ait olduğundan bu varyant için değiştirildi"
+  },
+  "TOMMAT-MGIV500WPLS-00105": {
+    "images": [
+      "tommatech-tommat-mgiv500wpls-00105-1.webp",
+      "tommatech-tommat-mgiv500wpls-00105-2.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-kolay-yasam-serisi-512wh-tasinabilir-guc-kaynagi-2031.html",
+    "note": "Resmi 1080px görsel (saplı, çift prizli V serisi Plus); 2. görsel resmi V serisi 512Wh Plus datasheet PDF'inden çıkarılan 2538x1692 yaşam tarzı fotoğrafı (plaj arka planı). Eski görseller R serisine benzer farklı gövde gösteriyordu"
+  },
+  "TOMMAT-MGIR500W-00108": {
+    "images": [
+      "tommatech-tommat-mgir500w-00108-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-kolay-yasam-serisi-448wh-tasinabilir-guc-kaynagi-2030.html",
+    "note": "Resmi 1080px görsel (R serisi 448Wh)"
+  },
+  "TOMMAT-ONGTT04A30NMF-00112": {
+    "images": [
+      "tommatech-tommat-ongtt04a30nmf-00112-1.webp",
+      "tommatech-tommat-ongtt04a30nmf-00112-2.webp",
+      "tommatech-tommat-ongtt04a30nmf-00112-3.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-uno-atom-n-30kw-tek-faz-inverter-2099.html",
+    "note": "Resmi Uno Atom N 3.0kW 1200px görselleri; eski görsel eski nesil Uno Atom gövdesiydi"
+  },
+  "TOMMAT-ONGTTUNOHN5K-00113": {
+    "images": [
+      "tommatech-tommat-ongttunohn5k-00113-1.webp",
+      "tommatech-tommat-ongttunohn5k-00113-2.webp",
+      "tommatech-tommat-ongttunohn5k-00113-3.webp"
+    ],
+    "source": "https://tommatech.de/tr/urun/tommatech-uno-home-n-50kw-tek-faz-inverter-1620.html",
+    "note": "Resmi Uno Home N 5.0kW 1200px görselleri (ön, açılı, arka)"
+  },
+  "TOMMAT-INVTTHY15SHVAIO-00141": {
+    "images": [
+      "tommatech-tommat-invtthy15shvaio-00141-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-trio-hybrid-s-150kw-hv-aio-uc-faz-hibrit-inverter-2428.html",
+    "note": "Resmi beyaz arka planlı 1200px görsel; siyah arka planlı iki görsel kaldırıldı"
+  },
+  "TOMMAT-BTRPPB512V100AH-00197": {
+    "images": [
+      "tommatech-tommat-btrppb512v100ah-00197-1.webp",
+      "tommatech-tommat-btrppb512v100ah-00197-2.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-512v-100ah-pb-serisi-lityum-batarya-2020.html",
+    "note": "Resmi 1080px açılı ve ön görseller"
+  },
+  "TOMMAT-AKSKBLSETTTRM15CM-00200": {
+    "images": [
+      "tommatech-tommat-akskblsetttrm15cm-00200-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-modularrack-series-batarya-paralelleme-kablo-seti-1380.html",
+    "note": "Resmi 1200px görsel; sayfa 15 cm paralel kablo setini doğruluyor"
+  },
+  "TOMMAT-AKSKBLSETTPE5015M-00202": {
+    "images": [
+      "tommatech-tommat-akskblsettpe5015m-00202-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-modularrack-series-256-512v-guc-kablo-seti-1379.html",
+    "note": "Resmi Modular/Rack 25.6-51.2V güç kablo seti (2x1,5 m siyah/kırmızı, pabuçlu) 1200px; eski görsel jenerik solar kablo makarasıydı. DİKKAT: görsel kırmızı+siyah çift gösteriyor, ürün adı tek kırmızı kablo; model kodu SET içerdiği için büyük ihtimalle aynı ürün, doğrulanmalı"
+  },
+  "TOMMAT-INVHYB48V15KFTF-00242": {
+    "images": [
+      "tommatech-tommat-invhyb48v15kftf-00242-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-f-serisi-150kw-uc-faz-lv-hibrit-inverter-1539.html",
+    "note": "Resmi F serisi 15.0kW LV 1200px görseli; eski görsel farklı gövdeli inverter gösteriyordu"
+  },
+  "TOMMAT-EVCLIKYAAC22KLED-00244": {
+    "images": [
+      "tommatech-tommat-evclikyaac22kled-00244-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-likya-22kw-ac-elektrikli-arac-sarj-cihazi-1986.html",
+    "note": "Resmi 1080px ön görsel (soketli Likya)"
+  },
+  "TOMMAT-EVCLIKYAAC22KLEDKB-00245": {
+    "images": [
+      "tommatech-tommat-evclikyaac22kledkb-00245-1.webp"
+    ],
+    "source": "https://cw-enerji.com/tr/urun/tommatech-likya-22kw-ac-elektrikli-arac-sarj-cihazi-kablolu-1987.html",
+    "note": "Resmi 1080px kablolu Likya görseli"
+  },
+  "VICTRO-CEP122160000-01406": {
+    "images": [
+      "victron-victro-cep122160000-01406-1.webp",
+      "victron-victro-cep122160000-01406-2.webp",
+      "victron-victro-cep122160000-01406-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/inverters-chargers/easyplus-12v-1600va",
+    "note": "Resmi EasyPlus Compact 12/1600/70-16 ön/sağ/sol 300 dpi fotoğrafları (eski görsel Phoenix etiketliydi, 251 px)."
+  },
+  "VICTRO-LYN060102010-01716": {
+    "images": [
+      "victron-victro-lyn060102010-01716-1.webp",
+      "victron-victro-lyn060102010-01716-2.webp",
+      "victron-victro-lyn060102010-01716-3.webp",
+      "victron-victro-lyn060102010-01716-4.webp"
+    ],
+    "source": "https://www.victronenergy.com/dc-distribution-systems/lynx-distributor",
+    "note": "Resmi Lynx Distributor (M10) fotoğrafları; AGUS logolu görsel kaldırıldı."
+  },
+  "VICTRO-CIP106100000-01765": {
+    "images": [
+      "victron-victro-cip106100000-01765-1.webp",
+      "victron-victro-cip106100000-01765-2.webp",
+      "victron-victro-cip106100000-01765-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/dc-distribution-systems/fuses-and-fuse-holders",
+    "note": "Resmi CIP106100000 ANL sigorta yuvası fotoğrafları."
+  },
+  "VICTRO-BPP900480100-01767": {
+    "images": [
+      "victron-victro-bpp900480100-01767-1.webp",
+      "victron-victro-bpp900480100-01767-2.webp",
+      "victron-victro-bpp900480100-01767-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/communication-centres/ekrano-gx",
+    "note": "Resmi Ekrano GX fotoğrafları (açılı ön, ön, arka)."
+  },
+  "VICTRO-BPP900495100-01768": {
+    "images": [
+      "victron-victro-bpp900495100-01768-1.webp",
+      "victron-victro-bpp900495100-01768-2.webp",
+      "victron-victro-bpp900495100-01768-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/ekrano-gx-wall-mount",
+    "note": "Resmi BPP900495100 Ekrano GX duvar montaj kutusu fotoğrafları (Ekrano takılı, ön, açık)."
+  },
+  "VICTRO-BPP900455050-01771": {
+    "images": [
+      "victron-victro-bpp900455050-01771-1.webp",
+      "victron-victro-bpp900455050-01771-2.webp",
+      "victron-victro-bpp900455050-01771-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/gx-touch-50",
+    "note": "Sorunsuz 1. görsel korundu; Cerbo GX ile karışık düşük çözünürlüklü 2. görsel yerine resmi GX Touch 50 arka/montaj fotoğrafları."
+  },
+  "VICTRO-BPP900800150-01778": {
+    "images": [
+      "victron-victro-bpp900800150-01778-1.webp",
+      "victron-victro-bpp900800150-01778-2.webp",
+      "victron-victro-bpp900800150-01778-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/communication-centres/gx-io-extender-150",
+    "note": "Resmi GX IO-Extender 150 fotoğrafları."
+  },
+  "VICTRO-BPP900400100-01779": {
+    "images": [
+      "victron-victro-bpp900400100-01779-1.webp",
+      "victron-victro-bpp900400100-01779-2.webp",
+      "victron-victro-bpp900400100-01779-3.webp",
+      "victron-victro-bpp900400100-01779-4.webp"
+    ],
+    "source": "https://web.archive.org/web/20230129062754/https://www.victronenergy.com/panel-systems-remote-monitoring/venus-gx",
+    "note": "Ürün sayfası kaldırılmış (Cerbo GX'e yönleniyor); arşivlenmiş sayfadaki resmi dosyalar victronenergy.com/upload/documents altından hâlâ indirilebiliyor."
+  },
+  "VICTRO-BPP900100200-01781": {
+    "images": [
+      "victron-victro-bpp900100200-01781-1.webp"
+    ],
+    "source": "https://www.drsa.com/products/victron-ccgx-wi-fi-module-simple-nano-usb-bpp900100200",
+    "note": "DİKKAT: resmi Victron sayfası yok (ürün üretimden kalkmış). BPP900100200 olarak listelenen bayi görseli (1000x1000, filigran/logo yok, jenerik 802.11n nano USB dongle). Resmi kaynak değil; istenirse not_found sayılabilir."
+  },
+  "VICTRO-VPN000200000-01783": {
+    "images": [
+      "victron-victro-vpn000200000-01783-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/ve.net-gmdss-panel",
+    "note": "DİKKAT: Victron'daki en büyük görsel 720x397 (500 px eşiğinin altında); mevcut 333 px'ten biraz daha iyi. Kılavuz/datasheet PDF'lerinde daha büyük görsel yok."
+  },
+  "VICTRO-BPP920140100-01786": {
+    "images": [
+      "victron-victro-bpp920140100-01786-1.webp",
+      "victron-victro-bpp920140100-01786-2.webp",
+      "victron-victro-bpp920140100-01786-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/communication-centres/gx-tank-140",
+    "note": "Resmi BPP920140100 GX Tank 140 fotoğrafları."
+  },
+  "VICTRO-REC020005010-01787": {
+    "images": [
+      "victron-victro-rec020005010-01787-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/digital-multi-control-200-200a",
+    "note": "Resmi Digital Multi Control 200/200A ön görseli (4028x2313)."
+  },
+  "VICTRO-DMC000200010R-01788": {
+    "images": [
+      "victron-victro-dmc000200010r-01788-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/digital-multi-control-panel-gx",
+    "note": "Resmi Digital Multi Control 200/200A GX ön görseli (4272x2848, açık gri zemin)."
+  },
+  "VICTRO-REC030001210-01789": {
+    "images": [
+      "victron-victro-rec030001210-01789-1.webp",
+      "victron-victro-rec030001210-01789-2.webp",
+      "victron-victro-rec030001210-01789-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/phoenix-inverter-control",
+    "note": "Resmi REC030001210 Inverter Control fotoğrafları."
+  },
+  "VICTRO-REC010001110-01790": {
+    "images": [
+      "victron-victro-rec010001110-01790-1.webp",
+      "victron-victro-rec010001110-01790-2.webp",
+      "victron-victro-rec010001110-01790-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/phoenix-charger-control",
+    "note": "Resmi REC010001110 Charger Control fotoğrafları."
+  },
+  "VICTRO-REC040010210R-01791": {
+    "images": [
+      "victron-victro-rec040010210r-01791-1.webp",
+      "victron-victro-rec040010210r-01791-2.webp",
+      "victron-victro-rec040010210r-01791-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/phoenix-inverter-control-ve.direct",
+    "note": "Resmi Inverter Control VE.Direct fotoğrafları."
+  },
+  "VICTRO-REC000300010R-01792": {
+    "images": [
+      "victron-victro-rec000300010r-01792-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/skylla-i-control-gx",
+    "note": "DİKKAT: Victron'daki tek görsel 720x406 (500 px eşiğinin altında) ama mevcut 299x168'den çok daha iyi; kılavuz PDF'inde daha büyüğü yok."
+  },
+  "VICTRO-BPA000100010R-01795": {
+    "images": [
+      "victron-victro-bpa000100010r-01795-1.webp",
+      "victron-victro-bpa000100010r-01795-2.webp"
+    ],
+    "source": "https://www.victronenergy.com/display-and-panels/battery-alarm",
+    "note": "Resmi Battery Alarm GX ön ve arka (PCB) fotoğrafları (6000x4000, açık gri zemin)."
+  },
+  "VICTRO-ASS030066018-01813": {
+    "images": [
+      "victron-victro-ass030066018-01813-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/cables/rj12-utp-cable",
+    "note": "Mevcut görsel yanlıştı (mavi RJ45 Ethernet kablosu). Victron RJ12 UTP kablo serisinin ana ürün fotoğrafı (yüksek çözünürlüklü dosya adı 0,9 m; tüm uzunluklar aynı görselle gösteriliyor)."
+  },
+  "VICTRO-ASS030532010-01849": {
+    "images": [
+      "victron-victro-ass030532010-01849-1.webp",
+      "victron-victro-ass030532010-01849-2.webp",
+      "victron-victro-ass030532010-01849-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/canusb-interface",
+    "note": "Resmi ASS030532010 CANUSB fotoğrafları."
+  },
+  "VICTRO-ASS030550120-01860": {
+    "images": [
+      "victron-victro-ass030550120-01860-1.webp",
+      "victron-victro-ass030550120-01860-2.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/inverting-remote-on-off-cable",
+    "note": "Resmi Inverting remote on-off cable fotoğrafları (sayfa ASS030550100/ASS030550120'yi birlikte listeliyor)."
+  },
+  "VICTRO-ASS030550220-01861": {
+    "images": [
+      "victron-victro-ass030550220-01861-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/cables/non-inverting-remote-on-off-cable",
+    "note": "Mevcut görsel yanlıştı (VE.Direct non-inverting kablo). Resmi Non-inverting remote on-off cable fotoğrafı (sayfa ASS030550200/ASS030550220)."
+  },
+  "VICTRO-CSE000100000-01865": {
+    "images": [
+      "victron-victro-cse000100000-01865-1.webp",
+      "victron-victro-cse000100000-01865-2.webp",
+      "victron-victro-cse000100000-01865-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/meters-and-sensors/ac-current-sensor",
+    "note": "Resmi CSE000100000 AC akım sensörü fotoğrafları."
+  },
+  "VICTRO-ASS000100000-01874": {
+    "images": [
+      "victron-victro-ass000100000-01874-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/temperature-sensor-for-bmv-702",
+    "note": "Resmi ASS000100000 sıcaklık sensörü fotoğrafı (4461x2820)."
+  },
+  "VICTRO-ASS070400100-01875": {
+    "images": [
+      "victron-victro-ass070400100-01875-1.webp",
+      "victron-victro-ass070400100-01875-2.webp",
+      "victron-victro-ass070400100-01875-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/pre-charge-cable",
+    "note": "Resmi Pre-Charge kablo fotoğrafları (genel, yakın, ambalaj)."
+  },
+  "VICTRO-ADA500140100-01877": {
+    "images": [
+      "victron-victro-ada500140100-01877-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/din35-adapter-small",
+    "note": "Victron DIN35 adaptör sayfası (ADA500100100/ADA500140100/ADA500180100) tüm boyutlar için tek aile görseli kullanıyor (dosya adı \"small\"); orta boy için ayrı görsel yok."
+  },
+  "VICTRO-ADA500180100-01878": {
+    "images": [
+      "victron-victro-ada500140100-01877-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/din35-adapter-small",
+    "note": "Victron DIN35 adaptör sayfası tüm boyutlar için tek aile görseli kullanıyor (dosya adı \"small\"); büyük boy için ayrı görsel yok."
+  },
+  "VICTRO-ASS030536011-01879": {
+    "images": [
+      "victron-victro-ass030536011-01879-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/ve-direct-bluetooth-smart-dongle",
+    "note": "Resmi VE.Direct Bluetooth Smart dongle fotoğrafı (1283x1417)."
+  },
+  "VICTRO-REL100100000-01880": {
+    "images": [
+      "victron-victro-rel100100000-01880-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/ziehl-voltage-frequency-sensitive-relay-ufr1001e",
+    "note": "Resmi Ziehl UFR1001E görseli (1920x1526)."
+  },
+  "VICTRO-REL200300100-01885": {
+    "images": [
+      "victron-victro-rel200300100-01885-1.webp",
+      "victron-victro-rel200300100-01885-2.webp",
+      "victron-victro-rel200300100-01885-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/meters-and-sensors/energy-meter",
+    "note": "Resmi Energy Meter VM-3P75CT (VM-375CT) fotoğrafları."
+  },
+  "VICTRO-ASS300420100-01888": {
+    "images": [
+      "victron-victro-ass300420100-01888-1.webp",
+      "victron-victro-ass300420100-01888-2.webp",
+      "victron-victro-ass300420100-01888-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/zigbee-converters",
+    "note": "Resmi DRF2659C Zigbee-RS485 dönüştürücü fotoğrafları."
+  },
+  "VICTRO-SCC940100100-01956": {
+    "images": [
+      "victron-victro-scc940100100-01956-1.webp"
+    ],
+    "source": "https://www.victronenergy.com/meters-and-sensors/temperature-sensor-bluesolar-pwm-pro",
+    "note": "Resmi BlueSolar PWM-Pro sıcaklık sensörü fotoğrafı (2448x3264; kenarlarda hafif bej ton)."
+  },
+  "VICTRO-SBS050150200-02002": {
+    "images": [
+      "victron-victro-sbs050150200-02002-1.webp",
+      "victron-victro-sbs050150200-02002-2.webp",
+      "victron-victro-sbs050150200-02002-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/meters-and-sensors/smart-battery-sense",
+    "note": "Resmi Smart Battery Sense (standart, SBS050150200) fotoğrafları; long range sürümü kullanılmadı."
+  },
+  "VICTRO-SHS121409230-02003": {
+    "images": [
+      "victron-victro-shs121409230-02003-1.webp",
+      "victron-victro-shs121409230-02003-2.webp"
+    ],
+    "source": "https://solarboss.ie/products/victron-shs-200-mppt-v3-0-mc4-shs121409230",
+    "note": "Victron ürün sayfası yok; Victron stüdyo fotoğrafları bayi sitelerinden (solarboss.ie 800x800, ussolarsupplier.com 500x500), filigransız, MC4 kablolu SHS 200."
+  },
+  "VICTRO-SHS800300300-02005": {
+    "images": [
+      "victron-victro-shs800300300-02005-1.webp"
+    ],
+    "source": "https://voltaconsolar.com/products/victron-battery-box-shs-200",
+    "note": "Victron ürün sayfası yok; resmi datasheet'teki (Datasheet-SHS-200-MPPT-EN.pdf) akü kutusu fotoğrafının 2000x2000 sürümü (bayi CDN, filigransız; üzerinde SHS 200 takılı)."
+  },
+  "VICTRO-SCC950200000-02009": {
+    "images": [
+      "victron-victro-scc950200000-02009-1.webp",
+      "victron-victro-scc950200000-02009-2.webp",
+      "victron-victro-scc950200000-02009-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/accessories/mppt-wire-box-tr",
+    "note": "Resmi MPPT WireBox-M (100/30-50 & 150/35) fotoğrafları; mevcut görsel MPPT ile birlikteydi."
+  },
+  "VICTRO-BMS400100000-02101": {
+    "images": [
+      "victron-victro-bms400100000-02101-1.webp",
+      "victron-victro-bms400100000-02101-2.webp",
+      "victron-victro-bms400100000-02101-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/battery-management-systems/smallbms",
+    "note": "Resmi BMS400100000 smallBMS fotoğrafları."
+  },
+  "VICTRO-BMS210055000-02114": {
+    "images": [
+      "victron-victro-bms210055000-02114-1.webp",
+      "victron-victro-bms210055000-02114-2.webp",
+      "victron-victro-bms210055000-02114-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/battery-management-systems/smart-bms-12-200",
+    "note": "Resmi BMS210055000 Smart BMS 12/200 fotoğrafları."
+  },
+  "VICTRO-BMS110022000-02115": {
+    "images": [
+      "victron-victro-bms110022000-02115-1.webp",
+      "victron-victro-bms110022000-02115-2.webp",
+      "victron-victro-bms110022000-02115-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/battery-management-systems/smart-bms-current-limiter",
+    "note": "Ürün BMS110022000 Smart BMS CL 12/100 cihazının kendisi (denetimdeki \"kablo olmalı\" notu hatalı); resmi yüksek çözünürlüklü fotoğraflar."
+  },
+  "VICTRO-BAT512120705-02123": {
+    "images": [
+      "victron-victro-bat512120705-02123-1.webp",
+      "victron-victro-bat512120705-02123-2.webp"
+    ],
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Resmi Lithium SuperPack 12,8V 200Ah fotoğrafları (varyanta özel)."
+  },
+  "VICTRO-BAT524050705-02124": {
+    "images": [
+      "victron-victro-bat524050705-02124-1.webp",
+      "victron-victro-bat524050705-02124-2.webp"
+    ],
+    "source": "https://www.victronenergy.com/batteries/12,8v-lithium-superpack",
+    "note": "Resmi Lithium SuperPack 25,6V 50Ah fotoğrafları (varyanta özel; eskiden 12,8V 200Ah görseli paylaşılıyordu)."
+  },
+  "FRECON-PV150I2S40BH-00557": {
+    "images": [
+      "frecon-deye-frecon-pv150i2s40bh-00557-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Resmi PV150A/PV150I siyah plastik gövde (198x300 mm sınıfı; 4,0 kW modeli 146x249 mm, aynı tasarım ailesi), tek ürün, 1920 px, beyaz zemin. Seri dizisi görseli kaldırıldı. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV150I2S55BH-00558": {
+    "images": [
+      "frecon-deye-frecon-pv150i2s55bh-00558-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Resmi PV150A/PV150I siyah plastik gövde (198x300 mm sınıfı; 4,0 kW modeli 146x249 mm, aynı tasarım ailesi), tek ürün, 1920 px, beyaz zemin. Seri dizisi görseli kaldırıldı. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T40BH-00560": {
+    "images": [
+      "frecon-deye-frecon-pv5004t40bh-00560-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T40BHVH-00585": {
+    "images": [
+      "frecon-deye-frecon-pv5004t40bhvh-00585-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T558H-00561": {
+    "images": [
+      "frecon-deye-frecon-pv5004t558h-00561-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T558HVH-00586": {
+    "images": [
+      "frecon-deye-frecon-pv5004t558hvh-00586-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T758H-00562": {
+    "images": [
+      "frecon-deye-frecon-pv5004t758h-00562-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T75BHVH-00587": {
+    "images": [
+      "frecon-deye-frecon-pv5004t75bhvh-00587-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T011BH-00563": {
+    "images": [
+      "frecon-deye-frecon-pv5004t011bh-00563-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T011BHVH-00588": {
+    "images": [
+      "frecon-deye-frecon-pv5004t011bhvh-00588-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik duvar tipi gövde (kılavuz Şekil 1-4; 4/5,5 kW 116,6x186,6 mm, 7,5/11 kW 146x249 mm), güncel LCD tuş takımı, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T015BHVH-00589": {
+    "images": [
+      "frecon-deye-frecon-pv5004t015bhvh-00589-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik gövdenin geniş (198x300 mm, 15-22 kW) versiyonu, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T018BHVH-00590": {
+    "images": [
+      "frecon-deye-frecon-pv5004t018bhvh-00590-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik gövdenin geniş (198x300 mm, 15-22 kW) versiyonu, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T022BH-00566": {
+    "images": [
+      "frecon-deye-frecon-pv5004t022bh-00566-1.webp"
+    ],
+    "source": "https://www.frecon.com.cn/products_177/167.html",
+    "note": "PV500 4-22 kW siyah plastik gövdenin geniş (198x300 mm, 15-22 kW) versiyonu, 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T055H-00570": {
+    "images": [
+      "frecon-deye-frecon-pv5004t055h-00570-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T075H-00571": {
+    "images": [
+      "frecon-deye-frecon-pv5004t075h-00571-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T075HVH-00596": {
+    "images": [
+      "frecon-deye-frecon-pv5004t075hvh-00596-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T090HVH-00597": {
+    "images": [
+      "frecon-deye-frecon-pv5004t090hvh-00597-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T160-00575": {
+    "images": [
+      "frecon-deye-frecon-pv5004t160-00575-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T185-00576": {
+    "images": [
+      "frecon-deye-frecon-pv5004t185-00576-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T200-00577": {
+    "images": [
+      "frecon-deye-frecon-pv5004t200-00577-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "FRECON-PV5004T220-00578": {
+    "images": [
+      "frecon-deye-frecon-pv5004t220-00578-1.webp"
+    ],
+    "source": "https://www.frecon-inverter.com/products_170/338.html",
+    "note": "Gri sac duvar tipi gövde: resmi kılavuz 30-280 kW için tek gövde tipi veriyor (Şekil 1-5 \"30~280kW Wall Mounting\"); 90-280 kW dolap/kabin DEĞİL. Yerde duran kabin yalnız 450-560 kW. Oran güç sınıfına göre değişir (ör. 75/90 kW 310x620, 160 kW 400x750, 185-220 kW 500x855 mm) ama tasarım aynı. 1920 px, beyaz zemin. Gövde sınıfı resmi PV500&PV150A kullanım kılavuzu V2.7 (bölüm 1.3) boyut tablosuna göre doğrulandı."
+  },
+  "DEYE-00396": {
+    "images": [
+      "frecon-deye-deye-00396-1.webp",
+      "frecon-deye-deye-00396-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/offgrid-inverter/SUN3-3-6-5-6KOG02LP1EUAM1.html",
+    "note": "Mevcut görseller YANLIŞ gövdeydi (00396: SUN-G on-grid dizi inverter, 00397: SG hibrit). Resmi Deye off-grid SUN-3/3.6/5/6.6/8.8K-OG03LP1 gövdesi (ön + yan), 1600 px, beyaz zemin. 5 kW seride mevcut."
+  },
+  "DEYE-00397": {
+    "images": [
+      "frecon-deye-deye-00397-1.webp",
+      "frecon-deye-deye-00397-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/offgrid-inverter/SUN3-3-6-5-6KOG02LP1EUAM1.html",
+    "note": "Mevcut görseller YANLIŞ gövdeydi (00396: SUN-G on-grid dizi inverter, 00397: SG hibrit). Resmi Deye off-grid SUN-3/3.6/5/6.6/8.8K-OG03LP1 gövdesi (ön + yan), 1600 px, beyaz zemin. Not: resmi seride tam 6 kW yok (6,6 kW var); model kodu teyit edilmeli."
+  },
+  "DEYE-00399": {
+    "images": [
+      "frecon-deye-deye-00399-1.webp",
+      "frecon-deye-deye-00399-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/SUN3-6-4-4-2-4-6-5-5-2-3540.html",
+    "note": "Mevcut görsel hibrit (SG) gövdeydi. Resmi monofaze on-grid SUN-3.6~6.2K-G05P1 (5 kW dahil) ön + 3/4 görünüm, 1600 px."
+  },
+  "DEYE-00400": {
+    "images": [
+      "frecon-deye-deye-00400-1.webp",
+      "frecon-deye-deye-00400-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/sun7-7-5-8kg02p1eucm2.html",
+    "note": "Mevcut görsel hibrit (SG) gövdeydi. Resmi monofaze on-grid SUN-7/7.5/8K-G02P1 gövdesi ön + 3/4, 1600 px."
+  },
+  "DEYE-00401": {
+    "images": [
+      "frecon-deye-deye-00401-1.webp",
+      "frecon-deye-deye-00401-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-string-inverter/SUN9-10-10-5KG02P1EUAM2.html",
+    "note": "Resmi monofaze on-grid SUN-9/10/10.5K-G02P1 gövdesi ön + 3/4, 1600 px (mevcut 600x315 düşük çözünürlüklüydü)."
+  },
+  "DEYE-00406": {
+    "images": [
+      "frecon-deye-deye-00406-1.webp",
+      "frecon-deye-deye-00406-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-string-inverter/sun3-4-5-6-7-8-9-10-12-15kg06p3eubm2-315kw-three-phase-2-mppt.html",
+    "note": "Resmi trifaze on-grid SUN-3~15K-G06P3 (15 kW dahil) ön + yan; ürün ~950 px yükseklik, kanvas 1071 px (resmi kaynak 972x1080)."
+  },
+  "DEYE-00416": {
+    "images": [
+      "frecon-deye-deye-00416-1.webp",
+      "frecon-deye-deye-00416-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-low-voltage-hybrid-inverter/SUN3-3-6-5-6KSG04LP1EU-36kW-Single-Phase-2-MPPT-Hybrid-Inverter-LV-Battery-Supported-2346.html",
+    "note": "Resmi monofaze LV hibrit SUN-3/3.6/5/6K-SG04LP1-EU-SM2 gövdesi ön + 3/4, 1600 px, rozet/yazı yok."
+  },
+  "DEYE-00417": {
+    "images": [
+      "frecon-deye-deye-00417-1.webp",
+      "frecon-deye-deye-00417-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-low-voltage-hybrid-inverter/SUN3-3-6-5-6KSG04LP1EU-36kW-Single-Phase-2-MPPT-Hybrid-Inverter-LV-Battery-Supported-2346.html",
+    "note": "Resmi monofaze LV hibrit SUN-3/3.6/5/6K-SG04LP1-EU-SM2 gövdesi ön + 3/4, 1600 px, rozet/yazı yok. Mevcut görselde \"7.6-12kW\" pazarlama kutusu ve yanlış (büyük) gövde vardı."
+  },
+  "DEYE-00420": {
+    "images": [
+      "frecon-deye-deye-00420-1.webp",
+      "frecon-deye-deye-00420-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-low-voltage-hybrid-inverter/sun7-6-8-10-12ksg02lp1euam2-am3-7-612kw-single-phase-2-mppt-hybrid-inverter-lv-battery-supported.html",
+    "note": "Resmi monofaze LV hibrit SUN-7.6/8/10/12K-SG02LP1 gövdesi ön + yan (mevcut görselle aynı gövde, daha net); ürün ~958 px yükseklik."
+  },
+  "DEYE-00421": {
+    "images": [
+      "frecon-deye-deye-00421-1.webp",
+      "frecon-deye-deye-00421-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/single-phase-low-voltage-hybrid-inverter/sun12-14-16-18ksg01lp1euam3p.html",
+    "note": "Resmi monofaze LV hibrit SUN-12/14/16/18K-SG01LP1 gövdesi (mevcut görselle aynı gövde) ön + yan, 1600 px. Not: resmi seride tam 15 kW model kodu yok; 12-18 kW aynı gövde."
+  },
+  "DEYE-00424": {
+    "images": [
+      "frecon-deye-deye-00424-1.webp",
+      "frecon-deye-deye-00424-2.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-hybrid-inverter-1/sun3-4-5-6-8-10-12ksg05lp3eusm2-312kw-three-phase-2-mppt-hybrid-inverter-lv-battery-supported.html",
+    "note": "Resmi trifaze LV hibrit SUN-3~12K-SG05LP3-EU-SM2 (10 kW dahil) ön + 3/4, 1600 px. Kardeş varyantlar (8/12 kW) da SG05LP3 gövdesini kullanıyor; mevcut görsel eski SG04LP3 gövdesiydi (resmi sitede artık yok)."
+  },
+  "DEYE-00432": {
+    "images": [
+      "frecon-deye-deye-00432-1.webp",
+      "frecon-deye-deye-00432-2.webp",
+      "frecon-deye-deye-00432-3.webp",
+      "frecon-deye-deye-00432-4.webp"
+    ],
+    "source": "https://www.deyeinverter.com/product/three-phase-high-voltage-hybrid-inverter/sun5-6-8-10-12-15-20ksg01hp3euam2-520kw-three-phase-2-mppt-hybrid-inverter-high-voltage-battery.html",
+    "note": "Bulanık 1. görsel yerine resmi SUN-5~25K-SG01HP3-EU-AM2 (25 kW dahil) net görünüm, 1600 px; sorunsuz diğer 3 görsel korundu (aynı SG01HP3 gövdesi)."
+  },
+  "TOMMAT-SLMDIYODMDK25A-00315": {
+    "images": [
+      "pending-tommat-slmdiyodmdk25a-00315.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "FRECON-PV5004T450H-00584": {
+    "images": [
+      "pending-frecon-pv5004t450h-00584.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-KBLMC4XT6012AWG1M-00109": {
+    "images": [
+      "manual-tommat-kblmc4xt6012awg1m-00109-1.webp"
+    ],
+    "source": "",
+    "note": "RJ45 veri kablosu gösteren ikinci görsel çıkarıldı"
+  },
+  "ELECTR-00493": {
+    "images": [
+      "manual-electr-00493-1.webp",
+      "manual-electr-00493-2.webp",
+      "manual-electr-00493-3.webp"
+    ],
+    "source": "https://electrozirve.com/urun/electrozirve-mc2450-50a-mppt-solar-charge-controller-12-24v-ekransiz/",
+    "note": "MC serisi ekransız gövde (MC2450 ile aynı kasa); modele özel resmî görsel yok"
+  },
+  "ELECTR-00495": {
+    "images": [
+      "manual-electr-00493-1.webp",
+      "manual-electr-00493-2.webp",
+      "manual-electr-00493-3.webp"
+    ],
+    "source": "https://electrozirve.com/urun/electrozirve-mc2450-50a-mppt-solar-charge-controller-12-24v-ekransiz/",
+    "note": "MC serisi ekransız gövde (MC2450 ile aynı kasa); modele özel resmî görsel yok"
+  },
+  "TOMMAT-SLMDIYODMDK55A-00316": {
+    "images": [
+      "pending-tommat-slmdiyodmdk55a-00316.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK70A-00317": {
+    "images": [
+      "pending-tommat-slmdiyodmdk70a-00317.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK90A-00318": {
+    "images": [
+      "pending-tommat-slmdiyodmdk90a-00318.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK90A-00319": {
+    "images": [
+      "pending-tommat-slmdiyodmdk90a-00319.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK110A-00320": {
+    "images": [
+      "pending-tommat-slmdiyodmdk110a-00320.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK110A-00321": {
+    "images": [
+      "pending-tommat-slmdiyodmdk110a-00321.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK110A-00322": {
+    "images": [
+      "pending-tommat-slmdiyodmdk110a-00322.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK110A-00323": {
+    "images": [
+      "pending-tommat-slmdiyodmdk110a-00323.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDK110A-00324": {
+    "images": [
+      "pending-tommat-slmdiyodmdk110a-00324.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SLMDIYODMDC15016-00325": {
+    "images": [
+      "pending-tommat-slmdiyodmdc15016-00325.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-HPTT22R32TFDIS-00352": {
+    "images": [
+      "pending-tommat-hptt22r32tfdis-00352.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-HPTT812R32MFIC-00353": {
+    "images": [
+      "pending-tommat-hptt812r32mfic-00353.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-HPTT1822R32MFIC-00354": {
+    "images": [
+      "pending-tommat-hptt1822r32mfic-00354.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-SRJTTADJ40100V300A-00230": {
+    "images": [
+      "pending-tommat-srjttadj40100v300a-00230.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-KBLMC4DC552518AWG1-00110": {
+    "images": [
+      "pending-tommat-kblmc4dc552518awg1-00110.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "FRECON-PV5004T315-00581": {
+    "images": [
+      "pending-frecon-pv5004t315-00581.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "FRECON-PV5004T355-00582": {
+    "images": [
+      "pending-frecon-pv5004t355-00582.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "FRECON-PV5004T400H-00583": {
+    "images": [
+      "pending-frecon-pv5004t400h-00583.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "EXELON-00533": {
+    "images": [
+      "pending-exelon-00533.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "EXELON-00534": {
+    "images": [
+      "pending-exelon-00534.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "TOMMAT-TT24048PM12-00086": {
+    "images": [
+      "enh-tommat-tt24048pm12-00086-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "TOMMAT-00249": {
+    "images": [
+      "enh-tommat-00249-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "TOMMAT-00250": {
+    "images": [
+      "enh-tommat-00250-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "TOMMAT-HPTTIND50R290-00346": {
+    "images": [
+      "enh-tommat-hpttind50r290-00346-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "NPPOWE-00438": {
+    "images": [
+      "enh-nppowe-00438-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "APEX-00457": {
+    "images": [
+      "enh-apex-00457-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "APEX-00468": {
+    "images": [
+      "enh-apex-00468-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "APEX-00472": {
+    "images": [
+      "enh-apex-00472-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "APEX-00478": {
+    "images": [
+      "enh-apex-00478-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ELECTR-00492": {
+    "images": [
+      "enh-electr-00492-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ELECTR-00497": {
+    "images": [
+      "diger-electr-00499-1.webp",
+      "diger-electr-00499-2.webp",
+      "diger-electr-00499-3.webp"
+    ],
+    "source": "https://electrozirve.com/urun/electrozirve-mc48100n25-100a-mppt-solar-charge-controlller-12-24-36-48v-ekranli/",
+    "note": "MC-4860N25 için resmî görsel yok; aynı N25 ekranlı gövdeli MC-48100N25 resmî fotoğrafları"
+  },
+  "ELECTR-00500": {
+    "images": [
+      "enh-electr-00500-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "VICTRO-BPC240815106-01536": {
+    "images": [
+      "enh-victro-bpc240815106-01536-1.webp"
+    ],
+    "source": "",
+    "note": "Daha iyi resmî görsel bulunamadı; mevcut görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00600": {
+    "images": [
+      "havensis-alpex-havens-00600-1.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/minisolar-3-amper",
+    "note": "Resmi Havensis MiniSolar-3AES (mavi kutu) fotoğrafı; ürün kırpılıp kare beyaz zemine ortalandı (ürün ~481px genişlik, kanvas 558px). Resmi sitede daha yüksek çözünürlük yok."
+  },
+  "HAVENS-00605": {
+    "images": [
+      "havensis-alpex-havens-00605-1.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/standar-seri-solar-sarj-kontrol-cihazi",
+    "note": "Resmi Havensis görseli, cihazda \"MiniSolar-10ASS\" etiketi okunuyor; kırpılıp kare beyaz zemine ortalandı (575x575, kaynak 800x566)."
+  },
+  "HAVENS-00611": {
+    "images": [
+      "havensis-alpex-havens-00611-1.webp",
+      "havensis-alpex-havens-00611-2.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/30a-mppt-solar-sarj-kontrol",
+    "note": "Resmi Havensis render, LCD'de \"HAVENSIS SOLAR-30AMPS\" yazıyor (1516x1135)."
+  },
+  "HAVENS-00616": {
+    "images": [
+      "havensis-alpex-havens-00616-1.webp",
+      "havensis-alpex-havens-00616-2.webp",
+      "havensis-alpex-havens-00616-3.webp",
+      "havensis-alpex-havens-00616-4.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "Resmi 60/70/80A-150V sayfası (Solar-60AMPS 150V bu sayfada listeleniyor), aynı gövde; LCD jenerik değer gösteriyor, cihazda model yazısı yok."
+  },
+  "HAVENS-00617": {
+    "images": [
+      "havensis-alpex-havens-00617-1.webp",
+      "havensis-alpex-havens-00617-2.webp",
+      "havensis-alpex-havens-00617-3.webp",
+      "havensis-alpex-havens-00617-4.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "Resmi 60/70/80A-150V sayfası (Solar-70AMPS 150V bu sayfada listeleniyor), aynı gövde; cihazda model yazısı yok."
+  },
+  "HAVENS-00618": {
+    "images": [
+      "havensis-alpex-havens-00618-1.webp",
+      "havensis-alpex-havens-00618-2.webp",
+      "havensis-alpex-havens-00618-3.webp",
+      "havensis-alpex-havens-00618-4.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+    "note": "Resmi Havensis 80A MPPT renderları (önden, harici ekranlı, terminal kapağı açık, alttan)."
+  },
+  "HAVENS-00620": {
+    "images": [
+      "havensis-alpex-havens-00620-1.webp",
+      "havensis-alpex-havens-00620-2.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/solar-45amps-6072v-45a-hv-mppt-1",
+    "note": "Resmi Havensis Solar-45AMPS 60/72V HV MPPT renderları."
+  },
+  "HAVENS-00622": {
+    "images": [
+      "havensis-alpex-havens-00622-1.webp",
+      "havensis-alpex-havens-00622-2.webp"
+    ],
+    "source": "https://web.archive.org/web/2022/https://havensis.com.tr/urunler/akilli-dc-dc-aku-sarj-cihazi",
+    "note": "Havensis resmi sitesinin arşiv (Wayback 2022) görselleri; siyah gövde, etikette \"BATCHG-1224BBC\" okunuyor. Kırpılıp kare beyaz zemine ortalandı. Güncel sitede bu eski model yok."
+  },
+  "HAVENS-00623": {
+    "images": [
+      "havensis-alpex-havens-00623-1.webp",
+      "havensis-alpex-havens-00623-2.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/akilli-dc-dc-aku-sarj-cihazi",
+    "note": "Resmi Havensis 30A tek yönlü sayfasının kendi renderı, filigransız. Not: Havensis tek yönlü modelde de etikette \"DCDC-1224B\" kullanıyor (çift yönlü renderda ayrıca \"Bidirection\" başlığı var, burada yok). 2. görsel resmi bağlantı şeması."
+  },
+  "HAVENS-00625": {
+    "images": [
+      "havensis-alpex-havens-00625-1.webp",
+      "havensis-alpex-havens-00625-2.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/40a-dc-dc-aku-sarj-cihazi-69426e0c57782",
+    "note": "Resmi Havensis 40A tek yönlü DC-DC sayfası (BATCHG-1224 40A); etiket \"DCDC-1224B\", \"Bidirection\" yok. 2. görsel resmi bağlantı şeması."
+  },
+  "HAVENS-00628": {
+    "images": [
+      "havensis-alpex-havens-00628-1.webp",
+      "havensis-alpex-havens-00628-2.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/yeni-model-tumlesik-sarj-kontrol-dual-charger-mpptdc-dc-67b2e2efa564f",
+    "note": "Resmi Havensis DUALCHARGER-4030AMD 60A renderları; LCD'de \"HAVENSIS DUAL CHARGER\"."
+  },
+  "HAVENS-HVSS50070DC-00633": {
+    "images": [
+      "havensis-alpex-havens-hvss50070dc-00633-1.webp",
+      "havensis-alpex-havens-hvss50070dc-00633-2.webp",
+      "havensis-alpex-havens-hvss50070dc-00633-3.webp",
+      "havensis-alpex-havens-hvss50070dc-00633-4.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/hvss-smart-shunt-500a-69a549f16f30e",
+    "note": "Resmi Havensis HVSS-500-70-DC ürün fotoğrafları (kırpılıp kare beyaz zemine ortalandı) + 4. sırada resmi bağlantı şeması."
+  },
+  "HAVENS-00634": {
+    "images": [
+      "havensis-alpex-havens-00634-1.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/minisolar-solar-wifi-modul-677cd6c65d97d",
+    "note": "Resmi Havensis Solar-WiFi modül renderı (SOLAR EKRAN MOBİL WiFi kutusu), 604x1056."
+  },
+  "HAVENS-00635": {
+    "images": [
+      "havensis-alpex-havens-00635-1.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/minisolar-bt-bluetooth-modul",
+    "note": "Resmi Havensis MiniSolar-BT renderı (SOLAR EKRAN-BLE), 604x1056; V2 RS485 aynı gövde."
+  },
+  "HAVENS-00636": {
+    "images": [
+      "havensis-alpex-havens-00636-1.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/40a-cift-yonlu-dc-dc-aku-sarj-cihazi-takviye-modlu-677cd5129e0de",
+    "note": "Resmi Havensis harici ekran renderı (684x582); Alpex de C216DSP için aynı gri ekranı kullanıyor."
+  },
+  "HAVENS-00638": {
+    "images": [
+      "havensis-alpex-havens-00638-1.webp"
+    ],
+    "source": "https://havensis.com.tr/urunler/otomatik-transfer-switch-10a-65141958771d8",
+    "note": "Resmi Havensis HTS-230-15 görseli (4000x1846) kırpılıp kare beyaz zemine ortalandı (2711x2711)."
+  },
+  "ALPEX-00364": {
+    "images": [
+      "havensis-alpex-alpex-00364-1.webp",
+      "havensis-alpex-alpex-00364-2.webp",
+      "havensis-alpex-alpex-00364-3.webp"
+    ],
+    "source": "https://www.alpexpower.com/600-watt-24-volt-modifiye-sinus-inverter",
+    "note": "Alpex resmi görselleri; etikette \"24VDC-AC 600W\" okunuyor. Kırpılıp kare beyaz zemine ortalandı (ön/arka görseller 640-713px)."
+  },
+  "ALPEX-00379": {
+    "images": [
+      "havensis-alpex-alpex-00379-1.webp",
+      "havensis-alpex-alpex-00379-2.webp",
+      "havensis-alpex-alpex-00379-3.webp"
+    ],
+    "source": "https://www.alpexpower.com/1000-watt-ups-aku-sarjli-modifiye-sinus-invertor-2674",
+    "note": "Alpex resmi fotoğrafları; etikette \"12V DC-AC 1000W ... WITH CHARGER\". Kırpılıp kare beyaz zemine ortalandı."
+  },
+  "ALPEX-00380": {
+    "images": [
+      "havensis-alpex-alpex-00380-1.webp",
+      "havensis-alpex-alpex-00380-2.webp",
+      "havensis-alpex-alpex-00380-3.webp"
+    ],
+    "source": "https://www.alpexpower.com/1500-watt-ups-sebeke-sarjli-modifiye-sinus-invertor",
+    "note": "Alpex resmi fotoğrafları; etikette \"12V DC-AC 1500W ... WITH CHARGER\". Kırpılıp kare beyaz zemine ortalandı."
+  },
+  "HAVENS-00601": {
+    "images": [
+      "enh-havens-00601-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00602": {
+    "images": [
+      "enh-havens-00602-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00608": {
+    "images": [
+      "enh-havens-00608-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00610": {
+    "images": [
+      "enh-havens-00610-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00630": {
+    "images": [
+      "enh-havens-00630-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00631": {
+    "images": [
+      "enh-havens-00631-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00632": {
+    "images": [
+      "enh-havens-00632-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ALPEX-00362": {
+    "images": [
+      "enh-alpex-00362-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ALPEX-00372": {
+    "images": [
+      "enh-alpex-00372-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ALPEX-00376": {
+    "images": [
+      "enh-alpex-00376-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ALPEX-00381": {
+    "images": [
+      "enh-alpex-00381-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "ALPEX-00382": {
+    "images": [
+      "enh-alpex-00382-1.webp"
+    ],
+    "source": "",
+    "note": "Daha büyük resmî görsel yok; en iyi resmî/doğru görsel beyaz zemin + 2x sınırlı büyütme ile düzenlendi."
+  },
+  "HAVENS-00604": {
+    "images": [
+      "pending-havens-00604.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  },
+  "HAVENS-00609": {
+    "images": [
+      "pending-havens-00609.webp"
+    ],
+    "pending": true,
+    "source": "",
+    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+  }
 }

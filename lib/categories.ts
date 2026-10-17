@@ -106,6 +106,23 @@ export const LEGACY_CATEGORY_REDIRECTS: Record<string, CategoryGroupId | null> =
   'isi-pompalari': 'isi-pompasi',
 }
 
+/**
+ * Eski alt kategori değerleri (?category=...) → yeni alt kategori değeri veya grup id'si.
+ * Eski linkler, reklamlar ve yer imleri boş/yanlış liste yerine doğru kategoriye düşer.
+ */
+export const LEGACY_SUBCATEGORY_MAP: Record<string, string> = {
+  Panel: 'gunes-paneli',
+  'İnverter': 'solar-inverter',
+  'Lityum Batarya': 'Lityum Akü',
+  'Kurşun/Jel Akü': 'Jel Akü',
+  'MPPT/PWM': 'solar-sarj-kontrol',
+  'Solar Pompa/Sürücü': 'Solar Pompa Sürücüsü',
+  'Türbin ve Aksesuar': 'ruzgar-enerjisi',
+  'AC/DC Şarj': 'Akü Şarj Cihazı',
+  'Sistem Bileşenleri': 'solar-baglanti-ekipmani',
+  'Güç ve Veri Kabloları': 'Kablo ve Konnektör',
+}
+
 /** Tüm kategori değerleri (static export / API yokken menü fallback için). */
 export const ALL_CATEGORY_VALUES = CATEGORY_GROUPS.flatMap((g) => [...g.categoryValues])
 

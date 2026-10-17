@@ -16,7 +16,7 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import { mockProducts } from '@/lib/products-mock'
 import { ProductCard } from '@/components/ProductCard'
 import { buildSpecFacets } from '@/lib/spec-facets'
-import { CATEGORY_GROUPS, getGroupIdForCategory, getCategoryValuesByGroupId, getCategoryKey } from '@/lib/categories'
+import { CATEGORY_GROUPS, getGroupIdForCategory, getCategoryValuesByGroupId, getCategoryKey, LEGACY_SUBCATEGORY_MAP } from '@/lib/categories'
 import { productMatchesQuery } from '@/lib/search-product'
 import { ProductPageShell } from '@/components/ProductPageShell'
 
@@ -84,6 +84,8 @@ function ProductsPageContent() {
         value = categoryParam
       } else if (ALL_CATEGORY_VALUES.has(categoryParam)) {
         value = categoryParam
+      } else if (LEGACY_SUBCATEGORY_MAP[categoryParam]) {
+        value = LEGACY_SUBCATEGORY_MAP[categoryParam]
       } else {
         const groupId = getGroupIdForCategory(categoryParam)
         if (groupId) value = groupId

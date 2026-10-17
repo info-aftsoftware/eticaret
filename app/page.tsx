@@ -99,27 +99,8 @@ export default function HomePage() {
   const sectionTitleClass = 'text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight'
   const sectionDescClass = 'text-slate-600 text-sm sm:text-base mt-1'
 
-  const faqItems = [
-    { q: t('faqQ1'), a: t('faqA1') },
-    { q: t('faqQ2'), a: t('faqA2') },
-    { q: t('faqQ3'), a: t('faqA3') },
-    { q: t('faqQ4'), a: t('faqA4') },
-    { q: t('faqQ5'), a: t('faqA5') },
-  ]
-
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqItems.map((item) => ({
-      '@type': 'Question',
-      name: item.q,
-      acceptedAnswer: { '@type': 'Answer', text: item.a },
-    })),
-  }
-
   return (
     <div className="w-full max-w-full min-w-0 overflow-x-hidden">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       {/* ─── 1. HERO SLIDER (voltekno.com yapısı) ─────────────────────────── */}
       <HeroSlider />
