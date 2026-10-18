@@ -86,6 +86,11 @@ const nextConfig = {
   serverExternalPackages: ['undici'],
   // Üst klasörlerdeki başka lockfile'lar kök dizini yanlış seçtirmesin (standalone çıktı yolu)
   outputFileTracingRoot: __dirname,
+  // pdfkit (@react-pdf/renderer) standart fontları '#standard-fonts/...' ile dinamik yükler; izleyici bunları görmez,
+  // standalone çıktıya elle eklenmezse sunucuda sözleşme/fatura PDF'i "Cannot find module ... Helvetica.cjs" ile düşer.
+  outputFileTracingIncludes: {
+    '/**': ['./node_modules/pdfkit/js/standard-fonts/**', './node_modules/pdfkit/js/data/**'],
+  },
   // Development'ta output belirtilmemeli (Next.js default kullanır)
   webpack: (config, { isServer }) => {
     // Client bundle'da undici kullanma; #target parse hatası veriyor. Tarayıcıda native fetch kullan.
