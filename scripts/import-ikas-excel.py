@@ -140,6 +140,22 @@ def image_overrides():
     return _image_overrides
 
 
+def apply_description_fixes(sku, desc_html):
+    """Excel açıklamasındaki kesin hatalar (ör. başka ürün şablonundan kopyalanmış SSS) için metin düzeltmeleri.
+    scripts/data/catalog-fixes.json: { "<SKU>": { "descriptionReplace": [["eski", "yeni"], ...], "note": "..." } }"""
+    path = os.path.join(ROOT, 'scripts', 'data', 'catalog-fixes.json')
+    if not os.path.exists(path):
+        return desc_html
+    with open(path, encoding='utf-8') as f:
+        fix = json.load(f).get(sku)
+    for old, new in (fix or {}).get('descriptionReplace', []):
+        if old in desc_html:
+            desc_html = desc_html.replace(old, new)
+        elif new not in desc_html:
+            print(f'  ! {sku}: catalog-fixes.json içindeki metin açıklamada bulunamadı: {old[:60]}...')
+    return desc_html
+
+
 def images_of(row, missing):
     override = image_overrides().get(row[COL_SKU])
     if override:
@@ -515,7 +531,7 @@ def main():
         else:
             name = head[COL_SEO_NAME] or head[COL_NAME]
         category = classify_category(name)
-        desc_html = sanitize_html(head[COL_DESC])
+        desc_html = apply_description_fixes(head[COL_SKU], sanitize_html(head[COL_DESC]))
         p = {
             'id': pid,
             'sku': head[COL_SKU],

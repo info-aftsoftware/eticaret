@@ -675,19 +675,19 @@
   },
   "TOMMAT-BTRPMRN1256V200AH-00103": {
     "images": [
-      "tommatech-tommat-btrpmrn1256v200ah-00103-1.webp",
-      "tommatech-tommat-btrpmrn1256v200ah-00103-2.webp"
+      "tommatech-mrn1-25-6v-200ah-1.webp",
+      "tommatech-mrn1-25-6v-200ah-2.webp"
     ],
-    "source": "https://cw-enerji.com/tr/urun/tommatech-abspc-kasa-256v-200ah-marine-batarya-2080.html",
-    "note": "Üreticinin 25.6V 200Ah sayfasındaki resmi görseller, ancak DİKKAT etikette BTR-MRN3-12.8V-200AH yazıyor (üretici aynı render kullanıyor). Birebir etiketli (MRN1-25.6V-200AH) görsel yalnızca düşük çözünürlükte mevcut (1H_eq... ürün küçük; 1AYZxo... 535x337); tercih size kalmış"
+    "source": "ikas Excel görselleri (Drive 1AYZxo..., 1lHRl...; Excel'de yanlışlıkla 12,8V 200Ah satırına bağlıydı)",
+    "note": "Etiket BTR-MRN1-25.6V-200AH (birebir). Önceki üretici görsellerinin etiketi BTR-MRN3-12.8V-200AH idi (yanlış seri, gerilim ve enerji); denetimde değiştirildi. 1. görsel 535x337, daha büyük birebir görsel yok."
   },
   "TOMMAT-BTRPMRN3256V100AH-00102": {
     "images": [
-      "tommatech-tommat-btrpmrn3256v100ah-00102-1.webp",
-      "tommatech-tommat-btrpmrn3256v100ah-00102-2.webp"
+      "tommatech-mrn-25-6v-100ah-1.webp",
+      "tommatech-mrn-25-6v-100ah-2.webp"
     ],
-    "source": "https://tommatech.de/tr/urun/tommatech-abspc-kasa-256v-100ah-marine-batarya-1646.html",
-    "note": "Üreticinin 25.6V 100Ah sayfasındaki resmi 1200px görseller; etikette MRN3-12.8V-200AH yazıyor (eski görselde de aynı etiket vardı, üretici aynı render kullanıyor)"
+    "source": "ikas Excel görselleri (TOMMAT-BTRPMRN1256V100AH-00101 satırı, Drive 1rTac..., 1J5Hz...)",
+    "note": "MRN3 25,6V 100Ah'ın birebir görseli yok. Önceki görselin etiketi BTR-MRN3-12.8V-200AH idi (gerilim ve kapasite yanlış); aynı kasalı, değerleri doğru BTR-MRN1-25.6V-100AH görseli kullanıldı. Etikette seri MRN1 yazıyor: TEYİT GEREKLİ."
   },
   "TOMMAT-BTRP256V204AH-00104": {
     "images": [
@@ -1912,5 +1912,79 @@
     ],
     "source": "Havensis official 2026 price list PDF (https://www.solar-bazaar.com/productis/Havensis-Genel-Fiyat-Listesi-Turkce-06-2026.pdf, page 6, embedded image)",
     "note": "eşleşme: exact — Only genuine image of the grey MiniSolar-3AMPS. BELOW QUALITY BAR: 1192x477 (short side 477 < 500) with Havensis feature icons, battery scale and Turk Mali stamp around the product. The only larger copy (solarenerjideposu.com.tr 1500x1500) is AI-upscaled (garbled MSMPORT text) and carries the dealer logo, so rejected. havensis.com.tr minisolar-3-amper page shows a different blue h"
+  },
+  "TOMMAT-SPITT220TF-00303": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "TOMMAT-SPITT243150TF-00305": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "TOMMAT-SPITT243550TF-00306": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "TOMMAT-SPITT244000TF-00307": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "TOMMAT-SPITT244500TF-00308": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "TOMMAT-SPITT245000TF-00309": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "TOMMAT-SPITT246300TF-00310": {
+    "images": [
+      "tommatech-spi-kabin-tipi-200kw-ustu.webp"
+    ],
+    "source": "ikas Excel görseli (TOMMAT-SPITT222500TF-00304, Drive 1My-7Fdo...)",
+    "note": "Excel görseli küçük (≤15 kW) veya orta (18,5-110 kW) duvar tipi kasayı gösteriyordu; 200 kW üstü SPI sürücüler kabin tipidir. Aynı serinin 250 kW (TOMMAT-SPITT222500TF-00304) kabin görseli kullanıldı; birebir model görseli yok (URUN-DENETIMI.md)."
+  },
+  "VICTRO-PIN241251200-01313": {
+    "images": [
+      "victron-phoenix-24-250-230v-schuko-1.webp",
+      "victron-phoenix-24-250-230v-schuko-2.webp"
+    ],
+    "source": "https://www.victronenergy.com/inverters/phoenix-inverter-vedirect-250va-800va",
+    "note": "Resmi \"Inverter 24V 250VA VE.direct 230V (top)\" görseli (etikette \"inverter 24 | 250\"). Eski ana görselde \"phoenix 12 | 250\" yazıyordu. 2. görsel: Excel'deki etiketsiz arka panel görseli."
+  },
+  "VICTRO-PPP012020000-02117": {
+    "images": [
+      "victron-peak-power-pack-20ah-1.webp",
+      "victron-peak-power-pack-20ah-2.webp"
+    ],
+    "source": "https://www.victronenergy.com/batteries/peak-power-pack",
+    "note": "Resmi PPP-12.8V-20Ah-256Wh görselleri (sol açı, üst). Eski görsel 40Ah/512Wh etiketliydi (üç varyant ortak)."
+  },
+  "VICTRO-PPP012030000-02118": {
+    "images": [
+      "victron-peak-power-pack-30ah-1.webp",
+      "victron-peak-power-pack-30ah-2.webp",
+      "victron-peak-power-pack-30ah-3.webp"
+    ],
+    "source": "https://www.victronenergy.com/batteries/peak-power-pack",
+    "note": "Resmi PPP 12.8V 30Ah 384Wh görselleri (sol açı, ön, üst). Eski görsel 40Ah/512Wh etiketliydi (üç varyant ortak)."
   }
 }
