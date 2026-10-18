@@ -15,8 +15,9 @@ _Son güncelleme: 18.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 | 3b | İstek: paket sayfaları sadeleştirildi | ✅ | "Hangi İhtiyaç İçin?" altındaki 5 paket sayfasından kaldırıldı: başlık altı açıklama ve hedef kitle metni, kullanım ve kategori rozetleri, "… Paketi ile Ne Yapabilirsiniz?" bölümü, ürünlerin altındaki kategori rozetleri, "Kullanım Senaryoları / Paket İçeriği Öne Çıkanlar" kartları, alttaki bağlantı kutuları. Kalan: görsel, başlık, butonlar, uygun ürünler, SSS |
 | 4 | Güvenlik | ✅ | 73 admin API ucunun hepsinde yetki kontrolü; cron uçları CRON_SECRET'lı; ödeme dönüşleri imza doğruluyor; formlarda istek sınırı var. Eklendi: `frame-src` (Google ile girişin iframe'i engelleniyordu), `base-uri`, `object-src`, HSTS, nosniff, Referrer-Policy, X-Frame-Options, Permissions-Policy. npm audit: yalnızca Tailwind'in derleme aracı (braces) — canlı sitede çalışmıyor, düzeltmesi Tailwind 4 geçişi istiyor |
 | 5 | İçerik | ✅ | "1.500+ ürün" → "340+" (Hakkımızda, blog); hesap menüsündeki boş "Puan ve Hediye Çekleri" sekmesi kaldırıldı ("yakında eklenecek" yazıyordu); footer tanıtım metni güncel ürün yelpazesine göre yenilendi (TR/EN) |
-| 6 | Düzelt, test, commit, yayın | ⏳ | Ara kayıtlar: `d52a075`, `9adcf5d`; yayın tüm işler bitince (yalnızca nextfirststep.com) |
-| 7 | voltekno.com geçiş listesi | ⏳ | |
+| 6 | Düzelt, test, commit, yayın | ✅ | `d52a075`, `9adcf5d`, `5919880`, `9283961` → nextfirststep.com (18.10.2026 15:42); canlı kontrol: sayfalar 200, eski kategori adresleri 308, ürün JSON-LD kargo ücreti desiden (22 desi → 325,76 ₺), yeni sözleşme bölümleri canlıda, log temiz |
+| 7 | voltekno.com geçiş listesi | ✅ | Aşağıda "voltekno.com geçişi" |
+| 8 | SEO (ayrı dal) | ✅ | `seo-alan-adi` dalı (`2e6d1b5`, klasör `../voltekno-seo`), **yayına dahil değil**: eski 132 voltekno.com adresi → yeni sayfalara kalıcı yönlendirme, kurum şeması yalnızca ana sayfada, ürün breadcrumb şeması. Ayrıntı: o daldaki `SEO-GECIS.md` |
 
 ## İstek turu 2 (18.10.2026)
 | İstek | Durum | Not |
@@ -84,6 +85,14 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 - Kart ödemesi: banka sanal POS bilgileri girilene kadar kapalı (Havale/EFT çalışıyor).
 - Kargo ücreti sabit (50 TL, 3.000 TL üstü ücretsiz); desi kuralı bekleniyor.
 
+## voltekno.com geçişi (sizde)
+1. `seo-alan-adi` dalını ana dala birleştir (bana "birleştir" demeniz yeterli)
+2. voltekno.com ortam değişkenleri: `NEXT_PUBLIC_SITE_URL=https://voltekno.com`, `NEXT_PUBLIC_NOINDEX` **olmamalı**, mutlak `DATABASE_URL`, yeni güçlü `ADMIN_TOKEN` + `ADMIN_TOTP_SECRET` (`node scripts/admin-2fa-setup.mjs`), `SMTP_FROM` yeni gönderim adresi (görünen ad `SMTP_FROM_NAME`, varsayılan Voltekno), `CRON_SECRET`, banka POS bilgileri, `MEDIA_DIR`
+3. Firebase: Authorized domains'a voltekno.com + www; Google/Facebook girişi için sağlayıcıları açıp `NEXT_PUBLIC_GOOGLE_SIGNIN_ENABLED=true` / `NEXT_PUBLIC_FACEBOOK_SIGNIN_ENABLED=true` (Facebook için App ID/Secret); `firebase deploy --only firestore:rules,firestore:indexes`
+4. DNS: ikas → Hostinger; www/http tek adımda kanonik adrese
+5. Search Console + Bing: sitemap gönder; Merchant Center akışı `/feed/google-merchant.xml`; 2 hafta 404 izle
+6. Teyit edilecekler: tahmini desi değerleri (özellikle Altech türbinleri, Apex 51,2V 280Ah, SPI 315–630 kW sürücüler), sözleşmelerin hukukçu kontrolü, GES fiyat bandı
+
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `58f75f6` (18.10.2026 12:31) — sayfalar 200, "3 Adımda" yok, "görsel hazırlanıyor" kartı yok, yeni görseller canlıda; açılış logunda hata yok
+- Son yayın: `9283961` (18.10.2026 15:42)
