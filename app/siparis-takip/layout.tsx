@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
+import { getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Sipariş Takibi',
-  description: 'Sipariş numaranız, e-posta adresiniz ve telefonunuzla siparişinizin durumunu ve kargo bilgisini görüntüleyin.',
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return {
+    title: locale === 'en' ? 'Order Tracking' : 'Sipariş Takibi',
+    description: 'Sipariş numaranız, e-posta adresiniz ve telefonunuzla siparişinizin durumunu ve kargo bilgisini görüntüleyin.',
+  }
 }
 
 export default function OrderTrackingLayout({ children }: { children: React.ReactNode }) {

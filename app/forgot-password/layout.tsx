@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
+import { getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Şifremi Unuttum',
-  robots: { index: false, follow: true },
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return {
+    title: locale === 'en' ? 'Forgot Password' : 'Şifremi Unuttum',
+    robots: { index: false, follow: true },
+  }
 }
 
 export default function ForgotPasswordLayout({ children }: { children: React.ReactNode }) {

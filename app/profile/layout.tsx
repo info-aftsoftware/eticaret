@@ -1,8 +1,12 @@
 import type { Metadata } from 'next'
+import { getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
-  title: 'Hesabım',
-  robots: { index: false, follow: true },
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale()
+  return {
+    title: locale === 'en' ? 'My Account' : 'Hesabım',
+    robots: { index: false, follow: true },
+  }
 }
 
 export default function ProfileLayout({ children }: { children: React.ReactNode }) {
