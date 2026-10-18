@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { trackViewItem } from '@/lib/analytics'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -89,6 +90,18 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const router = useRouter()
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
+  // Lightbox açıkken sayfa kaymasın; Esc ile kapanır
+  useEffect(() => {
+    if (!lightboxOpen) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setLightboxOpen(false) }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [lightboxOpen])
   /** Varyantlı ürünlerde seçilen seçenek (model/kapasite); yoksa ilk varyant veya null */
   const [selectedVariant, setSelectedVariant] = useState<{ key: string; label: string; price: number; sku?: string; specifications?: Record<string, string> } | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
@@ -244,14 +257,14 @@ export default function ProductDetailClient({ initialProduct, productId: product
       addToast({ type: 'info', title: tCart('stockLimit'), description: tCart('stockLimitDesc', { maxQty: stock }) })
       return false
     }
-    if (!silent) addToast({ type: 'success', title: tCart('addedToCart'), description: `${displayName} sepete eklendi.` })
+    if (!silent) addToast({ type: 'success', title: tCart('addedToCart'), description: L(`${displayName} sepete eklendi.`, `${displayName} added to cart.`) })
     return true
   }
 
   return (
     <ProductPageShell
       breadcrumbs={
-        <nav aria-label="Sayfa konumu" className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 flex-nowrap min-w-0 [&>a]:shrink-0 [&>svg]:shrink-0">
+        <nav aria-label={L('Sayfa konumu', 'Breadcrumb')} className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 flex-nowrap min-w-0 [&>a]:shrink-0 [&>svg]:shrink-0">
           <Link href="/" className="hover:text-brand transition-colors">{tCommon('home')}</Link>
           <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-300 shrink-0" />
           <Link href="/products" className="hover:text-brand transition-colors">{tCommon('products')}</Link>
@@ -304,39 +317,42 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 )}
               </div>
 
-              {/* Lightbox */}
-              {lightboxOpen && images.length > 0 && (
+              {/* Lightbox: body'ye portal — sayfa kapsayıcısının içinde kalınca mobilde başlığın ve breadcrumb'ın altında kalıp kayıyordu */}
+              {lightboxOpen && images.length > 0 && createPortal(
                 <div
-                  className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+                  className="fixed inset-0 z-[1000] bg-black/90 flex items-center justify-center p-4 pt-16 pb-14"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label={product.name}
                   onClick={() => setLightboxOpen(false)}
                 >
                   <button
-                    className="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+                    className="absolute top-3 right-3 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
                     onClick={() => setLightboxOpen(false)}
-                    aria-label="Kapat"
+                    aria-label={L('Kapat', 'Close')}
                   >
                     <X className="w-6 h-6" />
                   </button>
                   {images.length > 1 && (
                     <>
                       <button
-                        className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 transition-colors"
+                        className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-10 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 transition-colors"
                         onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => (i - 1 + images.length) % images.length) }}
-                        aria-label="Önceki"
+                        aria-label={L('Önceki', 'Previous')}
                       >
                         <ChevronLeft className="w-6 h-6" />
                       </button>
                       <button
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 transition-colors"
+                        className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-10 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 transition-colors"
                         onClick={(e) => { e.stopPropagation(); setLightboxIndex((i) => (i + 1) % images.length) }}
-                        aria-label="Sonraki"
+                        aria-label={L('Sonraki', 'Next')}
                       >
                         <ChevronRight className="w-6 h-6" />
                       </button>
                     </>
                   )}
                   <div
-                    className="relative w-full max-w-3xl max-h-[85vh] aspect-square"
+                    className="relative w-full max-w-3xl max-h-full aspect-square"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <Image
@@ -348,17 +364,22 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     />
                   </div>
                   {images.length > 1 && (
-                    <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                    <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
                       {images.map((_, i) => (
                         <button
                           key={i}
                           onClick={(e) => { e.stopPropagation(); setLightboxIndex(i) }}
-                          className={`w-2 h-2 rounded-full transition-all ${i === lightboxIndex ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'}`}
-                        />
+                          aria-label={`${i + 1} / ${images.length}`}
+                          aria-current={i === lightboxIndex ? 'true' : undefined}
+                          className="p-2 min-h-0 min-w-0 flex items-center justify-center"
+                        >
+                          <span className={`block w-2 h-2 rounded-full transition-all ${i === lightboxIndex ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/70'}`} />
+                        </button>
                       ))}
                     </div>
                   )}
-                </div>
+                </div>,
+                document.body
               )}
               {images.length > 1 && (
                 <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]" aria-label={tProduct('otherImages')}>
@@ -367,7 +388,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       <button
                         type="button"
                         onClick={() => setSelectedIndex(index)}
-                        aria-label={`${index + 1}. görsel`}
+                        aria-label={L(`${index + 1}. görsel`, `Image ${index + 1}`)}
                         aria-current={selectedIndex === index ? 'true' : undefined}
                         className={`relative block w-[72px] h-[72px] sm:w-20 sm:h-20 rounded-lg overflow-hidden border bg-white transition-colors ${selectedIndex === index
                           ? 'border-[#0b2540] ring-1 ring-[#0b2540]'

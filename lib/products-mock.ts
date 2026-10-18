@@ -98,43 +98,52 @@ export const PLACEHOLDER_PRODUCT_IDS: string[] = []
 export const mockProducts: MockProduct[] = catalog as MockProduct[]
 
 /** Ana kategoriye göre tamamlayıcı alt kategoriler (detay sayfası "Uyumlu Ürünler" ve öneriler) */
-const COMPLEMENTARY_BY_GROUP: Record<string, { title: string; description: string; categories: string[] }> = {
+type ComplementaryText = { title: string; description: string }
+const COMPLEMENTARY_BY_GROUP: Record<string, ComplementaryText & { categories: string[]; en: ComplementaryText }> = {
   'gunes-paneli': {
+    en: { title: 'Buy together', description: 'Turn your solar panel into a complete system with a charge controller, inverter and lithium battery.' },
     title: 'Bu ürünle birlikte alın',
     description: 'Güneş panelinizi şarj kontrol cihazı, inverter ve lityum akü ile eksiksiz bir sisteme dönüştürün.',
     categories: ['MPPT Şarj Kontrol Cihazı', 'Tam Sinüs MPPT Akıllı İnverter', 'Lityum Akü', 'Kablo ve Konnektör'],
   },
   'solar-inverter': {
+    en: { title: 'Frequently bought together', description: 'Complete your inverter with batteries, solar panels and connection equipment.' },
     title: 'Birlikte alınanlar',
     description: 'İnverterinizi akü, güneş paneli ve bağlantı ekipmanlarıyla tamamlayabilirsiniz.',
     categories: ['Lityum Akü', 'TopCon Güneş Paneli', 'Sigorta ve Dağıtım', 'İnverter Aksesuarı'],
   },
   'solar-aku': {
+    en: { title: 'Frequently bought together', description: 'Use your battery with an inverter, charge controller and battery management equipment.' },
     title: 'Birlikte alınanlar',
     description: 'Akünüzü inverter, şarj kontrol cihazı ve batarya yönetim ekipmanlarıyla birlikte kullanın.',
     categories: ['Tam Sinüs MPPT Akıllı İnverter', 'MPPT Şarj Kontrol Cihazı', 'Batarya Yönetimi ve Aksesuar', 'Akü Şarj Cihazı'],
   },
   'solar-sarj-kontrol': {
+    en: { title: 'Frequently bought together', description: 'Turn your charge controller into a complete system with a solar panel and battery.' },
     title: 'Birlikte alınanlar',
     description: 'Şarj kontrol cihazınızı güneş paneli ve akü ile eksiksiz bir sisteme dönüştürün.',
     categories: ['TopCon Güneş Paneli', 'Lityum Akü', 'Jel Akü', 'Şarj Kontrol Aksesuarı'],
   },
   'solar-baglanti-ekipmani': {
+    en: { title: 'Frequently bought together', description: 'Use connection equipment together with inverters, batteries and monitoring products.' },
     title: 'Birlikte alınanlar',
     description: 'Bağlantı ekipmanlarını inverter, akü ve izleme ürünleriyle birlikte kullanın.',
     categories: ['Tam Sinüs MPPT Akıllı İnverter', 'Lityum Akü', 'MPPT Şarj Kontrol Cihazı', 'Batarya Yönetimi ve Aksesuar'],
   },
   'ruzgar-enerjisi': {
+    en: { title: 'Frequently bought together', description: 'Complete your wind turbine with a charge controller, battery and inverter.' },
     title: 'Birlikte alınanlar',
     description: 'Rüzgar türbininizi şarj kontrol cihazı, akü ve inverter ile tamamlayın.',
     categories: ['Rüzgar Şarj Kontrol Cihazı', 'Rüzgar Türbini Aksesuarı', 'Lityum Akü', 'Tam Sinüs İnverter'],
   },
   'isi-pompasi': {
+    en: { title: 'Frequently bought together', description: 'Lower running costs by powering your heat pump with solar panels and an inverter.' },
     title: 'Birlikte alınanlar',
     description: 'Isı pompanızı güneş paneli ve inverter ile besleyerek işletme maliyetini düşürebilirsiniz.',
     categories: ['TopCon Güneş Paneli', 'On-Grid İnverter', 'Hibrit İnverter'],
   },
   'elektrikli-arac-sarj': {
+    en: { title: 'Frequently bought together', description: 'Complete your charging station with accessories and a solar energy system.' },
     title: 'Birlikte alınanlar',
     description: 'Şarj istasyonunuzu aksesuarları ve güneş enerjisi sistemiyle tamamlayın.',
     categories: ['Şarj İstasyonu Aksesuarı', 'TopCon Güneş Paneli', 'Hibrit İnverter'],
@@ -142,7 +151,7 @@ const COMPLEMENTARY_BY_GROUP: Record<string, { title: string; description: strin
 }
 
 /** Alt kategori (product.category) → tamamlayıcı ayarı; kendi alt kategorisi listeden çıkarılır. */
-const COMPLEMENTARY_CATEGORIES: Record<string, { title: string; description: string; categories: string[] }> =
+const COMPLEMENTARY_CATEGORIES: Record<string, ComplementaryText & { categories: string[]; en: ComplementaryText }> =
   Object.fromEntries(
     CATEGORY_GROUPS.flatMap((g) => {
       const config = COMPLEMENTARY_BY_GROUP[g.id]
@@ -184,10 +193,10 @@ export function getComplementaryIds(product: Pick<MockProduct, 'id' | 'category'
 }
 
 /** Kategoriye göre tamamlayıcı ürünler – tek şablon için (başlık, açıklama, ürün ID listesi; isteğe bağlı banner) */
-export const COMPLEMENTARY_BY_CATEGORY: Record<string, { title: string; description: string; productIds: string[]; banner?: string }> =
+export const COMPLEMENTARY_BY_CATEGORY: Record<string, ComplementaryText & { productIds: string[]; banner?: string; en: ComplementaryText }> =
   Object.fromEntries(
     Object.entries(COMPLEMENTARY_CATEGORIES).map(([category, c]) => [
       category,
-      { title: c.title, description: c.description, productIds: pickComplementaryIds(c.categories) },
+      { title: c.title, description: c.description, en: c.en, productIds: pickComplementaryIds(c.categories) },
     ])
   )

@@ -14,6 +14,21 @@ const ADMIN_UID = 'admin-panel-user'
 /** Tanımlıysa şifreye ek olarak doğrulama uygulaması kodu istenir (iki adımlı doğrulama) */
 const ADMIN_TOTP_SECRET = process.env.ADMIN_TOTP_SECRET
 
+/**
+ * IP'den bağımsız genel kilit: istek sınırı IP başlığına dayanır ve vekil sunucu bu başlığı ezmiyorsa taklit
+ * edilebilir. Tüm istemcilerden 15 dakikada 20 hatalı şifre/kod gelirse giriş 15 dakika kapanır.
+ */
+const GLOBAL_FAIL_LIMIT = 20
+const GLOBAL_FAIL_WINDOW_MS = 15 * 60_000
+const globalFailures: number[] = []
+function globalLocked(now: number): boolean {
+  while (globalFailures.length && now - globalFailures[0] > GLOBAL_FAIL_WINDOW_MS) globalFailures.shift()
+  return globalFailures.length >= GLOBAL_FAIL_LIMIT
+}
+function recordFailure(now: number) {
+  globalFailures.push(now)
+}
+
 /** Sabit zamanlı karşılaştırma (zamanlama saldırısına karşı). */
 function safeEqual(a: string, b: string): boolean {
   const ha = crypto.createHash('sha256').update(a).digest()
@@ -31,6 +46,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const now = Date.now()
+    if (globalLocked(now)) {
+      return NextResponse.json(
+        { success: false, error: 'Çok fazla hatalı deneme. Lütfen 15 dakika sonra tekrar deneyin.' },
+        { status: 429 }
+      )
+    }
+
     const body = await request.json()
     const password = typeof body?.password === 'string' ? body.password.trim() : ''
 
@@ -43,6 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!safeEqual(password, ADMIN_TOKEN)) {
+      recordFailure(now)
       return NextResponse.json({ success: false, error: 'Şifre hatalı.' }, { status: 401 })
     }
 
@@ -52,6 +76,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama uygulamasındaki 6 haneli kodu girin.' }, { status: 401 })
       }
       if (!verifyTotp(ADMIN_TOTP_SECRET, otp)) {
+        recordFailure(now)
         return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı veya süresi dolmuş.' }, { status: 401 })
       }
     }

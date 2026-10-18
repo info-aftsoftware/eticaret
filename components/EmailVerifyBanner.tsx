@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { MailWarning, Loader2, CheckCircle2, RefreshCw } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { sendVerificationEmail, refreshEmailVerified } from '@/lib/store/useFirebaseAuth'
+import { useL } from '@/lib/i18n-inline'
 
 export const RESEND_COOLDOWN_SECONDS = 60
 const STORAGE_KEY = 'voltekno_verify_sent_at'
@@ -33,6 +34,7 @@ function writeSentAt(uid: string, at: number) {
 
 /** Doğrulama e-postası gönderimi + bekleme süresi + durum yenileme (banner ve /verify-email ortak). */
 export function useEmailVerification() {
+  const L = useL()
   const user = useAuthStore((s) => s.user)
   const uid = user?.id ?? ''
   const [remaining, setRemaining] = useState(0)
@@ -66,48 +68,49 @@ export function useEmailVerification() {
     setSending(false)
     if (result.alreadyVerified) {
       await refreshEmailVerified()
-      setMessage({ tone: 'success', text: 'E-posta adresiniz zaten doğrulanmış.' })
+      setMessage({ tone: 'success', text: L('E-posta adresiniz zaten doğrulanmış.', 'Your email address is already verified.') })
       return
     }
     if (result.success) {
       writeSentAt(uid, Date.now())
       tick()
-      setMessage({ tone: 'success', text: `Doğrulama bağlantısı ${user?.email ?? 'e-posta adresinize'} adresine gönderildi. Gelen kutunuzu ve spam klasörünü kontrol edin.` })
+      setMessage({ tone: 'success', text: L(`Doğrulama bağlantısı ${user?.email ?? 'e-posta adresinize'} adresine gönderildi. Gelen kutunuzu ve spam klasörünü kontrol edin.`, `A verification link has been sent to ${user?.email ?? 'your email address'}. Check your inbox and spam folder.`) })
     } else {
-      setMessage({ tone: 'error', text: result.error || 'E-posta gönderilemedi. Lütfen biraz sonra tekrar deneyin.' })
+      setMessage({ tone: 'error', text: result.error || L('E-posta gönderilemedi. Lütfen biraz sonra tekrar deneyin.', 'The email could not be sent. Please try again shortly.') })
     }
-  }, [uid, remaining, sending, tick, user?.email])
+  }, [uid, remaining, sending, tick, user?.email, L])
 
   const check = useCallback(async () => {
     setChecking(true)
     setMessage(null)
     const ok = await refreshEmailVerified()
     setChecking(false)
-    if (!ok) setMessage({ tone: 'info', text: 'Henüz doğrulanmamış görünüyor. E-postadaki bağlantıya tıkladıktan sonra tekrar deneyin.' })
+    if (!ok) setMessage({ tone: 'info', text: L('Henüz doğrulanmamış görünüyor. E-postadaki bağlantıya tıkladıktan sonra tekrar deneyin.', 'It doesn’t look verified yet. Click the link in the email, then try again.') })
     return ok
-  }, [])
+  }, [L])
 
   return { user, remaining, sending, checking, message, resend, check, markSent }
 }
 
 export function EmailVerifyBanner({ className = '' }: { className?: string }) {
+  const L = useL()
   const authReady = useAuthStore((s) => s.authReady)
   const { user, remaining, sending, checking, message, resend, check } = useEmailVerification()
 
   if (!authReady || !user || user.emailVerified) return null
 
   return (
-    <div className={`rounded-xl border border-[#f5b400]/50 bg-[#fffaeb] p-4 sm:p-5 ${className}`} role="region" aria-label="E-posta doğrulama">
+    <div className={`rounded-xl border border-[#f5b400]/50 bg-[#fffaeb] p-4 sm:p-5 ${className}`} role="region" aria-label={L('E-posta doğrulama', 'Email verification')}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="flex min-w-0 flex-1 gap-3">
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f5b400]/20 text-[#8a6100]">
             <MailWarning className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <p className="text-[15px] font-semibold text-[#121926]">E-posta adresinizi doğrulayın</p>
+            <p className="text-[15px] font-semibold text-[#121926]">{L('E-posta adresinizi doğrulayın', 'Verify your email address')}</p>
             <p className="mt-0.5 text-[14px] leading-relaxed text-[#20384e]">
-              <span className="break-all font-medium">{user.email}</span> adresine gönderdiğimiz bağlantıya tıklayın. Doğrulama sonrası üye
-              olmadan verdiğiniz siparişler de hesabınızda görünür.
+              {L('', 'Click the link we sent to ')}<span className="break-all font-medium">{user.email}</span>
+              {L(' adresine gönderdiğimiz bağlantıya tıklayın. Doğrulama sonrası üye olmadan verdiğiniz siparişler de hesabınızda görünür.', '. After verification, orders you placed as a guest will also appear in your account.')}
             </p>
           </div>
         </div>
@@ -119,7 +122,7 @@ export function EmailVerifyBanner({ className = '' }: { className?: string }) {
             className="inline-flex h-10 items-center justify-center gap-2 rounded-[10px] bg-[#0b2540] px-4 text-[14px] font-semibold text-white transition-colors hover:bg-[#12335a] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {sending && <Loader2 className="h-4 w-4 animate-spin" />}
-            {remaining > 0 ? `Tekrar gönder (${remaining} sn)` : 'Doğrulama e-postasını tekrar gönder'}
+            {remaining > 0 ? L(`Tekrar gönder (${remaining} sn)`, `Resend (${remaining}s)`) : L('Doğrulama e-postasını tekrar gönder', 'Resend verification email')}
           </button>
           <button
             type="button"
@@ -128,7 +131,7 @@ export function EmailVerifyBanner({ className = '' }: { className?: string }) {
             className="inline-flex h-10 items-center justify-center gap-2 rounded-[10px] border border-[#d3d9e1] bg-white px-4 text-[14px] font-semibold text-[#121926] transition-colors hover:bg-[#f5f7fa] disabled:opacity-60"
           >
             {checking ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-            Doğruladım
+            {L('Doğruladım', 'I’ve verified')}
           </button>
         </div>
       </div>

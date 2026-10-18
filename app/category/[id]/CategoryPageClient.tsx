@@ -249,7 +249,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                 </div>
 
                 {subcategories.length > 0 && (
-                  <nav aria-label="Kategori filtresi">
+                  <nav aria-label={L('Kategori filtresi', 'Category filter')}>
                     <h3 className="text-sm font-semibold text-slate-800 mb-2">{tProducts('category')}</h3>
                     <ul className="space-y-1">
                       <li>
@@ -408,7 +408,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                 </div>
 
                 {subcategories.length > 0 && (
-                  <nav aria-label="Kategori filtresi">
+                  <nav aria-label={L('Kategori filtresi', 'Category filter')}>
                     <h3 className="text-sm font-semibold text-slate-800 mb-2">{tProducts('category')}</h3>
                     <ul className="space-y-1">
                       <li>
@@ -562,7 +562,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                 </Button>
                 <SlidersHorizontal className="w-4 h-4 text-slate-400 hidden sm:block" />
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                  <SelectTrigger aria-label="Sıralama" className="w-[178px] min-h-[44px] h-11 text-sm border-slate-200 bg-white rounded-xl touch-manipulation">
+                  <SelectTrigger aria-label={L('Sıralama', 'Sort')} className="w-[178px] min-h-[44px] h-11 text-sm border-slate-200 bg-white rounded-xl touch-manipulation">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -606,7 +606,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                   onClick={resetAllFilters}
                   className="text-xs font-semibold text-brand hover:text-brand-hover hover:underline transition-all px-2"
                 >
-                  Tümünü Temizle
+                  {L('Tümünü Temizle', 'Clear All')}
                 </button>
               </div>
             )}

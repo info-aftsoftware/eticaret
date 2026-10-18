@@ -10,6 +10,7 @@ import { invalidateCampaignCache } from '@/lib/discounts'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 export async function GET(
   request: NextRequest,
@@ -86,6 +87,7 @@ export async function PATCH(
     })
     invalidateCampaignCache()
 
+    revalidateStorefront()
     return NextResponse.json(discount)
   } catch (error) {
     console.error('Admin discount PATCH error:', error)
@@ -108,6 +110,7 @@ export async function DELETE(
       where: { id },
     })
     invalidateCampaignCache()
+    revalidateStorefront()
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Admin discount DELETE error:', error)

@@ -3,6 +3,7 @@
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { SELLER } from '@/lib/legal/company'
+import { useL } from '@/lib/i18n-inline'
 
 export function whatsappHref(text?: string) {
   return `https://wa.me/${SELLER.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ''}`
@@ -22,20 +23,21 @@ export function WhatsAppIcon({ className = 'w-5 h-5' }: { className?: string }) 
  */
 export function WhatsAppButton() {
   const pathname = usePathname() ?? ''
+  const L = useL()
   // Sayfa adresi yüklemeden sonra eklenir: sunucu ve istemci HTML'i aynı kalsın (hydration uyumsuzluğu olmasın)
   const [origin, setOrigin] = React.useState('')
   React.useEffect(() => setOrigin(window.location.origin), [])
   if (pathname.startsWith('/checkout') || pathname.startsWith('/admin')) return null
   const onProduct = pathname.startsWith('/products/')
   const text = onProduct
-    ? `Merhaba, bu ürün hakkında bilgi almak istiyorum: ${origin}${pathname}`
-    : 'Merhaba, voltekno.com üzerinden yazıyorum.'
+    ? L(`Merhaba, bu ürün hakkında bilgi almak istiyorum: ${origin}${pathname}`, `Hello, I would like information about this product: ${origin}${pathname}`)
+    : L('Merhaba, voltekno.com üzerinden yazıyorum.', 'Hello, I am writing via voltekno.com.')
   return (
     <a
       href={whatsappHref(text)}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="WhatsApp ile yazın"
+      aria-label={L('WhatsApp ile yazın', 'Message us on WhatsApp')}
       className="fixed right-4 bottom-20 sm:bottom-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 transition-transform print:hidden"
     >
       <WhatsAppIcon className="w-7 h-7" />

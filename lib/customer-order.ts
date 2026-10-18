@@ -36,11 +36,12 @@ const normalizePhone = (s: unknown) =>
 export function canAccessOrder(
   order: Pick<Order, 'userId' | 'shippingEmail' | 'shippingPhone'>,
   userId: string | null,
-  creds: { email?: string | null; phone?: string | null }
+  creds: { email?: unknown; phone?: unknown }
 ): boolean {
   if (order.userId && userId && order.userId === userId) return true
-  const email = creds.email?.trim().toLowerCase()
-  const phone = normalizePhone(creds.phone)
+  // Gövdeden gelen değerler metin olmayabilir (ör. dizi/nesne): metin değilse eşleşme yok sayılır, 500 verilmez
+  const email = typeof creds.email === 'string' ? creds.email.trim().toLowerCase() : ''
+  const phone = normalizePhone(typeof creds.phone === 'string' ? creds.phone : null)
   return (
     !!email && !!order.shippingEmail && order.shippingEmail.trim().toLowerCase() === email &&
     phone.length >= 10 && normalizePhone(order.shippingPhone) === phone

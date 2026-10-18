@@ -28,7 +28,7 @@ export async function POST(request: NextRequest, props: { params: Promise<{ orde
   const body = await request.json().catch(() => ({}))
   const order = await prisma.order.findUnique({ where: { orderNo: params.orderNo } })
   const userId = (await getCustomerFromRequest(request))?.userId ?? null
-  if (!order || !canAccessOrder(order, userId, { email: body.email, phone: body.phone })) {
+  if (!order || !canAccessOrder(order, userId, { email: str(body?.email, 200), phone: str(body?.phone, 30) })) {
     return NextResponse.json({ success: false, error: 'Sipariş bulunamadı' }, { status: 404 })
   }
   if (order.paymentMethod !== 'bank_transfer' || order.paymentStatus === 'PAID' || order.status !== 'PENDING') {

@@ -1,24 +1,27 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Truck, Package, Clock, MapPin, ChevronRight, AlertTriangle, CheckCircle } from 'lucide-react'
+import { getLocale } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Kargo ve Teslimat',
   description: 'Voltekno kargo süreleri, desiye göre kargo ücreti, kargo firmaları ve teslimat koşulları.',
 }
 
-export default function ShippingPage() {
+export default async function ShippingPage() {
+  const locale = await getLocale()
+  const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
   return (
     <div className="min-h-screen bg-surface">
       <div className="bg-surface-elevated border-b border-palette">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center gap-2 text-xs font-medium text-ink-muted mb-2" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-brand transition-colors">Ana Sayfa</Link>
+            <Link href="/" className="hover:text-brand transition-colors">{L('Ana Sayfa', 'Home')}</Link>
             <ChevronRight className="w-3.5 h-3.5 text-ink-muted" />
-            <span className="text-ink font-semibold">Kargo ve Teslimat</span>
+            <span className="text-ink font-semibold">{L('Kargo ve Teslimat', 'Shipping & Delivery')}</span>
           </nav>
-          <h1 className="text-2xl md:text-3xl font-bold text-ink uppercase tracking-tight">Kargo ve Teslimat</h1>
-          <p className="mt-1 text-sm text-ink-muted">Siparişiniz güvenle ve hızlıca kapınıza gelsin</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-ink uppercase tracking-tight">{L('Kargo ve Teslimat', 'Shipping & Delivery')}</h1>
+          <p className="mt-1 text-sm text-ink-muted">{L('Siparişiniz güvenle ve hızlıca kapınıza gelsin', 'Get your order delivered to your door safely and quickly')}</p>
         </div>
       </div>
 
@@ -31,33 +34,36 @@ export default function ShippingPage() {
               <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
                 <Clock className="w-5 h-5 text-brand" />
               </div>
-              <h2 className="text-xl font-bold text-ink">Teslimat Süreleri</h2>
+              <h2 className="text-xl font-bold text-ink">{L('Teslimat Süreleri', 'Delivery Times')}</h2>
             </div>
             <div className="space-y-4">
               <div className="flex gap-3">
                 <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-ink">Stokta Mevcut Ürünler</p>
-                  <p className="text-ink-muted text-sm mt-0.5">Ödeme onayından itibaren kargoya verilir. Kargo firması teslim süresi bölgeye ve siparişe göre değişir; tahmini süre sipariş onay e-postanızda belirtilir.</p>
+                  <p className="font-semibold text-ink">{L('Stokta Mevcut Ürünler', 'In-Stock Products')}</p>
+                  <p className="text-ink-muted text-sm mt-0.5">{L('Ödeme onayından itibaren kargoya verilir. Kargo firması teslim süresi bölgeye ve siparişe göre değişir; tahmini süre sipariş onay e-postanızda belirtilir.', 'Shipped once payment is confirmed. The carrier delivery time varies by region and order; the estimated time is stated in your order confirmation email.')}</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-ink">Özel Sipariş / Stok Dışı Ürünler</p>
-                  <p className="text-ink-muted text-sm mt-0.5">Ürünün tedarik süresi sipariş öncesinde size bildirilir. Bu kategorideki ürünlerde standart süre garantisi uygulanmaz.</p>
+                  <p className="font-semibold text-ink">{L('Özel Sipariş / Stok Dışı Ürünler', 'Special Order / Out-of-Stock Products')}</p>
+                  <p className="text-ink-muted text-sm mt-0.5">{L('Ürünün tedarik süresi sipariş öncesinde size bildirilir. Bu kategorideki ürünlerde standart süre garantisi uygulanmaz.', 'The supply lead time is communicated to you before ordering. Standard delivery time guarantees do not apply to products in this category.')}</p>
                 </div>
               </div>
               <div className="flex gap-3">
                 <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-semibold text-ink">Büyük / Ağır Ekipmanlar</p>
-                  <p className="text-ink-muted text-sm mt-0.5">Ağır güneş paneli paletleri, büyük batarya sistemleri gibi ürünler özel araçlı kargo ile sevk edilir. Teslimat öncesinde sizi arayarak randevu belirlenebilir.</p>
+                  <p className="font-semibold text-ink">{L('Büyük / Ağır Ekipmanlar', 'Large / Heavy Equipment')}</p>
+                  <p className="text-ink-muted text-sm mt-0.5">{L('Ağır güneş paneli paletleri, büyük batarya sistemleri gibi ürünler özel araçlı kargo ile sevk edilir. Teslimat öncesinde sizi arayarak randevu belirlenebilir.', 'Products such as heavy solar panel pallets and large battery systems are shipped by dedicated freight vehicles. We may call you before delivery to schedule an appointment.')}</p>
                 </div>
               </div>
             </div>
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
-              Teslimat süresi siparişin içeriğine, stok durumuna ve bulunduğunuz bölgeye göre değişiklik gösterebilir. Hafta sonu ve resmi tatil günleri iş günü sayılmaz.
+              {L(
+                'Teslimat süresi siparişin içeriğine, stok durumuna ve bulunduğunuz bölgeye göre değişiklik gösterebilir. Hafta sonu ve resmi tatil günleri iş günü sayılmaz.',
+                'Delivery time may vary depending on the order contents, stock availability and your region. Weekends and public holidays are not counted as business days.'
+              )}
             </div>
           </div>
 
@@ -67,13 +73,13 @@ export default function ShippingPage() {
               <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
                 <Package className="w-5 h-5 text-brand" />
               </div>
-              <h2 className="text-xl font-bold text-ink">Kargo Ücreti</h2>
+              <h2 className="text-xl font-bold text-ink">{L('Kargo Ücreti', 'Shipping Fee')}</h2>
             </div>
             <ul className="space-y-2 text-ink-muted text-sm list-disc pl-5">
-              <li>Kargo ücreti, sepetinizdeki ürünlerin toplam <strong className="text-ink">desisine</strong> (hacim ağırlığı: en × boy × yükseklik / 3000 ile kilogramın büyüğü) göre hesaplanır.</li>
-              <li>Her desi aralığı için anlaşmalı firmalar arasından en uygun tarife uygulanır; 30 desi üzerindeki her desi için ücret artar.</li>
-              <li>100 desi veya 100 kg üzerindeki gönderilere kargo firmasının ağır yük taşıma bedeli eklenir.</li>
-              <li>Ücrete KDV ve Evrensel Posta Taşıma Bedeli dahildir; tutar sepette ve ödeme adımında gösterilir.</li>
+              <li>{L('Kargo ücreti, sepetinizdeki ürünlerin toplam', 'The shipping fee is calculated based on the total')} <strong className="text-ink">{L('desisine', 'volumetric weight (desi)')}</strong> {L('(hacim ağırlığı: en × boy × yükseklik / 3000 ile kilogramın büyüğü) göre hesaplanır.', 'of the items in your cart (the greater of width × length × height / 3000 and the actual weight in kg).')}</li>
+              <li>{L('Her desi aralığı için anlaşmalı firmalar arasından en uygun tarife uygulanır; 30 desi üzerindeki her desi için ücret artar.', 'For each desi range, the most favorable rate among our partner carriers is applied; the fee increases for each desi above 30.')}</li>
+              <li>{L('100 desi veya 100 kg üzerindeki gönderilere kargo firmasının ağır yük taşıma bedeli eklenir.', 'Shipments over 100 desi or 100 kg incur the carrier\'s heavy freight surcharge.')}</li>
+              <li>{L('Ücrete KDV ve Evrensel Posta Taşıma Bedeli dahildir; tutar sepette ve ödeme adımında gösterilir.', 'The fee includes VAT and the Universal Postal Service Fee; the amount is shown in the cart and at checkout.')}</li>
             </ul>
           </div>
 
@@ -83,13 +89,19 @@ export default function ShippingPage() {
               <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
                 <Package className="w-5 h-5 text-brand" />
               </div>
-              <h2 className="text-xl font-bold text-ink">Kargo Firması ve Paketleme</h2>
+              <h2 className="text-xl font-bold text-ink">{L('Kargo Firması ve Paketleme', 'Carriers and Packaging')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
-              Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo) üzerinden gönderilmektedir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.
+              {L(
+                'Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo) üzerinden gönderilmektedir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.',
+                'Orders are shipped via our partner carriers (Sürat Kargo, HepsiJET, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo). The most suitable carrier is selected automatically based on your region and order weight.'
+              )}
             </p>
             <p className="text-ink-muted leading-relaxed">
-              Ürünler, nakliye sırasında hasara karşı özel koruyucu malzeme ve sağlam dış ambalaj ile paketlenir. Hassas elektronik ekipmanlar (inverterler, akü sistemleri vb.) ek köpük ve balonlu naylon ile desteklenir.
+              {L(
+                'Ürünler, nakliye sırasında hasara karşı özel koruyucu malzeme ve sağlam dış ambalaj ile paketlenir. Hassas elektronik ekipmanlar (inverterler, akü sistemleri vb.) ek köpük ve balonlu naylon ile desteklenir.',
+                'Products are packed with special protective material and sturdy outer packaging to prevent damage in transit. Sensitive electronic equipment (inverters, battery systems, etc.) is further protected with extra foam and bubble wrap.'
+              )}
             </p>
           </div>
 
@@ -99,10 +111,10 @@ export default function ShippingPage() {
               <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
                 <MapPin className="w-5 h-5 text-brand" />
               </div>
-              <h2 className="text-xl font-bold text-ink">Sipariş Takibi</h2>
+              <h2 className="text-xl font-bold text-ink">{L('Sipariş Takibi', 'Order Tracking')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed">
-              Siparişiniz kargoya verildiğinde <strong>e-posta ve/veya SMS</strong> ile kargo takip numarası gönderilir. Bu numara ile kargo firmasının web sitesinden veya mobil uygulamasından teslimat durumunu takip edebilirsiniz. Ayrıca hesabınızdan "Siparişlerim" bölümünde güncel sipariş durumuna ulaşabilirsiniz.
+              {L('Siparişiniz kargoya verildiğinde', 'When your order ships, a tracking number is sent to you by')} <strong>{L('e-posta ve/veya SMS', 'email and/or SMS')}</strong>{L(' ile kargo takip numarası gönderilir. Bu numara ile kargo firmasının web sitesinden veya mobil uygulamasından teslimat durumunu takip edebilirsiniz. Ayrıca hesabınızdan "Siparişlerim" bölümünde güncel sipariş durumuna ulaşabilirsiniz.', '. You can use this number to track the delivery status on the carrier\'s website or mobile app. You can also see your current order status in the "My Orders" section of your account.')}
             </p>
           </div>
 
@@ -112,16 +124,16 @@ export default function ShippingPage() {
               <div className="w-11 h-11 rounded-xl bg-red-50 flex items-center justify-center">
                 <AlertTriangle className="w-5 h-5 text-red-500" />
               </div>
-              <h2 className="text-xl font-bold text-ink">Hasarlı veya Eksik Teslimat</h2>
+              <h2 className="text-xl font-bold text-ink">{L('Hasarlı veya Eksik Teslimat', 'Damaged or Incomplete Delivery')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
-              Teslimat sırasında ürünün hasarlı olduğunu fark ederseniz, ürünü teslim almadan önce kargo görevlisine <strong>hasar/tutanak tutturmalısınız</strong>. Tutanak olmadan yapılan hasar talepleri değerlendirilemeyebilir.
+              {L('Teslimat sırasında ürünün hasarlı olduğunu fark ederseniz, ürünü teslim almadan önce kargo görevlisine', 'If you notice that the product is damaged upon delivery, before accepting it you')} <strong>{L('hasar/tutanak tutturmalısınız', 'must have the courier file a damage report')}</strong>{L('. Tutanak olmadan yapılan hasar talepleri değerlendirilemeyebilir.', '. Damage claims made without a report may not be considered.')}
             </p>
             <ol className="list-decimal list-inside text-ink-muted space-y-2">
-              <li>Kargo görevlisine hasar tutanağı tutturun ve bir kopyasını alın.</li>
-              <li>Ürünü teslim almaktan kaçınabilir ya da çekinceli teslim alabilirsiniz.</li>
-              <li>Durumu en kısa sürede <strong>info@voltekno.com</strong> adresine bildirin; tutanak ve fotoğrafları ekleyin.</li>
-              <li>İnceleme sonucunda hasar teyit edilirse yeni ürün gönderimi veya tam iade yapılır.</li>
+              <li>{L('Kargo görevlisine hasar tutanağı tutturun ve bir kopyasını alın.', 'Have the courier file a damage report and keep a copy.')}</li>
+              <li>{L('Ürünü teslim almaktan kaçınabilir ya da çekinceli teslim alabilirsiniz.', 'You may refuse the delivery or accept it with reservations.')}</li>
+              <li>{L('Durumu en kısa sürede', 'Report the issue as soon as possible to')} <strong>info@voltekno.com</strong>{L(' adresine bildirin; tutanak ve fotoğrafları ekleyin.', ', attaching the report and photos.')}</li>
+              <li>{L('İnceleme sonucunda hasar teyit edilirse yeni ürün gönderimi veya tam iade yapılır.', 'If the damage is confirmed after review, a replacement is sent or a full refund is issued.')}</li>
             </ol>
           </div>
 
@@ -131,16 +143,22 @@ export default function ShippingPage() {
               <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
                 <Truck className="w-5 h-5 text-brand" />
               </div>
-              <h2 className="text-xl font-bold text-ink">Teslimat Adresi</h2>
+              <h2 className="text-xl font-bold text-ink">{L('Teslimat Adresi', 'Delivery Address')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed">
-              Teslimat adresinizi sipariş sırasında veya profil sayfanızdaki adresler bölümünden girebilirsiniz. Kurumsal teslimat için fatura adresi ile teslimat adresi farklı olabilir; sipariş formunda her iki bilgiyi doldurunuz. Sipariş onayından sonra adres değişikliği için lütfen derhal müşteri hizmetleri ile iletişime geçin.
+              {L(
+                'Teslimat adresinizi sipariş sırasında veya profil sayfanızdaki adresler bölümünden girebilirsiniz. Kurumsal teslimat için fatura adresi ile teslimat adresi farklı olabilir; sipariş formunda her iki bilgiyi doldurunuz. Sipariş onayından sonra adres değişikliği için lütfen derhal müşteri hizmetleri ile iletişime geçin.',
+                'You can enter your delivery address during checkout or in the addresses section of your profile page. For business deliveries, the billing address and delivery address may differ; please fill in both on the order form. To change your address after order confirmation, please contact customer service immediately.'
+              )}
             </p>
           </div>
 
           <div className="text-center pt-2">
             <Link href="/contact" className="text-brand hover:underline font-medium text-sm">
-              Kargo ve teslimat hakkında sorularınız için iletişime geçin →
+              {L(
+                'Kargo ve teslimat hakkında sorularınız için iletişime geçin →',
+                'Contact us with any questions about shipping and delivery →'
+              )}
             </Link>
           </div>
 

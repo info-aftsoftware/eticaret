@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
+import { useL } from '@/lib/i18n-inline'
 
 export interface BreadcrumbItem {
   label: string
@@ -21,6 +22,8 @@ interface ClassicPageShellProps {
   className?: string
   /** Başlık bölümünü gizle (sadece breadcrumb) */
   noTitle?: boolean
+  /** Sayfa kendi görünür h1'ini çiziyorsa ekran okuyucu için gizli h1 eklenmez (sayfada tek h1) */
+  pageHasOwnH1?: boolean
 }
 
 /**
@@ -33,7 +36,9 @@ export function ClassicPageShell({
   children,
   className = '',
   noTitle = false,
+  pageHasOwnH1 = false,
 }: ClassicPageShellProps) {
+  const L = useL()
   return (
     <div className={`min-h-screen bg-slate-50 pb-safe w-full max-w-full min-w-0 overflow-x-hidden ${className}`}>
       <div className="bg-white border-b border-slate-200 shadow-sm">
@@ -41,7 +46,7 @@ export function ClassicPageShell({
           {breadcrumbs.length > 0 && (
             <nav className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-500 mb-2 min-h-[44px] items-center" aria-label="Breadcrumb">
               <Link href="/" className="py-2 -my-2 px-1 hover:text-slate-900 transition-colors touch-manipulation">
-                Ana Sayfa
+                {L('Ana Sayfa', 'Home')}
               </Link>
               {breadcrumbs.map((item, i) => (
                 <React.Fragment key={i}>
@@ -58,7 +63,7 @@ export function ClassicPageShell({
             </nav>
           )}
           {/* Görünür başlık yoksa ekran okuyucular için sayfa başlığı (her sayfada tek h1) */}
-          {(noTitle || !title) && breadcrumbs.length > 0 && (
+          {(noTitle || !title) && !pageHasOwnH1 && breadcrumbs.length > 0 && (
             <h1 className="sr-only">{breadcrumbs[breadcrumbs.length - 1].label}</h1>
           )}
           {!noTitle && (title || description) && (

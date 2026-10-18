@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { ArrowLeft, Clock, Tag, ArrowRight } from 'lucide-react'
+import { getLocale } from 'next-intl/server'
 
 const BLOG_CONTENT: Record<string, {
   title: string
@@ -512,6 +513,35 @@ function renderContent(content: string) {
   return elements
 }
 
+/** Sayfa çerçevesi için İngilizce etiketler (yazı içerikleri Türkçe kalır) */
+const CATEGORY_EN: Record<string, string> = {
+  'ev-sarj': 'EV Charging',
+  'gunes-enerjisi': 'Solar Energy',
+  batarya: 'Battery',
+  inverter: 'Inverter',
+  ges: 'Solar Plant',
+}
+
+const MONTHS_EN: Record<string, string> = {
+  Ocak: 'January',
+  Şubat: 'February',
+  Mart: 'March',
+  Nisan: 'April',
+  Mayıs: 'May',
+  Haziran: 'June',
+  Temmuz: 'July',
+  Ağustos: 'August',
+  Eylül: 'September',
+  Ekim: 'October',
+  Kasım: 'November',
+  Aralık: 'December',
+}
+
+function dateEn(date: string): string {
+  const [d, m, y] = date.split(' ')
+  return MONTHS_EN[m] ? `${MONTHS_EN[m]} ${d}, ${y}` : date
+}
+
 export async function generateStaticParams() {
   return Object.keys(BLOG_CONTENT).map((slug) => ({ slug }))
 }
@@ -531,6 +561,11 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
   const post = BLOG_CONTENT[params.slug]
   if (!post) notFound()
 
+  const locale = await getLocale()
+  const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
+  const categoryLabel = (slug: string, tr: string) => L(tr, CATEGORY_EN[slug] ?? tr)
+  const readTimeLabel = (readTime: string) => L(readTime, readTime.replace(' dk', ' min'))
+
   const otherPosts = Object.entries(BLOG_CONTENT)
     .filter(([slug]) => slug !== params.slug)
     .slice(0, 3)
@@ -548,12 +583,12 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           </Link>
           <div className="flex items-center gap-3 mb-5">
             <span className="text-xs font-bold uppercase tracking-widest bg-brand/20 text-brand rounded-lg px-3 py-1.5">
-              {post.category}
+              {categoryLabel(post.categorySlug, post.category)}
             </span>
             <span className="flex items-center gap-1 text-xs text-slate-500">
-              <Clock className="w-3.5 h-3.5" /> {post.readTime} okuma
+              <Clock className="w-3.5 h-3.5" /> {L(`${post.readTime} okuma`, `${readTimeLabel(post.readTime)} read`)}
             </span>
-            <span className="text-xs text-slate-600">{post.date}</span>
+            <span className="text-xs text-slate-600">{L(post.date, dateEn(post.date))}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
             {post.title}
@@ -574,23 +609,23 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           {/* CTA */}
           <div className="mt-14 rounded-2xl border border-brand/20 bg-brand/5 p-8 text-center">
             <h3 className="text-xl font-extrabold text-slate-900 mb-2">
-              Bu konuda ürün arıyor musunuz?
+              {L('Bu konuda ürün arıyor musunuz?', 'Looking for products on this topic?')}
             </h3>
             <p className="text-slate-500 text-sm mb-5">
-              Voltekno'da 340+ ürün stokta. Hızlı teslimat, 2 yıl garanti.
+              {L('Voltekno\'da 340+ ürün stokta. Hızlı teslimat, 2 yıl garanti.', '340+ products in stock at Voltekno. Fast delivery, 2-year warranty.')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/products"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand hover:bg-brand-hover text-white font-bold px-6 py-3 text-sm transition-colors"
               >
-                Ürünleri İncele <ArrowRight className="w-4 h-4" />
+                {L('Ürünleri İncele', 'Browse Products')} <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/ges"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold px-6 py-3 text-sm transition-colors"
               >
-                Teklif Al
+                {L('Teklif Al', 'Get a Quote')}
               </Link>
             </div>
           </div>
@@ -598,7 +633,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           {/* Other posts */}
           {otherPosts.length > 0 && (
             <div className="mt-14">
-              <h3 className="text-lg font-extrabold text-slate-900 mb-5">Diğer Yazılar</h3>
+              <h3 className="text-lg font-extrabold text-slate-900 mb-5">{L('Diğer Yazılar', 'Other Articles')}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {otherPosts.map(([slug, p]) => (
                   <Link
@@ -606,12 +641,12 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                     href={`/blog/${slug}`}
                     className="group block rounded-xl border border-slate-200 p-4 hover:border-brand/40 hover:shadow-md transition-all"
                   >
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand mb-2 block">{p.category}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand mb-2 block">{categoryLabel(p.categorySlug, p.category)}</span>
                     <h4 className="text-sm font-bold text-slate-800 group-hover:text-brand transition-colors line-clamp-2 leading-snug mb-1">
                       {p.title}
                     </h4>
                     <span className="flex items-center gap-1 text-[11px] text-slate-400">
-                      <Clock className="w-3 h-3" /> {p.readTime}
+                      <Clock className="w-3 h-3" /> {readTimeLabel(p.readTime)}
                     </span>
                   </Link>
                 ))}

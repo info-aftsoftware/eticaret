@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Mail, Loader2 } from 'lucide-react'
 import { getDb } from '@/lib/firebase/config'
 import { useAuthStore } from '@/lib/store/useAuthStore'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Ticari elektronik ileti izni (kampanya e-postası / SMS) — verme ve geri alma (ret hakkı).
@@ -17,6 +18,7 @@ export function MarketingConsentCard() {
   const [accepted, setAccepted] = useState<boolean | null>(null)
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState('')
+  const L = useL()
 
   useEffect(() => {
     if (!uid) return
@@ -36,9 +38,9 @@ export function MarketingConsentCard() {
         { merge: true }
       )
       setAccepted(next)
-      setMessage(next ? 'Kampanya ve duyurulardan haberdar edileceksiniz.' : 'Ticari ileti izniniz kaldırıldı.')
+      setMessage(next ? L('Kampanya ve duyurulardan haberdar edileceksiniz.', 'You will be notified about promotions and announcements.') : L('Ticari ileti izniniz kaldırıldı.', 'Your consent to marketing messages has been withdrawn.'))
     } catch {
-      setMessage('Tercihiniz kaydedilemedi. Lütfen tekrar deneyin.')
+      setMessage(L('Tercihiniz kaydedilemedi. Lütfen tekrar deneyin.', 'Your preference could not be saved. Please try again.'))
     } finally {
       setSaving(false)
     }
@@ -47,7 +49,7 @@ export function MarketingConsentCard() {
   return (
     <Card className="classic-card rounded-lg">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2"><Mail className="w-5 h-5" />İletişim Tercihleri</CardTitle>
+        <CardTitle className="flex items-center gap-2"><Mail className="w-5 h-5" />{L('İletişim Tercihleri', 'Communication Preferences')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 text-sm">
         {accepted === null ? (
@@ -62,12 +64,12 @@ export function MarketingConsentCard() {
               onChange={(e) => toggle(e.target.checked)}
             />
             <span className="text-ink">
-              Kampanya, indirim ve duyurularla ilgili e-posta ve SMS almak istiyorum.{' '}
-              <Link href="/pages/ticari-elektronik-ileti-onayi" className="text-brand hover:underline" target="_blank">Ayrıntılar</Link>
+              {L('Kampanya, indirim ve duyurularla ilgili e-posta ve SMS almak istiyorum.', 'I would like to receive emails and SMS about promotions, discounts and announcements.')}{' '}
+              <Link href="/pages/ticari-elektronik-ileti-onayi" className="text-brand hover:underline" target="_blank">{L('Ayrıntılar', 'Details')}</Link>
             </span>
           </label>
         )}
-        <p className="text-xs text-ink-muted">Sipariş, ödeme ve kargo bilgilendirmeleri bu tercihten bağımsız olarak gönderilir.</p>
+        <p className="text-xs text-ink-muted">{L('Sipariş, ödeme ve kargo bilgilendirmeleri bu tercihten bağımsız olarak gönderilir.', 'Order, payment and shipping notifications are sent regardless of this preference.')}</p>
         {message && <p role="status" className="text-xs text-emerald-700">{message}</p>}
       </CardContent>
     </Card>

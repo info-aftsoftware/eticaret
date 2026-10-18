@@ -2,14 +2,15 @@
  * Müşteri (customer) kimlik doğrulama.
  * İstemci `Authorization: Bearer <token>` gönderir. Token iki türden biri olabilir:
  *  1) Backend JWT (firebase-session / login sonrası, JWT_SECRET ile imzalı)
- *  2) Firebase ID token (useFirebaseAuth store'u doğrudan bunu kullanır) — firebase-admin ile doğrulanır
+ *  2) Firebase ID token (useFirebaseAuth store'u doğrudan bunu kullanır) — lib/firebase-id-token ile doğrulanır
+ *     (firebase-admin varsa o, yoksa Google açık anahtarları)
  * Firebase kullanıcısı Prisma'da yoksa oluşturulur (Order.userId FK için).
  */
 
 import { NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { prisma } from '@/lib/prisma'
-import { getAdminAuth } from '@/lib/firebaseAdminServer'
+import { verifyFirebaseIdToken } from '@/lib/firebase-id-token'
 
 const JWT_SECRET = process.env.JWT_SECRET ?? ''
 
@@ -60,15 +61,14 @@ export async function getCustomerFromRequest(request: NextRequest): Promise<Auth
     }
   }
 
-  const auth = getAdminAuth()
-  if (!auth) return null
   try {
-    const decoded = await auth.verifyIdToken(token)
+    const decoded = await verifyFirebaseIdToken(token)
+    if (!decoded) return null
     // Admin panelinin Firebase kimliği (özel token, admin claim'i) müşteri hesabı sayılmaz
     if (decoded.uid === 'admin-panel-user' || decoded.admin === true) return null
     const email = decoded.email?.toLowerCase() ?? null
     const emailVerified = decoded.email_verified ?? false
-    const name = (decoded.name as string | undefined) || (email ? email.split('@')[0] : 'Müşteri')
+    const name = decoded.name || (email ? email.split('@')[0] : 'Müşteri')
 
     const existing = await prisma.user.findUnique({ where: { id: decoded.uid }, select: { id: true, emailVerified: true } })
     if (existing && emailVerified && !existing.emailVerified) {

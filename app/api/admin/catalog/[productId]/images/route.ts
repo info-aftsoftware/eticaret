@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkAdmin } from '@/lib/adminAuth'
 import { deleteProductImage, MediaError, saveProductImage } from '@/lib/media-storage'
 import { isRateLimited } from '@/lib/rate-limit'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 const MAX_FILES = 10
 
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       if (!(e instanceof MediaError)) console.error('Admin image upload error:', e)
     }
   }
+  revalidateStorefront()
   return NextResponse.json({ uploaded, errors }, { status: uploaded.length ? 200 : 400 })
 }
 
@@ -51,5 +53,6 @@ export async function DELETE(request: NextRequest) {
   if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status })
   const url = new URL(request.url).searchParams.get('url') || ''
   const deleted = await deleteProductImage(url)
+  revalidateStorefront()
   return NextResponse.json({ deleted })
 }

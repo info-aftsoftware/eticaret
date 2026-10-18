@@ -4,7 +4,7 @@
  */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { computeOrderTotals } from '../../lib/store-config'
+import { computeOrderTotals, bankTransferDeadline } from '../../lib/store-config'
 import { shippingFeeFor, cartLogistics } from '../../lib/shipping/fee'
 import { safeRedirect } from '../../lib/safe-redirect'
 
@@ -56,4 +56,15 @@ test('safeRedirect yalnızca site içi yollara izin verir', () => {
   assert.equal(safeRedirect('/\\evil.com'), '/profile')
   assert.equal(safeRedirect('https://evil.com'), '/profile')
   assert.equal(safeRedirect(null, '/'), '/')
+  // tarayıcı kontrol karakterini atınca //evil.com olurdu
+  assert.equal(safeRedirect('/\t/evil.com'), '/profile')
+  assert.equal(safeRedirect('/\n/evil.com'), '/profile')
+  assert.equal(safeRedirect('/orders/ORD-1?x=1'), '/orders/ORD-1?x=1')
+})
+
+test('havale son ödeme anı: 3 gün sonrasının sonu, İstanbul saatiyle', () => {
+  // 01.10 15:00 İstanbul → 04.10 23:59:59 İstanbul
+  assert.equal(bankTransferDeadline('2026-10-01T12:00:00Z').toISOString(), '2026-10-04T20:59:59.999Z')
+  // 02.10 01:30 İstanbul (UTC hâlâ 01.10) → 05.10 sonu
+  assert.equal(bankTransferDeadline('2026-10-01T22:30:00Z').toISOString(), '2026-10-05T20:59:59.999Z')
 })

@@ -42,7 +42,7 @@ export function BrandStrip() {
               <Link
                 href={`/products?brand=${encodeURIComponent(brand.name)}`}
                 tabIndex={i >= BRANDS.length ? -1 : undefined}
-                title={`${brand.name} ürünleri`}
+                title={L(`${brand.name} ürünleri`, `${brand.name} products`)}
                 className="flex items-center justify-center w-[108px] h-[108px] min-[901px]:w-[123px] min-[901px]:h-[123px] min-[1025px]:w-[160px] min-[1025px]:h-[160px] p-2 hover:opacity-80 transition-opacity"
               >
                 <Image

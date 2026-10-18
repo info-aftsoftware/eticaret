@@ -1,13 +1,15 @@
 import { ShieldCheck, Lock } from 'lucide-react'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Kabul edilen kartlar ve güvenlik rozetleri (banka sanal POS başvurusunda istenir).
  * Görseller yerine sade metin/SVG rozetler — marka dosyası gerekmez, koyu/açık zeminde okunur.
  */
 export function PaymentBadges({ className = '' }: { className?: string }) {
+  const L = useL()
   const box = 'inline-flex h-7 items-center justify-center rounded bg-white px-2 shadow-sm'
   return (
-    <ul className={`flex flex-wrap items-center gap-2 ${className}`} aria-label="Kabul edilen kartlar ve ödeme güvenliği">
+    <ul className={`flex flex-wrap items-center gap-2 ${className}`} aria-label={L('Kabul edilen kartlar ve ödeme güvenliği', 'Accepted cards and payment security')}>
       <li className={box} title="Visa">
         <span className="text-[13px] font-extrabold italic tracking-tight text-[#1a1f71]">VISA</span>
       </li>

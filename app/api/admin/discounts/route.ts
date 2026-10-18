@@ -12,6 +12,7 @@ import { invalidateCampaignCache } from '@/lib/discounts'
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
     })
 
     invalidateCampaignCache()
+    revalidateStorefront()
     return NextResponse.json(discount)
   } catch (error) {
     console.error('Admin discounts POST error:', error)

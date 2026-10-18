@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
  * 503 dönerse istemci Firebase'in kendi e-postasına (sendPasswordResetEmail) düşer.
  */
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminAuth } from '@/lib/firebaseAdminServer'
+import { getAdminAuth, adminProjectMatchesClient } from '@/lib/firebaseAdminServer'
 import { isRateLimited } from '@/lib/rate-limit'
 import { sendPasswordResetMessage } from '@/lib/notifications'
 import { siteOrigin, oobCodeFromLink, inCooldown, clearCooldown } from '../_shared'
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   if (isRateLimited(request, 'password-reset', 5, 15 * 60_000)) {
     return NextResponse.json({ success: false, error: 'Çok fazla deneme yapıldı. Lütfen birkaç dakika sonra tekrar deneyin.' }, { status: 429 })
   }
-  const auth = getAdminAuth()
+  const auth = adminProjectMatchesClient() ? getAdminAuth() : null
   if (!auth) return NextResponse.json({ success: false, error: 'Sunucu yapılandırılmamış.' }, { status: 503 })
 
   const body = await request.json().catch(() => null)

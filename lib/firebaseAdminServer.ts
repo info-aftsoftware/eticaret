@@ -40,6 +40,24 @@ export function getAdminAuth(): Auth | null {
   return adminAuth
 }
 
+/**
+ * Sunucu Admin SDK'sı ile istemcinin Firebase projesi aynı mı? Farklıysa (proje taşıması yarım kaldıysa)
+ * kullanıcı arama, token doğrulama ve e-posta işlem bağlantıları yanlış projeye gider; bu uçlar 503 dönüp
+ * istemcinin Firebase'in kendi e-postasına düşmesini sağlamalıdır.
+ */
+export function adminProjectMatchesClient(): boolean {
+  const admin = process.env.FIREBASE_ADMIN_PROJECT_ID
+  const client = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  if (!admin || !client) return true
+  if (admin === client) return true
+  if (!projectMismatchLogged) {
+    projectMismatchLogged = true
+    console.error(`[firebase-admin] Admin SDK projesi "${admin}", istemci projesi "${client}". FIREBASE_ADMIN_* değişkenlerini istemci projesinin servis hesabıyla güncelleyin (FIREBASE_SETUP.md, adım 6).`)
+  }
+  return false
+}
+let projectMismatchLogged = false
+
 export function isFirebaseAdminConfigured(): boolean {
   return Boolean(
     process.env.FIREBASE_ADMIN_PROJECT_ID &&

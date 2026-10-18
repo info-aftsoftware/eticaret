@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { useL } from '@/lib/i18n-inline'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -39,6 +40,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
   const tCommon = useTranslations('common')
   const tHeader = useTranslations('header')
   const tProducts = useTranslations('products')
+  const L = useL()
 
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -199,7 +201,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         </Button>
       </form>
 
-      <nav aria-label="Kategoriler">
+      <nav aria-label={L('Kategoriler', 'Categories')}>
         <h3 className="text-sm font-semibold text-slate-800 mb-2">{tProducts('category')}</h3>
         <ul className="space-y-1">
           <li>
@@ -342,7 +344,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
 
       {selectedCategory && specFacets.length > 0 && (
         <section className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-800">Kategoriye Özel Filtreler</h3>
+          <h3 className="text-sm font-semibold text-slate-800">{L('Kategoriye Özel Filtreler', 'Category-Specific Filters')}</h3>
           {specFacets.map((facet) => (
             <div key={facet.key}>
               <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
@@ -401,7 +403,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             </Button>
             <span className="text-sm text-slate-600 font-medium">{tProducts('productsListed', { count: totalCount })}</span>
             <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
-              <SelectTrigger aria-label="Sıralama" className="min-h-[44px] h-11 w-[180px] max-w-full bg-white border-slate-200 text-slate-800 text-sm rounded-xl touch-manipulation">
+              <SelectTrigger aria-label={L('Sıralama', 'Sort')} className="min-h-[44px] h-11 w-[180px] max-w-full bg-white border-slate-200 text-slate-800 text-sm rounded-xl touch-manipulation">
                 <SelectValue placeholder={tProducts('sortByPlaceholder')} />
               </SelectTrigger>
               <SelectContent align="end" className="rounded-xl border-slate-200 bg-white">
@@ -443,7 +445,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
                     type="button"
                     onClick={() => updateSpecFilter(key, value, false)}
                     className="text-slate-500 hover:text-slate-800"
-                    aria-label="Filtreyi kaldır"
+                    aria-label={L('Filtreyi kaldır', 'Remove filter')}
                   >
                     <X className="w-3 h-3" />
                   </button>

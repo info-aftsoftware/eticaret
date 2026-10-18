@@ -14,12 +14,14 @@ import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog
 import { AuthLayout, TextField, PasswordField, PasswordStrength, Checkbox, PrimaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
 import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { saveSignupConsents } from '@/components/auth/consents'
+import { useL } from '@/lib/i18n-inline'
 
 const MIN_PASSWORD = 8
 
 type Errors = Partial<Record<'name' | 'email' | 'phone' | 'password' | 'confirmPassword' | 'terms', string>>
 
 function RegisterPageContent() {
+  const L = useL()
   const router = useRouter()
   const searchParams = useSearchParams()
   const register = useAuthStore((state) => state.register)
@@ -64,18 +66,18 @@ function RegisterPageContent() {
   const validate = (): Errors => {
     const next: Errors = {}
     const name = formData.name.trim()
-    if (!name) next.name = 'Adınızı ve soyadınızı girin.'
-    else if (name.length < 3) next.name = 'Ad soyad en az 3 karakter olmalıdır.'
+    if (!name) next.name = L('Adınızı ve soyadınızı girin.', 'Enter your full name.')
+    else if (name.length < 3) next.name = L('Ad soyad en az 3 karakter olmalıdır.', 'Full name must be at least 3 characters.')
     const email = formData.email.trim()
-    if (!email) next.email = 'E-posta adresinizi girin.'
-    else if (!EMAIL_RE.test(email)) next.email = 'Geçerli bir e-posta adresi girin (örn. ad@ornek.com).'
+    if (!email) next.email = L('E-posta adresinizi girin.', 'Enter your email address.')
+    else if (!EMAIL_RE.test(email)) next.email = L('Geçerli bir e-posta adresi girin (örn. ad@ornek.com).', 'Enter a valid email address (e.g. name@example.com).')
     const digits = formData.phone.replace(/\D/g, '')
-    if (formData.phone.trim() && (digits.length < 10 || digits.length > 13)) next.phone = 'Geçerli bir telefon numarası girin (örn. 0555 123 45 67).'
-    if (!formData.password) next.password = 'Bir şifre belirleyin.'
-    else if (formData.password.length < MIN_PASSWORD) next.password = `Şifre en az ${MIN_PASSWORD} karakter olmalıdır.`
-    if (!formData.confirmPassword) next.confirmPassword = 'Şifrenizi tekrar girin.'
-    else if (formData.password !== formData.confirmPassword) next.confirmPassword = 'Şifreler eşleşmiyor.'
-    if (!acceptTerms) next.terms = 'Devam etmek için Üyelik ve Kullanım Koşulları’nı kabul etmelisiniz.'
+    if (formData.phone.trim() && (digits.length < 10 || digits.length > 13)) next.phone = L('Geçerli bir telefon numarası girin (örn. 0555 123 45 67).', 'Enter a valid phone number (e.g. 0555 123 45 67).')
+    if (!formData.password) next.password = L('Bir şifre belirleyin.', 'Choose a password.')
+    else if (formData.password.length < MIN_PASSWORD) next.password = L(`Şifre en az ${MIN_PASSWORD} karakter olmalıdır.`, `Password must be at least ${MIN_PASSWORD} characters.`)
+    if (!formData.confirmPassword) next.confirmPassword = L('Şifrenizi tekrar girin.', 'Re-enter your password.')
+    else if (formData.password !== formData.confirmPassword) next.confirmPassword = L('Şifreler eşleşmiyor.', 'Passwords do not match.')
+    if (!acceptTerms) next.terms = L('Devam etmek için Üyelik ve Kullanım Koşulları’nı kabul etmelisiniz.', 'You must accept the Membership and Terms of Use to continue.')
     return next
   }
 
@@ -101,7 +103,7 @@ function RegisterPageContent() {
     const result = await register(formData.email.trim(), formData.password, formData.name.trim(), formData.phone.trim() || undefined)
 
     if (!result.success) {
-      setError(result.error || 'Kayıt tamamlanamadı.')
+      setError(result.error || L('Kayıt tamamlanamadı.', 'Registration could not be completed.'))
       setLoading(false)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
@@ -117,9 +119,9 @@ function RegisterPageContent() {
 
   return (
     <AuthLayout
-      breadcrumb="Kayıt Ol"
-      title="Üye Ol"
-      subtitle={fromOrder ? 'Siparişiniz oluşturuldu. Siparişlerinizi takip etmek için hesabınızı oluşturun.' : 'Birkaç adımda hesabınızı oluşturun, siparişlerinizi kolayca takip edin.'}
+      breadcrumb={L('Kayıt Ol', 'Register')}
+      title={L('Üye Ol', 'Sign Up')}
+      subtitle={fromOrder ? L('Siparişiniz oluşturuldu. Siparişlerinizi takip etmek için hesabınızı oluşturun.', 'Your order has been placed. Create an account to track your orders.') : L('Birkaç adımda hesabınızı oluşturun, siparişlerinizi kolayca takip edin.', 'Create your account in a few steps and track your orders easily.')}
     >
       <div className="space-y-5">
         {error && (
@@ -127,9 +129,9 @@ function RegisterPageContent() {
             {error}
             {error.includes('zaten var') && (
               <span className="mt-1 block">
-                <Link href={`/login?email=${encodeURIComponent(formData.email.trim())}${redirectParam ? `&redirect=${encodeURIComponent(target)}` : ''}`} className="font-semibold underline">Giriş yap</Link>
+                <Link href={`/login?email=${encodeURIComponent(formData.email.trim())}${redirectParam ? `&redirect=${encodeURIComponent(target)}` : ''}`} className="font-semibold underline">{L('Giriş yap', 'Sign in')}</Link>
                 {' · '}
-                <Link href={`/forgot-password?email=${encodeURIComponent(formData.email.trim())}`} className="font-semibold underline">Şifremi unuttum</Link>
+                <Link href={`/forgot-password?email=${encodeURIComponent(formData.email.trim())}`} className="font-semibold underline">{L('Şifremi unuttum', 'Forgot password')}</Link>
               </span>
             )}
           </FormAlert>
@@ -140,10 +142,10 @@ function RegisterPageContent() {
           onError={setError}
           acceptMarketing={acceptMarketing}
           disabled={loading}
-          dividerText="veya e-posta ile"
+          dividerText={L('veya e-posta ile', 'or with email')}
           canStart={() => {
             if (acceptTerms) return true
-            setErrors((prev) => ({ ...prev, terms: 'Google veya Facebook ile devam etmeden önce Üyelik ve Kullanım Koşulları’nı kabul edin.' }))
+            setErrors((prev) => ({ ...prev, terms: L('Google veya Facebook ile devam etmeden önce Üyelik ve Kullanım Koşulları’nı kabul edin.', 'Accept the Membership and Terms of Use before continuing with Google or Facebook.') }))
             document.querySelector<HTMLElement>('[data-field="terms"] input')?.focus()
             return false
           }}
@@ -151,20 +153,20 @@ function RegisterPageContent() {
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div data-field="name">
-            <TextField label="Ad Soyad" required placeholder="Adınız Soyadınız" value={formData.name} onChange={update('name')} error={errors.name} autoComplete="name" disabled={loading} />
+            <TextField label={L('Ad Soyad', 'Full Name')} required placeholder={L('Adınız Soyadınız', 'Your full name')} value={formData.name} onChange={update('name')} error={errors.name} autoComplete="name" disabled={loading} />
           </div>
           <div data-field="email">
-            <TextField label="E-posta" required type="email" inputMode="email" placeholder="ornek@email.com" value={formData.email} onChange={update('email')} error={errors.email} autoComplete="email" disabled={loading} hint="Sipariş ve fatura bildirimleri bu adrese gönderilir." />
+            <TextField label={L('E-posta', 'Email')} required type="email" inputMode="email" placeholder={L('ornek@email.com', 'example@email.com')} value={formData.email} onChange={update('email')} error={errors.email} autoComplete="email" disabled={loading} hint={L('Sipariş ve fatura bildirimleri bu adrese gönderilir.', 'Order and invoice notifications are sent to this address.')} />
           </div>
           <div data-field="phone">
-            <TextField label="Telefon" type="tel" inputMode="tel" placeholder="0555 123 45 67" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint="İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için." />
+            <TextField label={L('Telefon', 'Phone')} type="tel" inputMode="tel" placeholder="0555 123 45 67" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint={L('İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için.', 'Optional — so we can reach you about delivery.')} />
           </div>
           <div className="space-y-4">
             <div data-field="password">
-              <PasswordField label="Şifre" required placeholder={`En az ${MIN_PASSWORD} karakter`} value={formData.password} onChange={update('password')} error={errors.password} autoComplete="new-password" disabled={loading} />
+              <PasswordField label={L('Şifre', 'Password')} required placeholder={L(`En az ${MIN_PASSWORD} karakter`, `At least ${MIN_PASSWORD} characters`)} value={formData.password} onChange={update('password')} error={errors.password} autoComplete="new-password" disabled={loading} />
             </div>
             <div data-field="confirmPassword">
-              <PasswordField label="Şifre Tekrar" required placeholder="Şifrenizi tekrar girin" value={formData.confirmPassword} onChange={update('confirmPassword')} error={errors.confirmPassword} autoComplete="new-password" disabled={loading} />
+              <PasswordField label={L('Şifre Tekrar', 'Confirm Password')} required placeholder={L('Şifrenizi tekrar girin', 'Re-enter your password')} value={formData.confirmPassword} onChange={update('confirmPassword')} error={errors.confirmPassword} autoComplete="new-password" disabled={loading} />
             </div>
           </div>
           <div className="-mt-1 text-[13px] text-[#5d6e80]">
@@ -174,26 +176,26 @@ function RegisterPageContent() {
           <div className="space-y-3 rounded-md border border-[#e6ebf1] p-4">
             <div data-field="terms">
               <Checkbox checked={acceptTerms} onChange={(v) => { setAcceptTerms(v); if (v) setErrors((p) => ({ ...p, terms: undefined })) }} error={errors.terms} disabled={loading}>
-                <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı okudum ve kabul ediyorum. <span className="text-red-500">*</span>
+                {L('', 'I have read and accept the ')}<LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>{L('Üyelik ve Kullanım Koşulları', 'Membership and Terms of Use')}</LegalLink>{L('’nı okudum ve kabul ediyorum.', '.')} <span className="text-red-500">*</span>
               </Checkbox>
             </div>
             <Checkbox checked={acceptMarketing} onChange={setAcceptMarketing} disabled={loading}>
-              Kampanya ve duyurulardan haberdar olmak için <LegalLink slug="ticari-elektronik-ileti-onayi" onOpen={setLegalDoc}>ticari elektronik ileti</LegalLink> almayı kabul ediyorum (isteğe bağlı).
+              {L('Kampanya ve duyurulardan haberdar olmak için', 'I agree to receive')} <LegalLink slug="ticari-elektronik-ileti-onayi" onOpen={setLegalDoc}>{L('ticari elektronik ileti', 'commercial electronic messages')}</LegalLink> {L('almayı kabul ediyorum (isteğe bağlı).', 'to stay informed about campaigns and announcements (optional).')}
             </Checkbox>
             <p className="pl-8 text-[12.5px] leading-relaxed text-[#5d6e80] [&_button]:min-h-0 [&_button]:min-w-0">
-              Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> ve{' '}
-              <LegalLink slug="gizlilik-ve-cerez-politikasi" onOpen={setLegalDoc}>Gizlilik ve Çerez Politikası</LegalLink> kapsamında işlenir.
+              {L('Kişisel verileriniz', 'Your personal data is processed under the')} <LegalLink slug="kvkk" onOpen={setLegalDoc}>{L('KVKK Aydınlatma Metni', 'KVKK Privacy Notice')}</LegalLink> {L('ve', 'and')}{' '}
+              <LegalLink slug="gizlilik-ve-cerez-politikasi" onOpen={setLegalDoc}>{L('Gizlilik ve Çerez Politikası', 'Privacy and Cookie Policy')}</LegalLink>{L(' kapsamında işlenir.', '.')}
             </p>
           </div>
           <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />
 
-          <PrimaryButton type="submit" loading={loading} loadingText="Hesabınız oluşturuluyor…">
-            Üye Ol
+          <PrimaryButton type="submit" loading={loading} loadingText={L('Hesabınız oluşturuluyor…', 'Creating your account…')}>
+            {L('Üye Ol', 'Sign Up')}
           </PrimaryButton>
         </form>
 
         <p className="text-center text-[14.5px] text-[#5d6e80]">
-          Zaten hesabınız var mı? <Link href={loginHref} className={linkClass}>Giriş yapın</Link>
+          {L('Zaten hesabınız var mı?', 'Already have an account?')} <Link href={loginHref} className={linkClass}>{L('Giriş yapın', 'Sign in')}</Link>
         </p>
       </div>
     </AuthLayout>

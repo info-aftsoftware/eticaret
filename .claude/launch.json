@@ -50,6 +50,37 @@
       "port": 9323
     },
     {
+      "name": "akuaciftlik-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "C:/Users/aslan/Desktop/depo/su-urunleri-otomasyon",
+        "run",
+        "dev",
+        "--",
+        "-p",
+        "3100"
+      ],
+      "port": 3100
+    },
+    {
+      "name": "akuaciftlik-e2e",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "C:/Users/aslan/Desktop/depo/su-urunleri-otomasyon",
+        "run",
+        "dev",
+        "--",
+        "-p",
+        "3120"
+      ],
+      "env": {
+        "DEMO_LOGIN_ENABLED": "1"
+      },
+      "port": 3120
+    },
+    {
       "name": "Next.js Production 3007",
       "runtimeExecutable": "node",
       "runtimeArgs": [
@@ -59,6 +90,20 @@
         "3007"
       ],
       "port": 3007
+    },
+    {
+      "name": "Next.js Production Build 3008",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        "3008"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build"
+      },
+      "port": 3008
     }
   ]
 }

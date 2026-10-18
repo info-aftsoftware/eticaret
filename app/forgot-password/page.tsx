@@ -9,6 +9,7 @@ import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
 import { authErrorCode, authErrorMessage, EMAIL_RE } from '@/lib/auth-errors'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { AuthLayout, TextField, PrimaryButton, SecondaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
+import { useL } from '@/lib/i18n-inline'
 
 const COOLDOWN = 60
 
@@ -44,6 +45,7 @@ async function requestReset(email: string): Promise<void> {
 }
 
 function ForgotPasswordContent() {
+  const L = useL()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState(searchParams.get('email') ?? '')
   const [fieldError, setFieldError] = useState('')
@@ -75,8 +77,8 @@ function ForgotPasswordContent() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const value = email.trim()
-    if (!value) return setFieldError('E-posta adresinizi girin.')
-    if (!EMAIL_RE.test(value)) return setFieldError('Geçerli bir e-posta adresi girin (örn. ad@ornek.com).')
+    if (!value) return setFieldError(L('E-posta adresinizi girin.', 'Enter your email address.'))
+    if (!EMAIL_RE.test(value)) return setFieldError(L('Geçerli bir e-posta adresi girin (örn. ad@ornek.com).', 'Enter a valid email address (e.g. name@example.com).'))
     setFieldError('')
     submit(value)
   }
@@ -84,33 +86,33 @@ function ForgotPasswordContent() {
   if (sentTo) {
     return (
       <AuthLayout
-        breadcrumb="Şifremi Unuttum"
-        title="E-postanızı kontrol edin"
-        subtitle="Bu adrese kayıtlı bir hesap varsa şifre sıfırlama bağlantısını gönderdik."
+        breadcrumb={L('Şifremi Unuttum', 'Forgot Password')}
+        title={L('E-postanızı kontrol edin', 'Check your email')}
+        subtitle={L('Bu adrese kayıtlı bir hesap varsa şifre sıfırlama bağlantısını gönderdik.', 'If an account is registered with this address, we have sent a password reset link.')}
        
       >
         <div className="space-y-5">
           <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">
-            <p className="text-[13px] text-[#5d6e80]">Gönderilen adres</p>
+            <p className="text-[13px] text-[#5d6e80]">{L('Gönderilen adres', 'Sent to')}</p>
             <p className="mt-0.5 break-all text-[15px] font-semibold text-[#121926]">{sentTo}</p>
             <ul className="mt-3 space-y-1.5 text-[13.5px] leading-relaxed text-[#20384e]">
-              <li>• Bağlantı yaklaşık 1 saat geçerlidir ve bir kez kullanılabilir.</li>
-              <li>• E-posta gelmediyse spam / gereksiz klasörünü kontrol edin.</li>
+              <li>• {L('Bağlantı yaklaşık 1 saat geçerlidir ve bir kez kullanılabilir.', 'The link is valid for about 1 hour and can be used once.')}</li>
+              <li>• {L('E-posta gelmediyse spam / gereksiz klasörünü kontrol edin.', 'If the email hasn’t arrived, check your spam / junk folder.')}</li>
             </ul>
           </div>
           {error && <FormAlert>{error}</FormAlert>}
           <div className="space-y-3">
             <SecondaryButton type="button" onClick={() => submit(sentTo)} disabled={loading || remaining > 0}>
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {remaining > 0 ? `Tekrar gönder (${remaining} sn)` : 'Bağlantıyı tekrar gönder'}
+              {remaining > 0 ? L(`Tekrar gönder (${remaining} sn)`, `Resend (${remaining}s)`) : L('Bağlantıyı tekrar gönder', 'Resend link')}
             </SecondaryButton>
             <SecondaryButton type="button" onClick={() => { setSentTo(''); setError('') }} disabled={loading}>
-              Farklı bir e-posta adresi gir
+              {L('Farklı bir e-posta adresi gir', 'Use a different email address')}
             </SecondaryButton>
           </div>
           <p className="text-center text-[14.5px]">
             <Link href="/login" className={`${linkClass} inline-flex items-center gap-1.5`}>
-              <ArrowLeft className="h-4 w-4" /> Giriş sayfasına dön
+              <ArrowLeft className="h-4 w-4" /> {L('Giriş sayfasına dön', 'Back to sign in')}
             </Link>
           </p>
         </div>
@@ -120,18 +122,18 @@ function ForgotPasswordContent() {
 
   return (
     <AuthLayout
-      breadcrumb="Şifremi Unuttum"
-      title="Şifremi unuttum"
-      subtitle="Hesabınıza kayıtlı e-posta adresini girin; şifrenizi yenilemeniz için bir bağlantı gönderelim."
+      breadcrumb={L('Şifremi Unuttum', 'Forgot Password')}
+      title={L('Şifremi unuttum', 'Forgot password')}
+      subtitle={L('Hesabınıza kayıtlı e-posta adresini girin; şifrenizi yenilemeniz için bir bağlantı gönderelim.', 'Enter the email address registered to your account and we’ll send you a link to reset your password.')}
      
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {error && <FormAlert>{error}</FormAlert>}
         <TextField
-          label="E-posta"
+          label={L('E-posta', 'Email')}
           type="email"
           inputMode="email"
-          placeholder="ornek@email.com"
+          placeholder={L('ornek@email.com', 'example@email.com')}
           value={email}
           onChange={(e) => { setEmail(e.target.value); if (fieldError) setFieldError('') }}
           error={fieldError}
@@ -139,12 +141,12 @@ function ForgotPasswordContent() {
           disabled={loading}
           autoFocus
         />
-        <PrimaryButton type="submit" loading={loading} loadingText="Gönderiliyor…">
-          Sıfırlama bağlantısı gönder
+        <PrimaryButton type="submit" loading={loading} loadingText={L('Gönderiliyor…', 'Sending…')}>
+          {L('Sıfırlama bağlantısı gönder', 'Send reset link')}
         </PrimaryButton>
         <p className="pt-1 text-center text-[14.5px]">
           <Link href="/login" className={`${linkClass} inline-flex items-center gap-1.5`}>
-            <ArrowLeft className="h-4 w-4" /> Giriş sayfasına dön
+            <ArrowLeft className="h-4 w-4" /> {L('Giriş sayfasına dön', 'Back to sign in')}
           </Link>
         </p>
       </form>

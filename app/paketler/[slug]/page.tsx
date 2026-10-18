@@ -8,6 +8,7 @@ import { PACKAGE_CATEGORIES, getPackageCategory } from '@/lib/package-categories
 import { mockProducts } from '@/lib/products-mock'
 import { ProductCard } from '@/components/ProductCard'
 import { PAGE_CONTAINER } from '@/lib/page-container'
+import { getLocale } from 'next-intl/server'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const MAX_PRODUCTS = 16
@@ -76,6 +77,10 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
   const item = getPackageCategory(params.slug)
   if (!item) notFound()
 
+  const locale = await getLocale()
+  const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
+  const title = L(item.title, `${item.en.shortTitle} Packages`)
+
   const categorySet = new Set(item.productCategories)
   const relatedProducts = mockProducts
     .filter((p) => categorySet.has(p.category))
@@ -96,11 +101,11 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
       <div className="bg-white border-b border-slate-200/80">
         <div className={`${PAGE_CONTAINER} py-8 md:py-12`}>
           <nav className="text-sm text-slate-500 mb-6 flex items-center gap-1.5 flex-wrap">
-            <Link href="/" className="hover:text-slate-900 transition-colors">Ana Sayfa</Link>
+            <Link href="/" className="hover:text-slate-900 transition-colors">{L('Ana Sayfa', 'Home')}</Link>
             <span className="text-slate-300">/</span>
-            <Link href="/paketler" className="hover:text-slate-900 transition-colors">Paketler</Link>
+            <Link href="/paketler" className="hover:text-slate-900 transition-colors">{L('Paketler', 'Packages')}</Link>
             <span className="text-slate-300">/</span>
-            <span className="text-slate-900 font-medium">{item.title}</span>
+            <span className="text-slate-900 font-medium">{title}</span>
           </nav>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center">
@@ -108,7 +113,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
             <div className="lg:col-span-2 relative aspect-[4/3] rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
               <Image
                 src={item.image}
-                alt={item.imageAlt}
+                alt={L(item.imageAlt, `${item.en.shortTitle} solar energy package`)}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 40vw"
@@ -120,20 +125,20 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
             {/* Sağ: bilgi */}
             <div className="lg:col-span-3">
               <span className="inline-block text-xs font-semibold uppercase tracking-widest text-brand mb-3">
-                Paket Kategorisi
+                {L('Paket Kategorisi', 'Package Category')}
               </span>
               <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-slate-900 leading-tight">
-                {item.title}
+                {title}
               </h1>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild className="bg-brand hover:bg-brand-hover text-white rounded-xl">
-                  <a href="#urunler">Ürünleri İncele</a>
+                  <a href="#urunler">{L('Ürünleri İncele', 'Browse Products')}</a>
                 </Button>
                 <Button asChild variant="outline" className="rounded-xl border-slate-300">
-                  <Link href="/ges">GES Hesaplama</Link>
+                  <Link href="/ges">{L('GES Hesaplama', 'Solar Calculator')}</Link>
                 </Button>
                 <Button asChild variant="outline" className="rounded-xl border-slate-300">
-                  <Link href="/contact">Teklif Al</Link>
+                  <Link href="/contact">{L('Teklif Al', 'Get a Quote')}</Link>
                 </Button>
               </div>
             </div>
@@ -148,26 +153,26 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
             <div>
               <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-                {item.shortTitle} Paketine Uygun Ürünler
+                {L(`${item.shortTitle} Paketine Uygun Ürünler`, `Products for ${item.en.shortTitle} Packages`)}
               </h2>
               <p className="text-slate-500 text-sm mt-1">
-                {relatedProducts.length} ürün listeleniyor
+                {L(`${relatedProducts.length} ürün listeleniyor`, `${relatedProducts.length} products listed`)}
               </p>
             </div>
             <Link
               href={`/products?q=${encodeURIComponent(item.searchHint)}`}
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline shrink-0"
             >
-              Tümünü Gör
+              {L('Tümünü Gör', 'View All')}
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           {relatedProducts.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
-              <p className="text-slate-500">Bu kategoriye ait ürün bulunamadı.</p>
+              <p className="text-slate-500">{L('Bu kategoriye ait ürün bulunamadı.', 'No products found in this category.')}</p>
               <Button asChild variant="outline" className="mt-4">
-                <Link href="/products">Tüm Ürünler</Link>
+                <Link href="/products">{L('Tüm Ürünler', 'All Products')}</Link>
               </Button>
             </div>
           ) : (
@@ -181,9 +186,9 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
 
         {/* SSS */}
         <section className="bg-white border border-slate-200 rounded-2xl p-6">
-          <h2 className="text-lg font-bold text-slate-900 mb-5">Sık Sorulan Sorular</h2>
+          <h2 className="text-lg font-bold text-slate-900 mb-5">{L('Sık Sorulan Sorular', 'Frequently Asked Questions')}</h2>
           <div className="space-y-3">
-            {item.faq.map((qa) => (
+            {(locale === 'en' && item.en.faq ? item.en.faq : item.faq).map((qa) => (
               <details key={qa.question} className="group border border-slate-200 rounded-xl p-4">
                 <summary className="cursor-pointer font-semibold text-slate-900 list-none flex items-center justify-between gap-2">
                   {qa.question}

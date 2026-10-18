@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic'
 import { reportError } from '@/lib/alerts'
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { BANK_TRANSFER_PAYMENT_DAYS } from '@/lib/store-config'
+import { BANK_TRANSFER_PAYMENT_DAYS, bankTransferDeadline } from '@/lib/store-config'
 import { changeOrderStatus, logOrderEvent, sendCustomerStatusEmail } from '@/lib/order-service'
 import { processStockAlerts } from '@/lib/stock-alerts'
 import { processAbandonedCarts } from '@/lib/abandoned-cart'
@@ -41,15 +41,22 @@ export async function POST(request: NextRequest) {
       paymentStatus: { not: 'PAID' },
       createdAt: { lt: remindBefore },
     },
-    include: { lines: true, events: { where: { type: 'reminder' }, select: { id: true } } },
+    include: { lines: true, events: { where: { type: { in: ['reminder', 'payment_notice'] } }, select: { type: true } } },
     orderBy: { createdAt: 'asc' },
     take: 200,
   })
 
-  const result = { expired: [] as string[], reminded: [] as string[], errors: [] as string[] }
+  const result = { expired: [] as string[], reminded: [] as string[], held: [] as string[], errors: [] as string[] }
   for (const order of awaiting) {
     try {
-      if (order.createdAt < expireBefore) {
+      // Müşteri havale bildirimi yaptıysa (dekont/ödeme bildirimi) sipariş otomatik iptal edilmez ve hatırlatma gitmez:
+      // para gelmiş olabilir, admin bankayı kontrol edip onaylar (admin canlı paneli bu siparişleri ayrıca listeler).
+      if (order.events.some((e) => e.type === 'payment_notice')) {
+        result.held.push(order.orderNo)
+        continue
+      }
+      // Son ödeme günü (e-postada yazan tarih) İstanbul saatiyle bitmeden iptal edilmez
+      if (order.createdAt < expireBefore && bankTransferDeadline(order.createdAt).getTime() < now) {
         if (!dry) {
           await changeOrderStatus(order.id, 'CANCELLED', {
             actor: 'system',
@@ -57,7 +64,7 @@ export async function POST(request: NextRequest) {
           })
         }
         result.expired.push(order.orderNo)
-      } else if (order.events.length === 0) {
+      } else if (!order.events.some((e) => e.type === 'reminder')) {
         if (!dry) {
           await sendCustomerStatusEmail(order, 'payment_reminder')
           await logOrderEvent(order.id, { type: 'reminder', message: 'Ödeme hatırlatma e-postası gönderildi.', visibleToCustomer: false })

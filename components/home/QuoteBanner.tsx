@@ -17,7 +17,7 @@ export function QuoteBanner() {
         <div className="relative w-full aspect-square min-[769px]:aspect-video min-[769px]:max-h-[600px] rounded-md overflow-hidden bg-[#0b2540]">
           <Image
             src="/images/hero/voltekno-ges-banner.webp"
-            alt="Çatıya güneş paneli kuran teknisyenler"
+            alt={L('Çatıya güneş paneli kuran teknisyenler', 'Technicians installing solar panels on a roof')}
             fill
             sizes="(max-width: 1514px) 100vw, 1466px"
             className="object-cover object-center"

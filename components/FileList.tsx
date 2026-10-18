@@ -9,6 +9,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Download, FileText, File, Box } from 'lucide-react'
+import { useL } from '@/lib/i18n-inline'
 
 export interface FileItem {
   title: string
@@ -39,6 +40,7 @@ const fileTypeLabels = {
 }
 
 export function FileList({ files, className }: FileListProps) {
+  const L = useL()
   if (files.length === 0) {
     return null
   }
@@ -46,13 +48,13 @@ export function FileList({ files, className }: FileListProps) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>İndirilebilir Dosyalar</CardTitle>
+        <CardTitle>{L('İndirilebilir Dosyalar', 'Downloadable Files')}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
           {files.map((file, index) => {
             const Icon = fileIcons[file.type] || fileIcons.other
-            const typeLabel = fileTypeLabels[file.type] || 'Dosya'
+            const typeLabel = file.type === 'other' || !fileTypeLabels[file.type] ? L('Dosya', 'File') : fileTypeLabels[file.type]
 
             return (
               <div
@@ -76,7 +78,7 @@ export function FileList({ files, className }: FileListProps) {
                 >
                   <a href={file.url} download target="_blank" rel="noopener noreferrer">
                     <Download className="w-4 h-4 mr-2" />
-                    İndir
+                    {L('İndir', 'Download')}
                   </a>
                 </Button>
               </div>

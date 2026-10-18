@@ -13,6 +13,7 @@ import { useAuthStore } from '@/lib/store/useAuthStore'
 import { requestWelcomeEmail } from '@/lib/store/useFirebaseAuth'
 import { saveSignupConsents } from './consents'
 import { SecondaryButton, Divider } from './AuthUI'
+import { useL } from '@/lib/i18n-inline'
 
 type Provider = 'google' | 'facebook'
 
@@ -60,7 +61,7 @@ export function SocialSignInButtons({
   canStart,
   acceptMarketing = false,
   disabled,
-  dividerText = 'veya',
+  dividerText,
   notice,
 }: {
   onSuccess: (isNewUser: boolean) => void
@@ -73,6 +74,7 @@ export function SocialSignInButtons({
   /** Düğmelerin altında gösterilecek kısa bilgi (örn. ilk girişte üyelik koşulları) */
   notice?: React.ReactNode
 }) {
+  const L = useL()
   const loginWithGoogle = useAuthStore((s) => s.loginWithGoogle)
   const loginWithFacebook = useAuthStore((s) => s.loginWithFacebook)
   const [visible, setVisible] = useState<Provider[]>([])
@@ -115,10 +117,10 @@ export function SocialSignInButtons({
         // yoksay
       }
       setVisible((v) => v.filter((x) => x !== p))
-      onError(`${LABEL[p]} ile giriş şu anda kullanılamıyor. Lütfen e-posta adresiniz ve şifrenizle devam edin.`)
+      onError(L(`${LABEL[p]} ile giriş şu anda kullanılamıyor. Lütfen e-posta adresiniz ve şifrenizle devam edin.`, `Sign-in with ${LABEL[p]} is currently unavailable. Please continue with your email address and password.`))
       return
     }
-    onError(result.error || `${LABEL[p]} ile giriş yapılamadı.`)
+    onError(result.error || L(`${LABEL[p]} ile giriş yapılamadı.`, `Sign-in with ${LABEL[p]} failed.`))
   }
 
   return (
@@ -127,12 +129,12 @@ export function SocialSignInButtons({
         {visible.map((p) => (
           <SecondaryButton key={p} type="button" onClick={() => handleClick(p)} disabled={disabled || loading !== null}>
             {loading === p ? <Loader2 className="h-5 w-5 animate-spin text-[#5d6e80]" /> : p === 'google' ? <GoogleLogo /> : <FacebookLogo />}
-            {LABEL[p]} ile devam et
+            {L(`${LABEL[p]} ile devam et`, `Continue with ${LABEL[p]}`)}
           </SecondaryButton>
         ))}
       </div>
       {notice && <div className="-mt-2 text-[12.5px] leading-relaxed text-[#5d6e80] [&_button]:min-h-0 [&_button]:min-w-0">{notice}</div>}
-      <Divider>{dividerText}</Divider>
+      <Divider>{dividerText ?? L('veya', 'or')}</Divider>
     </div>
   )
 }

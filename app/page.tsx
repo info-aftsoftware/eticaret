@@ -191,7 +191,7 @@ export default function HomePage() {
                   <div className={`relative overflow-hidden bg-slate-100 ${isWide ? 'aspect-[8/3]' : 'aspect-[4/3]'}`}>
                     <Image
                       src={item.image}
-                      alt={item.imageAlt}
+                      alt={L(item.imageAlt, `${item.en.shortTitle} solar energy package`)}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                       sizes={isWide ? '(max-width: 640px) 66vw, 66vw' : '(max-width: 640px) 33vw, 33vw'}
@@ -199,7 +199,6 @@ export default function HomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                      <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-white/55 mb-1">{L('Enerji Paketi', 'Energy Package')}</span>
                       <p className="text-white font-bold text-sm leading-tight">{L(`${item.shortTitle} Paketleri`, `${item.en.shortTitle} Packages`)}</p>
                       <p className="text-white/70 text-xs mt-0.5 line-clamp-2">{L(item.description, item.en.description)}</p>
                       <span className="inline-flex items-center gap-1 text-white/80 text-xs mt-2 font-semibold">

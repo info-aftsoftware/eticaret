@@ -12,6 +12,7 @@ import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProducts } from '@/lib/catalog-merge'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -101,6 +102,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    revalidateStorefront()
     return NextResponse.json(created)
   } catch (error) {
     console.error('Admin catalog POST error:', error)

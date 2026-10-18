@@ -10,6 +10,7 @@ import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { notifyLowStockTransitions, readStocks } from '@/lib/low-stock'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -47,6 +48,7 @@ export async function PATCH(request: NextRequest) {
     // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
     if (value > 0) processStockAlerts([row.productId]).catch((e) => console.error('Stock alert error:', e))
     void notifyLowStockTransitions([{ productId: row.productId, before: before?.stock, after: value, name: before?.name }])
+    revalidateStorefront()
     return NextResponse.json(row)
   } catch (error) {
     console.error('Admin stock-overrides PATCH error:', error)

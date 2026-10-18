@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { FileCheck2, Truck, Lock, Headphones } from 'lucide-react'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Ana sayfa hero'su — voltekno.com ile birebir:
@@ -18,7 +19,7 @@ const SLIDES = [
     title: ['Yenilenebilir Enerji', 'Çözümleri'],
     mobileTitle: ['Yenilenebilir Enerji Çözümleri'],
     cta: 'TÜM ÜRÜNLER',
-    en: { title: ['Renewable Energy', 'Solutions'], mobileTitle: ['Renewable Energy Solutions'], cta: 'ALL PRODUCTS' },
+    en: { title: ['Renewable Energy', 'Solutions'], mobileTitle: ['Renewable Energy Solutions'], cta: 'ALL PRODUCTS', alt: 'Wall-mounted inverter, gel battery and solar panel' },
     href: '/products',
     alt: 'Duvara monte inverter, jel akü ve güneş paneli',
   },
@@ -27,7 +28,7 @@ const SLIDES = [
     title: ['Lityum Enerji', 'Depolama Sistemleri'],
     mobileTitle: ['Lityum Enerji', 'Depolama'],
     cta: 'KEŞFET',
-    en: { title: ['Lithium Energy', 'Storage Systems'], mobileTitle: ['Lithium Energy', 'Storage'], cta: 'EXPLORE' },
+    en: { title: ['Lithium Energy', 'Storage Systems'], mobileTitle: ['Lithium Energy', 'Storage'], cta: 'EXPLORE', alt: 'Stacked lithium battery modules' },
     href: `/products?category=${encodeURIComponent('Lityum Akü')}`,
     alt: 'Üst üste yığınlanmış lityum batarya modülleri',
   },
@@ -36,7 +37,7 @@ const SLIDES = [
     title: ['Solar Tarımsal', 'Sulama Çözümleri'],
     mobileTitle: ['Solar Tarımsal', 'Sulama', 'Çözümleri'],
     cta: 'İNCELE',
-    en: { title: ['Solar Agricultural', 'Irrigation'], mobileTitle: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW' },
+    en: { title: ['Solar Agricultural', 'Irrigation'], mobileTitle: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW', alt: 'TommaTech solar pump drives and solar panel' },
     href: `/products?category=${encodeURIComponent('Solar Pompa Sürücüsü')}`,
     alt: 'TommaTech solar pompa sürücüleri ve güneş paneli',
   },
@@ -53,6 +54,7 @@ const INTERVAL_MS = 5000
 
 export function HeroSlider() {
   const isEn = useLocale() === 'en'
+  const L = useL()
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
   const touchX = useRef<number | null>(null)
@@ -65,7 +67,7 @@ export function HeroSlider() {
   }, [current, paused, go])
 
   return (
-    <section aria-label="Öne çıkan çözümler" className="bg-white">
+    <section aria-label={L('Öne çıkan çözümler', 'Featured solutions')} className="bg-white">
       <div
         className={`${PAGE_CONTAINER} py-6 overflow-hidden`}
         aria-roledescription="carousel"
@@ -100,7 +102,7 @@ export function HeroSlider() {
                 >
                   <Image
                     src={slide.image}
-                    alt={slide.alt}
+                    alt={copy.alt}
                     fill
                     priority={i === 0}
                     sizes="100vw"
@@ -137,7 +139,7 @@ export function HeroSlider() {
                 key={slide.image}
                 type="button"
                 onClick={() => go(i)}
-                aria-label={`${i + 1}. slayt`}
+                aria-label={L(`${i + 1}. slayt`, `Slide ${i + 1}`)}
                 aria-current={i === current ? 'true' : undefined}
                 className="group/dot p-1.5 -m-1.5 !min-h-0 min-w-0 rounded-full"
               >
