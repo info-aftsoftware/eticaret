@@ -10,6 +10,7 @@ import { authErrorCode, authErrorMessage, EMAIL_RE } from '@/lib/auth-errors'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { AuthLayout, TextField, PrimaryButton, SecondaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 const COOLDOWN = 60
 
@@ -46,6 +47,7 @@ async function requestReset(email: string): Promise<void> {
 
 function ForgotPasswordContent() {
   const L = useL()
+  const tErr = useServerError()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState(searchParams.get('email') ?? '')
   const [fieldError, setFieldError] = useState('')
@@ -68,7 +70,7 @@ function ForgotPasswordContent() {
       setSentTo(address)
       setRemaining(COOLDOWN)
     } catch (err) {
-      setError((err as { userMessage?: string }).userMessage || authErrorMessage(err))
+      setError(tErr((err as { userMessage?: string }).userMessage || authErrorMessage(err)) || L('Bir hata oluştu. Lütfen tekrar deneyin.', 'Something went wrong. Please try again.'))
     } finally {
       setLoading(false)
     }

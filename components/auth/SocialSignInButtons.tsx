@@ -14,6 +14,7 @@ import { requestWelcomeEmail } from '@/lib/store/useFirebaseAuth'
 import { saveSignupConsents } from './consents'
 import { SecondaryButton, Divider } from './AuthUI'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type Provider = 'google' | 'facebook'
 
@@ -75,6 +76,7 @@ export function SocialSignInButtons({
   notice?: React.ReactNode
 }) {
   const L = useL()
+  const tErr = useServerError()
   const loginWithGoogle = useAuthStore((s) => s.loginWithGoogle)
   const loginWithFacebook = useAuthStore((s) => s.loginWithFacebook)
   const [visible, setVisible] = useState<Provider[]>([])
@@ -120,7 +122,7 @@ export function SocialSignInButtons({
       onError(L(`${LABEL[p]} ile giriş şu anda kullanılamıyor. Lütfen e-posta adresiniz ve şifrenizle devam edin.`, `Sign-in with ${LABEL[p]} is currently unavailable. Please continue with your email address and password.`))
       return
     }
-    onError(result.error || L(`${LABEL[p]} ile giriş yapılamadı.`, `Sign-in with ${LABEL[p]} failed.`))
+    onError(tErr(result.error) || L(`${LABEL[p]} ile giriş yapılamadı.`, `Sign-in with ${LABEL[p]} failed.`))
   }
 
   return (

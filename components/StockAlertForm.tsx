@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { Turnstile } from '@/components/Turnstile'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 /** Stoğu biten ürün için "Stok gelince haber ver" formu. */
 export function StockAlertForm({ productId }: { productId: string }) {
@@ -17,6 +18,7 @@ export function StockAlertForm({ productId }: { productId: string }) {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const L = useL()
+  const tErr = useServerError()
 
   if (state === 'done') {
     return (
@@ -38,7 +40,7 @@ export function StockAlertForm({ productId }: { productId: string }) {
       })
       setTurnstileReset((n) => n + 1)
       const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.success) throw new Error(data?.error || L('Kaydedilemedi.', 'Could not be saved.'))
+      if (!res.ok || !data?.success) throw new Error(tErr(data?.error) || L('Kaydedilemedi.', 'Could not be saved.'))
       setState('done')
     } catch (err) {
       setError(err instanceof Error ? err.message : L('Kaydedilemedi.', 'Could not be saved.'))

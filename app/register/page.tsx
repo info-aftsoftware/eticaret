@@ -15,6 +15,7 @@ import { AuthLayout, TextField, PasswordField, PasswordStrength, Checkbox, Prima
 import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { saveSignupConsents } from '@/components/auth/consents'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 const MIN_PASSWORD = 8
 
@@ -22,6 +23,7 @@ type Errors = Partial<Record<'name' | 'email' | 'phone' | 'password' | 'confirmP
 
 function RegisterPageContent() {
   const L = useL()
+  const tErr = useServerError()
   const router = useRouter()
   const searchParams = useSearchParams()
   const register = useAuthStore((state) => state.register)
@@ -103,7 +105,7 @@ function RegisterPageContent() {
     const result = await register(formData.email.trim(), formData.password, formData.name.trim(), formData.phone.trim() || undefined)
 
     if (!result.success) {
-      setError(result.error || L('Kayıt tamamlanamadı.', 'Registration could not be completed.'))
+      setError(tErr(result.error) || L('Kayıt tamamlanamadı.', 'Registration could not be completed.'))
       setLoading(false)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return

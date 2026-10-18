@@ -46,6 +46,7 @@ import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog
 import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type FormState = {
   name: string
@@ -263,6 +264,7 @@ const FIELD_ORDER = [
 
 export default function CheckoutPage() {
   const L = useL()
+  const tErr = useServerError()
   const router = useRouter()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -453,7 +455,7 @@ export default function CheckoutPage() {
     if (name === 'phone' && value && !isValidTrPhone(value)) msg = L('Telefon numarası 10 haneli olmalı (5xx xxx xx xx).', 'Phone number must be 10 digits (5xx xxx xx xx).')
     if ((name === 'postalCode' || name === 'billingPostalCode') && value && !isValidPostalCode(value)) msg = L('Geçerli bir posta kodu girin (5 hane).', 'Enter a valid postal code (5 digits).')
     if (['idNumber', 'taxId'].includes(name) && value) {
-      msg = validateBilling({ ...formData, [name]: value })[name] ?? ''
+      msg = tErr(validateBilling({ ...formData, [name]: value })[name]) ?? ''
     }
     setErrors((prev) => ({ ...prev, [name]: msg }))
   }
@@ -470,7 +472,7 @@ export default function CheckoutPage() {
     if (!f.district) err.district = L('İlçe seçin.', 'Select a district.')
     if (f.postalCode && !isValidPostalCode(f.postalCode)) err.postalCode = L('Geçerli bir posta kodu girin (5 hane).', 'Enter a valid postal code (5 digits).')
     if (f.addressLine.trim().length < 10) err.addressLine = f.addressLine.trim() ? L('Adresinizi mahalle, sokak ve kapı no ile eksiksiz yazın.', 'Enter your full address including neighborhood, street and building number.') : L('Adres zorunludur.', 'Address is required.')
-    Object.assign(err, validateBilling(f))
+    Object.assign(err, Object.fromEntries(Object.entries(validateBilling(f)).map(([k, v]) => [k, tErr(v) ?? v])))
     if (f.useDifferentBillingAddress) {
       if (!f.billingCity) err.billingCity = L('İl seçin.', 'Select a province.')
       if (!f.billingDistrict) err.billingDistrict = L('İlçe seçin.', 'Select a district.')
@@ -530,7 +532,7 @@ export default function CheckoutPage() {
 
     const data = await response.json().catch(() => null)
     if (!response.ok || !data?.success) {
-      const e = new Error(data?.error || L('Sipariş oluşturulamadı.', 'The order could not be created.')) as Error & { code?: string; fields?: Record<string, string> }
+      const e = new Error(tErr(data?.error) || L('Sipariş oluşturulamadı.', 'The order could not be created.')) as Error & { code?: string; fields?: Record<string, string> }
       e.code = data?.code
       e.fields = data?.fields
       throw e

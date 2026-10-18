@@ -12,6 +12,7 @@ import { Loader2, Trash2 } from 'lucide-react'
 import { getAuth } from '@/lib/firebase/config'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 /**
  * KVKK — hesabı silme. Yeniden doğrulama (şifreli hesapta şifre, Google/Facebook ile girişte sağlayıcı penceresi)
@@ -27,6 +28,7 @@ export function DeleteAccountCard() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const L = useL()
+  const tErr = useServerError()
   const confirmWord = L('SİL', 'DELETE')
   // Şifresi olmayan (yalnızca Google/Facebook ile giriş yapan) kullanıcı şifreyle yeniden doğrulanamaz
   const [socialProvider, setSocialProvider] = useState<'google.com' | 'facebook.com' | null>(null)
@@ -53,7 +55,7 @@ export function DeleteAccountCard() {
       const token = await current.getIdToken(true)
       const res = await fetch('/api/account', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
       const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.success) throw new Error(data?.error || L('Hesap silinemedi.', 'Your account could not be deleted.'))
+      if (!res.ok || !data?.success) throw new Error(tErr(data?.error) || L('Hesap silinemedi.', 'Your account could not be deleted.'))
       try {
         localStorage.removeItem('cart-storage')
       } catch {}

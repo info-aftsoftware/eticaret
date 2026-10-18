@@ -104,6 +104,26 @@
         "NEXT_DIST_DIR": ".next-build"
       },
       "port": 3008
+    },
+    {
+      "name": "Flow Test 3009 (no SMTP, DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        "3009"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/230c60fd-26fa-49ff-8732-b072b0e0f89e/scratchpad/flow.db",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": ""
+      },
+      "port": 3009
     }
   ]
 }

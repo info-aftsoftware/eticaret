@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 import {
   Mail,
   Phone,
@@ -44,6 +45,7 @@ function loadContactDraftForPage(): { name: string; email: string; phone: string
 
 export default function ContactPage() {
   const L = useL()
+  const tErr = useServerError()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -97,7 +99,7 @@ export default function ContactPage() {
         body: JSON.stringify({ ...formData, turnstileToken }),
       })
       const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.success) throw new Error(data?.error || L('Mesaj gönderilemedi.', 'Message could not be sent.'))
+      if (!res.ok || !data?.success) throw new Error(tErr(data?.error) || L('Mesaj gönderilemedi.', 'Message could not be sent.'))
       setIsSubmitting(false)
       setTurnstileReset((n) => n + 1)
       setIsSubmitted(true)

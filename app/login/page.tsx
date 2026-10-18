@@ -13,9 +13,11 @@ import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 function LoginForm() {
   const L = useL()
+  const tErr = useServerError()
   const router = useRouter()
   const searchParams = useSearchParams()
   const login = useAuthStore((state) => state.login)
@@ -53,7 +55,7 @@ function LoginForm() {
       router.push(target)
       return
     }
-    setError(result.error || L('Giriş yapılamadı.', 'Sign-in failed.'))
+    setError(tErr(result.error) || L('Giriş yapılamadı.', 'Sign-in failed.'))
     setLoading(false)
   }
 

@@ -10,6 +10,7 @@ import { MailWarning, Loader2, CheckCircle2, RefreshCw } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { sendVerificationEmail, refreshEmailVerified } from '@/lib/store/useFirebaseAuth'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 export const RESEND_COOLDOWN_SECONDS = 60
 const STORAGE_KEY = 'voltekno_verify_sent_at'
@@ -35,6 +36,7 @@ function writeSentAt(uid: string, at: number) {
 /** Doğrulama e-postası gönderimi + bekleme süresi + durum yenileme (banner ve /verify-email ortak). */
 export function useEmailVerification() {
   const L = useL()
+  const tErr = useServerError()
   const user = useAuthStore((s) => s.user)
   const uid = user?.id ?? ''
   const [remaining, setRemaining] = useState(0)
@@ -76,7 +78,7 @@ export function useEmailVerification() {
       tick()
       setMessage({ tone: 'success', text: L(`Doğrulama bağlantısı ${user?.email ?? 'e-posta adresinize'} adresine gönderildi. Gelen kutunuzu ve spam klasörünü kontrol edin.`, `A verification link has been sent to ${user?.email ?? 'your email address'}. Check your inbox and spam folder.`) })
     } else {
-      setMessage({ tone: 'error', text: result.error || L('E-posta gönderilemedi. Lütfen biraz sonra tekrar deneyin.', 'The email could not be sent. Please try again shortly.') })
+      setMessage({ tone: 'error', text: tErr(result.error) || L('E-posta gönderilemedi. Lütfen biraz sonra tekrar deneyin.', 'The email could not be sent. Please try again shortly.') })
     }
   }, [uid, remaining, sending, tick, user?.email, L])
 

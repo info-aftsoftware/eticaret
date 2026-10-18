@@ -630,7 +630,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     <div className="min-w-0 max-w-2xl">
                       <h3 className="text-sm font-bold text-slate-900 mb-3">{tProduct('specifications')}</h3>
                       <div className="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-                        <dl className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                        <dl lang="tr" className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                           {Object.entries(displaySpecs).map(([key, value], i) => (
                             <React.Fragment key={key}>
                               <dt
@@ -659,6 +659,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         {/* Excel'den (ikas) gelen HTML; import sırasında temizlenir (scripts/import-ikas-excel.py) */}
                         <div
                           className="product-description-html"
+                          lang="tr"
                           dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
                         />
                       </div>
@@ -679,9 +680,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
                             <div>
                               <h3 className="text-sm font-bold text-slate-900 mb-3">{tProduct('descriptions')}</h3>
                               {showAsAccordion && intro ? (
-                                <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-line mb-4">{intro}</p>
+                                <p lang="tr" className="text-slate-600 text-sm leading-relaxed whitespace-pre-line mb-4">{intro}</p>
                               ) : !showAsAccordion && rawDescription ? (
-                                <div className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
+                                <div lang="tr" className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
                                   {(product.fullDescription || product.description)
                                     ?.split(/\n/)
                                     .map((line, i) => {
@@ -702,7 +703,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                             </div>
                           )}
                           {showAsAccordion && (
-                            <Accordion type="multiple" className="w-full">
+                            <Accordion type="multiple" className="w-full" lang="tr">
                               {sections.map((section, i) => (
                                 <AccordionItem key={i} value={`section-${i}`}>
                                   <AccordionTrigger>{section.title}</AccordionTrigger>
@@ -722,7 +723,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     {product.features && product.features.length > 0 && (
                       <div>
                         <h3 className="text-sm font-bold text-slate-900 mb-2">{tProduct('contents')}</h3>
-                        <ul className="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
+                        <ul lang="tr" className="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
                           {product.features.map((f, i) => (
                             <li key={i}>{f}</li>
                           ))}

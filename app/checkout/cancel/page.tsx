@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation'
 import { XCircle, ShoppingCart, Banknote } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'
 import { posFailMessage } from '@/lib/payments/pos-messages'
+import { useLocale } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
 
 /**
@@ -14,9 +15,10 @@ import { useL } from '@/lib/i18n-inline'
  */
 function CancelContent() {
   const L = useL()
+  const locale = useLocale()
   const sp = useSearchParams()
   // Yalnızca sabit mesaj kodları gösterilir (adres çubuğundan keyfi metin enjekte edilemez)
-  const error = posFailMessage(sp.get('reason'))
+  const error = posFailMessage(sp.get('reason'), locale)
   const orderNo = sp.get('order_id')
   const cancelled = sp.get('cancelled') === '1'
 

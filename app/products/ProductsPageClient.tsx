@@ -346,7 +346,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         <section className="space-y-4">
           <h3 className="text-sm font-semibold text-slate-800">{L('Kategoriye Özel Filtreler', 'Category-Specific Filters')}</h3>
           {specFacets.map((facet) => (
-            <div key={facet.key}>
+            <div key={facet.key} lang="tr">
               <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
               <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
                 {facet.values.map((value) => {

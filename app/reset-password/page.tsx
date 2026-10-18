@@ -10,6 +10,7 @@ import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { AuthLayout, PasswordField, PasswordStrength, PrimaryButton, SecondaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 const MIN_PASSWORD = 8
 
@@ -17,6 +18,7 @@ type CodeState = 'checking' | 'valid' | 'expired' | 'invalid'
 
 function ResetPasswordForm() {
   const L = useL()
+  const tErr = useServerError()
   const router = useRouter()
   const searchParams = useSearchParams()
   const oobCode = searchParams.get('oobCode') || searchParams.get('token')
@@ -72,7 +74,7 @@ function ResetPasswordForm() {
       const code = authErrorCode(err)
       if (code === 'auth/expired-action-code') setCodeState('expired')
       else if (code === 'auth/invalid-action-code') setCodeState('invalid')
-      else setError(authErrorMessage(err))
+      else setError(tErr(authErrorMessage(err)) || L('Bir hata oluştu. Lütfen tekrar deneyin.', 'Something went wrong. Please try again.'))
     } finally {
       setLoading(false)
     }

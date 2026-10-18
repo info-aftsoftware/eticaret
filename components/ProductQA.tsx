@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type QAItem = {
   id: string
@@ -26,6 +27,7 @@ export function ProductQA({
 }) {
   const { user, isAuthenticated } = useAuthStore()
   const L = useL()
+  const tErr = useServerError()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const [qas, setQas] = useState<QAItem[]>([])
@@ -99,7 +101,7 @@ export function ProductQA({
 
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || L('Soru gönderilemedi. Lütfen tekrar deneyin.', 'Your question could not be submitted. Please try again.'))
+        setError(tErr(data.error) || L('Soru gönderilemedi. Lütfen tekrar deneyin.', 'Your question could not be submitted. Please try again.'))
         return
       }
 

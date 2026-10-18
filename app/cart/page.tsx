@@ -35,6 +35,7 @@ import type { LegalSlug } from '@/lib/legal/documents'
 import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useCartValidation, type CartLineStatus } from '@/lib/useCartValidation'
 
@@ -203,6 +204,7 @@ export default function CartPage() {
   const router = useRouter()
   const t = useTranslations('cart')
   const L = useL()
+  const tErr = useServerError()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
@@ -266,7 +268,7 @@ export default function CartPage() {
       if (!res.ok || !data?.success) {
         setCouponDiscount(0)
         setStoredCouponCode(null)
-        setCouponError(data?.error || L('Kupon kontrol edilemedi.', 'The coupon could not be verified.'))
+        setCouponError(tErr(data?.error) || L('Kupon kontrol edilemedi.', 'The coupon could not be verified.'))
         return
       }
       setCouponDiscount(Number(data.discount) || 0)

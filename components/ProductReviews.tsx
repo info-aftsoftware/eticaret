@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type Review = {
   id: string
@@ -42,6 +43,7 @@ function StarRow({
 export function ProductReviews({ productId }: { productId: string }) {
   const { user, isAuthenticated } = useAuthStore()
   const L = useL()
+  const tErr = useServerError()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const [reviews, setReviews] = useState<Review[]>([])
@@ -116,7 +118,7 @@ export function ProductReviews({ productId }: { productId: string }) {
 
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || L('Yorum gönderilemedi. Lütfen tekrar deneyin.', 'Your review could not be submitted. Please try again.'))
+        setError(tErr(data.error) || L('Yorum gönderilemedi. Lütfen tekrar deneyin.', 'Your review could not be submitted. Please try again.'))
         return
       }
 

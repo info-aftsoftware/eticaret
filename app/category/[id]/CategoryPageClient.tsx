@@ -357,7 +357,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                 {specFacets.length > 0 && (
                   <div className="border-t border-slate-200 pt-4 space-y-4">
                     {specFacets.map((facet) => (
-                      <div key={facet.key}>
+                      <div key={facet.key} lang="tr">
                         <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
                         <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
                           {facet.values.map((value) => {
@@ -516,7 +516,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                 {specFacets.length > 0 && (
                   <div className="border-t border-slate-200 pt-4 space-y-4">
                     {specFacets.map((facet) => (
-                      <div key={facet.key}>
+                      <div key={facet.key} lang="tr">
                         <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
                         <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
                           {facet.values.map((value) => {

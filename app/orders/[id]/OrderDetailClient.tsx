@@ -37,6 +37,7 @@ import { PaymentNoticeForm } from './PaymentNoticeForm'
 import { BankTransferDetails } from '@/components/order/BankTransferDetails'
 import { BANK_TRANSFER_DISCOUNT_RATE, STORE_TIME_ZONE, VAT_RATE, bankTransferDeadline } from '@/lib/store-config'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type Creds = { email: string; phone: string }
 type OrderEvent = { id: string; type: string; status: string | null; message: string; createdAt: Date }
@@ -195,6 +196,7 @@ export default function OrderDetailPage() {
   const [actionNotice, setActionNotice] = useState('')
   const [downloading, setDownloading] = useState<string | null>(null)
   const L = useL()
+  const tErr = useServerError()
   const loc = L('tr-TR', 'en-GB')
 
   /** Misafir sipariş takibi: sipariş no + e-posta + telefon birlikte doğrulanır. */
@@ -233,7 +235,7 @@ export default function OrderDetailPage() {
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        throw new Error(data?.error || L('Belge indirilemedi.', 'The document could not be downloaded.'))
+        throw new Error(tErr(data?.error) || L('Belge indirilemedi.', 'The document could not be downloaded.'))
       }
       const url = URL.createObjectURL(await res.blob())
       const a = document.createElement('a')
@@ -258,7 +260,7 @@ export default function OrderDetailPage() {
         body: JSON.stringify({ ...body, ...(guestCreds ?? {}) }),
       })
       const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.order) return { error: data?.error || L('İşlem yapılamadı.', 'The action could not be completed.') }
+      if (!res.ok || !data?.order) return { error: tErr(data?.error) || L('İşlem yapılamadı.', 'The action could not be completed.') }
       setOrder(toOrderView(data.order))
       return { error: null, data }
     } catch {
