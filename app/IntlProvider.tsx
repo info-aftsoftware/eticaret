@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { getLocale, getMessages } from 'next-intl/server'
 import { NextIntlClientProvider } from 'next-intl'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -82,9 +82,8 @@ export default async function IntlProvider({
             <Header />
             {/* min-h-screen: içerik istemcide geç gelse de footer ilk ekranda görünüp aşağı kaymaz (CLS) */}
             <main className="flex-1 min-h-screen pb-safe min-w-0 w-full max-w-full overflow-x-hidden overflow-y-auto pt-0 mt-0 [&>*]:mt-0 [&>*]:pt-0" id="main-content">
-              <Suspense fallback={null}>
-                <PageContainer>{children}</PageContainer>
-              </Suspense>
+              {/* Dış Suspense yok: içerik (LCP görseli dahil) gizli akış bloğunda kalıp sayfanın sonunu beklemesin */}
+              <PageContainer>{children}</PageContainer>
             </main>
             <Footer />
             <CookieConsent />

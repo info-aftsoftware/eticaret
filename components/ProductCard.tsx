@@ -39,6 +39,8 @@ export interface ProductCardProps {
   isVariantProduct?: boolean
   selectedVariant?: ProductVariant
   variant?: 'compact' | 'full'
+  /** İlk ekrandaki kartlar: görsel gecikmeli (lazy) değil, öncelikli yüklenir (LCP) */
+  priority?: boolean
   className?: string
 }
 
@@ -46,6 +48,7 @@ export function ProductCard({
   product,
   selectedVariant,
   variant = 'full',
+  priority = false,
   className = '',
   stock: stockProp,
   isVariantProduct,
@@ -168,6 +171,7 @@ export function ProductCard({
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                priority={priority}
                 className={`object-contain p-3 transition-transform duration-300 group-hover:scale-[1.04] ${outOfStock ? 'opacity-60' : ''}`}
                 onError={() => setImageError(true)}
               />

@@ -621,9 +621,10 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
               </div>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 md:gap-6 min-w-0">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product, i) => (
                   <ProductCard
                     key={product.id}
+                    priority={i < 4}
                     product={{ id: product.id, name: product.name, description: product.description, price: product.price, image: product.image, category: product.category, brand: product.brand }}
                     sku={product.sku}
                     badges={product.tags}

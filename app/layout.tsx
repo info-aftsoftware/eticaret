@@ -6,7 +6,8 @@ import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
 import { CartSync } from '@/components/CartSync'
 
-const inter = Inter({ subsets: ['latin'] })
+// latin-ext: Türkçe harfler (ş, ğ, ı, İ) aynı fonttan gelsin; yoksa yedek fonttan çizilip sonradan değişiyor (CLS)
+const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' })
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const SITE_NAME = 'voltekno'
 

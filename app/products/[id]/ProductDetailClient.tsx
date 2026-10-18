@@ -251,7 +251,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
   return (
     <ProductPageShell
       breadcrumbs={
-        <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 flex-wrap py-1">
+        <nav aria-label="Sayfa konumu" className="flex items-center gap-2 text-xs sm:text-sm text-slate-500 flex-nowrap min-w-0 [&>a]:shrink-0 [&>svg]:shrink-0">
           <Link href="/" className="hover:text-brand transition-colors">{tCommon('home')}</Link>
           <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-300 shrink-0" />
           <Link href="/products" className="hover:text-brand transition-colors">{tCommon('products')}</Link>
@@ -268,8 +268,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
             </>
           )}
           <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-300 shrink-0" />
-          <span className="text-slate-900 font-medium line-clamp-1">{product.name}</span>
-        </div>
+          <span className="text-slate-900 font-medium min-w-0 truncate">{product.name}</span>
+        </nav>
       }
     >
       {/* Mobilde ikinci kart çerçevesi yok: sayfa kenar boşluğu yeterli */}
@@ -744,7 +744,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
             <div className="relative group/recommended-scroll">
               <div
                 id="recommended-scroll-container"
-                className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-thin-h pb-6 snap-x snap-mandatory -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0"
+                className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-thin-h pb-6 snap-x snap-mandatory -mx-4 px-4 scroll-px-4 sm:-mx-6 sm:px-6 sm:scroll-px-6 md:mx-0 md:px-0 md:scroll-px-0"
               >
                 {recommendedProducts.map((rec) => (
                   <div key={rec.id} className="flex-none w-[200px] sm:w-[220px] md:w-[240px] snap-start">

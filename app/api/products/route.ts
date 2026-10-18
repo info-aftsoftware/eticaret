@@ -6,16 +6,9 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getStorefrontProducts, type StorefrontProduct } from '@/lib/discounts'
+import { getStorefrontProducts } from '@/lib/discounts'
 import { searchProducts } from '@/lib/search-product'
-
-function toListItem(p: StorefrontProduct) {
-  const { basePrice: _basePrice, desiSource: _desiSource, dimensionsCm: _dims, ...rest } = p
-  return {
-    ...rest,
-    variants: p.variants?.map(({ specifications: _s, basePrice: _b, desiSource: _d, dimensionsCm: _dm, ...v }) => v),
-  }
-}
+import { toListItem } from '@/lib/products-listing'
 
 export async function GET(request: NextRequest) {
   try {
