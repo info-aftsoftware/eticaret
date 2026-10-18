@@ -3,13 +3,15 @@
 _Son güncelleme: 18.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md`._
 
 ## Şu an yapılan
+_Bekleyen iş yok. Sizden beklenenler `YAPILACAKLAR.md` → "Sizin yapmanız gerekenler"._
+
 - [x] Ürün görselleri: "görsel hazırlanıyor" kartlarının hepsi gerçek fotoğraflarla değiştirildi (24 SKU; katalogda kart kalmadı)
   - [x] TommaTech diyot modülleri (11 SKU) — aynı OEM modelin gerçek fotoğrafı (MDK 25/55/70/90/110A etiketli)
   - [x] TommaTech 22 kW split dış ünite, R32 split iç ünite (2), 300A şarj ünitesi, R serisi MC4-DC5525 kablo (5 SKU)
   - [x] Frecon 315/355/400/450 kW (aynı serinin büyük gövde fotoğrafı), Exelon PMAX-11P/12P (aynı gövde, filigransız), Havensis 20AES / MPS 3A (birebir model) — 8 SKU
 - [x] Ana sayfadan "3 Adımda Enerji Çözümü" bölümü kaldırıldı
 - [x] Adım adım manuel test — 15/15 adım geçti (1 hata bulundu ve düzeltildi, aşağıda)
-- [ ] Commit + nextfirststep.com'a yayın + canlı kontrol
+- [x] Commit (`58f75f6`) + nextfirststep.com'a yayın + canlı kontrol
 
 ## Manuel test listesi
 _Yerel sunucuda (localhost:3005), test verisiyle; e-postalar gönderilmeden `.data/mail-outbox`'a yakalanır. Admin adımları yalnızca yerelde geçerli ayrı bir test anahtarıyla yapıldı._
@@ -45,4 +47,4 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `b2f3bcd` (18.10.2026) — canlı kontroller 35/35 geçti
+- Son yayın: `58f75f6` (18.10.2026 12:31) — sayfalar 200, "3 Adımda" yok, "görsel hazırlanıyor" kartı yok, yeni görseller canlıda; açılış logunda hata yok
