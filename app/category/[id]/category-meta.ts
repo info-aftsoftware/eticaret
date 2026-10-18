@@ -77,18 +77,11 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     keywords: ['elektrikli araç şarj istasyonu', 'ev şarj istasyonu', 'ev şarj cihazı', 'wallbox'],
   },
   'solar-baglanti-ekipmani': {
-    title: 'Solar Bağlantı Ekipmanı',
-    description: 'Solar transfer switch, sigorta ve DC dağıtım ürünleri, solar kablolar ve bağlantı kabloları.',
+    title: 'Bağlantı Ekipmanı ve Aksesuar',
+    description: 'Transfer switch, sigorta ve DC dağıtım, solar kablolar; GX izleme cihazları, akıllı sayaçlar ve sensörler.',
     seoDescription:
-      "Solar bağlantı ekipmanları: otomatik transfer switch, DC sigorta ve dağıtım (Lynx), solar kablo, VE.Direct ve uzaktan aç/kapa kabloları voltekno'da.",
-    keywords: ['solar transfer switch', 'dc sigorta', 'solar kablo', 'lynx distributor', 'solar bağlantı ekipmanı'],
-  },
-  aksesuar: {
-    title: 'Aksesuar',
-    description: 'İzleme ve kontrol cihazları: GX sistem izleme, akıllı sayaçlar, sensörler ve arayüzler.',
-    seoDescription:
-      "Solar sistem aksesuarları: Victron GX izleme cihazları, Smart Meter, akım ve sıcaklık sensörleri, arayüz ve dönüştürücüler voltekno'da.",
-    keywords: ['solar aksesuar', 'smart meter', 'victron gx', 'enerji sayacı', 'izleme ve kontrol'],
+      "Solar bağlantı ekipmanı ve aksesuarları: transfer switch, DC sigorta, solar kablo, Victron GX izleme, Smart Meter ve sensörler voltekno'da.",
+    keywords: ['solar transfer switch', 'dc sigorta', 'solar kablo', 'solar aksesuar', 'smart meter', 'victron gx', 'solar bağlantı ekipmanı'],
   },
   diger: {
     title: 'Diğer Ürünler',

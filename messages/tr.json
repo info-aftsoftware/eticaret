@@ -173,7 +173,7 @@
     "catMonitoringControl": "İzleme ve Kontrol",
     "catGroupSolarBattery": "Solar Akü",
     "catGroupSolarInverter": "Solar İnverter",
-    "catGroupSolarConnection": "Solar Bağlantı Ekipmanı",
+    "catGroupSolarConnection": "Bağlantı Ekipmanı ve Aksesuar",
     "catGroupReadyPackages": "Hazır Solar Paket",
     "catNavAllProducts": "Tüm Ürünler",
     "catNavAllCategories": "Tüm Kategoriler",
@@ -203,7 +203,7 @@
     "catWindController": "Rüzgar Şarj Kontrol Cihazı",
     "catEVStation": "Elektrikli Araç Şarj İstasyonu",
     "catEVStationAccessory": "Şarj İstasyonu Aksesuarı",
-    "catNavConnection": "Bağlantı Ekipmanı"
+    "catNavConnection": "Bağlantı ve Aksesuar"
   },
   "headerTopBar": {
     "gesButton": "GES Hesaplama",

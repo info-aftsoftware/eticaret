@@ -3,6 +3,7 @@
 import React, { useState, useMemo, Suspense } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ChevronRight, Package, SlidersHorizontal, Filter, Menu, X, Search } from 'lucide-react'
 import { ProductCard } from '@/components/ProductCard'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -154,7 +155,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   return (
     <ProductPageShell
       hero={
-        <div className="relative min-h-[max(28vh,200px)] sm:min-h-0 sm:h-[320px] md:h-[380px] overflow-hidden w-full">
+        <div className="relative flex flex-col justify-end min-h-[260px] sm:min-h-0 sm:h-[320px] md:h-[380px] overflow-hidden w-full">
           {/* Arka plan: görselin arkası siyah */}
           <div className="absolute inset-0 bg-black" />
           {/* Görsel yukarı ve aşağıdan görünebildiği kadar: object-contain, dikeyde tam görünür */}
@@ -186,7 +187,9 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
               </div>
             </>
           )}
-          <div className="relative z-10 h-full flex flex-col justify-end max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-8 sm:pb-10 md:pb-12 text-white">
+          {/* Metin okunurluğu: alttan koyu geçiş */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" aria-hidden />
+          <div className={`${PAGE_CONTAINER} relative z-10 pt-10 pb-7 sm:pb-10 md:pb-12 text-white`}>
             <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold mb-2 tracking-tight leading-tight">
               {meta.title}
             </h1>

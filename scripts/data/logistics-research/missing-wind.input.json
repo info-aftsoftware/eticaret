@@ -1,0 +1,354 @@
+[
+ {
+  "sku": "ALTECH-00384",
+  "name": "Altech Boreas 2000 2 kW 48V Off-Grid Rüzgar Türbini",
+  "variant": null,
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00385",
+  "name": "Altech Boreas 2000 2 kW 24V Off-Grid Rüzgar Türbini",
+  "variant": null,
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00387",
+  "name": "Altech Boreas 4000 4 kW 48V Off-Grid Rüzgar Türbini",
+  "variant": null,
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00388",
+  "name": "Altech Boreas 4000 4 kW 24V Off-Grid Rüzgar Türbini",
+  "variant": null,
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00390",
+  "name": "Altech Boreas 6000 6 kW 48V Off-Grid Rüzgar Türbini",
+  "variant": null,
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-00391",
+  "name": "Altech 7 m Kafes Tipi Rüzgar Türbini Montaj Direği",
+  "variant": null,
+  "brand": "Altech",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT3KWNOVA3000-00392",
+  "name": "Altech Nova Rüzgar Türbini (3 kW - 12 kW)",
+  "variant": "3000 3 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT5KWNOVA5000-00393",
+  "name": "Altech Nova Rüzgar Türbini (3 kW - 12 kW)",
+  "variant": "5000 5 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT8KWNOVA8000-00394",
+  "name": "Altech Nova Rüzgar Türbini (3 kW - 12 kW)",
+  "variant": "8000 8 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ALTECH-AT12KWNOVAPRE-00395",
+  "name": "Altech Nova Rüzgar Türbini (3 kW - 12 kW)",
+  "variant": "12000 12 kW Rüzgar Türbini",
+  "brand": "Altech",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "İSTABR-00647",
+  "name": "İstabreeze Heli Serisi 48V Rüzgar Türbini (2 kW / 4 kW)",
+  "variant": "2.0 2 kW 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 86.12
+  }
+ },
+ {
+  "sku": "İSTABR-00648",
+  "name": "İstabreeze Heli Serisi 48V Rüzgar Türbini (2 kW / 4 kW)",
+  "variant": "4.0 4 kW 48V Rüzgar Türbini",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 100
+  }
+ },
+ {
+  "sku": "İSTABR-00651",
+  "name": "İstabreeze Pro Wind Rüzgar Şarj Kontrol Cihazı",
+  "variant": "1500W 24V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 14.4
+  }
+ },
+ {
+  "sku": "İSTABR-00652",
+  "name": "İstabreeze Pro Wind Rüzgar Şarj Kontrol Cihazı",
+  "variant": "2000W 24/48V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 14.4
+  }
+ },
+ {
+  "sku": "İSTABR-00653",
+  "name": "İstabreeze Pro Wind Rüzgar Şarj Kontrol Cihazı",
+  "variant": "4000W 48V Rüzgar Şarj Kontrol Cihazı",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 12
+  }
+ },
+ {
+  "sku": "İSTABR-00660",
+  "name": "İstabreeze Rüzgar Türbini Alternatörü (500G - 2000G)",
+  "variant": "500G 12/24V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 2.7
+  }
+ },
+ {
+  "sku": "İSTABR-00661",
+  "name": "İstabreeze Rüzgar Türbini Alternatörü (500G - 2000G)",
+  "variant": "800G 12/24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 8.75
+  }
+ },
+ {
+  "sku": "İSTABR-00662",
+  "name": "İstabreeze Rüzgar Türbini Alternatörü (500G - 2000G)",
+  "variant": "1000G 24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 10
+  }
+ },
+ {
+  "sku": "İSTABR-00663",
+  "name": "İstabreeze Rüzgar Türbini Alternatörü (500G - 2000G)",
+  "variant": "1500G 24/48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 11.5
+  }
+ },
+ {
+  "sku": "İSTABR-00664",
+  "name": "İstabreeze Rüzgar Türbini Alternatörü (500G - 2000G)",
+  "variant": "2000G 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 13.6
+  }
+ },
+ {
+  "sku": "İSTABR-00665",
+  "name": "İstabreeze Heli Serisi Rüzgar Türbini Alternatörü",
+  "variant": "2.0 2 kW 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 25
+  }
+ },
+ {
+  "sku": "İSTABR-00666",
+  "name": "İstabreeze Heli Serisi Rüzgar Türbini Alternatörü",
+  "variant": "4.0 4 kW 48V Rüzgar Türbini Alternatörü",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 33.5
+  }
+ },
+ {
+  "sku": "İSTABR-00667",
+  "name": "İstabreeze 50 cm Kompozit Rüzgar Türbini Kanadı (Siyah-Beyaz)",
+  "variant": null,
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.19
+  }
+ },
+ {
+  "sku": "İSTABR-00668",
+  "name": "İstabreeze 56 cm Karbon Rüzgar Türbini Kanadı",
+  "variant": null,
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.18
+  }
+ },
+ {
+  "sku": "İSTABR-00669",
+  "name": "İstabreeze 57 cm Kompozit Rüzgar Türbini Kanadı (Siyah)",
+  "variant": null,
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.21
+  }
+ },
+ {
+  "sku": "İSTABR-00670",
+  "name": "İstabreeze Kompozit Rüzgar Türbini Kanadı",
+  "variant": "60 cm Kompozit Rüzgar Türbini Kanadı (Beyaz-Siyah)",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.27
+  }
+ },
+ {
+  "sku": "İSTABR-00672",
+  "name": "İstabreeze Kompozit Rüzgar Türbini Kanadı",
+  "variant": "107 cm Kompozit Rüzgar Türbini Kanadı (Beyaz-Siyah)",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.65
+  }
+ },
+ {
+  "sku": "İSTABR-00671",
+  "name": "İstabreeze 90 cm Kompozit Rüzgar Türbini Kanadı (Beyaz)",
+  "variant": null,
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.62
+  }
+ },
+ {
+  "sku": "İSTABR-00676",
+  "name": "İstabreeze Rüzgar Türbini Kuyruğu (700W-2000W Modeller İçin)",
+  "variant": null,
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.79
+  }
+ },
+ {
+  "sku": "İSTABR-00679",
+  "name": "İstabreeze Alüminyum Kanat Flanşı",
+  "variant": null,
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.285
+  }
+ },
+ {
+  "sku": "İSTABR-00680",
+  "name": "İstabreeze Kanat Flanşı (3 Kollu / 5 Kollu)",
+  "variant": "3 Kollu Kanat Flanşı",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 2.7
+  }
+ },
+ {
+  "sku": "İSTABR-00681",
+  "name": "İstabreeze Kanat Flanşı (3 Kollu / 5 Kollu)",
+  "variant": "5 Kollu Kanat Flanşı",
+  "brand": "İstabreeze",
+  "category": "Rüzgar Türbini Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 3.2
+  }
+ }
+]

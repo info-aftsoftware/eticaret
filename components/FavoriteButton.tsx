@@ -12,8 +12,8 @@ interface FavoriteButtonProps {
 }
 
 /** Ürün sayfası favori butonu — ürün kartı ve favoriler sayfasıyla aynı durumu kullanır (lib/useFavorites). */
-export function FavoriteButton({ productId, productName, className = '' }: FavoriteButtonProps) {
-  const { isFavorite, toggle, isMember } = useFavorites()
+export function FavoriteButton({ productId, className = '' }: FavoriteButtonProps) {
+  const { isFavorite, toggle } = useFavorites()
   const { addToast } = useToast()
   const [mounted, setMounted] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -30,8 +30,10 @@ export function FavoriteButton({ productId, productName, className = '' }: Favor
       const added = await toggle(productId)
       addToast({
         type: 'success',
+        variant: 'snackbar',
         title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı',
-        description: added && !isMember ? 'Favorileriniz bu cihazda saklanır; tüm cihazlarda görmek için giriş yapın.' : productName,
+        action: added ? { label: 'Favorilere git', href: '/favorites' } : undefined,
+        duration: 4000,
       })
     } catch {
       addToast({ type: 'error', title: 'Favori kaydedilemedi', description: 'Lütfen tekrar deneyin.' })

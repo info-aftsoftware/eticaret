@@ -1,0 +1,387 @@
+{
+  "ALPEX-00381": {
+    "dimsCm": [
+      50.0,
+      41.0,
+      19.0
+    ],
+    "weightKg": 14.0,
+    "basis": "estimate",
+    "source": "https://www.idefix.com/apex-pro-62-kw-hybrid-akilli-inverter-p-22334087",
+    "note": "No Alpex ALP.HYB0062.48 dims published. Packed estimate from same-class 6.2 kW 48V hybrids: Apex Pro 6.2 410x320x115 mm 12.5 kg; Asterion 6.2 kW 450x300x130 mm 12 kg; Exelon ECP 6200/48 carton 500x415x180 mm"
+  },
+  "APEX-00442": {
+    "dimsCm": [
+      41.0,
+      32.0,
+      11.5
+    ],
+    "weightKg": 11.0,
+    "basis": "series",
+    "source": "https://www.idefix.com/apex-pro-62-kw-hybrid-akilli-inverter-p-22334087",
+    "note": "No APX 4.2 Pro data (idefix: 'not specified by manufacturer'). Housing assumed same as sibling APX 6.2 Pro (410x320x115 mm, 12.5 kg); weight reduced to ~11 kg for 4.2 kW 24V - estimate, product not package"
+  },
+  "ELECTR-00447": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      22.0
+    ],
+    "weightKg": 26.0,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No 200Ah data. Typical 12.8V 200Ah LiFePO4 case ~522x240x218 mm, 22-27 kg (Exelon LIT12.8-200 22.5 kg; sibling Electrozirve 100Ah is 280x213x229 mm 14.5 kg)"
+  },
+  "APEX-00448": {
+    "dimsCm": [
+      56.0,
+      52.0,
+      24.0
+    ],
+    "weightKg": 50.0,
+    "basis": "estimate",
+    "source": "https://www.enfsolar.com/pv/storage-system-datasheet/16764",
+    "note": "APX-YRO-RCK 51.2V 100Ah rack type, no data published. Comparable 4U rack 5.12 kWh packs: ~450-520 x 480-495 x 160-175 mm, 44-50 kg net (one lists 58 kg gross); packed estimate"
+  },
+  "APEX-00450": {
+    "dimsCm": [
+      85.0,
+      60.0,
+      35.0
+    ],
+    "weightKg": 120.0,
+    "basis": "estimate",
+    "source": "https://www.enfsolar.com/pv/storage-system-datasheet/16246",
+    "note": "No Apex 51.2V 280Ah data. Comparable 14.3 kWh wall/floor LiFePO4 units ~109-115 kg net (e.g. Apollo APO-051280A 109 kg); packed on pallet/crate estimate - verify before quoting freight"
+  },
+  "NPPOWE-00454": {
+    "dimsCm": [
+      33.0,
+      17.2,
+      22.3
+    ],
+    "weightKg": 28.5,
+    "basis": "estimate",
+    "source": "https://electrozirve.com/dacegug/2025/03/GE100-12-Safepower-TR.pdf",
+    "note": "No NP Power gel spec. Standard 12V 100Ah gel case; comparable Apex Safepower GE100-12 (same distributor) 330x172x223 mm 28.2 kg, Exelon EPGS12-100 30.8 kg"
+  },
+  "NPPOWE-00455": {
+    "dimsCm": [
+      52.2,
+      24.0,
+      22.6
+    ],
+    "weightKg": 58.0,
+    "basis": "estimate",
+    "source": "https://electrozirve.com/apex-safepower-12-volt-200-amper-jel-aku/",
+    "note": "No NP Power gel spec. Standard 12V 200Ah gel case; comparable Apex Safepower GE200-12 522x240x226 mm 57 kg, Exelon EPGS12-200 60.3 kg"
+  },
+  "ELECTR-00473": {
+    "dimsCm": [
+      20.0,
+      15.0,
+      6.0
+    ],
+    "weightKg": 0.4,
+    "basis": "estimate",
+    "source": "https://www.idefix.com/max-uzaktan-kumanda-remote-control-fs-serileri-icin-cr80-p-28357957",
+    "note": "No dims published. Small wired remote with RJ45 cable (FS/NK series), boxed estimate"
+  },
+  "ELECTR-00474": {
+    "dimsCm": [
+      18.0,
+      12.0,
+      6.0
+    ],
+    "weightKg": 0.3,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No dims published. Wireless key-fob remote + receiver module, boxed estimate"
+  },
+  "ELECTR-00475": {
+    "dimsCm": [
+      18.0,
+      12.0,
+      6.0
+    ],
+    "weightKg": 0.3,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No dims published. Car-key style wireless remote + receiver, boxed estimate"
+  },
+  "ELECTR-00476": {
+    "dimsCm": [
+      20.0,
+      15.0,
+      6.0
+    ],
+    "weightKg": 0.45,
+    "basis": "estimate",
+    "source": "https://www.idefix.com/max-uzaktan-kumanda-lcd-gostergeli-remote-control-fs-serileri-icin-crd80-p-28357955",
+    "note": "No dims published (listing gives only 5 m cable). Wired remote with LCD + 5 m cable, boxed estimate"
+  },
+  "APEX-00477": {
+    "dimsCm": [
+      25.0,
+      16.5,
+      9.5
+    ],
+    "weightKg": 1.1,
+    "basis": "estimate",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/300-watt-12-volt-modifiye-sinus-inverter-6942775ae0a1a.pdf",
+    "note": "No Apex NS dims published. Comparable Alpex JYM-300 modified sine: box 250x165x95 mm, 1.1 kg gross"
+  },
+  "APEX-00478": {
+    "dimsCm": [
+      28.0,
+      17.0,
+      10.5
+    ],
+    "weightKg": 1.35,
+    "basis": "estimate",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/600-watt-12-volt-modifiye-sinus-inverter-6942774e022e3.pdf",
+    "note": "No Apex NS dims published. Comparable Alpex JYM-600 modified sine: box 280x170x105 mm, 1.35 kg gross"
+  },
+  "APEX-00479": {
+    "dimsCm": [
+      37.5,
+      24.5,
+      10.5
+    ],
+    "weightKg": 3.0,
+    "basis": "estimate",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-12-volt-modifiye-sinus-inverter-6942777277b4e.pdf",
+    "note": "No Apex NS dims published. Interpolated between Alpex JYM-1000 (box 355x180x95, 2.29 kg) and JYM-1500 (box 375x245x105, 3.55 kg)"
+  },
+  "APEX-00480": {
+    "dimsCm": [
+      39.5,
+      24.0,
+      10.5
+    ],
+    "weightKg": 4.4,
+    "basis": "estimate",
+    "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/2000-watt-12-volt-modifiye-sinus-inverter-6942773bc1496.pdf",
+    "note": "No Apex NS dims published. Comparable Alpex JYM-2000 modified sine: box 395x240x105 mm, 4.4 kg gross"
+  },
+  "NPPOWE-00488": {
+    "dimsCm": [
+      24.5,
+      16.5,
+      6.8
+    ],
+    "weightKg": 2.0,
+    "basis": "series",
+    "source": "https://electrozirve.com/np-power-mppt-solar-sarj-kontrol-cihazi-30-amper-12v-24v/",
+    "note": "No NP2440 data; sibling NP2430 30A: 245x165x68 mm, 1.8 kg. Same housing assumed, +0.2 kg"
+  },
+  "APEX-00506": {
+    "dimsCm": [
+      30.0,
+      20.0,
+      12.0
+    ],
+    "weightKg": 2.8,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No APX dims published. ~500 W switch-mode smart charger, boxed estimate"
+  },
+  "APEX-00507": {
+    "dimsCm": [
+      30.0,
+      20.0,
+      12.0
+    ],
+    "weightKg": 2.8,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No APX dims published. 24V 20A (~500 W) same power class as APX1240, boxed estimate"
+  },
+  "APEX-00508": {
+    "dimsCm": [
+      34.0,
+      22.0,
+      13.0
+    ],
+    "weightKg": 3.8,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No APX dims published. ~800 W switch-mode charger, boxed estimate"
+  },
+  "APEX-00509": {
+    "dimsCm": [
+      38.0,
+      24.0,
+      14.0
+    ],
+    "weightKg": 5.0,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No APX dims published. ~1.1 kW switch-mode charger, boxed estimate"
+  },
+  "APEX-00510": {
+    "dimsCm": [
+      38.0,
+      24.0,
+      14.0
+    ],
+    "weightKg": 5.0,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No APX dims published. 24V 40A (~1.1 kW) same class as APX1280, boxed estimate"
+  },
+  "APEX-00511": {
+    "dimsCm": [
+      42.0,
+      26.0,
+      15.0
+    ],
+    "weightKg": 6.5,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No APX dims published. ~1.4 kW switch-mode charger, boxed estimate"
+  },
+  "NPPOWE-00512": {
+    "dimsCm": [
+      22.0,
+      14.0,
+      8.0
+    ],
+    "weightKg": 1.0,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No dims published. Small 12V 10A charger, boxed estimate"
+  },
+  "NPPOWE-00513": {
+    "dimsCm": [
+      25.0,
+      16.0,
+      9.0
+    ],
+    "weightKg": 1.5,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No dims published. 12V 20A charger, boxed estimate"
+  },
+  "NPPOWE-00514": {
+    "dimsCm": [
+      25.0,
+      16.0,
+      9.0
+    ],
+    "weightKg": 1.5,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No dims published. 24V 10A charger (same power as 12V 20A), boxed estimate"
+  },
+  "NPPOWE-00515": {
+    "dimsCm": [
+      28.0,
+      18.0,
+      10.0
+    ],
+    "weightKg": 2.0,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No dims published. 12V 30A charger, boxed estimate"
+  },
+  "ELECTR-00516": {
+    "dimsCm": [
+      22.0,
+      16.0,
+      9.0
+    ],
+    "weightKg": 1.0,
+    "basis": "estimate",
+    "source": "https://www.victronenergy.com/media/pg/Orion-Tr_Smart_DC-DC_Charger_-_Non-Isolated/en/specifications.html",
+    "note": "No EC12-12 data. 12-12V 20A non-isolated DC-DC; comparable units ~0.3-1.3 kg; boxed estimate"
+  },
+  "ELECTR-00517": {
+    "dimsCm": [
+      26.0,
+      19.0,
+      10.0
+    ],
+    "weightKg": 1.7,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No EC12-12 data. 12-12V 40A DC-DC, boxed estimate"
+  },
+  "ELECTR-00518": {
+    "dimsCm": [
+      30.0,
+      21.0,
+      11.0
+    ],
+    "weightKg": 2.4,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No EC12-12 data. 12-12V 60A DC-DC, boxed estimate"
+  },
+  "ELECTR-00519": {
+    "dimsCm": [
+      24.0,
+      18.0,
+      11.0
+    ],
+    "weightKg": 1.8,
+    "basis": "estimate",
+    "source": "https://cdn.autosolar.es/pdf/fichas-tecnicas/Ficha-Tecnica-Convertidor-12V-12V-30A-SR-DCI12-1230-SRNE-Aislada.pdf",
+    "note": "No Electrozirve data. Comparable SRNE DCI12-1230 30A DC-DC: 187x133.6x83.9 mm, 1.4 kg / 1.8 kg (net/gross per search snippet); boxed estimate"
+  },
+  "ELECTR-00521": {
+    "dimsCm": [
+      26.0,
+      19.0,
+      11.0
+    ],
+    "weightKg": 2.2,
+    "basis": "estimate",
+    "source": "estimate",
+    "note": "No Electrozirve data. 40A unidirectional DC-DC, scaled from 30A comparable (SRNE DCI12-1230 1.8 kg gross); boxed estimate"
+  },
+  "ELECTR-00520": {
+    "dimsCm": [
+      24.0,
+      18.0,
+      11.0
+    ],
+    "weightKg": 2.0,
+    "basis": "estimate",
+    "source": "https://cdn.autosolar.es/pdf/fichas-tecnicas/Ficha-Tecnica-Convertidor-12V-12V-30A-SR-DCI12-1230-SRNE-Aislada.pdf",
+    "note": "No Electrozirve data. 30A bidirectional DC-DC with display; comparable SRNE 30A DC-DC 187x134x84 mm, 1.4-1.8 kg; boxed estimate"
+  },
+  "APEX-00528": {
+    "dimsCm": [
+      25.0,
+      20.0,
+      12.0
+    ],
+    "weightKg": 1.5,
+    "basis": "estimate",
+    "source": "https://electrozirve.com/urun/apex-80a-transfer-switch/",
+    "note": "No dims published (form not stated). Assumed compact solar ATS / DIN-rail or small enclosure unit; boxed estimate - low confidence"
+  },
+  "EXELON-00534": {
+    "dimsCm": [
+      61.8,
+      46.3,
+      24.2
+    ],
+    "weightKg": 18.0,
+    "basis": "series",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EMAX-PRO-10.2-KW-SMART-INV.pdf",
+    "note": "PMAX-12P not listed on exelon.com.tr. Carton from sibling EMAX PRO-10.2KW (618x463x242 mm, 16.8 kg gross; PMAX-11P device 601x360x163 mm); weight raised to ~18 kg for 12 kW"
+  },
+  "EXELON-ELH24-00537": {
+    "dimsCm": [
+      47.0,
+      80.0,
+      31.3
+    ],
+    "weightKg": 59.5,
+    "basis": "series",
+    "source": "https://exelon.com.tr/magaza/wp-content/uploads/2026/09/HL-16K-20K-LV-HYBRIT-INV.pdf",
+    "note": "No 24 kW datasheet (page links the 5-15K sheet: 422x658x254 mm, <=45 kg). Used nearest larger Exelon 16-20K-LV cabinet 470x800x313 mm (WxHxD), 59.5 kg product; packaging adds size/weight - verify"
+  }
+}

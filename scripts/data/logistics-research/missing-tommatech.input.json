@@ -1,0 +1,596 @@
+[
+ {
+  "sku": "TOMMAT-KBLMC4XT6012AWG1M-00109",
+  "name": "TommaTech V Serisi Güç İstasyonu Panel Bağlantı Kablosu (MC4-XT60)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-KBLMC4DC552518AWG1-00110",
+  "name": "TommaTech R Serisi Güç İstasyonu Panel Bağlantı Kablosu (Daire Soket)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHV40KWHS-00162",
+  "name": "TommaTech Hightech Power S 4 kWh HV Lityum Batarya Modülü",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Lityum Akü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHVBMS40SAIO-00163",
+  "name": "TommaTech Hightech Power S HV BMS (AIO)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-BTRYTTHVBMS40S-00164",
+  "name": "TommaTech Hightech Power S HV BMS",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTTRM15CM-00200",
+  "name": "TommaTech Rack/Modüler Batarya Paralel Kablo Seti 15 cm",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTTRM15M-00201",
+  "name": "TommaTech Rack/Modüler Batarya Seri Güç Kablosu Seti 1,5 m",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-AKSKBLSETTPE5015M-00202",
+  "name": "TommaTech TPE 50 mm² Kırmızı Batarya Güç Kablosu 1,5 m",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-KSAMTLTBN256V512V-00203",
+  "name": "TommaTech Modüler Batarya Alt Taban (25,6V 208Ah / 51,2V 102Ah)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V10A-00204",
+  "name": "TommaTech SC Serisi Entegre Tip Batarya Şarj Ünitesi",
+  "variant": "24V 10A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT24V40ASC-00206",
+  "name": "TommaTech SC Serisi Entegre Tip Batarya Şarj Ünitesi",
+  "variant": "24V 40A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V20ASC-00208",
+  "name": "TommaTech SC Serisi Entegre Tip Batarya Şarj Ünitesi",
+  "variant": "48V 20A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V25ASC-00210",
+  "name": "TommaTech SC Serisi Entegre Tip Batarya Şarj Ünitesi",
+  "variant": "48V 25A Entegre Tip Batarya Şarj Ünitesi (SC)",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V20A-00209",
+  "name": "TommaTech Entegre Tip Su Geçirmez Batarya Şarj Ünitesi",
+  "variant": "48V 20A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V25A-00211",
+  "name": "TommaTech Entegre Tip Su Geçirmez Batarya Şarj Ünitesi",
+  "variant": "48V 25A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V50A-00213",
+  "name": "TommaTech Entegre Tip Su Geçirmez Batarya Şarj Ünitesi",
+  "variant": "48V 50A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT48V60A-00214",
+  "name": "TommaTech Entegre Tip Su Geçirmez Batarya Şarj Ünitesi",
+  "variant": "48V 60A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACENT72V25A-00215",
+  "name": "TommaTech Entegre Tip Su Geçirmez Batarya Şarj Ünitesi",
+  "variant": "72V 25A Entegre Tip Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR48V200A-00222",
+  "name": "TommaTech Duvar Tipi Batarya Şarj Ünitesi",
+  "variant": "48V 200A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR72V40A-00223",
+  "name": "TommaTech Duvar Tipi Batarya Şarj Ünitesi",
+  "variant": "72V 40A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V80A-00224",
+  "name": "TommaTech Duvar Tipi Batarya Şarj Ünitesi",
+  "variant": "80V 80A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTACDVR80V300A-00227",
+  "name": "TommaTech Duvar Tipi Batarya Şarj Ünitesi",
+  "variant": "80V 300A Duvar Tipi Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ30100V200A-00228",
+  "name": "TommaTech 30-100V 200A Ayarlanabilir Mobil Batarya Şarj Ünitesi",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ40100V200A-00229",
+  "name": "TommaTech 40-100V Ayarlanabilir Batarya Şarj Ünitesi",
+  "variant": "200A Ayarlanabilir Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SRJTTADJ40100V300A-00230",
+  "name": "TommaTech 40-100V Ayarlanabilir Batarya Şarj Ünitesi",
+  "variant": "300A Ayarlanabilir Batarya Şarj Ünitesi",
+  "brand": "TommaTech",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-EVCTTCVSTANT22KW-00247",
+  "name": "TommaTech 22 kW Araç Şarj İstasyonu LED Işıklı Stand (Boş Pano)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Şarj İstasyonu Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-EVCTTTFCBLTYPE2-00248",
+  "name": "TommaTech 22 kW Type 2 32A Araç Şarj Kablosu 5 m",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Şarj İstasyonu Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-00249",
+  "name": "TommaTech Şarj Takip Ortak Şarj Yönetimi Yazılımı",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Şarj İstasyonu Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-00250",
+  "name": "TommaTech RFID Araç Şarj İstasyonu Kartı",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Şarj İstasyonu Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT243150TF-00305",
+  "name": "TommaTech SPI Serisi Solar Pompa Sürücüsü (2,2 kW - 630 kW)",
+  "variant": "315 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "category": "Solar Pompa Sürücüsü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT243550TF-00306",
+  "name": "TommaTech SPI Serisi Solar Pompa Sürücüsü (2,2 kW - 630 kW)",
+  "variant": "355 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "category": "Solar Pompa Sürücüsü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT245000TF-00309",
+  "name": "TommaTech SPI Serisi Solar Pompa Sürücüsü (2,2 kW - 630 kW)",
+  "variant": "500 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "category": "Solar Pompa Sürücüsü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT246300TF-00310",
+  "name": "TommaTech SPI Serisi Solar Pompa Sürücüsü (2,2 kW - 630 kW)",
+  "variant": "630 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "category": "Solar Pompa Sürücüsü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT244000TF-00307",
+  "name": "TommaTech SPI Serisi Trifaze Solar Pompa Sürücüsü",
+  "variant": "400 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "category": "Solar Pompa Sürücüsü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SPITT244500TF-00308",
+  "name": "TommaTech SPI Serisi Trifaze Solar Pompa Sürücüsü",
+  "variant": "450 kW Trifaze 380V Solar Pompa Sürücüsü (900VDC)",
+  "brand": "TommaTech",
+  "category": "Solar Pompa Sürücüsü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-UECINVSLM4G-00314",
+  "name": "TommaTech Solar Pompa Sürücüsü 4G Uzaktan Erişim Cihazı",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK25A-00315",
+  "name": "TommaTech MDK25A Solar Pompa Sürücüsü Diyot Modülü (2,2-5,5 kW Sürücüler İçin)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK55A-00316",
+  "name": "TommaTech Solar Pompa Sürücüsü Diyot Modülü",
+  "variant": "MDK55A Solar Pompa Sürücüsü Diyot Modülü (7,5-11 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK90A-00318",
+  "name": "TommaTech Solar Pompa Sürücüsü Diyot Modülü",
+  "variant": "MDK90A Solar Pompa Sürücüsü Diyot Modülü (18,5-30 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK70A-00317",
+  "name": "TommaTech MDK70A Solar Pompa Sürücüsü Diyot Modülü (15 kW Sürücüler İçin)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK90A-00319",
+  "name": "TommaTech MDK90A Solar Pompa Sürücüsü Diyot Modülü (37-45 kW Sürücüler İçin)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00321",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (90-110 kW Sürücüler İçin)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00320",
+  "name": "TommaTech MDK110A Solar Pompa Sürücüsü Diyot Modülü (55-75 kW Sürücüler İçin)",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00322",
+  "name": "TommaTech Yüksek Güçlü Solar Pompa Sürücüsü Diyot Modülü",
+  "variant": "MDK110A Solar Pompa Sürücüsü Diyot Modülü (132 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00323",
+  "name": "TommaTech Yüksek Güçlü Solar Pompa Sürücüsü Diyot Modülü",
+  "variant": "MDK110A Solar Pompa Sürücüsü Diyot Modülü (160 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDK110A-00324",
+  "name": "TommaTech Yüksek Güçlü Solar Pompa Sürücüsü Diyot Modülü",
+  "variant": "MDK110A Solar Pompa Sürücüsü Diyot Modülü (185 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-SLMDIYODMDC15016-00325",
+  "name": "TommaTech Yüksek Güçlü Solar Pompa Sürücüsü Diyot Modülü",
+  "variant": "MDC150-16 Solar Pompa Sürücüsü Diyot Modülü (250 kW Sürücüler İçin)",
+  "brand": "TommaTech",
+  "category": "Solar Sürücü Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTTPOOL515R410TF-00348",
+  "name": "TommaTech 51,5 kW R410 Trifaze Havuz Tipi Isı Pompası",
+  "variant": null,
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT12R32MFDIS-00349",
+  "name": "TommaTech R32 Monofaze Split Isı Pompası Dış Ünite",
+  "variant": "12 kW R32 Monofaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT18R32MFDIS-00350",
+  "name": "TommaTech R32 Monofaze Split Isı Pompası Dış Ünite",
+  "variant": "18 kW R32 Monofaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT12R32TFDIS-00351",
+  "name": "TommaTech R32 Trifaze Split Isı Pompası Dış Ünite",
+  "variant": "12 kW R32 Trifaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT22R32TFDIS-00352",
+  "name": "TommaTech R32 Trifaze Split Isı Pompası Dış Ünite",
+  "variant": "22 kW R32 Trifaze Split Isı Pompası Dış Ünite",
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT812R32MFIC-00353",
+  "name": "TommaTech R32 Split Isı Pompası İç Ünite",
+  "variant": "8-12 kW R32 Monofaze Split Isı Pompası İç Ünite",
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "TOMMAT-HPTT1822R32MFIC-00354",
+  "name": "TommaTech R32 Split Isı Pompası İç Ünite",
+  "variant": "18-22 kW R32 Monofaze Split Isı Pompası İç Ünite",
+  "brand": "TommaTech",
+  "category": "Isı Pompası",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ }
+]

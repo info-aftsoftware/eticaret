@@ -122,12 +122,7 @@ const COMPLEMENTARY_BY_GROUP: Record<string, { title: string; description: strin
   'solar-baglanti-ekipmani': {
     title: 'Birlikte alınanlar',
     description: 'Bağlantı ekipmanlarını inverter, akü ve izleme ürünleriyle birlikte kullanın.',
-    categories: ['Tam Sinüs MPPT Akıllı İnverter', 'Lityum Akü', 'İzleme ve Kontrol'],
-  },
-  aksesuar: {
-    title: 'Birlikte alınanlar',
-    description: 'İzleme ve kontrol ürünlerini inverter, akü ve şarj kontrol cihazlarıyla birlikte kullanın.',
-    categories: ['Şarjlı Tam Sinüs İnverter', 'Lityum Akü', 'MPPT Şarj Kontrol Cihazı', 'Batarya Yönetimi ve Aksesuar'],
+    categories: ['Tam Sinüs MPPT Akıllı İnverter', 'Lityum Akü', 'MPPT Şarj Kontrol Cihazı', 'Batarya Yönetimi ve Aksesuar'],
   },
   'ruzgar-enerjisi': {
     title: 'Birlikte alınanlar',

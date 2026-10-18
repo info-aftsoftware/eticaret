@@ -1,7 +1,8 @@
 'use client'
 
 import * as React from 'react'
-import { X, CheckCircle2, AlertCircle, Info, AlertTriangle } from 'lucide-react'
+import Link from 'next/link'
+import { X, CheckCircle2, AlertCircle, Info, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning'
@@ -12,6 +13,10 @@ export interface Toast {
   title: string
   description?: string
   duration?: number
+  /** snackbar: sol altta sade koyu bildirim (ör. favoriye ekleme); aynı anda tek snackbar gösterilir */
+  variant?: 'default' | 'snackbar'
+  /** Bildirimdeki bağlantı (ör. "Favorilere git") */
+  action?: { label: string; href: string }
 }
 
 interface ToastContextType {
@@ -33,7 +38,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       duration: toast.duration ?? 3000,
     }
     
-    setToasts((prev) => [...prev, newToast])
+    // Snackbar yenisiyle değişir (art arda tıklamada yığılmaz)
+    setToasts((prev) => [...(newToast.variant === 'snackbar' ? prev.filter((t) => t.variant !== 'snackbar') : prev), newToast])
 
     // Auto remove after duration
     if ((newToast.duration ?? 0) > 0) {
@@ -64,11 +70,55 @@ export function useToast() {
 }
 
 function ToastContainer({ toasts, removeToast }: { toasts: Toast[]; removeToast: (id: string) => void }) {
+  const snack = toasts.filter((t) => t.variant === 'snackbar')
   return (
-    <div className="fixed top-20 right-4 z-[100] flex flex-col gap-2 w-full max-w-sm pointer-events-none">
-      {toasts.map((toast) => (
-        <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
-      ))}
+    <>
+      <div className="fixed top-20 right-4 z-[100] flex flex-col gap-2 w-full max-w-sm pointer-events-none">
+        {toasts.filter((t) => t.variant !== 'snackbar').map((toast) => (
+          <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
+        ))}
+      </div>
+      <div className="fixed bottom-4 left-4 right-4 sm:right-auto z-[110] flex flex-col gap-2 sm:w-[360px] pointer-events-none" aria-live="polite">
+        {snack.map((toast) => (
+          <SnackbarItem key={toast.id} toast={toast} onRemove={removeToast} />
+        ))}
+      </div>
+    </>
+  )
+}
+
+function SnackbarItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
+  const [isVisible, setIsVisible] = React.useState(false)
+  React.useEffect(() => {
+    const t = setTimeout(() => setIsVisible(true), 10)
+    return () => clearTimeout(t)
+  }, [])
+  return (
+    <div
+      role="status"
+      className={cn(
+        'pointer-events-auto flex items-center gap-3 rounded-lg bg-[#0b2540] text-white pl-4 pr-2 py-3 shadow-[0_10px_30px_rgba(11,37,64,0.3)] transition-all duration-200',
+        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+      )}
+    >
+      <span className="flex-1 min-w-0 text-[13.5px] font-medium truncate">{toast.title}</span>
+      {toast.action && (
+        <Link
+          href={toast.action.href}
+          onClick={() => onRemove(toast.id)}
+          className="shrink-0 inline-flex items-center gap-1 rounded-md px-2 py-1 text-[13px] font-semibold text-[#f5b400] hover:bg-white/10"
+        >
+          {toast.action.label} <ArrowRight className="w-3.5 h-3.5" aria-hidden />
+        </Link>
+      )}
+      <button
+        type="button"
+        onClick={() => onRemove(toast.id)}
+        className="shrink-0 !min-h-0 !min-w-0 p-1.5 rounded-md text-white/70 hover:text-white hover:bg-white/10"
+        aria-label="Kapat"
+      >
+        <X className="h-4 w-4" />
+      </button>
     </div>
   )
 }

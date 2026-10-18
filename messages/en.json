@@ -173,7 +173,7 @@
     "catMonitoringControl": "Monitoring & Control",
     "catGroupSolarBattery": "Solar Batteries",
     "catGroupSolarInverter": "Solar Inverters",
-    "catGroupSolarConnection": "Solar Connection Equipment",
+    "catGroupSolarConnection": "Connection Equipment & Accessories",
     "catGroupReadyPackages": "Ready Solar Packages",
     "catNavAllProducts": "All Products",
     "catNavAllCategories": "All Categories",
@@ -203,7 +203,7 @@
     "catWindController": "Wind Charge Controllers",
     "catEVStation": "EV Charging Stations",
     "catEVStationAccessory": "EV Charging Accessories",
-    "catNavConnection": "Connection"
+    "catNavConnection": "Connection & Accessories"
   },
   "headerTopBar": {
     "gesButton": "GES Calculator",

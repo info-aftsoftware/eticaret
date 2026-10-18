@@ -11,6 +11,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  FacebookAuthProvider,
   sendEmailVerification,
   setPersistence,
   browserLocalPersistence,
@@ -46,6 +47,7 @@ interface AuthState {
   register: (email: string, password: string, name: string, phone?: string) => Promise<{ success: boolean; error?: string; message?: string; verificationSent?: boolean }>
   /** Google ile giriş/kayıt. İlk girişte Firestore profili register ile aynı şekilde oluşturulur. */
   loginWithGoogle: () => Promise<{ success: boolean; isNewUser?: boolean; error?: string; code?: string }>
+  loginWithFacebook: () => Promise<{ success: boolean; isNewUser?: boolean; error?: string; code?: string }>
   logout: () => void
   setUser: (user: User | null) => void
   setToken: (token: string | null) => void
@@ -60,6 +62,56 @@ function mapFirebaseUser(fb: FirebaseUser, profile: { name: string; phone?: stri
     phone: profile?.phone,
     role: (profile?.role as 'customer' | 'admin') ?? 'customer',
     emailVerified: fb.emailVerified ?? false,
+  }
+}
+
+/** Google / Facebook ile açılır pencereden giriş; ilk girişte Firestore profili oluşturulur. */
+async function socialLogin(
+  providerId: 'google' | 'facebook',
+  set: (partial: Partial<AuthState>) => void
+): Promise<{ success: boolean; isNewUser?: boolean; error?: string; code?: string }> {
+  const label = providerId === 'google' ? 'Google' : 'Facebook'
+  if (!isFirebaseConfigured) return { success: false, error: 'Firebase yapılandırılmamış.' }
+  try {
+    const auth = getAuth()
+    await setPersistence(auth, browserLocalPersistence)
+    let provider: GoogleAuthProvider | FacebookAuthProvider
+    if (providerId === 'google') {
+      const g = new GoogleAuthProvider()
+      g.setCustomParameters({ prompt: 'select_account' })
+      provider = g
+    } else {
+      const fb = new FacebookAuthProvider()
+      fb.addScope('email')
+      provider = fb
+    }
+    const cred = await signInWithPopup(auth, provider)
+    let profile = await getUserProfile(cred.user.uid)
+    const isNewUser = !profile
+    if (!profile) {
+      const data = {
+        email: cred.user.email || '',
+        name: cred.user.displayName || (cred.user.email ? cred.user.email.split('@')[0] : ''),
+        phone: cred.user.phoneNumber || undefined,
+        role: 'customer' as const,
+      }
+      await setUserProfile(cred.user.uid, data)
+      profile = { ...data, createdAt: { seconds: 0, nanoseconds: 0 } }
+    }
+    const firebaseToken = await cred.user.getIdToken()
+    set({
+      user: mapFirebaseUser(cred.user, profile),
+      token: firebaseToken,
+      isAuthenticated: true,
+      rememberMe: true,
+    })
+    return { success: true, isNewUser }
+  } catch (err) {
+    return {
+      success: false,
+      code: authErrorCode(err),
+      error: authErrorMessage(err, `${label} ile giriş yapılamadı. Lütfen tekrar deneyin.`),
+    }
   }
 }
 
@@ -135,44 +187,8 @@ export const useFirebaseAuthStore = create<AuthState>()(
         }
       },
 
-      loginWithGoogle: async () => {
-        if (!isFirebaseConfigured) {
-          return { success: false, error: 'Firebase yapılandırılmamış.' }
-        }
-        try {
-          const auth = getAuth()
-          await setPersistence(auth, browserLocalPersistence)
-          const provider = new GoogleAuthProvider()
-          provider.setCustomParameters({ prompt: 'select_account' })
-          const cred = await signInWithPopup(auth, provider)
-          let profile = await getUserProfile(cred.user.uid)
-          const isNewUser = !profile
-          if (!profile) {
-            const data = {
-              email: cred.user.email || '',
-              name: cred.user.displayName || (cred.user.email ? cred.user.email.split('@')[0] : ''),
-              phone: cred.user.phoneNumber || undefined,
-              role: 'customer' as const,
-            }
-            await setUserProfile(cred.user.uid, data)
-            profile = { ...data, createdAt: { seconds: 0, nanoseconds: 0 } }
-          }
-          const firebaseToken = await cred.user.getIdToken()
-          set({
-            user: mapFirebaseUser(cred.user, profile),
-            token: firebaseToken,
-            isAuthenticated: true,
-            rememberMe: true,
-          })
-          return { success: true, isNewUser }
-        } catch (err) {
-          return {
-            success: false,
-            code: authErrorCode(err),
-            error: authErrorMessage(err, 'Google ile giriş yapılamadı. Lütfen tekrar deneyin.'),
-          }
-        }
-      },
+      loginWithGoogle: () => socialLogin('google', set),
+      loginWithFacebook: () => socialLogin('facebook', set),
 
       logout: () => {
         if (isFirebaseConfigured && typeof window !== 'undefined') {

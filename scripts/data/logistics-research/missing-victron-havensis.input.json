@@ -1,0 +1,387 @@
+[
+ {
+  "sku": "HAVENS-00600",
+  "name": "Havensis MiniSolar-3AES 12V 3A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "PWM Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00601",
+  "name": "Havensis MiniSolar-5AES 12V 5A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "PWM Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00604",
+  "name": "Havensis MiniSolar-20AES 12V 20A PWM Şarj Kontrol Cihazı (Eko Seri)",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "PWM Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00609",
+  "name": "Havensis MiniSolar MPS 3A 12V MPPT Şarj Kontrol Cihazı",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "MPPT Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00615",
+  "name": "Havensis MPS Serisi 40A MPPT Şarj Kontrol Cihazı",
+  "variant": "12/24/36/48V MPPT Şarj Kontrol Cihazı (150V PV)",
+  "brand": "Havensis",
+  "category": "MPPT Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00622",
+  "name": "Havensis BATCHG-1224BBC 12/12V 20A DC-DC Akü Şarj Cihazı",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00634",
+  "name": "Havensis Solar-WiFi-485 MPPT Uzaktan İzleme Modülü",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00635",
+  "name": "Havensis MiniSolar-BT V2 RS485 Bluetooth Uzaktan İzleme Modülü",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00636",
+  "name": "Havensis C216DSP Şarj Kontrol Cihazı Harici Ekranı",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "HAVENS-00637",
+  "name": "Havensis EKBT Bluetooth'lu Harici Ekran",
+  "variant": null,
+  "brand": "Havensis",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "MEXXSU-RG06018MPMX005-00809",
+  "name": "Mexxsun MPK8 60A 12/24/48V MPPT Şarj Kontrol Cihazı",
+  "variant": null,
+  "brand": "Mexxsun",
+  "category": "MPPT Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "VICTRO-BPP900100200-01781",
+  "name": "Victron CCGX Wi-Fi Modülü (Basit)",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.03
+  }
+ },
+ {
+  "sku": "VICTRO-BPP920140100-01786",
+  "name": "Victron GX Tank 140 Tank Seviye Ölçüm Modülü",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.11
+  }
+ },
+ {
+  "sku": "VICTRO-REC020005010-01787",
+  "name": "Victron Digital Multi Control 200/200A Uzaktan Kontrol Paneli",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.28
+  }
+ },
+ {
+  "sku": "VICTRO-REC030001210-01789",
+  "name": "Victron Inverter Control İnverter Uzaktan Kontrol Paneli",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İnverter Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.118
+  }
+ },
+ {
+  "sku": "VICTRO-REC010001110-01790",
+  "name": "Victron Phoenix Charger Control Uzaktan Kontrol Paneli",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İnverter Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.208
+  }
+ },
+ {
+  "sku": "VICTRO-GSM900200100-01801",
+  "name": "Victron GX GSM ve GX LTE Aktif GPS Anteni",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.09
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030066018-01813",
+  "name": "Victron RJ12 UTP Kablo 1,8 m",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.044
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030560100-01840",
+  "name": "Victron 3 Pinli Erkek-Dişi Uzatma Kablosu 1 m (2'li Paket)",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.066
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030532010-01849",
+  "name": "Victron CANUSB Arayüz",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.07
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030200000-01852",
+  "name": "Victron RS232 - USB Dönüştürücü",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.1
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030550120-01860",
+  "name": "Victron Ters Çeviren (Inverting) Uzaktan Aç/Kapa Kablosu",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.014
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030550220-01861",
+  "name": "Victron Ters Çevirmeyen (Non-Inverting) Uzaktan Aç/Kapa Kablosu",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.12
+  }
+ },
+ {
+  "sku": "VICTRO-CSE000100000-01865",
+  "name": "Victron AC Akım Sensörü",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.1
+  }
+ },
+ {
+  "sku": "VICTRO-ASS000100000-01874",
+  "name": "Victron BMV-702/712 İçin Sıcaklık Sensörü",
+  "variant": null,
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.075
+  }
+ },
+ {
+  "sku": "VICTRO-ASS070400100-01875",
+  "name": "Victron Ön Şarj (Pre-charge) Kablosu",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.095
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030572018-01886",
+  "name": "Victron RS485 - USB Arayüz Kablosu (1,8 m / 5 m)",
+  "variant": "1,8 m",
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.09
+  }
+ },
+ {
+  "sku": "VICTRO-ASS030572050-01887",
+  "name": "Victron RS485 - USB Arayüz Kablosu (1,8 m / 5 m)",
+  "variant": "5 m",
+  "brand": "Victron",
+  "category": "İzleme ve Kontrol",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.203
+  }
+ },
+ {
+  "sku": "VICTRO-SCC900300000-01955",
+  "name": "Victron BlueSolar PWM-Pro Uzaktan Kontrol Paneli",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.31
+  }
+ },
+ {
+  "sku": "VICTRO-SCC940100100-01956",
+  "name": "Victron BlueSolar PWM-Pro Sıcaklık Sensörü",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.065
+  }
+ },
+ {
+  "sku": "VICTRO-SCC940100200-01957",
+  "name": "Victron BlueSolar PWM-Pro - USB Arayüz Kablosu",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.05
+  }
+ },
+ {
+  "sku": "VICTRO-SHS900120050-02004",
+  "name": "Victron SHS 200 Solar Kablo 5 m",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.475
+  }
+ },
+ {
+  "sku": "VICTRO-SHS800300300-02005",
+  "name": "Victron SHS 200 Akü Kutusu",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Batarya Yönetimi ve Aksesuar",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 5
+  }
+ },
+ {
+  "sku": "VICTRO-SCC950200000-02009",
+  "name": "Victron MPPT WireBox-M Kablo Kapağı",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Şarj Kontrol Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.275
+  }
+ },
+ {
+  "sku": "VICTRO-ASS070200100-02116",
+  "name": "Victron Smart BMS CL 12/100 Bağlantı Kablosu",
+  "variant": null,
+  "brand": "Victron",
+  "category": "Kablo ve Konnektör",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": 0.1
+  }
+ }
+]

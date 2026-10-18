@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Lock, KeyRound, CheckCircle2, XCircle, Loader2, ArrowLeft } from 'lucide-react'
+import { Loader2, ArrowLeft } from 'lucide-react'
 import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
 import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
@@ -78,7 +78,7 @@ function ResetPasswordForm() {
 
   if (codeState === 'checking') {
     return (
-      <AuthLayout breadcrumb="Şifre Sıfırla" icon={KeyRound} title="Bağlantı kontrol ediliyor" showBenefits={false}>
+      <AuthLayout breadcrumb="Şifre Sıfırla" title="Bağlantı kontrol ediliyor">
         <div className="flex flex-col items-center py-8 text-[#5d6e80]">
           <Loader2 className="mb-3 h-8 w-8 animate-spin text-[#0b2540]" />
           Lütfen bekleyin…
@@ -91,10 +91,9 @@ function ResetPasswordForm() {
     return (
       <AuthLayout
         breadcrumb="Şifre Sıfırla"
-        icon={CheckCircle2}
         title="Şifreniz güncellendi"
         subtitle="Yeni şifrenizle giriş yapabilirsiniz. Birkaç saniye içinde giriş sayfasına yönlendirileceksiniz."
-        showBenefits={false}
+       
       >
         <PrimaryButton type="button" onClick={() => router.push('/login?reset=true')}>Giriş yap</PrimaryButton>
       </AuthLayout>
@@ -105,14 +104,13 @@ function ResetPasswordForm() {
     return (
       <AuthLayout
         breadcrumb="Şifre Sıfırla"
-        icon={XCircle}
         title={codeState === 'expired' ? 'Bağlantının süresi dolmuş' : 'Bağlantı geçersiz'}
         subtitle={
           codeState === 'expired'
             ? 'Şifre sıfırlama bağlantıları güvenlik nedeniyle yaklaşık 1 saat geçerlidir. Yeni bir bağlantı isteyin.'
             : 'Bu bağlantı daha önce kullanılmış ya da eksik kopyalanmış olabilir. En son gönderilen e-postadaki bağlantıyı kullanın veya yeni bir bağlantı isteyin.'
         }
-        showBenefits={false}
+       
       >
         <div className="space-y-3">
           <PrimaryButton type="button" onClick={() => router.push('/forgot-password')}>Yeni bağlantı iste</PrimaryButton>
@@ -125,10 +123,9 @@ function ResetPasswordForm() {
   return (
     <AuthLayout
       breadcrumb="Şifre Sıfırla"
-      icon={KeyRound}
       title="Yeni şifre belirleyin"
       subtitle={accountEmail ? <>Hesap: <span className="break-all font-semibold text-[#20384e]">{accountEmail}</span></> : 'Hesabınız için yeni bir şifre belirleyin.'}
-      showBenefits={false}
+     
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {error && <FormAlert>{error}</FormAlert>}
@@ -137,7 +134,6 @@ function ResetPasswordForm() {
         <PasswordField
           label="Yeni şifre"
           required
-          icon={Lock}
           placeholder={`En az ${MIN_PASSWORD} karakter`}
           value={password}
           onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors({ ...errors, password: undefined }) }}
@@ -150,7 +146,6 @@ function ResetPasswordForm() {
         <PasswordField
           label="Yeni şifre (tekrar)"
           required
-          icon={Lock}
           placeholder="Şifrenizi tekrar girin"
           value={confirmPassword}
           onChange={(e) => { setConfirmPassword(e.target.value); if (errors.confirm) setErrors({ ...errors, confirm: undefined }) }}

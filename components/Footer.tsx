@@ -93,7 +93,7 @@ export function Footer() {
                 { href: '/category/solar-inverter', label: 'Solar İnverterler' },
                 { href: '/category/solar-aku', label: 'Solar Aküler' },
                 { href: '/category/solar-sarj-kontrol', label: 'Şarj Kontrol Cihazları' },
-                { href: '/category/solar-baglanti-ekipmani', label: 'Solar Bağlantı Ekipmanı' },
+                { href: '/category/solar-baglanti-ekipmani', label: 'Bağlantı Ekipmanı ve Aksesuar' },
                 { href: '/paketler', label: 'Enerji Paketleri' },
               ].map((item) => (
                 <li key={item.href}>

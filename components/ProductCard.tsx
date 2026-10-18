@@ -126,7 +126,13 @@ export function ProductCard({
     stop(e)
     try {
       const added = await toggle(product.id)
-      addToast({ type: 'success', title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı', description: product.name })
+      addToast({
+        type: 'success',
+        variant: 'snackbar',
+        title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı',
+        action: added ? { label: 'Favorilere git', href: '/favorites' } : undefined,
+        duration: 4000,
+      })
     } catch {
       addToast({ type: 'error', title: 'Favori kaydedilemedi', description: 'Lütfen tekrar deneyin.' })
     }

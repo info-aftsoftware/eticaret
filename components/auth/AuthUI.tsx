@@ -6,77 +6,34 @@
  */
 
 import React, { useId, useState } from 'react'
-import { Eye, EyeOff, AlertCircle, CheckCircle2, Info, Loader2, ShieldCheck, Truck, PackageSearch, FileText } from 'lucide-react'
+import { Eye, EyeOff, AlertCircle, CheckCircle2, Info, Loader2 } from 'lucide-react'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { passwordStrength } from '@/lib/auth-errors'
 
-const BENEFITS = [
-  { icon: PackageSearch, title: 'Sipariş takibi', text: 'Siparişlerinizi ve kargo durumunu tek ekrandan izleyin.' },
-  { icon: Truck, title: 'Hızlı ödeme', text: 'Kayıtlı adres ve fatura bilgileriyle saniyeler içinde sipariş verin.' },
-  { icon: FileText, title: 'Teklif ve faturalar', text: 'GES tekliflerinize ve faturalarınıza her an ulaşın.' },
-  { icon: ShieldCheck, title: 'Güvenli hesap', text: 'Verileriniz KVKK kapsamında korunur, ödemeler 3D Secure ile.' },
-]
-
+/**
+ * Sade, kurumsal üyelik kartı: ortada tek kart, başlık + kısa açıklama, ardından form.
+ * (Eski tanıtım paneli, ikon rozeti ve dekoratif öğeler kaldırıldı.)
+ */
 export function AuthLayout({
   breadcrumb,
-  icon: Icon,
   title,
   subtitle,
   children,
-  showBenefits = true,
 }: {
   breadcrumb: string
-  icon: React.ElementType
   title: string
   subtitle?: React.ReactNode
   children: React.ReactNode
-  /** Geniş ekranda soldaki lacivert tanıtım paneli */
-  showBenefits?: boolean
 }) {
   return (
     <ClassicPageShell breadcrumbs={[{ label: breadcrumb }]} noTitle>
-      <div className="flex justify-center sm:py-2 min-w-0">
-        <div
-          className={`w-full min-w-0 bg-white border border-[#e6ebf1] rounded-xl shadow-[0_1px_3px_rgba(11,37,64,0.06)] overflow-hidden ${
-            showBenefits ? 'max-w-[960px] lg:grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]' : 'max-w-[480px]'
-          }`}
-        >
-          {showBenefits && (
-            <aside className="hidden lg:flex flex-col gap-10 bg-[#0b2540] text-white p-10 relative overflow-hidden">
-              <div aria-hidden className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-white/[0.04]" />
-              <div aria-hidden className="absolute -left-16 bottom-10 w-48 h-48 rounded-full bg-[#f5b400]/[0.07]" />
-              <div className="relative">
-                <p className="text-[13px] font-semibold tracking-[0.12em] uppercase text-[#f5b400]">Voltekno Hesabı</p>
-                <p className="mt-3 text-[26px] leading-tight font-bold">Enerji ihtiyacınız için tek adres</p>
-                <p className="mt-3 text-[15px] leading-relaxed text-white/70">
-                  Güneş paneli, akü, inverter ve şarj çözümlerinde alışverişinizi hesabınızla kolaylaştırın.
-                </p>
-              </div>
-              <ul className="relative space-y-5">
-                {BENEFITS.map(({ icon: BIcon, title: t, text }) => (
-                  <li key={t} className="flex gap-3.5">
-                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.08] text-[#f5b400]">
-                      <BIcon className="h-[18px] w-[18px]" />
-                    </span>
-                    <span>
-                      <span className="block text-[15px] font-semibold">{t}</span>
-                      <span className="block text-[13.5px] leading-relaxed text-white/65">{text}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </aside>
-          )}
-          <div className="p-5 sm:p-8 lg:p-10 min-w-0">
-            <div className="mb-6">
-              <span className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] bg-[#f1f4f8] text-[#0b2540]">
-                <Icon className="h-[22px] w-[22px]" />
-              </span>
-              <h2 className="mt-4 text-[24px] sm:text-[26px] font-bold tracking-tight text-[#121926]">{title}</h2>
-              {subtitle && <p className="mt-1.5 text-[15px] leading-relaxed text-[#5d6e80]">{subtitle}</p>}
-            </div>
-            {children}
+      <div className="flex justify-center py-2 sm:py-6 min-w-0">
+        <div className="w-full max-w-[440px] min-w-0 sm:bg-white sm:border sm:border-[#e3e8ee] sm:rounded-lg sm:p-8">
+          <div className="mb-6">
+            <h1 className="text-[22px] sm:text-[24px] font-bold tracking-tight text-[#121926]">{title}</h1>
+            {subtitle && <p className="mt-1.5 text-[14.5px] leading-relaxed text-[#5d6e80]">{subtitle}</p>}
           </div>
+          {children}
         </div>
       </div>
     </ClassicPageShell>
@@ -91,7 +48,7 @@ export function FormAlert({ tone = 'error', children }: { tone?: 'error' | 'succ
   }[tone]
   const Icon = tone === 'error' ? AlertCircle : tone === 'success' ? CheckCircle2 : Info
   return (
-    <div role={tone === 'error' ? 'alert' : 'status'} className={`flex gap-2.5 rounded-[10px] border px-3.5 py-3 text-[14px] leading-relaxed ${styles}`}>
+    <div role={tone === 'error' ? 'alert' : 'status'} className={`flex gap-2.5 rounded-md border px-3.5 py-3 text-[14px] leading-relaxed ${styles}`}>
       <Icon className="mt-0.5 h-[18px] w-[18px] shrink-0" />
       <div className="min-w-0">{children}</div>
     </div>
@@ -99,7 +56,7 @@ export function FormAlert({ tone = 'error', children }: { tone?: 'error' | 'succ
 }
 
 const inputBase =
-  'block w-full min-w-0 h-12 rounded-[10px] border bg-white px-3.5 text-[15px] text-[#121926] placeholder:text-[#9aa7b5] transition-colors focus:outline-none focus:ring-[3px] disabled:bg-[#f5f7fa] disabled:text-[#5d6e80]'
+  'block w-full min-w-0 h-11 rounded-md border bg-white px-3.5 text-[15px] text-[#121926] placeholder:text-[#9aa7b5] transition-colors focus:outline-none focus:ring-[3px] disabled:bg-[#f5f7fa] disabled:text-[#5d6e80]'
 
 function inputTone(error?: string) {
   return error
@@ -121,10 +78,9 @@ export function TextField({
   hint,
   required,
   labelExtra,
-  icon: Icon,
   className = '',
   ...input
-}: FieldProps & { icon?: React.ElementType } & React.InputHTMLAttributes<HTMLInputElement>) {
+}: FieldProps & React.InputHTMLAttributes<HTMLInputElement>) {
   const id = useId()
   return (
     <div className="space-y-1.5">
@@ -136,12 +92,11 @@ export function TextField({
         {labelExtra}
       </div>
       <div className="relative">
-        {Icon && <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#9aa7b5]" />}
         <input
           id={id}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-err` : hint ? `${id}-hint` : undefined}
-          className={`${inputBase} ${inputTone(error)} ${Icon ? 'pl-11' : ''} ${className}`}
+          className={`${inputBase} ${inputTone(error)} ${className}`}
           {...input}
         />
       </div>
@@ -160,9 +115,8 @@ export function PasswordField({
   hint,
   required,
   labelExtra,
-  icon: Icon,
   ...input
-}: FieldProps & { icon?: React.ElementType } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>) {
+}: FieldProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>) {
   const id = useId()
   const [show, setShow] = useState(false)
   return (
@@ -175,13 +129,12 @@ export function PasswordField({
         {labelExtra}
       </div>
       <div className="relative">
-        {Icon && <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#9aa7b5]" />}
         <input
           id={id}
           type={show ? 'text' : 'password'}
           aria-invalid={!!error}
           aria-describedby={error ? `${id}-err` : hint ? `${id}-hint` : undefined}
-          className={`${inputBase} ${inputTone(error)} pr-12 ${Icon ? 'pl-11' : ''}`}
+          className={`${inputBase} ${inputTone(error)} pr-12`}
           {...input}
         />
         <button
@@ -269,7 +222,7 @@ export function PrimaryButton({
     <button
       {...props}
       disabled={loading || props.disabled}
-      className={`flex h-12 w-full items-center justify-center gap-2 rounded-[10px] bg-[#0b2540] px-5 text-[15px] font-semibold text-white transition-colors hover:bg-[#12335a] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#0b2540]/30 disabled:cursor-not-allowed disabled:opacity-70 touch-manipulation ${className}`}
+      className={`flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#0b2540] px-5 text-[15px] font-semibold text-white transition-colors hover:bg-[#12335a] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#0b2540]/30 disabled:cursor-not-allowed disabled:opacity-70 touch-manipulation ${className}`}
     >
       {loading ? (
         <>
@@ -287,7 +240,7 @@ export function SecondaryButton({ className = '', ...props }: React.ButtonHTMLAt
   return (
     <button
       {...props}
-      className={`flex h-12 w-full items-center justify-center gap-2 rounded-[10px] border border-[#d3d9e1] bg-white px-5 text-[15px] font-semibold text-[#121926] transition-colors hover:bg-[#f5f7fa] hover:border-[#b9c3cf] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#0b2540]/15 disabled:cursor-not-allowed disabled:opacity-60 touch-manipulation ${className}`}
+      className={`flex h-11 w-full items-center justify-center gap-2.5 rounded-md border border-[#d3d9e1] bg-white px-5 text-[15px] font-semibold text-[#121926] transition-colors hover:bg-[#f5f7fa] hover:border-[#b9c3cf] focus:outline-none focus-visible:ring-[3px] focus-visible:ring-[#0b2540]/15 disabled:cursor-not-allowed disabled:opacity-60 touch-manipulation ${className}`}
     />
   )
 }

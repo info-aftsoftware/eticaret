@@ -5,8 +5,9 @@ import { trackViewItem, grossPrice } from '@/lib/analytics'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Package, ChevronRight, Minus, Plus, ShoppingCart, Zap, Send, ZoomIn, X, ChevronLeft, ShieldCheck, Truck, Headphones, RotateCcw } from 'lucide-react'
+import { ArrowLeft, Package, ChevronRight, Minus, Plus, ShoppingCart, Zap, ZoomIn, X, ChevronLeft } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
+import { BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useCartStore } from '@/lib/store/useCartStore'
@@ -15,7 +16,6 @@ import { FavoriteButton } from '@/components/FavoriteButton'
 import { StockAlertForm } from '@/components/StockAlertForm'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { CompareButton } from '@/components/CompareButton'
-import { Turnstile } from '@/components/Turnstile'
 import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
@@ -85,22 +85,10 @@ export default function ProductDetailClient({ initialProduct, productId: product
   useEffect(() => setCartMounted(true), [])
   const { addToast } = useToast()
   const router = useRouter()
-  const [quantity, setQuantity] = useState(1)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
   /** Varyantlı ürünlerde seçilen seçenek (model/kapasite); yoksa ilk varyant veya null */
   const [selectedVariant, setSelectedVariant] = useState<{ key: string; label: string; price: number; sku?: string; specifications?: Record<string, string> } | null>(null)
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  })
-  const [contactTurnstile, setContactTurnstile] = useState<string | null>(null)
-  const [contactTurnstileReset, setContactTurnstileReset] = useState(0)
-  const [contactSubmitting, setContactSubmitting] = useState(false)
-  const [contactSent, setContactSent] = useState(false)
-  const [contactFormOpen, setContactFormOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   useEffect(() => {
@@ -117,8 +105,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
             ? data.variants.find((v: { key: string }) => v.key === data.defaultVariantKey) ?? data.variants[0]
             : data?.variants?.[0] ?? null
         setSelectedVariant(initialVariant)
-        const st = typeof data?.stock === 'number' ? data.stock : 0
-        setQuantity(st > 0 ? 1 : 0)
       })
       .catch(() => {
         const data = mockProductsMap[productId] ?? null
@@ -128,8 +114,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
             ? data.variants.find((v) => v.key === data.defaultVariantKey) ?? data.variants[0]
             : data?.variants?.[0] ?? null
         setSelectedVariant(initialVariant)
-        const st = typeof data?.stock === 'number' ? data.stock : 0
-        setQuantity(st > 0 ? 1 : 0)
       })
       .finally(() => setLoading(false))
   }, [productId, initialProduct])
@@ -238,8 +222,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const stock = typeof product.stock === 'number' ? product.stock : 0
   const outOfStock = stock === 0
   const isLowStock = stock > 0 && stock <= 5
-  const maxQuantity = Math.max(1, stock)
-  const displayQuantity = outOfStock ? 0 : Math.min(quantity, maxQuantity)
 
   /** Seçili seçeneği 1 adet sepete ekler (stok sınırı aşılırsa eklemez); eklendiyse true */
   const addCurrentToCart = (silent = false): boolean => {
@@ -288,8 +270,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
         </div>
       }
     >
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden min-w-0 overflow-x-hidden">
-        <div className="p-4 sm:p-6 md:p-8 lg:p-12">
+      {/* Mobilde ikinci kart çerçevesi yok: sayfa kenar boşluğu yeterli */}
+      <div className="bg-white sm:rounded-3xl sm:border sm:border-slate-200 sm:shadow-sm overflow-hidden min-w-0 overflow-x-hidden">
+        <div className="py-4 sm:p-6 md:p-8 lg:p-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 lg:gap-16">
             <div className="space-y-3">
               <div
@@ -376,133 +359,163 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 </div>
               )}
               {images.length > 1 && (
-                <div className="mt-4">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">{tProduct('otherImages')}</p>
-                  <div className="product-gallery-pause rounded-2xl border border-slate-200 bg-slate-50/70 shadow-sm overflow-hidden py-4">
-                    <div className="overflow-hidden">
-                      <div className="flex gap-5 w-max animate-product-gallery">
-                        {[...images, ...images, ...images].map((src, i) => {
-                          const index = i % images.length
-                          return (
-                            <button
-                              key={i}
-                              type="button"
-                              onClick={() => setSelectedIndex(index)}
-                              className={`relative flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:ring-offset-2 shadow-md hover:shadow-lg hover:scale-[1.02] ${selectedIndex === index
-                                ? 'border-brand ring-2 ring-brand/30 ring-offset-2'
-                                : 'border-white bg-white hover:border-slate-200'
-                                }`}
-                            >
-                              <Image src={src} alt={`${product.name} ${index + 1}`} fill className="object-cover" sizes="112px" />
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-3 mb-4 flex-wrap">
-                {product.brand && <p className="text-sm font-bold text-brand uppercase tracking-wider">{product.brand}</p>}
-                {(effectiveVariant?.sku || product.sku) && (
-                  <span className="text-xs font-semibold text-slate-600 border border-slate-200 px-3 py-1 rounded-lg bg-white">
-                    {tProduct('productCode', { sku: effectiveVariant?.sku || product.sku })}
-                  </span>
-                )}
-                <FavoriteButton productId={product.id} className="ml-auto sm:ml-0" />
-                <CompareButton productId={product.id} productName={product.name} />
-              </div>
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 tracking-tight leading-snug max-w-xl">{product.name}</h1>
-
-              {product.variants && product.variants.length > 0 && (
-                <div className="mb-4">
-                  <p className="text-sm font-semibold text-slate-700 mb-2">
-                    {tProduct('modelCapacity')}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {product.variants.map((v) => (
+                <ul className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]" aria-label={tProduct('otherImages')}>
+                  {images.map((src, index) => (
+                    <li key={src + index} className="shrink-0">
                       <button
-                        key={v.key}
                         type="button"
-                        onClick={() => setSelectedVariant(v)}
-                        className={`rounded-xl border-2 px-4 py-2.5 text-left text-sm font-medium transition-colors ${selectedVariant?.key === v.key
-                          ? 'border-brand bg-brand/10 text-brand'
-                          : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                        onClick={() => setSelectedIndex(index)}
+                        aria-label={`${index + 1}. görsel`}
+                        aria-current={selectedIndex === index ? 'true' : undefined}
+                        className={`relative block w-[72px] h-[72px] sm:w-20 sm:h-20 rounded-lg overflow-hidden border bg-white transition-colors ${selectedIndex === index
+                          ? 'border-[#0b2540] ring-1 ring-[#0b2540]'
+                          : 'border-[#e6ebf1] hover:border-[#8a99a8]'
                           }`}
                       >
-                        <span className="block">{v.label}</span>
-                        <span className="text-xs text-slate-500 mt-0.5">{formatPrice(v.price)}</span>
+                        <Image src={src} alt="" fill className="object-contain p-1.5" sizes="80px" />
                       </button>
-                    ))}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="flex flex-col min-w-0">
+              {/* Üst satır: marka + favori / karşılaştır */}
+              <div className="flex items-center justify-between gap-3 mb-3">
+                {product.brand ? (
+                  <Link
+                    href={`/products?brand=${encodeURIComponent(product.brand)}`}
+                    className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#0b2540] hover:underline underline-offset-2"
+                  >
+                    {product.brand}
+                  </Link>
+                ) : <span />}
+                <div className="flex items-center gap-2 shrink-0">
+                  <FavoriteButton productId={product.id} />
+                  <CompareButton productId={product.id} productName={product.name} />
+                </div>
+              </div>
+
+              <h1 className="text-xl sm:text-2xl font-bold text-[#121926] tracking-tight leading-snug">{product.name}</h1>
+
+              {/* Varyant seçimi */}
+              {product.variants && product.variants.length > 0 && (
+                <div className="mt-5">
+                  <p className="text-[13px] font-semibold text-[#20384e] mb-2">{tProduct('modelCapacity')}</p>
+                  <div className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-2">
+                    {product.variants.map((v) => {
+                      const selected = (selectedVariant ?? product.variants?.[0])?.key === v.key
+                      return (
+                        <button
+                          key={v.key}
+                          type="button"
+                          onClick={() => setSelectedVariant(v)}
+                          aria-pressed={selected}
+                          className={`rounded-lg border px-3.5 py-2.5 text-left transition-colors ${selected
+                            ? 'border-[#0b2540] bg-[#f5f7fa] ring-1 ring-[#0b2540]'
+                            : 'border-[#d3d9e1] bg-white hover:border-[#8a99a8]'
+                            }`}
+                        >
+                          <span className="block text-[13.5px] font-medium text-[#121926] leading-snug">{v.label}</span>
+                          <span className="block text-[12.5px] text-[#5d6e80] mt-0.5 tabular-nums">{formatPrice(v.price)}</span>
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
               )}
 
+              {/* Fiyat */}
               {(() => {
                 const sp = product as typeof product & { oldPrice?: number; discount?: number; campaign?: { name: string; endsAt: string | null } }
-                if (!sp.campaign || !sp.oldPrice) return null
-                // Varyantta eski fiyat: kampanya oranından geri hesaplanır
-                const old = effectiveVariant && sp.discount ? effectiveVariant.price / (1 - sp.discount / 100) : sp.oldPrice
+                const price = effectiveVariant ? effectiveVariant.price : product.price
+                const old = sp.campaign && sp.oldPrice
+                  ? (effectiveVariant && sp.discount ? effectiveVariant.price / (1 - sp.discount / 100) : sp.oldPrice)
+                  : null
                 return (
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className="text-lg text-slate-400 line-through">{formatPrice(old)}</span>
-                    {!!sp.discount && <span className="rounded-md bg-brand px-2 py-0.5 text-xs font-bold text-white">%{sp.discount} İndirim</span>}
-                    <span className="text-xs text-slate-600">
-                      {sp.campaign.name}
-                      {sp.campaign.endsAt && ` · ${new Date(sp.campaign.endsAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })} tarihine kadar`}
-                    </span>
+                  <div className="mt-5">
+                    {old && (
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
+                        <span className="text-[15px] text-[#8a99a8] line-through tabular-nums">{formatPrice(old)}</span>
+                        {!!sp.discount && <span className="rounded bg-[#d6262c] px-1.5 py-0.5 text-[11.5px] font-bold text-white">%{sp.discount}</span>}
+                        <span className="text-[12.5px] text-[#5d6e80]">
+                          {sp.campaign!.name}
+                          {sp.campaign!.endsAt && ` · ${new Date(sp.campaign!.endsAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })} tarihine kadar`}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(price)}</span>
+                      <span className="text-[13px] text-[#5d6e80]">
+                        +KDV · KDV dahil <span className="tabular-nums">{formatPrice(price * (1 + VAT_RATE / 100))}</span>
+                      </span>
+                    </div>
                   </div>
                 )
               })()}
-              <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
-                {formatPrice(effectiveVariant ? effectiveVariant.price : product.price)}
-              </p>
-              <p className="text-sm text-slate-500 mb-3">
-                {tProduct('priceWithVAT')} {formatPrice((effectiveVariant ? effectiveVariant.price : product.price) * 1.20)}
-              </p>
-              <div className="mb-6">
-                {outOfStock ? (
-                  <span className="inline-flex items-center rounded-lg bg-brand-light px-3 py-1.5 text-sm font-semibold text-brand border border-brand/20">
-                    {tProduct('soldOut')}
-                  </span>
-                ) : isLowStock ? (
-                  <span className="inline-flex items-center rounded-lg bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-800 border border-amber-200">
-                    {tProduct('lowStock', { stock })}
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center rounded-lg bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-700 border border-emerald-200">
-                    {tProduct('inStock')}
-                  </span>
+
+              {/* Kısa bilgi tablosu */}
+              <dl className="mt-5 border-y border-[#eef1f5] py-4 grid grid-cols-[112px_1fr] gap-y-2.5 text-[13.5px]">
+                {product.category && categoryLabel && (
+                  <>
+                    <dt className="text-[#5d6e80]">Kategori</dt>
+                    <dd>
+                      <Link href={`/products?category=${encodeURIComponent(product.category)}`} className="text-[#0b2540] font-medium hover:underline underline-offset-2">
+                        {categoryLabel}
+                      </Link>
+                    </dd>
+                  </>
                 )}
-                {!outOfStock && <DeliveryEstimate className="mt-3" />}
-              </div>
+                {(effectiveVariant?.sku || product.sku) && (
+                  <>
+                    <dt className="text-[#5d6e80]">Stok kodu</dt>
+                    <dd className="text-[#121926] font-medium break-all">{effectiveVariant?.sku || product.sku}</dd>
+                  </>
+                )}
+                <dt className="text-[#5d6e80]">Stok</dt>
+                <dd className={`font-semibold ${outOfStock ? 'text-[#d6262c]' : isLowStock ? 'text-amber-700' : 'text-emerald-700'}`}>
+                  {outOfStock ? tProduct('soldOut') : isLowStock ? tProduct('lowStock', { stock }) : tProduct('inStock')}
+                </dd>
+                {!outOfStock && (
+                  <>
+                    <dt className="text-[#5d6e80]">Havale/EFT</dt>
+                    <dd className="text-[#121926]">
+                      <span className="font-semibold tabular-nums">
+                        {formatPrice((effectiveVariant ? effectiveVariant.price : product.price) * (1 + VAT_RATE / 100) * (1 - BANK_TRANSFER_DISCOUNT_RATE / 100))}
+                      </span>
+                      <span className="text-[#5d6e80]"> KDV dahil · %{BANK_TRANSFER_DISCOUNT_RATE} indirimli</span>
+                    </dd>
+                    <dt className="text-[#5d6e80]">Teslimat</dt>
+                    <dd><DeliveryEstimate compact /></dd>
+                  </>
+                )}
+              </dl>
 
-              {outOfStock && <StockAlertForm productId={product.id} />}
+              {outOfStock && <div className="mt-5"><StockAlertForm productId={product.id} /></div>}
 
-              <div className="flex gap-2 sm:gap-3 mb-6">
+              {/* Sepet butonları */}
+              <div className="mt-5 grid grid-cols-2 gap-2.5">
                 {cartQty === 0 ? (
                   <Button
                     disabled={outOfStock}
                     onClick={() => addCurrentToCart()}
-                    className="flex-1 rounded-xl min-h-12 h-auto py-3 px-4 sm:px-5 bg-brand hover:bg-brand-hover text-white font-semibold text-sm sm:text-base disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
+                    className="rounded-lg h-12 px-4 bg-[#0b2540] hover:bg-[#12335a] text-white font-semibold text-[15px] disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
                   >
-                    <ShoppingCart className="w-4 h-4 mr-2 shrink-0" />
+                    <ShoppingCart className="w-[18px] h-[18px] mr-2 shrink-0" aria-hidden />
                     {outOfStock ? tCart('outOfStock') : tCart('addToCart')}
                   </Button>
                 ) : (
-                  <div className="flex-1 flex items-center h-12 rounded-xl border-2 border-brand bg-brand/5 overflow-hidden">
+                  <div className="flex items-center h-12 rounded-lg border border-[#0b2540] overflow-hidden">
                     <button
                       type="button"
                       onClick={() => updateQuantity(cartLineId, cartQty - 1)}
-                      className="flex items-center justify-center h-full w-12 text-brand hover:bg-brand/10 transition-colors touch-manipulation"
+                      className="flex items-center justify-center h-full w-12 text-[#0b2540] hover:bg-[#f1f4f8] transition-colors touch-manipulation"
                       aria-label={tCart('decreaseQty')}
                     >
                       <Minus className="w-4 h-4" />
                     </button>
-                    <span className="flex-1 flex items-center justify-center text-brand font-bold text-base tabular-nums select-none" aria-live="polite">
-                      {cartQty}
+                    <span className="flex-1 text-center text-[#0b2540] font-bold tabular-nums select-none" aria-live="polite">
+                      {cartQty} <span className="font-normal text-[13px] text-[#5d6e80]">sepette</span>
                     </span>
                     <button
                       type="button"
@@ -514,7 +527,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         updateQuantity(cartLineId, cartQty + 1)
                       }}
                       aria-disabled={productCartQty >= stock}
-                      className={`flex items-center justify-center h-full w-12 text-brand transition-colors touch-manipulation ${productCartQty >= stock ? 'opacity-40' : 'hover:bg-brand/10'}`}
+                      className={`flex items-center justify-center h-full w-12 text-[#0b2540] transition-colors touch-manipulation ${productCartQty >= stock ? 'opacity-40' : 'hover:bg-[#f1f4f8]'}`}
                       aria-label={tCart('increaseQty')}
                     >
                       <Plus className="w-4 h-4" />
@@ -529,15 +542,14 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     if (cartQty === 0 && !addCurrentToCart(true)) return
                     router.push('/cart')
                   }}
-                  variant="destructive"
-                  className="flex-1 rounded-xl h-12 px-4 sm:px-5 font-semibold text-sm sm:text-base disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
+                  className="rounded-lg h-12 px-4 bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] font-semibold text-[15px] disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
                 >
-                  <Zap className="w-4 h-4 mr-2 shrink-0" />
-                  <span className="break-words">{outOfStock ? tCart('outOfStock') : tProduct('buyNow')}</span>
+                  <Zap className="w-[18px] h-[18px] mr-2 shrink-0" aria-hidden />
+                  {outOfStock ? tCart('outOfStock') : tProduct('buyNow')}
                 </Button>
               </div>
 
-              {/* Uyumlu ürünler */}
+              {/* Uyumlu ürünler (eski "Bu ürün size uygun mu?" alanının yerinde) */}
               {(() => {
                 const complementary = product.category ? COMPLEMENTARY_BY_CATEGORY[product.category] : undefined
                 if (!complementary) return null
@@ -548,165 +560,29 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   .filter(Boolean) as (typeof mockProducts)[number][]
                 if (compatProducts.length === 0) return null
                 return (
-                  <div className="mt-5 pt-5 border-t border-slate-200">
-                    <p className="text-xs font-bold text-slate-900 uppercase tracking-wide mb-3">Uyumlu Ürünler</p>
-                    {complementary.banner && (
-                      <div className="mb-3 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 leading-relaxed">
-                        {complementary.banner}
-                      </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-2">
+                  <section className="mt-7" aria-labelledby="compat-heading">
+                    <h2 id="compat-heading" className="text-[15px] font-bold text-[#121926] mb-1">Uyumlu ürünler</h2>
+                    {complementary.banner && <p className="text-[12.5px] text-[#5d6e80] leading-relaxed mb-3">{complementary.banner}</p>}
+                    <ul className="mt-3 divide-y divide-[#eef1f5] border border-[#e6ebf1] rounded-lg">
                       {compatProducts.map((p) => (
-                        <Link
-                          key={p.id}
-                          href={`/products/${p.id}`}
-                          className="flex items-center gap-2 bg-white border border-slate-200 rounded-xl p-2 hover:border-brand hover:shadow-sm transition-all group"
-                        >
-                          <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
-                            {(p.images?.[0] ?? p.image) ? (
-                              <img
-                                src={p.images?.[0] ?? p.image}
-                                alt={p.name}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <Package className="w-5 h-5 text-slate-300" />
-                            )}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <p className="text-xs font-semibold text-slate-800 line-clamp-2 leading-tight group-hover:text-brand transition-colors">{p.name}</p>
-                          </div>
-                        </Link>
+                        <li key={p.id}>
+                          <Link href={`/products/${p.id}`} className="flex items-center gap-3 p-2.5 hover:bg-[#f7f8fa] transition-colors group">
+                            <span className="relative w-12 h-12 shrink-0 rounded-md bg-white border border-[#eef1f5] overflow-hidden">
+                              {(p.images?.[0] ?? p.image) ? (
+                                <Image src={(p.images?.[0] ?? p.image)!} alt="" fill sizes="48px" className="object-contain p-1" />
+                              ) : (
+                                <Package className="w-5 h-5 text-slate-300 m-auto" aria-hidden />
+                              )}
+                            </span>
+                            <span className="min-w-0 flex-1 text-[13px] font-medium text-[#20384e] line-clamp-2 leading-snug group-hover:text-[#0b2540]">{p.name}</span>
+                            <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{formatPrice(p.price)}</span>
+                          </Link>
+                        </li>
                       ))}
-                    </div>
-                  </div>
+                    </ul>
+                  </section>
                 )
               })()}
-
-              {/* Güven / servis mini blok */}
-              <div className="mt-5 grid grid-cols-4 gap-1.5">
-                <div className="flex flex-col items-center text-center gap-1 bg-emerald-50 border border-emerald-100 rounded-xl p-2">
-                  <div className="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  </div>
-                  <p className="text-[12px] font-bold text-slate-800 leading-tight">2 Yıl Garanti</p>
-                </div>
-                <div className="flex flex-col items-center text-center gap-1 bg-blue-50 border border-blue-100 rounded-xl p-2">
-                  <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                    <Truck className="w-3.5 h-3.5 text-blue-600" />
-                  </div>
-                  <p className="text-[12px] font-bold text-slate-800 leading-tight">Hızlı Kargo</p>
-                </div>
-                <div className="flex flex-col items-center text-center gap-1 bg-brand/5 border border-brand/15 rounded-xl p-2">
-                  <div className="w-7 h-7 rounded-full bg-brand/10 flex items-center justify-center shrink-0">
-                    <Headphones className="w-3.5 h-3.5 text-brand" />
-                  </div>
-                  <p className="text-[12px] font-bold text-slate-800 leading-tight">Teknik Destek</p>
-                </div>
-                <div className="flex flex-col items-center text-center gap-1 bg-amber-50 border border-amber-100 rounded-xl p-2">
-                  <div className="w-7 h-7 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                    <RotateCcw className="w-3.5 h-3.5 text-amber-600" />
-                  </div>
-                  <p className="text-[12px] font-bold text-slate-800 leading-tight">14 Gün İade</p>
-                </div>
-              </div>
-
-              {/* Görselin sağında: Bu ürün size uygun mu? – tıklanınca mini form açılır */}
-              <div className="mt-6 pt-6 border-t border-slate-200">
-                <button
-                  type="button"
-                  onClick={() => setContactFormOpen((o) => !o)}
-                  className="text-sm font-semibold text-brand hover:text-brand/80 transition-colors text-left flex items-center gap-2"
-                >
-                  {tProduct('suitableQuestion')}
-                  <ChevronRight className={`w-4 h-4 transition-transform ${contactFormOpen ? 'rotate-90' : ''}`} />
-                </button>
-                <p className="text-slate-600 text-sm mt-1.5">{tProduct('suitableDesc')}</p>
-                {contactFormOpen && (
-                  <div className="mt-4">
-                    {contactSent ? (
-                      <p className="text-sm text-green-600 font-medium py-2">{tProduct('contactSent')}</p>
-                    ) : (
-                      <form
-                        className="space-y-2.5"
-                        onSubmit={async (e) => {
-                          e.preventDefault()
-                          if (contactSubmitting || !contactForm.name.trim() || !contactForm.email.trim() || !contactForm.phone.trim() || !contactForm.message.trim()) return
-                          setContactSubmitting(true)
-                          try {
-                            // Sunucu: doğrulama + bot koruması + admin'e e-posta + panel kaydı
-                            const res = await fetch('/api/contact', {
-                              method: 'POST',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify({
-                                name: contactForm.name.trim(),
-                                email: contactForm.email.trim(),
-                                phone: contactForm.phone.trim(),
-                                subject: tProduct('contactSubject'),
-                                message: `[Ürün: ${product.name}]\n\n${contactForm.message.trim()}`,
-                                productId: product.id,
-                                turnstileToken: contactTurnstile,
-                              }),
-                            })
-                            setContactTurnstileReset((n) => n + 1)
-                            const data = await res.json().catch(() => null)
-                            if (!res.ok || !data?.success) throw new Error(data?.error)
-                            setContactSent(true)
-                            addToast({ type: 'success', title: tProduct('sentTitle'), description: tProduct('sentDesc') })
-                          } catch {
-                            addToast({ type: 'error', title: tCart('errorTitle'), description: tProduct('sendErrorDesc') })
-                          } finally {
-                            setContactSubmitting(false)
-                          }
-                        }}
-                      >
-                        <input
-                          type="text"
-                          placeholder={tProduct('contactNamePlaceholder')}
-                          value={contactForm.name}
-                          onChange={(e) => setContactForm((f) => ({ ...f, name: e.target.value }))}
-                          className="w-full h-9 rounded-lg border border-slate-200 px-3 text-sm"
-                          required
-                        />
-                        <input
-                          type="email"
-                          placeholder={tProduct('contactEmailPlaceholder')}
-                          value={contactForm.email}
-                          onChange={(e) => setContactForm((f) => ({ ...f, email: e.target.value }))}
-                          className="w-full h-9 rounded-lg border border-slate-200 px-3 text-sm"
-                          required
-                        />
-                        <input
-                          type="tel"
-                          placeholder={tProduct('contactPhonePlaceholder')}
-                          value={contactForm.phone}
-                          onChange={(e) => setContactForm((f) => ({ ...f, phone: e.target.value }))}
-                          className="w-full h-9 rounded-lg border border-slate-200 px-3 text-sm"
-                          required
-                        />
-                        <textarea
-                          placeholder={tProduct('contactMessagePlaceholder')}
-                          value={contactForm.message}
-                          onChange={(e) => setContactForm((f) => ({ ...f, message: e.target.value }))}
-                          className="w-full min-h-[60px] rounded-lg border border-slate-200 px-3 py-2 text-sm resize-y"
-                          rows={2}
-                          required
-                        />
-                        <Turnstile onToken={setContactTurnstile} resetKey={contactTurnstileReset} />
-                        <Button type="submit" disabled={contactSubmitting} size="sm" className="w-full rounded-lg h-9 text-sm font-semibold">
-                          {contactSubmitting ? tProduct('contactSending') : (
-                            <>
-                              <Send className="w-3.5 h-3.5 mr-1.5" />
-                              {tProduct('contactSend')}
-                            </>
-                          )}
-                        </Button>
-                      </form>
-                    )}
-                  </div>
-                )}
-              </div>
-
             </div>
           </div>
 

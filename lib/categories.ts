@@ -41,15 +41,11 @@ export const CATEGORY_GROUPS = [
     categoryValues: ['MPPT Şarj Kontrol Cihazı', 'PWM Şarj Kontrol Cihazı', 'Akü Şarj Cihazı', 'Şarj Kontrol Aksesuarı'],
   },
   {
+    // Bağlantı ekipmanı ve aksesuar tek grupta (eski /category/aksesuar buraya yönlenir)
     id: 'solar-baglanti-ekipmani',
-    labelKey: 'catGroupSolarConnection', // Solar Bağlantı Ekipmanı
-    navLabelKey: 'catNavConnection', // üst menüde kısa: Bağlantı Ekipmanı
-    categoryValues: ['Solar Transfer Switch', 'Sigorta ve Dağıtım', 'Kablo ve Konnektör'],
-  },
-  {
-    id: 'aksesuar',
-    labelKey: 'catGroupAccessories', // Aksesuar
-    categoryValues: ['İzleme ve Kontrol'],
+    labelKey: 'catGroupSolarConnection', // Bağlantı Ekipmanı ve Aksesuar
+    navLabelKey: 'catNavConnection', // üst menüde kısa: Bağlantı ve Aksesuar
+    categoryValues: ['Solar Transfer Switch', 'Sigorta ve Dağıtım', 'Kablo ve Konnektör', 'İzleme ve Kontrol'],
   },
   {
     id: 'ruzgar-enerjisi',
@@ -88,7 +84,8 @@ export const LEGACY_CATEGORY_REDIRECTS: Record<string, CategoryGroupId | null> =
   'pompa-ve-surucu': 'solar-inverter',
   'sarj-cihazlari': 'solar-sarj-kontrol',
   'kablolar-ve-baglanti': 'solar-baglanti-ekipmani',
-  'aksesuar-ve-koruma': 'aksesuar',
+  'aksesuar-ve-koruma': 'solar-baglanti-ekipmani',
+  aksesuar: 'solar-baglanti-ekipmani',
   // Eski katalog
   'elektrikli-arac-sarj-urunleri': 'elektrikli-arac-sarj',
   'ev-sarj': 'elektrikli-arac-sarj',
@@ -97,7 +94,7 @@ export const LEGACY_CATEGORY_REDIRECTS: Record<string, CategoryGroupId | null> =
   'ev-sarj-aksesuarlari': 'elektrikli-arac-sarj',
   'batarya-depolama': 'solar-aku',
   'enerji-depolama-sistemleri': 'solar-aku',
-  'enerji-yonetimi': 'aksesuar',
+  'enerji-yonetimi': 'solar-baglanti-ekipmani',
   inverterler: 'solar-inverter',
   'akilli-enerji': 'solar-inverter',
   'gunes-enerjisi': 'gunes-paneli',

@@ -16,7 +16,6 @@ import {
   Wind,
   Car,
   Cable,
-  ShieldCheck,
   Thermometer,
   LayoutGrid,
 } from 'lucide-react'
@@ -31,7 +30,6 @@ const GROUP_CONFIG: Record<string, { icon: React.ElementType; color: string; bg:
   'gunes-paneli':            { icon: Sun,             color: 'text-orange-500',  bg: 'bg-orange-50' },
   'solar-sarj-kontrol':      { icon: Gauge,           color: 'text-amber-600',   bg: 'bg-amber-50' },
   'solar-baglanti-ekipmani': { icon: Cable,           color: 'text-slate-600',   bg: 'bg-slate-100' },
-  'aksesuar':                { icon: ShieldCheck,     color: 'text-indigo-600',  bg: 'bg-indigo-50' },
   'ruzgar-enerjisi':         { icon: Wind,            color: 'text-teal-600',    bg: 'bg-teal-50' },
   'isi-pompasi':             { icon: Thermometer,     color: 'text-red-500',     bg: 'bg-red-50' },
   'elektrikli-arac-sarj':    { icon: Car,             color: 'text-blue-600',    bg: 'bg-blue-50' },

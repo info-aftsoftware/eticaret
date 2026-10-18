@@ -16,10 +16,7 @@ import {
   Lock,
   MapPin,
   Package,
-  RotateCcw,
-  ShieldCheck,
   ShoppingCart,
-  Truck,
   User,
 } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
@@ -1034,9 +1031,9 @@ export default function CheckoutPage() {
                       {isSubmitting ? (
                         <><Loader2 className="h-5 w-5 animate-spin" aria-hidden />{paymentMethod === 'card' ? 'Bankaya yönlendiriliyor…' : 'Sipariş oluşturuluyor…'}</>
                       ) : paymentMethod === 'card' ? (
-                        <><Lock className="h-[18px] w-[18px]" aria-hidden />Kartla öde · {formatPrice(total)}</>
+                        <><Lock className="h-[18px] w-[18px]" aria-hidden />Kartla öde</>
                       ) : (
-                        <><Check className="h-5 w-5" aria-hidden />Siparişi onayla · {formatPrice(total)}</>
+                        <><Check className="h-5 w-5" aria-hidden />Siparişi onayla</>
                       )}
                     </button>
                     <p className="text-center text-xs text-[#5d6e80]">
@@ -1047,11 +1044,6 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <ul className="grid grid-cols-3 gap-2 text-center text-[11px] leading-tight text-[#20384e] sm:text-xs">
-                  <li className="flex flex-col items-center gap-1.5 rounded-lg border border-[#e6ebf1] bg-white px-2 py-3"><ShieldCheck className="h-5 w-5 text-[#0b2540]" aria-hidden />Güvenli ödeme</li>
-                  <li className="flex flex-col items-center gap-1.5 rounded-lg border border-[#e6ebf1] bg-white px-2 py-3"><Truck className="h-5 w-5 text-[#0b2540]" aria-hidden />Hızlı kargo</li>
-                  <li className="flex flex-col items-center gap-1.5 rounded-lg border border-[#e6ebf1] bg-white px-2 py-3"><RotateCcw className="h-5 w-5 text-[#0b2540]" aria-hidden />14 gün cayma hakkı</li>
-                </ul>
               </div>
             </aside>
           </div>

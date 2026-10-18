@@ -7,6 +7,7 @@ import { HEADER_NAV_GROUP_COUNT } from '@/lib/categories'
 import { HeaderWrapper } from './HeaderWrapper'
 import { HeaderTopBar } from './HeaderTopBar'
 import { AllCategoriesMenu, CategoryGridIcon } from './header/AllCategoriesMenu'
+import { NavGroupMenu } from './header/NavGroupMenu'
 import { Logo } from './Logo'
 import { Badge } from './ui/badge'
 import { Input } from './ui/input'
@@ -273,14 +274,22 @@ export function HeaderInnerUI(props) {
       <div className="hidden min-[1025px]:block bg-white shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
         <div className="flex items-center h-[65px] px-6 min-w-0 max-w-[1454px] mx-auto">
           <AllCategoriesMenu navGroups={navGroups} t={t} />
-          <nav className="flex-1 min-w-0 flex items-center justify-evenly gap-1 overflow-hidden pl-4" aria-label="Ana menu">
+          {/* Daralınca önce boşluklar azalır (justify-evenly), sonra sondaki kategoriler gizlenir (6 → 5 → 4);
+              gizlenenler "Tüm Kategoriler" menüsünde. ≤1024 px'te mobil/tablet header (hamburger) devreye girer. */}
+          <nav className="flex-1 min-w-0 flex items-center justify-evenly gap-0.5 pl-4" aria-label="Ana menü">
             <Link href="/products" className={navLinkClass(isAllProducts)}>
               {t('catNavAllProducts')}
             </Link>
-            {navRowGroups.map((g) => (
-              <Link key={g.id} href={g.href} className={navLinkClass(pathname?.startsWith(g.href))}>
-                {t(g.navLabelKey || g.labelKey)}
-              </Link>
+            {navRowGroups.map((g, i) => (
+              <NavGroupMenu
+                key={g.id}
+                group={g}
+                label={t(g.navLabelKey || g.labelKey)}
+                align={i >= navRowGroups.length - 2 ? 'right' : 'left'}
+                className={i === 4 ? 'hidden min-[1200px]:block' : i === 5 ? 'hidden min-[1360px]:block' : ''}
+                linkClassName={navLinkClass(pathname?.startsWith(g.href))}
+                t={t}
+              />
             ))}
           </nav>
         </div>

@@ -26,12 +26,14 @@ export function CompareButton({ productId, productName }: { productId: string; p
           addToast({ type: 'success', title: r === 'added' ? 'Karşılaştırmaya eklendi' : 'Karşılaştırmadan çıkarıldı', description: productName })
         }
       }}
+      aria-label={active ? 'Karşılaştırmada' : 'Karşılaştır'}
       className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
         active ? 'border-brand bg-brand/10 text-brand' : 'border-slate-200 text-slate-700 hover:border-slate-300'
       }`}
     >
       <GitCompare className="w-4 h-4" aria-hidden />
-      {active ? 'Karşılaştırmada' : 'Karşılaştır'}
+      {/* Dar ekranda yalnızca simge; ad aria-label ile */}
+      <span className="hidden min-[420px]:inline">{active ? 'Karşılaştırmada' : 'Karşılaştır'}</span>
     </button>
   )
 }

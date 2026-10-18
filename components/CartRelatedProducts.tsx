@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Plus, Star, Zap } from 'lucide-react'
+import { ShoppingCart, Star, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCartStore } from '@/lib/store/useCartStore'
@@ -150,36 +150,35 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
                     <div className="text-[11px] text-slate-400 line-through">{formatPrice(product.oldPrice)}</div>
                   )}
                 </div>
-                {product.variants?.length ? (
-                  // Varyantlı ürün sepete taban id ile eklenemez; seçenek ürün sayfasında seçilir
-                  <Button asChild size="sm" variant="outline" className="h-8 px-2.5 rounded-lg border-brand/30 text-xs font-semibold hover:bg-brand hover:text-white hover:border-brand transition-colors flex-shrink-0">
-                    <Link href={`/products/${product.id}`}>Seç</Link>
-                  </Button>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={product.stock <= 0}
-                    className="h-8 w-8 p-0 rounded-lg border-brand/30 hover:bg-brand hover:text-white hover:border-brand transition-colors flex-shrink-0"
-                    onClick={() =>
-                      addItem({
-                        id: product.id,
-                        productId: product.id,
-                        maxQuantity: product.stock,
-                        name: product.name,
-                        price: product.price,
-                        quantity: 1,
-                        image: product.image,
-                        category: product.category,
-                        description: product.description,
-                      })
-                    }
-                    aria-label={`${product.name} sepete ekle`}
-                    title="Sepete ekle"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </Button>
-                )}
+                {(() => {
+                  // Tüm önerilerde aynı buton: varyantlı üründe varsayılan seçenek (ürün sayfasındakiyle aynı) eklenir
+                  const v = product.variants?.find((x) => x.key === product.defaultVariantKey) ?? product.variants?.[0]
+                  const soldOut = product.stock <= 0
+                  return (
+                    <Button
+                      size="sm"
+                      disabled={soldOut}
+                      className="h-8 px-3 rounded-md bg-[#0b2540] hover:bg-[#12335a] text-white text-xs font-semibold flex-shrink-0 disabled:opacity-50"
+                      onClick={() =>
+                        addItem({
+                          id: v ? `${product.id}-${v.key}` : product.id,
+                          productId: product.id,
+                          maxQuantity: product.stock,
+                          name: v ? `${product.name} (${v.label})` : product.name,
+                          price: v ? v.price : product.price,
+                          quantity: 1,
+                          image: product.image,
+                          category: product.category,
+                          description: product.description,
+                        })
+                      }
+                      aria-label={`${product.name} sepete ekle`}
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5 mr-1.5" aria-hidden />
+                      {soldOut ? 'Tükendi' : 'Sepete ekle'}
+                    </Button>
+                  )
+                })()}
               </div>
             </div>
           </div>

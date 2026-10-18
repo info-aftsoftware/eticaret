@@ -7,7 +7,7 @@ import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { mockProducts } from '@/lib/products-mock'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 
-type NavGroup = {
+export type NavGroup = {
   id: string
   labelKey: string
   href: string
@@ -15,7 +15,7 @@ type NavGroup = {
 }
 
 /** Alt kategori → katalogdaki markalar (ürün sayısına göre azalan) */
-const BRANDS_BY_CATEGORY: Record<string, string[]> = (() => {
+export const BRANDS_BY_CATEGORY: Record<string, string[]> = (() => {
   const counts: Record<string, Record<string, number>> = {}
   for (const p of mockProducts) {
     if (!p.category || !p.brand) continue
@@ -31,7 +31,7 @@ const BRANDS_BY_CATEGORY: Record<string, string[]> = (() => {
 })()
 
 const PACKAGES_ID = '__packages'
-const productsHref = (category: string, brand?: string) =>
+export const productsHref = (category: string, brand?: string) =>
   `/products?category=${encodeURIComponent(category)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}`
 
 /** voltekno.com'daki dört kareli kategori ikonu (sarı) */

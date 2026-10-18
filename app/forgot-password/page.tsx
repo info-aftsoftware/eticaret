@@ -3,7 +3,7 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Mail, KeyRound, ArrowLeft, MailCheck, Loader2 } from 'lucide-react'
+import { ArrowLeft, Loader2 } from 'lucide-react'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
 import { authErrorCode, authErrorMessage, EMAIL_RE } from '@/lib/auth-errors'
@@ -85,10 +85,9 @@ function ForgotPasswordContent() {
     return (
       <AuthLayout
         breadcrumb="Şifremi Unuttum"
-        icon={MailCheck}
         title="E-postanızı kontrol edin"
         subtitle="Bu adrese kayıtlı bir hesap varsa şifre sıfırlama bağlantısını gönderdik."
-        showBenefits={false}
+       
       >
         <div className="space-y-5">
           <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">
@@ -122,16 +121,14 @@ function ForgotPasswordContent() {
   return (
     <AuthLayout
       breadcrumb="Şifremi Unuttum"
-      icon={KeyRound}
       title="Şifremi unuttum"
       subtitle="Hesabınıza kayıtlı e-posta adresini girin; şifrenizi yenilemeniz için bir bağlantı gönderelim."
-      showBenefits={false}
+     
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {error && <FormAlert>{error}</FormAlert>}
         <TextField
           label="E-posta"
-          icon={Mail}
           type="email"
           inputMode="email"
           placeholder="ornek@email.com"

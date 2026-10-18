@@ -16,7 +16,6 @@ const GROUP_IMAGES: Record<string, string> = {
   'gunes-paneli': '/images/products/voltekno/1SfPNowoPDRUrusBcQf2n8JRxFaOjxZbe.webp',
   'solar-sarj-kontrol': '/images/products/voltekno/1Ljnbfi_nYV6-niNLUZftU4nLlfWBr3vn.webp',
   'solar-baglanti-ekipmani': '/images/products/override/apex-80a-ats-1.webp',
-  aksesuar: '/images/products/voltekno/1Tf9LviDZzj3UtH8Nz1x-Z7z0YMq0wUMb.webp',
   'ruzgar-enerjisi': '/images/products/voltekno/1y87j6hUisrHK1xp4foB6pYFbAjmS8qGT.webp',
   'isi-pompasi': '/images/products/voltekno/1aHKVNfDf_RZe7eoHxkJsTL51e8DPDQYm.webp',
   'elektrikli-arac-sarj': '/images/products/voltekno/1xWJp1WcdJ2j8Dy3YpYNeSV2aIUblX2uV.webp',
@@ -127,13 +126,16 @@ export function CategoryShowcase() {
             </li>
           )}
 
-          {rest.map((tile) => (
-            <li key={tile.id}>
+          {rest.map((tile, i) => {
+            // Tek sayıda küçük kart kalırsa sonuncusu iki sütun kaplar: ızgarada boş hücre kalmaz (2, 3 ve 4 sütunda)
+            const wide = rest.length % 2 === 1 && i === rest.length - 1
+            return (
+            <li key={tile.id} className={wide ? 'col-span-2' : undefined}>
               <Link
                 href={tile.href}
-                className="group relative h-full flex flex-col rounded-xl border border-[#e6ebf1] bg-white overflow-hidden hover:border-[#cfdbe8] hover:shadow-[0_6px_24px_rgba(11,37,64,0.08)] transition-[box-shadow,border-color] duration-200"
+                className={`group relative h-full flex ${wide ? 'flex-row' : 'flex-col'} rounded-xl border border-[#e6ebf1] bg-white overflow-hidden hover:border-[#cfdbe8] hover:shadow-[0_6px_24px_rgba(11,37,64,0.08)] transition-[box-shadow,border-color] duration-200`}
               >
-                <span className="relative block aspect-[4/3] bg-[#f5f7fa]">
+                <span className={`relative block bg-[#f5f7fa] ${wide ? 'w-1/2 shrink-0 aspect-[4/3]' : 'aspect-[4/3]'}`}>
                   <Image
                     src={tile.image}
                     alt={tile.label}
@@ -145,7 +147,7 @@ export function CategoryShowcase() {
                     {tile.count} ürün
                   </span>
                 </span>
-                <span className="flex-1 flex items-start justify-between gap-3 p-3.5 min-[901px]:p-4">
+                <span className={`flex-1 flex justify-between gap-3 p-3.5 min-[901px]:p-4 ${wide ? 'items-center' : 'items-start'}`}>
                   <span className="min-w-0">
                     <span className="block text-[14px] min-[901px]:text-[15px] font-bold leading-snug text-[#121926] group-hover:text-[#0b2540]">
                       {tile.label}
@@ -160,7 +162,8 @@ export function CategoryShowcase() {
                 </span>
               </Link>
             </li>
-          ))}
+            )
+          })}
         </ul>
       </div>
     </section>

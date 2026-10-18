@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { applyActionCode, checkActionCode } from 'firebase/auth'
-import { MailCheck, CheckCircle2, XCircle, Loader2, Mail, RefreshCw, ArrowRight } from 'lucide-react'
+import { Loader2, RefreshCw, ArrowRight } from 'lucide-react'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'
 import { refreshEmailVerified } from '@/lib/store/useFirebaseAuth'
 import { useAuthStore } from '@/lib/store/useAuthStore'
@@ -105,7 +105,7 @@ function VerifyEmailContent() {
 
   if (status === 'loading') {
     return (
-      <AuthLayout breadcrumb="E-posta Doğrulama" icon={Mail} title="E-posta doğrulanıyor" showBenefits={false}>
+      <AuthLayout breadcrumb="E-posta Doğrulama" title="E-posta doğrulanıyor">
         <div className="flex flex-col items-center py-8 text-[#5d6e80]">
           <Loader2 className="mb-3 h-8 w-8 animate-spin text-[#0b2540]" />
           Lütfen bekleyin…
@@ -118,14 +118,13 @@ function VerifyEmailContent() {
     return (
       <AuthLayout
         breadcrumb="E-posta Doğrulama"
-        icon={CheckCircle2}
         title={status === 'recovered' ? 'E-posta adresiniz geri yüklendi' : 'E-posta adresiniz doğrulandı'}
         subtitle={
           status === 'recovered'
             ? `Hesabınızın e-posta adresi ${restoredEmail || 'önceki adresinize'} geri alındı. Güvenliğiniz için şifrenizi değiştirmenizi öneririz.`
             : 'Teşekkürler! Hesabınız tamamen etkin. Siparişlerinizi ve üye olmadan verdiğiniz siparişleri hesabınızdan takip edebilirsiniz.'
         }
-        showBenefits={false}
+       
       >
         <div className="space-y-3">
           {user ? (
@@ -150,14 +149,13 @@ function VerifyEmailContent() {
     return (
       <AuthLayout
         breadcrumb="E-posta Doğrulama"
-        icon={XCircle}
         title={status === 'expired' ? 'Bağlantının süresi dolmuş' : 'Bağlantı geçersiz'}
         subtitle={
           status === 'expired'
             ? 'Güvenlik nedeniyle doğrulama bağlantıları sınırlı süre geçerlidir. Yeni bir bağlantı isteyebilirsiniz.'
             : 'Bu bağlantı daha önce kullanılmış ya da eksik kopyalanmış olabilir. En son gönderilen e-postadaki bağlantıyı kullanın veya yeni bir bağlantı isteyin.'
         }
-        showBenefits={false}
+       
       >
         <div className="space-y-3">
           {message && <FormAlert tone={message.tone}>{message.text}</FormAlert>}
@@ -180,10 +178,9 @@ function VerifyEmailContent() {
     return (
       <AuthLayout
         breadcrumb="E-posta Doğrulama"
-        icon={Mail}
         title="E-posta doğrulama"
         subtitle="Doğrulama için e-posta adresinize gönderdiğimiz bağlantıya tıklayın. Bağlantı ulaşmadıysa giriş yapıp yeni bir bağlantı isteyebilirsiniz."
-        showBenefits={false}
+       
       >
         <div className="space-y-3">
           <PrimaryButton type="button" onClick={() => router.push(loginForResend)}>Giriş yap</PrimaryButton>
@@ -199,14 +196,13 @@ function VerifyEmailContent() {
   return (
     <AuthLayout
       breadcrumb="E-posta Doğrulama"
-      icon={MailCheck}
       title={sent ? 'Hesabınız oluşturuldu' : 'E-posta adresinizi doğrulayın'}
       subtitle={
         sent === '0'
           ? 'Doğrulama e-postası şu anda gönderilemedi. Aşağıdan tekrar deneyebilirsiniz.'
           : 'Son bir adım kaldı: e-posta adresinize gönderdiğimiz doğrulama bağlantısına tıklayın.'
       }
-      showBenefits={false}
+     
     >
       <div className="space-y-5">
         <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">

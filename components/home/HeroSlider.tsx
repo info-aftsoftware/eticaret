@@ -90,7 +90,7 @@ export function HeroSlider() {
                   aria-roledescription="slide"
                   aria-label={`${i + 1} / ${SLIDES.length}`}
                   aria-hidden={!active}
-                  className="relative shrink-0 w-full aspect-square min-[641px]:aspect-video min-[641px]:max-h-[596px] bg-[#f5f7fa] overflow-hidden"
+                  className="relative shrink-0 w-full aspect-[4/5] min-[641px]:aspect-video min-[641px]:max-h-[596px] bg-[#f5f7fa] overflow-hidden"
                 >
                   <Image
                     src={slide.image}
@@ -98,9 +98,10 @@ export function HeroSlider() {
                     fill
                     priority={i === 0}
                     sizes="100vw"
-                    className="object-contain object-[50%_18%] min-[641px]:object-cover min-[641px]:object-[50%_45%]"
+                    className="object-contain object-top min-[641px]:object-cover min-[641px]:object-[50%_45%]"
                   />
-                  <div className="absolute inset-0 flex items-center p-6">
+                  {/* Mobilde görsel üstte, başlık ve buton altta (noktaların üstünde); geniş ekranda görselin üzerinde ortada */}
+                  <div className="absolute inset-0 flex items-end pb-14 px-6 min-[641px]:items-center min-[641px]:p-6">
                     <div>
                       <p className="mb-4 text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[48px] font-semibold leading-tight text-[#121926]">
                         <span className="min-[769px]:hidden">

@@ -1,0 +1,354 @@
+{
+ "ALTECH-00384": {
+  "dimsCm": [
+   80,
+   50,
+   45
+  ],
+  "weightKg": 55,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "Altech (Teknovasyon Arge) publishes no weight/package data (idefix listing has none; teknovasyonarge.net datasheet unreachable). Estimated from comparable 2 kW horizontal off-grid turbines (rotor ~3 m): ships as 2 boxes, main body 80x50x45 (~43 kg) + blades ~150x35x25 (~12 kg); dims = largest box, weight = total."
+ },
+ "ALTECH-00385": {
+  "dimsCm": [
+   80,
+   50,
+   45
+  ],
+  "weightKg": 55,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "Altech (Teknovasyon Arge) publishes no weight/package data (idefix listing has none; teknovasyonarge.net datasheet unreachable). Same hardware as Boreas 2000 48V (voltage variant). 2 boxes: main 80x50x45 + blades ~150x35x25; weight = total estimate."
+ },
+ "ALTECH-00387": {
+  "dimsCm": [
+   90,
+   60,
+   50
+  ],
+  "weightKg": 85,
+  "basis": "estimate",
+  "source": "https://www.idefix.com/teknovasyon-arge-altech-boreas-4000-4-kw-on-grid-yatay-ruzgar-turbini-p-5251508",
+  "note": "Altech (Teknovasyon Arge) publishes no weight/package data (idefix listing has none; teknovasyonarge.net datasheet unreachable). Estimated from comparable 4 kW horizontal turbines: main body box 90x60x50 (~68 kg) + blade box ~180x35x25 (~17 kg); dims = largest box, weight = total."
+ },
+ "ALTECH-00388": {
+  "dimsCm": [
+   90,
+   60,
+   50
+  ],
+  "weightKg": 85,
+  "basis": "estimate",
+  "source": "https://www.idefix.com/teknovasyon-arge-altech-boreas-4000-4-kw-on-grid-yatay-ruzgar-turbini-p-5251508",
+  "note": "Altech (Teknovasyon Arge) publishes no weight/package data (idefix listing has none; teknovasyonarge.net datasheet unreachable). Same hardware as Boreas 4000 48V (voltage variant). 2 boxes: main 90x60x50 + blades ~180x35x25; weight = total estimate."
+ },
+ "ALTECH-00390": {
+  "dimsCm": [
+   100,
+   70,
+   60
+  ],
+  "weightKg": 120,
+  "basis": "estimate",
+  "source": "https://www.idefix.com/teknovasyon-arge-altech-boreas-6000-6-kw-48-volt-yatay-ruzgar-turbini-boreas600048-p-5250841",
+  "note": "Altech (Teknovasyon Arge) publishes no weight/package data (idefix listing has none; teknovasyonarge.net datasheet unreachable). Estimated from comparable 6 kW horizontal turbines: main body crate 100x70x60 (~95 kg) + blade box ~210x40x25 (~25 kg); dims = largest box, weight = total. Freight item."
+ },
+ "ALTECH-00391": {
+  "dimsCm": [
+   240,
+   60,
+   60
+  ],
+  "weightKg": 200,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "No published data. 7 m steel lattice mast assumed shipped as ~3 bundled sections ~2.4 m long plus base/anchor parts; ~200 kg typical for small-turbine lattice towers. Freight/pallet item, needs supplier confirmation."
+ },
+ "ALTECH-AT3KWNOVA3000-00392": {
+  "dimsCm": [
+   110,
+   80,
+   70
+  ],
+  "weightKg": 120,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "No published data for Altech Nova series (model codes not indexed anywhere). Estimated from comparable Chinese-built horizontal turbines; palletized wooden crates, freight item. 3 kW (rotor ~3.8 m): main crate 110x80x70 + blade crate ~200x40x30; dims = largest crate, weight = total."
+ },
+ "ALTECH-AT5KWNOVA5000-00393": {
+  "dimsCm": [
+   130,
+   90,
+   80
+  ],
+  "weightKg": 200,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "No published data for Altech Nova series (model codes not indexed anywhere). Estimated from comparable Chinese-built horizontal turbines; palletized wooden crates, freight item. 5 kW (rotor ~5 m): main crate 130x90x80 + blade crate ~260x50x30; dims = largest crate, weight = total."
+ },
+ "ALTECH-AT8KWNOVA8000-00394": {
+  "dimsCm": [
+   140,
+   100,
+   90
+  ],
+  "weightKg": 320,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "No published data for Altech Nova series (model codes not indexed anywhere). Estimated from comparable Chinese-built horizontal turbines; palletized wooden crates, freight item. 8 kW (rotor ~6.4 m): main crate 140x100x90 + blade crate ~330x50x40; dims = largest crate by volume, weight = total."
+ },
+ "ALTECH-AT12KWNOVAPRE-00395": {
+  "dimsCm": [
+   160,
+   110,
+   100
+  ],
+  "weightKg": 450,
+  "basis": "estimate",
+  "source": "estimate",
+  "note": "No published data for Altech Nova series (model codes not indexed anywhere). Estimated from comparable Chinese-built horizontal turbines; palletized wooden crates, freight item. 12 kW (rotor ~8 m): main crate 160x110x100 + blade crate ~400x60x40; dims = largest crate by volume, weight = total."
+ },
+ "İSTABR-00647": {
+  "dimsCm": [
+   120,
+   80,
+   50
+  ],
+  "weightKg": 86.12,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/istabreeze-heli2-offgrid-netz",
+  "note": "Known weight kept (official store shipping weight 86.12 kg). Package dims not published: estimated as pallet 120x80x50 holding generator/frame/tail + 3x125 cm blades. Freight item, needs confirmation."
+ },
+ "İSTABR-00648": {
+  "dimsCm": [
+   150,
+   80,
+   60
+  ],
+  "weightKg": 100,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/heli-4kw-48v-off-grid-wind-turbine/",
+  "note": "Known weight kept (official total turbine weight 100 kg; store shipping weight 146 kg). Rotor 300 cm, blades ~2.7 kg each. Package dims not published: estimated pallet 150x80x60. Freight item."
+ },
+ "İSTABR-00651": {
+  "dimsCm": [
+   50,
+   40,
+   30
+  ],
+  "weightKg": 14.4,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/ihcc-laderegler-1500-2000",
+  "note": "Known shipping weight kept (controller + external dump-load resistor). Dims not published; estimated combined carton for controller with aluminium heat-sink and resistor bank."
+ },
+ "İSTABR-00652": {
+  "dimsCm": [
+   50,
+   40,
+   30
+  ],
+  "weightKg": 14.4,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/istabreeze-laderegler-ihcc-24v-48v",
+  "note": "Known shipping weight kept (controller + external dump-load resistor). Dims not published; estimated combined carton for controller with aluminium heat-sink and resistor bank."
+ },
+ "İSTABR-00653": {
+  "dimsCm": [
+   55,
+   40,
+   30
+  ],
+  "weightKg": 12,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/4000w-48v-laderegler",
+  "note": "Known shipping weight kept (controller + external dump-load resistor). Dims not published; estimated combined carton for controller with aluminium heat-sink and resistor bank. Includes 4.0 kW brake resistor."
+ },
+ "İSTABR-00660": {
+  "dimsCm": [
+   25,
+   25,
+   20
+  ],
+  "weightKg": 2.7,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/permanentmagnet-generator-12-24",
+  "note": "Known weight kept (G-500 polyamide body). Dims not published (official SolidWorks drawing exists but is not text-readable); package estimated from generator size class."
+ },
+ "İSTABR-00661": {
+  "dimsCm": [
+   30,
+   30,
+   25
+  ],
+  "weightKg": 8.75,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/g-800-12v-24v-48v-permanent-magnet-generator/",
+  "note": "Known weight kept (8.75 kg). Dims not published (official SolidWorks drawing exists but is not text-readable); package estimated from generator size class."
+ },
+ "İSTABR-00662": {
+  "dimsCm": [
+   32,
+   32,
+   28
+  ],
+  "weightKg": 10,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/g-1000-24v-48v-permanent-magnet-generator/",
+  "note": "Known weight kept (10 kg). Dims not published (official SolidWorks drawing exists but is not text-readable); package estimated from generator size class."
+ },
+ "İSTABR-00663": {
+  "dimsCm": [
+   32,
+   32,
+   30
+  ],
+  "weightKg": 11.5,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/g-1500-24v-48v-permanent-magnet-generator/",
+  "note": "Known weight kept (11.5 kg). Dims not published (official SolidWorks drawing exists but is not text-readable); package estimated from generator size class."
+ },
+ "İSTABR-00664": {
+  "dimsCm": [
+   35,
+   35,
+   30
+  ],
+  "weightKg": 13.6,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/g-2000-48v-permanent-magnet-generator/",
+  "note": "Known weight kept (13.6 kg). Dims not published (official SolidWorks drawing exists but is not text-readable); package estimated from generator size class."
+ },
+ "İSTABR-00665": {
+  "dimsCm": [
+   45,
+   45,
+   35
+  ],
+  "weightKg": 25,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/48v-low-rpm-pm-generator",
+  "note": "Known weight kept (Heli 2.0 low-rpm generator 25 kg). Dims not published; package estimated for large-diameter low-rpm PM generator."
+ },
+ "İSTABR-00666": {
+  "dimsCm": [
+   50,
+   50,
+   40
+  ],
+  "weightKg": 33.5,
+  "basis": "estimate",
+  "source": "https://istabreeze.store/products/48v-low-rpm-pm-generator",
+  "note": "Known weight kept (Heli 4.0 generator 33.5 kg). Dims not published; package estimated."
+ },
+ "İSTABR-00667": {
+  "dimsCm": [
+   55,
+   15,
+   5
+  ],
+  "weightKg": 0.19,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/50-cm-wind-blade-for-wind-turbine/",
+  "note": "Per single blade. Length from official spec; cross-section not published, package estimated as blade length + ~5 cm by blade width + padding. 50 cm blade."
+ },
+ "İSTABR-00668": {
+  "dimsCm": [
+   61,
+   15,
+   5
+  ],
+  "weightKg": 0.18,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/56-cm-carbon-blade-for-wind-turbine/",
+  "note": "Per single blade. Length from official spec; cross-section not published, package estimated as blade length + ~5 cm by blade width + padding. 56 cm blade."
+ },
+ "İSTABR-00669": {
+  "dimsCm": [
+   62,
+   15,
+   5
+  ],
+  "weightKg": 0.21,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/57-cm-blade-for-wind-turbine/",
+  "note": "Per single blade. Length from official spec; cross-section not published, package estimated as blade length + ~5 cm by blade width + padding. 57 cm blade, width 12.5 cm (official)."
+ },
+ "İSTABR-00670": {
+  "dimsCm": [
+   65,
+   15,
+   5
+  ],
+  "weightKg": 0.27,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/60-cm-wind-blade-for-wind-turbine/",
+  "note": "Per single blade. Length from official spec; cross-section not published, package estimated as blade length + ~5 cm by blade width + padding. 60 cm blade."
+ },
+ "İSTABR-00672": {
+  "dimsCm": [
+   112,
+   17,
+   6
+  ],
+  "weightKg": 0.65,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/107-cm-wind-blade-for-wind-turbine/",
+  "note": "Per single blade. Length from official spec; cross-section not published, package estimated as blade length + ~5 cm by blade width + padding. 107 cm blade, width 14.3 cm (official)."
+ },
+ "İSTABR-00671": {
+  "dimsCm": [
+   95,
+   17,
+   6
+  ],
+  "weightKg": 0.62,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/90-cm-wind-blade-for-wind-turbine/",
+  "note": "Per single blade. Length from official spec; cross-section not published, package estimated as blade length + ~5 cm by blade width + padding. 90 cm blade, width 14.3 cm (official)."
+ },
+ "İSTABR-00676": {
+  "dimsCm": [
+   60,
+   40,
+   5
+  ],
+  "weightKg": 0.79,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/tail-for-between-700w-2000w/",
+  "note": "Known weight kept (790 g tail fin). Dims not published; flat tail-fin carton estimated 60x40x5 (tail pipe sold separately)."
+ },
+ "İSTABR-00679": {
+  "dimsCm": [
+   15,
+   15,
+   6
+  ],
+  "weightKg": 0.285,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/flange-for-3-blade-500w-wind-turbines/",
+  "note": "Known weight kept (285 g); official diameter 132 mm, height not published; small box estimated."
+ },
+ "İSTABR-00680": {
+  "dimsCm": [
+   42,
+   42,
+   8
+  ],
+  "weightKg": 2.7,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/flange-for-3-blade-version-between-700w-2kw-wind-turbines/",
+  "note": "Known weight kept (2.7 kg); official diameter 390 mm, 5 mm steel; box estimated 42x42x8."
+ },
+ "İSTABR-00681": {
+  "dimsCm": [
+   42,
+   42,
+   8
+  ],
+  "weightKg": 3.2,
+  "basis": "estimate",
+  "source": "https://istabreeze.us/flange-for-5-blade-version-between-1kw-2kw-wind-turbines/",
+  "note": "Known weight kept (3.2 kg); official diameter 390 mm, 5 mm steel; box estimated 42x42x8."
+ }
+}

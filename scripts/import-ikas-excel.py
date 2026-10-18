@@ -408,10 +408,14 @@ def load_logistics_overrides():
     data = {}
     research_dir = os.path.join(ROOT, 'scripts', 'data', 'logistics-research')
     if os.path.isdir(research_dir):
-        for name in sorted(os.listdir(research_dir)):
-            if name.endswith('.result.json'):
-                with open(os.path.join(research_dir, name), encoding='utf-8') as f:
-                    data.update(json.load(f))
+        # Sonraki tamamlama turları (missing-*) en son okunur; alan bazında birleşir, boş değer doluyu ezmez
+        names = sorted(n for n in os.listdir(research_dir) if n.endswith('.result.json'))
+        names.sort(key=lambda n: n.startswith('missing-'))
+        for name in names:
+            with open(os.path.join(research_dir, name), encoding='utf-8') as f:
+                for sku, value in json.load(f).items():
+                    if isinstance(value, dict):
+                        data[sku] = {**data.get(sku, {}), **{k: v for k, v in value.items() if v not in (None, '', [])}}
     manual = os.path.join(ROOT, 'scripts', 'data', 'product-logistics.json')
     if os.path.exists(manual):
         with open(manual, encoding='utf-8') as f:

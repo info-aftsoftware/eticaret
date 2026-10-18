@@ -3,13 +3,13 @@
 import React, { useEffect, useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Mail, Lock, LogIn, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { safeRedirect } from '@/lib/safe-redirect'
 import { EMAIL_RE } from '@/lib/auth-errors'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { AuthLayout, TextField, PasswordField, Checkbox, PrimaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
-import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton'
+import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import type { LegalSlug } from '@/lib/legal/documents'
 
@@ -60,7 +60,7 @@ function LoginForm() {
   const registerHref = redirectParam ? `/register?redirect=${encodeURIComponent(target)}` : '/register'
 
   return (
-    <AuthLayout breadcrumb="Giriş Yap" icon={LogIn} title="Giriş Yap" subtitle="Hesabınıza giriş yaparak siparişlerinizi takip edin ve hızlıca alışveriş yapın.">
+    <AuthLayout breadcrumb="Giriş Yap" title="Giriş Yap" subtitle="Hesabınıza giriş yaparak siparişlerinizi takip edin ve hızlıca alışveriş yapın.">
       <div className="space-y-5">
         {verified && <FormAlert tone="success">E-posta adresiniz doğrulandı. Giriş yapabilirsiniz.</FormAlert>}
         {reset && <FormAlert tone="success">Şifreniz güncellendi. Yeni şifrenizle giriş yapabilirsiniz.</FormAlert>}
@@ -69,14 +69,14 @@ function LoginForm() {
         )}
         {error && <FormAlert>{error}</FormAlert>}
 
-        <GoogleSignInButton
+        <SocialSignInButtons
           onSuccess={() => router.push(target)}
           onError={setError}
           disabled={loading}
           dividerText="veya e-posta ile"
           notice={
             <>
-              Google ile ilk girişinizde hesabınız oluşturulur ve{' '}
+              Google veya Facebook ile ilk girişinizde hesabınız oluşturulur ve{' '}
               <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı kabul etmiş
               olursunuz. Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> kapsamında işlenir.
             </>
@@ -86,7 +86,6 @@ function LoginForm() {
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <TextField
             label="E-posta"
-            icon={Mail}
             type="email"
             inputMode="email"
             placeholder="ornek@email.com"
@@ -99,7 +98,6 @@ function LoginForm() {
           />
           <PasswordField
             label="Şifre"
-            icon={Lock}
             placeholder="Şifreniz"
             value={password}
             onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors({ ...errors, password: undefined }) }}

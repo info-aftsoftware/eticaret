@@ -3,7 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Mail, Lock, User, Phone, UserPlus, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { requestWelcomeEmail } from '@/lib/store/useFirebaseAuth'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
@@ -12,7 +12,7 @@ import { EMAIL_RE } from '@/lib/auth-errors'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import { AuthLayout, TextField, PasswordField, PasswordStrength, Checkbox, PrimaryButton, FormAlert, linkClass } from '@/components/auth/AuthUI'
-import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton'
+import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { saveSignupConsents } from '@/components/auth/consents'
 
 const MIN_PASSWORD = 8
@@ -118,7 +118,6 @@ function RegisterPageContent() {
   return (
     <AuthLayout
       breadcrumb="Kayıt Ol"
-      icon={UserPlus}
       title="Üye Ol"
       subtitle={fromOrder ? 'Siparişiniz oluşturuldu. Siparişlerinizi takip etmek için hesabınızı oluşturun.' : 'Birkaç adımda hesabınızı oluşturun, siparişlerinizi kolayca takip edin.'}
     >
@@ -136,7 +135,7 @@ function RegisterPageContent() {
           </FormAlert>
         )}
 
-        <GoogleSignInButton
+        <SocialSignInButtons
           onSuccess={() => router.push(target)}
           onError={setError}
           acceptMarketing={acceptMarketing}
@@ -144,7 +143,7 @@ function RegisterPageContent() {
           dividerText="veya e-posta ile"
           canStart={() => {
             if (acceptTerms) return true
-            setErrors((prev) => ({ ...prev, terms: 'Google ile devam etmeden önce Üyelik ve Kullanım Koşulları’nı kabul edin.' }))
+            setErrors((prev) => ({ ...prev, terms: 'Google veya Facebook ile devam etmeden önce Üyelik ve Kullanım Koşulları’nı kabul edin.' }))
             document.querySelector<HTMLElement>('[data-field="terms"] input')?.focus()
             return false
           }}
@@ -152,27 +151,27 @@ function RegisterPageContent() {
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <div data-field="name">
-            <TextField label="Ad Soyad" required icon={User} placeholder="Adınız Soyadınız" value={formData.name} onChange={update('name')} error={errors.name} autoComplete="name" disabled={loading} />
+            <TextField label="Ad Soyad" required placeholder="Adınız Soyadınız" value={formData.name} onChange={update('name')} error={errors.name} autoComplete="name" disabled={loading} />
           </div>
           <div data-field="email">
-            <TextField label="E-posta" required icon={Mail} type="email" inputMode="email" placeholder="ornek@email.com" value={formData.email} onChange={update('email')} error={errors.email} autoComplete="email" disabled={loading} hint="Sipariş ve fatura bildirimleri bu adrese gönderilir." />
+            <TextField label="E-posta" required type="email" inputMode="email" placeholder="ornek@email.com" value={formData.email} onChange={update('email')} error={errors.email} autoComplete="email" disabled={loading} hint="Sipariş ve fatura bildirimleri bu adrese gönderilir." />
           </div>
           <div data-field="phone">
-            <TextField label="Telefon" icon={Phone} type="tel" inputMode="tel" placeholder="0555 123 45 67" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint="İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için." />
+            <TextField label="Telefon" type="tel" inputMode="tel" placeholder="0555 123 45 67" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint="İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için." />
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-4">
             <div data-field="password">
-              <PasswordField label="Şifre" required icon={Lock} placeholder={`En az ${MIN_PASSWORD} karakter`} value={formData.password} onChange={update('password')} error={errors.password} autoComplete="new-password" disabled={loading} />
+              <PasswordField label="Şifre" required placeholder={`En az ${MIN_PASSWORD} karakter`} value={formData.password} onChange={update('password')} error={errors.password} autoComplete="new-password" disabled={loading} />
             </div>
             <div data-field="confirmPassword">
-              <PasswordField label="Şifre Tekrar" required icon={Lock} placeholder="Şifrenizi tekrar girin" value={formData.confirmPassword} onChange={update('confirmPassword')} error={errors.confirmPassword} autoComplete="new-password" disabled={loading} />
+              <PasswordField label="Şifre Tekrar" required placeholder="Şifrenizi tekrar girin" value={formData.confirmPassword} onChange={update('confirmPassword')} error={errors.confirmPassword} autoComplete="new-password" disabled={loading} />
             </div>
           </div>
           <div className="-mt-1 text-[13px] text-[#5d6e80]">
             <PasswordStrength password={formData.password} />
           </div>
 
-          <div className="space-y-3 rounded-[10px] bg-[#f5f7fa] p-4">
+          <div className="space-y-3 rounded-md border border-[#e6ebf1] p-4">
             <div data-field="terms">
               <Checkbox checked={acceptTerms} onChange={(v) => { setAcceptTerms(v); if (v) setErrors((p) => ({ ...p, terms: undefined })) }} error={errors.terms} disabled={loading}>
                 <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı okudum ve kabul ediyorum. <span className="text-red-500">*</span>

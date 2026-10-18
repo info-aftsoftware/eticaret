@@ -1,0 +1,387 @@
+[
+ {
+  "sku": "ALPEX-00381",
+  "name": "Alpex 6200W 48V On-Grid/Off-Grid Hibrit İnverter",
+  "variant": null,
+  "brand": "Alpex",
+  "category": "Tam Sinüs MPPT Akıllı İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00442",
+  "name": "Apex APX 4.2 Pro 4,2 kW Hibrit MPPT Akıllı İnverter",
+  "variant": null,
+  "brand": "Apex",
+  "category": "Tam Sinüs MPPT Akıllı İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00447",
+  "name": "Electrozirve 12,8V LiFePO4 Lityum Akü (100Ah / 200Ah)",
+  "variant": "200Ah LiFePO4 Lityum Akü",
+  "brand": "Electrozirve",
+  "category": "Lityum Akü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00448",
+  "name": "Apex 51,2V LiFePO4 Lityum Akü (100Ah / 280Ah)",
+  "variant": "100Ah LiFePO4 Lityum Akü",
+  "brand": "Apex",
+  "category": "Lityum Akü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00450",
+  "name": "Apex 51,2V LiFePO4 Lityum Akü (100Ah / 280Ah)",
+  "variant": "280Ah LiFePO4 Lityum Akü",
+  "brand": "Apex",
+  "category": "Lityum Akü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00454",
+  "name": "NP Power 12V Jel Akü (100Ah / 200Ah)",
+  "variant": "100Ah Jel Akü",
+  "brand": "NP Power",
+  "category": "Jel Akü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00455",
+  "name": "NP Power 12V Jel Akü (100Ah / 200Ah)",
+  "variant": "200Ah Jel Akü",
+  "brand": "NP Power",
+  "category": "Jel Akü",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00473",
+  "name": "Electrozirve CR80 Kablolu İnverter Kumandası",
+  "variant": null,
+  "brand": "Electrozirve",
+  "category": "İnverter Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00474",
+  "name": "Electrozirve CRW80 Kablosuz İnverter Kumandası",
+  "variant": null,
+  "brand": "Electrozirve",
+  "category": "İnverter Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00475",
+  "name": "Electrozirve CRW88 Kablosuz (Car Design) İnverter Kumandası",
+  "variant": null,
+  "brand": "Electrozirve",
+  "category": "İnverter Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00476",
+  "name": "Electrozirve CRD80 Kablolu Ekranlı İnverter Kumandası",
+  "variant": null,
+  "brand": "Electrozirve",
+  "category": "İnverter Aksesuarı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00477",
+  "name": "Apex NS Serisi Modifiye Sinüs İnverter (300W - 2000W)",
+  "variant": "300W Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "category": "Modifiye Sinüs İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00478",
+  "name": "Apex NS Serisi Modifiye Sinüs İnverter (300W - 2000W)",
+  "variant": "600W Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "category": "Modifiye Sinüs İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00479",
+  "name": "Apex NS Serisi Modifiye Sinüs İnverter (300W - 2000W)",
+  "variant": "1200W 12/24V Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "category": "Modifiye Sinüs İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00480",
+  "name": "Apex NS Serisi Modifiye Sinüs İnverter (300W - 2000W)",
+  "variant": "2000W Modifiye Sinüs İnverter",
+  "brand": "Apex",
+  "category": "Modifiye Sinüs İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00488",
+  "name": "NP Power MPPT Şarj Kontrol Cihazı (30A / 40A)",
+  "variant": "NP2440 40A MPPT Şarj Kontrol Cihazı",
+  "brand": "NP Power",
+  "category": "MPPT Şarj Kontrol Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00506",
+  "name": "Apex APX Akü Şarj Cihazı (12V / 24V, 20A - 100A)",
+  "variant": "APX1240 12V 40A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00507",
+  "name": "Apex APX Akü Şarj Cihazı (12V / 24V, 20A - 100A)",
+  "variant": "APX2420 24V 20A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00508",
+  "name": "Apex APX Akü Şarj Cihazı (12V / 24V, 20A - 100A)",
+  "variant": "APX1260 12V 60A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00509",
+  "name": "Apex APX Akü Şarj Cihazı (12V / 24V, 20A - 100A)",
+  "variant": "APX1280 12V 80A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00510",
+  "name": "Apex APX Akü Şarj Cihazı (12V / 24V, 20A - 100A)",
+  "variant": "APX2440 24V 40A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00511",
+  "name": "Apex APX Akü Şarj Cihazı (12V / 24V, 20A - 100A)",
+  "variant": "APX12100 12V 100A Akü Şarj Cihazı",
+  "brand": "Apex",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00512",
+  "name": "NP Power Akü Şarj Cihazı (12V / 24V, 10A - 30A)",
+  "variant": "NP1210 12V 10A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00513",
+  "name": "NP Power Akü Şarj Cihazı (12V / 24V, 10A - 30A)",
+  "variant": "NP1220 12V 20A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00514",
+  "name": "NP Power Akü Şarj Cihazı (12V / 24V, 10A - 30A)",
+  "variant": "NP2410 24V 10A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "NPPOWE-00515",
+  "name": "NP Power Akü Şarj Cihazı (12V / 24V, 10A - 30A)",
+  "variant": "NP1230 12V 30A Akü Şarj Cihazı",
+  "brand": "NP Power",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00516",
+  "name": "Electrozirve EC12-12 12V DC-DC Akü Şarj Cihazı",
+  "variant": "20A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00517",
+  "name": "Electrozirve EC12-12 12V DC-DC Akü Şarj Cihazı",
+  "variant": "40A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00518",
+  "name": "Electrozirve EC12-12 12V DC-DC Akü Şarj Cihazı",
+  "variant": "60A DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00519",
+  "name": "Electrozirve Tek Yönlü DC-DC Akü Şarj Cihazı (30A / 40A)",
+  "variant": "30A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00521",
+  "name": "Electrozirve Tek Yönlü DC-DC Akü Şarj Cihazı (30A / 40A)",
+  "variant": "40A Tek Yönlü DC-DC Akü Şarj Cihazı",
+  "brand": "Electrozirve",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "ELECTR-00520",
+  "name": "Electrozirve 30A Çift Yönlü DC-DC Akü Şarj Cihazı",
+  "variant": null,
+  "brand": "Electrozirve",
+  "category": "Akü Şarj Cihazı",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "APEX-00528",
+  "name": "Apex 80A Otomatik Transfer Switch",
+  "variant": null,
+  "brand": "Apex",
+  "category": "Solar Transfer Switch",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "EXELON-00534",
+  "name": "Exelon EMAX PMAX-12P 12 kW 48V Akıllı İnverter",
+  "variant": null,
+  "brand": "Exelon",
+  "category": "Tam Sinüs MPPT Akıllı İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "EXELON-ELH24-00537",
+  "name": "Exelon ELH Serisi Akıllı İnverter (ELH-12 / ELH-15 / ELH-24)",
+  "variant": "ELH-24 Akıllı İnverter",
+  "brand": "Exelon",
+  "category": "Tam Sinüs MPPT Akıllı İnverter",
+  "known": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ }
+]
