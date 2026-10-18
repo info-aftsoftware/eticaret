@@ -24,6 +24,9 @@ import { getUserProfile, setUserProfile } from '@/lib/firebase/firestore'
 import { isFirebaseConfigured } from '@/lib/firebase/config'
 import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
 
+/** app/api/admin/auth: admin panelinin Firebase özel kimliği (müşteri değil) */
+const ADMIN_PANEL_UID = 'admin-panel-user'
+
 export interface User {
   id: string
   email: string
@@ -209,6 +212,12 @@ if (typeof window !== 'undefined' && isFirebaseConfigured) {
     const auth = getAuth()
     onAuthStateChanged(auth, async (fbUser) => {
       try {
+        // Admin paneli Firestore okumaları için aynı tarayıcıda özel "admin-panel-user" oturumu açar;
+        // bu oturum müşteri hesabı değildir — vitrin misafir gibi davranır (header, sepet, favoriler karışmasın).
+        if (fbUser && fbUser.uid === ADMIN_PANEL_UID) {
+          useFirebaseAuthStore.setState({ user: null, token: null, isAuthenticated: false, authReady: true })
+          return
+        }
         if (fbUser) {
           const firebaseToken = await fbUser.getIdToken()
           const profile = await getUserProfile(fbUser.uid)
@@ -250,6 +259,8 @@ export async function getAuthToken(): Promise<string | null> {
     // Sayfa yeni açıldıysa Firebase oturumu geri yükleyene kadar bekle (eski token'a düşmemek için)
     await auth.authStateReady()
     const current = auth.currentUser
+    // Admin paneli oturumu vitrinde müşteri kimliği olarak kullanılmaz
+    if (current?.uid === ADMIN_PANEL_UID) return null
     if (!current) return useFirebaseAuthStore.getState().token
     const token = await current.getIdToken()
     if (token !== useFirebaseAuthStore.getState().token) useFirebaseAuthStore.setState({ token })

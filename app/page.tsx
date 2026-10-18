@@ -4,10 +4,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  ShoppingBag,
   ArrowUpRight,
-  FileText,
-  CheckCircle2,
   ArrowRight,
 } from 'lucide-react'
 import { ProductCard } from '@/components/ProductCard'
@@ -55,30 +52,6 @@ function getFeaturedRowProducts(products: MockProduct[] = mockProducts): MockPro
   }
   return result
 }
-
-const HOW_IT_WORKS = [
-  {
-    step: '01',
-    title: 'İhtiyacını Belirle',
-    desc: 'Kullanım senaryonu, tüketim miktarını ve bütçeni belirt. İstersen ücretsiz keşif formumuzu doldur.',
-    icon: FileText,
-    color: 'bg-brand',
-  },
-  {
-    step: '02',
-    title: 'Ürün / Paket Seç',
-    desc: 'İhtiyacına özel hazırlanmış paketleri incele ya da ürün kataloğundan doğrudan seçim yap.',
-    icon: ShoppingBag,
-    color: 'bg-emerald-500',
-  },
-  {
-    step: '03',
-    title: 'Kurulum / Teslim',
-    desc: 'Siparişin hızla hazırlanır, teknik destek ekibimiz kurulum sürecinde yanında.',
-    icon: CheckCircle2,
-    color: 'bg-violet-500',
-  },
-]
 
 export default function HomePage() {
   const t = useTranslations('home')
@@ -237,36 +210,6 @@ export default function HomePage() {
 
       {/* ─── 7. KATEGORİLER (9 ana kategori) ──────────────────────────────── */}
       <CategoryShowcase />
-
-      {/* ─── 6. NASIL ÇALIŞIR ─────────────────────────────────────────────── */}
-      <section className={`${sectionPadding} min-w-0 opacity-0 animate-section-in`} aria-labelledby="how-it-works-heading">
-        <div className={containerClass}>
-          <header className="text-center mb-10 md:mb-14">
-            <span className="block text-xs font-bold uppercase tracking-widest text-brand mb-2">Nasıl Çalışır?</span>
-            <h2 id="how-it-works-heading" className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
-              3 Adımda Enerji Çözümü
-            </h2>
-            <p className="text-slate-500 text-sm sm:text-base mt-2 max-w-xl mx-auto leading-relaxed">
-              İhtiyacından siparişe, siparişten teslimat ve kuruluma kadar tüm süreçte yanınızdayız.
-            </p>
-          </header>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {HOW_IT_WORKS.map((item) => {
-              const Icon = item.icon
-              return (
-                <div key={item.step} className="flex flex-col items-center text-center p-6 md:p-8 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
-                  <div className={`w-16 h-16 ${item.color} rounded-2xl flex items-center justify-center mb-5 shadow-md`}>
-                    <Icon className="w-8 h-8 text-white" />
-                  </div>
-                  <span className="text-xs font-black text-slate-200 uppercase tracking-widest mb-2">{item.step}</span>
-                  <h3 className="text-lg font-bold text-slate-900 mb-3">{item.title}</h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">{item.desc}</p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* ─── 8. TEKLİF BANDI — ana sayfanın son bölümü (voltekno.com görsel düzeni) ─── */}
       <QuoteBanner />

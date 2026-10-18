@@ -1376,19 +1376,18 @@
   },
   "TOMMAT-SLMDIYODMDK25A-00315": {
     "images": [
-      "pending-tommat-slmdiyodmdk25a-00315.webp"
+      "diyot2-tommat-slmdiyodmdk25a-00315-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.ca/dp/B0DGNXS979",
+    "note": "eşleşme: same-OEM-model — Generic MDK25A 1600V common-cathode dual diode module (engraved \"MDK 25A1600V\", KK1/2A/3A), 1500x1500, white bg, no watermark/logo. No TommaTech-branded photo exists online."
   },
   "FRECON-PV5004T450H-00584": {
     "images": [
-      "pending-frecon-pv5004t450h-00584.webp"
+      "diger2-frecon-pv5004t315-00581-1.webp",
+      "diger2-frecon-pv5004t315-00581-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "Official Frecon: https://www.frecon.com.cn/products_177/159.html (PV150A&500 product page gallery, /static/upload/image/20220511/1652257699508784.jpg, 1920x1920) + https://www.frecon-inverter.com/products_170/338.html (/static/upload/image/20250227/1740624214519137.png, 1920x1920)",
+    "note": "eşleşme: same-family — CAUTION: the real 450 kW unit is a floor-standing double-door cabinet (940x1684 mm); no photo of it was found anywhere (Frecon sites, catalogs, manuals, marketplaces, CN/VN/IN/TR dealers, image search). These official Frecon PV500 large wall-mount housing photos are the same product family only, NOT the same enclosure. Owner may prefer keeping a placeholder for this SKU."
   },
   "TOMMAT-KBLMC4XT6012AWG1M-00109": {
     "images": [
@@ -1417,163 +1416,154 @@
   },
   "TOMMAT-SLMDIYODMDK55A-00316": {
     "images": [
-      "pending-tommat-slmdiyodmdk55a-00316.webp"
+      "diyot2-tommat-slmdiyodmdk55a-00316-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CP2Q3BWP",
+    "note": "eşleşme: same-OEM-model — Generic MDK55A 1600V common-cathode dual diode module (engraved \"MDK 55A1600V\"), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK70A-00317": {
     "images": [
-      "pending-tommat-slmdiyodmdk70a-00317.webp"
+      "diyot2-tommat-slmdiyodmdk70a-00317-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0DQ1HZSL6",
+    "note": "eşleşme: same-OEM-model — MDK 70A 1600V dual diode module (engraved \"70 A1600V\", KK1/2A/3A), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK90A-00318": {
     "images": [
-      "pending-tommat-slmdiyodmdk90a-00318.webp"
+      "diyot2-tommat-slmdiyodmdk90a-00318-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0DQ1HZSL6",
+    "note": "eşleşme: same-OEM-model — MDK 90A 1600V dual diode module (engraved \"90 A1600V\"; 90A variant of same listing, ASIN B0DQ1BV6NR), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK90A-00319": {
     "images": [
-      "pending-tommat-slmdiyodmdk90a-00319.webp"
+      "diyot2-tommat-slmdiyodmdk90a-00318-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0DQ1HZSL6",
+    "note": "eşleşme: same-OEM-model — MDK 90A 1600V dual diode module (engraved \"90 A1600V\"; 90A variant of same listing, ASIN B0DQ1BV6NR), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK110A-00320": {
     "images": [
-      "pending-tommat-slmdiyodmdk110a-00320.webp"
+      "diyot2-tommat-slmdiyodmdk110a-00320-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CM9H44JP",
+    "note": "eşleşme: same-OEM-model — MDK 110A 1600V dual diode module (engraved \"MDK 110A1600V\"), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK110A-00321": {
     "images": [
-      "pending-tommat-slmdiyodmdk110a-00321.webp"
+      "diyot2-tommat-slmdiyodmdk110a-00320-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CM9H44JP",
+    "note": "eşleşme: same-OEM-model — MDK 110A 1600V dual diode module (engraved \"MDK 110A1600V\"), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK110A-00322": {
     "images": [
-      "pending-tommat-slmdiyodmdk110a-00322.webp"
+      "diyot2-tommat-slmdiyodmdk110a-00320-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CM9H44JP",
+    "note": "eşleşme: same-OEM-model — MDK 110A 1600V dual diode module (engraved \"MDK 110A1600V\"), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK110A-00323": {
     "images": [
-      "pending-tommat-slmdiyodmdk110a-00323.webp"
+      "diyot2-tommat-slmdiyodmdk110a-00320-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CM9H44JP",
+    "note": "eşleşme: same-OEM-model — MDK 110A 1600V dual diode module (engraved \"MDK 110A1600V\"), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDK110A-00324": {
     "images": [
-      "pending-tommat-slmdiyodmdk110a-00324.webp"
+      "diyot2-tommat-slmdiyodmdk110a-00320-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CM9H44JP",
+    "note": "eşleşme: same-OEM-model — MDK 110A 1600V dual diode module (engraved \"MDK 110A1600V\"), 1500x1500, no watermark/logo."
   },
   "TOMMAT-SLMDIYODMDC15016-00325": {
     "images": [
-      "pending-tommat-slmdiyodmdc15016-00325.webp"
+      "diyot2-tommat-slmdiyodmdc15016-00325-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.amazon.com/dp/B0CN3SZL1C",
+    "note": "eşleşme: same-family — No clean MDC150-16 photo found (only NNC-logo MIC images of MDC160-16). Used 160A-class 34mm 3-terminal diode module (same 94x34mm package as MDC130-180A per NNC drawing), angled view where no label/model text is visible; 1500x1500, no watermark/logo."
   },
   "TOMMAT-HPTT22R32TFDIS-00352": {
     "images": [
-      "pending-tommat-hptt22r32tfdis-00352.webp"
+      "tommatech2-tommat-hptt22r32tfdis-00352-1.webp",
+      "tommatech2-tommat-hptt22r32tfdis-00352-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://cw-enerji.com/tr/urun/tommatech-23kw-r32-power-serisi-isi-pompasitrifaze-1845.html (official TommaTech distributor; images /images/product/1845_..._0.webp and _1.webp, 1200x1200)",
+    "note": "eşleşme: same-family — No public photo of the TommaTech Split HP-TT-22-R32-TF-DIS exists. The split series is only listed in text (Aplas Group page: 'Split 12 kW TF DIŞ / 22 kW TF DIŞ'), with no images. CW/TommaTech catalogues (isi-pompasi-katalogu-1184, 170-heat-pump-catalogue) and price lists show no split units, and the ERP price list host refuses connections. Chosen: the official TommaTech R32"
   },
   "TOMMAT-HPTT812R32MFIC-00353": {
     "images": [
-      "pending-tommat-hptt812r32mfic-00353.webp"
+      "tommatech2-tommat-hptt812r32mfic-00353-1.webp",
+      "tommatech2-tommat-hptt812r32mfic-00353-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.poolworldheatpump.com/heating-cooling-dhw-heat-pump/r32-heat-pump/air-source-heat-pump-hydrobox.html (images air-source-heat-pump-hydrobox25074238970.jpg / 25033457667.jpg, 730x730)",
+    "note": "eşleşme: generic-same-type — No TommaTech or OEM photo of the HP-TT-8/12-R32-MF-IC indoor unit could be found anywhere (CW/TommaTech sites, catalogues, download portal indir.cw-enerji.com, dealers, marketplaces, Aplas). Chosen: a clean, unbranded wall-hung air-to-water hydro module (hydrobox) render. It is the correct product type (indoor water module), with no logo or watermark. Short side is 730"
   },
   "TOMMAT-HPTT1822R32MFIC-00354": {
     "images": [
-      "pending-tommat-hptt1822r32mfic-00354.webp"
+      "tommatech2-tommat-hptt812r32mfic-00353-1.webp",
+      "tommatech2-tommat-hptt812r32mfic-00353-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.poolworldheatpump.com/heating-cooling-dhw-heat-pump/r32-heat-pump/air-source-heat-pump-hydrobox.html",
+    "note": "eşleşme: generic-same-type — Same situation as the 8-12 kW indoor unit: no public photo of the HP-TT-18/22-R32-MF-IC exists. Uses the same unbranded hydrobox render (both indoor variants look the same externally)."
   },
   "TOMMAT-SRJTTADJ40100V300A-00230": {
     "images": [
-      "pending-tommat-srjttadj40100v300a-00230.webp"
+      "tommatech2-tommat-srjttadj40100v300a-00230-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://cw-enerji.com/tr/urun/tommatech-batarya-sarj-unitesi-duvar-tipi-80v-200a-1807.html (image /images/product/1807_..._0.webp, 1200x1200)",
+    "note": "eşleşme: same-family — No 300A or 'ADJ 40-100V' TommaTech charger is published on cw-enerji.com, tommatech.de, the lithium-battery catalogue (Orijinal Şarj Cihazları pages), voltekno.com (which uses one wall-unit image for both 200A and 300A) or any dealer. Chosen: the official TommaTech 80V-200A wall-type lithium charger. Its datasheet gives a 30-100 VDC adjustable output with adjustable current/"
   },
   "TOMMAT-KBLMC4DC552518AWG1-00110": {
     "images": [
-      "pending-tommat-kblmc4dc552518awg1-00110.webp"
+      "tommatech2-tommat-kblmc4dc552518awg1-00110-1.webp",
+      "tommatech2-tommat-kblmc4dc552518awg1-00110-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://veryeah.com/products/mc4-dc5525-cable (1100x860); second: Optonica MC4-DC5525 cable via https://ledlightsmalta.com/index.php?route=product/product&product_id=3227 (600x600)",
+    "note": "eşleşme: generic-same-type — TommaTech has no published photo of KBL-MC4-DC5525-18AWG-1M. It does not appear in the R-series datasheet, the MGI-R-500W manual, the CW accessory pages or dealer galleries (solarenerjipazari, ionbatech). Both chosen photos show the exact connector type (MC4 male+female pair to a 5.5x2.5 mm barrel plug), clean on white, with no logo or watermark. Backup: Outbax MC4-DC5"
   },
   "FRECON-PV5004T315-00581": {
     "images": [
-      "pending-frecon-pv5004t315-00581.webp"
+      "diger2-frecon-pv5004t315-00581-1.webp",
+      "diger2-frecon-pv5004t315-00581-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "Official Frecon: https://www.frecon.com.cn/products_177/159.html (PV150A&500 product page gallery, /static/upload/image/20220511/1652257699508784.jpg, 1920x1920) + https://www.frecon-inverter.com/products_170/338.html (/static/upload/image/20250227/1740624214519137.png, 1920x1920)",
+    "note": "eşleşme: same-family — No real photo of the 315-400 kW (700x1025 mm) PV500/FR500A unit exists online after searching frecon.com.cn, frecon-inverter.com (all product pages, catalogs, manuals), Alibaba/1688/Taobao, Made-in-China, Bing images (EN/CN/VI/TR queries), Vietnamese/Indian/African/Turkish dealers. Dealers (e.g. phanphoibientan.com) reuse one generic grey large-housing image for every model "
   },
   "FRECON-PV5004T355-00582": {
     "images": [
-      "pending-frecon-pv5004t355-00582.webp"
+      "diger2-frecon-pv5004t315-00581-1.webp",
+      "diger2-frecon-pv5004t315-00581-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "Official Frecon: https://www.frecon.com.cn/products_177/159.html (PV150A&500 product page gallery, /static/upload/image/20220511/1652257699508784.jpg, 1920x1920) + https://www.frecon-inverter.com/products_170/338.html (/static/upload/image/20250227/1740624214519137.png, 1920x1920)",
+    "note": "eşleşme: same-family — No real photo of the 315-400 kW (700x1025 mm) PV500/FR500A unit exists online after searching frecon.com.cn, frecon-inverter.com (all product pages, catalogs, manuals), Alibaba/1688/Taobao, Made-in-China, Bing images (EN/CN/VI/TR queries), Vietnamese/Indian/African/Turkish dealers. Dealers (e.g. phanphoibientan.com) reuse one generic grey large-housing image for every model "
   },
   "FRECON-PV5004T400H-00583": {
     "images": [
-      "pending-frecon-pv5004t400h-00583.webp"
+      "diger2-frecon-pv5004t315-00581-1.webp",
+      "diger2-frecon-pv5004t315-00581-2.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "Official Frecon: https://www.frecon.com.cn/products_177/159.html (PV150A&500 product page gallery, /static/upload/image/20220511/1652257699508784.jpg, 1920x1920) + https://www.frecon-inverter.com/products_170/338.html (/static/upload/image/20250227/1740624214519137.png, 1920x1920)",
+    "note": "eşleşme: same-family — No real photo of the 315-400 kW (700x1025 mm) PV500/FR500A unit exists online after searching frecon.com.cn, frecon-inverter.com (all product pages, catalogs, manuals), Alibaba/1688/Taobao, Made-in-China, Bing images (EN/CN/VI/TR queries), Vietnamese/Indian/African/Turkish dealers. Dealers (e.g. phanphoibientan.com) reuse one generic grey large-housing image for every model "
   },
   "EXELON-00533": {
     "images": [
-      "pending-exelon-00533.webp"
+      "diger2-exelon-00533-1.webp",
+      "diger2-exelon-00533-2.webp",
+      "diger2-exelon-00533-3.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://ynrsolar.com.tr/magaza/inverterler/exelon-11kw-akilli-inverter-48v/ (Exelon 11 kW 48V MPPT 450VDC Paralel/Wi-Fi/Dual Output listing; /wp-content/uploads/2025/09/smart-inverter0001/0003/0002_result.jpg, 2000x2000 Exelon official renders, no dealer logo)",
+    "note": "eşleşme: same-housing — Identical teal+black housing (teal left cover with EXELON logo, black right panel with LCD, 3 LEDs, 4 buttons, left vent grille) to the KUZGUN-watermarked PMAX-11P image on kuzgunsolarenerji.com.tr. Renders carry no model label, so the exact model cannot be read off the image; dealers use these renders for the Exelon 11 kW (and 10.2 kW) smart inverter. exelon.com.tr has no "
   },
   "EXELON-00534": {
     "images": [
-      "pending-exelon-00534.webp"
+      "diger2-exelon-00533-1.webp",
+      "diger2-exelon-00533-2.webp",
+      "diger2-exelon-00533-3.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://ynrsolar.com.tr/magaza/inverterler/exelon-11kw-akilli-inverter-48v/ (Exelon 11 kW 48V MPPT 450VDC Paralel/Wi-Fi/Dual Output listing; /wp-content/uploads/2025/09/smart-inverter0001/0003/0002_result.jpg, 2000x2000 Exelon official renders, no dealer logo)",
+    "note": "eşleşme: same-housing — PMAX-12P uses the same enclosure as PMAX-11P (checked against the Kuzgun Solar PMAX-12P image: identical housing). No clean 12P-specific image exists online; renders carry no model label."
   },
   "TOMMAT-TT24048PM12-00086": {
     "images": [
@@ -1911,18 +1901,16 @@
   },
   "HAVENS-00604": {
     "images": [
-      "pending-havens-00604.webp"
+      "diger2-havens-00604-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "https://www.solarkutu.com/urun/havensis-20-amper-12v-solar-sarj-kontrol-cihazi-minisolar-20aes (identical file on mavienerji.com) - Havensis-made product visual",
+    "note": "eşleşme: exact — Front label reads MiniSolar-20AES PWM (dark housing, no USB port, consistent with Eko series; Havensis 2026 price list also shows the dark housing for MS20AES). Only 500x500 (largest copy anywhere) and has a Havensis marketing frame (green text boxes, Turk Mali stamp, Havensis logo/slogan); no third-party shop logo. The 1500px solarenerjideposu MS20AES image actually shows a 20ASS"
   },
   "HAVENS-00609": {
     "images": [
-      "pending-havens-00609.webp"
+      "diger2-havens-00609-1.webp"
     ],
-    "pending": true,
-    "source": "",
-    "note": "Doğru resmî görsel bulunamadı; yanlış/filigranlı görsel yerine geçici kart."
+    "source": "Havensis official 2026 price list PDF (https://www.solar-bazaar.com/productis/Havensis-Genel-Fiyat-Listesi-Turkce-06-2026.pdf, page 6, embedded image)",
+    "note": "eşleşme: exact — Only genuine image of the grey MiniSolar-3AMPS. BELOW QUALITY BAR: 1192x477 (short side 477 < 500) with Havensis feature icons, battery scale and Turk Mali stamp around the product. The only larger copy (solarenerjideposu.com.tr 1500x1500) is AI-upscaled (garbled MSMPORT text) and carries the dealer logo, so rejected. havensis.com.tr minisolar-3-amper page shows a different blue h"
   }
 }

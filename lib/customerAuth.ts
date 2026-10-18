@@ -64,6 +64,8 @@ export async function getCustomerFromRequest(request: NextRequest): Promise<Auth
   if (!auth) return null
   try {
     const decoded = await auth.verifyIdToken(token)
+    // Admin panelinin Firebase kimliği (özel token, admin claim'i) müşteri hesabı sayılmaz
+    if (decoded.uid === 'admin-panel-user' || decoded.admin === true) return null
     const email = decoded.email?.toLowerCase() ?? null
     const emailVerified = decoded.email_verified ?? false
     const name = (decoded.name as string | undefined) || (email ? email.split('@')[0] : 'Müşteri')
