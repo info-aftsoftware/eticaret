@@ -50,7 +50,7 @@ _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 | 8 | SEO (ayrı dal) | ✅ | `seo-alan-adi` dalı (`2e6d1b5`, klasör `../voltekno-seo`), **yayına dahil değil**: eski 132 voltekno.com adresi → yeni sayfalara kalıcı yönlendirme, kurum şeması yalnızca ana sayfada, ürün breadcrumb şeması. Ayrıntı: o daldaki `SEO-GECIS.md` |
 | 9 | /products sunucuda çiziliyor + hız | ✅ | `083acc2`: ürün listesi ilk yüklemede HTML'de geliyor (24 ürün, yükleniyor göstergesi yok); filtre/sıralama/sayfa adresten okunuyor, birim testli (52 test). Kök `loading.tsx` ve dış Suspense kaldırıldı: içerik gizli akış bloğunda bekliyor, LCP ~10 s gecikiyordu → ana sayfa/kategori/ürünler LCP 2,7–3,2 s (Lighthouse mobil, devtools kısıtlaması). Ürün sayfası: Inter `latin-ext` + tek satır breadcrumb → CLS 0,21 → 0; önerilen ürünler şeridi yüklenince kendini 16 px kaydırıp Chrome'un LCP ölçümünü kesiyordu (scroll-padding ile düzeldi). İlk 4 ürün görseli öncelikli. Hydration hatası yok (TR/EN) |
 
-| 10 | 19.10 turu: denetim, çeviri, senkron | ✅ | `ff6d9d1` (katalog), `4471547` (çeviri, denetim düzeltmeleri, admin ↔ vitrin senkronu, gizlilik kartı) → nextfirststep.com. Doğrulama: 53 birim testi, tip kontrolü, Playwright 49 geçti, 1 atlandı, 1 kaldı ( test ürünü veritabanına doğrudan yazıldığı için derlenmiş Merchant akışında görünmüyor; admin üzerinden eklenen ürün akışı tazeler), yerel üretim derlemesinde admin stok 17→24 → ürün sayfası ilk istekte 24 |
+| 10 | 19.10 turu: denetim, çeviri, senkron | ✅ | `ff6d9d1` (katalog), `4471547` (çeviri, denetim düzeltmeleri, admin ↔ vitrin senkronu, gizlilik kartı), `990ecba` (sekme başlıkları EN) → nextfirststep.com; canlıda 25 sayfa/uç 200, EN arayüz ve `lang` doğru, kart seçeneği POS yokken pasif. Doğrulama: 53 birim testi, tip kontrolü, Playwright 49 geçti, 1 atlandı, 1 kaldı ( test ürünü veritabanına doğrudan yazıldığı için derlenmiş Merchant akışında görünmüyor; admin üzerinden eklenen ürün akışı tazeler), yerel üretim derlemesinde admin stok 17→24 → ürün sayfası ilk istekte 24 |
 
 ## İstek turu 2 (18.10.2026)
 | İstek | Durum | Not |
@@ -149,6 +149,6 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `4471547` (19.10.2026 00:55)
+- Son yayın: `990ecba` (19.10.2026 01:05) — `4471547` + sepet/ödeme/giriş/hesap sekme başlıkları İngilizcede de çevrili
 - Yayına **dahil olmayan**, başka oturumun commit'lenmemiş işi (çalışma klasöründe duruyor): header kategori menüsü düzenlemesi (`components/header/*`), Firebase proje yapılandırması (`firebase.json`, `.firebaserc`, `storage.rules`, `FIREBASE_SETUP.md`), SMTP gönderen/düz metin değişikliği (`lib/email-smtp.ts`). O oturum bitirince commit'lenip yeniden yayınlanmalı.
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor; `git remote set-url origin …` ile güncellenebilir). Dal: `urun-katalogu-ikas`.
