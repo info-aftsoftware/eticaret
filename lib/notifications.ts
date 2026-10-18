@@ -115,7 +115,7 @@ export async function sendOrderStatusUpdate(data: NotificationData, newStatus: s
       data.customer.email,
       statusInfo.subject,
       `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
           <h2>Sipariş Durumu Güncellendi</h2>
           <p>Merhaba ${esc(data.customer.name)},</p>
           <p>${statusInfo.message}</p>
@@ -140,7 +140,7 @@ export async function sendPaymentConfirmation(data: NotificationData): Promise<b
       data.customer.email,
       `Ödeme Onayı - ${data.orderId}`,
       `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
           <h2>Ödemeniz Onaylandı</h2>
           <p>Merhaba ${esc(data.customer.name)},</p>
           <p>Siparişiniz için yapılan ödeme başarıyla onaylanmıştır.</p>
@@ -165,7 +165,7 @@ export async function sendPaymentFailureNotification(data: NotificationData): Pr
       data.customer.email,
       `Ödeme Hatası - ${data.orderId}`,
       `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
           <h2>Ödeme İşlemi Başarısız</h2>
           <p>Merhaba ${esc(data.customer.name)},</p>
           <p>Siparişiniz için yapılan ödeme işlemi başarısız olmuştur.</p>
@@ -190,7 +190,7 @@ export async function sendRefundNotification(data: NotificationData, refundAmoun
       data.customer.email,
       `İade İşlemi - ${data.orderId}`,
       `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
           <h2>İade İşlemi Tamamlandı</h2>
           <p>Merhaba ${esc(data.customer.name)},</p>
           <p>Siparişiniz için iade işlemi başarıyla tamamlanmıştır.</p>
@@ -217,7 +217,7 @@ export async function sendLowStockNotification(productName: string, currentStock
       adminEmail,
       `Düşük Stok Uyarısı - ${productName}`,
       `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
           <h2>Düşük Stok Uyarısı</h2>
           <p>Merhaba Admin,</p>
           <p>Aşağıdaki ürünün stok seviyesi kritik seviyeye düşmüştür:</p>
@@ -245,7 +245,7 @@ export async function sendSystemErrorNotification(error: string, context: string
       adminEmail,
       `Sistem Hatası - ${new Date().toLocaleDateString('tr-TR')}`,
       `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
           <h2>Sistem Hatası Bildirimi</h2>
           <p>Merhaba Admin,</p>
           <p>Sistemde bir hata oluşmuştur:</p>

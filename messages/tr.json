@@ -257,7 +257,8 @@
     "privacy": "Gizlilik Politikası",
     "terms": "Kullanım Şartları",
     "cookies": "Çerez Politikası",
-    "location": "Merkez, Elazığ, Türkiye"
+    "location": "Merkez, Elazığ, Türkiye",
+    "orderTracking": "Sipariş Takibi"
   },
   "ges": {
     "title": "Güneş Enerjisi Hesaplama Aracı",
@@ -494,7 +495,9 @@
       "redFlagsTitle": "Dikkat edilmesi gerekenler",
       "redFlagsNone": "Belirgin bir uyarı hesaplanmadı.",
       "successTitle": "Talebiniz alındı",
-      "successMessage": "Aşağıda özet ve uyarılar yer almaktadır."
+      "successMessage": "Aşağıda özet ve uyarılar yer almaktadır.",
+      "optional": "isteğe bağlı",
+      "companyNamePlaceholder": "Firma adı (isteğe bağlı)"
     },
     "quoteCheck": {
       "title": "GES Teklif Kontrol",
@@ -516,7 +519,7 @@
       "orientationMixed": "Karışık",
       "electricityPrice": "Elektrik birim fiyatı (TL/kWh, opsiyonel)",
       "electricityPricePlaceholder": "Örn. 3.5",
-      "electricityPriceHint": "Varsayılan 3,5 TL",
+      "electricityPriceHint": "Varsayılan 3,8–5,2 TL",
       "evaluate": "Değerlendir",
       "resultPriceTitle": "Fiyat değerlendirmesi",
       "resultPriceReasonable": "Makul",
@@ -588,7 +591,6 @@
     "b2bContact": "B2B siparişler için",
     "contactUs": "iletişime geçiniz",
     "securePayment": "Güvenli ödeme",
-    "freeShipping": "3000 TL+ ücretsiz kargo",
     "trustedShop": "Güvenilir alışveriş",
     "pickedForYou": "Sizin İçin Seçtiklerimiz",
     "pickedForYouDesc": "Öne çıkan ürünler ve fırsatlar",
@@ -606,7 +608,6 @@
     "techSupport": "Teknik Destek",
     "techSupportDesc": "Uzman ekibimiz her zaman yanınızda",
     "fastDelivery": "Hızlı Teslimat",
-    "fastDeliveryDesc": "3000 TL üzeri ücretsiz kargo",
     "noProductsYet": "Henüz ürün bulunmuyor.",
     "productCount": "{count} ürün",
     "heroSlideLabelCharge": "Şarj istasyonlarına git",
@@ -644,8 +645,6 @@
     "filterByCategory": "TÜM KATEGORİLER",
     "priceRange": "Fiyat Aralığı",
     "whyChooseUs": "NEDEN BİZİ TERCİH ETMELİSİNİZ?",
-    "freeShippingBanner": "ÜCRETSİZ KARGO",
-    "freeShippingBannerDesc": "3000 TL Üzeri Alışverişte",
     "secureShopping": "GÜVENLİ ALIŞVERIŞ",
     "secureShoppingDesc": "256 Bit SSL Sertifikası",
     "easyReturn": "KOLAY İADE",
@@ -726,7 +725,6 @@
     "subtotal": "Ara Toplam",
     "tax": "KDV (%20)",
     "shipping": "Kargo",
-    "freeShipping": "Ücretsiz",
     "discount": "İndirim",
     "total": "Toplam",
     "couponPlaceholder": "Kupon kodu",

@@ -66,7 +66,7 @@ function ProfilePageContent() {
   useEffect(() => {
     if (!authReady) return
     if (!isAuthenticated) {
-      router.push('/login')
+      router.replace(`/login?redirect=${encodeURIComponent('/profile' + window.location.search)}`)
       return
     }
   }, [authReady, isAuthenticated, router])
@@ -266,7 +266,8 @@ function ProfilePageContent() {
     }
   }
 
-  if (!authReady) {
+  // Oturum doğrulanana (veya girişe yönlendirilene) kadar boş hesap sayfası gösterilmez
+  if (!authReady || !isAuthenticated) {
     return (
       <ClassicPageShell breadcrumbs={[{ label: 'Hesabım' }]} noTitle>
         <div className="flex items-center justify-center py-20">

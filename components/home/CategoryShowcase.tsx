@@ -8,6 +8,7 @@ import { ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
+import { useL } from '@/lib/i18n-inline'
 
 /** Her ana kategoriyi en iyi temsil eden ürün görseli (yoksa gruptaki ilk görselli ürün kullanılır) */
 const GROUP_IMAGES: Record<string, string> = {
@@ -39,6 +40,7 @@ type Tile = {
  */
 export function CategoryShowcase() {
   const t = useTranslations('header')
+  const L = useL()
 
   const tiles = useMemo<Tile[]>(() => {
     const countBy: Record<string, number> = {}
@@ -67,19 +69,20 @@ export function CategoryShowcase() {
   }, [t])
 
   const [featured, ...rest] = tiles
+  const totalCount = tiles.reduce((n, x) => n + x.count, 0)
 
   return (
     <section className="bg-white py-12 min-[901px]:py-16" aria-labelledby="home-categories-heading">
       <div className={PAGE_CONTAINER}>
         <div className="flex items-end justify-between gap-4 mb-6 min-[901px]:mb-8">
           <div>
-            <h2 id="home-categories-heading" className="text-[23px] font-bold text-[#121926]">Kategoriler</h2>
+            <h2 id="home-categories-heading" className="text-[23px] font-bold text-[#121926]">{t('categories')}</h2>
             <p className="mt-1 text-sm text-[#5d6e80]">
-              {tiles.length} ana kategoride {tiles.reduce((n, x) => n + x.count, 0)} ürün
+              {L(`${tiles.length} ana kategoride ${totalCount} ürün`, `${totalCount} products in ${tiles.length} categories`)}
             </p>
           </div>
           <Link href="/categories" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0b2540] hover:text-[#12335a] whitespace-nowrap">
-            Tüm Kategoriler <ArrowRight className="w-4 h-4" aria-hidden />
+            {t('catNavAllCategories')} <ArrowRight className="w-4 h-4" aria-hidden />
           </Link>
         </div>
 
@@ -97,11 +100,11 @@ export function CategoryShowcase() {
                   />
                 </Link>
                 <div className="flex flex-col p-5 min-[901px]:p-6 text-white min-[641px]:w-1/2 min-[1025px]:w-auto">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#f5b400]">Öne çıkan kategori</span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#f5b400]">{L('Öne çıkan kategori', 'Featured category')}</span>
                   <Link href={featured.href} className="mt-1.5 text-xl min-[901px]:text-2xl font-bold hover:text-[#f5b400] transition-colors">
                     {featured.label}
                   </Link>
-                  <span className="mt-1 text-sm text-[#cfdbe8]">{featured.count} ürün</span>
+                  <span className="mt-1 text-sm text-[#cfdbe8]">{featured.count} {L('ürün', 'products')}</span>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {featured.subs.map((s) => (
                       <li key={s.href}>
@@ -119,7 +122,7 @@ export function CategoryShowcase() {
                     href={featured.href}
                     className="mt-5 min-[641px]:mt-auto min-[1025px]:mt-5 pt-0 min-[641px]:pt-5 min-[1025px]:pt-0 self-start inline-flex items-center gap-2 text-sm font-semibold text-[#f5b400] hover:text-[#ffc933]"
                   >
-                    Kategoriyi incele <ArrowRight className="w-4 h-4" aria-hidden />
+                    {L('Kategoriyi incele', 'Explore category')} <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>
                 </div>
               </div>
@@ -144,7 +147,7 @@ export function CategoryShowcase() {
                     className="object-contain p-4 min-[901px]:p-5 mix-blend-multiply group-hover:scale-[1.04] transition-transform duration-500"
                   />
                   <span className="absolute top-2.5 left-2.5 rounded-full bg-white/90 px-2 py-0.5 text-[11px] font-semibold text-[#20384e]">
-                    {tile.count} ürün
+                    {tile.count} {L('ürün', 'products')}
                   </span>
                 </span>
                 <span className={`flex-1 flex justify-between gap-3 p-3.5 min-[901px]:p-4 ${wide ? 'items-center' : 'items-start'}`}>

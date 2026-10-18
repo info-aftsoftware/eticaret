@@ -24,7 +24,7 @@ export async function generateAndSendInvoice(
     const pdfBuffer = await generateInvoicePDF(orderId, orderData)
 
     const htmlBody = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <div style="font-family: Arial, sans-serif; max-width: 680px; margin: 0 auto; padding: 0 8px;">
         <h2>Sipariş Özetiniz</h2>
         <p>Merhaba ${escapeHtml(orderData.customer.name || '')},</p>
         <p><strong>Sipariş No:</strong> ${escapeHtml(orderId)}</p>

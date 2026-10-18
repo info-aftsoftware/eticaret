@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { FileCheck2, Truck, Lock, Headphones } from 'lucide-react'
@@ -17,6 +18,7 @@ const SLIDES = [
     title: ['Yenilenebilir Enerji', 'Çözümleri'],
     mobileTitle: ['Yenilenebilir Enerji Çözümleri'],
     cta: 'TÜM ÜRÜNLER',
+    en: { title: ['Renewable Energy', 'Solutions'], mobileTitle: ['Renewable Energy Solutions'], cta: 'ALL PRODUCTS' },
     href: '/products',
     alt: 'Duvara monte inverter, jel akü ve güneş paneli',
   },
@@ -25,6 +27,7 @@ const SLIDES = [
     title: ['Lityum Enerji', 'Depolama Sistemleri'],
     mobileTitle: ['Lityum Enerji', 'Depolama'],
     cta: 'KEŞFET',
+    en: { title: ['Lithium Energy', 'Storage Systems'], mobileTitle: ['Lithium Energy', 'Storage'], cta: 'EXPLORE' },
     href: `/products?category=${encodeURIComponent('Lityum Akü')}`,
     alt: 'Üst üste yığınlanmış lityum batarya modülleri',
   },
@@ -33,21 +36,23 @@ const SLIDES = [
     title: ['Solar Tarımsal', 'Sulama Çözümleri'],
     mobileTitle: ['Solar Tarımsal', 'Sulama', 'Çözümleri'],
     cta: 'İNCELE',
+    en: { title: ['Solar Agricultural', 'Irrigation'], mobileTitle: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW' },
     href: `/products?category=${encodeURIComponent('Solar Pompa Sürücüsü')}`,
     alt: 'TommaTech solar pompa sürücüleri ve güneş paneli',
   },
 ] as const
 
 const FEATURES = [
-  { icon: FileCheck2, title: 'Orijinal ve Faturalı Ürün', text: 'Tüm ürünler faturalı ve garantili olarak satılır' },
-  { icon: Truck, title: 'Özenli Paketleme, Hızlı Kargo', text: 'Stoktaki ürünlerde hızlı sevkiyat ve takip' },
-  { icon: Lock, title: 'Güvenli Ödeme', text: 'Kredi ve banka kartıyla güvenli alışveriş' },
-  { icon: Headphones, title: 'Uzman Teknik Destek', text: 'Ürün seçimi ve sistem tasarımında mühendis desteği' },
+  { icon: FileCheck2, tr: ['Orijinal ve Faturalı Ürün', 'Tüm ürünler faturalı ve garantili olarak satılır'], en: ['Genuine, Invoiced Products', 'Every product is sold with invoice and warranty'] },
+  { icon: Truck, tr: ['Özenli Paketleme, Hızlı Kargo', 'Stoktaki ürünlerde hızlı sevkiyat ve takip'], en: ['Careful Packing, Fast Shipping', 'Quick dispatch and tracking for in-stock items'] },
+  { icon: Lock, tr: ['Güvenli Ödeme', 'Kredi ve banka kartıyla güvenli alışveriş'], en: ['Secure Payment', 'Safe shopping by credit and debit card'] },
+  { icon: Headphones, tr: ['Uzman Teknik Destek', 'Ürün seçimi ve sistem tasarımında mühendis desteği'], en: ['Expert Technical Support', 'Engineering help with product choice and system design'] },
 ] as const
 
 const INTERVAL_MS = 5000
 
 export function HeroSlider() {
+  const isEn = useLocale() === 'en'
   const [current, setCurrent] = useState(0)
   const [paused, setPaused] = useState(false)
   const touchX = useRef<number | null>(null)
@@ -83,6 +88,7 @@ export function HeroSlider() {
           >
             {SLIDES.map((slide, i) => {
               const active = i === current
+              const copy = isEn ? slide.en : slide
               return (
                 <div
                   key={slide.image}
@@ -105,10 +111,10 @@ export function HeroSlider() {
                     <div>
                       <p className="mb-4 text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[48px] font-semibold leading-tight text-[#121926]">
                         <span className="min-[769px]:hidden">
-                          {slide.mobileTitle.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
+                          {copy.mobileTitle.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
                         </span>
                         <span className="hidden min-[769px]:inline">
-                          {slide.title.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
+                          {copy.title.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
                         </span>
                       </p>
                       <Link
@@ -116,7 +122,7 @@ export function HeroSlider() {
                         tabIndex={active ? 0 : -1}
                         className="inline-flex items-center justify-center h-10 min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-base font-semibold transition-colors"
                       >
-                        {slide.cta}
+                        {copy.cta}
                       </Link>
                     </div>
                   </div>
@@ -146,7 +152,9 @@ export function HeroSlider() {
       {/* Güven kartları: masaüstünde hero'nun alt kenarına biner (voltekno.com: margin-top -44px) */}
       <div className="relative z-[3] max-w-[1406px] mx-auto px-4 min-[541px]:px-6 mt-0 min-[1001px]:-mt-[44px] pb-2">
         <ul className="grid grid-cols-2 min-[1001px]:grid-cols-4 gap-2.5 min-[541px]:gap-[18px]">
-          {FEATURES.map(({ icon: Icon, title, text }) => (
+          {FEATURES.map(({ icon: Icon, tr, en }) => {
+            const [title, text] = isEn ? en : tr
+            return (
             <li
               key={title}
               className="flex flex-col min-[541px]:flex-row min-[541px]:items-center gap-3 min-[541px]:gap-3.5 p-3 min-[541px]:p-[18px] rounded-xl bg-white border border-[#e6ebf1] shadow-[0_6px_24px_rgba(11,37,64,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5"
@@ -159,7 +167,8 @@ export function HeroSlider() {
                 <small className="hidden min-[541px]:block mt-0.5 text-[11.5px] font-medium leading-[17.8px] text-[#5d6e80]">{text}</small>
               </span>
             </li>
-          ))}
+            )
+          })}
         </ul>
       </div>
     </section>

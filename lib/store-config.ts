@@ -5,8 +5,6 @@
  */
 
 export const VAT_RATE = 20
-export const FREE_SHIPPING_THRESHOLD = 3000
-export const SHIPPING_FEE = 50
 /** Havale/EFT ile ödemede ara toplam üzerinden uygulanan indirim oranı (%) */
 export const BANK_TRANSFER_DISCOUNT_RATE = 3
 /** Havale/EFT siparişlerinde ödemenin beklendiği süre (gün) */
@@ -42,18 +40,26 @@ export type OrderTotals = {
   total: number
 }
 
-const round2 = (n: number) => Math.round(n * 100) / 100
+export const round2 = (n: number) => Math.round(n * 100) / 100
+
+/** KDV dahil fiyat (mağaza fiyatları KDV hariç tutulur) */
+export const grossPrice = (net: number) => round2(net * (1 + VAT_RATE / 100))
+
+/** Havale/EFT ile ödemede KDV dahil fiyat (indirim KDV matrahından düşülür; computeOrderTotals ile aynı kural) */
+export const bankTransferGrossPrice = (net: number) => round2(net * (1 - BANK_TRANSFER_DISCOUNT_RATE / 100) * (1 + VAT_RATE / 100))
 
 /**
  * İndirimler KDV matrahından düşülür (faturada doğru KDV için):
  *   matrah = ara toplam − kupon − havale indirimi
  *   toplam = matrah + KDV + kargo
- * Ücretsiz kargo: indirim öncesi ara toplam FREE_SHIPPING_THRESHOLD ve üzerindeyse.
+ * Kargo: sepetin desisine göre fiyat listesinden (lib/shipping.ts → shippingFeeFor); çağıran hesaplayıp verir.
  */
 export function computeOrderTotals(input: {
   subtotal: number
   couponDiscount?: number
   paymentMethod?: CheckoutPaymentMethod | null
+  /** Vergiler dahil kargo ücreti (lib/shipping.ts → shippingFeeFor(cartLogistics(...))) */
+  shippingFee: number
 }): OrderTotals {
   const subtotal = round2(Math.max(0, input.subtotal))
   const couponDiscount = round2(Math.min(Math.max(0, input.couponDiscount ?? 0), subtotal))
@@ -63,12 +69,8 @@ export function computeOrderTotals(input: {
   const discount = round2(Math.min(couponDiscount + paymentDiscount, subtotal))
   const taxableAmount = round2(subtotal - discount)
   const tax = round2((taxableAmount * VAT_RATE) / 100)
-  const shipping = subtotal === 0 || subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE
+  const shipping = subtotal === 0 ? 0 : round2(Math.max(0, input.shippingFee))
   const total = round2(taxableAmount + tax + shipping)
   return { subtotal, couponDiscount, paymentDiscount, discount, taxableAmount, tax, shipping, total }
 }
 
-/** Ücretsiz kargo için kalan tutar (0 ise ücretsiz kargo kazanıldı). */
-export function amountToFreeShipping(subtotal: number): number {
-  return subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : round2(FREE_SHIPPING_THRESHOLD - subtotal)
-}

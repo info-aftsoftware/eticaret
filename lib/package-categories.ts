@@ -6,6 +6,8 @@
   objectPosition?: string
   imageAlt: string
   description: string
+  /** İngilizce kısa ad ve kart açıklaması (ana sayfa kartları) */
+  en: { shortTitle: string; description: string }
   seoTitle: string
   seoDescription: string
   keywords: string[]
@@ -32,6 +34,7 @@
 export const PACKAGE_CATEGORIES: PackageCategory[] = [
   {
     slug: 'bag-evi-paketleri',
+    en: { shortTitle: 'Country House', description: 'Off-grid solar packages for country and holiday homes.' },
     title: 'Bağ Evi Paketleri',
     shortTitle: 'Bağ Evi',
     image: '/images/packages/custom/bahce.jpg',
@@ -60,6 +63,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'sulama-paketleri',
+    en: { shortTitle: 'Irrigation', description: 'Durable solar packages for agricultural irrigation.' },
     title: 'Sulama Paketleri',
     shortTitle: 'Sulama',
     image: '/images/packages/custom/tarla.webp',
@@ -88,6 +92,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'karavan-paketleri',
+    en: { shortTitle: 'Caravan', description: 'Portable energy packages for caravans and mobile living.' },
     title: 'Karavan Paketleri',
     shortTitle: 'Karavan',
     image: '/images/packages/custom/karavan.webp',
@@ -116,6 +121,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'villa-paketleri',
+    en: { shortTitle: 'Villa', description: 'Hybrid energy packages for high-consumption villas.' },
     title: 'Villa Paketleri',
     shortTitle: 'Villa',
     image: '/images/packages/custom/villa.jpg',
@@ -144,6 +150,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'marin-paketleri',
+    en: { shortTitle: 'Marine', description: 'Low-voltage energy packages for boats and marine use.' },
     title: 'Marin Paketleri',
     shortTitle: 'Marin',
     image: '/images/packages/custom/marin.webp',

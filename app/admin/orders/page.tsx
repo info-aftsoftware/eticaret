@@ -28,6 +28,7 @@ type ListResponse = { orders: AdminOrderRow[]; total: number; page: number; page
 const TABS = [
   { value: 'all', label: 'Tümü' },
   { value: 'awaiting_payment', label: 'Ödeme bekleyen', tone: 'yellow' as const },
+  { value: 'awaiting_transfer', label: 'Havale/EFT onayı', tone: 'yellow' as const },
   { value: 'to_prepare', label: 'Hazırlanacak', tone: 'yellow' as const },
   { value: 'picking', label: 'Hazırlanıyor', tone: 'yellow' as const },
   { value: 'shipped', label: 'Kargoda' },

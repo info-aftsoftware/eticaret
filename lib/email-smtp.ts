@@ -67,6 +67,13 @@ export interface EmailAttachment {
   contentType: string
 }
 
+/** SMTP_FROM içindeki adres ("Ad" <adres> veya yalın adres); yoksa SMTP_USER */
+function senderAddress(): string {
+  const from = process.env.SMTP_FROM || ''
+  const m = from.match(/<([^>]+)>/)
+  return (m ? m[1] : from.trim()) || process.env.SMTP_USER || ''
+}
+
 export async function sendEmailSMTP(
   to: string,
   subject: string,
@@ -101,7 +108,8 @@ export async function sendEmailSMTP(
     }
 
     const mailOptions: SendMailOptions = {
-      from: process.env.SMTP_FROM || `"Voltekno" <${process.env.SMTP_USER}>`,
+      // Görünen ad SMTP_FROM_NAME (varsayılan Voltekno); adres SMTP_FROM / SMTP_USER'dan (gönderim adresi sonra değişecek)
+      from: `"${process.env.SMTP_FROM_NAME || 'Voltekno'}" <${senderAddress()}>`,
       to: to,
       subject: subject,
       html: htmlContent,

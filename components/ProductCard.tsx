@@ -11,6 +11,8 @@ import type { ProductVariant } from '@/components/AddToCartButton'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { useFavorites } from '@/lib/useFavorites'
+import { useL } from '@/lib/i18n-inline'
+import { useTranslations } from 'next-intl'
 
 export interface ProductCardProduct {
   id: string
@@ -55,6 +57,10 @@ export function ProductCard({
   const addItem = useCartStore((s) => s.addItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const { addToast } = useToast()
+  const L = useL()
+  const tCart = useTranslations('addToCart')
+  const showStockLimit = () =>
+    addToast({ type: 'info', title: tCart('stockLimit'), description: tCart('stockLimitDesc', { maxQty: stock ?? 0 }) })
   const { isFavorite, toggle } = useFavorites()
   const isCompact = variant === 'compact'
   const [imageError, setImageError] = useState(false)
@@ -104,14 +110,14 @@ export function ProductCard({
       image: product.image,
       category: product.category,
     })
-    if (added > 0) addToast({ type: 'success', title: 'Sepete eklendi', description: `${displayName} sepete eklendi.` })
-    else addToast({ type: 'info', title: 'Stok sınırı', description: `Bu üründen en fazla ${stock} adet alabilirsiniz.` })
+    if (added > 0) addToast({ type: 'success', title: tCart('addedToCart'), description: displayName })
+    else showStockLimit()
   }
 
   const handleIncrease = (e: React.MouseEvent) => {
     stop(e)
     if (atMax) {
-      addToast({ type: 'info', title: 'Stok sınırı', description: `Bu üründen en fazla ${stock} adet alabilirsiniz.` })
+      showStockLimit()
       return
     }
     updateQuantity(cartId, quantity + 1)
@@ -129,12 +135,12 @@ export function ProductCard({
       addToast({
         type: 'success',
         variant: 'snackbar',
-        title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı',
-        action: added ? { label: 'Favorilere git', href: '/favorites' } : undefined,
+        title: added ? L('Favorilere eklendi', 'Added to favorites') : L('Favorilerden çıkarıldı', 'Removed from favorites'),
+        action: added ? { label: L('Favorilere git', 'View favorites'), href: '/favorites' } : undefined,
         duration: 4000,
       })
     } catch {
-      addToast({ type: 'error', title: 'Favori kaydedilemedi', description: 'Lütfen tekrar deneyin.' })
+      addToast({ type: 'error', title: L('Favori kaydedilemedi', 'Could not save favorite'), description: L('Lütfen tekrar deneyin.', 'Please try again.') })
     }
   }
 
@@ -210,7 +216,7 @@ export function ProductCard({
       <button
         type="button"
         onClick={handleFavorite}
-        aria-label={favorited ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+        aria-label={favorited ? L('Favorilerden çıkar', 'Remove from favorites') : L('Favorilere ekle', 'Add to favorites')}
         aria-pressed={favorited}
         className={`absolute right-2 top-2 z-10 flex h-9 w-9 !min-h-0 !min-w-0 items-center justify-center rounded-full border shadow-sm transition-colors touch-manipulation ${
           favorited
@@ -232,7 +238,7 @@ export function ProductCard({
             href={href}
             className={`${btnBase} border border-[#d3d9e1] bg-white text-[#0b2540] hover:border-[#0b2540] hover:bg-[#0b2540] hover:text-white [@media(hover:hover)]:group-hover:border-[#0b2540]`}
           >
-            <span>Seçenekleri Gör</span>
+            <span>{L('Seçenekleri Gör', 'View Options')}</span>
             <ChevronRight className={`${icon} shrink-0`} />
           </Link>
         ) : isInCart ? (
@@ -266,7 +272,7 @@ export function ProductCard({
             aria-label={`${product.name} sepete ekle`}
           >
             <ShoppingCart className={`${icon} shrink-0`} />
-            <span>Sepete Ekle</span>
+            <span>{tCart('addToCart')}</span>
           </button>
         )}
       </div>

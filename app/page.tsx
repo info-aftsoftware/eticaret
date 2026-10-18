@@ -11,6 +11,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { mockProducts } from '@/lib/products-mock'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { useTranslations } from 'next-intl'
+import { useL } from '@/lib/i18n-inline'
 import { HeroSlider } from '@/components/home/HeroSlider'
 import { BrandStrip } from '@/components/home/BrandStrip'
 import { CategoryShowcase } from '@/components/home/CategoryShowcase'
@@ -56,6 +57,8 @@ function getFeaturedRowProducts(products: MockProduct[] = mockProducts): MockPro
 
 export default function HomePage() {
   const t = useTranslations('home')
+  const tHeader = useTranslations('header')
+  const L = useL()
   const [allProducts, setAllProducts] = useState(mockProducts)
   const featuredRowProducts = useMemo(() => getFeaturedRowProducts(allProducts), [allProducts])
 
@@ -76,7 +79,7 @@ export default function HomePage() {
   return (
     <div className="w-full max-w-full min-w-0 overflow-x-hidden">
       {/* Slayt başlıkları döndüğü için sayfanın tek H1'i görünmez; arama motoru ve ekran okuyucu içindir */}
-      <h1 className="sr-only">voltekno — Güneş Paneli, Akü, Solar İnverter ve Enerji Sistemleri</h1>
+      <h1 className="sr-only">{L('voltekno — Güneş Paneli, Akü, Solar İnverter ve Enerji Sistemleri', 'voltekno — Solar Panels, Batteries, Solar Inverters and Energy Systems')}</h1>
 
       {/* ─── 1. HERO SLIDER (voltekno.com yapısı) ─────────────────────────── */}
       <HeroSlider />
@@ -89,9 +92,9 @@ export default function HomePage() {
         <div className={containerClass}>
           <header className="mb-6 md:mb-8">
             <h2 id="popular-products-heading" className={sectionTitleClass}>
-              Popüler Ürünler
+              {L('Popüler Ürünler', 'Popular Products')}
             </h2>
-            <p className={sectionDescClass}>Müşterilerimizin en çok satın aldığı ürünler.</p>
+            <p className={sectionDescClass}>{L('Müşterilerimizin en çok satın aldığı ürünler.', 'Our customers’ most purchased products.')}</p>
           </header>
           {featuredRowProducts.length === 0 ? (
             <p className="text-slate-500 py-8">{t('noProductsYet')}</p>
@@ -131,11 +134,11 @@ export default function HomePage() {
         <div className={containerClass}>
           <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <h2 id="featured-grid-heading" className={sectionTitleClass}>Öne Çıkan Ürünler</h2>
-              <p className={sectionDescClass}>En çok tercih edilen ve en yüksek puanlı ürünler.</p>
+              <h2 id="featured-grid-heading" className={sectionTitleClass}>{t('featuredProducts')}</h2>
+              <p className={sectionDescClass}>{L('En çok tercih edilen ve en yüksek puanlı ürünler.', 'Most preferred and top-rated products.')}</p>
             </div>
             <Link href="/products" className="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
-              Tüm Ürünler <ArrowUpRight className="w-4 h-4" />
+              {tHeader('allProducts')} <ArrowUpRight className="w-4 h-4" />
             </Link>
           </header>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
@@ -169,11 +172,11 @@ export default function HomePage() {
         <div className={containerClass}>
           <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div>
-              <h2 id="use-cases-heading" className={sectionTitleClass}>Hangi İhtiyaç İçin?</h2>
-              <p className={sectionDescClass}>Kullanım alanınıza özel hazırlanmış enerji çözümleri.</p>
+              <h2 id="use-cases-heading" className={sectionTitleClass}>{L('Hangi İhtiyaç İçin?', 'Solutions by Use')}</h2>
+              <p className={sectionDescClass}>{L('Kullanım alanınıza özel hazırlanmış enerji çözümleri.', 'Energy solutions prepared for your application.')}</p>
             </div>
             <Link href="/paketler" className="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
-              Tüm Paketler <ArrowUpRight className="w-4 h-4" />
+              {L('Tüm Paketler', 'All Packages')} <ArrowUpRight className="w-4 h-4" />
             </Link>
           </header>
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -196,11 +199,11 @@ export default function HomePage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                      <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-white/55 mb-1">Enerji Paketi</span>
-                      <p className="text-white font-bold text-sm leading-tight">{item.shortTitle} Paketleri</p>
-                      <p className="text-white/70 text-xs mt-0.5 line-clamp-2">{item.description}</p>
+                      <span className="inline-block text-[9px] font-bold uppercase tracking-widest text-white/55 mb-1">{L('Enerji Paketi', 'Energy Package')}</span>
+                      <p className="text-white font-bold text-sm leading-tight">{L(`${item.shortTitle} Paketleri`, `${item.en.shortTitle} Packages`)}</p>
+                      <p className="text-white/70 text-xs mt-0.5 line-clamp-2">{L(item.description, item.en.description)}</p>
                       <span className="inline-flex items-center gap-1 text-white/80 text-xs mt-2 font-semibold">
-                        İncele <ArrowRight className="w-3 h-3" />
+                        {L('İncele', 'View')} <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
                   </div>

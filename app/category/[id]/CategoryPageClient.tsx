@@ -12,7 +12,8 @@ import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
-import { getCategoryValuesByGroupId } from '@/lib/categories'
+import { getCategoryValuesByGroupId, getCategoryKey, CATEGORY_GROUPS } from '@/lib/categories'
+import { useL } from '@/lib/i18n-inline'
 import { buildSpecFacets } from '@/lib/spec-facets'
 import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 import { ProductPageShell } from '@/components/ProductPageShell'
@@ -47,6 +48,15 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   }, [])
 
   const meta = CATEGORY_META[groupId]
+  const tHeader = useTranslations('header')
+  const L = useL()
+  const groupLabelKey = CATEGORY_GROUPS.find((g) => g.id === groupId)?.labelKey
+  /** Başlık ve alt kategori adları seçili dilde (Türkçede SEO başlığı, İngilizcede çeviri) */
+  const title = L(meta?.title ?? '', groupLabelKey ? tHeader(groupLabelKey) : meta?.title ?? '')
+  const subLabel = (v: string) => {
+    const k = getCategoryKey(v)
+    return k ? tHeader(k) : v
+  }
   const categoryValues = useMemo(() => getCategoryValuesByGroupId(groupId), [groupId])
   const heroImages = useMemo(() => {
     const inGroup = catalog.filter((p) => categoryValues.includes(p.category) && p.image && p.image !== PLACEHOLDER_PRODUCT_IMAGE)
@@ -191,10 +201,10 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent" aria-hidden />
           <div className={`${PAGE_CONTAINER} relative z-10 pt-10 pb-7 sm:pb-10 md:pb-12 text-white`}>
             <h1 className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold mb-2 tracking-tight leading-tight">
-              {meta.title}
+              {title}
             </h1>
             <p className="text-white/75 text-sm sm:text-base max-w-lg leading-relaxed font-light">
-              {meta.description}
+              {L(meta.description, `${title}: original, invoiced products with technical support and fast delivery.`)}
             </p>
 
             <div className="mt-4 flex items-center gap-3">
@@ -212,7 +222,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
           <ChevronRight className="w-3 h-3" />
           <Link href="/products" className="hover:text-slate-900 transition-colors">{tCommon('products')}</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-slate-900 font-semibold">{meta.title}</span>
+          <span className="text-slate-900 font-semibold">{title}</span>
         </nav>
       }
     >
@@ -261,7 +271,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                               onClick={() => { setSelectedSub(isSelected ? null : sub); setFilterOpen(false) }}
                               className={`w-full flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${isSelected ? 'bg-brand text-white shadow-sm' : 'text-slate-700 hover:bg-slate-100'}`}
                             >
-                              <span className="truncate text-left">{sub}</span>
+                              <span className="truncate text-left">{subLabel(sub)}</span>
                               {isSelected && <ChevronRight className="w-4 h-4 shrink-0" />}
                             </button>
                           </li>
@@ -420,7 +430,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                               onClick={() => setSelectedSub(isSelected ? null : sub)}
                               className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isSelected ? 'bg-brand text-white' : 'text-slate-600 hover:bg-slate-100'}`}
                             >
-                              <span className="truncate text-left">{sub}</span>
+                              <span className="truncate text-left">{subLabel(sub)}</span>
                               {isSelected && <ChevronRight className="w-4 h-4 shrink-0" />}
                             </button>
                           </li>

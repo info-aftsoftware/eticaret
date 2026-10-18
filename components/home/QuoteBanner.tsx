@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Ana sayfanın son bölümü — voltekno.com'daki "GES projeniz için teklif alın" bandının görsel düzeni:
@@ -9,6 +10,7 @@ import { PAGE_CONTAINER } from '@/lib/page-container'
  * Yükseklik: masaüstü 600 px (16:9 ile sınırlı), 768 px ve altı kare.
  */
 export function QuoteBanner() {
+  const L = useL()
   return (
     <section aria-labelledby="quote-cta-heading" className="bg-white">
       <div className={`${PAGE_CONTAINER} pt-6 pb-12 min-[901px]:pb-16`}>
@@ -24,13 +26,13 @@ export function QuoteBanner() {
           <div className="absolute inset-0 flex items-center p-6">
             <div className="max-w-[640px]">
               <h2 id="quote-cta-heading" className="text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[40px] font-semibold leading-tight text-white mb-5 min-[769px]:mb-6">
-                Enerji Faturanızı Düşürmeye Hazır mısınız?
+                {L('Enerji Faturanızı Düşürmeye Hazır mısınız?', 'Ready to Cut Your Energy Bill?')}
               </h2>
               <Link
                 href="/ges"
                 className="inline-flex items-center justify-center h-11 min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-[15px] font-semibold transition-colors"
               >
-                TEKLİF AL
+                {L('TEKLİF AL', 'GET A QUOTE')}
               </Link>
             </div>
           </div>

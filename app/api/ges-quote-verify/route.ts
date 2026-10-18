@@ -15,7 +15,6 @@ const PERFORMANCE_GUARANTEE_MIN = 80
 
 function computeRedFlags(body: Record<string, unknown>): string[] {
   const flags: string[] = []
-  const companyName = typeof body.companyName === 'string' ? body.companyName.trim() : ''
   const panelBrandModel = typeof body.panelBrandModel === 'string' ? body.panelBrandModel.trim() : ''
   const panelWatt = typeof body.panelWatt === 'number' ? body.panelWatt : null
   const panelCount = typeof body.panelCount === 'number' ? body.panelCount : null
@@ -26,9 +25,6 @@ function computeRedFlags(body: Record<string, unknown>): string[] {
   const paybackYearsQuoted = typeof body.paybackYearsQuoted === 'number' ? body.paybackYearsQuoted : null
   const warrantyPerformance25Pct = typeof body.warrantyPerformance25Pct === 'number' ? body.warrantyPerformance25Pct : null
 
-  if (!companyName || companyName.length < 2) {
-    flags.push('Teklifi veren firma adı belirtilmemiş veya çok kısa.')
-  }
   if (!panelBrandModel || panelBrandModel.length < 2) {
     flags.push('Panel markası / modeli belirtilmemiş.')
   }
@@ -72,12 +68,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
 
     const companyName = typeof body.companyName === 'string' ? body.companyName.trim() : ''
-    if (!companyName || companyName.length < 2) {
-      return NextResponse.json(
-        { success: false, error: 'Teklifi veren firma adı en az 2 karakter olmalıdır.' },
-        { status: 400 }
-      )
-    }
+    // Firma adı isteğe bağlı
 
     const quoteDate = body.quoteDate
       ? new Date(body.quoteDate)

@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { trackViewItem, grossPrice } from '@/lib/analytics'
+import { trackViewItem } from '@/lib/analytics'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Package, ChevronRight, Minus, Plus, ShoppingCart, Zap, ZoomIn, X, ChevronLeft } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
-import { BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import { BANK_TRANSFER_DISCOUNT_RATE, bankTransferGrossPrice, grossPrice } from '@/lib/store-config'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useCartStore } from '@/lib/store/useCartStore'
@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/accordion'
 import { ProductReviews } from '@/components/ProductReviews'
 import { ProductQA } from '@/components/ProductQA'
+import { useL } from '@/lib/i18n-inline'
 
 const mockProductsMap: Record<string, (typeof mockProducts)[number]> = {}
 mockProducts.forEach((p) => { mockProductsMap[p.id] = p })
@@ -79,6 +80,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const tProduct = useTranslations('productDetail')
   const tCart = useTranslations('addToCart')
   const tCommon = useTranslations('common')
+  const L = useL()
   const addItem = useCartStore((s) => s.addItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const [cartMounted, setCartMounted] = useState(false)
@@ -440,14 +442,14 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         {!!sp.discount && <span className="rounded bg-[#d6262c] px-1.5 py-0.5 text-[11.5px] font-bold text-white">%{sp.discount}</span>}
                         <span className="text-[12.5px] text-[#5d6e80]">
                           {sp.campaign!.name}
-                          {sp.campaign!.endsAt && ` · ${new Date(sp.campaign!.endsAt).toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })} tarihine kadar`}
+                          {sp.campaign!.endsAt && ` · ${new Date(sp.campaign!.endsAt).toLocaleDateString(L('tr-TR', 'en-GB'), { day: '2-digit', month: 'long' })}${L(' tarihine kadar', '')}`}
                         </span>
                       </div>
                     )}
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(price)}</span>
                       <span className="text-[13px] text-[#5d6e80]">
-                        +KDV · KDV dahil <span className="tabular-nums">{formatPrice(price * (1 + VAT_RATE / 100))}</span>
+                        {L('+KDV · KDV dahil', '+VAT · incl. VAT')} <span className="tabular-nums">{formatPrice(grossPrice(price))}</span>
                       </span>
                     </div>
                   </div>
@@ -458,7 +460,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
               <dl className="mt-5 border-y border-[#eef1f5] py-4 grid grid-cols-[112px_1fr] gap-y-2.5 text-[13.5px]">
                 {product.category && categoryLabel && (
                   <>
-                    <dt className="text-[#5d6e80]">Kategori</dt>
+                    <dt className="text-[#5d6e80]">{L('Kategori', 'Category')}</dt>
                     <dd>
                       <Link href={`/products?category=${encodeURIComponent(product.category)}`} className="text-[#0b2540] font-medium hover:underline underline-offset-2">
                         {categoryLabel}
@@ -468,24 +470,24 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 )}
                 {(effectiveVariant?.sku || product.sku) && (
                   <>
-                    <dt className="text-[#5d6e80]">Stok kodu</dt>
+                    <dt className="text-[#5d6e80]">{L('Stok kodu', 'SKU')}</dt>
                     <dd className="text-[#121926] font-medium break-all">{effectiveVariant?.sku || product.sku}</dd>
                   </>
                 )}
-                <dt className="text-[#5d6e80]">Stok</dt>
+                <dt className="text-[#5d6e80]">{L('Stok', 'Stock')}</dt>
                 <dd className={`font-semibold ${outOfStock ? 'text-[#d6262c]' : isLowStock ? 'text-amber-700' : 'text-emerald-700'}`}>
                   {outOfStock ? tProduct('soldOut') : isLowStock ? tProduct('lowStock', { stock }) : tProduct('inStock')}
                 </dd>
                 {!outOfStock && (
                   <>
-                    <dt className="text-[#5d6e80]">Havale/EFT</dt>
+                    <dt className="text-[#5d6e80]">{L('Havale/EFT', 'Bank transfer')}</dt>
                     <dd className="text-[#121926]">
                       <span className="font-semibold tabular-nums">
-                        {formatPrice((effectiveVariant ? effectiveVariant.price : product.price) * (1 + VAT_RATE / 100) * (1 - BANK_TRANSFER_DISCOUNT_RATE / 100))}
+                        {formatPrice(bankTransferGrossPrice(effectiveVariant ? effectiveVariant.price : product.price))}
                       </span>
-                      <span className="text-[#5d6e80]"> KDV dahil · %{BANK_TRANSFER_DISCOUNT_RATE} indirimli</span>
+                      <span className="text-[#5d6e80]"> {L(`KDV dahil · %${BANK_TRANSFER_DISCOUNT_RATE} indirimli`, `incl. VAT · ${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</span>
                     </dd>
-                    <dt className="text-[#5d6e80]">Teslimat</dt>
+                    <dt className="text-[#5d6e80]">{L('Teslimat', 'Delivery')}</dt>
                     <dd><DeliveryEstimate compact /></dd>
                   </>
                 )}
@@ -515,7 +517,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       <Minus className="w-4 h-4" />
                     </button>
                     <span className="flex-1 text-center text-[#0b2540] font-bold tabular-nums select-none" aria-live="polite">
-                      {cartQty} <span className="font-normal text-[13px] text-[#5d6e80]">sepette</span>
+                      {cartQty} <span className="font-normal text-[13px] text-[#5d6e80]">{L('sepette', 'in cart')}</span>
                     </span>
                     <button
                       type="button"
@@ -561,7 +563,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 if (compatProducts.length === 0) return null
                 return (
                   <section className="mt-7" aria-labelledby="compat-heading">
-                    <h2 id="compat-heading" className="text-[15px] font-bold text-[#121926] mb-1">Uyumlu ürünler</h2>
+                    <h2 id="compat-heading" className="text-[15px] font-bold text-[#121926] mb-1">{L('Uyumlu ürünler', 'Compatible products')}</h2>
                     {complementary.banner && <p className="text-[12.5px] text-[#5d6e80] leading-relaxed mb-3">{complementary.banner}</p>}
                     <ul className="mt-3 divide-y divide-[#eef1f5] border border-[#e6ebf1] rounded-lg">
                       {compatProducts.map((p) => (

@@ -28,11 +28,11 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import { getAddresses } from '@/lib/firebase/firestore'
 import {
   computeOrderTotals,
-  amountToFreeShipping,
   BANK_TRANSFER_DISCOUNT_RATE,
   BANK_TRANSFER_PAYMENT_DAYS,
   VAT_RATE,
 } from '@/lib/store-config'
+import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
 import {
   formatTrPhone,
@@ -384,13 +384,13 @@ export default function CheckoutPage() {
   }, [cartHydrated])
 
   // Sunucuyla aynı hesaplayıcı (lib/store-config): indirimler KDV matrahından düşülür
-  const totals = computeOrderTotals({
-    subtotal: cartTotal,
-    couponDiscount,
-    paymentMethod: paymentMethod === 'havale' ? 'bank_transfer' : 'card',
-  })
+  // Form alanlarına her tuşta yeniden hesaplanmasın
+  const shippingFee = useMemo(() => shippingFeeFor(cartLogistics(cartItems)), [cartItems])
+  const totals = useMemo(
+    () => computeOrderTotals({ subtotal: cartTotal, couponDiscount, paymentMethod: paymentMethod === 'havale' ? 'bank_transfer' : 'card', shippingFee }),
+    [cartTotal, couponDiscount, paymentMethod, shippingFee]
+  )
   const { subtotal, tax, shipping, total, paymentDiscount } = totals
-  const toFreeShipping = amountToFreeShipping(subtotal)
   const itemCount = cartItems.reduce((n, i) => n + i.quantity, 0)
 
   /** Sipariş oluştu ve sayfadan ayrılınıyor (banka / başarı sayfası): sepet boşalınca /cart'a atlamasın */
@@ -670,14 +670,9 @@ export default function CheckoutPage() {
       <div className="flex justify-between gap-3">
         <dt className="text-[#5d6e80]">Kargo</dt>
         <dd className="font-medium tabular-nums">
-          {shipping === 0 ? <span className="text-emerald-700">Ücretsiz</span> : <span className="text-[#121926]">{formatPrice(shipping)}</span>}
+          <span className="text-[#121926]">{formatPrice(shipping)}</span>
         </dd>
       </div>
-      {toFreeShipping > 0 && (
-        <p className="rounded-lg bg-[#fff8e1] px-3 py-2 text-[13px] text-[#6b5200]">
-          <strong className="font-semibold">{formatPrice(toFreeShipping)}</strong> daha ekleyin, kargo ücretsiz olsun.
-        </p>
-      )}
       <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-3">
         <dt className="text-base font-semibold text-[#121926]">Toplam <span className="text-xs font-normal text-[#5d6e80]">(KDV dahil)</span></dt>
         <dd className="text-xl font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</dd>

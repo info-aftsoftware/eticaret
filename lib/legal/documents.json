@@ -135,7 +135,7 @@
   },
   "mesafeli-satis-sozlesmesi": {
     "title": "Mesafeli Satış Sözleşmesi",
-    "updated": "02.10.2026",
+    "updated": "18.10.2026",
     "blocks": [
       {
         "t": "h",
@@ -199,19 +199,23 @@
       },
       {
         "t": "p",
-        "x": "3.1. Ürünün/ürünlerin cinsi, türü, marka-modeli, adedi, KDV dahil satış fiyatı, ödeme şekli, kargo/teslimat bedeli ve toplam tutar, siparişin onaylandığı anda sipariş özetinde ve Alıcı'ya gönderilen sipariş onay e-postasında yer aldığı şekildedir. Bu bilgiler işbu Sözleşme'nin ayrılmaz parçasıdır."
+        "x": "3.1. Ürünün/ürünlerin cinsi, türü, marka-modeli, varyantı, adedi, birim ve toplam satış fiyatı, KDV tutarı, ödeme şekli, kargo/teslimat bedeli, varsa indirimler ve ödenecek toplam tutar, siparişin onaylandığı anda sipariş özetinde ve Alıcı'ya gönderilen sipariş onay e-postasında yer aldığı şekildedir. Bu bilgiler işbu Sözleşme'nin ayrılmaz parçasıdır."
       },
       {
         "t": "p",
-        "x": "3.2. Site'de ilan edilen fiyatlar, aksi belirtilmedikçe KDV dahil Türk Lirası fiyatlarıdır. İlan edilen fiyatlar ve vaatler güncelleme yapılana ve değiştirilene kadar geçerlidir. Süreli olarak ilan edilen fiyatlar ise belirtilen süre sonuna kadar geçerlidir."
+        "x": "3.2. Site'de ürün fiyatları KDV hariç olarak ve KDV dahil karşılığıyla birlikte Türk Lirası cinsinden gösterilir. Döviz cinsinden belirlenen fiyatlar Türkiye Cumhuriyet Merkez Bankası güncel döviz satış kuru ile Türk Lirası'na çevrilir; siparişin onaylandığı andaki fiyat sözleşme fiyatıdır ve sonradan kur değişikliği gerekçesiyle değiştirilmez."
       },
       {
         "t": "p",
-        "x": "3.3. Kargo/teslimat ücreti, sipariş özetinde ayrıca gösterilir ve Alıcı tarafından ödenir; Site'de ücretsiz kargo kampanyası ilan edilmişse kampanya koşulları uygulanır."
+        "x": "3.3. Kargo bedeli, sepetteki ürünlerin toplam desi (hacim ağırlığı) ve ağırlığına göre anlaşmalı kargo firmalarının güncel tarifesiyle hesaplanır ve sipariş özetinde KDV dahil olarak ayrıca gösterilir. Hacimli ve ağır ürünlerin ambar/nakliye ile gönderilmesi halinde teslimat şekli Alıcı'ya ayrıca bildirilir."
       },
       {
         "t": "p",
-        "x": "3.4. Taksitli ödemeler, ilgili banka ve ödeme kuruluşunun koşullarına tabidir. Taksit tutarları ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
+        "x": "3.4. Havale/EFT ile ödemede ara toplam üzerinden %3 indirim uygulanır; ödeme açıklamasına sipariş numarasının yazılması gerekir. Sipariş tarihinden itibaren 3 gün içinde ödemesi alınmayan siparişler iptal edilebilir."
+      },
+      {
+        "t": "p",
+        "x": "3.5. Kredi kartı/banka kartı ile ödemeler bankanın 3D Secure ortamında alınır. Taksitli ödemeler ilgili banka ve ödeme kuruluşunun koşullarına tabidir; taksit tutarları ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
       },
       {
         "t": "h",
@@ -355,7 +359,27 @@
       },
       {
         "t": "h",
-        "x": "10. YÜRÜRLÜK"
+        "x": "10. MÜCBİR SEBEP"
+      },
+      {
+        "t": "p",
+        "x": "Tarafların kontrolü dışında gelişen; doğal afet, salgın, savaş, terör, grev, lokavt, resmi makamların kararları, kargo ve lojistik altyapısında yaşanan genel aksaklıklar ile üretici kaynaklı tedarik kesintileri gibi öngörülemeyen haller mücbir sebep sayılır. Mücbir sebep süresince tarafların edimleri askıya alınır; Satıcı bu durumu Alıcı'ya derhal bildirir. Mücbir sebebin 30 (otuz) günden fazla sürmesi halinde Alıcı sözleşmeden dönebilir ve ödediği tüm bedel 14 (on dört) gün içinde iade edilir."
+      },
+      {
+        "t": "h",
+        "x": "11. BİLDİRİMLER VE DELİL SÖZLEŞMESİ"
+      },
+      {
+        "t": "p",
+        "x": "11.1. Taraflar arasındaki bildirimler, Alıcı'nın sipariş sırasında beyan ettiği e-posta adresi ve telefon numarası ile Satıcı'nın işbu Sözleşme'de belirtilen iletişim bilgileri üzerinden yapılır. Alıcı, iletişim bilgilerindeki değişiklikleri Satıcı'ya bildirmekle yükümlüdür."
+      },
+      {
+        "t": "p",
+        "x": "11.2. Taraflar, işbu Sözleşme'den doğabilecek uyuşmazlıklarda Satıcı'nın elektronik kayıtlarının, sipariş ve onay kayıtlarının, e-posta yazışmalarının ve bilgisayar kayıtlarının 6100 sayılı Hukuk Muhakemeleri Kanunu'nun 193. maddesi uyarınca geçerli delil teşkil edeceğini kabul eder; Alıcı'nın bu kayıtlara karşı ispat hakkı saklıdır."
+      },
+      {
+        "t": "h",
+        "x": "12. YÜRÜRLÜK"
       },
       {
         "t": "p",
@@ -507,19 +531,23 @@
   },
   "on-bilgilendirme-formu": {
     "title": "Ön Bilgilendirme Formu",
-    "updated": "02.10.2026",
+    "updated": "18.10.2026",
     "blocks": [
       {
         "t": "p",
-        "x": "İşbu Ön Bilgilendirme Formu, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca, mesafeli satış sözleşmesi kurulmadan önce Alıcı'nın bilgilendirilmesi amacıyla düzenlenmiştir."
+        "x": "İşbu Ön Bilgilendirme Formu (\"Form\"), 6502 sayılı Tüketicinin Korunması Hakkında Kanun (\"Kanun\") ve 27.11.2014 tarihli Resmî Gazete'de yayımlanan Mesafeli Sözleşmeler Yönetmeliği (\"Yönetmelik\") uyarınca, voltekno.com internet sitesi (\"Site\") üzerinden kurulacak mesafeli satış sözleşmesinden önce Alıcı'nın açık, anlaşılır ve eksiksiz biçimde bilgilendirilmesi amacıyla hazırlanmıştır."
+      },
+      {
+        "t": "p",
+        "x": "Alıcı, siparişini onaylamadan önce bu Form'u okuduğunu, içeriğini anladığını ve sözleşme kurulmadan önce Satıcı tarafından bilgilendirildiğini kabul eder. Form'un bir örneği sipariş onayından sonra Alıcı'nın e-posta adresine kalıcı veri saklayıcısıyla (PDF) gönderilir."
       },
       {
         "t": "h",
-        "x": "1. SATICI BİLGİLERİ"
+        "x": "1. SATICIYA İLİŞKİN BİLGİLER"
       },
       {
         "t": "li",
-        "x": "Ticaret Unvanı: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\")"
+        "x": "Ticaret Unvanı: AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ (\"Voltekno\" veya \"Satıcı\")"
       },
       {
         "t": "li",
@@ -546,92 +574,188 @@
         "x": "KEP Adresi: afetteknoloji@hs01.kep.tr"
       },
       {
-        "t": "h",
-        "x": "2. ALICI BİLGİLERİ"
-      },
-      {
-        "t": "p",
-        "x": "Sipariş sırasında Alıcı tarafından beyan edilen ad-soyad/unvan, adres, telefon ve e-posta bilgileridir."
+        "t": "li",
+        "x": "İnternet Sitesi: voltekno.com"
       },
       {
         "t": "h",
-        "x": "3. ÜRÜNÜN TEMEL NİTELİKLERİ VE FİYATI"
+        "x": "2. ALICIYA İLİŞKİN BİLGİLER"
       },
       {
         "t": "p",
-        "x": "3.1. Ürünün/ürünlerin temel nitelikleri (cinsi, türü, marka-modeli, teknik özellikleri, adedi) ürün sayfasında ve sipariş özetinde yer almaktadır."
-      },
-      {
-        "t": "p",
-        "x": "3.2. Ürünün KDV dahil satış fiyatı, teslimat/kargo bedeli, varsa indirimler ve ödenecek toplam tutar, ödeme adımında sipariş özetinde gösterilir."
-      },
-      {
-        "t": "p",
-        "x": "3.3. Ödeme; kredi kartı, banka kartı ve ödeme adımında sunulan diğer yöntemlerle yapılabilir. Taksit seçenekleri ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
+        "x": "Alıcı; Site üzerinden sipariş veren gerçek veya tüzel kişidir. Alıcı'nın ad-soyad/unvan, teslimat ve fatura adresi, telefon ve e-posta bilgileri sipariş sırasında Alıcı tarafından beyan edilen bilgilerdir. Alıcı, verdiği bilgilerin doğru ve güncel olduğunu; yanlış veya eksik bilgiden doğabilecek gecikme ve aksaklıklardan kendisinin sorumlu olduğunu kabul eder."
       },
       {
         "t": "h",
-        "x": "4. TESLİMAT"
+        "x": "3. SÖZLEŞME KONUSU ÜRÜN VE HİZMETLERİN TEMEL NİTELİKLERİ"
       },
       {
         "t": "p",
-        "x": "4.1. Ürün, ürün sayfasında belirtilen süre içinde ve her halükarda yasal 30 (otuz) günlük süreyi aşmamak kaydıyla, Satıcı'nın çalıştığı kargo firmalarından biri ile Alıcı'nın belirttiği teslimat adresine gönderilir."
+        "x": "3.1. Sözleşme konusu ürünün/ürünlerin cinsi, türü, marka ve modeli, teknik özellikleri, varyantı (güç, kapasite vb.) ve adedi ürün sayfasında ve ödeme adımındaki sipariş özetinde belirtilmiştir. Ürün görselleri bilgilendirme amaçlıdır; renk ve görünümde ekran ayarlarından kaynaklanan farklılıklar olabilir."
       },
       {
         "t": "p",
-        "x": "4.2. Hacimli ve ağır ürünlerde (güneş paneli, akü, batarya grupları vb.) teslimat, ambar/nakliye firması aracılığıyla yapılabilir; bu durumda teslimat şekli ve süresi Alıcı'ya ayrıca bildirilir."
+        "x": "3.2. Teknik özellikler üretici tarafından yayımlanan belgelere dayanır. Satıcı, üreticinin model güncellemelerinden kaynaklanan ve ürünün temel niteliğini değiştirmeyen farklılıklar hakkında Alıcı'yı bilgilendirir."
+      },
+      {
+        "t": "p",
+        "x": "3.3. Kurulum, devreye alma, proje veya keşif gibi hizmetler ürün satışına dahil değildir; bu hizmetler talep edilmesi halinde ayrıca tekliflendirilir."
       },
       {
         "t": "h",
-        "x": "5. CAYMA HAKKI"
+        "x": "4. FİYAT, VERGİLER VE ÖDEME"
       },
       {
         "t": "p",
-        "x": "5.1. Alıcı, ürünün teslim tarihinden itibaren 14 (on dört) gün içinde hiçbir gerekçe göstermeksizin ve cezai şart ödemeksizin sözleşmeden cayma hakkına sahiptir."
+        "x": "4.1. Ürün fiyatları Türk Lirası olarak gösterilir. Ürün sayfasında KDV hariç fiyat ve KDV dahil karşılığı birlikte yer alır; ödenecek toplam tutar, KDV (%20), kargo bedeli ve varsa indirimler ödeme adımındaki sipariş özetinde ayrı ayrı gösterilir."
       },
       {
         "t": "p",
-        "x": "5.2. Cayma bildirimi, süre içinde info@voltekno.com adresine e-posta ile, +90 551 829 16 13 numaralı telefona veya Site'deki \"Hesabım > Siparişlerim\" bölümü üzerinden yapılabilir."
+        "x": "4.2. Döviz cinsinden belirlenen ürün fiyatları, Türkiye Cumhuriyet Merkez Bankası güncel döviz satış kuru esas alınarak Türk Lirası'na çevrilir. Siparişin onaylandığı andaki fiyat, sözleşme fiyatıdır; sipariş sonrasında kur değişikliği gerekçesiyle fiyat değiştirilmez."
       },
       {
         "t": "p",
-        "x": "5.3. Alıcı, cayma bildiriminden itibaren 10 (on) gün içinde ürünü faturası ve tüm aksesuarlarıyla birlikte şu adrese göndermelidir: AFET TEKNOLOJİLERİ TİC. VE SAN. LTD. ŞTİ. – Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ"
+        "x": "4.3. Ödeme yöntemleri: (a) Havale/EFT ile ödeme: Sipariş sonrasında Satıcı'nın banka hesap bilgileri (IBAN) ekranda ve e-posta ile iletilir; ödeme açıklamasına sipariş numarasının yazılması gerekir. Havale/EFT ile ödemelerde ara toplam üzerinden %3 indirim uygulanır. Sipariş tarihinden itibaren 3 gün içinde ödemesi alınmayan siparişler iptal edilebilir. (b) Kredi kartı / banka kartı ile ödeme: Ödeme, bankanın 3D Secure ortamında tamamlanır; kart bilgileri Satıcı tarafından saklanmaz."
       },
       {
         "t": "p",
-        "x": "5.4. Satıcı'nın iade için belirttiği kargo firması ve iade kodu ile yapılan gönderimlerde iade kargo bedeli Satıcı'ya aittir; Alıcı'nın kendi seçtiği farklı bir taşıyıcı ile yaptığı gönderimlerin bedeli Alıcı'ya aittir."
+        "x": "4.4. Taksitli ödemede taksit sayısı, varsa vade farkı ve toplam ödeme tutarı ödeme adımında Alıcı'ya gösterilir. Vade farkına ilişkin oranlar Alıcı'nın kartını çıkaran bankanın uygulamasına tabidir."
       },
       {
         "t": "p",
-        "x": "5.5. Satıcı, cayma bildiriminin kendisine ulaşmasından itibaren 14 (on dört) gün içinde, teslimat masrafları dahil tahsil edilen tüm bedeli Alıcı'nın kullandığı ödeme aracına iade eder."
-      },
-      {
-        "t": "p",
-        "x": "5.6. Alıcı'nın istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan ya da üzerinde değişiklik yapılan ürünler başta olmak üzere, Mesafeli Sözleşmeler Yönetmeliği'nin 15. maddesinde sayılan hallerde cayma hakkı kullanılamaz."
+        "x": "4.5. Satıcı'nın açık ve bariz bir hata sonucu (örneğin sistemsel bir hatayla gösterilen, ürünün piyasa değerinin çok altındaki fiyatlar) oluşan siparişlerde Alıcı derhal bilgilendirilir ve tahsil edilen bedel iade edilerek sipariş iptal edilebilir."
       },
       {
         "t": "h",
-        "x": "6. ŞİKÂYET VE İTİRAZLAR"
+        "x": "5. TESLİMAT VE KARGO"
       },
       {
         "t": "p",
-        "x": "Alıcı, talep ve şikâyetlerini yukarıdaki iletişim kanalları aracılığıyla Satıcı'ya iletebilir. Uyuşmazlık halinde Ticaret Bakanlığı'nca her yıl ilan edilen parasal sınırlar dahilinde Tüketici Hakem Heyetlerine, bu sınırları aşan durumlarda Tüketici Mahkemelerine başvurulabilir. Başvurular e-Devlet üzerinden Tüketici Bilgi Sistemi (TÜBİS) ile de yapılabilir."
+        "x": "5.1. Ürün, siparişin onaylanmasından (havale/EFT ile ödemelerde ödemenin hesaba geçmesinden) itibaren ürün sayfasında belirtilen tahmini süre içinde ve her halükarda yasal 30 (otuz) günlük süreyi aşmamak kaydıyla, Alıcı'nın bildirdiği teslimat adresine gönderilir."
+      },
+      {
+        "t": "p",
+        "x": "5.2. Kargo bedeli, sepetteki ürünlerin toplam desi (hacim ağırlığı) ve ağırlık bilgisine göre, anlaşmalı kargo firmalarının güncel tarifesi esas alınarak hesaplanır ve ödeme adımında sipariş özetinde KDV dahil olarak gösterilir."
+      },
+      {
+        "t": "p",
+        "x": "5.3. Hacimli ve ağır ürünler (güneş paneli paletleri, akü/batarya grupları, ısı pompası, rüzgar türbini, büyük güç sürücüleri vb.) ambar veya nakliye firması aracılığıyla, şehir merkezi teslim usulüyle gönderilebilir; bu durumda teslimat şekli ve tahmini süresi Alıcı'ya ayrıca bildirilir. Lityum aküler, tehlikeli madde taşımacılığı kurallarına (UN3480) uygun olarak paketlenir."
+      },
+      {
+        "t": "p",
+        "x": "5.4. Alıcı, teslimat sırasında paketi kargo görevlisinin yanında kontrol etmeli; hasarlı, ezik veya açılmış paketleri teslim almamalı ya da hasar tespit tutanağı düzenletmelidir. Tutanak düzenlenmeden teslim alınan ve taşımadan kaynaklandığı anlaşılan hasarlarda Alıcı'nın Satıcı'ya derhal bildirimde bulunması gerekir."
+      },
+      {
+        "t": "p",
+        "x": "5.5. Teslimatın, Alıcı'nın adreste bulunmaması veya yanlış adres bildirmesi nedeniyle gerçekleşememesi halinde doğacak ek masraflar Alıcı'ya aittir."
       },
       {
         "t": "h",
-        "x": "7. DİĞER HUSUSLAR"
+        "x": "6. CAYMA HAKKI"
       },
       {
         "t": "p",
-        "x": "7.1. Ayıplı mal halinde Alıcı, 6502 sayılı Kanun'un 11. maddesinde düzenlenen seçimlik haklarını kullanabilir. Ürünler, en az 2 (iki) yıllık yasal garanti kapsamındadır."
+        "x": "6.1. Alıcı, malın kendisine veya gösterdiği üçüncü kişiye teslim edildiği tarihten itibaren 14 (on dört) gün içinde, herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin sözleşmeden cayma hakkına sahiptir. Birden fazla ürünün ayrı ayrı teslim edildiği siparişlerde süre, son ürünün teslim tarihinden itibaren başlar."
       },
       {
         "t": "p",
-        "x": "7.2. Sipariş onaylandıktan sonra işbu form ve Mesafeli Satış Sözleşmesi Alıcı'nın e-posta adresine gönderilir ve Satıcı tarafından en az 3 (üç) yıl süreyle saklanır."
+        "x": "6.2. Cayma bildirimi, süre içinde info@voltekno.com adresine e-posta ile, +90 551 829 16 13 numaralı telefona veya Site'deki \"Hesabım > Siparişlerim\" ya da \"Sipariş Takibi\" bölümü üzerinden yapılabilir. Cayma hakkının süresi içinde kullanıldığını ispat yükü Alıcı'ya aittir."
       },
       {
         "t": "p",
-        "x": "7.3. Alıcı, işbu Ön Bilgilendirme Formu'nu okuduğunu, anladığını ve siparişi onaylamadan önce elektronik ortamda teyit ettiğini kabul eder."
+        "x": "6.3. Alıcı, cayma bildiriminden itibaren 10 (on) gün içinde ürünü; faturası, kutusu, ambalajı, aksesuarları, kullanım kılavuzu ve varsa promosyon ürünleriyle birlikte şu adrese göndermelidir: AFET TEKNOLOJİLERİ TİC. VE SAN. LTD. ŞTİ. – Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ."
+      },
+      {
+        "t": "p",
+        "x": "6.4. Satıcı'nın iade için belirttiği kargo firması ve iade kodu ile yapılan gönderimlerde iade kargo bedeli Satıcı'ya aittir. Alıcı'nın kendi seçtiği farklı bir taşıyıcı ile yaptığı gönderimlerin bedeli Alıcı'ya aittir."
+      },
+      {
+        "t": "p",
+        "x": "6.5. Satıcı, cayma bildiriminin kendisine ulaşmasından itibaren en geç 14 (on dört) gün içinde, teslimat masrafları dahil tahsil edilen tüm bedeli, Alıcı'nın satın alırken kullandığı ödeme aracına uygun şekilde ve Alıcı'ya herhangi bir masraf yüklemeden tek seferde iade eder. Satıcı, ürün kendisine ulaşana kadar iade yükümlülüğünü askıya alabilir."
+      },
+      {
+        "t": "p",
+        "x": "6.6. Ürünün, işleyişine, teknik özelliklerine ve kullanım talimatlarına uygun kullanım dışında kullanılması nedeniyle oluşan değer kaybından Alıcı sorumludur. Montajı yapılmış, devreye alınmış veya sisteme bağlanmış ürünlerde oluşan değer kaybı bu kapsamdadır."
+      },
+      {
+        "t": "h",
+        "x": "7. CAYMA HAKKININ KULLANILAMAYACAĞI HALLER"
+      },
+      {
+        "t": "p",
+        "x": "Yönetmelik'in 15. maddesi uyarınca aşağıdaki hallerde cayma hakkı kullanılamaz:"
+      },
+      {
+        "t": "li",
+        "x": "Fiyatı finansal piyasalardaki dalgalanmalara bağlı olarak değişen ve Satıcı'nın kontrolünde olmayan mal veya hizmetlere ilişkin sözleşmeler,"
+      },
+      {
+        "t": "li",
+        "x": "Alıcı'nın istekleri veya kişisel ihtiyaçları doğrultusunda hazırlanan mallara (özel konfigürasyonlu sistemler, ölçüye göre hazırlanan kablo setleri vb.) ilişkin sözleşmeler,"
+      },
+      {
+        "t": "li",
+        "x": "Çabuk bozulabilen veya son kullanma tarihi geçebilecek mallar,"
+      },
+      {
+        "t": "li",
+        "x": "Tesliminden sonra ambalaj, bant, mühür, paket gibi koruyucu unsurları açılmış olan ve iadesi sağlık ve hijyen açısından uygun olmayan mallar,"
+      },
+      {
+        "t": "li",
+        "x": "Tesliminden sonra başka ürünlerle karışan ve doğası gereği ayrıştırılması mümkün olmayan mallar,"
+      },
+      {
+        "t": "li",
+        "x": "Elektronik ortamda anında ifa edilen hizmetler veya Alıcı'ya anında teslim edilen gayrimaddi mallar (yazılım lisansı, aktivasyon kodu vb.),"
+      },
+      {
+        "t": "li",
+        "x": "Cayma hakkı süresi sona ermeden önce, Alıcı'nın onayı ile ifasına başlanan hizmetlere (kurulum, keşif, devreye alma) ilişkin sözleşmeler."
+      },
+      {
+        "t": "h",
+        "x": "8. AYIPLI MAL VE GARANTİ"
+      },
+      {
+        "t": "p",
+        "x": "8.1. Ürünler, faturalı ve üretici/distribütör garantili olarak satılır; yasal garanti süresi teslim tarihinden itibaren en az 2 (iki) yıldır. Üreticinin daha uzun garanti sunduğu ürünlerde (ör. panel performans garantisi) üreticinin garanti koşulları geçerlidir."
+      },
+      {
+        "t": "p",
+        "x": "8.2. Ayıplı mal halinde Alıcı, Kanun'un 11. maddesi uyarınca; sözleşmeden dönme, satış bedelinden indirim isteme, ücretsiz onarılmasını isteme veya imkân varsa ayıpsız bir misli ile değiştirilmesini isteme seçimlik haklarından birini kullanabilir."
+      },
+      {
+        "t": "p",
+        "x": "8.3. Yanlış montaj, uygun olmayan kablo/sigorta kullanımı, aşırı gerilim, yıldırım, su/nem teması, yetkisiz müdahale ve kullanım kılavuzuna aykırı kullanımdan kaynaklanan arızalar garanti kapsamı dışındadır."
+      },
+      {
+        "t": "h",
+        "x": "9. ŞİKÂYET VE İTİRAZLAR"
+      },
+      {
+        "t": "p",
+        "x": "Alıcı, talep ve şikâyetlerini yukarıda belirtilen iletişim kanalları aracılığıyla Satıcı'ya iletebilir. Uyuşmazlık halinde Ticaret Bakanlığı'nca her yıl ilan edilen parasal sınırlar dahilinde Alıcı'nın veya Satıcı'nın yerleşim yerindeki Tüketici Hakem Heyetlerine, bu sınırları aşan durumlarda Tüketici Mahkemelerine başvurulabilir. Başvurular e-Devlet üzerinden Tüketici Bilgi Sistemi (TÜBİS) aracılığıyla da yapılabilir."
+      },
+      {
+        "t": "h",
+        "x": "10. KİŞİSEL VERİLER"
+      },
+      {
+        "t": "p",
+        "x": "Alıcı'nın kişisel verileri, 6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında, siparişin kurulması ve ifası, faturalandırma, teslimat ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenir. Ayrıntılı bilgi Site'de yer alan KVKK Aydınlatma Metni ile Gizlilik ve Çerez Politikası'nda yer almaktadır."
+      },
+      {
+        "t": "h",
+        "x": "11. DİĞER HUSUSLAR"
+      },
+      {
+        "t": "p",
+        "x": "11.1. Sipariş onayıyla birlikte Alıcı, Ön Bilgilendirme Formu'nu ve Mesafeli Satış Sözleşmesi'ni elektronik ortamda okuyup onayladığını kabul eder. Satıcı, onay kayıtlarını ve sözleşme metnini yasal süre boyunca saklar."
+      },
+      {
+        "t": "p",
+        "x": "11.2. Bu Form, Mesafeli Satış Sözleşmesi'nin ayrılmaz bir parçasıdır. Form ile Sözleşme arasında çelişki olması halinde Alıcı lehine olan hüküm uygulanır."
       }
     ]
   },

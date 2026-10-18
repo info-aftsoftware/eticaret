@@ -628,6 +628,15 @@ def main():
         json.dump(details, f, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(OUT_DIR, 'descriptions.json'), 'w', encoding='utf-8') as f:
         json.dump(descriptions, f, ensure_ascii=False, separators=(',', ':'))
+    # Kargo hesabı için küçük harita (istemci sepeti + sunucu): sepet satır id'si -> [desi, kg]
+    # Basit ürün: ürün id; varyantlı ürün: "<ürün id>-<varyant key>" (sepetle aynı biçim) + ürün id (varsayılan varyant)
+    desi_map = {}
+    for p in products:
+        for v in p.get('variants') or []:
+            desi_map[f"{p['id']}-{v['key']}"] = [v.get('desi', 0), v.get('weightKg', 0)]
+        desi_map[p['id']] = [p.get('desi', 0), p.get('weightKg', 0)]
+    with open(os.path.join(OUT_DIR, 'desi.json'), 'w', encoding='utf-8') as f:
+        json.dump(desi_map, f, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(OUT_DIR, 'fx-snapshot.json'), 'w', encoding='utf-8') as f:
         json.dump({'USD': fx['USD'], 'EUR': fx['EUR'], 'date': fx_date, 'source': 'TCMB ForexSelling'}, f, indent=2)
         f.write('\n')

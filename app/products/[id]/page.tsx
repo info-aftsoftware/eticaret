@@ -4,7 +4,8 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import ProductDetailClient from './ProductDetailClient'
 import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discounts'
-import { computeOrderTotals, VAT_RATE } from '@/lib/store-config'
+import { VAT_RATE } from '@/lib/store-config'
+import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { SELLER } from '@/lib/legal/company'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 import { withDetails } from '@/lib/catalog-details'
@@ -94,7 +95,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
 function buildProductJsonLd(product: StorefrontProduct) {
   // Google: yapılandırılmış veri fiyatı sayfadaki satış fiyatıyla (KDV dahil) aynı olmalı
   const priceWithVat = Math.round(product.price * (1 + VAT_RATE / 100) * 100) / 100
-  const shippingFee = computeOrderTotals({ subtotal: product.price, paymentMethod: 'card' }).shipping
+  const shippingFee = shippingFeeFor(lineLogistics(product.id))
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
 

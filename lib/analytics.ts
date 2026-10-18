@@ -9,10 +9,10 @@
 import { logEvent } from 'firebase/analytics'
 import { getAnalytics, isFirebaseConfigured } from '@/lib/firebase/config'
 import { hasAnalyticsConsent } from '@/components/CookieConsent'
-import { VAT_RATE } from '@/lib/store-config'
 
-/** Mağaza fiyatları KDV hariç tutulur; GA4'e müşterinin gördüğü KDV dahil fiyat gönderilir. */
-export const grossPrice = (net: number) => Math.round(net * (1 + VAT_RATE / 100) * 100) / 100
+/** GA4'e müşterinin gördüğü KDV dahil fiyat gönderilir (hesap: lib/store-config) */
+import { grossPrice } from '@/lib/store-config'
+export { grossPrice }
 
 export type GaItem = {
   item_id: string

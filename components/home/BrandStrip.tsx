@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Markalar şeridi (voltekno.com "Markalar" bölümü + katalogdaki ek markalar).
@@ -25,11 +26,12 @@ const BRANDS = [
 ] as const
 
 export function BrandStrip() {
+  const L = useL()
   return (
     <section className="bg-white pt-14 pb-10" aria-labelledby="brands-heading">
       <div className={PAGE_CONTAINER}>
       <h2 id="brands-heading" className="mb-8 text-[23px] font-bold text-[#121926]">
-        Markalar
+        {L('Markalar', 'Brands')}
       </h2>
       {/* Kayan şerit de aynı kabın içinde: geniş ekranda kenarlar diğer bölümlerle hizalı */}
       <div className="overflow-hidden group/scroll">

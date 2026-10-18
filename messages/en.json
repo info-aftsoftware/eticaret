@@ -257,7 +257,8 @@
     "privacy": "Privacy Policy",
     "terms": "Terms of Use",
     "cookies": "Cookie Policy",
-    "location": "Merkez, Elazig, Turkey"
+    "location": "Merkez, Elazig, Turkey",
+    "orderTracking": "Order Tracking"
   },
   "ges": {
     "title": "Solar Energy Calculation Tool",
@@ -494,7 +495,9 @@
       "redFlagsTitle": "Points to check",
       "redFlagsNone": "No major flags were calculated.",
       "successTitle": "Request received",
-      "successMessage": "Summary and any warnings are shown below."
+      "successMessage": "Summary and any warnings are shown below.",
+      "optional": "optional",
+      "companyNamePlaceholder": "Company name (optional)"
     },
     "quoteCheck": {
       "title": "GES Quote Check",
@@ -516,7 +519,7 @@
       "orientationMixed": "Mixed",
       "electricityPrice": "Electricity price (TL/kWh, optional)",
       "electricityPricePlaceholder": "e.g. 3.5",
-      "electricityPriceHint": "Default 3.5 TL",
+      "electricityPriceHint": "Default 3.8–5.2 TL",
       "evaluate": "Evaluate",
       "resultPriceTitle": "Price assessment",
       "resultPriceReasonable": "Reasonable",
@@ -588,7 +591,6 @@
     "b2bContact": "For B2B orders",
     "contactUs": "contact us",
     "securePayment": "Secure payment",
-    "freeShipping": "Free shipping over 3000 TL",
     "trustedShop": "Trusted shopping",
     "pickedForYou": "Picked for You",
     "pickedForYouDesc": "Featured products and deals",
@@ -606,7 +608,6 @@
     "techSupport": "Technical Support",
     "techSupportDesc": "Our expert team is always with you",
     "fastDelivery": "Fast Delivery",
-    "fastDeliveryDesc": "Free shipping over 3000 TL",
     "noProductsYet": "No products yet.",
     "productCount": "{count} products",
     "heroSlideLabelCharge": "Go to charging stations",
@@ -644,8 +645,6 @@
     "filterByCategory": "ALL CATEGORIES",
     "priceRange": "Price Range",
     "whyChooseUs": "WHY CHOOSE US?",
-    "freeShippingBanner": "FREE SHIPPING",
-    "freeShippingBannerDesc": "On orders over 3000 TL",
     "secureShopping": "SECURE SHOPPING",
     "secureShoppingDesc": "256 Bit SSL Certificate",
     "easyReturn": "EASY RETURNS",
@@ -726,7 +725,6 @@
     "subtotal": "Subtotal",
     "tax": "VAT (20%)",
     "shipping": "Shipping",
-    "freeShipping": "Free",
     "discount": "Discount",
     "total": "Total",
     "couponPlaceholder": "Coupon code",

@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useTranslations } from 'next-intl'
+import { useL } from '@/lib/i18n-inline'
 import {
   Mail,
   Phone,
@@ -24,6 +25,7 @@ const ETBIS_URL = process.env.NEXT_PUBLIC_ETBIS_VERIFY_URL
 
 export function Footer() {
   const t = useTranslations('footer')
+  const L = useL()
   const currentYear = new Date().getFullYear()
 
   const headingClass = 'text-white/60 font-semibold text-[11px] uppercase tracking-widest mb-4'
@@ -52,7 +54,7 @@ export function Footer() {
               <li>
                 <a href={SELLER.phoneHref} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
                   <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
-                    <Phone className="w-3.5 h-3.5 text-brand" aria-hidden />
+                    <Phone className="w-3.5 h-3.5 text-white" aria-hidden />
                   </span>
                   <span className="font-semibold">{SELLER.phone}</span>
                 </a>
@@ -62,20 +64,20 @@ export function Footer() {
                   <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
                     <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
                   </span>
-                  <span>WhatsApp ile yazın</span>
+                  <span>{L('WhatsApp ile yazın', 'Chat on WhatsApp')}</span>
                 </a>
               </li>
               <li>
                 <a href={`mailto:${SELLER.email}`} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
                   <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
-                    <Mail className="w-3.5 h-3.5 text-brand" aria-hidden />
+                    <Mail className="w-3.5 h-3.5 text-white" aria-hidden />
                   </span>
                   <span>{SELLER.email}</span>
                 </a>
               </li>
               <li className="flex items-center gap-3 text-slate-400">
                 <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                  <MapPin className="w-3.5 h-3.5 text-brand" aria-hidden />
+                  <MapPin className="w-3.5 h-3.5 text-white" aria-hidden />
                 </span>
                 <span className="text-sm leading-relaxed">{SELLER.address}</span>
               </li>
@@ -85,16 +87,16 @@ export function Footer() {
 
           {/* Kolon 2: Ürünler (2 col) */}
           <div className="lg:col-span-2">
-            <h3 className={headingClass}>Ürünler</h3>
+            <h3 className={headingClass}>{t('products')}</h3>
             <ul className="space-y-0">
               {[
-                { href: '/products', label: 'Tüm Ürünler' },
-                { href: '/category/gunes-paneli', label: 'Güneş Panelleri' },
-                { href: '/category/solar-inverter', label: 'Solar İnverterler' },
-                { href: '/category/solar-aku', label: 'Solar Aküler' },
-                { href: '/category/solar-sarj-kontrol', label: 'Şarj Kontrol Cihazları' },
-                { href: '/category/solar-baglanti-ekipmani', label: 'Bağlantı Ekipmanı ve Aksesuar' },
-                { href: '/paketler', label: 'Enerji Paketleri' },
+                { href: '/products', label: L('Tüm Ürünler', 'All Products') },
+                { href: '/category/gunes-paneli', label: L('Güneş Panelleri', 'Solar Panels') },
+                { href: '/category/solar-inverter', label: L('Solar İnverterler', 'Solar Inverters') },
+                { href: '/category/solar-aku', label: L('Solar Aküler', 'Solar Batteries') },
+                { href: '/category/solar-sarj-kontrol', label: L('Şarj Kontrol Cihazları', 'Charge Controllers') },
+                { href: '/category/solar-baglanti-ekipmani', label: L('Bağlantı Ekipmanı ve Aksesuar', 'Connection & Accessories') },
+                { href: '/paketler', label: L('Enerji Paketleri', 'Energy Packages') },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={linkClass}>{item.label}</Link>
@@ -105,15 +107,15 @@ export function Footer() {
 
           {/* Kolon 3: Hizmetler (2 col) */}
           <div className="lg:col-span-2">
-            <h3 className={headingClass}>Hizmetler</h3>
+            <h3 className={headingClass}>{L('Hizmetler', 'Services')}</h3>
             <ul className="space-y-0">
               {[
-                { href: '/ges', label: 'GES Hesaplama', highlight: true },
-                { href: '/ges/teklif-dogrulama', label: 'Teklif Doğrulama' },
-                { href: '/contact', label: 'Teklif Al' },
-                { href: '/contact', label: 'Teknik Destek' },
-                { href: '/paketler', label: 'Hazır Paketler' },
-                { href: '/products?q=sulama', label: 'Sulama Çözümleri' },
+                { href: '/ges', label: t('ges'), highlight: true },
+                { href: '/ges/teklif-dogrulama', label: t('gesQuoteVerify') },
+                { href: '/contact', label: t('teklifAl') },
+                { href: '/contact', label: L('Teknik Destek', 'Technical Support') },
+                { href: '/paketler', label: L('Hazır Paketler', 'Ready Packages') },
+                { href: '/products?q=sulama', label: L('Sulama Çözümleri', 'Irrigation Solutions') },
               ].map((item) => (
                 <li key={item.href + item.label}>
                   <Link
@@ -146,24 +148,24 @@ export function Footer() {
                 </li>
               ))}
               <li>
-                <Link href="/siparis-takip" className={linkClass}>Sipariş Takibi</Link>
+                <Link href="/siparis-takip" className={linkClass}>{t('orderTracking')}</Link>
               </li>
             </ul>
           </div>
 
           {/* Kolon 5: Kurumsal (2 col) */}
           <div className="lg:col-span-2">
-            <h3 className={headingClass}>Sözleşmeler</h3>
+            <h3 className={headingClass}>{L('Sözleşmeler', 'Legal')}</h3>
             <ul className="space-y-0">
               {[
-                { href: legalHref('mesafeli-satis-sozlesmesi'), label: 'Mesafeli Satış Sözleşmesi' },
-                { href: legalHref('on-bilgilendirme-formu'), label: 'Ön Bilgilendirme Formu' },
-                { href: legalHref('gizlilik-ve-cerez-politikasi'), label: 'Gizlilik ve Çerez Politikası' },
-                { href: legalHref('kvkk'), label: 'KVKK Aydınlatma Metni' },
-                { href: legalHref('acik-riza-metni'), label: 'Açık Rıza Metni' },
-                { href: legalHref('ticari-elektronik-ileti-onayi'), label: 'Ticari Elektronik İleti Onayı' },
-                { href: legalHref('uyelik-ve-kullanim-kosullari'), label: 'Üyelik ve Kullanım Koşulları' },
-                { href: '/hakkimizda', label: 'Hakkımızda' },
+                { href: legalHref('mesafeli-satis-sozlesmesi'), label: L('Mesafeli Satış Sözleşmesi', 'Distance Sales Agreement') },
+                { href: legalHref('on-bilgilendirme-formu'), label: L('Ön Bilgilendirme Formu', 'Pre-Information Form') },
+                { href: legalHref('gizlilik-ve-cerez-politikasi'), label: L('Gizlilik ve Çerez Politikası', 'Privacy & Cookie Policy') },
+                { href: legalHref('kvkk'), label: L('KVKK Aydınlatma Metni', 'Personal Data (KVKK) Notice') },
+                { href: legalHref('acik-riza-metni'), label: L('Açık Rıza Metni', 'Explicit Consent') },
+                { href: legalHref('ticari-elektronik-ileti-onayi'), label: L('Ticari Elektronik İleti Onayı', 'Commercial Message Consent') },
+                { href: legalHref('uyelik-ve-kullanim-kosullari'), label: L('Üyelik ve Kullanım Koşulları', 'Membership & Terms of Use') },
+                { href: '/hakkimizda', label: t('about') },
               ].map((item) => (
                 <li key={item.href + item.label}>
                   <Link href={item.href} className={linkClass}>{item.label}</Link>

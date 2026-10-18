@@ -5,7 +5,8 @@
  */
 
 import { getStorefrontProducts } from '@/lib/discounts'
-import { computeOrderTotals, VAT_RATE } from '@/lib/store-config'
+import { VAT_RATE } from '@/lib/store-config'
+import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { SELLER } from '@/lib/legal/company'
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { getGroupIdForCategory } from '@/lib/categories'
@@ -42,7 +43,7 @@ export async function GET() {
     // Kampanyada: g:price = normal fiyat, g:sale_price = kampanyalı fiyat (KDV dahil)
     const regular = (p.oldPrice ?? p.price) * (1 + VAT_RATE / 100)
     const sale = p.oldPrice ? p.price * (1 + VAT_RATE / 100) : null
-    const shipping = computeOrderTotals({ subtotal: p.price, paymentMethod: 'card' }).shipping
+    const shipping = shippingFeeFor(lineLogistics(p.id))
     return `    <item>
       <g:id>${xml(p.id)}</g:id>
       <title>${xml(p.name.slice(0, 150))}</title>

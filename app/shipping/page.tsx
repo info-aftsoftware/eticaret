@@ -1,11 +1,10 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/lib/store-config'
 import { Truck, Package, Clock, MapPin, ChevronRight, AlertTriangle, CheckCircle } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Kargo ve Teslimat',
-  description: 'Voltekno kargo süreleri, ücretsiz kargo şartı, kargo firması ve teslimat koşulları.',
+  description: 'Voltekno kargo süreleri, desiye göre kargo ücreti, kargo firmaları ve teslimat koşulları.',
 }
 
 export default function ShippingPage() {
@@ -70,15 +69,11 @@ export default function ShippingPage() {
               </div>
               <h2 className="text-xl font-bold text-ink">Kargo Ücreti</h2>
             </div>
-            <ul className="space-y-2 text-ink-muted text-sm">
-              <li>
-                <strong className="text-ink">{FREE_SHIPPING_THRESHOLD.toLocaleString('tr-TR')} TL ve üzeri</strong> siparişlerde kargo ücretsizdir
-                (KDV hariç ara toplam, indirimler öncesi).
-              </li>
-              <li>
-                Bu tutarın altındaki siparişlerde kargo ücreti <strong className="text-ink">{SHIPPING_FEE.toLocaleString('tr-TR')} TL</strong>&apos;dir ve
-                ödeme adımında sipariş özetinde gösterilir.
-              </li>
+            <ul className="space-y-2 text-ink-muted text-sm list-disc pl-5">
+              <li>Kargo ücreti, sepetinizdeki ürünlerin toplam <strong className="text-ink">desisine</strong> (hacim ağırlığı: en × boy × yükseklik / 3000 ile kilogramın büyüğü) göre hesaplanır.</li>
+              <li>Her desi aralığı için anlaşmalı firmalar arasından en uygun tarife uygulanır; 30 desi üzerindeki her desi için ücret artar.</li>
+              <li>100 desi veya 100 kg üzerindeki gönderilere kargo firmasının ağır yük taşıma bedeli eklenir.</li>
+              <li>Ücrete KDV ve Evrensel Posta Taşıma Bedeli dahildir; tutar sepette ve ödeme adımında gösterilir.</li>
             </ul>
           </div>
 
@@ -91,7 +86,7 @@ export default function ShippingPage() {
               <h2 className="text-xl font-bold text-ink">Kargo Firması ve Paketleme</h2>
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
-              Siparişler, anlaşmalı kargo firmalarımız (Yurtiçi Kargo, MNG Kargo, Sürat Kargo) üzerinden gönderilmektedir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.
+              Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo) üzerinden gönderilmektedir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.
             </p>
             <p className="text-ink-muted leading-relaxed">
               Ürünler, nakliye sırasında hasara karşı özel koruyucu malzeme ve sağlam dış ambalaj ile paketlenir. Hassas elektronik ekipmanlar (inverterler, akü sistemleri vb.) ek köpük ve balonlu naylon ile desteklenir.

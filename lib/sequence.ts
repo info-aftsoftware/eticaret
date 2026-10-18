@@ -2,13 +2,15 @@
  * Unique sipariş ve müşteri numarası üretimi.
  * Prisma Sequence tablosu kullanır; tek bir atomik upsert ile tekil değer garanti edilir.
  *
- * Sipariş no: ORD-YYYY-NNNNN (örn. ORD-2025-00001)
+ * Sipariş no: ORD-YYYY-NNNNN; numaralar 2301'den başlar (örn. ORD-2026-02301)
  * Müşteri no: CUS-NNNNN (örn. CUS-00001)
  */
 
 import { prisma } from '@/lib/prisma'
 
 const ORDER_SEQ_NAME = 'orderNo'
+/** Sipariş numaraları 1 yerine 2301'den başlar; mevcut (küçük) numaralarla çakışmaz */
+const ORDER_NO_OFFSET = 2300
 const CUSTOMER_SEQ_NAME = 'customerNo'
 
 /**
@@ -28,7 +30,7 @@ async function nextValue(name: string): Promise<number> {
  */
 export async function getNextOrderNo(): Promise<string> {
   const year = new Date().getFullYear()
-  const seq = await nextValue(ORDER_SEQ_NAME)
+  const seq = (await nextValue(ORDER_SEQ_NAME)) + ORDER_NO_OFFSET
   return `ORD-${year}-${String(seq).padStart(5, '0')}`
 }
 

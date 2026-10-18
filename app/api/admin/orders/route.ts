@@ -24,6 +24,8 @@ const PAYMENT_STATUSES: PaymentStatus[] = ['PENDING', 'PAID', 'FAILED', 'REFUNDE
 const TABS: Record<string, Prisma.OrderWhereInput> = {
   all: {},
   awaiting_payment: { status: 'PENDING', paymentStatus: { not: 'PAID' } },
+  /** Havale/EFT ile verilip ödemesi onay bekleyen siparişler */
+  awaiting_transfer: { status: 'PENDING', paymentMethod: 'bank_transfer', paymentStatus: { not: 'PAID' } },
   to_prepare: { paymentStatus: 'PAID', status: { in: ['PENDING', 'PAID', 'CONFIRMED', 'PROCESSING'] } },
   picking: { status: 'PICKING' },
   shipped: { status: 'SHIPPED' },

@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -32,7 +32,9 @@ import { CartRelatedProducts } from '@/components/CartRelatedProducts'
 import { LegalDocumentDialog } from '@/components/LegalDocumentDialog'
 import { trackViewCart, cartItemToGa } from '@/lib/analytics'
 import type { LegalSlug } from '@/lib/legal/documents'
-import { computeOrderTotals, amountToFreeShipping, FREE_SHIPPING_THRESHOLD, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { useL } from '@/lib/i18n-inline'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useCartValidation, type CartLineStatus } from '@/lib/useCartValidation'
 
@@ -51,6 +53,7 @@ function CartLine({
   productQty: number
   formatPrice: (n: number) => string
 }) {
+  const L = useL()
   const removeItem = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const [draft, setDraft] = useState(String(item.quantity))
@@ -97,7 +100,7 @@ function CartLine({
                 {item.name || 'Ürün'}
               </Link>
               <p className="mt-1 text-xs text-[#5d6e80]">
-                {formatPrice(item.price)} / adet <span className="text-[#9aa8b6]">· KDV hariç</span>
+                {formatPrice(grossPrice(item.price))} {L('/ adet', '/ unit')} <span className="text-[#9aa8b6]">· {L('KDV dahil', 'incl. VAT')}</span>
               </p>
               {status?.campaign && <p className="mt-0.5 text-xs font-medium text-[#b42318]">{status.campaign}</p>}
               {item.isCustom && (
@@ -152,7 +155,8 @@ function CartLine({
               </button>
             </div>
             <div className="text-right">
-              <p className="text-base font-bold tabular-nums text-[#121926]">{formatPrice(item.price * item.quantity)}</p>
+              <p className="text-base font-bold tabular-nums text-[#121926]">{formatPrice(grossPrice(item.price * item.quantity))}</p>
+              <p className="text-[11px] text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</p>
               {max != null && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">Son {max} adet</p>}
             </div>
           </div>
@@ -198,6 +202,7 @@ function CartLine({
 export default function CartPage() {
   const router = useRouter()
   const t = useTranslations('cart')
+  const L = useL()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
@@ -241,9 +246,9 @@ export default function CartPage() {
   }, [])
 
   // Sunucuyla aynı hesaplayıcı; ödeme yöntemi ödeme adımında seçildiği için havale indirimi burada uygulanmaz
-  const { subtotal, tax, shipping, total } = computeOrderTotals({ subtotal: getTotalPrice(), couponDiscount })
-  const remainingForFreeShipping = amountToFreeShipping(subtotal)
-  const freeShippingProgress = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100)
+  const logistics = useMemo(() => cartLogistics(items), [items])
+  const shippingDesi = logistics.desi
+  const { subtotal, tax, shipping, total } = computeOrderTotals({ subtotal: getTotalPrice(), couponDiscount, shippingFee: shippingFeeFor(logistics) })
 
   /** Kupon sunucuda doğrulanır (ödeme sırasında aynı hesaplayıcı kullanılır). */
   const applyCoupon = useCallback(async (rawCode: string) => {
@@ -368,31 +373,13 @@ export default function CartPage() {
     <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={`${getTotalItems()} ${t('itemsCount')}`}>
       <div className="grid min-w-0 max-w-full grid-cols-1 gap-5 pb-safe lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
         <div className="min-w-0 space-y-5">
-          {/* Ücretsiz kargo ilerlemesi */}
-          <div className="rounded-xl border border-[#e6ebf1] bg-white p-4">
-            <div className="flex items-center gap-2 text-sm text-[#20384e]">
-              <Truck className={`h-4 w-4 shrink-0 ${remainingForFreeShipping > 0 ? 'text-[#0b2540]' : 'text-emerald-600'}`} aria-hidden />
-              {remainingForFreeShipping > 0 ? (
-                <span>
-                  Ücretsiz kargo için <strong className="text-[#121926]">{formatPrice(remainingForFreeShipping)}</strong> daha ekleyin.
-                </span>
-              ) : (
-                <span className="font-semibold text-emerald-700">Kargo ücretsiz!</span>
-              )}
-            </div>
-            <div
-              className="mt-2.5 h-2 overflow-hidden rounded-full bg-[#f1f4f8]"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={FREE_SHIPPING_THRESHOLD}
-              aria-valuenow={Math.round(Math.min(subtotal, FREE_SHIPPING_THRESHOLD))}
-              aria-label="Ücretsiz kargo eşiği"
-            >
-              <div
-                className={`h-full rounded-full transition-[width] duration-500 ${remainingForFreeShipping > 0 ? 'bg-[#f5b400]' : 'bg-emerald-500'}`}
-                style={{ width: `${freeShippingProgress}%` }}
-              />
-            </div>
+          {/* Kargo: sepetin desisine göre fiyat listesinden */}
+          <div className="flex items-start gap-3 rounded-xl border border-[#e6ebf1] bg-white p-4 text-sm">
+            <Truck className="mt-0.5 h-5 w-5 shrink-0 text-[#0b2540]" aria-hidden />
+            <p className="text-[#20384e]">
+              {L('Kargo ücreti sepetinizin hacim/ağırlığına göre hesaplanır:', 'Shipping is calculated from your cart volume/weight:')} <strong className="text-[#121926]">{shippingDesi} desi</strong> ·{' '}
+              <strong className="text-[#121926] tabular-nums">{formatPrice(shipping)}</strong> <span className="text-[#5d6e80]">{L('(vergiler dahil)', '(incl. taxes)')}</span>
+            </p>
           </div>
 
           <section className="rounded-xl border border-[#e6ebf1] bg-white" aria-labelledby="cart-items-heading">
@@ -478,7 +465,7 @@ export default function CartPage() {
               <div className="flex justify-between gap-3">
                 <dt className="text-[#5d6e80]">Kargo</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">
-                  {shipping === 0 ? <span className="text-emerald-700">Ücretsiz</span> : formatPrice(shipping)}
+                  {formatPrice(shipping)}
                 </dd>
               </div>
             </dl>

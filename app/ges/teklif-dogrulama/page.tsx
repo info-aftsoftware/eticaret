@@ -114,8 +114,6 @@ export default function GesTeklifDogrulamaPage() {
 
   const validate = (): boolean => {
     const next: Record<string, string> = {}
-    if (!form.companyName.trim() || form.companyName.trim().length < 2)
-      next.companyName = 'Teklifi veren firma adı en az 2 karakter olmalıdır.'
     if (!form.quoteDate)
       next.quoteDate = 'Teklif tarihi zorunludur.'
     if (!form.totalPriceTry || (num(form.totalPriceTry) ?? 0) <= 0)
@@ -409,16 +407,15 @@ export default function GesTeklifDogrulamaPage() {
                     {/* companyName */}
                     <div id="field-companyName" className="space-y-1.5">
                       <Label htmlFor="companyName" className="text-sm font-medium text-slate-700">
-                        {t('quoteVerify.companyName')} <Req />
+                        {t('quoteVerify.companyName')} <span className="font-normal text-slate-500">({t('quoteVerify.optional')})</span>
                       </Label>
                       <Input
                         id="companyName"
                         value={form.companyName}
                         onChange={(e) => set({ companyName: e.target.value })}
-                        placeholder="Firma adı"
-                        className={fieldCls(errors.companyName)}
+                        placeholder={t('quoteVerify.companyNamePlaceholder')}
+                        className={fieldCls()}
                       />
-                      {errors.companyName && <p className="text-xs text-red-600">{errors.companyName}</p>}
                     </div>
 
                     {/* quoteDate */}

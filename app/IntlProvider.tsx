@@ -5,7 +5,7 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { ToastProvider } from '@/components/ui/toast'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
-import { SidebarLayout } from '@/components/SidebarLayout'
+import { PageContainer } from '@/components/PageContainer'
 import { SuppressConsoleWarnings } from '@/components/SuppressConsoleWarnings'
 import { CookieConsent } from '@/components/CookieConsent'
 import { CompareBar } from '@/components/CompareBar'
@@ -83,7 +83,7 @@ export default async function IntlProvider({
             {/* min-h-screen: içerik istemcide geç gelse de footer ilk ekranda görünüp aşağı kaymaz (CLS) */}
             <main className="flex-1 min-h-screen pb-safe min-w-0 w-full max-w-full overflow-x-hidden overflow-y-auto pt-0 mt-0 [&>*]:mt-0 [&>*]:pt-0" id="main-content">
               <Suspense fallback={null}>
-                <SidebarLayout>{children}</SidebarLayout>
+                <PageContainer>{children}</PageContainer>
               </Suspense>
             </main>
             <Footer />

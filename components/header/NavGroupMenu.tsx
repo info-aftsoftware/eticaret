@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { BRANDS_BY_CATEGORY, productsHref, type NavGroup } from './AllCategoriesMenu'
+import { useL } from '@/lib/i18n-inline'
 
 const OPEN_DELAY = 90
 const CLOSE_DELAY = 160
@@ -30,6 +31,7 @@ export function NavGroupMenu({
   t: (key: string) => string
 }) {
   const [open, setOpen] = useState(false)
+  const L = useL()
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const schedule = (next: boolean) => {
@@ -108,7 +110,7 @@ export function NavGroupMenu({
                 onClick={() => setOpen(false)}
                 className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#0b2540] hover:text-[#12335a]"
               >
-                Tüm {label} ürünleri <ArrowRight className="w-4 h-4" aria-hidden />
+                {L(`Tüm ${label} ürünleri`, `All ${label}`)} <ArrowRight className="w-4 h-4" aria-hidden />
               </Link>
             </div>
           </div>
