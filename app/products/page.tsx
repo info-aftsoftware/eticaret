@@ -456,7 +456,7 @@ function ProductsPageContent() {
             </Button>
             <span className="text-sm text-slate-600 font-medium">{tProducts('productsListed', { count: filteredProducts.length })}</span>
             <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
-              <SelectTrigger className="min-h-[44px] h-11 w-[180px] max-w-full bg-white border-slate-200 text-slate-800 text-sm rounded-xl touch-manipulation">
+              <SelectTrigger aria-label="Sıralama" className="min-h-[44px] h-11 w-[180px] max-w-full bg-white border-slate-200 text-slate-800 text-sm rounded-xl touch-manipulation">
                 <SelectValue placeholder={tProducts('sortByPlaceholder')} />
               </SelectTrigger>
               <SelectContent align="end" className="rounded-xl border-slate-200 bg-white">

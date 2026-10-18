@@ -73,7 +73,7 @@ export function AuthLayout({
                 <Icon className="h-[22px] w-[22px]" />
               </span>
               <h2 className="mt-4 text-[24px] sm:text-[26px] font-bold tracking-tight text-[#121926]">{title}</h2>
-              {subtitle && <p className="mt-1.5 text-[15px] leading-relaxed text-[#6b7c8f]">{subtitle}</p>}
+              {subtitle && <p className="mt-1.5 text-[15px] leading-relaxed text-[#5d6e80]">{subtitle}</p>}
             </div>
             {children}
           </div>
@@ -99,7 +99,7 @@ export function FormAlert({ tone = 'error', children }: { tone?: 'error' | 'succ
 }
 
 const inputBase =
-  'block w-full min-w-0 h-12 rounded-[10px] border bg-white px-3.5 text-[15px] text-[#121926] placeholder:text-[#9aa7b5] transition-colors focus:outline-none focus:ring-[3px] disabled:bg-[#f5f7fa] disabled:text-[#6b7c8f]'
+  'block w-full min-w-0 h-12 rounded-[10px] border bg-white px-3.5 text-[15px] text-[#121926] placeholder:text-[#9aa7b5] transition-colors focus:outline-none focus:ring-[3px] disabled:bg-[#f5f7fa] disabled:text-[#5d6e80]'
 
 function inputTone(error?: string) {
   return error
@@ -148,7 +148,7 @@ export function TextField({
       {error ? (
         <p id={`${id}-err`} className="text-[13px] text-red-600">{error}</p>
       ) : hint ? (
-        <div id={`${id}-hint`} className="text-[13px] text-[#6b7c8f]">{hint}</div>
+        <div id={`${id}-hint`} className="text-[13px] text-[#5d6e80]">{hint}</div>
       ) : null}
     </div>
   )
@@ -187,7 +187,7 @@ export function PasswordField({
         <button
           type="button"
           onClick={() => setShow((v) => !v)}
-          className="absolute right-1 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-lg text-[#6b7c8f] hover:text-[#0b2540] hover:bg-[#f1f4f8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2540]/30 touch-manipulation"
+          className="absolute right-1 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-lg text-[#5d6e80] hover:text-[#0b2540] hover:bg-[#f1f4f8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2540]/30 touch-manipulation"
           aria-label={show ? 'Şifreyi gizle' : 'Şifreyi göster'}
           aria-pressed={show}
         >
@@ -197,7 +197,7 @@ export function PasswordField({
       {error ? (
         <p id={`${id}-err`} className="text-[13px] text-red-600">{error}</p>
       ) : hint ? (
-        <div id={`${id}-hint`} className="text-[13px] text-[#6b7c8f]">{hint}</div>
+        <div id={`${id}-hint`} className="text-[13px] text-[#5d6e80]">{hint}</div>
       ) : null}
     </div>
   )
@@ -294,7 +294,7 @@ export function SecondaryButton({ className = '', ...props }: React.ButtonHTMLAt
 
 export function Divider({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-3 text-[13px] text-[#6b7c8f]" role="separator">
+    <div className="flex items-center gap-3 text-[13px] text-[#5d6e80]" role="separator">
       <span className="h-px flex-1 bg-[#e6ebf1]" />
       {children}
       <span className="h-px flex-1 bg-[#e6ebf1]" />

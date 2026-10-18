@@ -45,13 +45,13 @@ function Kpi({ label, value, sub, icon: Icon, accent }: { label: string; value: 
   return (
     <Panel className={accent ? 'p-4 sm:p-5 border-[#f5dc85] bg-[#fffbeb]' : 'p-4 sm:p-5'}>
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[12px] font-medium text-[#6b7c8f]">{label}</p>
+        <p className="text-[12px] font-medium text-[#5d6e80]">{label}</p>
         <span className={accent ? 'w-8 h-8 rounded-lg bg-[#f5b400] text-[#111] flex items-center justify-center' : 'w-8 h-8 rounded-lg bg-[#f1f4f8] text-[#0b2540] flex items-center justify-center'}>
           <Icon className="w-4 h-4" />
         </span>
       </div>
       <p className="text-2xl sm:text-[28px] font-bold text-[#121926] tracking-tight mt-1 tabular-nums">{value}</p>
-      {sub && <p className="text-xs text-[#6b7c8f] mt-1">{sub}</p>}
+      {sub && <p className="text-xs text-[#5d6e80] mt-1">{sub}</p>}
     </Panel>
   )
 }
@@ -109,7 +109,7 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-[#121926] tracking-tight">Genel Bakış</h1>
-          <p className="text-sm text-[#6b7c8f] mt-1 first-letter:uppercase">{today}</p>
+          <p className="text-sm text-[#5d6e80] mt-1 first-letter:uppercase">{today}</p>
         </div>
         <div className="flex gap-2">
           <Btn variant="outline" onClick={afterAction} loading={reloading}>
@@ -171,7 +171,7 @@ export default function AdminDashboardPage() {
                       {o.cancelRequested && <Pill tone="red">İptal talebi</Pill>}
                       {o.openReturns > 0 && <Pill tone="orange">İade talebi</Pill>}
                     </div>
-                    <p className="text-[13px] text-[#6b7c8f] mt-0.5 truncate">
+                    <p className="text-[13px] text-[#5d6e80] mt-0.5 truncate">
                       {o.customerName} · {methodLabel(o.paymentMethod)} · {timeAgo(o.createdAt)}
                     </p>
                   </Link>
@@ -202,7 +202,7 @@ export default function AdminDashboardPage() {
                           ? 'w-8 h-8 rounded-lg bg-[#fff6d6] text-[#a57900] flex items-center justify-center shrink-0'
                           : t.tone === 'navy'
                             ? 'w-8 h-8 rounded-lg bg-[#e8eef6] text-[#0b2540] flex items-center justify-center shrink-0'
-                            : 'w-8 h-8 rounded-lg bg-[#f1f4f8] text-[#6b7c8f] flex items-center justify-center shrink-0'
+                            : 'w-8 h-8 rounded-lg bg-[#f1f4f8] text-[#5d6e80] flex items-center justify-center shrink-0'
                       }
                     >
                       <t.icon className="w-4 h-4" />
@@ -230,7 +230,7 @@ export default function AdminDashboardPage() {
             <ol className="divide-y divide-[#eef2f6]">
               {stats.topProducts!.map((p, i) => (
                 <li key={p.productId ?? p.name} className="flex items-center gap-3 px-4 sm:px-5 py-2.5 text-[13px]">
-                  <span className="w-6 h-6 rounded-md bg-[#f1f4f8] text-[#6b7c8f] text-xs font-semibold flex items-center justify-center shrink-0">{i + 1}</span>
+                  <span className="w-6 h-6 rounded-md bg-[#f1f4f8] text-[#5d6e80] text-xs font-semibold flex items-center justify-center shrink-0">{i + 1}</span>
                   <span className="min-w-0 flex-1 truncate text-[#20384e]">
                     {p.productId ? (
                       <Link href={`/admin/products/duzenle?id=${encodeURIComponent(p.productId)}`} className="hover:underline">{p.name}</Link>
@@ -238,7 +238,7 @@ export default function AdminDashboardPage() {
                       p.name
                     )}
                   </span>
-                  <span className="shrink-0 tabular-nums text-[#6b7c8f]">{p.quantity} adet</span>
+                  <span className="shrink-0 tabular-nums text-[#5d6e80]">{p.quantity} adet</span>
                   <span className="shrink-0 tabular-nums font-semibold text-[#121926] w-24 text-right">{fmtTRY(p.revenue)}</span>
                 </li>
               ))}

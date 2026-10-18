@@ -64,7 +64,7 @@ export default function OrderTrackingPage() {
             </span>
             <div>
               <h2 className="text-base font-semibold text-[#121926]">Siparişimi sorgula</h2>
-              <p className="text-sm text-[#6b7c8f]">Üyelik gerekmez.</p>
+              <p className="text-sm text-[#5d6e80]">Üyelik gerekmez.</p>
             </div>
           </div>
           <form onSubmit={submit} className="space-y-4" noValidate>
@@ -95,7 +95,7 @@ export default function OrderTrackingPage() {
               {loading ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden />Sorgulanıyor…</> : 'Siparişimi göster'}
             </button>
           </form>
-          <p className="mt-5 text-[13px] text-[#6b7c8f]">
+          <p className="mt-5 text-[13px] text-[#5d6e80]">
             Sipariş numaranız sipariş onay e-postanızda yer alır.{' '}
             {isAuthenticated ? (
               <Link href="/profile?tab=orders" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Tüm siparişlerim →</Link>
@@ -115,7 +115,7 @@ export default function OrderTrackingPage() {
               <i.icon className="mt-0.5 h-5 w-5 shrink-0 text-[#0b2540]" aria-hidden />
               <div>
                 <p className="font-semibold text-[#121926]">{i.title}</p>
-                <p className="text-[13px] text-[#6b7c8f]">{i.text}</p>
+                <p className="text-[13px] text-[#5d6e80]">{i.text}</p>
               </div>
             </li>
           ))}

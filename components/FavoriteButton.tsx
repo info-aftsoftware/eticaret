@@ -51,7 +51,7 @@ export function FavoriteButton({ productId, productName, className = '' }: Favor
       className={`relative z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors touch-manipulation disabled:opacity-60 ${
         active
           ? 'border-[#f5b400] bg-[#f5b400] text-[#111]'
-          : 'border-[#e6ebf1] bg-white text-[#6b7c8f] hover:border-[#0b2540] hover:text-[#0b2540]'
+          : 'border-[#e6ebf1] bg-white text-[#5d6e80] hover:border-[#0b2540] hover:text-[#0b2540]'
       } ${className}`}
     >
       <Heart className={`h-4 w-4 ${active ? 'fill-current' : ''}`} />

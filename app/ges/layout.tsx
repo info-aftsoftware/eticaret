@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'GES Hesaplama — Güneş Enerjisi Sistemi Boyutlandırma',
   description:
-    'Ücretsiz GES hesaplama aracı: aylık elektrik tüketiminizi girin, ihtiyacınız olan güneş paneli gücünü, inverter kapasitesini ve yatırım geri dönüş süresini öğrenin. Hemen teklif alın.',
+    'Ücretsiz GES hesaplama: aylık tüketiminizi girin; gereken panel gücünü, inverter kapasitesini ve geri dönüş süresini öğrenin, hemen teklif alın.',
   keywords: [
     'ges hesaplama',
     'güneş enerji sistemi hesaplama',

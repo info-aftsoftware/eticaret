@@ -15,6 +15,7 @@ import { HeroSlider } from '@/components/home/HeroSlider'
 import { BrandStrip } from '@/components/home/BrandStrip'
 import { CategoryShowcase } from '@/components/home/CategoryShowcase'
 import { QuoteBanner } from '@/components/home/QuoteBanner'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 import type { MockProduct } from '@/lib/products-mock'
 
 const FEATURED_ROW_MAX = 10
@@ -68,12 +69,14 @@ export default function HomePage() {
 
 
   const sectionPadding = 'py-8 sm:py-12 md:py-16 lg:py-20'
-  const containerClass = 'container mx-auto px-4 sm:px-6 lg:px-8 max-w-[1440px] min-w-0'
+  const containerClass = PAGE_CONTAINER
   const sectionTitleClass = 'text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight'
   const sectionDescClass = 'text-slate-600 text-sm sm:text-base mt-1'
 
   return (
     <div className="w-full max-w-full min-w-0 overflow-x-hidden">
+      {/* Slayt başlıkları döndüğü için sayfanın tek H1'i görünmez; arama motoru ve ekran okuyucu içindir */}
+      <h1 className="sr-only">voltekno — Güneş Paneli, Akü, Solar İnverter ve Enerji Sistemleri</h1>
 
       {/* ─── 1. HERO SLIDER (voltekno.com yapısı) ─────────────────────────── */}
       <HeroSlider />

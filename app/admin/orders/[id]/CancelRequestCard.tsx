@@ -50,7 +50,7 @@ export function CancelRequestCard({
     <div className={open ? 'rounded-xl border-2 border-red-200 bg-red-50/60 p-4 space-y-3' : 'rounded-xl border border-[#e6ebf1] bg-white p-4 space-y-2'}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold text-[#121926] inline-flex items-center gap-2">
-          <XCircle className={open ? 'w-4 h-4 text-red-600' : 'w-4 h-4 text-[#6b7c8f]'} />
+          <XCircle className={open ? 'w-4 h-4 text-red-600' : 'w-4 h-4 text-[#5d6e80]'} />
           Müşteri iptal talebi
         </p>
         <Pill tone={open ? 'red' : request.status === 'APPROVED' ? 'slate' : 'amber'}>
@@ -58,10 +58,10 @@ export function CancelRequestCard({
         </Pill>
       </div>
       <dl className="text-[13px] space-y-1 text-[#20384e]">
-        <div><dt className="inline text-[#6b7c8f]">Talep: </dt><dd className="inline">{fmtDateTime(request.requestedAt)}</dd></div>
-        <div><dt className="inline text-[#6b7c8f]">Neden: </dt><dd className="inline">{request.reason || 'Belirtilmedi'}</dd></div>
-        {request.resolvedAt && <div><dt className="inline text-[#6b7c8f]">Sonuç: </dt><dd className="inline">{fmtDateTime(request.resolvedAt)}</dd></div>}
-        {request.rejectReason && <div><dt className="inline text-[#6b7c8f]">Ret gerekçesi: </dt><dd className="inline">{request.rejectReason}</dd></div>}
+        <div><dt className="inline text-[#5d6e80]">Talep: </dt><dd className="inline">{fmtDateTime(request.requestedAt)}</dd></div>
+        <div><dt className="inline text-[#5d6e80]">Neden: </dt><dd className="inline">{request.reason || 'Belirtilmedi'}</dd></div>
+        {request.resolvedAt && <div><dt className="inline text-[#5d6e80]">Sonuç: </dt><dd className="inline">{fmtDateTime(request.resolvedAt)}</dd></div>}
+        {request.rejectReason && <div><dt className="inline text-[#5d6e80]">Ret gerekçesi: </dt><dd className="inline">{request.rejectReason}</dd></div>}
       </dl>
       {open && (
         <div className="flex flex-wrap gap-2 pt-1">
@@ -98,7 +98,7 @@ export function CancelRequestCard({
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
             {REFUND_WARNING}
           </p>
-          <p className="text-xs text-[#6b7c8f]">Ödeme yöntemi: {paymentMethod === 'bank_transfer' ? 'Havale/EFT' : 'Kart'}</p>
+          <p className="text-xs text-[#5d6e80]">Ödeme yöntemi: {paymentMethod === 'bank_transfer' ? 'Havale/EFT' : 'Kart'}</p>
           <Field label="Not (isteğe bağlı, müşteriye iletilir)" htmlFor="cancel-note">
             <TextArea id="cancel-note" rows={2} value={note} onChange={(e) => setNote(e.target.value)} maxLength={500} />
           </Field>

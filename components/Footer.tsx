@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useTranslations } from 'next-intl'
 import {
   Mail,
@@ -32,7 +33,7 @@ export function Footer() {
     <footer className="bg-slate-900 text-slate-400 pb-safe">
 
       {/* Ana içerik */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+      <div className={`${PAGE_CONTAINER} pt-12 pb-8`}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6">
 
           {/* Kolon 1: Marka + iletişim (4 col) */}
@@ -176,7 +177,7 @@ export function Footer() {
 
       {/* Alt bar */}
       <div className="border-t border-white/5">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex flex-col lg:flex-row justify-between items-center gap-3">
+        <div className={`${PAGE_CONTAINER} py-4 flex flex-col lg:flex-row justify-between items-center gap-3`}>
           <div className="text-xs text-slate-500 space-y-0.5 text-center sm:text-left">
             <p>© {currentYear} Voltekno · {SELLER.shortLegalName} {t('copyright')}</p>
             <p>

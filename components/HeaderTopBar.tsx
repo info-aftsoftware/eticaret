@@ -19,7 +19,7 @@ const PHONE_DISPLAY = SELLER.phone.replace('+90 ', '0')
 export function HeaderTopBar() {
   return (
     <div className="bg-[#0b2540]">
-      <div className="flex items-center justify-between h-[38px] px-3.5 min-[901px]:px-6 max-w-[1454px] mx-auto text-xs leading-3 font-medium tracking-[0.12px]">
+      <div className="flex items-center justify-between h-[38px] px-4 min-[541px]:px-6 max-w-[1454px] mx-auto text-xs leading-3 font-medium tracking-[0.12px]">
         <nav aria-label="Kurumsal" className="flex items-center gap-[22px] min-w-0">
           {TOP_LINKS.map((link) => (
             <Link

@@ -168,7 +168,7 @@ function RegisterPageContent() {
               <PasswordField label="Şifre Tekrar" required icon={Lock} placeholder="Şifrenizi tekrar girin" value={formData.confirmPassword} onChange={update('confirmPassword')} error={errors.confirmPassword} autoComplete="new-password" disabled={loading} />
             </div>
           </div>
-          <div className="-mt-1 text-[13px] text-[#6b7c8f]">
+          <div className="-mt-1 text-[13px] text-[#5d6e80]">
             <PasswordStrength password={formData.password} />
           </div>
 
@@ -181,7 +181,7 @@ function RegisterPageContent() {
             <Checkbox checked={acceptMarketing} onChange={setAcceptMarketing} disabled={loading}>
               Kampanya ve duyurulardan haberdar olmak için <LegalLink slug="ticari-elektronik-ileti-onayi" onOpen={setLegalDoc}>ticari elektronik ileti</LegalLink> almayı kabul ediyorum (isteğe bağlı).
             </Checkbox>
-            <p className="pl-8 text-[12.5px] leading-relaxed text-[#6b7c8f] [&_button]:min-h-0 [&_button]:min-w-0">
+            <p className="pl-8 text-[12.5px] leading-relaxed text-[#5d6e80] [&_button]:min-h-0 [&_button]:min-w-0">
               Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> ve{' '}
               <LegalLink slug="gizlilik-ve-cerez-politikasi" onOpen={setLegalDoc}>Gizlilik ve Çerez Politikası</LegalLink> kapsamında işlenir.
             </p>
@@ -193,7 +193,7 @@ function RegisterPageContent() {
           </PrimaryButton>
         </form>
 
-        <p className="text-center text-[14.5px] text-[#6b7c8f]">
+        <p className="text-center text-[14.5px] text-[#5d6e80]">
           Zaten hesabınız var mı? <Link href={loginHref} className={linkClass}>Giriş yapın</Link>
         </p>
       </div>

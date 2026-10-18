@@ -6,7 +6,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BAS
 export const metadata: Metadata = {
   title: 'İletişim — Teknik Destek ve Ürün Teklifi',
   description:
-    'voltekno ile iletişime geçin. Güneş paneli, akü, inverter ve EV şarj ürünleri için fiyat teklifi, teknik destek ve kurulum danışmanlığı. Elazığ merkezli, Türkiye geneli hizmet.',
+    'voltekno ile iletişime geçin: güneş paneli, akü ve inverter için fiyat teklifi, teknik destek ve kurulum danışmanlığı. Elazığ merkezli, Türkiye geneli hizmet.',
   keywords: [
     'voltekno iletişim',
     'güneş paneli teklif',

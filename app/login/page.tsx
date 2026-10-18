@@ -113,7 +113,7 @@ function LoginForm() {
             }
           />
           <Checkbox checked={rememberMe} onChange={setRememberMe} disabled={loading}>
-            Beni hatırla <span className="text-[#6b7c8f]">— ortak kullanılan cihazlarda işaretlemeyin</span>
+            Beni hatırla <span className="text-[#5d6e80]">— ortak kullanılan cihazlarda işaretlemeyin</span>
           </Checkbox>
 
           <PrimaryButton type="submit" loading={loading} loadingText="Giriş yapılıyor…">
@@ -121,7 +121,7 @@ function LoginForm() {
           </PrimaryButton>
         </form>
 
-        <p className="text-center text-[14.5px] text-[#6b7c8f]">
+        <p className="text-center text-[14.5px] text-[#5d6e80]">
           Hesabınız yok mu?{' '}
           <Link href={registerHref} className={linkClass}>Hemen üye olun</Link>
         </p>

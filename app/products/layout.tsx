@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Tüm Ürünler — Akü, Güneş Paneli, İnverter, EV Şarj',
   description:
-    'Lityum akü, güneş paneli, hibrit inverter, EV şarj istasyonu ve enerji depolama sistemleri. Marka, kategori ve fiyata göre filtreleyin. voltekno\'da hızlı teslimat ve teknik destek.',
+    'Güneş paneli, lityum akü, solar inverter ve enerji depolama ürünleri. Marka, kategori ve fiyata göre filtreleyin; hızlı teslimat ve teknik destek voltekno\'da.',
   keywords: [
     'güneş paneli satın al',
     'lityum akü fiyatları',

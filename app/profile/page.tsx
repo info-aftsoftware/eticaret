@@ -792,17 +792,6 @@ function ProfilePageContent() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="points" className="space-y-4">
-              <Card className="classic-card rounded-lg">
-                <CardHeader>
-                  <CardTitle>Puan ve Hediye Çekleri</CardTitle>
-                  <p className="text-sm text-ink-muted">Kazanılan puanlar ve hediye çekleriniz burada listelenir.</p>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-ink-muted">Bu özellik yakında eklenecektir.</p>
-                </CardContent>
-              </Card>
-            </TabsContent>
       </Tabs>
     </ClassicPageShell>
   )

@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 
 /**
  * Markalar şeridi (voltekno.com "Markalar" bölümü + katalogdaki ek markalar).
@@ -26,9 +27,11 @@ const BRANDS = [
 export function BrandStrip() {
   return (
     <section className="bg-white pt-14 pb-10" aria-labelledby="brands-heading">
-      <h2 id="brands-heading" className="px-6 mb-8 text-[23px] font-bold text-[#121926]">
+      <div className={PAGE_CONTAINER}>
+      <h2 id="brands-heading" className="mb-8 text-[23px] font-bold text-[#121926]">
         Markalar
       </h2>
+      {/* Kayan şerit de aynı kabın içinde: geniş ekranda kenarlar diğer bölümlerle hizalı */}
       <div className="overflow-hidden group/scroll">
         <ul className="flex w-max items-center animate-brand-scroll">
           {/* Kesintisiz döngü için liste iki kez; ikinci kopya ekran okuyuculardan gizli */}
@@ -52,6 +55,7 @@ export function BrandStrip() {
             </li>
           ))}
         </ul>
+      </div>
       </div>
     </section>
   )

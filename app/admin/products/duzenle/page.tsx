@@ -149,7 +149,7 @@ function SectionNav({ items }: { items: { id: string; label: string }[] }) {
   return (
     <nav className="hidden xl:block sticky top-20 space-y-0.5" aria-label="Bölümler">
       {items.map((i) => (
-        <a key={i.id} href={`#${i.id}`} className="block px-3 py-1.5 rounded-md text-[13px] text-[#6b7c8f] hover:text-[#0b2540] hover:bg-white">
+        <a key={i.id} href={`#${i.id}`} className="block px-3 py-1.5 rounded-md text-[13px] text-[#5d6e80] hover:text-[#0b2540] hover:bg-white">
           {i.label}
         </a>
       ))}
@@ -530,7 +530,7 @@ function Editor() {
               </Field>
               {currencyNote && (
                 <p className="sm:col-span-2 flex gap-2 text-[13px] text-[#20384e] bg-[#f5f7fa] border border-[#e6ebf1] rounded-lg px-3 py-2.5">
-                  <Info className="w-4 h-4 text-[#6b7c8f] shrink-0 mt-0.5" />
+                  <Info className="w-4 h-4 text-[#5d6e80] shrink-0 mt-0.5" />
                   <span>
                     Katalog fiyatı <strong>{product!.basePrice} {product!.priceCurrency}</strong>; TL karşılığı her gün güncel kurla hesaplanır
                     {' '}(şu an {fmtTRY(product!.price)}). TL fiyatı değiştirirseniz ürün sabit TL fiyatla satılır.
@@ -557,12 +557,12 @@ function Editor() {
               }
             />
             {variants.length === 0 ? (
-              <p className="px-5 py-6 text-[13px] text-[#6b7c8f]">Bu ürünün varyantı yok. Farklı model/güç seçenekleri varsa “Varyant ekle” ile tanımlayın.</p>
+              <p className="px-5 py-6 text-[13px] text-[#5d6e80]">Bu ürünün varyantı yok. Farklı model/güç seçenekleri varsa “Varyant ekle” ile tanımlayın.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-[13px] min-w-[640px]">
                   <thead>
-                    <tr className="text-[11px] uppercase tracking-wider text-[#6b7c8f] border-b border-[#e6ebf1] text-left">
+                    <tr className="text-[11px] uppercase tracking-wider text-[#5d6e80] border-b border-[#e6ebf1] text-left">
                       <th className="px-4 py-2 w-16">Sıra</th>
                       <th className="px-2 py-2">Varyant adı</th>
                       <th className="px-2 py-2 w-48">SKU</th>
@@ -578,10 +578,10 @@ function Editor() {
                         <tr key={v.key} className="align-top">
                           <td className="px-4 py-2">
                             <div className="flex gap-0.5">
-                              <button type="button" className="w-6 h-8 rounded flex items-center justify-center text-[#6b7c8f] hover:bg-[#f1f4f8] disabled:opacity-30" disabled={i === 0} onClick={() => moveVariant(i, i - 1)} aria-label="Yukarı taşı">
+                              <button type="button" className="w-6 h-8 rounded flex items-center justify-center text-[#5d6e80] hover:bg-[#f1f4f8] disabled:opacity-30" disabled={i === 0} onClick={() => moveVariant(i, i - 1)} aria-label="Yukarı taşı">
                                 <ArrowUp className="w-3.5 h-3.5" />
                               </button>
-                              <button type="button" className="w-6 h-8 rounded flex items-center justify-center text-[#6b7c8f] hover:bg-[#f1f4f8] disabled:opacity-30" disabled={i === variants.length - 1} onClick={() => moveVariant(i, i + 1)} aria-label="Aşağı taşı">
+                              <button type="button" className="w-6 h-8 rounded flex items-center justify-center text-[#5d6e80] hover:bg-[#f1f4f8] disabled:opacity-30" disabled={i === variants.length - 1} onClick={() => moveVariant(i, i + 1)} aria-label="Aşağı taşı">
                                 <ArrowDown className="w-3.5 h-3.5" />
                               </button>
                             </div>
@@ -602,7 +602,7 @@ function Editor() {
                               className={priceChanged ? 'border-[#f5b400] bg-[#fffbeb]' : undefined}
                             />
                             {v.basePrice !== undefined && product?.priceCurrency && (
-                              <p className="text-[11px] text-[#6b7c8f] mt-1">{priceChanged ? 'Sabit TL fiyata geçecek' : `${v.basePrice} ${product.priceCurrency} · kurla`}</p>
+                              <p className="text-[11px] text-[#5d6e80] mt-1">{priceChanged ? 'Sabit TL fiyata geçecek' : `${v.basePrice} ${product.priceCurrency} · kurla`}</p>
                             )}
                           </td>
                           <td className="px-4 py-2">
@@ -670,9 +670,9 @@ function Editor() {
                 className={cn('rounded-xl border-2 border-dashed p-3 transition-colors', dropActive ? 'border-[#f5b400] bg-[#fffbeb]' : 'border-[#e6ebf1]')}
               >
                 {isNew ? (
-                  <p className="py-6 text-center text-[13px] text-[#6b7c8f]">Görsel eklemek için önce ürünü oluşturun.</p>
+                  <p className="py-6 text-center text-[13px] text-[#5d6e80]">Görsel eklemek için önce ürünü oluşturun.</p>
                 ) : images.length === 0 && uploading === 0 ? (
-                  <button type="button" onClick={() => fileInput.current?.click()} className="w-full py-8 flex flex-col items-center gap-2 text-[13px] text-[#6b7c8f] hover:text-[#0b2540]">
+                  <button type="button" onClick={() => fileInput.current?.click()} className="w-full py-8 flex flex-col items-center gap-2 text-[13px] text-[#5d6e80] hover:text-[#0b2540]">
                     <ImagePlus className="w-8 h-8 text-[#b9c3cf]" />
                     Görselleri buraya sürükleyin veya tıklayıp seçin
                   </button>
@@ -704,10 +704,10 @@ function Editor() {
                         </span>
                         <div className="flex items-center justify-between gap-1 px-1.5 py-1 border-t border-[#eef2f6]">
                           <div className="flex">
-                            <button type="button" onClick={() => moveImage(i, i - 1)} disabled={i === 0} className="w-7 h-7 rounded flex items-center justify-center text-[#6b7c8f] hover:bg-[#f1f4f8] disabled:opacity-30" aria-label="Öne al">
+                            <button type="button" onClick={() => moveImage(i, i - 1)} disabled={i === 0} className="w-7 h-7 rounded flex items-center justify-center text-[#5d6e80] hover:bg-[#f1f4f8] disabled:opacity-30" aria-label="Öne al">
                               <ArrowUp className="w-3.5 h-3.5 -rotate-90" />
                             </button>
-                            <button type="button" onClick={() => moveImage(i, i + 1)} disabled={i === images.length - 1} className="w-7 h-7 rounded flex items-center justify-center text-[#6b7c8f] hover:bg-[#f1f4f8] disabled:opacity-30" aria-label="Sona al">
+                            <button type="button" onClick={() => moveImage(i, i + 1)} disabled={i === images.length - 1} className="w-7 h-7 rounded flex items-center justify-center text-[#5d6e80] hover:bg-[#f1f4f8] disabled:opacity-30" aria-label="Sona al">
                               <ArrowUp className="w-3.5 h-3.5 rotate-90" />
                             </button>
                             {i > 0 && (
@@ -724,12 +724,12 @@ function Editor() {
                     ))}
                     {uploading > 0 &&
                       Array.from({ length: uploading }).map((_, i) => (
-                        <li key={`up-${i}`} className="aspect-square rounded-lg border border-dashed border-[#d3d9e1] bg-[#fafbfd] flex items-center justify-center text-xs text-[#6b7c8f] animate-pulse">
+                        <li key={`up-${i}`} className="aspect-square rounded-lg border border-dashed border-[#d3d9e1] bg-[#fafbfd] flex items-center justify-center text-xs text-[#5d6e80] animate-pulse">
                           Yükleniyor…
                         </li>
                       ))}
                     <li>
-                      <button type="button" onClick={() => fileInput.current?.click()} className="w-full aspect-square rounded-lg border border-dashed border-[#d3d9e1] flex flex-col items-center justify-center gap-1 text-xs text-[#6b7c8f] hover:border-[#0b2540] hover:text-[#0b2540]">
+                      <button type="button" onClick={() => fileInput.current?.click()} className="w-full aspect-square rounded-lg border border-dashed border-[#d3d9e1] flex flex-col items-center justify-center gap-1 text-xs text-[#5d6e80] hover:border-[#0b2540] hover:text-[#0b2540]">
                         <ImagePlus className="w-5 h-5" />
                         Ekle
                       </button>
@@ -759,7 +759,7 @@ function Editor() {
               }
             />
             <div className="p-4 sm:p-5 space-y-2">
-              {specs.length === 0 && <p className="text-[13px] text-[#6b7c8f]">Teknik özellik yok.</p>}
+              {specs.length === 0 && <p className="text-[13px] text-[#5d6e80]">Teknik özellik yok.</p>}
               {specs.map((s) => (
                 <div key={s.id} className="grid grid-cols-[1fr_1.4fr_auto] gap-2">
                   <TextInput value={s.k} onChange={(e) => setSpecs((prev) => prev.map((x) => (x.id === s.id ? { ...x, k: e.target.value } : x)))} placeholder="Özellik" aria-label="Özellik adı" />
@@ -777,7 +777,7 @@ function Editor() {
       {/* Kaydet çubuğu */}
       <div className="fixed bottom-0 left-0 right-0 lg:left-60 z-20 border-t border-[#e6ebf1] bg-white/95 backdrop-blur px-4 sm:px-8 py-3">
         <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-3">
-          <p className="text-[13px] text-[#6b7c8f] truncate">
+          <p className="text-[13px] text-[#5d6e80] truncate">
             {isNew ? 'Yeni ürün' : dirty ? <span className="text-[#7a5a00] font-medium">Kaydedilmemiş değişiklikler var ({Object.keys(changes).filter((k) => k !== 'image').length} alan)</span> : 'Tüm değişiklikler kaydedildi'}
           </p>
           <div className="flex gap-2 shrink-0">

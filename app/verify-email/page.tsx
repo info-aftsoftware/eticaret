@@ -106,7 +106,7 @@ function VerifyEmailContent() {
   if (status === 'loading') {
     return (
       <AuthLayout breadcrumb="E-posta Doğrulama" icon={Mail} title="E-posta doğrulanıyor" showBenefits={false}>
-        <div className="flex flex-col items-center py-8 text-[#6b7c8f]">
+        <div className="flex flex-col items-center py-8 text-[#5d6e80]">
           <Loader2 className="mb-3 h-8 w-8 animate-spin text-[#0b2540]" />
           Lütfen bekleyin…
         </div>
@@ -187,7 +187,7 @@ function VerifyEmailContent() {
       >
         <div className="space-y-3">
           <PrimaryButton type="button" onClick={() => router.push(loginForResend)}>Giriş yap</PrimaryButton>
-          <p className="text-center text-[14px] text-[#6b7c8f]">
+          <p className="text-center text-[14px] text-[#5d6e80]">
             Hesabınız yok mu? <Link href="/register" className="font-semibold text-[#0b2540] hover:underline">Üye olun</Link>
           </p>
         </div>
@@ -210,7 +210,7 @@ function VerifyEmailContent() {
     >
       <div className="space-y-5">
         <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">
-          <p className="text-[13px] text-[#6b7c8f]">Doğrulama bağlantısının gönderildiği adres</p>
+          <p className="text-[13px] text-[#5d6e80]">Doğrulama bağlantısının gönderildiği adres</p>
           <p className="mt-0.5 break-all text-[15px] font-semibold text-[#121926]">{user?.email}</p>
           <ul className="mt-3 space-y-1.5 text-[13.5px] leading-relaxed text-[#20384e]">
             <li>• E-posta birkaç dakika içinde ulaşır; gelmezse spam / gereksiz klasörünü kontrol edin.</li>

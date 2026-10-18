@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { ArrowRight, Clock } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Blog – Enerji Rehberi | Voltekno',
+  title: 'Blog – Enerji Rehberi',
   description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, karşılaştırmalar ve kurulum rehberleri.',
   openGraph: {
     title: 'Blog – Enerji Rehberi | Voltekno',
@@ -49,7 +49,7 @@ const BLOG_POSTS: {
     category: 'Güneş Enerjisi',
     categorySlug: 'gunes-enerjisi',
     readTime: '8 dk',
-    image: '/images/categories/panel.png',
+    image: '/images/categories/panel.webp',
     accent: 'bg-orange-500',
   },
   {
@@ -59,7 +59,7 @@ const BLOG_POSTS: {
     category: 'Batarya',
     categorySlug: 'batarya',
     readTime: '7 dk',
-    image: '/images/categories/batarya.png',
+    image: '/images/categories/batarya.webp',
     accent: 'bg-emerald-600',
   },
   {
@@ -69,7 +69,7 @@ const BLOG_POSTS: {
     category: 'İnverter',
     categorySlug: 'inverter',
     readTime: '5 dk',
-    image: '/images/ges/solar-hero-premium.png',
+    image: '/images/ges/solar-hero-premium.webp',
     accent: 'bg-violet-600',
   },
   {
@@ -79,7 +79,7 @@ const BLOG_POSTS: {
     category: 'GES',
     categorySlug: 'ges',
     readTime: '10 dk',
-    image: '/images/ges/solar-prominent.png',
+    image: '/images/ges/solar-prominent.webp',
     accent: 'bg-orange-500',
   },
   {
@@ -89,7 +89,7 @@ const BLOG_POSTS: {
     category: 'Batarya',
     categorySlug: 'batarya',
     readTime: '6 dk',
-    image: '/images/packages/custom/karavan.png',
+    image: '/images/packages/custom/karavan.webp',
     accent: 'bg-emerald-600',
   },
 ]

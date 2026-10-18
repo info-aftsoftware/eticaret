@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 import { FileCheck2, Truck, Lock, Headphones } from 'lucide-react'
 
 /**
@@ -61,7 +62,7 @@ export function HeroSlider() {
   return (
     <section aria-label="Öne çıkan çözümler" className="bg-white">
       <div
-        className="p-6 overflow-hidden max-w-[1514px] mx-auto"
+        className={`${PAGE_CONTAINER} py-6 overflow-hidden`}
         aria-roledescription="carousel"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
@@ -123,7 +124,7 @@ export function HeroSlider() {
             })}
           </div>
 
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[2] flex items-center gap-2">
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[2] flex items-center gap-3">
             {SLIDES.map((slide, i) => (
               <button
                 key={slide.image}
@@ -131,8 +132,11 @@ export function HeroSlider() {
                 onClick={() => go(i)}
                 aria-label={`${i + 1}. slayt`}
                 aria-current={i === current ? 'true' : undefined}
-                className={`h-3 !min-h-0 min-w-0 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#14141a]' : 'w-3 bg-white hover:bg-white/80'}`}
-              />
+                className="group/dot p-1.5 -m-1.5 !min-h-0 min-w-0 rounded-full"
+              >
+                {/* Görünen nokta 12px; dokunma alanı 24px (erişilebilirlik) */}
+                <span className={`block h-3 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#14141a]' : 'w-3 bg-white group-hover/dot:bg-white/80'}`} />
+              </button>
             ))}
           </div>
         </div>
@@ -151,7 +155,7 @@ export function HeroSlider() {
               </span>
               <span className="min-w-0">
                 <b className="block text-[13px] font-[650] leading-[16.25px] tracking-[-0.13px] text-[#20384e]">{title}</b>
-                <small className="hidden min-[541px]:block mt-0.5 text-[11.5px] font-medium leading-[17.8px] text-[#6b7c8f]">{text}</small>
+                <small className="hidden min-[541px]:block mt-0.5 text-[11.5px] font-medium leading-[17.8px] text-[#5d6e80]">{text}</small>
               </span>
             </li>
           ))}

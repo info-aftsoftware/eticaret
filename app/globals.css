@@ -83,8 +83,8 @@
   .animate-brand-scroll {
     animation: brand-scroll 40s linear infinite;
   }
-  .group\/scroll:hover .animate-brand-scroll,
-  .group\/scroll:focus-within .animate-brand-scroll {
+  /* Fareyle üzerine gelince durmaz; yalnızca klavyeyle bir logoya odaklanınca durur (erişilebilirlik) */
+  .group\/scroll:has(:focus-visible) .animate-brand-scroll {
     animation-play-state: paused;
   }
   @media (prefers-reduced-motion: reduce) {

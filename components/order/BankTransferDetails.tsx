@@ -32,25 +32,25 @@ export function BankTransferDetails({ orderNo, amount, dueDate }: { orderNo: str
       <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-[#e6ebf1] bg-[#e6ebf1] sm:grid-cols-2">
         {amount && (
           <div className="bg-white px-4 py-3">
-            <dt className="text-xs text-[#6b7c8f]">Ödenecek tutar</dt>
+            <dt className="text-xs text-[#5d6e80]">Ödenecek tutar</dt>
             <dd className="mt-0.5 text-lg font-bold text-[#0b2540] tabular-nums">{amount}</dd>
           </div>
         )}
         {dueDate && (
           <div className="bg-white px-4 py-3">
-            <dt className="text-xs text-[#6b7c8f]">Son ödeme tarihi</dt>
+            <dt className="text-xs text-[#5d6e80]">Son ödeme tarihi</dt>
             <dd className="mt-0.5 text-[15px] font-semibold text-[#121926]">{dueDate}</dd>
           </div>
         )}
         <div className="bg-white px-4 py-3 sm:col-span-2">
-          <dt className="text-xs text-[#6b7c8f]">Açıklama</dt>
+          <dt className="text-xs text-[#5d6e80]">Açıklama</dt>
           <dd className="mt-0.5 flex items-center justify-between gap-2">
             <span className="whitespace-nowrap font-mono text-[15px] font-semibold text-[#121926]">{orderNo}</span>
             <CopyButton value={orderNo} label="Sipariş numarasını" />
           </dd>
         </div>
       </dl>
-      <p className="text-[13px] text-[#6b7c8f]">Alıcı: <span className="font-medium text-[#20384e]">{BANK_ACCOUNT_HOLDER}</span></p>
+      <p className="text-[13px] text-[#5d6e80]">Alıcı: <span className="font-medium text-[#20384e]">{BANK_ACCOUNT_HOLDER}</span></p>
       <ul className="space-y-2">
         {BANK_ACCOUNTS.map((a) => (
           <li key={a.iban} className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#e6ebf1] bg-white px-4 py-3">

@@ -313,7 +313,7 @@ export default function GesTeklifDogrulamaPage() {
       <div
         className="relative overflow-hidden pt-12 pb-24 md:pt-20 md:pb-32"
         style={{
-          backgroundImage: 'url("/images/ges/ges-verification-hero.png")',
+          backgroundImage: 'url("/images/ges/ges-verification-hero.webp")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

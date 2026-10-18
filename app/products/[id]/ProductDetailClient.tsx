@@ -459,7 +459,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
               <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
                 {formatPrice(effectiveVariant ? effectiveVariant.price : product.price)}
               </p>
-              <p className="text-sm text-slate-400 mb-3">
+              <p className="text-sm text-slate-500 mb-3">
                 {tProduct('priceWithVAT')} {formatPrice((effectiveVariant ? effectiveVariant.price : product.price) * 1.20)}
               </p>
               <div className="mb-6">

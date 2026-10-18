@@ -34,7 +34,7 @@ export function LanguageSwitcher() {
         <button
           type="button"
           className="flex items-center gap-1 hover:text-brand transition-colors text-inherit font-medium"
-          aria-label="Dil seçin / Choose language"
+          aria-label={`${LOCALES.find((l) => l.code === locale)?.label ?? 'Türkçe'} — dil seçin`}
         >
           {LOCALES.find((l) => l.code === locale)?.label ?? 'Türkçe'}
           <ChevronDown className="w-3 h-3" />

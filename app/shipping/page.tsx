@@ -4,7 +4,7 @@ import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/lib/store-config'
 import { Truck, Package, Clock, MapPin, ChevronRight, AlertTriangle, CheckCircle } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Kargo ve Teslimat | voltekno',
+  title: 'Kargo ve Teslimat',
   description: 'Voltekno kargo süreleri, ücretsiz kargo şartı, kargo firması ve teslimat koşulları.',
 }
 

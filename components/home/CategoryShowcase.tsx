@@ -3,6 +3,7 @@
 import React, { useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
@@ -70,11 +71,11 @@ export function CategoryShowcase() {
 
   return (
     <section className="bg-white py-12 min-[901px]:py-16" aria-labelledby="home-categories-heading">
-      <div className="max-w-[1514px] mx-auto px-4 min-[541px]:px-6">
+      <div className={PAGE_CONTAINER}>
         <div className="flex items-end justify-between gap-4 mb-6 min-[901px]:mb-8">
           <div>
             <h2 id="home-categories-heading" className="text-[23px] font-bold text-[#121926]">Kategoriler</h2>
-            <p className="mt-1 text-sm text-[#6b7c8f]">
+            <p className="mt-1 text-sm text-[#5d6e80]">
               {tiles.length} ana kategoride {tiles.reduce((n, x) => n + x.count, 0)} ürün
             </p>
           </div>
@@ -150,7 +151,7 @@ export function CategoryShowcase() {
                       {tile.label}
                     </span>
                     <span className="hidden min-[541px]:block mt-1 h-9 overflow-hidden">
-                      <span className="line-clamp-2 text-[12px] leading-[18px] text-[#6b7c8f]">{tile.caption}</span>
+                      <span className="line-clamp-2 text-[12px] leading-[18px] text-[#5d6e80]">{tile.caption}</span>
                     </span>
                   </span>
                   <span className="hidden min-[541px]:flex shrink-0 w-8 h-8 rounded-full bg-[#f5b400] text-[#111111] items-center justify-center group-hover:translate-x-0.5 transition-transform">

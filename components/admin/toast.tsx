@@ -61,7 +61,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               />
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-[#121926]">{t.title}</p>
-                {t.text && <p className="text-[13px] text-[#6b7c8f] mt-0.5 break-words">{t.text}</p>}
+                {t.text && <p className="text-[13px] text-[#5d6e80] mt-0.5 break-words">{t.text}</p>}
               </div>
             </>
           )

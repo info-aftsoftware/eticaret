@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 
 /**
  * Ana sayfanın son bölümü — voltekno.com'daki "GES projeniz için teklif alın" bandının görsel düzeni:
@@ -10,7 +11,7 @@ import Image from 'next/image'
 export function QuoteBanner() {
   return (
     <section aria-labelledby="quote-cta-heading" className="bg-white">
-      <div className="max-w-[1514px] mx-auto px-6 pt-6 pb-12 min-[901px]:pb-16">
+      <div className={`${PAGE_CONTAINER} pt-6 pb-12 min-[901px]:pb-16`}>
         <div className="relative w-full aspect-square min-[769px]:aspect-video min-[769px]:max-h-[600px] rounded-md overflow-hidden bg-[#0b2540]">
           <Image
             src="/images/hero/voltekno-ges-banner.webp"

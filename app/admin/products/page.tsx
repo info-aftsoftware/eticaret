@@ -111,7 +111,7 @@ function StockCell({ row, onSaved }: { row: CatalogRow; onSaved: (id: string, st
           row.stock === 0 ? 'text-red-700' : row.stock <= LOW ? 'text-amber-700' : 'text-[#121926]'
         )}
       />
-      {saving && <span className="text-xs text-[#6b7c8f]">…</span>}
+      {saving && <span className="text-xs text-[#5d6e80]">…</span>}
     </div>
   )
 }
@@ -348,7 +348,7 @@ function ProductsContent() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-[13px] min-w-[600px]">
               <thead>
-                <tr className="text-[11px] uppercase tracking-wider text-[#6b7c8f] border-b border-[#e6ebf1]">
+                <tr className="text-[11px] uppercase tracking-wider text-[#5d6e80] border-b border-[#e6ebf1]">
                   <th className="pl-4 pr-1 py-2.5 w-8">
                     <input
                       type="checkbox"
@@ -397,7 +397,7 @@ function ProductsContent() {
                             <Link href={`/admin/products/duzenle?id=${encodeURIComponent(p.id)}`} className="font-medium text-[#121926] hover:underline line-clamp-2">
                               {p.name}
                             </Link>
-                            <p className="text-xs text-[#6b7c8f] truncate">
+                            <p className="text-xs text-[#5d6e80] truncate">
                               {[p.brand, p.sku].filter(Boolean).join(' · ')}
                               {p.variants?.length ? ` · ${p.variants.length} varyant` : ''}
                             </p>
@@ -425,7 +425,7 @@ function ProductsContent() {
                       </td>
                       <td className="px-4 py-2.5">
                         <div className="flex justify-end gap-1">
-                          <a href={`/products/${p.id}`} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg hidden lg:inline-flex items-center justify-center text-[#6b7c8f] hover:bg-[#f1f4f8]" title="Sitede gör">
+                          <a href={`/products/${p.id}`} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg hidden lg:inline-flex items-center justify-center text-[#5d6e80] hover:bg-[#f1f4f8]" title="Sitede gör">
                             <ExternalLink className="w-4 h-4" />
                           </a>
                           <BtnLink href={`/admin/products/duzenle?id=${encodeURIComponent(p.id)}`} size="xs" variant="outline">

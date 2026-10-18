@@ -79,7 +79,7 @@ function ResetPasswordForm() {
   if (codeState === 'checking') {
     return (
       <AuthLayout breadcrumb="Şifre Sıfırla" icon={KeyRound} title="Bağlantı kontrol ediliyor" showBenefits={false}>
-        <div className="flex flex-col items-center py-8 text-[#6b7c8f]">
+        <div className="flex flex-col items-center py-8 text-[#5d6e80]">
           <Loader2 className="mb-3 h-8 w-8 animate-spin text-[#0b2540]" />
           Lütfen bekleyin…
         </div>

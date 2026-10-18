@@ -3,12 +3,12 @@ import Link from 'next/link'
 import { ChevronRight, ShieldCheck, Zap, Truck, HeadphonesIcon, Users, Package, Award, Clock } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Hakkımızda | voltekno',
+  title: 'Hakkımızda',
   description: 'Voltekno hakkında: misyonumuz, değerlerimiz ve temiz enerji çözümlerindeki uzmanlığımız.',
 }
 
 const stats = [
-  { label: '1.500+', desc: 'Ürün Çeşidi', icon: Package },
+  { label: '340+', desc: 'Ürün Çeşidi', icon: Package },
   { label: '2.000+', desc: 'Mutlu Müşteri', icon: Users },
   { label: '2 Yıl', desc: 'Garanti', icon: Award },
   { label: '7/24', desc: 'Teknik Destek', icon: Clock },

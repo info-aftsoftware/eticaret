@@ -549,7 +549,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                 </Button>
                 <SlidersHorizontal className="w-4 h-4 text-slate-400 hidden sm:block" />
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                  <SelectTrigger className="w-[178px] min-h-[44px] h-11 text-sm border-slate-200 bg-white rounded-xl touch-manipulation">
+                  <SelectTrigger aria-label="Sıralama" className="w-[178px] min-h-[44px] h-11 text-sm border-slate-200 bg-white rounded-xl touch-manipulation">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

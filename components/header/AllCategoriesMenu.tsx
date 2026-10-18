@@ -148,7 +148,7 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
                       <li key={p.slug}>
                         <Link href={`/paketler/${p.slug}`} onClick={close} className="block rounded-lg border border-[#e6ebf1] px-4 py-3 hover:bg-[#f1f4f8] transition-colors">
                           <span className="block text-sm font-semibold text-[#20384e]">{p.shortTitle}</span>
-                          <span className="block text-xs text-[#6b7c8f] mt-0.5 line-clamp-2">{p.description}</span>
+                          <span className="block text-xs text-[#5d6e80] mt-0.5 line-clamp-2">{p.description}</span>
                         </Link>
                       </li>
                     ))}
@@ -169,7 +169,7 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
                             <ul className="space-y-0.5">
                               {brands.map((brand) => (
                                 <li key={brand}>
-                                  <Link href={productsHref(cat.value, brand)} onClick={close} className="block text-[13px] text-[#6b7c8f] hover:text-[#0b2540] py-0.5">
+                                  <Link href={productsHref(cat.value, brand)} onClick={close} className="block text-[13px] text-[#5d6e80] hover:text-[#0b2540] py-0.5">
                                     {brand}
                                   </Link>
                                 </li>
@@ -194,7 +194,7 @@ function PanelHeading({ title, href, onClick }: { title: string; href: string; o
   return (
     <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e6ebf1]">
       <span className="text-[15px] font-semibold text-[#0b2540]">{title}</span>
-      <Link href={href} onClick={onClick} className="inline-flex items-center gap-1 text-xs font-medium text-[#6b7c8f] hover:text-[#0b2540]">
+      <Link href={href} onClick={onClick} className="inline-flex items-center gap-1 text-xs font-medium text-[#5d6e80] hover:text-[#0b2540]">
         Tümünü Gör <ArrowRight className="w-3 h-3" aria-hidden />
       </Link>
     </div>

@@ -3,30 +3,31 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
 export const metadata: Metadata = {
-  title: 'Enerji Paketleri | Bag Evi, Villa, Karavan, Sulama, Marin ve Bungalov Cozumleri',
+  title: 'Enerji Paketleri: Bağ Evi, Villa, Karavan, Sulama, Marin',
   description:
-    'Bag evi, dag evi, yayla evi, bungalov, villa, karavan, tarimsal sulama ve marin uygulamalari icin hazir gunes enerji paketleri. GES, inverter ve batarya cozumleriyle ihtiyaca uygun sistemler.',
+    'Bağ evi, villa, karavan, tarımsal sulama ve marin uygulamaları için hazır güneş enerjisi paketleri. Panel, inverter ve akü ihtiyaca göre birlikte seçilir.',
   keywords: [
-    'bag evi gunes enerji paketi',
-    'dag evi solar sistem',
-    'yayla evi gunes paneli',
+    'bağ evi güneş enerji paketi',
+    'dağ evi solar sistem',
+    'yayla evi güneş paneli',
     'bungalov enerji paketi',
-    'villa gunes paneli paketi',
-    'karavan gunes paneli',
-    'sulama gunes enerjisi',
-    'marin gunes enerji paketi',
+    'villa güneş paneli paketi',
+    'karavan güneş paneli',
+    'sulama güneş enerjisi',
+    'marin güneş enerji paketi',
     'hazir solar paket',
-    'gunes enerji sistemi fiyatlari',
+    'güneş enerji sistemi fiyatları',
     'ges paketi',
   ],
   alternates: { canonical: '/paketler' },
   openGraph: {
     title: 'Enerji Paketleri | voltekno',
-    description: 'Bag evi, villa, karavan, sulama ve marin icin hazir gunes enerji paketleri.',
+    description: 'Bağ evi, villa, karavan, sulama ve marin için hazır güneş enerjisi paketleri.',
     type: 'website',
     siteName: 'voltekno',
     url: `${SITE_URL}/paketler`,
@@ -38,7 +39,7 @@ function buildPackageListSchema() {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Enerji Paketleri',
-    description: 'Farkli kullanim alanlari icin hazirlanmis gunes enerji paketleri.',
+    description: 'Farklı kullanım alanları için hazırlanmış güneş enerjisi paketleri.',
     url: `${SITE_URL}/paketler`,
     mainEntity: {
       '@type': 'ItemList',
@@ -59,10 +60,10 @@ export default function PaketlerPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPackageListSchema()) }}
       />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10 md:py-14">
+      <div className={`${PAGE_CONTAINER} py-10 md:py-14`}>
         <header className="mb-8 md:mb-10">
           <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Paket Kategorileri</h1>
-          <p className="mt-2 text-slate-600">Ihtiyaca gore hazirlanmis enerji paketlerini inceleyin.</p>
+          <p className="mt-2 text-slate-600">İhtiyaca göre hazırlanmış enerji paketlerini inceleyin.</p>
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-7">

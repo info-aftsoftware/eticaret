@@ -29,7 +29,7 @@ function CancelContent() {
           {error}
         </p>
       )}
-      <p className="mt-3 text-[15px] text-[#6b7c8f]">
+      <p className="mt-3 text-[15px] text-[#5d6e80]">
         {cancelled && orderNo ? `Ödeme alınmadı ve ${orderNo} numaralı sipariş iptal edildi. ` : 'Kartınızdan ödeme alınmadı. '}
         Sepetiniz aynen duruyor; tekrar deneyebilir veya Havale/EFT ile indirimli ödeyebilirsiniz.
       </p>
@@ -41,7 +41,7 @@ function CancelContent() {
           <Banknote className="h-4 w-4" aria-hidden /> Sepete git
         </Link>
       </div>
-      <p className="mt-6 text-xs text-[#6b7c8f]">
+      <p className="mt-6 text-xs text-[#5d6e80]">
         Sorun devam ederse bize ulaşın: <a href={SELLER.phoneHref} className="font-medium text-[#0b2540] underline">{SELLER.phone}</a>
       </p>
     </div>

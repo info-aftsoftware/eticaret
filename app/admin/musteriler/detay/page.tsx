@@ -18,7 +18,7 @@ type Detail = CustomerRow & {
 function Stat({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: React.ReactNode }) {
   return (
     <Panel className="p-4">
-      <div className="flex items-center gap-2 text-[12px] text-[#6b7c8f]">
+      <div className="flex items-center gap-2 text-[12px] text-[#5d6e80]">
         <Icon className="w-4 h-4" />
         {label}
       </div>
@@ -105,7 +105,7 @@ function CustomerDetail() {
                 <span className="text-[#20384e]">{data.city ?? '—'}</span>
               </div>
               <div className="pt-2 border-t border-[#eef2f6]">
-                <p className="text-xs text-[#6b7c8f] mb-1">Pazarlama izni</p>
+                <p className="text-xs text-[#5d6e80] mb-1">Pazarlama izni</p>
                 <ConsentPill value={data.marketingConsent} />
               </div>
             </dl>
@@ -122,7 +122,7 @@ function CustomerDetail() {
                       {a.isDefault && <Pill tone="navy">Varsayılan</Pill>}
                     </p>
                     <p className="text-[#20384e]">{a.name} · {a.phone}</p>
-                    <p className="text-[#6b7c8f]">{a.addressLine}, {a.district} / {a.city}</p>
+                    <p className="text-[#5d6e80]">{a.addressLine}, {a.district} / {a.city}</p>
                   </li>
                 ))}
               </ul>
@@ -141,7 +141,7 @@ function CustomerDetail() {
                   <Link href={`/admin/orders/${o.id}`} className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-4 px-4 sm:px-5 py-3 hover:bg-[#fafbfd]">
                     <div className="min-w-0 flex-1">
                       <p className="font-mono text-[13px] font-semibold text-[#0b2540]">{o.orderNo}</p>
-                      <p className="text-xs text-[#6b7c8f]">{fmtDateTime(o.createdAt)} · {methodLabel(o.paymentMethod)} · {o.city}</p>
+                      <p className="text-xs text-[#5d6e80]">{fmtDateTime(o.createdAt)} · {methodLabel(o.paymentMethod)} · {o.city}</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
                       <Pill tone={ORDER_STATUS_TONE[o.status] ?? 'slate'} dot>{statusLabel(o.status)}</Pill>

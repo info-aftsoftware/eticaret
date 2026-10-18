@@ -107,12 +107,12 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
           <Package className="h-10 w-10 text-slate-300" />
         </div>
         <p className="mt-3 text-sm font-semibold text-[#121926]">Bu ürün artık satışta değil</p>
-        <p className="mt-1 text-xs text-[#6b7c8f]">Benzer ürünlere göz atabilirsiniz.</p>
+        <p className="mt-1 text-xs text-[#5d6e80]">Benzer ürünlere göz atabilirsiniz.</p>
         <div className="mt-auto flex gap-2 pt-3">
           <Link href={`/products/${id}`} className="inline-flex h-9 flex-1 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white text-xs font-semibold text-[#0b2540] hover:border-[#0b2540]">
             Benzerlerini gör
           </Link>
-          <button type="button" onClick={() => onRemove(id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white text-[#6b7c8f] hover:text-[#b42318]" aria-label="Favorilerden kaldır">
+          <button type="button" onClick={() => onRemove(id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white text-[#5d6e80] hover:text-[#b42318]" aria-label="Favorilerden kaldır">
             <Trash2 className="h-4 w-4" />
           </button>
         </div>
@@ -150,29 +150,29 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
       </button>
 
       <div className="flex flex-1 flex-col border-t border-[#f1f4f8] p-3 sm:p-4">
-        {product.brand && <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[#6b7c8f]">{product.brand}</p>}
+        {product.brand && <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[#5d6e80]">{product.brand}</p>}
         <Link href={href} className="line-clamp-2 text-sm font-medium leading-snug text-[#121926] hover:text-[#0b2540] hover:underline">
           {product.name}
         </Link>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
           <div>
             {product.oldPrice && product.oldPrice > product.price && (
-              <span className="block text-xs text-[#6b7c8f] line-through">{formatPrice(product.oldPrice)}</span>
+              <span className="block text-xs text-[#5d6e80] line-through">{formatPrice(product.oldPrice)}</span>
             )}
             <span className={`text-base font-bold ${product.oldPrice ? 'text-[#b42318]' : 'text-[#121926]'}`}>
               {formatPrice(product.price)}
             </span>
-            {product.variants.length > 1 && <span className="ml-1.5 text-[11px] text-[#6b7c8f]">{product.variants.length} seçenek</span>}
+            {product.variants.length > 1 && <span className="ml-1.5 text-[11px] text-[#5d6e80]">{product.variants.length} seçenek</span>}
           </div>
           {outOfStock ? (
-            <span className="rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[11px] font-semibold text-[#6b7c8f]">Tükendi</span>
+            <span className="rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[11px] font-semibold text-[#5d6e80]">Tükendi</span>
           ) : lowStock ? (
             <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">Son {product.stock} adet</span>
           ) : (
             <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700">Stokta</span>
           )}
         </div>
-        {product.campaign && <p className="mt-1 text-[11px] text-[#6b7c8f]">{product.campaign}</p>}
+        {product.campaign && <p className="mt-1 text-[11px] text-[#5d6e80]">{product.campaign}</p>}
 
         <div className="mt-auto pt-3">
           {outOfStock ? (
@@ -252,7 +252,7 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
             <Heart className="h-7 w-7 text-[#e0a500]" />
           </span>
           <h2 className="text-lg font-semibold text-[#121926]">Henüz favori ürününüz yok</h2>
-          <p className="mt-2 max-w-sm text-sm text-[#6b7c8f]">
+          <p className="mt-2 max-w-sm text-sm text-[#5d6e80]">
             Beğendiğiniz ürünlerdeki kalp simgesine dokunun; fiyatını ve stok durumunu buradan takip edin.
           </p>
           <Link href="/products" className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">

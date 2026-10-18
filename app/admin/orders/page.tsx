@@ -164,7 +164,7 @@ function OrdersContent() {
           {filtersOpen && (
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-2 items-end">
               <label className="space-y-1">
-                <span className="text-xs text-[#6b7c8f]">Ödeme durumu</span>
+                <span className="text-xs text-[#5d6e80]">Ödeme durumu</span>
                 <SelectInput value={paymentStatus} onChange={(e) => setParams({ paymentStatus: e.target.value })}>
                   <option value="">Tümü</option>
                   <option value="PENDING">Ödeme bekleniyor</option>
@@ -174,7 +174,7 @@ function OrdersContent() {
                 </SelectInput>
               </label>
               <label className="space-y-1">
-                <span className="text-xs text-[#6b7c8f]">Ödeme yöntemi</span>
+                <span className="text-xs text-[#5d6e80]">Ödeme yöntemi</span>
                 <SelectInput value={paymentMethod} onChange={(e) => setParams({ paymentMethod: e.target.value })}>
                   <option value="">Tümü</option>
                   <option value="bank_transfer">Havale/EFT</option>
@@ -182,11 +182,11 @@ function OrdersContent() {
                 </SelectInput>
               </label>
               <label className="space-y-1">
-                <span className="text-xs text-[#6b7c8f]">Başlangıç</span>
+                <span className="text-xs text-[#5d6e80]">Başlangıç</span>
                 <TextInput type="date" value={from} max={to || undefined} onChange={(e) => setParams({ from: e.target.value })} />
               </label>
               <label className="space-y-1">
-                <span className="text-xs text-[#6b7c8f]">Bitiş</span>
+                <span className="text-xs text-[#5d6e80]">Bitiş</span>
                 <TextInput type="date" value={to} min={from || undefined} onChange={(e) => setParams({ to: e.target.value })} />
               </label>
               <Btn
@@ -226,7 +226,7 @@ function OrdersContent() {
             <div className="hidden lg:block overflow-x-auto">
               <table className="w-full text-left text-[13px]">
                 <thead>
-                  <tr className="text-[11px] uppercase tracking-wider text-[#6b7c8f] border-b border-[#e6ebf1]">
+                  <tr className="text-[11px] uppercase tracking-wider text-[#5d6e80] border-b border-[#e6ebf1]">
                     <th className="font-semibold px-5 py-2.5">Sipariş</th>
                     <th className="font-semibold px-3 py-2.5">Müşteri</th>
                     <th className="font-semibold px-3 py-2.5 text-right">Tutar</th>
@@ -242,7 +242,7 @@ function OrdersContent() {
                         <Link href={`/admin/orders/${o.id}`} className="font-mono font-semibold text-[#0b2540] hover:underline">
                           {o.orderNo}
                         </Link>
-                        <p className="text-xs text-[#6b7c8f] mt-0.5">
+                        <p className="text-xs text-[#5d6e80] mt-0.5">
                           {fmtDateTime(o.createdAt)} · {o.itemCount} kalem
                         </p>
                       </td>
@@ -251,7 +251,7 @@ function OrdersContent() {
                           {o.customerName}
                           {!o.userId && <span className="ml-1.5 text-[10px] font-semibold uppercase text-[#9aa8b6]">misafir</span>}
                         </p>
-                        <p className="text-xs text-[#6b7c8f] truncate">{o.customerEmail || o.phone}</p>
+                        <p className="text-xs text-[#5d6e80] truncate">{o.customerEmail || o.phone}</p>
                       </td>
                       <td className="px-3 py-3 text-right font-semibold text-[#121926] tabular-nums whitespace-nowrap">{fmtTRY(o.total)}</td>
                       <td className="px-3 py-3">
@@ -266,7 +266,7 @@ function OrdersContent() {
                           <Pill tone={PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus)}</Pill>
                           {o.paymentNotified && o.paymentStatus !== 'PAID' && <Pill tone="yellow">Bildirildi</Pill>}
                         </div>
-                        <p className="text-xs text-[#6b7c8f] mt-0.5">{methodLabel(o.paymentMethod)}</p>
+                        <p className="text-xs text-[#5d6e80] mt-0.5">{methodLabel(o.paymentMethod)}</p>
                       </td>
                       <td className="px-5 py-3">
                         <OrderQuickActions order={o} onDone={afterAction} />
@@ -285,7 +285,7 @@ function OrdersContent() {
                     <Link href={`/admin/orders/${o.id}`} className="min-w-0">
                       <span className="font-mono text-[13px] font-semibold text-[#0b2540]">{o.orderNo}</span>
                       <p className="text-[13px] font-medium text-[#121926] truncate">{o.customerName}</p>
-                      <p className="text-xs text-[#6b7c8f] truncate">
+                      <p className="text-xs text-[#5d6e80] truncate">
                         {fmtDateTime(o.createdAt)} · {methodLabel(o.paymentMethod)}
                       </p>
                     </Link>

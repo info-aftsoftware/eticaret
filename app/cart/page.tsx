@@ -96,7 +96,7 @@ function CartLine({
               <Link href={href} className="line-clamp-2 text-sm font-semibold leading-snug text-[#121926] hover:text-[#0b2540] hover:underline sm:text-[15px]">
                 {item.name || 'Ürün'}
               </Link>
-              <p className="mt-1 text-xs text-[#6b7c8f]">
+              <p className="mt-1 text-xs text-[#5d6e80]">
                 {formatPrice(item.price)} / adet <span className="text-[#9aa8b6]">· KDV hariç</span>
               </p>
               {status?.campaign && <p className="mt-0.5 text-xs font-medium text-[#b42318]">{status.campaign}</p>}
@@ -107,7 +107,7 @@ function CartLine({
             <button
               type="button"
               onClick={() => removeItem(item.id)}
-              className="-mr-1 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#6b7c8f] transition-colors hover:bg-red-50 hover:text-[#b42318] touch-manipulation"
+              className="-mr-1 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#5d6e80] transition-colors hover:bg-red-50 hover:text-[#b42318] touch-manipulation"
               aria-label={`${item.name} sepetten kaldır`}
               title="Sepetten kaldır"
             >
@@ -333,7 +333,7 @@ export default function CartPage() {
             <ShoppingBag className="h-9 w-9 text-[#0b2540]" />
           </span>
           <h2 className="text-xl font-bold text-[#121926] sm:text-2xl">{t('emptyTitle')}</h2>
-          <p className="mt-2 text-sm leading-relaxed text-[#6b7c8f] sm:text-base">
+          <p className="mt-2 text-sm leading-relaxed text-[#5d6e80] sm:text-base">
             Güneş paneli, inverter, akü ve aksesuarlarda aradığınızı keşfedin. B2B ve proje siparişleri için{' '}
             <Link href="/contact" className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">
               bize ulaşın
@@ -398,11 +398,11 @@ export default function CartPage() {
           <section className="rounded-xl border border-[#e6ebf1] bg-white" aria-labelledby="cart-items-heading">
             <div className="flex items-center justify-between gap-3 border-b border-[#f1f4f8] px-4 py-3 sm:px-5">
               <h2 id="cart-items-heading" className="text-base font-semibold text-[#121926]">
-                Ürünler <span className="font-normal text-[#6b7c8f]">({getTotalItems()})</span>
+                Ürünler <span className="font-normal text-[#5d6e80]">({getTotalItems()})</span>
               </h2>
               {confirmClear ? (
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="text-[#6b7c8f]">Sepet boşaltılsın mı?</span>
+                  <span className="text-[#5d6e80]">Sepet boşaltılsın mı?</span>
                   <button type="button" onClick={() => { clearCart(); setConfirmClear(false) }} className="rounded-md bg-[#b42318] px-2.5 py-1.5 font-semibold text-white">
                     Evet
                   </button>
@@ -414,7 +414,7 @@ export default function CartPage() {
                 <button
                   type="button"
                   onClick={() => setConfirmClear(true)}
-                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium text-[#6b7c8f] transition-colors hover:bg-red-50 hover:text-[#b42318]"
+                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium text-[#5d6e80] transition-colors hover:bg-red-50 hover:text-[#b42318]"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   {t('clearCart')}
@@ -462,7 +462,7 @@ export default function CartPage() {
 
             <dl className="mt-4 space-y-2.5 text-sm">
               <div className="flex justify-between gap-3">
-                <dt className="text-[#6b7c8f]">Ara toplam</dt>
+                <dt className="text-[#5d6e80]">Ara toplam</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">{formatPrice(subtotal)}</dd>
               </div>
               {couponDiscount > 0 && (
@@ -472,11 +472,11 @@ export default function CartPage() {
                 </div>
               )}
               <div className="flex justify-between gap-3">
-                <dt className="text-[#6b7c8f]">KDV (%{VAT_RATE})</dt>
+                <dt className="text-[#5d6e80]">KDV (%{VAT_RATE})</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">{formatPrice(tax)}</dd>
               </div>
               <div className="flex justify-between gap-3">
-                <dt className="text-[#6b7c8f]">Kargo</dt>
+                <dt className="text-[#5d6e80]">Kargo</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">
                   {shipping === 0 ? <span className="text-emerald-700">Ücretsiz</span> : formatPrice(shipping)}
                 </dd>
@@ -487,7 +487,7 @@ export default function CartPage() {
               <span className="text-base font-semibold text-[#121926]">Toplam</span>
               <span className="text-xl font-bold tabular-nums text-[#121926]">{formatPrice(total)}</span>
             </div>
-            <p className="mt-1 text-xs text-[#6b7c8f]">
+            <p className="mt-1 text-xs text-[#5d6e80]">
               Havale/EFT ile ödemede ara toplam üzerinden <strong className="text-emerald-700">%{BANK_TRANSFER_DISCOUNT_RATE} indirim</strong>.
             </p>
 
@@ -614,7 +614,7 @@ export default function CartPage() {
             </button>
 
             {!isAuthenticated && (
-              <p className="mt-3 text-center text-xs text-[#6b7c8f]">
+              <p className="mt-3 text-center text-xs text-[#5d6e80]">
                 Üye olmadan da sipariş verebilirsiniz.{' '}
                 <Link href="/login?redirect=/cart" className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">
                   Giriş yapın
@@ -623,7 +623,7 @@ export default function CartPage() {
               </p>
             )}
 
-            <p className="mt-4 flex items-center justify-center gap-1.5 border-t border-[#f1f4f8] pt-4 text-xs text-[#6b7c8f]">
+            <p className="mt-4 flex items-center justify-center gap-1.5 border-t border-[#f1f4f8] pt-4 text-xs text-[#5d6e80]">
               <Lock className="h-3.5 w-3.5" aria-hidden />
               Güvenli ödeme · Kişisel verileriniz korunur
             </p>

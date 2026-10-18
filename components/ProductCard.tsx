@@ -177,7 +177,7 @@ export function ProductCard({
         {/* Bilgi alanı */}
         <div className={`flex flex-1 flex-col border-t border-[#f1f4f8] ${isCompact ? 'p-2.5 sm:p-3' : 'p-3'}`}>
           {product.brand && (
-            <p className={`mb-1 font-semibold uppercase tracking-wide text-[#6b7c8f] ${isCompact ? 'text-[10px]' : 'text-[10px] sm:text-[11px]'}`}>
+            <p className={`mb-1 font-semibold uppercase tracking-wide text-[#5d6e80] ${isCompact ? 'text-[10px]' : 'text-[10px] sm:text-[11px]'}`}>
               {product.brand}
             </p>
           )}
@@ -187,7 +187,7 @@ export function ProductCard({
           <div className="mt-auto flex items-end justify-between gap-2 pt-2">
             <p className={`font-bold leading-tight text-[#121926] ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
               {showOldPrice && (
-                <span className="block text-[11px] font-normal text-[#6b7c8f] line-through">{formatPrice(oldPrice!)}</span>
+                <span className="block text-[11px] font-normal text-[#5d6e80] line-through">{formatPrice(oldPrice!)}</span>
               )}
               <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(displayPrice)}</span>
             </p>
@@ -209,7 +209,7 @@ export function ProductCard({
         className={`absolute right-2 top-2 z-10 flex h-9 w-9 !min-h-0 !min-w-0 items-center justify-center rounded-full border shadow-sm transition-colors touch-manipulation ${
           favorited
             ? 'border-[#f5b400] bg-[#f5b400] text-[#111]'
-            : 'border-[#e6ebf1] bg-white/95 text-[#6b7c8f] hover:border-[#0b2540] hover:text-[#0b2540]'
+            : 'border-[#e6ebf1] bg-white/95 text-[#5d6e80] hover:border-[#0b2540] hover:text-[#0b2540]'
         }`}
       >
         <Heart className={`h-4 w-4 ${favorited ? 'fill-current' : ''}`} />
@@ -218,7 +218,7 @@ export function ProductCard({
       {/* Sepet aksiyonu — her cihazda görünür; masaüstünde kart üzerine gelince vurgulanır */}
       <div className={isCompact ? 'px-2.5 pb-2.5 sm:px-3 sm:pb-3' : 'px-3 pb-3'}>
         {outOfStock ? (
-          <button type="button" disabled aria-disabled="true" className={`${btnBase} cursor-not-allowed bg-[#f1f4f8] text-[#6b7c8f]`}>
+          <button type="button" disabled aria-disabled="true" className={`${btnBase} cursor-not-allowed bg-[#f1f4f8] text-[#5d6e80]`}>
             Stokta yok
           </button>
         ) : hasVariants ? (

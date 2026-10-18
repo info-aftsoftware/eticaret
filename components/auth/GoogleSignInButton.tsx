@@ -107,10 +107,10 @@ export function GoogleSignInButton({
   return (
     <div className="space-y-5">
       <SecondaryButton type="button" onClick={handleClick} disabled={disabled || loading}>
-        {loading ? <Loader2 className="h-5 w-5 animate-spin text-[#6b7c8f]" /> : <GoogleLogo />}
+        {loading ? <Loader2 className="h-5 w-5 animate-spin text-[#5d6e80]" /> : <GoogleLogo />}
         Google ile devam et
       </SecondaryButton>
-      {notice && <div className="-mt-2 text-[12.5px] leading-relaxed text-[#6b7c8f] [&_button]:min-h-0 [&_button]:min-w-0">{notice}</div>}
+      {notice && <div className="-mt-2 text-[12.5px] leading-relaxed text-[#5d6e80] [&_button]:min-h-0 [&_button]:min-w-0">{notice}</div>}
       <Divider>{dividerText}</Divider>
     </div>
   )

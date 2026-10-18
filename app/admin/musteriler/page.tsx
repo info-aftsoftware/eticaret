@@ -128,7 +128,7 @@ function CustomersContent() {
             <div className="hidden lg:block overflow-x-auto">
               <table className="w-full text-left text-[13px]">
                 <thead>
-                  <tr className="text-[11px] uppercase tracking-wider text-[#6b7c8f] border-b border-[#e6ebf1]">
+                  <tr className="text-[11px] uppercase tracking-wider text-[#5d6e80] border-b border-[#e6ebf1]">
                     <th className="font-semibold px-5 py-2.5">Müşteri</th>
                     <th className="font-semibold px-3 py-2.5">İletişim</th>
                     <th className="font-semibold px-3 py-2.5 text-right">Sipariş</th>
@@ -148,7 +148,7 @@ function CustomersContent() {
                             <Link href={`/admin/musteriler/detay?key=${c.key}`} className="font-medium text-[#121926] hover:underline truncate block" onClick={(e) => e.stopPropagation()}>
                               {c.name}
                             </Link>
-                            <p className="text-xs text-[#6b7c8f]">
+                            <p className="text-xs text-[#5d6e80]">
                               {c.type === 'registered' ? (c.customerNo ?? 'Üye') : 'Misafir'}
                               {c.registeredAt && ` · ${fmtDate(c.registeredAt)}`}
                             </p>
@@ -157,7 +157,7 @@ function CustomersContent() {
                       </td>
                       <td className="px-3 py-3 max-w-[240px]">
                         <p className="truncate text-[#20384e]">{c.email ?? '—'}</p>
-                        <p className="text-xs text-[#6b7c8f] truncate">{[c.phone, c.city].filter(Boolean).join(' · ') || '—'}</p>
+                        <p className="text-xs text-[#5d6e80] truncate">{[c.phone, c.city].filter(Boolean).join(' · ') || '—'}</p>
                       </td>
                       <td className="px-3 py-3 text-right tabular-nums">
                         <span className="font-semibold text-[#121926]">{c.orderCount}</span>
@@ -181,12 +181,12 @@ function CustomersContent() {
                       <p className="text-[13px] font-medium text-[#121926] truncate">
                         {c.name} <span className="text-[11px] font-normal text-[#9aa8b6]">{c.type === 'registered' ? c.customerNo ?? 'Üye' : 'Misafir'}</span>
                       </p>
-                      <p className="text-xs text-[#6b7c8f] truncate">{c.email ?? c.phone}</p>
+                      <p className="text-xs text-[#5d6e80] truncate">{c.email ?? c.phone}</p>
                       <div className="mt-1"><ConsentPill value={c.marketingConsent} /></div>
                     </div>
                     <div className="text-right shrink-0">
                       <p className="text-[13px] font-semibold tabular-nums text-[#121926]">{fmtTRY(c.paidTotal)}</p>
-                      <p className="text-xs text-[#6b7c8f]">{c.orderCount} sipariş</p>
+                      <p className="text-xs text-[#5d6e80]">{c.orderCount} sipariş</p>
                     </div>
                   </Link>
                 </li>

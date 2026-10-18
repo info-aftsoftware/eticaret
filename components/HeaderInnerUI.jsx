@@ -189,7 +189,7 @@ export function HeaderInnerUI(props) {
   )
 
   const cartLink = (
-    <Link href="/cart" className="flex items-center gap-2.5 text-[#142b40] hover:text-[#0b2540] shrink-0" aria-label={t('cartAria')}>
+    <Link href="/cart" className="flex items-center gap-2.5 text-[#142b40] hover:text-[#0b2540] shrink-0">
       <span className="relative inline-flex">
         <ShoppingBag className="w-[22px] h-[22px]" strokeWidth={1.75} />
         <Badge className="absolute -top-2.5 -right-2.5 h-[18px] min-w-[18px] px-1 rounded-full bg-[#ff0000] hover:bg-[#ff0000] text-white border-0 text-[11px] font-medium flex items-center justify-center shadow-none">
@@ -197,6 +197,7 @@ export function HeaderInnerUI(props) {
         </Badge>
       </span>
       <span className="hidden min-[1025px]:inline text-[13px] font-semibold">Sepetim</span>
+      <span className="sr-only min-[1025px]:hidden">{t('cartAria')}</span>
     </Link>
   )
 
@@ -219,7 +220,7 @@ export function HeaderInnerUI(props) {
                     <button type="button" className="flex items-center gap-3 text-[#142b40] hover:text-[#0b2540] text-[13px] font-semibold whitespace-nowrap outline-none">
                       <User className="w-[18px] h-[18px]" strokeWidth={1.75} />
                       <span className="max-w-[120px] truncate">{user.name.split(' ')[0]}</span>
-                      <ChevronDown className="w-3.5 h-3.5 text-[#6b7c8f]" />
+                      <ChevronDown className="w-3.5 h-3.5 text-[#5d6e80]" />
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" sideOffset={6} className="w-72 p-0 rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-xl shadow-slate-200/50">
@@ -240,9 +241,6 @@ export function HeaderInnerUI(props) {
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild className="rounded-xl h-11 px-4 mx-1 cursor-pointer text-ink font-normal text-base focus:bg-brand-light/30 focus:text-brand data-[highlighted]:bg-brand-light/30 data-[highlighted]:text-brand">
                         <Link href="/profile?tab=settings">{t('updateInfo')}</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="rounded-xl h-11 px-4 mx-1 cursor-pointer text-ink font-normal text-base focus:bg-brand-light/30 focus:text-brand data-[highlighted]:bg-brand-light/30 data-[highlighted]:text-brand">
-                        <Link href="/profile?tab=points">{t('pointsAndGifts')}</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild className="rounded-xl h-11 px-4 mx-1 cursor-pointer text-ink font-normal text-base focus:bg-brand-light/30 focus:text-brand data-[highlighted]:bg-brand-light/30 data-[highlighted]:text-brand">
                         <Link href="/favorites">{t('viewFavorites')}</Link>
@@ -290,7 +288,7 @@ export function HeaderInnerUI(props) {
 
       {/* ── Mobil (≤900) ve tablet (901–1024): menü + logo + simgeler, kategori + arama, kategori hapları ── */}
       <div className="min-[1025px]:hidden bg-white">
-        <div className="flex items-center h-[78px] min-[901px]:h-[85px] px-3.5 min-[901px]:px-6 gap-2">
+        <div className="flex items-center h-[78px] min-[901px]:h-[85px] px-4 min-[541px]:px-6 gap-2">
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
@@ -319,7 +317,7 @@ export function HeaderInnerUI(props) {
             <div className="w-10 max-[359px]:w-8 h-10 flex items-center justify-center">{cartLink}</div>
           </div>
         </div>
-        <div className="border-t border-[#e3e8ee] px-3.5 min-[901px]:px-6 pt-2.5 pb-[13px] min-[901px]:pb-[15px] space-y-3 min-[901px]:space-y-5 shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
+        <div className="border-t border-[#e3e8ee] px-4 min-[541px]:px-6 pt-2.5 pb-[13px] min-[901px]:pb-[15px] space-y-3 min-[901px]:space-y-5 shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
           <div className="flex items-stretch gap-2.5 min-[901px]:gap-[18px]">
             <div className="hidden min-[901px]:block">
               <AllCategoriesMenu navGroups={navGroups} t={t} />
@@ -338,7 +336,7 @@ export function HeaderInnerUI(props) {
               {renderSearchDropdown(undefined, 'search-suggestions-mobile')}
             </div>
           </div>
-          <nav className="flex gap-2 overflow-x-auto -mx-3.5 px-3.5 min-[901px]:-mx-6 min-[901px]:px-6 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Kategoriler">
+          <nav className="flex gap-2 overflow-x-auto -mx-4 px-4 min-[541px]:-mx-6 min-[541px]:px-6 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Kategoriler">
             <Link href="/products" className={pillClass(isAllProducts)}>{t('catNavAllProducts')}</Link>
             {navGroups.map((g) => (
               <Link key={g.id} href={g.href} className={pillClass(pathname?.startsWith(g.href))}>

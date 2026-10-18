@@ -577,7 +577,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
               Bu konuda ürün arıyor musunuz?
             </h3>
             <p className="text-slate-500 text-sm mb-5">
-              Voltekno'da 1.500+ ürün stokta. Hızlı teslimat, 2 yıl garanti.
+              Voltekno'da 340+ ürün stokta. Hızlı teslimat, 2 yıl garanti.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link

@@ -231,7 +231,7 @@ export default function AdminOrderDetailPage() {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Link href="/admin/orders" className="inline-flex items-center gap-1 text-[13px] text-[#6b7c8f] hover:text-[#0b2540]">
+        <Link href="/admin/orders" className="inline-flex items-center gap-1 text-[13px] text-[#5d6e80] hover:text-[#0b2540]">
           <ArrowLeft className="w-4 h-4" />
           Siparişler
         </Link>
@@ -242,7 +242,7 @@ export default function AdminOrderDetailPage() {
               <Pill tone={ORDER_STATUS_TONE[order.status] ?? 'slate'} dot>{order.statusLabel ?? STATUS_LABELS[order.status] ?? order.status}</Pill>
               <Pill tone={PAYMENT_STATUS_TONE[order.paymentStatus] ?? 'slate'}>{PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}</Pill>
             </h1>
-            <p className="text-sm text-[#6b7c8f] mt-1">
+            <p className="text-sm text-[#5d6e80] mt-1">
               {fmtDate(order.createdAt)} · {c.name}
               {order.customerNo ? ` · ${order.customerNo}` : order.userId ? ' · Üye' : ' · Misafir'}
             </p>

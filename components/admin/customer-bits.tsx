@@ -40,7 +40,7 @@ function initials(name: string) {
 
 export function Avatar({ name, guest }: { name: string; guest?: boolean }) {
   return (
-    <span className={guest ? 'w-9 h-9 rounded-full bg-[#f1f4f8] text-[#6b7c8f] text-xs font-semibold flex items-center justify-center shrink-0' : 'w-9 h-9 rounded-full bg-[#0b2540] text-white text-xs font-semibold flex items-center justify-center shrink-0'}>
+    <span className={guest ? 'w-9 h-9 rounded-full bg-[#f1f4f8] text-[#5d6e80] text-xs font-semibold flex items-center justify-center shrink-0' : 'w-9 h-9 rounded-full bg-[#0b2540] text-white text-xs font-semibold flex items-center justify-center shrink-0'}>
       {initials(name) || '?'}
     </span>
   )

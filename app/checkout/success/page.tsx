@@ -151,7 +151,7 @@ function SuccessContent() {
           <StatusIcon kind={view.icon} />
         )}
         <h1 className="mt-6 text-2xl font-bold text-[#121926] sm:text-[28px]">{view.title}</h1>
-        <p className="mx-auto mt-2 max-w-md text-[15px] text-[#6b7c8f]" role="status">{view.description}</p>
+        <p className="mx-auto mt-2 max-w-md text-[15px] text-[#5d6e80]" role="status">{view.description}</p>
         {orderId && (
           <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#f1f4f8] px-4 py-2 text-sm text-[#20384e]">
             Sipariş no: <span className="font-mono font-semibold text-[#0b2540]">{orderId}</span>
@@ -191,7 +191,7 @@ function SuccessContent() {
                 </span>
                 <div>
                   <p className="text-sm font-semibold text-[#121926]">{i + 1}. {s.title}</p>
-                  <p className="text-[13px] text-[#6b7c8f]">{s.text}</p>
+                  <p className="text-[13px] text-[#5d6e80]">{s.text}</p>
                 </div>
               </li>
             ))}

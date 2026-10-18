@@ -100,7 +100,7 @@ export function PanelHeader({
         )}
         <div className="min-w-0">
           <h2 className="text-[15px] font-semibold text-[#121926] leading-tight">{title}</h2>
-          {description && <p className="text-xs text-[#6b7c8f] mt-0.5">{description}</p>}
+          {description && <p className="text-xs text-[#5d6e80] mt-0.5">{description}</p>}
         </div>
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -122,7 +122,7 @@ export function PageHeader({
   return (
     <div className="space-y-2">
       {back && (
-        <Link href={back.href} className="inline-flex items-center gap-1 text-[13px] text-[#6b7c8f] hover:text-[#0b2540]">
+        <Link href={back.href} className="inline-flex items-center gap-1 text-[13px] text-[#5d6e80] hover:text-[#0b2540]">
           <ChevronLeft className="w-4 h-4" />
           {back.label}
         </Link>
@@ -130,7 +130,7 @@ export function PageHeader({
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-xl sm:text-2xl font-bold text-[#121926] tracking-tight">{title}</h1>
-          {description && <p className="text-sm text-[#6b7c8f] mt-1">{description}</p>}
+          {description && <p className="text-sm text-[#5d6e80] mt-1">{description}</p>}
         </div>
         {actions && <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div>}
       </div>
@@ -172,7 +172,7 @@ export function CountBadge({ value, tone = 'yellow', className }: { value: numbe
 
 export const inputClass =
   'h-9 w-full rounded-lg border border-[#d3d9e1] bg-white px-3 text-sm text-[#121926] placeholder:text-[#9aa8b6] ' +
-  'focus:outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/10 disabled:bg-[#f5f7fa] disabled:text-[#6b7c8f]'
+  'focus:outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/10 disabled:bg-[#f5f7fa] disabled:text-[#5d6e80]'
 
 export const TextInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(function TextInput(
   { className, ...props },
@@ -203,7 +203,7 @@ export function Field({ label, hint, htmlFor, children, className }: { label: Re
         {label}
       </label>
       {children}
-      {hint && <p className="text-xs text-[#6b7c8f]">{hint}</p>}
+      {hint && <p className="text-xs text-[#5d6e80]">{hint}</p>}
     </div>
   )
 }
@@ -261,7 +261,7 @@ export function EmptyState({
         <Icon className="w-6 h-6 text-[#9aa8b6]" />
       </div>
       <p className="text-sm font-semibold text-[#121926]">{title}</p>
-      {description && <p className="text-[13px] text-[#6b7c8f] mt-1 max-w-sm">{description}</p>}
+      {description && <p className="text-[13px] text-[#5d6e80] mt-1 max-w-sm">{description}</p>}
       {action && <div className="mt-4">{action}</div>}
     </div>
   )
@@ -296,7 +296,7 @@ export function Pagination({
     else if (nums[nums.length - 1] !== '…') nums.push('…')
   }
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-t border-[#e6ebf1] text-[13px] text-[#6b7c8f]">
+    <div className="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-t border-[#e6ebf1] text-[13px] text-[#5d6e80]">
       <span>
         <span className="font-medium text-[#20384e] tabular-nums">{from}–{to}</span> / {total}
       </span>
@@ -353,7 +353,7 @@ export function TabStrip<T extends string>({
             onClick={() => onChange(t.value)}
             className={cn(
               'shrink-0 inline-flex items-center gap-1.5 px-3 h-10 text-[13px] font-medium border-b-2 transition-colors',
-              active ? 'border-[#f5b400] text-[#0b2540]' : 'border-transparent text-[#6b7c8f] hover:text-[#20384e]'
+              active ? 'border-[#f5b400] text-[#0b2540]' : 'border-transparent text-[#5d6e80] hover:text-[#20384e]'
             )}
           >
             {t.label}
@@ -361,7 +361,7 @@ export function TabStrip<T extends string>({
               <span
                 className={cn(
                   'min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-semibold inline-flex items-center justify-center tabular-nums',
-                  active ? 'bg-[#0b2540] text-white' : t.tone === 'yellow' && t.count > 0 ? 'bg-[#fff1c2] text-[#7a5a00]' : 'bg-[#f1f4f8] text-[#6b7c8f]'
+                  active ? 'bg-[#0b2540] text-white' : t.tone === 'yellow' && t.count > 0 ? 'bg-[#fff1c2] text-[#7a5a00]' : 'bg-[#f1f4f8] text-[#5d6e80]'
                 )}
               >
                 {t.count}
@@ -407,9 +407,9 @@ export function Modal({
         <div className="flex items-start justify-between gap-3 px-5 pt-4 pb-3 border-b border-[#e6ebf1]">
           <div className="min-w-0">
             <h3 className="text-base font-semibold text-[#121926]">{title}</h3>
-            {description && <p className="text-[13px] text-[#6b7c8f] mt-0.5">{description}</p>}
+            {description && <p className="text-[13px] text-[#5d6e80] mt-0.5">{description}</p>}
           </div>
-          <button type="button" onClick={onClose} className="w-8 h-8 -mr-1 rounded-lg flex items-center justify-center text-[#6b7c8f] hover:bg-[#f1f4f8]" aria-label="Kapat">
+          <button type="button" onClick={onClose} className="w-8 h-8 -mr-1 rounded-lg flex items-center justify-center text-[#5d6e80] hover:bg-[#f1f4f8]" aria-label="Kapat">
             <X className="w-4 h-4" />
           </button>
         </div>

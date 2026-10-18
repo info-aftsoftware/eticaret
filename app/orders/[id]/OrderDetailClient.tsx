@@ -74,7 +74,7 @@ function Card({ title, icon: Icon, children, aside, className = '' }: {
     <section className={`rounded-xl border border-[#e6ebf1] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)] ${className}`}>
       {title && (
         <header className="flex flex-wrap items-center gap-2 border-b border-[#eef1f5] px-4 py-3.5 sm:px-5">
-          {Icon && <Icon className="h-[18px] w-[18px] text-[#6b7c8f]" aria-hidden />}
+          {Icon && <Icon className="h-[18px] w-[18px] text-[#5d6e80]" aria-hidden />}
           <h2 className="text-[15px] font-semibold text-[#121926]">{title}</h2>
           {aside && <div className="ml-auto">{aside}</div>}
         </header>
@@ -132,8 +132,8 @@ function ProgressTimeline({ order }: { order: any }) {
               {done && !active ? <Check className="h-4 w-4" aria-hidden /> : <s.icon className="h-4 w-4" aria-hidden />}
             </span>
             <span className="min-w-0 pt-1.5 sm:pt-0">
-              <span className={`block text-sm leading-tight ${done ? 'font-semibold text-[#121926]' : 'text-[#6b7c8f]'}`}>{s.label}</span>
-              <span className="block text-xs text-[#6b7c8f]">{done && s.date ? fmtDay(new Date(s.date)) : active ? 'Şu an' : ''}</span>
+              <span className={`block text-sm leading-tight ${done ? 'font-semibold text-[#121926]' : 'text-[#5d6e80]'}`}>{s.label}</span>
+              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date)) : active ? 'Şu an' : ''}</span>
             </span>
           </li>
         )
@@ -404,7 +404,7 @@ export default function OrderDetailPage() {
                 </span>
                 <h2 className="text-lg font-semibold text-[#121926]">Siparişinizi görüntüleyin</h2>
                 <p className="mt-1 font-mono text-sm font-semibold text-[#0b2540]">{id}</p>
-                <p className="mb-5 mt-2 text-sm text-[#6b7c8f]">
+                <p className="mb-5 mt-2 text-sm text-[#5d6e80]">
                   Güvenliğiniz için siparişte kullandığınız e-posta adresi ve telefon numarasını girin.
                   {!isAuthenticated && (
                     <> Üye iseniz <Link href={`/login?redirect=/orders/${encodeURIComponent(id)}`} className="font-medium text-[#0b2540] underline-offset-2 hover:underline">giriş yapın</Link>.</>
@@ -465,7 +465,7 @@ export default function OrderDetailPage() {
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">Sipariş <span className="font-mono">{order.orderId}</span></h1>
-            <p className="mt-1 text-sm text-[#6b7c8f]">{fmtDateTime(new Date(order.createdAt))}</p>
+            <p className="mt-1 text-sm text-[#5d6e80]">{fmtDateTime(new Date(order.createdAt))}</p>
           </div>
           <StatusBadge order={order} />
         </div>
@@ -486,7 +486,7 @@ export default function OrderDetailPage() {
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600"><XCircle className="h-5 w-5" aria-hidden /></span>
                   <div className="text-sm">
                     <p className="text-base font-semibold text-[#121926]">{isCancelled ? 'Bu sipariş iptal edildi' : 'Bu sipariş iade alındı'}</p>
-                    {order.dates?.cancelledAt && isCancelled && <p className="text-[#6b7c8f]">{fmtDateTime(new Date(order.dates.cancelledAt))}</p>}
+                    {order.dates?.cancelledAt && isCancelled && <p className="text-[#5d6e80]">{fmtDateTime(new Date(order.dates.cancelledAt))}</p>}
                     {refunded ? (
                       <p className="mt-2 rounded-lg bg-emerald-50 px-3 py-2 text-emerald-800">
                         Ücret iadeniz başlatıldı ({formatPrice(p.total || 0)}). {order.paymentMethod === 'bank_transfer'
@@ -494,7 +494,7 @@ export default function OrderDetailPage() {
                           : 'Tutarın kartınıza yansıması bankanıza bağlı olarak 2–10 iş günü sürebilir.'}
                       </p>
                     ) : isCancelled && order.paymentStatus !== 'PAID' ? (
-                      <p className="mt-1 text-[#6b7c8f]">Ödeme alınmadığından yapmanız gereken bir işlem yok.</p>
+                      <p className="mt-1 text-[#5d6e80]">Ödeme alınmadığından yapmanız gereken bir işlem yok.</p>
                     ) : null}
                   </div>
                 </div>
@@ -549,11 +549,11 @@ export default function OrderDetailPage() {
               <Card title="Kargo bilgisi" icon={Truck}>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                   <div>
-                    <p className="text-xs text-[#6b7c8f]">Kargo firması</p>
+                    <p className="text-xs text-[#5d6e80]">Kargo firması</p>
                     <p className="text-sm font-semibold text-[#121926]">{order.carrierName || '—'}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-[#6b7c8f]">Takip numarası</p>
+                    <p className="text-xs text-[#5d6e80]">Takip numarası</p>
                     <p className="flex items-center gap-2 font-mono text-sm font-semibold text-[#121926]">
                       {order.trackingNumber}
                       <CopyInline value={order.trackingNumber} />
@@ -565,7 +565,7 @@ export default function OrderDetailPage() {
                     </a>
                   )}
                 </div>
-                {carrier?.trackingHint && <p className="mt-3 text-[13px] text-[#6b7c8f]">{carrier.trackingHint}</p>}
+                {carrier?.trackingHint && <p className="mt-3 text-[13px] text-[#5d6e80]">{carrier.trackingHint}</p>}
               </Card>
             )}
 
@@ -576,7 +576,7 @@ export default function OrderDetailPage() {
                   <li key={item.id ?? i} className="flex items-start justify-between gap-4 py-3 text-sm first:pt-0 last:pb-0">
                     <span className="min-w-0 text-[#121926]">
                       {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{item.name}</Link> : <span className="font-medium">{item.name}</span>}
-                      <span className="block text-xs text-[#6b7c8f]">{item.quantity} adet</span>
+                      <span className="block text-xs text-[#5d6e80]">{item.quantity} adet</span>
                     </span>
                     <span className="shrink-0 font-semibold tabular-nums text-[#121926]">{formatPrice((item.price || 0) * (item.quantity || 1))}</span>
                   </li>
@@ -599,7 +599,7 @@ export default function OrderDetailPage() {
                     <li key={e.id} className="ml-4">
                       <span className={`absolute -left-[7px] mt-1.5 h-3 w-3 rounded-full ring-2 ring-white ${i === 0 ? 'bg-[#f5b400]' : 'bg-[#0b2540]'}`} />
                       <p className="text-sm text-[#121926]">{e.message}</p>
-                      <p className="text-xs text-[#6b7c8f]">{fmtDateTime(new Date(e.createdAt))}</p>
+                      <p className="text-xs text-[#5d6e80]">{fmtDateTime(new Date(e.createdAt))}</p>
                     </li>
                   ))}
                 </ol>
@@ -612,20 +612,20 @@ export default function OrderDetailPage() {
             <Card title="Ödeme özeti" icon={CreditCard}>
               {isPrismaOrder ? (
                 <dl className="space-y-2 text-sm">
-                  <div className="flex justify-between gap-3"><dt className="text-[#6b7c8f]">Ara toplam (KDV hariç)</dt><dd className="tabular-nums">{formatPrice(p.subtotal)}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">Ara toplam (KDV hariç)</dt><dd className="tabular-nums">{formatPrice(p.subtotal)}</dd></div>
                   {p.couponDiscount > 0 && (
                     <div className="flex justify-between gap-3 text-emerald-700"><dt>Kupon {p.couponCode ? `(${p.couponCode})` : ''}</dt><dd className="tabular-nums">−{formatPrice(p.couponDiscount)}</dd></div>
                   )}
                   {p.paymentDiscount > 0 && (
                     <div className="flex justify-between gap-3 text-emerald-700"><dt>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</dt><dd className="tabular-nums">−{formatPrice(p.paymentDiscount)}</dd></div>
                   )}
-                  <div className="flex justify-between gap-3"><dt className="text-[#6b7c8f]">KDV (%{VAT_RATE})</dt><dd className="tabular-nums">{formatPrice(p.tax)}</dd></div>
-                  <div className="flex justify-between gap-3"><dt className="text-[#6b7c8f]">Kargo</dt><dd>{p.shipping > 0 ? formatPrice(p.shipping) : <span className="text-emerald-700">Ücretsiz</span>}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">KDV (%{VAT_RATE})</dt><dd className="tabular-nums">{formatPrice(p.tax)}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">Kargo</dt><dd>{p.shipping > 0 ? formatPrice(p.shipping) : <span className="text-emerald-700">Ücretsiz</span>}</dd></div>
                   <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-2.5">
                     <dt className="font-semibold text-[#121926]">Toplam</dt>
                     <dd className="text-lg font-bold tabular-nums text-[#0b2540]">{formatPrice(p.total)}</dd>
                   </div>
-                  <div className="flex justify-between gap-3 pt-1 text-xs text-[#6b7c8f]">
+                  <div className="flex justify-between gap-3 pt-1 text-xs text-[#5d6e80]">
                     <dt>Ödeme yöntemi</dt>
                     <dd>{order.paymentMethod === 'bank_transfer' ? 'Havale / EFT' : order.paymentMethod === 'card' ? 'Kredi / banka kartı' : '—'}</dd>
                   </div>
@@ -668,7 +668,7 @@ export default function OrderDetailPage() {
               <Card title={canCancelNow ? 'Siparişi iptal et' : 'İptal talebi'} icon={RotateCcw}>
                 {!cancelOpen ? (
                   <>
-                    <p className="text-sm text-[#6b7c8f]">
+                    <p className="text-sm text-[#5d6e80]">
                       {canCancelNow
                         ? 'Ödemesi henüz alınmamış siparişinizi hemen iptal edebilirsiniz.'
                         : 'Siparişiniz kargoya verilmeden iptal talebi oluşturabilirsiniz. Onaylanırsa ödemenizin tamamı iade edilir.'}
@@ -680,7 +680,7 @@ export default function OrderDetailPage() {
                   </>
                 ) : (
                   <div className="space-y-3">
-                    <label htmlFor="cancel-reason" className="block text-sm font-medium text-[#20384e]">İptal nedeni <span className="font-normal text-[#6b7c8f]">(isteğe bağlı)</span></label>
+                    <label htmlFor="cancel-reason" className="block text-sm font-medium text-[#20384e]">İptal nedeni <span className="font-normal text-[#5d6e80]">(isteğe bağlı)</span></label>
                     <textarea id="cancel-reason" rows={3} maxLength={500} value={cancelReason} onChange={(e) => setCancelReason(e.target.value)}
                       className="w-full rounded-lg border border-[#d3d9e1] px-3 py-2 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
                     <div className="flex gap-2">
@@ -695,7 +695,7 @@ export default function OrderDetailPage() {
               </Card>
             )}
 
-            <p className="px-1 text-xs leading-relaxed text-[#6b7c8f]">
+            <p className="px-1 text-xs leading-relaxed text-[#5d6e80]">
               Sorularınız için <a href={SELLER.phoneHref} className="font-medium text-[#0b2540]">{SELLER.phone}</a> veya{' '}
               <Link href="/contact" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">iletişim</Link> sayfamız.
               İade koşulları: <Link href="/returns" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">İade ve cayma</Link>.

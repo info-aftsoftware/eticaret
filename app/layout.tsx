@@ -23,11 +23,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: [
-      { url: '/favicon.png', type: 'image/png', sizes: 'any' },
+      { url: '/favicon.png', type: 'image/png', sizes: '192x192' },
     ],
-    apple: [
-      { url: '/favicon.png', type: 'image/png' },
-    ],
+    // Apple simgesi: app/apple-icon.png (180×180, beyaz zemin) dosya kuralıyla eklenir
     shortcut: ['/favicon.png'],
   },
   title: {
@@ -35,7 +33,7 @@ export const metadata: Metadata = {
     template: '%s | voltekno',
   },
   description:
-    'Güneş paneli, lityum akü, hibrit inverter, EV şarj istasyonu ve enerji depolama sistemleri. GES hesaplama, bağ evi – villa – karavan – sulama – marin enerji paketleri. Hızlı teslimat, uzman teknik destek.',
+    'Güneş paneli, lityum akü, solar inverter, şarj kontrol cihazı ve anahtar teslim GES çözümleri. Hazır enerji paketleri, hızlı teslimat ve uzman teknik destek.',
   keywords: [
     'güneş paneli',
     'güneş paneli fiyatları',

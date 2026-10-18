@@ -2,12 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, CheckCircle2, Zap } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PACKAGE_CATEGORIES, getPackageCategory } from '@/lib/package-categories'
 import { mockProducts } from '@/lib/products-mock'
 import { ProductCard } from '@/components/ProductCard'
-import { PackageUsageScenario } from '@/components/PackageUsageScenario'
+import { PAGE_CONTAINER } from '@/lib/page-container'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const MAX_PRODUCTS = 16
@@ -19,13 +19,14 @@ export function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
   const item = getPackageCategory(params.slug)
-  if (!item) return { title: 'Paket Bulunamadı | voltekno' }
+  if (!item) return { title: 'Paket Bulunamadı' }
 
   const title = `${item.seoTitle} | voltekno`
   const description = item.seoDescription
 
   return {
-    title,
+    // Kök şablon "%s | voltekno" ekler; sayfa başlığına marka tekrar yazılmaz
+    title: item.seoTitle,
     description,
     keywords: item.keywords,
     alternates: { canonical: `/paketler/${item.slug}` },
@@ -80,12 +81,6 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
     .filter((p) => categorySet.has(p.category))
     .slice(0, MAX_PRODUCTS)
 
-  // Kategori bazlı ürün sayıları (gösterim için)
-  const categoryCounts = item.productCategories.map((cat) => ({
-    cat,
-    count: mockProducts.filter((p) => p.category === cat).length,
-  })).filter((x) => x.count > 0)
-
   return (
     <div className="min-h-screen bg-slate-50">
       <script
@@ -99,7 +94,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
 
       {/* Hero */}
       <div className="bg-white border-b border-slate-200/80">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8 md:py-12">
+        <div className={`${PAGE_CONTAINER} py-8 md:py-12`}>
           <nav className="text-sm text-slate-500 mb-6 flex items-center gap-1.5 flex-wrap">
             <Link href="/" className="hover:text-slate-900 transition-colors">Ana Sayfa</Link>
             <span className="text-slate-300">/</span>
@@ -130,34 +125,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
               <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-slate-900 leading-tight">
                 {item.title}
               </h1>
-              <p className="mt-4 text-slate-600 text-base md:text-lg leading-relaxed">
-                {item.seoDescription}
-              </p>
-              <p className="mt-2 text-slate-500 text-sm">{item.targetAudience}</p>
-
-              {/* Kullanım alanları */}
-              <div className="mt-5 flex flex-wrap gap-2">
-                {item.useCases.map((uc) => (
-                  <span key={uc} className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700">
-                    <CheckCircle2 className="w-3 h-3 text-brand shrink-0" />
-                    {uc}
-                  </span>
-                ))}
-              </div>
-
-              {/* Kategori sayımları */}
-              {categoryCounts.length > 0 && (
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {categoryCounts.map(({ cat, count }) => (
-                    <span key={cat} className="inline-flex items-center gap-1.5 rounded-lg bg-red-50 border border-red-200 px-3 py-1 text-xs font-semibold text-brand">
-                      <Zap className="w-3 h-3 shrink-0" />
-                      {cat} <span className="text-brand/60">({count})</span>
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="mt-7 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Button asChild className="bg-brand hover:bg-brand-hover text-white rounded-xl">
                   <a href="#urunler">Ürünleri İncele</a>
                 </Button>
@@ -173,9 +141,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
         </div>
       </div>
 
-      <PackageUsageScenario item={item} />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-10 md:py-14 space-y-12">
+      <div className={`${PAGE_CONTAINER} py-10 md:py-14 space-y-12`}>
 
         {/* Ürünler bölümü */}
         <section id="urunler">
@@ -185,7 +151,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
                 {item.shortTitle} Paketine Uygun Ürünler
               </h2>
               <p className="text-slate-500 text-sm mt-1">
-                {relatedProducts.length} ürün listeleniyor — {item.productCategories.length} kategori
+                {relatedProducts.length} ürün listeleniyor
               </p>
             </div>
             <Link
@@ -211,49 +177,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
               ))}
             </div>
           )}
-
-          {/* Kategori bazlı alt filtreler */}
-          {categoryCounts.length > 1 && (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {categoryCounts.map(({ cat }) => (
-                <Link
-                  key={cat}
-                  href={`/products?category=${encodeURIComponent(cat)}`}
-                  className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
-                >
-                  {cat}
-                </Link>
-              ))}
-            </div>
-          )}
         </section>
-
-        {/* Paket Detayları */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <section className="bg-white border border-slate-200 rounded-2xl p-6">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">Kullanım Senaryoları</h2>
-            <ul className="space-y-2.5">
-              {item.useCases.map((useCase) => (
-                <li key={useCase} className="flex items-start gap-2.5">
-                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-brand shrink-0" />
-                  <span className="text-slate-700 text-sm">{useCase}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="bg-white border border-slate-200 rounded-2xl p-6">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">Paket İçeriği Öne Çıkanlar</h2>
-            <ul className="space-y-2.5">
-              {item.includedHighlights.map((feature) => (
-                <li key={feature} className="flex items-start gap-2.5">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-slate-900 shrink-0" />
-                  <span className="text-slate-700 text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
 
         {/* SSS */}
         <section className="bg-white border border-slate-200 rounded-2xl p-6">
@@ -269,28 +193,6 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
               </details>
             ))}
           </div>
-        </section>
-
-        {/* Alt bağlantılar */}
-        <section className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Link
-            href="/products"
-            className="text-center rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
-          >
-            Tüm Ürünler
-          </Link>
-          <Link
-            href="/category/gunes-paneli"
-            className="text-center rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
-          >
-            Güneş Paneli
-          </Link>
-          <Link
-            href="/category/solar-aku"
-            className="text-center rounded-xl border border-slate-200 bg-white py-3 px-4 text-sm font-medium text-slate-700 hover:border-brand hover:text-brand transition-colors"
-          >
-            Solar Akü
-          </Link>
         </section>
       </div>
     </div>

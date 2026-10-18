@@ -28,7 +28,7 @@ export function LocaleCurrencySwitcher() {
       <span className="w-px h-3.5 bg-white/15" aria-hidden />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="flex items-center gap-1 transition-colors" aria-label="Para birimi">
+          <button type="button" className="flex items-center gap-1 transition-colors" aria-label={`${CURRENCIES.find((c) => c.code === currency)?.label ?? 'TL'} — para birimi`}>
             {CURRENCIES.find((c) => c.code === currency)?.label ?? 'TL'}
             <ChevronDown className="w-3 h-3" />
           </button>

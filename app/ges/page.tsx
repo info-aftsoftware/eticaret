@@ -410,7 +410,7 @@ export default function GesPage() {
       <div
         className="relative overflow-hidden pt-16 pb-28 md:pt-24 md:pb-36"
         style={{
-          backgroundImage: 'url("/images/ges/solar-prominent.png")',
+          backgroundImage: 'url("/images/ges/solar-prominent.webp")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

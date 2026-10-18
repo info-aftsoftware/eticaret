@@ -98,7 +98,7 @@ function matchDistrict(city: string, value: string): string {
 }
 
 const inputCls = (invalid?: boolean) =>
-  `w-full h-12 rounded-lg border bg-white px-3.5 text-base text-[#121926] placeholder:text-[#8a99a8] outline-none transition-colors focus:ring-2 disabled:bg-[#f5f7fa] disabled:text-[#6b7c8f] ${
+  `w-full h-12 rounded-lg border bg-white px-3.5 text-base text-[#121926] placeholder:text-[#8a99a8] outline-none transition-colors focus:ring-2 disabled:bg-[#f5f7fa] disabled:text-[#5d6e80] ${
     invalid ? 'border-red-500 focus:border-red-500 focus:ring-red-500/15' : 'border-[#d3d9e1] hover:border-[#b8c2ce] focus:border-[#0b2540] focus:ring-[#0b2540]/15'
   }`
 
@@ -123,7 +123,7 @@ function Field({
     <div className={`min-w-0 ${className}`}>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[#20384e]">
         {label}
-        {required ? <span className="text-red-600"> *</span> : <span className="font-normal text-[#6b7c8f]"> (isteğe bağlı)</span>}
+        {required ? <span className="text-red-600"> *</span> : <span className="font-normal text-[#5d6e80]"> (isteğe bağlı)</span>}
       </label>
       {children}
       {error ? (
@@ -132,7 +132,7 @@ function Field({
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-hint`} className="mt-1.5 text-[13px] text-[#6b7c8f]">{hint}</p>
+        <p id={`${id}-hint`} className="mt-1.5 text-[13px] text-[#5d6e80]">{hint}</p>
       ) : null}
     </div>
   )
@@ -150,7 +150,7 @@ function Section({ step, title, icon: Icon, children, aside }: {
       <header className="flex flex-wrap items-center gap-3 border-b border-[#eef1f5] px-4 py-3.5 sm:px-6">
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0b2540] text-[13px] font-semibold text-white">{step}</span>
         <h2 id={`step-${step}`} className="flex items-center gap-2 text-base font-semibold text-[#121926] sm:text-[17px]">
-          <Icon className="h-[18px] w-[18px] text-[#6b7c8f]" aria-hidden />
+          <Icon className="h-[18px] w-[18px] text-[#5d6e80]" aria-hidden />
           {title}
         </h2>
         {aside && <div className="ml-auto text-sm">{aside}</div>}
@@ -185,7 +185,7 @@ function CitySelect({ id, value, onChange, invalid, describedBy }: {
           <option key={c.name} value={c.name} className="text-[#121926]">{c.name}</option>
         ))}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7c8f]" aria-hidden />
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5d6e80]" aria-hidden />
     </div>
   )
 }
@@ -218,7 +218,7 @@ function DistrictSelect({ id, city, value, onChange, invalid, describedBy }: {
           <option key={d} value={d} className="text-[#121926]">{d}</option>
         ))}
       </select>
-      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6b7c8f]" aria-hidden />
+      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5d6e80]" aria-hidden />
     </div>
   )
 }
@@ -236,7 +236,7 @@ function Stepper() {
           {i > 0 && <span className="h-px w-4 bg-[#d3d9e1] sm:w-8" aria-hidden />}
           <span
             className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${
-              s.state === 'done' ? 'bg-[#0b2540] text-white' : s.state === 'current' ? 'bg-[#f5b400] text-[#111]' : 'bg-[#e6ebf1] text-[#6b7c8f]'
+              s.state === 'done' ? 'bg-[#0b2540] text-white' : s.state === 'current' ? 'bg-[#f5b400] text-[#111]' : 'bg-[#e6ebf1] text-[#5d6e80]'
             }`}
           >
             {s.state === 'done' ? <Check className="h-3.5 w-3.5" aria-hidden /> : i + 1}
@@ -244,7 +244,7 @@ function Stepper() {
           {s.href ? (
             <Link href={s.href} className="hidden truncate text-[#20384e] hover:underline sm:inline">{s.label}</Link>
           ) : (
-            <span className={`truncate ${s.state === 'current' ? 'font-semibold text-[#121926]' : 'hidden text-[#6b7c8f] sm:inline'}`}>{s.label}</span>
+            <span className={`truncate ${s.state === 'current' ? 'font-semibold text-[#121926]' : 'hidden text-[#5d6e80] sm:inline'}`}>{s.label}</span>
           )}
         </li>
       ))}
@@ -635,7 +635,7 @@ export default function CheckoutPage() {
             <ShoppingCart className="h-7 w-7 text-[#0b2540]" aria-hidden />
           </div>
           <h1 className="text-xl font-semibold text-[#121926]">Sepetiniz boş</h1>
-          <p className="mt-2 text-sm text-[#6b7c8f]">Ödeme adımına geçmek için önce sepetinize ürün ekleyin.</p>
+          <p className="mt-2 text-sm text-[#5d6e80]">Ödeme adımına geçmek için önce sepetinize ürün ekleyin.</p>
           <Link href="/products" className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">
             Ürünlere göz atın
           </Link>
@@ -651,7 +651,7 @@ export default function CheckoutPage() {
   const summaryLines = (
     <dl className="space-y-2.5 text-sm">
       <div className="flex justify-between gap-3">
-        <dt className="text-[#6b7c8f]">Ara toplam <span className="text-xs">(KDV hariç)</span></dt>
+        <dt className="text-[#5d6e80]">Ara toplam <span className="text-xs">(KDV hariç)</span></dt>
         <dd className="font-medium text-[#121926] tabular-nums">{formatPrice(subtotal)}</dd>
       </div>
       {couponDiscount > 0 && (
@@ -667,11 +667,11 @@ export default function CheckoutPage() {
         </div>
       )}
       <div className="flex justify-between gap-3">
-        <dt className="text-[#6b7c8f]">KDV (%{VAT_RATE})</dt>
+        <dt className="text-[#5d6e80]">KDV (%{VAT_RATE})</dt>
         <dd className="font-medium text-[#121926] tabular-nums">{formatPrice(tax)}</dd>
       </div>
       <div className="flex justify-between gap-3">
-        <dt className="text-[#6b7c8f]">Kargo</dt>
+        <dt className="text-[#5d6e80]">Kargo</dt>
         <dd className="font-medium tabular-nums">
           {shipping === 0 ? <span className="text-emerald-700">Ücretsiz</span> : <span className="text-[#121926]">{formatPrice(shipping)}</span>}
         </dd>
@@ -682,7 +682,7 @@ export default function CheckoutPage() {
         </p>
       )}
       <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-3">
-        <dt className="text-base font-semibold text-[#121926]">Toplam <span className="text-xs font-normal text-[#6b7c8f]">(KDV dahil)</span></dt>
+        <dt className="text-base font-semibold text-[#121926]">Toplam <span className="text-xs font-normal text-[#5d6e80]">(KDV dahil)</span></dt>
         <dd className="text-xl font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</dd>
       </div>
     </dl>
@@ -702,8 +702,8 @@ export default function CheckoutPage() {
           </div>
           <div className="min-w-0 flex-1">
             <p className="line-clamp-2 text-sm font-medium leading-snug text-[#121926]">{item.name}</p>
-            {item.selectedVariant?.label && <p className="mt-0.5 text-xs text-[#6b7c8f]">{item.selectedVariant.label}</p>}
-            <p className="mt-0.5 text-xs text-[#6b7c8f]">{item.quantity} adet × {formatPrice(item.price)}</p>
+            {item.selectedVariant?.label && <p className="mt-0.5 text-xs text-[#5d6e80]">{item.selectedVariant.label}</p>}
+            <p className="mt-0.5 text-xs text-[#5d6e80]">{item.quantity} adet × {formatPrice(item.price)}</p>
           </div>
           <span className="shrink-0 text-sm font-semibold text-[#121926] tabular-nums">{formatPrice(item.price * item.quantity)}</span>
         </li>
@@ -770,7 +770,7 @@ export default function CheckoutPage() {
                 title="İletişim bilgileri"
                 icon={User}
                 aside={!isAuthenticated ? (
-                  <span className="text-[#6b7c8f]">Üye misiniz? <Link href="/login?redirect=/checkout" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Giriş yapın</Link></span>
+                  <span className="text-[#5d6e80]">Üye misiniz? <Link href="/login?redirect=/checkout" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Giriş yapın</Link></span>
                 ) : undefined}
               >
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -785,7 +785,7 @@ export default function CheckoutPage() {
                   </Field>
                   <Field id="phone" label="Cep telefonu" required error={errors.phone} hint="Kargo firması teslimat için arayabilir.">
                     <div className="relative">
-                      <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-base text-[#6b7c8f]">+90</span>
+                      <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-base text-[#5d6e80]">+90</span>
                       <input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="5xx xxx xx xx"
                         value={f.phone} onChange={handleInputChange} onBlur={(e) => validateField('phone', e.target.value)}
                         aria-invalid={!!errors.phone || undefined} aria-describedby={errors.phone ? 'phone-error' : 'phone-hint'} className={`${inputCls(!!errors.phone)} pl-12`} />
@@ -823,8 +823,8 @@ export default function CheckoutPage() {
                                 {address.title || 'Adres'}
                                 {address.isDefault && <span className="rounded bg-[#e6ebf1] px-1.5 py-0.5 text-[11px] font-medium text-[#20384e]">Varsayılan</span>}
                               </span>
-                              <span className="mt-0.5 block truncate text-[#6b7c8f]">{address.addressLine}</span>
-                              <span className="block text-xs text-[#6b7c8f]">{address.district} / {address.city}</span>
+                              <span className="mt-0.5 block truncate text-[#5d6e80]">{address.addressLine}</span>
+                              <span className="block text-xs text-[#5d6e80]">{address.district} / {address.city}</span>
                             </span>
                           </label>
                         )
@@ -880,7 +880,7 @@ export default function CheckoutPage() {
                       role="radio"
                       aria-checked={f.billingType === value}
                       onClick={() => { setField('billingType', value); setErrors((p) => ({ ...p, idNumber: '', companyName: '', taxId: '', taxOffice: '' })) }}
-                      className={`h-9 rounded-md px-4 text-sm font-medium transition-colors ${f.billingType === value ? 'bg-white text-[#0b2540] shadow-sm ring-1 ring-[#d3d9e1]' : 'text-[#6b7c8f] hover:text-[#20384e]'}`}
+                      className={`h-9 rounded-md px-4 text-sm font-medium transition-colors ${f.billingType === value ? 'bg-white text-[#0b2540] shadow-sm ring-1 ring-[#d3d9e1]' : 'text-[#5d6e80] hover:text-[#20384e]'}`}
                     >
                       {label}
                     </button>
@@ -975,7 +975,7 @@ export default function CheckoutPage() {
                           <span className="text-[15px] font-semibold text-[#121926]">{m.title}</span>
                           <span className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${m.value === 'havale' ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' : 'bg-white text-[#20384e] ring-1 ring-[#d3d9e1]'}`}>{m.badge}</span>
                         </span>
-                        <span className="pl-7 text-[13px] leading-relaxed text-[#6b7c8f]">{m.text}</span>
+                        <span className="pl-7 text-[13px] leading-relaxed text-[#5d6e80]">{m.text}</span>
                       </label>
                     )
                   })}
@@ -1039,7 +1039,7 @@ export default function CheckoutPage() {
                         <><Check className="h-5 w-5" aria-hidden />Siparişi onayla · {formatPrice(total)}</>
                       )}
                     </button>
-                    <p className="text-center text-xs text-[#6b7c8f]">
+                    <p className="text-center text-xs text-[#5d6e80]">
                       {paymentMethod === 'card'
                         ? 'Ödeme, bankanızın 3D Secure sayfasında tamamlanır.'
                         : 'Siparişiniz oluşturulur; ödeme bilgileri ekranda ve e-postanızda yer alır.'}

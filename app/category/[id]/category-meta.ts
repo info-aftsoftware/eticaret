@@ -19,9 +19,9 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     title: 'Güneş Paneli',
     description: 'TOPCon, monokristal, bifacial, esnek ve katlanabilir güneş panelleri. Ev, karavan ve ticari projeler için.',
     seoDescription:
-      'Güneş paneli fiyatları ve modelleri: TOPCon, half-cut monokristal, bifacial, esnek (flexible) ve katlanabilir çanta tipi paneller. Teknik özellikler ve datasheet voltekno\'da.',
+      'Güneş paneli fiyatları ve modelleri: TOPCon, half-cut monokristal, bifacial, esnek ve katlanabilir paneller. Teknik özellikler ve datasheet voltekno\'da.',
     keywords: ['güneş paneli', 'güneş paneli fiyatları', 'topcon güneş paneli', 'monokristal panel', 'bifacial panel', 'esnek güneş paneli', 'katlanabilir güneş paneli', 'solar panel'],
-    image: '/images/categories/panel.png',
+    image: '/images/categories/panel.webp',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
@@ -29,9 +29,9 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     title: 'Solar İnverter',
     description: 'Tam sinüs MPPT akıllı inverterler, hibrit ve on-grid inverterler, şarjlı ve modifiye sinüs inverterler, solar pompa sürücüleri.',
     seoDescription:
-      "Solar inverter fiyatları: tam sinüs MPPT akıllı inverter, hibrit inverter, on-grid inverter, şebeke şarjlı tam sinüs ve modifiye sinüs inverterler, solar pompa sürücüleri. TommaTech, Deye, Victron ve daha fazlası voltekno'da.",
+      "Solar inverter fiyatları: tam sinüs MPPT, hibrit ve on-grid inverterler, solar pompa sürücüleri. TommaTech, Deye, Victron ve daha fazlası voltekno'da.",
     keywords: ['solar inverter', 'akıllı inverter', 'hibrit inverter', 'on-grid inverter', 'tam sinüs inverter', 'solar pompa sürücüsü', 'inverter fiyatları'],
-    image: '/images/categories/inverter.png',
+    image: '/images/categories/inverter.webp',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
@@ -39,9 +39,9 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     title: 'Solar Akü',
     description: 'LiFePO4 lityum aküler, jel aküler, batarya yönetim ekipmanları ve taşınabilir güç istasyonları.',
     seoDescription:
-      "Solar akü fiyatları: LiFePO4 lityum aküler, yüksek ve düşük voltaj batarya modülleri, jel aküler, BMS ve batarya aksesuarları, taşınabilir güç istasyonları voltekno'da.",
+      "Solar akü fiyatları: LiFePO4 lityum aküler, yüksek ve düşük voltaj batarya modülleri, jel aküler, BMS ve taşınabilir güç istasyonları voltekno'da.",
     keywords: ['solar akü', 'lityum akü', 'lifepo4 akü', 'jel akü', 'enerji depolama', 'taşınabilir güç istasyonu', 'akü fiyatları'],
-    image: '/images/categories/batarya.png',
+    image: '/images/categories/batarya.webp',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
@@ -49,16 +49,16 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     title: 'Solar Şarj Kontrol Cihazları',
     description: 'MPPT ve PWM solar şarj kontrol cihazları, DC-DC ve AC akü şarj cihazları, uzaktan izleme modülleri ve ekranlar.',
     seoDescription:
-      'MPPT ve PWM solar şarj kontrol cihazı fiyatları. Güneş paneli ile akü/batarya arasında verimli şarj yönetimi için Victron, Havensis, TommaTech ve diğer markalar voltekno\'da.',
+      'MPPT ve PWM solar şarj kontrol cihazı fiyatları. Victron, Havensis, TommaTech ve diğer markalarla panelden aküye verimli şarj voltekno\'da.',
     keywords: ['mppt şarj kontrol', 'pwm şarj kontrol', 'solar şarj kontrol cihazı', 'şarj regülatörü', 'mppt fiyatları'],
   },
   'isi-pompasi': {
     title: 'Isı Pompası',
     description: 'Monoblok, split ve havuz tipi ısı pompaları; R290, R32 ve EVI teknolojisiyle ısıtma, soğutma ve sıcak su.',
     seoDescription:
-      'Isı pompası fiyatları: TommaTech monoblok, split ve havuz tipi ısı pompaları, R290 / R32 EVI inverter modeller. Ev ve endüstriyel ısıtma-soğutma çözümleri voltekno\'da.',
+      'Isı pompası fiyatları: TommaTech monoblok, split ve havuz tipi, R290 / R32 EVI inverter modeller. Ev ve endüstriyel ısıtma-soğutma voltekno\'da.',
     keywords: ['ısı pompası', 'ısı pompası fiyatları', 'havuz ısı pompası', 'split ısı pompası', 'r290 ısı pompası', 'evi ısı pompası', 'tommatech ısı pompası'],
-    image: '/images/categories/isi-pompasi.png',
+    image: '/images/categories/isi-pompasi.webp',
     imagePosition: 'center center',
     imageScale: 0.78,
   },
@@ -66,7 +66,7 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     title: 'Rüzgar Enerjisi',
     description: 'Rüzgar türbinleri, rüzgar şarj kontrol cihazları, direk setleri, kanatlar ve türbin aksesuarları.',
     seoDescription:
-      'Rüzgar türbini fiyatları ve aksesuarları: ev tipi rüzgar türbinleri, direk setleri, kanatlar, burun ve kuyruk parçaları. İstabreeze ürünleri voltekno\'da.',
+      'Rüzgar türbini fiyatları ve aksesuarları: ev tipi türbinler, direk setleri, kanatlar, burun ve kuyruk parçaları. İstabreeze ürünleri voltekno\'da.',
     keywords: ['rüzgar türbini', 'ev tipi rüzgar türbini', 'rüzgar jeneratörü', 'türbin kanadı', 'rüzgar enerjisi'],
   },
   'elektrikli-arac-sarj': {
@@ -87,7 +87,7 @@ export const CATEGORY_META: Record<string, CategoryMetaItem> = {
     title: 'Aksesuar',
     description: 'İzleme ve kontrol cihazları: GX sistem izleme, akıllı sayaçlar, sensörler ve arayüzler.',
     seoDescription:
-      "Solar sistem aksesuarları: Victron GX izleme cihazları, Smart Meter ve enerji sayaçları, akım ve sıcaklık sensörleri, arayüz ve dönüştürücüler voltekno'da.",
+      "Solar sistem aksesuarları: Victron GX izleme cihazları, Smart Meter, akım ve sıcaklık sensörleri, arayüz ve dönüştürücüler voltekno'da.",
     keywords: ['solar aksesuar', 'smart meter', 'victron gx', 'enerji sayacı', 'izleme ve kontrol'],
   },
   diger: {

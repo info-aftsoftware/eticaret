@@ -92,7 +92,7 @@ function ForgotPasswordContent() {
       >
         <div className="space-y-5">
           <div className="rounded-[10px] border border-[#e6ebf1] bg-[#f5f7fa] p-4">
-            <p className="text-[13px] text-[#6b7c8f]">Gönderilen adres</p>
+            <p className="text-[13px] text-[#5d6e80]">Gönderilen adres</p>
             <p className="mt-0.5 break-all text-[15px] font-semibold text-[#121926]">{sentTo}</p>
             <ul className="mt-3 space-y-1.5 text-[13.5px] leading-relaxed text-[#20384e]">
               <li>• Bağlantı yaklaşık 1 saat geçerlidir ve bir kez kullanılabilir.</li>

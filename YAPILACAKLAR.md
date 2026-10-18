@@ -92,7 +92,7 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [ ] `firebase deploy --only firestore:rules` (eski sipariş yolu kilidi).
 - [ ] Firebase Console → Authentication → Authorized domains: `voltekno.com`, `www.voltekno.com`, `nextfirststep.com`. Google ile giriş isteniyorsa Sign-in method → Google → Enable ve ortama `NEXT_PUBLIC_GOOGLE_SIGNIN_ENABLED=true`.
 - [ ] Canlıda `MEDIA_DIR` (admin'den yüklenen görseller için kalıcı klasör; varsayılan SQLite dosyasının yanındaki `media/`).
-- [ ] 24 "görsel hazırlanıyor" ürünü için fotoğraf (TommaTech diyot modülleri, R32 split iç/dış ünite, Frecon 315–450 kW, Exelon PMAX, Havensis 20AES/MPS 3A vb.).
+- [x] 24 "görsel hazırlanıyor" ürünü için fotoğraf (TommaTech diyot modülleri, R32 split iç/dış ünite, Frecon 315–450 kW, Exelon PMAX, Havensis 20AES/MPS 3A vb.). — tamamlandı (18.10.2026, gerçek fotoğraflar)
 - [ ] Desi bazlı kargo ücreti kuralı (şu an sabit 50 TL, 3.000 TL üstü ücretsiz) ve taksit tablosu: bilgiler gelince eklenecek.
 
 ### 🔴 P0 — Yayından önce (sizde)

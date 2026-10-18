@@ -77,10 +77,11 @@ export default async function IntlProvider({
             >
               {skipToContent}
             </a>
-            <Suspense fallback={<div className="h-14 md:min-h-[8rem] bg-white border-b border-slate-200 shrink-0" aria-hidden />}>
-              <Header />
-            </Suspense>
-            <main className="flex-1 min-h-0 pb-safe min-w-0 w-full max-w-full overflow-x-hidden overflow-y-auto pt-0 mt-0 [&>*]:mt-0 [&>*]:pt-0" id="main-content">
+            {/* Suspense yok: header askıya alınmıyor; sınır olunca React büyük header'ı sonradan akıtıyor,
+                önce 56px yer tutucu çizilip içerik aşağı kayıyordu (CLS 0.93) */}
+            <Header />
+            {/* min-h-screen: içerik istemcide geç gelse de footer ilk ekranda görünüp aşağı kaymaz (CLS) */}
+            <main className="flex-1 min-h-screen pb-safe min-w-0 w-full max-w-full overflow-x-hidden overflow-y-auto pt-0 mt-0 [&>*]:mt-0 [&>*]:pt-0" id="main-content">
               <Suspense fallback={null}>
                 <SidebarLayout>{children}</SidebarLayout>
               </Suspense>
