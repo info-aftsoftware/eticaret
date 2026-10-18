@@ -55,6 +55,7 @@ function CartLine({
   formatPrice: (n: number) => string
 }) {
   const L = useL()
+  const tErr = useServerError()
   const removeItem = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const [draft, setDraft] = useState(String(item.quantity))
@@ -175,7 +176,7 @@ function CartLine({
             <div role="alert" className="mt-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-2 text-xs text-red-900">
               <p className="flex items-start gap-1.5">
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                <span>{status?.error ?? L('Bu ürün şu anda satılamıyor.', 'This product is currently unavailable.')}</span>
+                <span>{tErr(status?.error) ?? L('Bu ürün şu anda satılamıyor.', 'This product is currently unavailable.')}</span>
               </p>
               <div className="mt-1 flex flex-wrap items-center gap-x-4 pl-5">
                 {canFixQty && (

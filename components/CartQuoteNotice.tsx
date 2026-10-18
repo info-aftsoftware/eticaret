@@ -5,10 +5,12 @@ import { AlertTriangle, Info } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useCartQuote } from '@/lib/useCartQuote'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 /** Sepet/ödeme: sunucuyla eşlenen fiyat değişikliği ve satılamayan ürün uyarıları. */
 export function CartQuoteNotice() {
   const L = useL()
+  const tErr = useServerError()
   const { pricesChanged, unavailable } = useCartQuote()
   const removeItem = useCartStore((s) => s.removeItem)
   if (!pricesChanged && unavailable.length === 0) return null
@@ -23,7 +25,7 @@ export function CartQuoteNotice() {
       {unavailable.map((u) => (
         <div key={u.id} role="alert" className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-900">
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" aria-hidden />
-          <span className="flex-1">{u.error}</span>
+          <span className="flex-1">{tErr(u.error) || L('Bu ürün şu anda satılamıyor.', 'This product is currently unavailable.')}</span>
           <button type="button" onClick={() => removeItem(u.id)} className="shrink-0 font-medium underline">
             {L('Sepetten çıkar', 'Remove from cart')}
           </button>

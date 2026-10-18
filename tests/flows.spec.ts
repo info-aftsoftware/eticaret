@@ -372,6 +372,20 @@ test.describe('İngilizce akış', () => {
     await expect(page.locator('body')).not.toContainText('için stokta yalnızca')
   })
 
+  test('EN: sepette satıştan kalkmış ürün uyarısı İngilizce', async ({ page }) => {
+    await page.context().addCookies([{ name: 'NEXT_LOCALE', value: 'en', url: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3009' }])
+    await page.addInitScript(() => {
+      sessionStorage.setItem('cart-storage', JSON.stringify({
+        state: { items: [{ id: 'satistan-kalkmis-urun-xyz', name: 'Eski Ürün', price: 100, quantity: 1 }], couponCode: null },
+        version: 0,
+      }))
+      localStorage.setItem('voltekno_cookie_consent', 'dismissed')
+    })
+    await page.goto('/cart')
+    await expect(page.locator('body')).toContainText('A product in your cart is no longer for sale', { timeout: 15_000 })
+    await expect(page.locator('body')).not.toContainText('artık satışta değil')
+  })
+
   test('EN: şirket faturasında doğrulama mesajları İngilizce', async ({ page }) => {
     await seedCart(page, 1, 'en')
     await page.goto('/checkout')
