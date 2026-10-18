@@ -28,11 +28,8 @@ export function StructuredData() {
         "@type": "WebSite",
         "name": "voltekno",
         "url": "https://voltekno.com",
-        "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://voltekno.com/products?q={search_term_string}",
-            "query-input": "required name=search_term_string"
-        }
+        "inLanguage": "tr"
+        // SearchAction yok: Google sitelinks arama kutusunu kaldırdı
     }
 
     return (

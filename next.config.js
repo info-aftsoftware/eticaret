@@ -25,13 +25,17 @@ const nextConfig = {
     ],
   },
   // Eski katalogdaki ürün adresleri → yeni ürün veya kategori (Google'da dizinli sayfalar 404 olmasın).
-  // Liste: lib/legacy-product-redirects.json. Static export'ta yönlendirme desteklenmez.
+  // Listeler: lib/legacy-product-redirects.json, lib/seo/legacy-redirects.json. Static export'ta yönlendirme desteklenmez.
   ...(!isStaticExport && {
     async redirects() {
       const map = require('./lib/legacy-product-redirects.json')
       return Object.entries(map)
         .filter(([id]) => /^[a-z0-9-]+$/.test(id))
         .map(([id, destination]) => ({ source: `/products/${id}`, destination, permanent: true }))
+        // voltekno.com (ikas) adresleri: kökteki ürün/koleksiyon slug'ları → yeni ürün/kategori (alan adı geçişi, 1:1)
+        .concat(
+          Object.entries(require('./lib/seo/legacy-redirects.json')).map(([source, destination]) => ({ source, destination, permanent: true }))
+        )
     },
   }),
   // Production optimizasyonları

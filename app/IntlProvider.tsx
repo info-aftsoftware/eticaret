@@ -25,11 +25,12 @@ export default async function IntlProvider({
   // Detect admin routes: middleware forwards x-pathname header to server components
   // In static export mode (STATIC_EXPORT=true), headers() is not available — skip admin check
   let isAdmin = false
+  let pathname = ''
   if (process.env.STATIC_EXPORT !== 'true') {
     try {
       const { headers } = await import('next/headers')
       const headersList = await headers()
-      const pathname = headersList.get('x-pathname') || ''
+      pathname = headersList.get('x-pathname') || ''
       isAdmin = pathname.startsWith('/admin')
     } catch {
       // headers() unavailable (static export or edge runtime) — default to full layout
@@ -66,7 +67,8 @@ export default async function IntlProvider({
     <NextIntlClientProvider locale={locale} messages={messages}>
       <HtmlLangSync />
       <SuppressConsoleWarnings />
-      <StructuredData />
+      {/* Organization / WebSite / LocalBusiness yalnızca ana sayfada (Google: kurum bilgisi tek yerde) */}
+      {pathname === '/' && <StructuredData />}
       <TooltipProvider>
         <ToastProvider>
           <CategoriesWithProductsProvider>

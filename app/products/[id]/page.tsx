@@ -7,6 +7,8 @@ import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discount
 import { VAT_RATE } from '@/lib/store-config'
 import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { SELLER } from '@/lib/legal/company'
+import { getGroupIdForCategory } from '@/lib/categories'
+import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 import { withDetails } from '@/lib/catalog-details'
 import legacyProductRedirects from '@/lib/legacy-product-redirects.json'
@@ -89,6 +91,23 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
       description,
       ...(imageUrl && { images: [imageUrl] }),
     },
+  }
+}
+
+/** Görünür breadcrumb ile aynı yol: Ana Sayfa › Ürünler › ana kategori › alt kategori › ürün */
+function buildBreadcrumbJsonLd(product: StorefrontProduct) {
+  const groupId = product.category ? getGroupIdForCategory(product.category) : null
+  const items: { name: string; item?: string }[] = [
+    { name: 'Ana Sayfa', item: `${SITE_URL}/` },
+    { name: 'Ürünler', item: `${SITE_URL}/products` },
+  ]
+  if (groupId && CATEGORY_META[groupId]) items.push({ name: CATEGORY_META[groupId].title, item: `${SITE_URL}/category/${groupId}` })
+  if (product.category) items.push({ name: product.category, item: `${SITE_URL}/products?category=${encodeURIComponent(product.category)}` })
+  items.push({ name: product.name })
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((it, i) => ({ '@type': 'ListItem', position: i + 1, name: it.name, ...(it.item ? { item: it.item } : {}) })),
   }
 }
 
@@ -181,6 +200,10 @@ export default async function ProductPage(props: { params: Promise<{ id: string 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(product)) }}
       />
       <ProductDetailClient initialProduct={product} productId={params.id} />
     </>
