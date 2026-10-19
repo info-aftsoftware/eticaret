@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react'
-import { MailWarning, Loader2, CheckCircle2, RefreshCw } from 'lucide-react'
+import { Loader2, CheckCircle2, RefreshCw } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { sendVerificationEmail, refreshEmailVerified } from '@/lib/store/useFirebaseAuth'
 import { useL } from '@/lib/i18n-inline'
@@ -105,9 +105,6 @@ export function EmailVerifyBanner({ className = '' }: { className?: string }) {
     <div className={`rounded-xl border border-[#f5b400]/50 bg-[#fffaeb] p-4 sm:p-5 ${className}`} role="region" aria-label={L('E-posta doğrulama', 'Email verification')}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="flex min-w-0 flex-1 gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#f5b400]/20 text-[#8a6100]">
-            <MailWarning className="h-5 w-5" />
-          </span>
           <div className="min-w-0">
             <p className="text-[15px] font-semibold text-[#121926]">{L('E-posta adresinizi doğrulayın', 'Verify your email address')}</p>
             <p className="mt-0.5 text-[14px] leading-relaxed text-[#20384e]">

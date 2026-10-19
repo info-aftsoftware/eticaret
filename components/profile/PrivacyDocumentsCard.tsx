@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { FileText, ShieldCheck } from 'lucide-react'
+import { FileText } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { COOKIE_CONSENT_KEY } from '@/components/CookieConsent'
@@ -43,8 +43,7 @@ export function PrivacyDocumentsCard() {
   return (
     <Card className="classic-card rounded-lg">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5" />
+        <CardTitle>
           {L('Gizlilik ve Belgeler', 'Privacy and Documents')}
         </CardTitle>
         <p className="text-sm text-ink-muted">

@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { CheckCircle2, Clock, XCircle, Package, Mail, Truck, Banknote, UserPlus, ArrowRight, Loader2 } from 'lucide-react'
+import { CheckCircle2, Clock, XCircle, Package, Mail, Truck, Banknote, ArrowRight, Loader2 } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { BANK_TRANSFER_PAYMENT_DAYS, STORE_TIME_ZONE, bankTransferDeadline } from '@/lib/store-config'
@@ -206,9 +206,6 @@ function SuccessContent() {
 
       {showAccountCta && (
         <section className="flex flex-col gap-4 rounded-xl bg-[#0b2540] px-5 py-5 text-white sm:flex-row sm:items-center">
-          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/10">
-            <UserPlus className="h-5 w-5 text-[#f5b400]" aria-hidden />
-          </span>
           <div className="flex-1">
             <h2 className="text-base font-semibold">{L('Siparişlerinizi tek yerden takip edin', 'Track all your orders in one place')}</h2>
             <p className="mt-0.5 text-[13px] text-white/75">

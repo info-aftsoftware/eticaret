@@ -2,7 +2,9 @@
 
 /**
  * Favoriler — tek kaynak (ürün kartı, ürün sayfası, favoriler sayfası ve profil aynı durumu görür).
- * Üye: Firestore users/{uid}/favorites. Misafir: localStorage; girişte üyenin listesine taşınır.
+ * Yalnızca üyeler favori ekleyebilir (Firestore users/{uid}/favorites). Misafir favoriye dokununca giriş sayfasına
+ * yönlendirilir; dokunduğu ürün sessionStorage'da bekler ve giriş/kayıttan sonra favorilerine eklenir.
+ * Eski sürümden kalan misafir listesi (localStorage) girişte üyenin listesine taşınır.
  */
 
 import { useCallback, useEffect } from 'react'
@@ -11,6 +13,26 @@ import { getFavorites, addFavorite, removeFavorite } from '@/lib/firebase/firest
 import { useAuthStore } from '@/lib/store/useAuthStore'
 
 const GUEST_KEY = 'guest-favorites'
+const PENDING_KEY = 'favorite-after-login'
+
+/** Misafirin dokunduğu ürünü girişten sonra eklemek üzere saklar ve giriş sayfasının adresini döner */
+export function favoriteLoginHref(productId: string): string {
+  try {
+    sessionStorage.setItem(PENDING_KEY, productId)
+  } catch {}
+  const here = typeof window === 'undefined' ? '/' : `${window.location.pathname}${window.location.search}`
+  return `/login?redirect=${encodeURIComponent(here)}&reason=favorite`
+}
+
+function takePending(): string | null {
+  try {
+    const id = sessionStorage.getItem(PENDING_KEY)
+    sessionStorage.removeItem(PENDING_KEY)
+    return id && /^[\w-]{1,200}$/.test(id) ? id : null
+  } catch {
+    return null
+  }
+}
 
 type FavoritesState = {
   ids: string[]
@@ -49,13 +71,15 @@ export async function handleFavoritesAuthChange(uid: string | null): Promise<voi
   syncedFor = uid
   const seq = ++loadSeq
   if (!uid) {
-    useFavoritesStore.setState({ ids: readGuest(), uid: null, ready: true })
+    // Misafirde favori listesi yok (eski misafir listesi localStorage'da bekler, girişte hesaba taşınır)
+    useFavoritesStore.setState({ ids: [], uid: null, ready: true })
     return
   }
   useFavoritesStore.setState({ ids: [], uid, ready: false })
   const remote = (await getFavorites(uid)).map((f) => f.productId)
   const guest = readGuest()
-  const missing = guest.filter((id) => !remote.includes(id))
+  const pending = takePending()
+  const missing = [...new Set([...guest, ...(pending ? [pending] : [])])].filter((id) => !remote.includes(id))
   const moved: string[] = []
   await Promise.all(
     missing.map((id) =>
@@ -89,11 +113,9 @@ export function useFavorites() {
       const before = useFavoritesStore.getState().ids
       const adding = !before.includes(productId)
       const next = adding ? [productId, ...before] : before.filter((id) => id !== productId)
+      // Misafir favori ekleyemez: çağıran önce isMember'ı kontrol edip favoriteLoginHref ile girişe yönlendirir
+      if (!uid) throw new Error('login-required')
       useFavoritesStore.setState({ ids: next })
-      if (!uid) {
-        writeGuest(next)
-        return adding
-      }
       try {
         if (adding) await addFavorite(uid, productId)
         else await removeFavorite(uid, productId)
@@ -113,5 +135,5 @@ export function useFavorites() {
     [toggle]
   )
 
-  return { ids, ready, isFavorite, toggle, remove, isMember: !!uid }
+  return { ids, ready, authReady, isFavorite, toggle, remove, isMember: !!uid }
 }

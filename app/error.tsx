@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, RefreshCw, Home } from 'lucide-react'
+import { RefreshCw, Home } from 'lucide-react'
 
 export default function Error({
   error,
@@ -26,9 +26,6 @@ export default function Error({
       description={t('description')}
     >
       <div className="py-12 text-center max-w-lg mx-auto">
-        <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-red-100 mb-6">
-          <AlertCircle className="w-8 h-8 text-red-600" />
-        </div>
         <p className="text-gray-600 mb-8">
           {t('hint')}
         </p>

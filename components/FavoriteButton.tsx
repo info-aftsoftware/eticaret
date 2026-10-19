@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
 import { useToast } from '@/components/ui/toast'
-import { useFavorites } from '@/lib/useFavorites'
+import { useRouter } from 'next/navigation'
+import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 
 interface FavoriteButtonProps {
@@ -14,7 +15,8 @@ interface FavoriteButtonProps {
 
 /** Ürün sayfası favori butonu — ürün kartı ve favoriler sayfasıyla aynı durumu kullanır (lib/useFavorites). */
 export function FavoriteButton({ productId, className = '' }: FavoriteButtonProps) {
-  const { isFavorite, toggle } = useFavorites()
+  const { isFavorite, toggle, isMember, authReady } = useFavorites()
+  const router = useRouter()
   const { addToast } = useToast()
   const L = useL()
   const [mounted, setMounted] = useState(false)
@@ -26,7 +28,12 @@ export function FavoriteButton({ productId, className = '' }: FavoriteButtonProp
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (busy) return
+    if (busy || !authReady) return
+    // Favoriler üyelere özel: misafir giriş/kayıt sayfasına gider, ürün girişten sonra eklenir
+    if (!isMember) {
+      router.push(favoriteLoginHref(productId))
+      return
+    }
     setBusy(true)
     try {
       const added = await toggle(productId)

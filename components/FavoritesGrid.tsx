@@ -219,16 +219,25 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
 
   const grid = compact ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3' : 'grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 sm:gap-5'
 
-  const guestHint = mounted && ready && !isMember && (
-    <div className="mb-5 flex flex-col gap-3 rounded-xl border border-[#e6ebf1] bg-[#f5f7fa] p-4 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm text-[#20384e]">
-        {L('Favorileriniz yalnızca bu cihazda saklanıyor. Tüm cihazlarınızda görmek için giriş yapın; listeniz hesabınıza taşınır.', 'Your favorites are stored only on this device. Sign in to see them on all your devices; your list will be moved to your account.')}
-      </p>
-      <Link href="/login?redirect=/favorites" className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-[#0b2540] px-4 text-sm font-semibold text-white hover:bg-[#12335a]">
-        {L('Giriş yap', 'Sign in')}
-      </Link>
-    </div>
-  )
+  // Favoriler üyelere özel: misafire liste yerine giriş / üye ol seçenekleri
+  if (mounted && ready && !isMember) {
+    return (
+      <div className="flex flex-col items-center rounded-xl border border-[#e6ebf1] bg-white px-6 py-14 text-center">
+        <h2 className="text-lg font-semibold text-[#121926]">{L('Favorilerinizi görmek için giriş yapın', 'Sign in to see your favorites')}</h2>
+        <p className="mt-2 max-w-sm text-sm text-[#5d6e80]">
+          {L('Beğendiğiniz ürünleri hesabınıza kaydedin; fiyatını ve stok durumunu tüm cihazlarınızdan takip edin.', 'Save the products you like to your account and track their price and stock from any device.')}
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/login?redirect=/favorites" className="inline-flex h-11 items-center rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">
+            {L('Giriş yap', 'Sign in')}
+          </Link>
+          <Link href="/register?redirect=/favorites" className="inline-flex h-11 items-center rounded-lg border border-[#d3d9e1] bg-white px-5 text-sm font-semibold text-[#0b2540] hover:border-[#0b2540]">
+            {L('Üye ol', 'Create account')}
+          </Link>
+        </div>
+      </div>
+    )
+  }
 
   if (!mounted || !ready || (loading && list.length === 0)) {
     return (
@@ -250,11 +259,7 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
   if (ids.length === 0) {
     return (
       <div>
-        {guestHint}
         <div className="flex flex-col items-center rounded-xl border border-[#e6ebf1] bg-white px-6 py-14 text-center">
-          <span className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#fff6db]">
-            <Heart className="h-7 w-7 text-[#e0a500]" />
-          </span>
           <h2 className="text-lg font-semibold text-[#121926]">{L('Henüz favori ürününüz yok', 'You have no favorite products yet')}</h2>
           <p className="mt-2 max-w-sm text-sm text-[#5d6e80]">
             {L('Beğendiğiniz ürünlerdeki kalp simgesine dokunun; fiyatını ve stok durumunu buradan takip edin.', 'Tap the heart icon on products you like and track their price and stock status here.')}
@@ -270,7 +275,6 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
 
   return (
     <div>
-      {guestHint}
       {error && list.length < ids.length && (
         <p role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
           {L('Bazı ürün bilgileri yüklenemedi. Sayfayı yenileyip tekrar deneyin.', 'Some product details could not be loaded. Please refresh the page and try again.')}

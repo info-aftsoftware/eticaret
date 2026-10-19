@@ -1,4 +1,4 @@
-import { ShieldCheck, Lock } from 'lucide-react'
+import { Lock } from 'lucide-react'
 import { useL } from '@/lib/i18n-inline'
 
 /**
@@ -24,7 +24,6 @@ export function PaymentBadges({ className = '' }: { className?: string }) {
         <span className="text-[13px] font-bold lowercase text-[#00a3b4]">troy</span>
       </li>
       <li className={`${box} gap-1 text-[11px] font-semibold text-slate-700`}>
-        <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
         3D Secure
       </li>
       <li className={`${box} gap-1 text-[11px] font-semibold text-slate-700`}>

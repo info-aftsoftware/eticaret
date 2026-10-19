@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { ChevronRight, ShieldCheck, Zap, Truck, HeadphonesIcon, Users, Package, Award, Clock } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 
 export const metadata: Metadata = {
@@ -9,15 +9,14 @@ export const metadata: Metadata = {
 }
 
 const stats = [
-  { label: { tr: '340+', en: '340+' }, desc: { tr: 'Ürün Çeşidi', en: 'Products' }, icon: Package },
-  { label: { tr: '2.000+', en: '2,000+' }, desc: { tr: 'Mutlu Müşteri', en: 'Happy Customers' }, icon: Users },
-  { label: { tr: '2 Yıl', en: '2 Years' }, desc: { tr: 'Garanti', en: 'Warranty' }, icon: Award },
-  { label: { tr: '7/24', en: '24/7' }, desc: { tr: 'Teknik Destek', en: 'Technical Support' }, icon: Clock },
+  { label: { tr: '340+', en: '340+' }, desc: { tr: 'Ürün Çeşidi', en: 'Products' } },
+  { label: { tr: '2.000+', en: '2,000+' }, desc: { tr: 'Mutlu Müşteri', en: 'Happy Customers' } },
+  { label: { tr: '2 Yıl', en: '2 Years' }, desc: { tr: 'Garanti', en: 'Warranty' } },
+  { label: { tr: '7/24', en: '24/7' }, desc: { tr: 'Teknik Destek', en: 'Technical Support' } },
 ]
 
 const values = [
   {
-    icon: ShieldCheck,
     title: { tr: 'Kalite Güvencesi', en: 'Quality Assurance' },
     desc: {
       tr: 'Sadece sertifikalı, test edilmiş ürünleri stokluyor; her kalem teslim öncesi kalite kontrolünden geçiyor.',
@@ -25,7 +24,6 @@ const values = [
     },
   },
   {
-    icon: Zap,
     title: { tr: 'Hızlı Teslimat', en: 'Fast Delivery' },
     desc: {
       tr: 'Siparişler en kısa sürede kargoya verilir. Teslimat süresi siparişin içeriğine ve bölgeye göre değişir.',
@@ -33,7 +31,6 @@ const values = [
     },
   },
   {
-    icon: Truck,
     title: { tr: 'Güvenli Kargo', en: 'Safe Shipping' },
     desc: {
       tr: 'Ürünler özel koruyucu ambalaj ile gönderilir. Teslimatta hasar oluşursa tam iade veya yeniden gönderim yapıyoruz.',
@@ -41,7 +38,6 @@ const values = [
     },
   },
   {
-    icon: HeadphonesIcon,
     title: { tr: '7/24 Teknik Destek', en: '24/7 Technical Support' },
     desc: {
       tr: 'Satış öncesi danışmanlıktan kurulum sonrası teknik desteğe kadar yanınızdayız.',
@@ -96,11 +92,8 @@ export default async function HakkimizdaPage() {
 
         {/* İstatistikler */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {stats.map(({ label, desc, icon: Icon }) => (
+          {stats.map(({ label, desc }) => (
             <div key={desc.tr} className="bg-surface-elevated rounded-2xl border border-palette shadow-sm p-6 flex flex-col items-center text-center">
-              <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-3">
-                <Icon className="w-6 h-6 text-brand" />
-              </div>
               <span className="text-3xl font-bold text-ink">{L(label.tr, label.en)}</span>
               <span className="text-sm text-ink-muted mt-1">{L(desc.tr, desc.en)}</span>
             </div>
@@ -111,11 +104,8 @@ export default async function HakkimizdaPage() {
         <div className="max-w-4xl mx-auto mb-10">
           <h2 className="text-2xl font-bold text-ink mb-6 text-center">{L('Neden Voltekno?', 'Why Voltekno?')}</h2>
           <div className="grid sm:grid-cols-2 gap-5">
-            {values.map(({ icon: Icon, title, desc }) => (
+            {values.map(({ title, desc }) => (
               <div key={title.tr} className="bg-surface-elevated rounded-2xl border border-palette shadow-sm p-6 flex gap-4">
-                <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center shrink-0">
-                  <Icon className="w-5 h-5 text-brand" />
-                </div>
                 <div>
                   <h3 className="font-bold text-ink mb-1">{L(title.tr, title.en)}</h3>
                   <p className="text-sm text-ink-muted leading-relaxed">{L(desc.tr, desc.en)}</p>

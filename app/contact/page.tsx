@@ -12,15 +12,7 @@ import { Label } from '@/components/ui/label'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useL } from '@/lib/i18n-inline'
 import { useServerError } from '@/lib/server-error-i18n'
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Send,
-  CheckCircle2,
-  MessageSquare,
-  Loader2,
-} from 'lucide-react'
+import { Phone, Send, Loader2 } from 'lucide-react'
 
 const CONTACT_IMAGE =
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80'
@@ -136,9 +128,6 @@ export default function ContactPage() {
             <CardContent>
               {isSubmitted ? (
                 <div className="text-center py-10">
-                  <div className="w-16 h-16 rounded-2xl bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 className="w-8 h-8 text-emerald-600" />
-                  </div>
                   <h3 className="text-lg font-semibold text-slate-900 mb-1">{L('Mesajınız Gönderildi!', 'Your Message Has Been Sent!')}</h3>
                   <p className="text-slate-600 text-sm">{L('En kısa sürede size dönüş yapacağız.', 'We will get back to you as soon as possible.')}</p>
                 </div>
@@ -260,9 +249,6 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">
             <CardContent className="p-5">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mb-3">
-                <Mail className="w-5 h-5 text-slate-600" />
-              </div>
               <h3 className="font-semibold text-slate-900 mb-1">{L('E-posta', 'Email')}</h3>
               <a
                 href="mailto:info@voltekno.com"
@@ -274,9 +260,6 @@ export default function ContactPage() {
           </Card>
           <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">
             <CardContent className="p-5">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mb-3">
-                <Phone className="w-5 h-5 text-slate-600" />
-              </div>
               <h3 className="font-semibold text-slate-900 mb-1">{L('Telefon', 'Phone')}</h3>
               <a
                 href="tel:+905518291613"
@@ -296,18 +279,12 @@ export default function ContactPage() {
           </Card>
           <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">
             <CardContent className="p-5">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mb-3">
-                <MapPin className="w-5 h-5 text-slate-600" />
-              </div>
               <h3 className="font-semibold text-slate-900 mb-1">{L('Adres', 'Address')}</h3>
               <p className="text-slate-600 text-sm">Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17 Merkez/ELAZIĞ</p>
             </CardContent>
           </Card>
           <Card className="bg-white rounded-2xl border border-slate-200 shadow-sm">
             <CardContent className="p-5">
-              <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center mb-3">
-                <MessageSquare className="w-5 h-5 text-slate-600" />
-              </div>
               <h3 className="font-semibold text-slate-900 mb-1">{L('Çalışma saatleri', 'Working hours')}</h3>
               <div className="text-slate-600 text-sm space-y-0.5">
                 <p>{L('Pzt - Cuma: 09:00 - 18:00', 'Mon - Fri: 09:00 - 18:00')}</p>
