@@ -280,7 +280,7 @@ export default function CartPage() {
     } finally {
       setCouponBusy(false)
     }
-  }, [items, setStoredCouponCode, L])
+  }, [items, setStoredCouponCode, L, tErr])
 
   const removeCoupon = () => {
     setCouponDiscount(0)

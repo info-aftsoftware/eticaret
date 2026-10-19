@@ -127,8 +127,10 @@ export function localizeServerError(message: unknown, locale: string): string | 
   return TURKISH.test(message) ? undefined : message
 }
 
-/** İstemci bileşenleri için: tErr(data?.error) || L('…', '…') */
+const tErrTr = (message: unknown) => localizeServerError(message, 'tr')
+const tErrEn = (message: unknown) => localizeServerError(message, 'en')
+
+/** İstemci bileşenleri için: tErr(data?.error) || L('…', '…'). Sabit kimlikli (hook bağımlılıklarında güvenli). */
 export function useServerError(): (message: unknown) => string | undefined {
-  const locale = useLocale()
-  return (message) => localizeServerError(message, locale)
+  return useLocale() === 'en' ? tErrEn : tErrTr
 }

@@ -80,7 +80,7 @@ export function useEmailVerification() {
     } else {
       setMessage({ tone: 'error', text: tErr(result.error) || L('E-posta gönderilemedi. Lütfen biraz sonra tekrar deneyin.', 'The email could not be sent. Please try again shortly.') })
     }
-  }, [uid, remaining, sending, tick, user?.email, L])
+  }, [uid, remaining, sending, tick, user?.email, L, tErr])
 
   const check = useCallback(async () => {
     setChecking(true)
