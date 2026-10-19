@@ -154,6 +154,6 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: (bkz. `git log`, 19.10.2026 ~02:00) — çeviri ayrıntılı kontrolü + sepette satıştan kalkmış ürün uyarısı EN (sunucu/giriş hata mesajları, kart mesajları, sekme başlıkları İngilizce) + akış senaryo testleri
+- Son yayın: `28f5fb7` (19.10.2026 12:11; CI Node 22 düzeltmesi + derleme işçisi sınırı — Hostinger "spawn EAGAIN" ile iki kez düşmüştü) — çeviri ayrıntılı kontrolü + sepette satıştan kalkmış ürün uyarısı EN (sunucu/giriş hata mesajları, kart mesajları, sekme başlıkları İngilizce) + akış senaryo testleri
 - Yayına **dahil olmayan**, başka oturumun commit'lenmemiş işi (çalışma klasöründe duruyor): header kategori menüsü düzenlemesi (`components/header/*`), Firebase proje yapılandırması (`firebase.json`, `.firebaserc`, `storage.rules`, `FIREBASE_SETUP.md`), SMTP gönderen/düz metin değişikliği (`lib/email-smtp.ts`). O oturum bitirince commit'lenip yeniden yayınlanmalı.
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor; `git remote set-url origin …` ile güncellenebilir). Dal: `urun-katalogu-ikas`.
