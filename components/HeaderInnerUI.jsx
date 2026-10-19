@@ -20,6 +20,7 @@ import {
 import { Sheet, SheetContent, SheetTitle } from './ui/sheet'
 import { ShoppingBag, ShoppingCart, Heart, User, Search, Menu, ChevronDown, ChevronRight, Home, Phone } from 'lucide-react'
 import { useL } from '@/lib/i18n-inline'
+import { categoryHref } from '@/lib/seo/type-paths'
 
 /**
  * Site başlığı — voltekno.com ile birebir yapı:
@@ -451,7 +452,7 @@ export function HeaderInnerUI(props) {
                             return (
                               <Link
                                 key={cat.value}
-                                href={`/products?category=${encodeURIComponent(cat.value)}`}
+                                href={categoryHref(cat.value)}
                                 onClick={() => setMobileMenuOpen(false)}
                                 className={`flex items-center gap-2 min-h-[40px] px-2 py-2 rounded-lg text-sm font-medium transition-colors touch-manipulation ${isSubActive ? 'text-brand bg-white' : 'text-slate-600 hover:text-brand hover:bg-white/80'}`}
                               >

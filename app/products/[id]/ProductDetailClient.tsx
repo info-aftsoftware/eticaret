@@ -32,6 +32,8 @@ import {
 import { ProductReviews } from '@/components/ProductReviews'
 import { ProductQA } from '@/components/ProductQA'
 import { useL } from '@/lib/i18n-inline'
+import { categoryHref } from '@/lib/seo/type-paths'
+import { brandHref } from '@/lib/seo/brands'
 
 const mockProductsMap: Record<string, (typeof mockProducts)[number]> = {}
 mockProducts.forEach((p) => { mockProductsMap[p.id] = p })
@@ -274,7 +276,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
           {product.category && categoryLabel && (
             <>
               <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-300 shrink-0" />
-              <Link href={`/products?category=${encodeURIComponent(product.category)}`} className="hover:text-brand transition-colors">{categoryLabel}</Link>
+              <Link href={categoryHref(product.category)} className="hover:text-brand transition-colors">{categoryLabel}</Link>
             </>
           )}
           <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-300 shrink-0" />
@@ -404,7 +406,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
               <div className="flex items-center justify-between gap-3 mb-3">
                 {product.brand ? (
                   <Link
-                    href={`/products?brand=${encodeURIComponent(product.brand)}`}
+                    href={brandHref(product.brand)}
                     className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#0b2540] hover:underline underline-offset-2"
                   >
                     {product.brand}
@@ -480,7 +482,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   <>
                     <dt className="text-[#5d6e80]">{L('Kategori', 'Category')}</dt>
                     <dd>
-                      <Link href={`/products?category=${encodeURIComponent(product.category)}`} className="text-[#0b2540] font-medium hover:underline underline-offset-2">
+                      <Link href={categoryHref(product.category)} className="text-[#0b2540] font-medium hover:underline underline-offset-2">
                         {categoryLabel}
                       </Link>
                     </dd>

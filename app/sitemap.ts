@@ -4,60 +4,49 @@ import { CATEGORY_GROUPS } from '@/lib/categories'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { getMergedProducts } from '@/lib/catalog-merge'
 import { LEGAL_SLUGS, legalHref } from '@/lib/legal/documents'
+import { PRODUCT_TYPES } from '@/lib/seo/product-types'
+import { BRANDS } from '@/lib/seo/brands'
+import { BLOG_POSTS, blogDateIso } from '@/lib/blog-posts'
 
 // Admin'in eklediği ürünler de site haritasına girsin
 export const revalidate = 3600
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
+/**
+ * Yalnızca 200 dönen, canonical'ı kendine bakan, dizinlenebilir sayfalar.
+ * lastModified yalnızca gerçek tarih biliniyorsa (blog) yazılır; her derlemede "bugün" yazmak Google'a yanlış sinyal verir.
+ * changeFrequency / priority Google tarafından yok sayıldığı için yazılmaz.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date()
+  const page = (path: string, lastModified?: string): MetadataRoute.Sitemap[number] => ({
+    url: `${SITE_URL}${path}`,
+    ...(lastModified && { lastModified }),
+  })
 
-  const staticPages: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/`, lastModified: now, changeFrequency: 'daily', priority: 1 },
-    { url: `${SITE_URL}/products`, lastModified: now, changeFrequency: 'daily', priority: 0.95 },
-    { url: `${SITE_URL}/ges`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${SITE_URL}/paketler`, lastModified: now, changeFrequency: 'weekly', priority: 0.85 },
-    { url: `${SITE_URL}/categories`, lastModified: now, changeFrequency: 'weekly', priority: 0.82 },
-    { url: `${SITE_URL}/faq`, lastModified: now, changeFrequency: 'weekly', priority: 0.78 },
-    { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${SITE_URL}/shipping`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${SITE_URL}/siparis-takip`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
-    // Yasal metinler (eski /terms, /privacy, /cookies, /returns bu adreslere canonical verir)
-    ...LEGAL_SLUGS.map((slug) => ({
-      url: `${SITE_URL}${legalHref(slug)}`,
-      lastModified: now,
-      changeFrequency: 'yearly' as const,
-      priority: 0.4,
-    })),
-  ]
+  const staticPages = [
+    '/', '/products', '/categories', '/paketler', '/ges', '/blog', '/hakkimizda', '/faq', '/contact', '/shipping', '/siparis-takip',
+  ].map((p) => page(p))
+  const legalPages = LEGAL_SLUGS.map((slug) => page(legalHref(slug)))
 
-  const categoryPages: MetadataRoute.Sitemap = CATEGORY_GROUPS.map((group) => ({
-    url: `${SITE_URL}/category/${group.id}`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.85,
-  }))
-
-  const packagePages: MetadataRoute.Sitemap = PACKAGE_CATEGORIES.map((item) => ({
-    url: `${SITE_URL}/paketler/${item.slug}`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }))
-
-  let products: { id: string }[] = mockProducts
+  // Ürün grupları ve türleri (boş "diger" grubu hariç)
+  let products: { id: string; category?: string; brand?: string }[] = mockProducts
   try {
     products = await getMergedProducts()
   } catch (e) {
     console.error('Sitemap catalog error:', e)
   }
-  const productPages: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${SITE_URL}/products/${product.id}`,
-    lastModified: now,
-    changeFrequency: 'weekly',
-    priority: 0.8,
-  }))
+  const categoriesWithProducts = new Set(products.map((p) => p.category))
+  const brandsWithProducts = new Set(products.map((p) => p.brand))
 
-  return [...staticPages, ...categoryPages, ...packagePages, ...productPages]
+  const groupPages = CATEGORY_GROUPS.filter((g) => g.categoryValues.some((c) => categoriesWithProducts.has(c))).map((g) =>
+    page(`/category/${g.id}`)
+  )
+  const typePages = PRODUCT_TYPES.filter((t) => categoriesWithProducts.has(t.category)).map((t) => page(`/category/${t.group}/${t.slug}`))
+  const brandPages = BRANDS.filter((b) => brandsWithProducts.has(b.name)).map((b) => page(`/marka/${b.slug}`))
+  const packagePages = PACKAGE_CATEGORIES.map((item) => page(`/paketler/${item.slug}`))
+  const blogPages = Object.entries(BLOG_POSTS).map(([slug, post]) => page(`/blog/${slug}`, blogDateIso(post.date)))
+  const productPages = products.map((p) => page(`/products/${p.id}`))
+
+  return [...staticPages, ...groupPages, ...typePages, ...brandPages, ...packagePages, ...blogPages, ...productPages, ...legalPages]
 }

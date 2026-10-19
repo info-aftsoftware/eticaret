@@ -24,6 +24,30 @@ _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, he
 | E12 | Sağlayıcı / iş kararı gerektirenler | ❌ sizde | e-Arşiv entegratörü, SQLite → PostgreSQL, IBAN hesap sahibi adı kontrolü, kargo API, SMS, taksit tablosu, Turnstile, ETBİS, İYS, Meta Pixel (çerez politikasına eklenmeli), PayTR kararı, kapıda ödeme (`YAPILACAKLAR.md` 125–128, 242, 261) |
 | E13 | Playwright testleri üretim derlemesinde kırmızıydı | ✅ `220407d` | Mobilde havale testi gizli masaüstü özet kopyasına bakıyordu (sayfa doğru, test hatalı). Merchant testi önceden üretilmiş akışta (ISR) gerekçeli atlanıyor. Not: e2e testleri sunucuyla aynı `DATABASE_URL` ile çalıştırılmalı (test ürünü/kuponu oraya yazılır) |
 
+## SEO kapsamı (19.10.2026 akşam)
+**İstek:** ürün türünü arayan kişi doğrudan bizi bulsun.
+
+**Önceki durum (denetim):** 371 adresin hepsi 200, yinelenen başlık yok, her sayfada tek H1. Ama ürün türleri (lityum akü, MPPT şarj kontrol cihazı, hibrit inverter…) yalnızca `/products?category=…` filtresiydi ve canonical'ı `/products` → Google'da tür aramasına karşılık gelen sayfa yoktu. Kök düzen her sayfaya ana sayfa canonical'ı + hreflang veriyordu: /categories, /shipping, /siparis-takip, /hakkimizda, /blog ve 6 blog yazısı ana sayfanın kopyası sayılıyordu; blog site haritasında yoktu. Kurum şeması her sayfadaydı, ürün sayfasında kırıntı şeması yoktu, 2 üründe açıklama yineleniyordu.
+
+| Yapılan | Not |
+|---|---|
+| Ürün türü sayfaları | `/category/<grup>/<tür>`, 29 tür (ısı pompası tek türlü grup, grup sayfası yeterli). Sunucuda: kırıntı yolu, H1, giriş, katalogdan özet (ürün sayısı, markalar, KDV dahil başlangıç fiyatı), tüm ürünler, alım rehberi (H2), SSS, ilgili türler ve blog. Şema: BreadcrumbList + CollectionPage/ItemList. İçerik `lib/seo/product-types.ts` |
+| Marka sayfaları | `/marka/<slug>`, 13 marka; türler ve sayılar katalogdan, tanıtım yalnızca doğrulanabilir bilgi (`lib/seo/brands.ts`) |
+| İç bağlantılar | Menüler, mobil menü, ana sayfa kategori kartları/hero, marka şeridi, ürün sayfası kırıntı yolu ve kategori/marka bağlantıları, grup sayfaları, blog yazıları → tür/marka sayfaları (`lib/seo/type-paths.ts`) |
+| Canonical / hreflang | Kök düzendeki genel canonical ve hreflang kaldırıldı; ana sayfa ve canonical'ı eksik sayfalara kendi adresi |
+| Blog | Canonical, BlogPosting + BreadcrumbList şeması, ilgili ürün türü bağlantıları; veri `lib/blog-posts.ts` |
+| Kurum şeması | Yalnızca ana sayfada `OnlineStore` + `WebSite` (@id ile), unvan/adres/vergi no/e-posta firma bilgisinden; doğrulanmamış sosyal medya adresleri kaldırıldı |
+| SEO dalı birleştirildi | Eski voltekno.com adresleri (132) → yeni sayfalara 308; kategori/marka filtresine gidenler artık tür/marka sayfalarına |
+| Site haritası | Tür, marka, blog, hakkımızda eklendi; sahte "bugün" tarihi ve Google'ın yok saydığı alanlar kaldırıldı |
+
+| Diğer düzeltmeler | Kök düzen her sayfaya Organization + WebSite (kaldırılmış SearchAction ile) + LocalBusiness basıyordu → kaldırıldı; boş Google doğrulama etiketi yalnızca değer varsa; teklif doğrulama aracı noindex + kendi başlığı; 2 üründe yinelenen açıklama ayrıştı; tür ve marka sayfalarında çerçeve etiketleri EN modda İngilizce, Türkçe içerik `lang="tr"` |
+
+**Doğrulama (yerel üretim derlemesi, 467 sayfa):** iç bağlantılardan 425 adres tarandı, hepsi 200; dizinlenebilir 420 sayfanın hepsinde canonical kendine, yinelenen başlık 0, her sayfada tek H1, JSON-LD hatası 0, kurum şeması yalnızca ana sayfada; site haritası (420) dizinlenebilir sayfalarla birebir. Eski voltekno.com adresleri 308 → tür/marka sayfaları (örnek: `/ac-dc-sarj` → akü şarj cihazı türü, `/deye` → `/marka/deye`). Birim testi 68/68 (yeni: tür/marka eşleme tutarlılığı), Playwright 98/98.
+
+**Tür metinlerinde teyit edilmesi iyi olanlar** (genel kabul gören kurallar veya katalogdan türetilmiş hesaplar; hatalı değil ama tedarikçi kılavuzuyla kontrol önerilir): hibrit inverterlerin bataryasız çalışabilmesi (TommaTech Uno/Trio), Victron BMS–akü eşleşmeleri, Digital Multi Control GX önerisi, dizi başına panel sayıları (−10 °C kabulüyle), kurşun-asit şarj akımı %10–20, jel akü %50 deşarj, kablo gerilim düşümü ≤ %3, rüzgar türbini yerleşim kuralı. **Katalog uyarısı:** Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8 katalogda 120 V sürüm olarak geçiyor; doğruysa Türkiye şebekesine (230 V) uygun değildir, ürün sayfalarında belirtilmeli veya satıştan kaldırılmalı.
+
+**Sıralama için kodla yapılamayanlar (sizde):** voltekno.com geçişi (test ortamı arama motorlarına kapalı, hiçbir şey sıralanmaz), Search Console alan adı doğrulaması + site haritası gönderimi + önemli sayfalar için "Dizine eklenmesini iste", Merchant Center ücretsiz ürün listelemeleri (akış hazır: `/feed/google-merchant.xml`; barkod/GTIN boş olması görünürlüğü sınırlar), Google Business Profile (Elazığ adresi), Bing Webmaster Tools. Yeni alan adında sıralama haftalar–aylar sürer.
+
 ## İstek turu 4 (19.10.2026 öğleden sonra)
 | İstek | Durum | Not |
 |---|---|---|

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { categoryHref } from '@/lib/seo/type-paths'
 import { mockProducts } from '@/lib/products-mock'
 import { notFound, permanentRedirect } from 'next/navigation'
 import ProductDetailClient from './ProductDetailClient'
@@ -29,6 +30,16 @@ export async function generateStaticParams() {
 
 // Admin fiyat/stok değişiklikleri sayfaya ve yapılandırılmış veriye 10 dakika içinde yansır
 export const revalidate = 600
+
+/** Katalogda birden fazla üründe aynı olan (kısaltılmış) açıklamalar */
+const DUPLICATE_DESCRIPTIONS: Set<string> = (() => {
+  const seen = new Map<string, number>()
+  for (const p of mockProducts) {
+    const d = truncate(p.description || '', 160)
+    if (d) seen.set(d, (seen.get(d) ?? 0) + 1)
+  }
+  return new Set([...seen].filter(([, n]) => n > 1).map(([d]) => d))
+})()
 
 /** Katalog (kod + admin düzenlemeleri); veritabanına ulaşılamazsa koddaki ürün */
 async function loadProduct(id: string): Promise<StorefrontProduct | null> {
@@ -68,7 +79,8 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir
   const title = product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
   const baseDesc = product.description || `${product.name} — ${product.category}.`
-  const description = truncate(baseDesc, 160)
+  // Aynı açıklamayı paylaşan varyant ürünlerde (ör. 55-75 kW / 90-110 kW) ürün adı başa alınır: her sayfa benzersiz
+  const description = truncate(DUPLICATE_DESCRIPTIONS.has(truncate(baseDesc, 160)) ? `${product.name}: ${baseDesc}` : baseDesc, 160)
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
   const keywords = [
@@ -112,7 +124,11 @@ function buildBreadcrumbJsonLd(product: StorefrontProduct) {
     { name: 'Ürünler', item: `${SITE_URL}/products` },
   ]
   if (groupId && CATEGORY_META[groupId]) items.push({ name: CATEGORY_META[groupId].title, item: `${SITE_URL}/category/${groupId}` })
-  if (product.category) items.push({ name: product.category, item: `${SITE_URL}/products?category=${encodeURIComponent(product.category)}` })
+  // Alt kategori: dizinlenebilir tür sayfası (tek türlü grupta grup sayfasıyla aynıysa tekrar eklenmez)
+  if (product.category) {
+    const typeUrl = `${SITE_URL}${categoryHref(product.category)}`
+    if (!items.some((it) => it.item === typeUrl)) items.push({ name: product.category, item: typeUrl })
+  }
   items.push({ name: product.name })
   return {
     '@context': 'https://schema.org',

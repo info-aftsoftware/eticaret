@@ -6,6 +6,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: locale === 'en' ? 'Order Tracking' : 'Sipariş Takibi',
     description: 'Sipariş numaranız, e-posta adresiniz ve telefonunuzla siparişinizin durumunu ve kargo bilgisini görüntüleyin.',
+    alternates: { canonical: '/siparis-takip' },
   }
 }
 

@@ -9,6 +9,8 @@ export function revalidateStorefront(): void {
   try {
     revalidatePath('/products/[id]', 'page')
     revalidatePath('/category/[id]', 'page')
+    revalidatePath('/category/[id]/[type]', 'page')
+    revalidatePath('/marka/[slug]', 'page')
     revalidatePath('/paketler/[slug]', 'page')
     revalidatePath('/products')
     revalidatePath('/')

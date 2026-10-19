@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
+import { categoryHref } from '@/lib/seo/type-paths'
 import { useL } from '@/lib/i18n-inline'
 
 export type NavGroup = {
@@ -15,7 +16,8 @@ export type NavGroup = {
 }
 
 const PACKAGES_ID = '__packages'
-export const productsHref = (category: string) => `/products?category=${encodeURIComponent(category)}`
+/** Alt kategori bağlantısı: dizinlenebilir tür sayfası (lib/seo/type-paths.ts) */
+export const productsHref = (category: string) => categoryHref(category)
 
 /** voltekno.com'daki dört kareli kategori ikonu (sarı) */
 export function CategoryGridIcon({ className = '' }: { className?: string }) {

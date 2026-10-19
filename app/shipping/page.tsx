@@ -6,6 +6,7 @@ import { getLocale } from 'next-intl/server'
 export const metadata: Metadata = {
   title: 'Kargo ve Teslimat',
   description: 'Voltekno kargo süreleri, desiye göre kargo ücreti, kargo firmaları ve teslimat koşulları.',
+  alternates: { canonical: '/shipping' },
 }
 
 export default async function ShippingPage() {

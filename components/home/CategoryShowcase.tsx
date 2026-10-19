@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl'
 import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { useL } from '@/lib/i18n-inline'
+import { categoryHref } from '@/lib/seo/type-paths'
 
 /** Her ana kategoriyi en iyi temsil eden ürün görseli (yoksa gruptaki ilk görselli ürün kullanılır) */
 const GROUP_IMAGES: Record<string, string> = {
@@ -54,7 +55,7 @@ export function CategoryShowcase() {
     return CATEGORY_GROUPS.map((g) => {
       const subs = g.categoryValues
         .filter((v) => countBy[v])
-        .map((v) => ({ label: t(getCategoryKey(v) ?? 'catGeneral'), href: `/products?category=${encodeURIComponent(v)}`, count: countBy[v] }))
+        .map((v) => ({ label: t(getCategoryKey(v) ?? 'catGeneral'), href: categoryHref(v), count: countBy[v] }))
       const brands = [...new Set(g.categoryValues.flatMap((v) => [...(brandsBy[v] ?? [])]))]
       return {
         id: g.id,

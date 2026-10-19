@@ -6,6 +6,7 @@ import { useLocale } from 'next-intl'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useL } from '@/lib/i18n-inline'
+import { categoryHref } from '@/lib/seo/type-paths'
 
 /**
  * Ana sayfa hero'su — voltekno.com ile birebir:
@@ -28,7 +29,7 @@ const SLIDES = [
     mobileTitle: ['Lityum Enerji', 'Depolama'],
     cta: 'KEŞFET',
     en: { title: ['Lithium Energy', 'Storage Systems'], mobileTitle: ['Lithium Energy', 'Storage'], cta: 'EXPLORE', alt: 'Stacked lithium battery modules' },
-    href: `/products?category=${encodeURIComponent('Lityum Akü')}`,
+    href: categoryHref('Lityum Akü'),
     alt: 'Üst üste yığınlanmış lityum batarya modülleri',
   },
   {
@@ -39,7 +40,7 @@ const SLIDES = [
     mobileTitle: ['Solar Tarımsal', 'Sulama', 'Çözümleri'],
     cta: 'İNCELE',
     en: { title: ['Solar Agricultural', 'Irrigation'], mobileTitle: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW', alt: 'TommaTech solar pump drives and solar panel' },
-    href: `/products?category=${encodeURIComponent('Solar Pompa Sürücüsü')}`,
+    href: categoryHref('Solar Pompa Sürücüsü'),
     alt: 'TommaTech solar pompa sürücüleri ve güneş paneli',
   },
 ] as const

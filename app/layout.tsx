@@ -102,88 +102,14 @@ export const metadata: Metadata = {
       'Güneş paneli, lityum akü, inverter, EV şarj ve enerji depolama ürünleri. GES hesaplama ve teknik destek.',
     images: ['https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&h=630&fit=crop&q=80'],
   },
-  alternates: {
-    canonical: SITE_URL,
-    languages: {
-      'tr-TR': SITE_URL,
-    },
-  },
-  verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
-  },
+  // canonical sayfa başına verilir (kök düzende verilirse kendi canonical'ı olmayan her sayfa ana sayfanın kopyası sayılır)
+  // Search Console HTML etiketi doğrulaması (alan adı DNS ile doğrulanırsa gerekmez)
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+    verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION },
+  }),
 }
 
-const organizationJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'voltekno',
-  legalName: 'AFET TEKNOLOJİLERİ TİCARET VE SANAYİ LİMİTED ŞİRKETİ',
-  email: 'info@voltekno.com',
-  taxID: '0091882726',
-  url: SITE_URL,
-  logo: `${SITE_URL}/icon.png`,
-  description: 'Güneş paneli, akü, inverter, EV şarj istasyonu ve enerji depolama sistemleri satışı.',
-  sameAs: [],
-  contactPoint: {
-    '@type': 'ContactPoint',
-    telephone: '+90-551-829-16-13',
-    contactType: 'customer service',
-    availableLanguage: ['Turkish', 'English'],
-    areaServed: 'TR',
-  },
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17',
-    addressLocality: 'Merkez',
-    addressRegion: 'Elazığ',
-    addressCountry: 'TR',
-  },
-}
-
-const websiteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'voltekno',
-  url: SITE_URL,
-  description: 'Güneş paneli, akü, inverter ve enerji sistemleri e-ticaret sitesi.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: `${SITE_URL}/products?q={search_term_string}`,
-    },
-    'query-input': 'required name=search_term_string',
-  },
-}
-
-const localBusinessJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: 'voltekno',
-  url: SITE_URL,
-  logo: `${SITE_URL}/icon.png`,
-  telephone: '+90-551-829-16-13',
-  email: 'info@voltekno.com',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Çaydaçıra Mah. Prof. Dr. Nuri Orhan Bul. No:5 İç Kapı No:17',
-    addressLocality: 'Merkez',
-    addressRegion: 'Elazığ',
-    addressCountry: 'TR',
-  },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      opens: '09:00',
-      closes: '18:00',
-    },
-  ],
-  priceRange: '₺₺',
-  currenciesAccepted: 'TRY',
-  paymentAccepted: 'Cash, Credit Card, Bank Transfer',
-  areaServed: 'TR',
-}
+// Kurum + site şeması yalnızca ana sayfada (components/StructuredData.tsx); diğer sayfalar @id ile başvurur.
 
 export default async function RootLayout({
   children,
@@ -200,10 +126,6 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify([organizationJsonLd, websiteJsonLd, localBusinessJsonLd]) }}
-        />
         <IntlProvider>
           <FirebaseAnalyticsInit />
           <CartSync />

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useL } from '@/lib/i18n-inline'
+import { brandHref } from '@/lib/seo/brands'
 
 /**
  * Markalar şeridi (voltekno.com "Markalar" bölümü + katalogdaki ek markalar).
@@ -40,7 +41,7 @@ export function BrandStrip() {
           {[...BRANDS, ...BRANDS].map((brand, i) => (
             <li key={`${brand.name}-${i}`} aria-hidden={i >= BRANDS.length || undefined} className="flex-none pr-12">
               <Link
-                href={`/products?brand=${encodeURIComponent(brand.name)}`}
+                href={brandHref(brand.name)}
                 tabIndex={i >= BRANDS.length ? -1 : undefined}
                 title={L(`${brand.name} ürünleri`, `${brand.name} products`)}
                 className="flex items-center justify-center w-[108px] h-[108px] min-[901px]:w-[123px] min-[901px]:h-[123px] min-[1025px]:w-[160px] min-[1025px]:h-[160px] p-2 hover:opacity-80 transition-opacity"

@@ -8,6 +8,7 @@ import { getLocale } from 'next-intl/server'
 export const metadata: Metadata = {
   title: 'Blog – Enerji Rehberi',
   description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, karşılaştırmalar ve kurulum rehberleri.',
+  alternates: { canonical: '/blog' },
   openGraph: {
     title: 'Blog – Enerji Rehberi | Voltekno',
     description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında rehber yazılar.',

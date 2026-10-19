@@ -6,6 +6,7 @@ import { getLocale } from 'next-intl/server'
 export const metadata: Metadata = {
   title: 'Hakkımızda',
   description: 'Voltekno hakkında: misyonumuz, değerlerimiz ve temiz enerji çözümlerindeki uzmanlığımız.',
+  alternates: { canonical: '/hakkimizda' },
 }
 
 const stats = [
