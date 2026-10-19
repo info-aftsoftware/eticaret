@@ -282,7 +282,10 @@ test.describe('mobil ödeme (Pixel 5)', () => {
 test.describe('arama ve karşılaştırma', () => {
   test('başlık araması: yazım hatasıyla öneri, ok tuşu ve Enter ile ürüne gider', async ({ page }) => {
     await page.goto('/')
-    const box = page.getByRole('combobox').first()
+    // Mobil/tablet başlığında arama kutusu arama simgesine dokununca açılır
+    const toggle = page.locator('button[aria-controls="mobile-search-bar"]')
+    if (await toggle.isVisible()) await toggle.click()
+    const box = page.getByRole('combobox').locator('visible=true').first()
     await box.fill('invertör')
     const list = page.getByRole('listbox').first()
     await expect(list.getByRole('option').first()).toBeVisible({ timeout: 20_000 })
