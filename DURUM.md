@@ -3,9 +3,9 @@
 _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**Profesyonel seviye turu tamamlandı (`e8806cf`), canlıya alınmadı.** Yönetici hesapları/rolleri/2FA/işlem kaydı, izleme, sunucu dışı yedek, yorum-soru-iletişimin Firebase'den çıkarılması, CSV ile stok/fiyat ve muhasebe aktarımı, toplu kargo ve etiket, izin defteri. Ayrıntı aşağıda "Profesyonel seviye". SEO çalışması (`6a30301`) da aynı dalda ve canlıda değil.
+**Profesyonel seviye turu tamamlandı ve SEO hariç canlıya alındı (19.10.2026 19:27, yayın dalı `yayin-pro-seo-haric`, `25ae00a`).** Yönetici hesapları/rolleri/2FA/işlem kaydı, izleme, sunucu dışı yedek, yorum-soru-iletişimin Firebase'den çıkarılması, CSV ile stok/fiyat ve muhasebe aktarımı, toplu kargo ve etiket, izin defteri. Ayrıntı aşağıda "Profesyonel seviye". SEO çalışması (`9ad9119` + `6a30301`) kararla canlıda değil.
 
-## Profesyonel seviye (19.10.2026 akşam, `e8806cf`, canlıda değil)
+## Profesyonel seviye (19.10.2026 akşam, `e8806cf`; canlıda `25ae00a` olarak, SEO hariç)
 **İstek:** kartla ödeme, e-Arşiv ve alan adı dışındaki eksikleri profesyonel bir e-ticaret sistemi seviyesine getirmek.
 
 | Alan | Yapılan | Not |
@@ -236,7 +236,8 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü (uygulama içi zamanlayıcı, header menüleri, Firebase/SMTP), mobil başlık + hero, süs ikonlarının kaldırılması, KDV etiketi, üyelere özel favoriler. Canlı kontrol: 16 sayfa/uç 200, eski kategori adresi 308, cron ucu yetkisiz 401, ürün sayfasında "+KDV" yok, mobil arama satırı var. Zamanlayıcı canlıda çalıştı: `expire-orders` (iptal 0) ve ilk otomatik yedek (`voltekno-2026-10-19T12-57-41-391Z.db`, 636 KB), durum dosyası veritabanının yanında. Önceki yayın: `28f5fb7` (19.10 12:11)
-- Canlıda olmayanlar: `6a30301` (SEO tür ve marka sayfaları; "SEO yayınlamıyoruz" kararıyla bekliyor) ve `e8806cf` (profesyonel seviye). İkisi aynı dalda art arda; yalnızca profesyonel seviyeyi yayınlamak için SEO commit'i ayrı bir daldan geri alınarak yayın paketi hazırlanmalı
+- Son yayın: `25ae00a` (19.10.2026 19:27), dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
+- Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
+- Canlıda olmayanlar: `9ad9119` ve `6a30301` (SEO; "SEO yayınlamıyoruz" kararıyla bekliyor). SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; profesyonel seviye zaten içinde
 - 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.
