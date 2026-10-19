@@ -88,3 +88,6 @@ dev.log
 tmp-email-preview/
 # Claude Code çalışma ağaçları
 .claude/worktrees/
+
+# eski statik derleme çıktısı (artık Node yayını; git dışında)
+/public_html_standalone/

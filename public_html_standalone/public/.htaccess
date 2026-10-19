@@ -1,8 +1,0 @@
-# Allow access to public files - 403 hatası önleme
-<FilesMatch "\.(jpg|jpeg|png|gif|svg|ico|pdf|css|js|woff|woff2|ttf|eot|webp)$">
-    Order Allow,Deny
-    Allow from all
-</FilesMatch>
-
-# Directory listing'i kapat
-Options -Indexes
