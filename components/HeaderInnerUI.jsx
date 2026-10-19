@@ -6,7 +6,7 @@ import { fmtPrice } from '@/lib/format'
 import { HEADER_NAV_GROUP_COUNT } from '@/lib/categories'
 import { HeaderWrapper } from './HeaderWrapper'
 import { HeaderTopBar } from './HeaderTopBar'
-import { AllCategoriesMenu, CategoryGridIcon } from './header/AllCategoriesMenu'
+import { AllCategoriesMenu } from './header/AllCategoriesMenu'
 import { NavGroupMenu } from './header/NavGroupMenu'
 import { Logo } from './Logo'
 import { Badge } from './ui/badge'
@@ -59,6 +59,17 @@ export function HeaderInnerUI(props) {
   const desktopSearchRef = useRef(null)
   const mobileSearchRef = useRef(null)
   const mobileSearchInputRef = useRef(null)
+  /** Mobil/tablet: arama satırı yalnızca arama simgesine dokununca açılır (kategoriler burger menüde) */
+  const [mobileSearchBarOpen, setMobileSearchBarOpen] = React.useState(false)
+
+  useEffect(() => {
+    if (mobileSearchBarOpen) mobileSearchInputRef.current?.focus()
+  }, [mobileSearchBarOpen])
+
+  // Sayfa değişince (arama yapılınca da) arama satırı kapanır
+  useEffect(() => {
+    setMobileSearchBarOpen(false)
+  }, [pathname])
 
   useEffect(() => {
     if (!searchOpen) return
@@ -167,8 +178,6 @@ export function HeaderInnerUI(props) {
   const isAllProducts = pathname === '/products' && !currentCategory
   const navLinkClass = (active) =>
     `px-2.5 py-2.5 rounded-lg text-[13.5px] leading-[14px] font-medium whitespace-nowrap transition-colors ${active ? 'bg-[#f1f4f8] text-[#0b2540]' : 'text-[#3b4a5a] hover:bg-[#f1f4f8] hover:text-[#0b2540]'}`
-  const pillClass = (active) =>
-    `shrink-0 inline-flex items-center h-[29px] !min-h-0 px-3 rounded-full border text-[13px] font-medium whitespace-nowrap transition-colors ${active ? 'border-[#0b2540] bg-[#0b2540] text-white' : 'border-[#d3d9e1] bg-white text-[#3b4a5a]'}`
 
   const searchForm = (listId, inputRef) => (
     <form onSubmit={handleSearch} className="flex h-[44px] min-[1025px]:h-[46px] rounded-md border border-[#d3d9e1] bg-[#f7f8fa] overflow-hidden focus-within:border-[#0b2540] transition-colors">
@@ -297,8 +306,8 @@ export function HeaderInnerUI(props) {
         </div>
       </div>
 
-      {/* ── Mobil (≤900) ve tablet (901–1024): menü + logo + simgeler, kategori + arama, kategori hapları ── */}
-      <div className="min-[1025px]:hidden bg-white">
+      {/* ── Mobil ve tablet (≤1024): tek satır — menü + logo + simgeler. Kategoriler burger menüde, arama simgeyle açılır ── */}
+      <div className="min-[1025px]:hidden bg-white border-b border-[#e3e8ee] shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
         <div className="flex items-center h-[78px] min-[901px]:h-[85px] px-4 min-[541px]:px-6 gap-2">
           <button
             type="button"
@@ -312,9 +321,11 @@ export function HeaderInnerUI(props) {
           <div className="ml-auto flex items-center gap-1">
             <button
               type="button"
-              onClick={() => mobileSearchInputRef.current?.focus()}
+              onClick={() => setMobileSearchBarOpen((o) => !o)}
               className="w-10 max-[359px]:w-8 h-10 flex items-center justify-center text-[#14141a] touch-manipulation"
               aria-label={t('searchPlaceholder')}
+              aria-expanded={mobileSearchBarOpen}
+              aria-controls="mobile-search-bar"
             >
               <Search className="w-[22px] h-[22px]" strokeWidth={1.75} />
             </button>
@@ -328,34 +339,14 @@ export function HeaderInnerUI(props) {
             <div className="w-10 max-[359px]:w-8 h-10 flex items-center justify-center">{cartLink}</div>
           </div>
         </div>
-        <div className="border-t border-[#e3e8ee] px-4 min-[541px]:px-6 pt-2.5 pb-[13px] min-[901px]:pb-[15px] space-y-3 min-[901px]:space-y-5 shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
-          <div className="flex items-stretch gap-2.5 min-[901px]:gap-[18px]">
-            <div className="hidden min-[901px]:block">
-              <AllCategoriesMenu navGroups={navGroups} t={t} />
-            </div>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen(true)}
-              className="min-[901px]:hidden shrink-0 flex items-center justify-center gap-2 h-[42px] !min-h-0 w-[66px] self-center rounded-[10px] bg-[#0b2540] text-white touch-manipulation"
-              aria-label={t('catNavAllCategories')}
-            >
-              <CategoryGridIcon className="w-[13px] h-[13px]" />
-              <ChevronDown className="w-4 h-4" aria-hidden />
-            </button>
-            <div ref={mobileSearchRef} className="relative flex-1 min-w-0">
+        {mobileSearchBarOpen && (
+          <div id="mobile-search-bar" className="border-t border-[#e3e8ee] px-4 min-[541px]:px-6 py-2.5">
+            <div ref={mobileSearchRef} className="relative">
               {searchForm('search-suggestions-mobile', mobileSearchInputRef)}
               {renderSearchDropdown(undefined, 'search-suggestions-mobile')}
             </div>
           </div>
-          <nav className="flex gap-2 overflow-x-auto -mx-4 px-4 min-[541px]:-mx-6 min-[541px]:px-6 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label={L('Kategoriler', 'Categories')}>
-            <Link href="/products" className={pillClass(isAllProducts)}>{t('catNavAllProducts')}</Link>
-            {navGroups.map((g) => (
-              <Link key={g.id} href={g.href} className={pillClass(pathname?.startsWith(g.href))}>
-                {t(g.navLabelKey || g.labelKey)}
-              </Link>
-            ))}
-          </nav>
-        </div>
+        )}
       </div>
 
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>

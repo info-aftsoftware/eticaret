@@ -34,6 +34,8 @@ const SLIDES = [
   },
   {
     image: '/images/hero/voltekno-hero-3.webp',
+    // 2,4:1 geniş görsel: mobilde 16:9 kırpılınca sağdaki ürünler görünsün
+    mobileFocus: 'object-[72%_50%]',
     title: ['Solar Tarımsal', 'Sulama Çözümleri'],
     mobileTitle: ['Solar Tarımsal', 'Sulama', 'Çözümleri'],
     cta: 'İNCELE',
@@ -98,20 +100,23 @@ export function HeroSlider() {
                   aria-roledescription="slide"
                   aria-label={`${i + 1} / ${SLIDES.length}`}
                   aria-hidden={!active}
-                  className="relative shrink-0 w-full aspect-[4/5] min-[641px]:aspect-video min-[641px]:max-h-[596px] bg-[#f5f7fa] overflow-hidden"
+                  className="relative shrink-0 w-full flex flex-col min-[641px]:block min-[641px]:aspect-video min-[641px]:max-h-[596px] bg-[#f5f7fa] overflow-hidden"
                 >
-                  <Image
-                    src={slide.image}
-                    alt={copy.alt}
-                    fill
-                    priority={i === 0}
-                    sizes="100vw"
-                    className="object-contain object-top min-[641px]:object-cover min-[641px]:object-[50%_45%]"
-                  />
-                  {/* Mobilde görsel üstte, başlık ve buton altta (noktaların üstünde); geniş ekranda görselin üzerinde ortada */}
-                  <div className="absolute inset-0 flex items-end pb-14 px-6 min-[641px]:items-center min-[641px]:p-6">
+                  {/* Mobilde görsel tam genişlikte 16:9 (boş gri alan kalmasın), geniş ekranda tüm alanı kaplar */}
+                  <div className="relative w-full aspect-video min-[641px]:absolute min-[641px]:inset-0 min-[641px]:aspect-auto">
+                    <Image
+                      src={slide.image}
+                      alt={copy.alt}
+                      fill
+                      priority={i === 0}
+                      sizes="100vw"
+                      className={`object-cover ${'mobileFocus' in slide ? slide.mobileFocus : 'object-center'} min-[641px]:object-[50%_45%]`}
+                    />
+                  </div>
+                  {/* Mobilde başlık ve buton görselin hemen altında (noktalara yer bırakarak); geniş ekranda görselin üzerinde ortada */}
+                  <div className="flex-1 px-5 pt-5 pb-14 min-[641px]:absolute min-[641px]:inset-0 min-[641px]:flex min-[641px]:items-center min-[641px]:p-6">
                     <div>
-                      <p className="mb-4 text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[48px] font-semibold leading-tight text-[#121926]">
+                      <p className="mb-4 text-[22px] min-[400px]:text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[48px] font-semibold leading-tight text-[#121926]">
                         <span className="min-[769px]:hidden">
                           {copy.mobileTitle.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
                         </span>
@@ -122,7 +127,7 @@ export function HeroSlider() {
                       <Link
                         href={slide.href}
                         tabIndex={active ? 0 : -1}
-                        className="inline-flex items-center justify-center h-10 min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-base font-semibold transition-colors"
+                        className="inline-flex items-center justify-center h-11 min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-base font-semibold transition-colors"
                       >
                         {copy.cta}
                       </Link>
@@ -133,7 +138,7 @@ export function HeroSlider() {
             })}
           </div>
 
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[2] flex items-center gap-3">
+          <div className="absolute bottom-5 min-[641px]:bottom-6 left-1/2 -translate-x-1/2 z-[2] flex items-center gap-3">
             {SLIDES.map((slide, i) => (
               <button
                 key={slide.image}
@@ -144,7 +149,7 @@ export function HeroSlider() {
                 className="group/dot p-1.5 -m-1.5 !min-h-0 min-w-0 rounded-full"
               >
                 {/* Görünen nokta 12px; dokunma alanı 24px (erişilebilirlik) */}
-                <span className={`block h-3 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#14141a]' : 'w-3 bg-white group-hover/dot:bg-white/80'}`} />
+                <span className={`block h-3 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#14141a]' : 'w-3 bg-[#c9d2dc] min-[641px]:bg-white group-hover/dot:bg-white/80'}`} />
               </button>
             ))}
           </div>
