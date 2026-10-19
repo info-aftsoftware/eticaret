@@ -93,6 +93,11 @@ const nextConfig = {
   // Dev sunucusu çalışırken ayrı klasöre derleme denemesi için (ör. NEXT_DIST_DIR=.next-build)
   ...(process.env.NEXT_DIST_DIR && { distDir: process.env.NEXT_DIST_DIR }),
   serverExternalPackages: ['undici'],
+  // Paylaşımlı hostingte işlem sayısı sınırlı: statik sayfa üretimi CPU başına alt işlem açınca
+  // "spawn node EAGAIN" ile derleme düşüyor. NEXT_BUILD_CPUS ile artırılabilir (varsayılan 2).
+  experimental: {
+    cpus: Math.max(1, Number(process.env.NEXT_BUILD_CPUS) || 2),
+  },
   // Üst klasörlerdeki başka lockfile'lar kök dizini yanlış seçtirmesin (standalone çıktı yolu)
   outputFileTracingRoot: __dirname,
   // pdfkit (@react-pdf/renderer) standart fontları '#standard-fonts/...' ile dinamik yükler; izleyici bunları görmez,
