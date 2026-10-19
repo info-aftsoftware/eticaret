@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { XCircle, ShoppingCart, Banknote } from 'lucide-react'
+import { ShoppingCart, Banknote } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'
 import { posFailMessage } from '@/lib/payments/pos-messages'
 import { useLocale } from 'next-intl'
@@ -24,9 +24,6 @@ function CancelContent() {
 
   return (
     <div className="mx-auto max-w-lg rounded-xl border border-[#e6ebf1] bg-white px-5 py-8 text-center shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:px-10">
-      <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-600 ring-8 ring-red-50/60">
-        <XCircle className="h-8 w-8" aria-hidden />
-      </span>
       <h1 className="mt-6 text-2xl font-bold text-[#121926]">{L('Ödeme tamamlanmadı', 'Payment not completed')}</h1>
       {error && (
         <p role="alert" className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">

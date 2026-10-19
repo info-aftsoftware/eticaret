@@ -3,25 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import {
-  AlertCircle,
-  Banknote,
-  Check,
-  CheckCircle2,
-  Clock,
-  Copy,
-  CreditCard,
-  ExternalLink,
-  FileText,
-  Loader2,
-  MapPin,
-  Package,
-  PackageCheck,
-  ReceiptText,
-  RotateCcw,
-  Truck,
-  XCircle,
-} from 'lucide-react'
+import { AlertCircle, Banknote, Check, CheckCircle2, Clock, Copy, CreditCard, ExternalLink, FileText, Loader2, MapPin, Package, PackageCheck, ReceiptText, RotateCcw, Truck, XCircle } from 'lucide-react'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'
 import { getDb } from '@/lib/firebase/config'
@@ -418,9 +400,6 @@ export default function OrderDetailPage() {
           <div className="w-full max-w-md rounded-xl border border-[#e6ebf1] bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-8">
             {isGuestOrderId ? (
               <>
-                <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#f1f4f8]">
-                  <Package className="h-6 w-6 text-[#0b2540]" aria-hidden />
-                </span>
                 <h2 className="text-lg font-semibold text-[#121926]">{L('Siparişinizi görüntüleyin', 'View your order')}</h2>
                 <p className="mt-1 font-mono text-sm font-semibold text-[#0b2540]">{id}</p>
                 <p className="mb-5 mt-2 text-sm text-[#5d6e80]">
@@ -502,7 +481,7 @@ export default function OrderDetailPage() {
             {isCancelled || isReturned ? (
               <Card>
                 <div className="flex items-start gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600"><XCircle className="h-5 w-5" aria-hidden /></span>
+                  
                   <div className="text-sm">
                     <p className="text-base font-semibold text-[#121926]">{isCancelled ? L('Bu sipariş iptal edildi', 'This order has been cancelled') : L('Bu sipariş iade alındı', 'This order has been returned')}</p>
                     {order.dates?.cancelledAt && isCancelled && <p className="text-[#5d6e80]">{fmtDateTime(new Date(order.dates.cancelledAt), loc)}</p>}

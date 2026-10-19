@@ -16,7 +16,7 @@ import { getAddresses, addAddress, updateAddress, deleteAddress, getOrders, setU
 import { FavoritesGrid } from '@/components/FavoritesGrid'
 import { getAuth } from '@/lib/firebase/config'
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth'
-import { User, ShoppingCart, Settings, Trash2, MapPin, Package, Truck, CheckCircle2, Clock, XCircle, Plus, Pencil as Edit } from 'lucide-react'
+import { User, Settings, Trash2, Package, Truck, Plus, Pencil as Edit } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
@@ -318,9 +318,6 @@ function ProfilePageContent() {
               ) : orders.length === 0 ? (
                 <Card className="classic-card rounded-lg">
                   <CardContent className="py-12 text-center">
-                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-surface mb-4">
-                      <ShoppingCart className="w-8 h-8 text-ink-muted" />
-                    </div>
                     <h3 className="text-lg font-semibold text-ink mb-2">{L('Henüz sipariş yok', 'No orders yet')}</h3>
                     <p className="text-ink-muted mb-4">
                       {L('Siparişleriniz burada görünecek.', 'Your orders will appear here.')}
@@ -512,9 +509,6 @@ function ProfilePageContent() {
               {addresses.length === 0 ? (
                 <Card className="classic-card rounded-lg">
                   <CardContent className="py-12 text-center">
-                    <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-surface mb-4">
-                      <MapPin className="w-8 h-8 text-ink-muted" />
-                    </div>
                     <h3 className="text-lg font-semibold text-ink mb-2">{L('Henüz adres yok', 'No addresses yet')}</h3>
                     <p className="text-ink-muted mb-4">
                       {L('Teslimat adreslerinizi kaydedin.', 'Save your delivery addresses.')}

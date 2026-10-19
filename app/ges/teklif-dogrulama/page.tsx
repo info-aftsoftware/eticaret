@@ -11,11 +11,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import {
-  FileCheck, Loader2, CheckCircle, AlertTriangle, Phone,
-  ChevronRight, ChevronDown, ShieldCheck, Clock, Star,
-  Search, Info,
-} from 'lucide-react'
+import { FileCheck, Loader2, AlertTriangle, Phone, ChevronDown, ShieldCheck, Clock, Star, Search, Info } from 'lucide-react'
 
 const CONTACT_PHONE = '+90 551 829 16 13'
 const CONTACT_PHONE_HREF = 'tel:+905518291613'
@@ -242,9 +238,6 @@ export default function GesTeklifDogrulamaPage() {
       <div className="min-h-screen bg-slate-50 flex flex-col">
         <div className="flex-1 container mx-auto max-w-lg px-4 py-16 space-y-6">
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-emerald-100 text-emerald-600 mb-5 shadow-inner">
-              <CheckCircle className="w-10 h-10" />
-            </div>
             <h2 className="text-2xl font-bold text-slate-900 mb-2">{t('quoteVerify.successTitle')}</h2>
             <p className="text-slate-600 leading-relaxed">{t('quoteVerify.successMessageNew')}</p>
           </div>
@@ -331,9 +324,6 @@ export default function GesTeklifDogrulamaPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-white/20 mb-6 shadow-lg">
-              <FileCheck className="w-9 h-9 text-white" />
-            </div>
             <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 drop-shadow">
               {t('quoteVerify.title')}
             </h1>
@@ -365,9 +355,6 @@ export default function GesTeklifDogrulamaPage() {
           {/* Info banner */}
           <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-white">
             <CardContent className="p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-orange-100 text-orange-600 shrink-0">
-                <Info className="w-5 h-5" />
-              </div>
               <p className="text-sm text-slate-700 leading-relaxed flex-1">
                 {t('quoteVerify.intro')}
               </p>
@@ -389,9 +376,6 @@ export default function GesTeklifDogrulamaPage() {
                 {/* Form header */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-blend-soft-light bg-orange-100 text-orange-600 shrink-0">
-                      <FileCheck className="w-5 h-5" />
-                    </div>
                     <div>
                       <h2 className="text-lg font-bold text-slate-800">{L('Teklif Bilgilerini Girin', 'Enter Quote Details')}</h2>
                       <p className="text-sm text-slate-500">

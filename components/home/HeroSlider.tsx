@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
-import { FileCheck2, Truck, Lock, Headphones } from 'lucide-react'
 import { useL } from '@/lib/i18n-inline'
 
 /**
@@ -46,10 +45,10 @@ const SLIDES = [
 ] as const
 
 const FEATURES = [
-  { icon: FileCheck2, tr: ['Orijinal ve Faturalı Ürün', 'Tüm ürünler faturalı ve garantili olarak satılır'], en: ['Genuine, Invoiced Products', 'Every product is sold with invoice and warranty'] },
-  { icon: Truck, tr: ['Özenli Paketleme, Hızlı Kargo', 'Stoktaki ürünlerde hızlı sevkiyat ve takip'], en: ['Careful Packing, Fast Shipping', 'Quick dispatch and tracking for in-stock items'] },
-  { icon: Lock, tr: ['Güvenli Ödeme', 'Kredi ve banka kartıyla güvenli alışveriş'], en: ['Secure Payment', 'Safe shopping by credit and debit card'] },
-  { icon: Headphones, tr: ['Uzman Teknik Destek', 'Ürün seçimi ve sistem tasarımında mühendis desteği'], en: ['Expert Technical Support', 'Engineering help with product choice and system design'] },
+  { tr: ['Orijinal ve Faturalı Ürün', 'Tüm ürünler faturalı ve garantili olarak satılır'], en: ['Genuine, Invoiced Products', 'Every product is sold with invoice and warranty'] },
+  { tr: ['Özenli Paketleme, Hızlı Kargo', 'Stoktaki ürünlerde hızlı sevkiyat ve takip'], en: ['Careful Packing, Fast Shipping', 'Quick dispatch and tracking for in-stock items'] },
+  { tr: ['Güvenli Ödeme', 'Kredi ve banka kartıyla güvenli alışveriş'], en: ['Secure Payment', 'Safe shopping by credit and debit card'] },
+  { tr: ['Uzman Teknik Destek', 'Ürün seçimi ve sistem tasarımında mühendis desteği'], en: ['Expert Technical Support', 'Engineering help with product choice and system design'] },
 ] as const
 
 const INTERVAL_MS = 5000
@@ -159,16 +158,13 @@ export function HeroSlider() {
       {/* Güven kartları: masaüstünde hero'nun alt kenarına biner (voltekno.com: margin-top -44px) */}
       <div className="relative z-[3] max-w-[1406px] mx-auto px-4 min-[541px]:px-6 mt-0 min-[1001px]:-mt-[44px] pb-2">
         <ul className="grid grid-cols-2 min-[1001px]:grid-cols-4 gap-2.5 min-[541px]:gap-[18px]">
-          {FEATURES.map(({ icon: Icon, tr, en }) => {
+          {FEATURES.map(({ tr, en }) => {
             const [title, text] = isEn ? en : tr
             return (
             <li
               key={title}
               className="flex flex-col min-[541px]:flex-row min-[541px]:items-center gap-3 min-[541px]:gap-3.5 p-3 min-[541px]:p-[18px] rounded-xl bg-white border border-[#e6ebf1] shadow-[0_6px_24px_rgba(11,37,64,0.06)] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5"
             >
-              <span className="w-11 h-11 shrink-0 rounded-[10px] bg-[#f1f4f8] flex items-center justify-center text-[#20384e]">
-                <Icon className="w-6 h-6" strokeWidth={1.6} aria-hidden />
-              </span>
               <span className="min-w-0">
                 <b className="block text-[13px] font-[650] leading-[16.25px] tracking-[-0.13px] text-[#20384e]">{title}</b>
                 <small className="hidden min-[541px]:block mt-0.5 text-[11.5px] font-medium leading-[17.8px] text-[#5d6e80]">{text}</small>

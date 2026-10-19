@@ -252,9 +252,6 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
       <div>
         {guestHint}
         <div className="flex flex-col items-center rounded-xl border border-[#e6ebf1] bg-white px-6 py-14 text-center">
-          <span className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#fff6db]">
-            <Heart className="h-7 w-7 text-[#e0a500]" />
-          </span>
           <h2 className="text-lg font-semibold text-[#121926]">{L('Henüz favori ürününüz yok', 'You have no favorite products yet')}</h2>
           <p className="mt-2 max-w-sm text-sm text-[#5d6e80]">
             {L('Beğendiğiniz ürünlerdeki kalp simgesine dokunun; fiyatını ve stok durumunu buradan takip edin.', 'Tap the heart icon on products you like and track their price and stock status here.')}

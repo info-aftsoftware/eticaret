@@ -6,7 +6,7 @@ import { trackViewItem } from '@/lib/analytics'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Package, ChevronRight, Minus, Plus, ShoppingCart, Zap, ZoomIn, X, ChevronLeft } from 'lucide-react'
+import { ArrowLeft, Package, ChevronRight, Minus, Plus, ShoppingCart, ZoomIn, X, ChevronLeft } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
 import { BANK_TRANSFER_DISCOUNT_RATE, bankTransferGrossPrice, grossPrice } from '@/lib/store-config'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
@@ -209,9 +209,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
         <div className="max-w-sm w-full text-center space-y-4">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white border border-slate-200 shadow-sm mx-auto">
-            <Package className="w-8 h-8 text-slate-400" />
-          </div>
           <h2 className="text-lg font-semibold text-slate-900 mb-1">{tProduct('notFound')}</h2>
           <p className="text-sm text-slate-500 font-medium">{tProduct('notFoundDesc')}</p>
           <Button asChild variant="outline" className="rounded-xl border-slate-200">
@@ -470,7 +467,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(price)}</span>
                       <span className="text-[13px] text-[#5d6e80]">
-                        {L('+KDV · KDV dahil', '+VAT · incl. VAT')} <span className="tabular-nums">{formatPrice(grossPrice(price))}</span>
+                        {L('KDV dahil', 'incl. VAT')} <span className="tabular-nums">{formatPrice(grossPrice(price))}</span>
                       </span>
                     </div>
                   </div>
@@ -567,7 +564,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   }}
                   className="rounded-lg h-12 px-4 bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] font-semibold text-[15px] disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
                 >
-                  <Zap className="w-[18px] h-[18px] mr-2 shrink-0" aria-hidden />
                   {outOfStock ? tCart('outOfStock') : tProduct('buyNow')}
                 </Button>
               </div>

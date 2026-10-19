@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AlertCircle, Loader2, Package, Search, ShieldCheck, Truck } from 'lucide-react'
+import { AlertCircle, Loader2, Package, ShieldCheck, Truck } from 'lucide-react'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { formatTrPhone, isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
@@ -61,9 +61,6 @@ export default function OrderTrackingPage() {
       <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-[minmax(0,1fr)_280px]">
         <div className="rounded-xl border border-[#e6ebf1] bg-white p-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-7">
           <div className="mb-5 flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-[#f1f4f8]">
-              <Search className="h-5 w-5 text-[#0b2540]" aria-hidden />
-            </span>
             <div>
               <h2 className="text-base font-semibold text-[#121926]">{L('Siparişimi sorgula', 'Look up my order')}</h2>
               <p className="text-sm text-[#5d6e80]">{L('Üyelik gerekmez.', 'No account needed.')}</p>

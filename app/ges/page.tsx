@@ -11,11 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import {
-  Sun, Calculator, ChevronDown, CheckCircle, Zap, Clock, ShieldCheck,
-  Loader2, Info, FileCheck, Settings, Banknote, CircleDollarSign,
-  ChevronRight, Star,
-} from 'lucide-react'
+import { Calculator, ChevronDown, CheckCircle, Clock, ShieldCheck, Loader2, FileCheck, Star } from 'lucide-react'
 import {
   GES_REGIONS, MONTHLY_KWH_MIN, MONTHLY_KWH_MAX,
   SUN_HOURS_MIN, SUN_HOURS_MAX, PR_MIN, PR_MAX, GES_DEFAULT_PR,
@@ -346,9 +342,6 @@ export default function GesPage() {
         <div className="flex-1 flex items-center justify-center py-20 px-4">
           <Card className="max-w-lg w-full shadow-xl border-0">
             <CardContent className="py-16 text-center px-8">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 text-green-600 mb-6">
-                <CheckCircle className="w-10 h-10" />
-              </div>
               <h2 className="text-2xl font-bold text-slate-900 mb-3">{t('quoteForm.successTitle')}</h2>
               <p className="text-slate-600 mb-8 leading-relaxed">{t('quoteForm.successMessage')}</p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -429,9 +422,6 @@ export default function GesPage() {
         <div className="container mx-auto px-4 relative z-10">
 
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-white/20 mb-6 shadow-lg">
-              <Sun className="w-9 h-9 text-white" />
-            </div>
             <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 drop-shadow">
               {L('Güneş Enerjisi Analizi & Ücretsiz Teklif', 'Solar Energy Analysis & Free Quote')}
             </h1>
@@ -467,9 +457,6 @@ export default function GesPage() {
 
                 {/* Form header */}
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-brand/10 text-brand shrink-0">
-                    <Sun className="w-5 h-5" />
-                  </div>
                   <div>
                     <h2 className="text-lg font-bold text-slate-800">{L('Ücretsiz Teklif Al', 'Get a Free Quote')}</h2>
                     <p className="text-sm text-slate-500">
@@ -924,11 +911,7 @@ export default function GesPage() {
                     disabled={submitting}
                     className="w-full h-14 text-base font-bold rounded-xl bg-orange-500 hover:bg-orange-600 gap-2 shadow-lg shadow-orange-500/25"
                   >
-                    {submitting ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Sun className="w-5 h-5" />
-                    )}
+                    {submitting && <Loader2 className="w-5 h-5 animate-spin" />}
                     {t('quoteForm.submit')}
                   </Button>
 

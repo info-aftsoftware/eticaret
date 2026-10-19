@@ -3,7 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { ChevronRight, Grid3X3 } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { CATEGORY_GROUPS } from '@/lib/categories'
 import { mockProducts } from '@/lib/products-mock'
 
@@ -35,9 +35,6 @@ export default function CategoriesPage() {
                 href={`/category/${group.id}`}
                 className="group flex items-center gap-4 p-4 sm:p-5 rounded-2xl border border-palette bg-surface-elevated hover:border-brand/30 hover:shadow-md transition-all"
               >
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/10 text-brand group-hover:bg-brand group-hover:text-white transition-colors">
-                  <Grid3X3 className="w-6 h-6" />
-                </span>
                 <div className="min-w-0 flex-1">
                   <h2 className="font-semibold text-ink truncate group-hover:text-brand transition-colors">
                     {label}

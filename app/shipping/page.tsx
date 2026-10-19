@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Truck, Package, Clock, MapPin, ChevronRight, AlertTriangle, CheckCircle } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 
 export const metadata: Metadata = {
@@ -31,28 +31,22 @@ export default async function ShippingPage() {
           {/* Teslimat Süreleri */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-brand" />
-              </div>
               <h2 className="text-xl font-bold text-ink">{L('Teslimat Süreleri', 'Delivery Times')}</h2>
             </div>
             <div className="space-y-4">
               <div className="flex gap-3">
-                <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-ink">{L('Stokta Mevcut Ürünler', 'In-Stock Products')}</p>
                   <p className="text-ink-muted text-sm mt-0.5">{L('Ödeme onayından itibaren kargoya verilir. Kargo firması teslim süresi bölgeye ve siparişe göre değişir; tahmini süre sipariş onay e-postanızda belirtilir.', 'Shipped once payment is confirmed. The carrier delivery time varies by region and order; the estimated time is stated in your order confirmation email.')}</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-ink">{L('Özel Sipariş / Stok Dışı Ürünler', 'Special Order / Out-of-Stock Products')}</p>
                   <p className="text-ink-muted text-sm mt-0.5">{L('Ürünün tedarik süresi sipariş öncesinde size bildirilir. Bu kategorideki ürünlerde standart süre garantisi uygulanmaz.', 'The supply lead time is communicated to you before ordering. Standard delivery time guarantees do not apply to products in this category.')}</p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <CheckCircle className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-semibold text-ink">{L('Büyük / Ağır Ekipmanlar', 'Large / Heavy Equipment')}</p>
                   <p className="text-ink-muted text-sm mt-0.5">{L('Ağır güneş paneli paletleri, büyük batarya sistemleri gibi ürünler özel araçlı kargo ile sevk edilir. Teslimat öncesinde sizi arayarak randevu belirlenebilir.', 'Products such as heavy solar panel pallets and large battery systems are shipped by dedicated freight vehicles. We may call you before delivery to schedule an appointment.')}</p>
@@ -70,9 +64,6 @@ export default async function ShippingPage() {
           {/* Kargo Ücreti */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
-                <Package className="w-5 h-5 text-brand" />
-              </div>
               <h2 className="text-xl font-bold text-ink">{L('Kargo Ücreti', 'Shipping Fee')}</h2>
             </div>
             <ul className="space-y-2 text-ink-muted text-sm list-disc pl-5">
@@ -86,9 +77,6 @@ export default async function ShippingPage() {
           {/* Kargo Firması */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
-                <Package className="w-5 h-5 text-brand" />
-              </div>
               <h2 className="text-xl font-bold text-ink">{L('Kargo Firması ve Paketleme', 'Carriers and Packaging')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
@@ -108,9 +96,6 @@ export default async function ShippingPage() {
           {/* Sipariş Takibi */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-brand" />
-              </div>
               <h2 className="text-xl font-bold text-ink">{L('Sipariş Takibi', 'Order Tracking')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed">
@@ -121,9 +106,6 @@ export default async function ShippingPage() {
           {/* Hasar Durumu */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-red-50 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-red-500" />
-              </div>
               <h2 className="text-xl font-bold text-ink">{L('Hasarlı veya Eksik Teslimat', 'Damaged or Incomplete Delivery')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
@@ -140,9 +122,6 @@ export default async function ShippingPage() {
           {/* Teslimat Adresi */}
           <div className="bg-surface-elevated rounded-xl border border-palette shadow-sm p-6 md:p-8">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center">
-                <Truck className="w-5 h-5 text-brand" />
-              </div>
               <h2 className="text-xl font-bold text-ink">{L('Teslimat Adresi', 'Delivery Address')}</h2>
             </div>
             <p className="text-ink-muted leading-relaxed">

@@ -4,21 +4,7 @@ import React, { useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import {
-  AlertCircle,
-  ArrowLeft,
-  Banknote,
-  Building2,
-  Check,
-  ChevronDown,
-  CreditCard,
-  Loader2,
-  Lock,
-  MapPin,
-  Package,
-  ShoppingCart,
-  User,
-} from 'lucide-react'
+import { AlertCircle, ArrowLeft, Banknote, Building2, Check, ChevronDown, CreditCard, Loader2, Lock, MapPin, Package, ShoppingCart, User } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { trackBeginCheckout, trackAddPaymentInfo, cartItemToGa } from '@/lib/analytics'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
@@ -650,9 +636,6 @@ export default function CheckoutPage() {
     return (
       <div className="flex min-h-[60vh] items-center justify-center bg-[#f5f7fa] px-4">
         <div className="w-full max-w-md rounded-xl border border-[#e6ebf1] bg-white p-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#f1f4f8]">
-            <ShoppingCart className="h-7 w-7 text-[#0b2540]" aria-hidden />
-          </div>
           <h1 className="text-xl font-semibold text-[#121926]">{L('Sepetiniz boş', 'Your cart is empty')}</h1>
           <p className="mt-2 text-sm text-[#5d6e80]">{L('Ödeme adımına geçmek için önce sepetinize ürün ekleyin.', 'Add products to your cart before proceeding to checkout.')}</p>
           <Link href="/products" className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">

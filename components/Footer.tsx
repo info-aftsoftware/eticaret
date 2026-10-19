@@ -5,13 +5,7 @@ import Link from 'next/link'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
-import {
-  Mail,
-  Phone,
-  MapPin,
-  ShieldCheck,
-  Zap,
-} from 'lucide-react'
+import { Mail, Phone, MapPin } from 'lucide-react'
 import { Logo } from './Logo'
 import { PaymentBadges } from './PaymentBadges'
 import { LocaleCurrencySwitcher } from './LocaleCurrencySwitcher'
@@ -125,7 +119,6 @@ export function Footer() {
                       : linkClass
                     }
                   >
-                    {item.highlight && <Zap className="w-3.5 h-3.5" />}
                     {item.label}
                   </Link>
                 </li>
@@ -188,7 +181,6 @@ export function Footer() {
             {ETBIS_URL && (
               <p>
                 <a href={ETBIS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white">
-                  <ShieldCheck className="w-3.5 h-3.5" aria-hidden />
                   {L('ETBİS\'e kayıtlıdır — doğrula', 'Registered with ETBİS — verify')}
                 </a>
               </p>

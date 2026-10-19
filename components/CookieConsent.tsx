@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { Cookie } from 'lucide-react'
 
 export const COOKIE_CONSENT_KEY = 'voltekno_cookie_consent'
 export const COOKIE_CONSENT_EVENT = 'voltekno:cookie-consent'
@@ -59,9 +58,6 @@ export function CookieConsent() {
     >
       <div className="container mx-auto max-w-5xl flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-start gap-3 flex-1 min-w-0">
-          <div className="shrink-0 w-10 h-10 rounded-lg bg-brand-light flex items-center justify-center">
-            <Cookie className="w-5 h-5 text-brand" />
-          </div>
           <div className="min-w-0">
             <p className="text-sm font-medium text-ink mb-0.5">{t('title')}</p>
             <p className="text-sm text-ink-muted">

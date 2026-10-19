@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Star, Zap } from 'lucide-react'
+import { ShoppingCart, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCartStore } from '@/lib/store/useCartStore'
@@ -78,9 +78,6 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
       {/* Başlık */}
       <div className="flex items-center gap-2 mb-1">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center">
-            <Zap className="w-4 h-4 text-amber-500" />
-          </div>
           <div>
             <h3 className="font-bold text-slate-900 text-base">{sectionTitle}</h3>
             {sectionDesc && (
