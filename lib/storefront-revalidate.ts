@@ -15,6 +15,12 @@ export function revalidateStorefront(): void {
     revalidatePath('/feed/google-merchant.xml')
     revalidatePath('/sitemap.xml')
   } catch (e) {
+    // İstek bağlamı dışında (uygulama içi zamanlayıcı, build) Next önbelleği tazeleyemez. Zararsız:
+    // ürün listeleri önbelleksiz /api/products'tan okur, ürün sayfası açılınca güncel stoğu kendisi çeker.
+    if (e instanceof Error && e.message.includes('static generation store missing')) {
+      console.info('Storefront revalidate skipped (no request context)')
+      return
+    }
     console.error('Storefront revalidate error:', e)
   }
 }
