@@ -24,6 +24,16 @@ _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, he
 | E12 | Sağlayıcı / iş kararı gerektirenler | ❌ sizde | e-Arşiv entegratörü, SQLite → PostgreSQL, IBAN hesap sahibi adı kontrolü, kargo API, SMS, taksit tablosu, Turnstile, ETBİS, İYS, Meta Pixel (çerez politikasına eklenmeli), PayTR kararı, kapıda ödeme (`YAPILACAKLAR.md` 125–128, 242, 261) |
 | E13 | Playwright testleri üretim derlemesinde kırmızıydı | ✅ `220407d` | Mobilde havale testi gizli masaüstü özet kopyasına bakıyordu (sayfa doğru, test hatalı). Merchant testi önceden üretilmiş akışta (ISR) gerekçeli atlanıyor. Not: e2e testleri sunucuyla aynı `DATABASE_URL` ile çalıştırılmalı (test ürünü/kuponu oraya yazılır) |
 
+## İstek turu 4 (19.10.2026 öğleden sonra)
+| İstek | Durum | Not |
+|---|---|---|
+| Mobilde başlık: burger menü yeterli | ✅ `f77d2de` | ≤1024 px'te tek satır (burger, logo, arama, hesap, sepet). Kategori düğmesi, arama kutusu ve kategori hapları kalktı; kategoriler burger menüde, arama simgesi ince bir arama satırı açar (odaklı, sayfa değişince kapanır) |
+| Mobilde hero kötü duruyordu | ✅ `f77d2de` | Görsel tam genişlikte 16:9 (altındaki boş gri alan gitti), başlık ve buton hemen altında; geniş 3. görselde ürünler kadrajda; pasif noktalar açık zeminde görünür |
+| Fiyatın yanına "+KDV" yazılmasın | ✅ `d3a5aef` | Ürün sayfası: "KDV dahil ₺X". Sepet ve kartlarda zaten yalnızca KDV dahil |
+| Klasik "yapay zekâ" ikonları hiçbir yerde olmasın | ✅ `d3a5aef` | Renkli kutu içindeki süs ikonları kaldırıldı (bölüm başlıkları, boş/başarı ekranları, iletişim/kargo/hakkımızda kartları, güven kartları, çerez ve e-posta bantları, sepet önerileri); "Hemen al" şimşeği, footer şimşek/kalkan, 3D Secure kalkanı, GES düğmesindeki güneş, onay işaretli maddeler. Kalan ikonlar işlevsel: menü, arama, hesap, sepet, oklar, silme, yükleniyor, satır içi hata/uyarı, WhatsApp, footer iletişim |
+| Favoriye tıklayınca giriş/kayda yönlendirsin | ✅ `4598c6b` | Yukarıda manuel test #6 |
+| Ekran görüntüsündeki sepet sayfası taşması | ℹ️ | 375 px'te sayfada genişliği aşan öğe yok, giriş kutuları 16 px (Safari otomatik yakınlaştırmaz); görüntü elle yakınlaştırılmış olabilir. Yayından sonra telefonda tekrar bakılmalı |
+
 ## Admin paneli girişi
 | Ortam | Adres | Şifre | İki adımlı doğrulama |
 |---|---|---|---|
@@ -116,7 +126,7 @@ _Yerel sunucuda (localhost:3005), test verisiyle; e-postalar gönderilmeden `.da
 | 3 | Kategori sayfası | ✅ | ✅ | Şarj Kontrol: 66 ürün |
 | 4 | Ürün sayfası: galeri, varyant, sepete ekle, favori | ✅ | ✅ | 13 görsel, 2 varyant, favori ve sepete ekleme çalışıyor |
 | 5 | Ürün kartı: sepete ekle, adet +/−, "Seçenekleri Gör" | ✅ | ✅ | Karttan ekleme ve adet artırma çalışıyor |
-| 6 | Favoriler (misafir) | ✅ | ✅ | Giriş istemeden listeleniyor |
+| 6 | Favoriler (misafir) | ✅ | ✅ | 19.10'dan beri üyelere özel: misafir kalbe dokununca giriş sayfasına gider (açıklamalı), ürün girişten sonra eklenir; /favorites misafire giriş/üye ol gösterir |
 | 7 | Sepet: kargo çubuğu, sözleşme onayları | ✅ | ✅ | Ücretsiz kargo bilgisi (test 18.10 sabahı; eşik sonradan kaldırıldı, sepet artık desi ücretini gösteriyor), 3 onay kutusu |
 | 8 | Ödeme: doğrulamalar, il/ilçe, kurumsal fatura | ✅ | ✅ | Boş formda "7 alanı kontrol edin" + alan mesajları; hatalı vergi no reddedildi; İzmir 30 ilçe |
 | 9 | Havale ile sipariş + başarı sayfası + e-postalar | ✅ | — | ORD-2026-00053: IBAN'lar gösterildi; "sipariş alındı" + admin "yeni sipariş" e-postaları |
