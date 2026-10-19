@@ -1,5 +1,6 @@
 'use client'
 
+import { StockPriceTransfer } from '@/components/admin/DataTransfer'
 /**
  * Ürünler & Stok — tek ürün yöneticisi (eski "Ürün Düzenleme" /admin/katalog ve "Stok Yönetimi" /admin/urunler
  * sayfaları buraya yönlenir). Liste, satır içi stok düzenleme, toplu işlemler; ayrıntılı düzenleme
@@ -271,6 +272,7 @@ function ProductsContent() {
               <RefreshCw />
               Yenile
             </Btn>
+            <StockPriceTransfer onApplied={load} />
             <BtnLink href="/admin/products/duzenle?yeni=1" variant="primary">
               <Plus />
               Yeni Ürün

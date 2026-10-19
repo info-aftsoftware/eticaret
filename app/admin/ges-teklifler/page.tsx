@@ -51,33 +51,27 @@ export default function AdminGesTekliflerPage() {
   const [loadingVerifications, setLoadingVerifications] = useState(true)
 
   useEffect(() => {
-    (async () => {
+    // Kayıtlar Prisma'da (GesQuoteRequest / GesQuoteVerification); admin uçlarından okunur
+    const asIso = (v: unknown) => (typeof v === 'string' ? v : '')
+    ;(async () => {
       try {
-        const { collection: col, getDocs } = await import('firebase/firestore')
-        const { getDb } = await import('@/lib/firebase/config')
-        const db = getDb()
-
-        // GES teklif talepleri
-        const quotesSnap = await getDocs(col(db, 'gesQuotes'))
-        const quotes: GesQuoteRow[] = quotesSnap.docs.map((d) => {
-          const data = d.data()
-          const createdAt = data.createdAt as { seconds: number } | null
-          return {
-            id: d.id,
-            fullName: data.fullName || '',
-            phone: data.phone || '',
-            city: data.city || '',
-            email: data.email || null,
-            monthlyKwh: data.monthlyKwh ?? null,
-            regionId: data.regionId ?? null,
-            suggestedKwp: data.suggestedKwp ?? null,
-            installationType: data.installationAreaType ?? data.installationType ?? null,
-            notes: data.notes ?? null,
-            wantsEvChargingQuote: data.wantsEvChargingQuote,
-            wantsLightingQuote: data.wantsLightingQuote,
-            createdAt: createdAt?.seconds ? new Date(createdAt.seconds * 1000).toISOString() : '',
-          }
-        })
+        const res = await fetch('/api/admin/ges-quotes', { credentials: 'include' })
+        const data: Record<string, unknown>[] = res.ok ? await res.json() : []
+        const quotes: GesQuoteRow[] = (Array.isArray(data) ? data : []).map((d) => ({
+          id: String(d.id),
+          fullName: String(d.fullName ?? ''),
+          phone: String(d.phone ?? ''),
+          city: String(d.city ?? ''),
+          email: (d.email as string | null) ?? null,
+          monthlyKwh: (d.monthlyKwh as number | null) ?? null,
+          regionId: (d.regionId as string | null) ?? null,
+          suggestedKwp: (d.suggestedKwp as number | null) ?? null,
+          installationType: ((d.installationAreaType ?? d.installationType) as string | null) ?? null,
+          notes: (d.notes as string | null) ?? null,
+          wantsEvChargingQuote: Boolean(d.wantsEvChargingQuote),
+          wantsLightingQuote: Boolean(d.wantsLightingQuote),
+          createdAt: asIso(d.createdAt),
+        }))
         quotes.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
         setList(quotes)
       } catch (err) {
@@ -86,32 +80,36 @@ export default function AdminGesTekliflerPage() {
       } finally {
         setLoading(false)
       }
-    })();
-
-    // GES doğrulamaları
-    (async () => {
+    })()
+    ;(async () => {
       try {
-        const { collection: col, getDocs } = await import('firebase/firestore')
-        const { getDb } = await import('@/lib/firebase/config')
-        const db = getDb()
-        const snap = await getDocs(col(db, 'gesVerifications'))
-        const rows: GesVerificationRow[] = snap.docs.map((d) => {
-          const data = d.data()
-          const createdAt = data.createdAt as { seconds: number } | null
-          return {
-            id: d.id,
-            companyName: data.companyName || '',
-            quoteDate: data.quoteDate ?? null,
-            totalPriceTry: data.totalPriceTry ?? null,
-            totalKwp: data.totalKwp ?? null,
-            panelBrandModel: data.panelBrandModel ?? null,
-            contactName: data.contactName ?? null,
-            contactEmail: data.contactEmail ?? null,
-            contactPhone: data.contactPhone ?? null,
-            redFlags: Array.isArray(data.redFlags) ? data.redFlags : null,
-            createdAt: createdAt?.seconds ? new Date(createdAt.seconds * 1000).toISOString() : '',
+        const res = await fetch('/api/admin/ges-verifications', { credentials: 'include' })
+        const data: Record<string, unknown>[] = res.ok ? await res.json() : []
+        const flags = (v: unknown): string[] | null => {
+          if (Array.isArray(v)) return v.map(String)
+          if (typeof v === 'string' && v.trim()) {
+            try {
+              const p = JSON.parse(v)
+              return Array.isArray(p) ? p.map(String) : [v]
+            } catch {
+              return [v]
+            }
           }
-        })
+          return null
+        }
+        const rows: GesVerificationRow[] = (Array.isArray(data) ? data : []).map((d) => ({
+          id: String(d.id),
+          companyName: String(d.companyName ?? ''),
+          quoteDate: (d.quoteDate as string | null) ?? null,
+          totalPriceTry: (d.totalPriceTry as number | null) ?? null,
+          totalKwp: (d.totalKwp as number | null) ?? null,
+          panelBrandModel: (d.panelBrandModel as string | null) ?? null,
+          contactName: (d.contactName as string | null) ?? null,
+          contactEmail: (d.contactEmail as string | null) ?? null,
+          contactPhone: (d.contactPhone as string | null) ?? null,
+          redFlags: flags(d.redFlags),
+          createdAt: asIso(d.createdAt),
+        }))
         rows.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
         setVerifications(rows)
       } catch (err) {

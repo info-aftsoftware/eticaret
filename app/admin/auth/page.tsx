@@ -9,6 +9,7 @@ import Image from 'next/image'
 
 export default function AdminAuthPage() {
   const router = useRouter()
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -25,7 +26,7 @@ export default function AdminAuthPage() {
       const res = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(otpRequired ? { password, otp } : { password }),
+        body: JSON.stringify(otpRequired ? { email, password, otp } : { email, password }),
         credentials: 'include',
       })
       const data = await res.json().catch(() => ({}))
@@ -50,7 +51,8 @@ export default function AdminAuthPage() {
           await signInWithCustomToken(auth, data.firebaseCustomToken)
         } catch {}
       }
-      router.push('/admin')
+      // İlk girişte veya şifre sıfırlandıktan sonra önce şifre değiştirilir
+      router.push(data.mustChangePassword ? '/admin/hesabim' : '/admin')
       router.refresh()
     } catch (err: any) {
       setError('Bağlantı hatası. Tekrar deneyin.')
@@ -82,6 +84,24 @@ export default function AdminAuthPage() {
               </div>
             )}
             <div className="space-y-1.5">
+              <label htmlFor="admin-email" className="block text-white/60 text-xs font-semibold uppercase tracking-wider">
+                E-posta
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                autoComplete="username"
+                placeholder="ad@voltekno.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ background: 'rgba(255,255,255,0.08)', color: 'white' }}
+                className="w-full h-11 px-3 rounded-xl border border-white/15 text-sm outline-none focus:border-[#f4a11a] placeholder-white/25 transition-colors"
+                disabled={loading}
+                autoFocus
+              />
+              <p className="text-[11px] text-white/35">Ana yönetici şifresiyle girmek için boş bırakın.</p>
+            </div>
+            <div className="space-y-1.5">
               <label htmlFor="admin-password" className="block text-white/60 text-xs font-semibold uppercase tracking-wider">
                 Şifre
               </label>
@@ -98,7 +118,6 @@ export default function AdminAuthPage() {
                   className="w-full h-11 pl-10 pr-10 rounded-xl border border-white/15 text-sm outline-none focus:border-[#f4a11a] placeholder-white/25 transition-colors"
                   required
                   disabled={loading}
-                  autoFocus
                 />
                 <button
                   type="button"

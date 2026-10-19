@@ -1,11 +1,12 @@
 /**
- * Kritik hata bildirimi (Sentry vb. yokken): hata loglanır ve admin'e e-posta gönderilir.
+ * Kritik hata bildirimi: hata ErrorLog tablosuna yazılır (Yönetim > Sistem Durumu) ve admin'e e-posta gönderilir.
  * Aynı bağlam için en fazla 15 dakikada bir e-posta (e-posta yağmurunu önler); aradaki tekrarlar sayılır.
  * Kullanım: reportError('stripe-webhook', err, { orderNo })
  */
 
 import { sendEmail } from '@/lib/email'
 import { STORE_CONTACT } from '@/lib/store-config'
+import { recordError } from '@/lib/error-log'
 
 const THROTTLE_MS = 15 * 60_000
 const last = new Map<string, { at: number; suppressed: number }>()
@@ -17,6 +18,8 @@ export async function reportError(context: string, error: unknown, details?: Rec
   const message = error instanceof Error ? error.message : String(error)
   const stack = error instanceof Error ? error.stack?.split('\n').slice(0, 8).join('\n') : undefined
   console.error(`[${context}]`, error, details ?? '')
+  // Yönetim > Sistem Durumu için kalıcı kayıt (e-posta kısıtlamasından bağımsız; tekrarlar sayılır)
+  await recordError({ source: 'server', context, message, stack, details })
 
   const now = Date.now()
   const entry = last.get(context)

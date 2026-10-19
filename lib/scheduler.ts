@@ -37,7 +37,7 @@ const JOBS: Job[] = [
       // SQLite dışı veritabanı veya yanlış BACKUP_DIR: tekrar denemenin anlamı yok, durum kaydedilir
       if (status === 400) return `atlandı: ${String(body.error)}`
       if (status !== 200) throw new Error(String(body.error ?? `durum ${status}`))
-      return `${String(body.file)} (${Math.round(Number(body.sizeBytes) / 1024)} KB, saklanan ${String(body.kept)})`
+      return `${String(body.file)} (${Math.round(Number(body.sizeBytes) / 1024)} KB, saklanan ${String(body.kept)}, sunucu dışı: ${String(body.offsite)})`
     },
   },
 ]

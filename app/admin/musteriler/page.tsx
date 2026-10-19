@@ -1,5 +1,7 @@
 'use client'
 
+import { DownloadLink } from '@/components/admin/DataTransfer'
+import { useAdminMe } from '@/components/admin/AdminMeContext'
 import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -13,6 +15,7 @@ type ListResponse = { customers: CustomerRow[]; total: number; page: number; pag
 const PAGE_SIZE = 25
 
 function CustomersContent() {
+  const me = useAdminMe()
   const router = useRouter()
   const pathname = usePathname()
   const sp = useSearchParams()
@@ -82,10 +85,15 @@ function CustomersContent() {
         title="Müşteriler"
         description="Üyeler ve misafir alışveriş yapanlar (e-postaya göre gruplanır)"
         actions={
-          <Btn variant="outline" onClick={load} loading={loading && !!data}>
-            {!(loading && data) && <RefreshCw />}
-            Yenile
-          </Btn>
+          <>
+            <Btn variant="outline" onClick={load} loading={loading && !!data}>
+              {!(loading && data) && <RefreshCw />}
+              Yenile
+            </Btn>
+            {(me?.user.role === 'owner' || me?.user.role === 'manager') && (
+              <DownloadLink href="/api/admin/exports/subscribers">İzinli kişiler (ticari ileti)</DownloadLink>
+            )}
+          </>
         }
       />
 

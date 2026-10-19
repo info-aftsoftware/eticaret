@@ -13,6 +13,7 @@ import { getAdminFirestore } from '@/lib/firebaseAdminServer'
 import { priceOrder } from '@/lib/order-pricing'
 import { STORE_CONTACT, VAT_RATE } from '@/lib/store-config'
 import { EmailLayout, CtaButton, s, fmtTRY } from '@/emails/order/shared'
+import { getMarketingConsent } from '@/lib/marketing-consent'
 
 const HOUR = 3_600_000
 
@@ -42,7 +43,10 @@ function AbandonedCartEmail({ lines, cartUrl, settingsUrl }: { lines: Line[]; ca
   )
 }
 
-async function hasCommercialConsent(uid: string): Promise<boolean> {
+async function hasCommercialConsent(uid: string, email?: string): Promise<boolean> {
+  // Önce sunucudaki izin defteri (lib/marketing-consent.ts); kayıt yoksa eski Firestore profili
+  const ledger = await getMarketingConsent({ userId: uid, email }).catch(() => null)
+  if (ledger !== null) return ledger
   const db = getAdminFirestore()
   if (!db) return false
   try {
@@ -66,7 +70,7 @@ export async function processAbandonedCarts(opts: { dry?: boolean } = {}) {
   const result = { reminded: 0, skippedNoConsent: 0, skippedEmpty: 0 }
 
   for (const snap of candidates) {
-    if (!(await hasCommercialConsent(snap.userId))) {
+    if (!(await hasCommercialConsent(snap.userId, snap.email))) {
       result.skippedNoConsent++
       continue
     }

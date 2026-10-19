@@ -19,6 +19,8 @@ export type FirebaseIdToken = {
   email_verified?: boolean
   name?: string
   admin?: boolean
+  /** Son kimlik doğrulama zamanı (saniye) — hassas işlemlerde "yakın zamanda giriş" kontrolü için */
+  auth_time?: number
 }
 
 async function verifyWithPublicKeys(token: string): Promise<FirebaseIdToken | null> {
@@ -34,7 +36,7 @@ async function verifyWithPublicKeys(token: string): Promise<FirebaseIdToken | nu
     const p = payload as JWTPayload & { email?: string; email_verified?: boolean; name?: string; admin?: boolean; auth_time?: number }
     if (!p.sub || typeof p.sub !== 'string') return null
     if (typeof p.auth_time === 'number' && p.auth_time * 1000 > Date.now() + 60_000) return null
-    return { uid: p.sub, email: p.email, email_verified: p.email_verified, name: p.name, admin: p.admin }
+    return { uid: p.sub, email: p.email, email_verified: p.email_verified, name: p.name, admin: p.admin, auth_time: p.auth_time }
   } catch {
     return null
   }
@@ -46,7 +48,7 @@ export async function verifyFirebaseIdToken(token: string): Promise<FirebaseIdTo
   if (auth) {
     try {
       const d = await auth.verifyIdToken(token)
-      return { uid: d.uid, email: d.email, email_verified: d.email_verified, name: d.name as string | undefined, admin: d.admin === true }
+      return { uid: d.uid, email: d.email, email_verified: d.email_verified, name: d.name as string | undefined, admin: d.admin === true, auth_time: d.auth_time }
     } catch {
       return null
     }

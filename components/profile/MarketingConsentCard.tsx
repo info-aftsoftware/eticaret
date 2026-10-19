@@ -4,14 +4,15 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Mail, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
+import { saveMarketingConsent } from '@/components/auth/consents'
 import { getDb } from '@/lib/firebase/config'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useL } from '@/lib/i18n-inline'
 
 /**
  * Ticari elektronik ileti izni (kampanya e-postası / SMS) — verme ve geri alma (ret hakkı).
- * Firestore users/{uid}.consents.commercialMessages (zaman damgalı).
+ * Sunucudaki izin defteri (lib/marketing-consent.ts, tarihli kayıt); eski kayıtlar için Firestore'a geri düşer.
  */
 export function MarketingConsentCard() {
   const uid = useAuthStore((s) => s.user?.id)
@@ -22,9 +23,22 @@ export function MarketingConsentCard() {
 
   useEffect(() => {
     if (!uid) return
-    getDoc(doc(getDb(), 'users', uid))
-      .then((snap) => setAccepted(snap.get('consents.commercialMessages.accepted') === true))
-      .catch(() => setAccepted(false))
+    // Önce sunucudaki izin defteri; kayıt yoksa eski Firestore kaydı
+    ;(async () => {
+      try {
+        const { getAuth } = await import('@/lib/firebase/config')
+        const token = await getAuth().currentUser?.getIdToken()
+        if (token) {
+          const res = await fetch('/api/account/consent', { headers: { Authorization: `Bearer ${token}` } })
+          const d = res.ok ? await res.json() : null
+          if (typeof d?.accepted === 'boolean') return setAccepted(d.accepted)
+        }
+        const snap = await getDoc(doc(getDb(), 'users', uid))
+        setAccepted(snap.get('consents.commercialMessages.accepted') === true)
+      } catch {
+        setAccepted(false)
+      }
+    })()
   }, [uid])
 
   const toggle = async (next: boolean) => {
@@ -32,11 +46,13 @@ export function MarketingConsentCard() {
     setSaving(true)
     setMessage('')
     try {
-      await setDoc(
+      if (!(await saveMarketingConsent(next, 'hesap'))) throw new Error('consent')
+      // Eski kayıt yeri de güncel kalsın (Firestore yoksa sessizce atlanır)
+      setDoc(
         doc(getDb(), 'users', uid),
         { consents: { commercialMessages: { accepted: next, at: new Date().toISOString(), channels: next ? ['email', 'sms'] : [] } } },
         { merge: true }
-      )
+      ).catch(() => {})
       setAccepted(next)
       setMessage(next ? L('Kampanya ve duyurulardan haberdar edileceksiniz.', 'You will be notified about promotions and announcements.') : L('Ticari ileti izniniz kaldırıldı.', 'Your consent to marketing messages has been withdrawn.'))
     } catch {
@@ -49,7 +65,7 @@ export function MarketingConsentCard() {
   return (
     <Card className="classic-card rounded-lg">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2"><Mail className="w-5 h-5" />{L('İletişim Tercihleri', 'Communication Preferences')}</CardTitle>
+        <CardTitle>{L('İletişim Tercihleri', 'Communication Preferences')}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 text-sm">
         {accepted === null ? (

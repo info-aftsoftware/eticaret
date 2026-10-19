@@ -33,33 +33,15 @@ export default function AdminIletisimPage() {
     if (!silent) setLoading(true)
     else setRefreshing(true)
     try {
-      const { collection: col, getDocs, orderBy, query: fsQuery, limit } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-
-      const q = fsQuery(col(db, 'contactMessages'), orderBy('createdAt', 'desc'), limit(200))
-      const snap = await getDocs(q)
-
-      const rows: ContactMessage[] = snap.docs.map((d) => {
-        const data = d.data()
-        const createdAt = data.createdAt as { seconds: number } | null
-        // Mesaj içinde ürün adı varsa çıkar
-        const message = data.message || ''
-        const productMatch = message.match(/\[Ürün: ([^\]]+)\]/)
-        const productName = productMatch ? productMatch[1] : (data.productName || null)
-        return {
-          id: d.id,
-          name: data.name || '',
-          email: data.email || '',
-          phone: data.phone || null,
-          subject: data.subject || '',
-          message: message,
-          emailSent: data.emailSent === true,
-          createdAt: createdAt?.seconds ? new Date(createdAt.seconds * 1000).toISOString() : '',
-          productId: data.productId || null,
-          productName: productName,
-        }
-      })
+      // Mesajlar Prisma'da (ContactMessage); admin ucundan okunur
+      const res = await fetch('/api/admin/contact', { credentials: 'include' })
+      const data = res.ok ? await res.json() : { messages: [] }
+      const rows: ContactMessage[] = (data.messages ?? []).map((m: ContactMessage) => ({
+        ...m,
+        phone: m.phone ?? null,
+        productId: m.productId ?? null,
+        productName: m.productName ?? null,
+      }))
 
       setMessages(rows)
     } catch (err) {

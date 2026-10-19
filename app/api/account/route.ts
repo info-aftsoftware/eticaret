@@ -9,7 +9,8 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { getAdminAuth, getAdminFirestore } from '@/lib/firebaseAdminServer'
+import { adminProjectMatchesClient, getAdminAuth, getAdminFirestore } from '@/lib/firebaseAdminServer'
+import { verifyFirebaseIdToken } from '@/lib/firebase-id-token'
 import { isRateLimited } from '@/lib/rate-limit'
 
 const RECENT_LOGIN_SECONDS = 5 * 60
@@ -18,13 +19,28 @@ export async function DELETE(request: NextRequest) {
   if (isRateLimited(request, 'account-delete', 5, 10 * 60_000)) {
     return NextResponse.json({ success: false, error: 'Çok fazla istek.' }, { status: 429 })
   }
-  const auth = getAdminAuth()
-  const db = getAdminFirestore()
-  if (!auth || !db) {
-    return NextResponse.json({ success: false, error: 'Sunucu yapılandırılmamış.' }, { status: 503 })
-  }
   const token = request.headers.get('authorization')?.replace(/^Bearer\s+/, '')
   if (!token) return NextResponse.json({ success: false, error: 'Giriş yapmanız gerekiyor.' }, { status: 401 })
+
+  const auth = adminProjectMatchesClient() ? getAdminAuth() : null
+  const db = auth ? getAdminFirestore() : null
+  if (!auth || !db) {
+    // Servis hesabı yokken: oturum Google açık anahtarlarıyla doğrulanır, sunucudaki veriler silinir;
+    // Firebase hesabı ve kullanıcının kendi Firestore verileri tarayıcıda silinir (istemci SDK, yeni girişle izinli).
+    const decoded = await verifyFirebaseIdToken(token)
+    if (!decoded) return NextResponse.json({ success: false, error: 'Oturum doğrulanamadı.' }, { status: 401 })
+    if (!decoded.auth_time || Date.now() / 1000 - decoded.auth_time > RECENT_LOGIN_SECONDS) {
+      return NextResponse.json({ success: false, error: 'Güvenliğiniz için şifrenizi yeniden girip tekrar deneyin.' }, { status: 401 })
+    }
+    try {
+      await prisma.user.deleteMany({ where: { id: decoded.uid } })
+      console.log(`Account data deleted (KVKK request, client completes auth deletion): ${decoded.uid}`)
+      return NextResponse.json({ success: true, clientDelete: true })
+    } catch (e) {
+      console.error('Account delete error:', e)
+      return NextResponse.json({ success: false, error: 'Hesap silinemedi. Lütfen bizimle iletişime geçin.' }, { status: 500 })
+    }
+  }
 
   let uid: string
   let email: string | null

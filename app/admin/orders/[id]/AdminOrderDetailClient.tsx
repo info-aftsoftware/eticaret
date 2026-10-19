@@ -425,6 +425,14 @@ export default function AdminOrderDetailPage() {
                 </Button>
               )}
               {isPrisma && (
+                <Button asChild variant="outline" className="w-full">
+                  <a href={`/api/admin/shipping/labels?ids=${encodeURIComponent(order.id)}`} target="_blank" rel="noopener noreferrer">
+                    <Package className="w-4 h-4 mr-2" />
+                    Kargo Etiketi (10×15)
+                  </a>
+                </Button>
+              )}
+              {isPrisma && (
                 <Button variant="outline" className="w-full" onClick={handleSendInvoice} disabled={busy !== null}>
                   {busy === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
                   Faturayı E-postayla Gönder

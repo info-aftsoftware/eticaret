@@ -156,6 +156,25 @@ async function buildGroups(): Promise<Map<string, Group>> {
 /** Pazarlama izni: üyenin Firestore profilindeki ticari ileti onayı veya bülten aboneliği */
 async function consentMap(rows: CustomerSummary[]): Promise<Map<string, 'commercial' | 'newsletter'>> {
   const out = new Map<string, 'commercial' | 'newsletter'>()
+  if (!rows.length) return out
+  // Sunucudaki izin defteri (öncelikli): üye kimliği veya e-posta ile
+  const ledger = await prisma.marketingConsent.findMany({
+    where: {
+      OR: [
+        { userId: { in: rows.map((r) => r.userId).filter(Boolean) as string[] } },
+        { email: { in: rows.map((r) => r.email?.toLowerCase()).filter(Boolean) as string[] } },
+      ],
+    },
+  }).catch(() => [])
+  const decided = new Set<string>()
+  for (const r of rows) {
+    const hit = ledger.find((c) => (r.userId && c.userId === r.userId) || (r.email && c.email === r.email.toLowerCase()))
+    if (hit) {
+      decided.add(r.key)
+      if (hit.accepted) out.set(r.key, hit.source === 'bulten' ? 'newsletter' : 'commercial')
+    }
+  }
+  rows = rows.filter((r) => !decided.has(r.key))
   if (!rows.length || !isFirebaseAdminConfigured()) return out
   const db = getAdminFirestore()
   if (!db) return out

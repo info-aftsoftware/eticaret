@@ -3,13 +3,12 @@ export const dynamic = 'force-dynamic'
 /**
  * Admin: canlı bildirim özeti (panel düzeni ~30 sn'de bir yoklar).
  * GET ?since=ISO → bekleyen iş sayıları + since sonrasındaki yeni siparişler / havale bildirimleri.
- * Yorum ve soru sayıları Firestore'dan gelir; maliyeti düşük tutmak için 60 sn önbelleklenir.
+ * Bekleyen yorum ve soru sayıları (Prisma) 60 sn önbelleklenir.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
-import { getAdminFirestore, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 
 const OPEN_RETURN_STATUSES = ['REQUESTED', 'APPROVED', 'RECEIVED']
 /** Açık müşteri iptal talebi (lib/order-service notes.cancelRequest) */
@@ -21,15 +20,10 @@ async function moderationCounts(): Promise<{ reviews: number; questions: number 
   let reviews = moderationCache?.reviews ?? 0
   let questions = moderationCache?.questions ?? 0
   try {
-    const db = isFirebaseAdminConfigured() ? getAdminFirestore() : null
-    if (db) {
-      const [r, q] = await Promise.all([
-        db.collection('productReviews').where('status', '==', 'pending').count().get(),
-        db.collection('productQuestions').where('answer', '==', null).count().get(),
-      ])
-      reviews = r.data().count
-      questions = q.data().count
-    }
+    ;[reviews, questions] = await Promise.all([
+      prisma.storeReview.count({ where: { status: 'pending' } }),
+      prisma.storeQuestion.count({ where: { status: 'pending' } }),
+    ])
   } catch (e) {
     console.warn('Admin live: moderation count failed', (e as Error).message)
   }

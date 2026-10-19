@@ -2,10 +2,10 @@ export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { sendEmailSMTP } from '@/lib/email-smtp'
+import { prisma } from '@/lib/prisma'
+import { reportError } from '@/lib/alerts'
 import { isRateLimited, getClientIp } from '@/lib/rate-limit'
 import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
-import { getAdminFirestore } from '@/lib/firebaseAdminServer'
-import { FieldValue } from 'firebase-admin/firestore'
 import React from 'react'
 
 // Simple email template for contact form
@@ -172,25 +172,21 @@ export async function POST(request: NextRequest) {
       // Don't fail the request if email fails, just log it
     }
 
-    // Firestore'a kaydet (admin panelinde görüntülenebilmesi için)
+    // Veritabanına kaydet (Yönetim > İletişim Formları); e-posta gitmese de mesaj kaybolmaz
     try {
-      const db = getAdminFirestore()
-      if (db) {
-        await db.collection('contactMessages').add({
-          name,
-          email,
-          phone: phone || null,
-          subject,
-          message,
-          productId,
-          status: 'new',
-          emailSent: emailResult.success,
-          createdAt: FieldValue.serverTimestamp(),
-        })
-      }
-    } catch (fsErr) {
-      console.error('Firestore contact save error:', fsErr)
-      // Non-critical: don't fail the request
+      await prisma.contactMessage.create({
+        data: {
+          name: String(name).slice(0, 200),
+          email: String(email).slice(0, 200),
+          phone: phone ? String(phone).slice(0, 40) : null,
+          subject: String(subject).slice(0, 300),
+          message: String(message).slice(0, 5000),
+          productId: productId ? String(productId).slice(0, 200) : null,
+          emailSent: Boolean(emailResult.success),
+        },
+      })
+    } catch (dbErr) {
+      await reportError('iletisim-formu-kayit', dbErr)
     }
 
     return NextResponse.json({
