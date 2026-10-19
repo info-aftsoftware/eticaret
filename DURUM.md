@@ -1,9 +1,28 @@
 # Proje Durumu — Voltekno e-ticaret
 
-_Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md`. Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
+_Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
 **19.10.2026 turu tamamlandı:** katalog denetimi, İngilizce/Türkçe tam çeviri, mobil görsel düzeltmesi, uçtan uca site denetimi ve düzeltmeleri, admin ↔ vitrin senkronu, müşteri hesabı gizlilik/belgeler. Ayrıntı aşağıda "19.10.2026 turu" bölümünde.
+
+## Eksikler ve tutarsızlıklar (19.10.2026 kontrolü ve çözümü)
+_DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, herkese açık API) ve `YAPILACAKLAR.md` ile karşılaştırıldı, ardından çözüldü. Doğrulama: tip kontrolü, lint, 63 birim testi, üretim derlemesi (425 sayfa), Playwright Chromium + Mobile Chrome 98 geçti / 0 kaldı (veritabanı kopyası, e-posta kapalı)._
+
+| # | Eksik | Durum | Ne yapıldı / kalan |
+|---|---|---|---|
+| E1 | Hostinger'da cron görevi yok → süresi geçen havale siparişleri iptal edilmiyor, stok geri dönmüyor, yedek alınmıyordu | ✅ kodda · ⏳ yayın | Uygulama içi zamanlayıcı (`instrumentation.ts` → `lib/scheduler.ts`): havale takibi 6 saatte bir, veritabanı yedeği günde bir. Son çalışma zamanı veritabanının yanındaki `scheduler-state.json`'da (yayınlar arasında korunur), süreçler arası kilitli. Görev mantığı `lib/cron-jobs.ts`'de; HTTP uçları aynı işi yapar. Yerelde kopya veritabanında denendi: 5 günlük havale siparişi iptal edildi, yedek alındı. `INTERNAL_CRON=0` ile kapatılır. Uygulama ziyaretsiz kalıp uyutulursa görev ilk açılıştan ≈1 dk sonra çalışır; tam zamanlama için hPanel cron'u da kurulabilir (`/api/cron/expire-orders` ve `/api/cron/backup`, `Authorization: Bearer <CRON_SECRET>`), ikisi birlikte sorun çıkarmaz |
+| E2 | Header menü değişikliği commit'lenmemişti | ✅ `c2ef7af` · ⏳ yayın | Menülerde yalnızca alt kategoriler. Kullanılmayan marka listesi silindi; başlık bileşeni artık tüm kataloğu tarayıcıya yüklemiyor. Tarayıcıda (1440 px) iki menü de kontrol edildi. İngilizcede Türkçe kalan "Tümünü Gör" düzeltildi (`d2f2e30`) |
+| E3 | Firebase / SMTP işi commit'lenmemişti | ✅ `1b02374` · ⏳ yayın | `.firebaserc`, `firebase.json`, `storage.rules`, `FIREBASE_SETUP.md`, `lib/email-smtp.ts`. `FIREBASE_SETUP.md` düzeltildi: veri taşınmayacağı kararı ve sonucu, anahtarsız çalışanlar (admin girişi, müşteri oturumu), yetkili alan adlarına nextfirststep.com |
+| E4 | Canlı Firebase hâlâ eski projede | ❌ sizde | Kod hazır. Yeni projede Firestore/Auth/Storage açılıp servis hesabı anahtarı gelince canlı ortamdaki `NEXT_PUBLIC_FIREBASE_*` + `FIREBASE_ADMIN_*` birlikte değiştirilip yeniden yayınlanmalı (adımlar `FIREBASE_SETUP.md`). Veri taşınmayacak (18.10 kararı) |
+| E5 | `MEDIA_DIR` canlıda yok | ✅ gerek yok | Canlı `DATABASE_URL` mutlak ve kalıcı (`/home/u718952521/domains/nextfirststep.com/voltekno.db`, YAPILACAKLAR.md 63). `MEDIA_DIR` yokken görseller onun yanındaki `media/` klasörüne gider (`lib/media-storage.ts`), yayınlarda silinmez |
+| E6 | Ana dala birleştirme yok, `origin` eski adres | ⚠️ sizde | `urun-katalogu-ikas` → `main` saf ileri sarma (çakışma yok; yerel `main` ve `origin/main` dalın içinde). `main`'e gönderme ve remote adresini değiştirme sizin onayınızı bekliyor. Yeni adres doğrulandı (aynı depo): `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git` |
+| E7 | `seo-alan-adi` dalı eskiydi | ✅ | Güncel dal birleştirildi (çakışmasız), tip kontrolü + 57 birim testi geçti. 132 yönlendirme güncel katalogla karşılaştırıldı: ürün hedeflerinin hepsi mevcut, kategori/marka filtreleri geçerli, eski ürün listesiyle çakışma yok. Düzeltildi: eski `/diger` boş "Diğer" grubuna gidiyordu → `/products` (`94c8eb6`). Hâlâ **yayına dahil değil** |
+| E8 | `public_html_standalone/` git'teydi | ✅ `0859e22` | Git takibinden çıkarıldı (2056 dosya), `.gitignore`'a eklendi; klasör diskte duruyor |
+| E9 | `docs/su-urunleri-otomasyon/` kopyası | ✅ | Asıl depodakiyle karşılaştırıldı (4 dosya aynı, 1 dosyanın asıl depodaki sürümü daha yeni ve kapsıyor), Geri Dönüşüm Kutusu'na taşındı |
+| E10 | Canlı veritabanı işleri | ✅ / ❌ | Canlı API'de 340 ürün, eski katalog ürünü yok; aktif kampanya yok, "yeni10" kuponu geçersiz. **Kalan (sizde):** gerçek stoklar girilmemiş (338 ürün 17, 2 ürün 16) |
+| E11 | Katalog teyitleri (tedarikçi) | ❌ sizde | Deye model kuşağı (41 SKU), Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, eksik 16 görsel, barkod/GTIN boş (Merchant Center GTIN'siz ürünleri sınırlar), İstabreeze kanat seti ağırlığı, koli ölçüleri |
+| E12 | Sağlayıcı / iş kararı gerektirenler | ❌ sizde | e-Arşiv entegratörü, SQLite → PostgreSQL, IBAN hesap sahibi adı kontrolü, kargo API, SMS, taksit tablosu, Turnstile, ETBİS, İYS, Meta Pixel (çerez politikasına eklenmeli), PayTR kararı, kapıda ödeme (`YAPILACAKLAR.md` 125–128, 242, 261) |
+| E13 | Playwright testleri üretim derlemesinde kırmızıydı | ✅ `220407d` | Mobilde havale testi gizli masaüstü özet kopyasına bakıyordu (sayfa doğru, test hatalı). Merchant testi önceden üretilmiş akışta (ISR) gerekçeli atlanıyor. Not: e2e testleri sunucuyla aynı `DATABASE_URL` ile çalıştırılmalı (test ürünü/kuponu oraya yazılır) |
 
 ## Admin paneli girişi
 | Ortam | Adres | Şifre | İki adımlı doğrulama |
@@ -31,9 +50,9 @@ _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 | Gönderen adresi @voltekno.com | ❌ sizde | Yerelde ve büyük ihtimalle canlıda `SMTP_USER`/`SMTP_FROM` = `info@bataryakit.com`. Spam'e düşmemesi için Hostinger'da `@voltekno.com` kutusu (örn. `info@` veya `noreply@`) ile SMTP; SPF + Hostinger DKIM zaten hazır, alan adı hizası tutar |
 | Servis hesabı anahtarı | ❌ sizde | Müşteri oturumu artık anahtarsız doğrulanıyor (19.10, `lib/firebase-id-token.ts`, Google açık anahtarları): Siparişlerim, sipariş sahipliği, üye siparişinin hesaba bağlanması çalışır. Anahtar gelene kadar çalışmayanlar: markalı doğrulama/şifre/hoş geldin e-postaları (Firebase'in kendi e-postaları gidiyor), hesap silme, terk edilmiş sepet e-postası, yorum ve soru-cevap (Firestore) |
 | Firestore / Auth / Storage açılışı | ❌ sizde | Yeni projede Firestore API kapalı (veritabanı yok); Storage Blaze plan istiyor |
-| Eski favori / adres / sipariş verisi | ⚠️ karar bekliyor | Favoriler, adresler ve eski siparişlerin bir kısmı eski projenin Firestore'unda; Prisma'daki siparişler Firebase UID'sine bağlı. Yeni projede kullanıcılar yeni UID alırsa bunların hiçbiri görünmez (aşağıda) |
+| Eski favori / adres / sipariş verisi | ✅ karar verildi | 18.10.2026 kararı: veri ve kullanıcı taşınmayacak, yeni proje boş başlıyor (sonucu aşağıda) |
 
-**Veri bağımlılığı:** Prisma `User.id` = Firebase UID. `lib/customerAuth.ts`, UID bulunamayıp e-posta zaten kayıtlıysa yer tutucu e-postalı yeni kullanıcı açıyor; eski siparişler eski kayıtta kalıyor. Temiz çözüm: eski projeden Auth kullanıcılarını **aynı UID'lerle** (şifre özetleriyle) yeni projeye aktarmak ve Firestore'u kopyalamak — o zaman Prisma ve Firestore kimlikleri olduğu gibi eşleşir.
+**Veri bağımlılığı:** Prisma `User.id` = Firebase UID. `lib/customerAuth.ts`, UID bulunamayıp e-posta zaten kayıtlıysa yer tutucu e-postalı yeni kullanıcı açıyor; eski siparişler eski kayıtta kalıyor. Taşıma yapılmayacağı için eski hesaplar yeni projede olmaz: kullanıcılar yeniden kayıt olur, eski favori ve adresler görünmez, eski üye siparişleri sipariş takip formundan açılır. Test ortamında yalnızca test siparişleri var.
 
 ## Yayına hazırlık
 | # | Adım | Durum | Not |
@@ -55,8 +74,8 @@ _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 ## İstek turu 2 (18.10.2026)
 | İstek | Durum | Not |
 |---|---|---|
-| Header başlıkları üzerine gelince alt menü | ✅ | Alt kategoriler (marka listesi kaldırıldı, 18.10); daralınca önce boşluk azalır, sonra başlık sayısı 6→5→4, ≤1024 px hamburger |
-| İstek turu 3 (18.10) | ✅ | "Tüm Kategoriler" ve başlık menülerinde markalar yerine yalnızca alt kategoriler; ana sayfa paket kartlarındaki "ENERJİ PAKETİ" etiketi kaldırıldı; girişteki "ortak kullanılan cihazlarda işaretlemeyin" uyarısı kaldırıldı |
+| Header başlıkları üzerine gelince alt menü | ✅ | Alt kategoriler (marka listesi kaldırıldı, `c2ef7af`); daralınca önce boşluk azalır, sonra başlık sayısı 6→5→4, ≤1024 px hamburger |
+| İstek turu 3 (18.10) | ✅ | Menü kısmı 19.10'da commit'lendi (`c2ef7af`), yayın bekliyor. "Tüm Kategoriler" ve başlık menülerinde markalar yerine yalnızca alt kategoriler; ana sayfa paket kartlarındaki "ENERJİ PAKETİ" etiketi kaldırıldı; girişteki "ortak kullanılan cihazlarda işaretlemeyin" uyarısı kaldırıldı |
 | Bağlantı Ekipmanı + Aksesuar birleşik | ✅ | Tek grup "Bağlantı Ekipmanı ve Aksesuar"; /category/aksesuar yönlendirilir |
 | Havale/EFT %3 + e-posta (IBAN, sipariş no) | ✅ | Zaten vardı; ürün sayfasına havale fiyatı satırı eklendi; admin'e "Havale/EFT onayı" sekmesi |
 | Ürün sayfası sadeleşti | ✅ | "Uygun mu?" formu, ikon kutuları, 15:00 yazısı, kayan galeri kaldırıldı; uyumlu ürünler sağ sütunda |
@@ -93,12 +112,12 @@ _Yerel sunucuda (localhost:3005), test verisiyle; e-postalar gönderilmeden `.da
 | # | Adım | Masaüstü | Mobil | Not |
 |---|---|---|---|---|
 | 1 | Ana sayfa: header, hero kaydırma, markalar, kategoriler, teklif bandı, footer | ✅ | ✅ | Hero slayt değişiyor, 13 marka, 9 kategori, teklif bandı; "3 Adımda" yok; yatay taşma yok |
-| 2 | Header: Tüm Kategoriler menüsü, kategori linkleri, arama önerileri | ✅ | ✅ | Mega menü (alt kategoriler; 18.10'dan beri markasız), arama önerisi 8 sonuç, Enter → ürünler |
+| 2 | Header: Tüm Kategoriler menüsü, kategori linkleri, arama önerileri | ✅ | ✅ | Mega menü (alt kategoriler, markasız; 19.10'da yeniden kontrol edildi), arama önerisi 8 sonuç, Enter → ürünler |
 | 3 | Kategori sayfası | ✅ | ✅ | Şarj Kontrol: 66 ürün |
 | 4 | Ürün sayfası: galeri, varyant, sepete ekle, favori | ✅ | ✅ | 13 görsel, 2 varyant, favori ve sepete ekleme çalışıyor |
 | 5 | Ürün kartı: sepete ekle, adet +/−, "Seçenekleri Gör" | ✅ | ✅ | Karttan ekleme ve adet artırma çalışıyor |
 | 6 | Favoriler (misafir) | ✅ | ✅ | Giriş istemeden listeleniyor |
-| 7 | Sepet: kargo çubuğu, sözleşme onayları | ✅ | ✅ | Ücretsiz kargo bilgisi, 3 onay kutusu |
+| 7 | Sepet: kargo çubuğu, sözleşme onayları | ✅ | ✅ | Ücretsiz kargo bilgisi (test 18.10 sabahı; eşik sonradan kaldırıldı, sepet artık desi ücretini gösteriyor), 3 onay kutusu |
 | 8 | Ödeme: doğrulamalar, il/ilçe, kurumsal fatura | ✅ | ✅ | Boş formda "7 alanı kontrol edin" + alan mesajları; hatalı vergi no reddedildi; İzmir 30 ilçe |
 | 9 | Havale ile sipariş + başarı sayfası + e-postalar | ✅ | — | ORD-2026-00053: IBAN'lar gösterildi; "sipariş alındı" + admin "yeni sipariş" e-postaları |
 | 10 | Sipariş takibi → sipariş detayı | ✅ | — | Takip formu (POST) → detay 2,5 sn'de açıldı |
@@ -146,6 +165,7 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 ## voltekno.com geçişi (sizde)
 1. `seo-alan-adi` dalını ana dala birleştir (bana "birleştir" demeniz yeterli)
 2. voltekno.com ortam değişkenleri: `NEXT_PUBLIC_SITE_URL=https://voltekno.com`, `NEXT_PUBLIC_NOINDEX` **olmamalı**, mutlak `DATABASE_URL`, yeni güçlü `ADMIN_TOKEN` + `ADMIN_TOTP_SECRET` (`node scripts/admin-2fa-setup.mjs`; test ortamında da şu an kapalı), `SMTP_FROM` yeni gönderim adresi (görünen ad `SMTP_FROM_NAME`, varsayılan Voltekno), `CRON_SECRET`, banka POS bilgileri, `MEDIA_DIR`
+2a. Zamanlanmış görevler: uygulama içi zamanlayıcı havale takibini ve yedeği kendisi çalıştırır (E1); `BACKUP_DIR` derleme klasörünün dışında olmalı
 3. Firebase (yeni proje `voltekno-eticaret`, adımlar `FIREBASE_SETUP.md`): Firestore/Auth/Storage açılışı, Authorized domains'a voltekno.com + www, servis hesabı anahtarı; Google/Facebook girişi için sağlayıcıları açıp `NEXT_PUBLIC_GOOGLE_SIGNIN_ENABLED=true` / `NEXT_PUBLIC_FACEBOOK_SIGNIN_ENABLED=true` (Facebook için App ID/Secret); `firebase deploy --only firestore,storage --project voltekno-eticaret`. Canlı sunucuda `NEXT_PUBLIC_FIREBASE_*` + `FIREBASE_ADMIN_*` güncellenip yeniden derlenmeli
 3a. E-posta: `SMTP_USER`/`SMTP_FROM`/`SMTP_PASSWORD` → `@voltekno.com` kutusu (şu an `info@bataryakit.com`); DMARC birkaç hafta `p=none` + rapor (`rua`) ile izlenip sonra `p=quarantine`
 4. DNS: ikas → Hostinger; www/http tek adımda kanonik adrese
@@ -155,5 +175,5 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
 - Son yayın: `28f5fb7` (19.10.2026 12:11; CI Node 22 düzeltmesi + derleme işçisi sınırı — Hostinger "spawn EAGAIN" ile iki kez düşmüştü) — çeviri ayrıntılı kontrolü + sepette satıştan kalkmış ürün uyarısı EN (sunucu/giriş hata mesajları, kart mesajları, sekme başlıkları İngilizce) + akış senaryo testleri
-- Yayına **dahil olmayan**, başka oturumun commit'lenmemiş işi (çalışma klasöründe duruyor): header kategori menüsü düzenlemesi (`components/header/*`), Firebase proje yapılandırması (`firebase.json`, `.firebaserc`, `storage.rules`, `FIREBASE_SETUP.md`), SMTP gönderen/düz metin değişikliği (`lib/email-smtp.ts`). O oturum bitirince commit'lenip yeniden yayınlanmalı.
-- GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor; `git remote set-url origin …` ile güncellenebilir). Dal: `urun-katalogu-ikas`.
+- **Yayın bekleyen (commit'li, test edildi):** header menüleri (`c2ef7af`), Firebase yapılandırması + SMTP düz metin (`1b02374`), eski derleme klasörünün git'ten çıkarılması (`0859e22`), uygulama içi zamanlayıcı (`6aaec73`), "Tümünü Gör" çevirisi (`d2f2e30`), e2e test düzeltmeleri (`220407d`). Yayın arşivi hazır (`git archive`, `docs/` ve `.claude/` hariç); Hostinger'a gönderim onayınızı bekliyor. Yayından sonra canlı loglarda `[scheduler] başladı` ve ≈1 dk sonra `expire-orders` / `backup` satırları görülmeli.
+- GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.

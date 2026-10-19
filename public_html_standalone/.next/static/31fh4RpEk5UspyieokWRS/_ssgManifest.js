@@ -1,1 +1,0 @@
-self.__SSG_MANIFEST=new Set(["\u002Fadmin\u002Forders\u002F[id]","\u002Fapi\u002Fadmin\u002Fproducts\u002F[id]","\u002Fapi\u002Fauth\u002F[...nextauth]","\u002Fapi\u002Forders\u002F[id]","\u002Fapi\u002Fproducts\u002F[id]","\u002Fapi\u002Fproducts\u002F[id]\u002Fquestions","\u002Fapi\u002Fproducts\u002F[id]\u002Freviews"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

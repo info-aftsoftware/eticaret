@@ -121,9 +121,32 @@
         "SMTP_PORT": "9",
         "SMTP_SECURE": "false",
         "SMTP_USER": "",
-        "SMTP_PASSWORD": ""
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
       },
       "port": 3009
+    },
+    {
+      "name": "Scheduler Test 3010 (no SMTP, DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        "3010"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/sched/sched.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/sched/backups",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "1"
+      },
+      "port": 3010
     }
   ]
 }

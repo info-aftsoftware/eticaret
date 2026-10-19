@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
+import { useL } from '@/lib/i18n-inline'
 
 export type NavGroup = {
   id: string
@@ -159,11 +160,12 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
 }
 
 function PanelHeading({ title, href, onClick }: { title: string; href: string; onClick: () => void }) {
+  const L = useL()
   return (
     <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e6ebf1]">
       <span className="text-[15px] font-semibold text-[#0b2540]">{title}</span>
       <Link href={href} onClick={onClick} className="inline-flex items-center gap-1 text-xs font-medium text-[#5d6e80] hover:text-[#0b2540]">
-        Tümünü Gör <ArrowRight className="w-3 h-3" aria-hidden />
+        {L('Tümünü Gör', 'View all')} <ArrowRight className="w-3 h-3" aria-hidden />
       </Link>
     </div>
   )
