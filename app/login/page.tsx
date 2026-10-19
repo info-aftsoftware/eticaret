@@ -69,7 +69,11 @@ function LoginForm() {
         {verified && <FormAlert tone="success">{L('E-posta adresiniz doğrulandı. Giriş yapabilirsiniz.', 'Your email address has been verified. You can now sign in.')}</FormAlert>}
         {reset && <FormAlert tone="success">{L('Şifreniz güncellendi. Yeni şifrenizle giriş yapabilirsiniz.', 'Your password has been updated. You can sign in with your new password.')}</FormAlert>}
         {redirectParam && !verified && !reset && (
-          <FormAlert tone="info">{L('Devam etmek için lütfen giriş yapın.', 'Please sign in to continue.')}</FormAlert>
+          <FormAlert tone="info">
+            {searchParams.get('reason') === 'favorite'
+              ? L('Ürünü favorilerinize eklemek için giriş yapın veya üye olun. Girişten sonra ürün favorilerinize eklenir.', 'Sign in or create an account to add this product to your favorites. It will be added once you sign in.')
+              : L('Devam etmek için lütfen giriş yapın.', 'Please sign in to continue.')}
+          </FormAlert>
         )}
         {error && <FormAlert>{error}</FormAlert>}
 

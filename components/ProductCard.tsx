@@ -10,7 +10,8 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import type { ProductVariant } from '@/components/AddToCartButton'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
-import { useFavorites } from '@/lib/useFavorites'
+import { useRouter } from 'next/navigation'
+import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 import { useTranslations } from 'next-intl'
 
@@ -64,7 +65,8 @@ export function ProductCard({
   const tCart = useTranslations('addToCart')
   const showStockLimit = () =>
     addToast({ type: 'info', title: tCart('stockLimit'), description: tCart('stockLimitDesc', { maxQty: stock ?? 0 }) })
-  const { isFavorite, toggle } = useFavorites()
+  const { isFavorite, toggle, isMember, authReady } = useFavorites()
+  const router = useRouter()
   const isCompact = variant === 'compact'
   const [imageError, setImageError] = useState(false)
   const [mounted, setMounted] = useState(false)
@@ -133,6 +135,12 @@ export function ProductCard({
 
   const handleFavorite = async (e: React.MouseEvent) => {
     stop(e)
+    if (!authReady) return
+    // Favoriler üyelere özel: misafir giriş/kayıt sayfasına gider, ürün girişten sonra eklenir
+    if (!isMember) {
+      router.push(favoriteLoginHref(product.id))
+      return
+    }
     try {
       const added = await toggle(product.id)
       addToast({
