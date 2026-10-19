@@ -3,16 +3,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, ChevronDown } from 'lucide-react'
-import { BRANDS_BY_CATEGORY, productsHref, type NavGroup } from './AllCategoriesMenu'
+import { productsHref, type NavGroup } from './AllCategoriesMenu'
 import { useL } from '@/lib/i18n-inline'
 
 const OPEN_DELAY = 90
 const CLOSE_DELAY = 160
-const MAX_BRANDS = 5
 
 /**
- * Masaüstü kategori satırındaki tek bir ana kategori linki: fareyle üzerine gelince altında alt kategorileri ve
- * her birinin öne çıkan markalarını gösteren panel açılır. Link tıklanınca kategori sayfasına gider; panel yalnızca
+ * Masaüstü kategori satırındaki tek bir ana kategori linki: fareyle üzerine gelince altında alt kategorilerini
+ * gösteren panel açılır. Link tıklanınca kategori sayfasına gider; panel yalnızca
  * fare kısayoludur (klavyede Tab her linkten geçmesin diye odakla açılmaz; tüm alt kategoriler "Tüm Kategoriler" menüsünde).
  */
 export function NavGroupMenu({
@@ -73,36 +72,18 @@ export function NavGroupMenu({
             className="rounded-xl border border-[#e3e8ee] bg-white shadow-[0_18px_40px_rgba(11,37,64,0.14)] p-5"
             style={{ width: cols === 1 ? 280 : cols === 2 ? 480 : 680 }}
           >
-            <ul className="grid gap-x-6 gap-y-5" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
-              {subs.map((cat) => {
-                const brands = (BRANDS_BY_CATEGORY[cat.value] ?? []).slice(0, MAX_BRANDS)
-                return (
-                  <li key={cat.value} className="min-w-0">
-                    <Link
-                      href={productsHref(cat.value)}
-                      onClick={() => setOpen(false)}
-                      className="block text-[14px] font-semibold text-[#121926] hover:text-[#0b2540] hover:underline underline-offset-2"
-                    >
-                      {t(cat.labelKey)}
-                    </Link>
-                    {brands.length > 0 && (
-                      <ul className="mt-2 space-y-1.5">
-                        {brands.map((brand) => (
-                          <li key={brand}>
-                            <Link
-                              href={productsHref(cat.value, brand)}
-                              onClick={() => setOpen(false)}
-                              className="text-[13px] text-[#5d6e80] hover:text-[#0b2540]"
-                            >
-                              {brand}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                )
-              })}
+            <ul className="grid gap-x-6 gap-y-1" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+              {subs.map((cat) => (
+                <li key={cat.value} className="min-w-0">
+                  <Link
+                    href={productsHref(cat.value)}
+                    onClick={() => setOpen(false)}
+                    className="block py-1.5 text-[14px] font-medium text-[#121926] hover:text-[#0b2540] hover:underline underline-offset-2"
+                  >
+                    {t(cat.labelKey)}
+                  </Link>
+                </li>
+              ))}
             </ul>
             <div className="mt-5 pt-4 border-t border-[#eef1f5]">
               <Link
