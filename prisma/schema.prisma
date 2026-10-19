@@ -861,3 +861,151 @@ model LegacyProduct {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+// ---------------------------------------------------------------------------
+// Yönetim paneli kullanıcıları (çok kullanıcılı admin, roller, kişiye özel 2FA)
+// Roller: owner (her şey + kullanıcı yönetimi), manager (kullanıcı yönetimi hariç her şey),
+// operator (siparişler, müşteriler, yorum/soru), editor (katalog, stok, kampanya, yorum/soru). Bkz. lib/admin-users.ts
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  role         String    @default("operator")
+  passwordHash String
+  /** Doğrulama uygulaması gizli anahtarı (base32); totpEnabled false iken kurulum aşamasında */
+  totpSecret   String?
+  totpEnabled  Boolean   @default(false)
+  active       Boolean   @default(true)
+  /** İlk girişte / sıfırlamadan sonra şifre değiştirme zorunlu */
+  mustChangePassword Boolean @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  auditLogs    AdminAuditLog[]
+}
+
+// Yönetim işlem kaydı: kim, ne zaman, hangi işlemi yaptı (girişler ve tüm değiştiren istekler)
+model AdminAuditLog {
+  id          String     @id @default(cuid())
+  createdAt   DateTime   @default(now())
+  adminUserId String?
+  adminUser   AdminUser? @relation(fields: [adminUserId], references: [id], onDelete: SetNull)
+  /** Görünen ad (kullanıcı silinse de kayıt okunabilir kalsın) */
+  actor       String
+  action      String
+  method      String?
+  path        String?
+  ip          String?
+  details     String?
+
+  @@index([createdAt])
+  @@index([adminUserId])
+}
+
+// Hata kaydı (sunucu + tarayıcı). Aynı kaynak/bağlam/mesaj tek satırda toplanır (fingerprint), sayaç artar.
+// Yönetim > Sistem Durumu'nda listelenir; 30 günden eski kayıtlar zamanlayıcıyla silinir.
+model ErrorLog {
+  id          String   @id @default(cuid())
+  fingerprint String   @unique
+  source      String   // server | client
+  context     String
+  message     String
+  stack       String?
+  url         String?
+  details     String?
+  count       Int      @default(1)
+  createdAt   DateTime @default(now())
+  lastSeenAt  DateTime @default(now())
+
+  @@index([lastSeenAt])
+}
+
+// Ürün yorumları (katalog ürün kimliğiyle; Firestore'dan taşındı). Moderasyon: pending → approved / rejected.
+// verifiedPurchase: yorumcunun bu ürünü içeren teslim edilmiş siparişi var.
+model StoreReview {
+  id               String   @id @default(cuid())
+  productId        String
+  userId           String?
+  userName         String
+  userEmail        String
+  rating           Int
+  title            String?
+  comment          String
+  status           String   @default("pending")
+  verifiedPurchase Boolean  @default(false)
+  /** Mağaza yanıtı (yorumun altında görünür) */
+  reply            String?
+  repliedAt        DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([productId, status])
+  @@index([status])
+}
+
+// Ürün soruları (Firestore'dan taşındı). Yalnızca yanıtlanmış ve gizlenmemiş sorular sitede görünür.
+model StoreQuestion {
+  id                String    @id @default(cuid())
+  productId         String
+  productName       String?
+  userId            String?
+  userName          String
+  userEmail         String
+  question          String
+  answer            String?
+  status            String    @default("pending") // pending | answered | hidden
+  answeredAt        DateTime?
+  answerEmailSentAt DateTime?
+  createdAt         DateTime  @default(now())
+
+  @@index([productId, status])
+  @@index([status])
+}
+
+// İletişim formu mesajları (Firestore'dan taşındı; Yönetim > İletişim Formları)
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  productId String?
+  status    String   @default("new") // new | read | archived
+  emailSent Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// Ticari elektronik ileti izni (6563 sayılı Kanun / İYS): güncel durum, e-posta başına bir satır
+model MarketingConsent {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  userId    String?
+  name      String?
+  accepted  Boolean
+  channels  String   // "email,sms" veya boş
+  source    String   // kayit | hesap | odeme | bulten
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([accepted])
+}
+
+// İzin değişikliklerinin tarihli kaydı (ispat yükü için silinmez)
+model MarketingConsentLog {
+  id        String   @id @default(cuid())
+  email     String
+  userId    String?
+  accepted  Boolean
+  channels  String
+  source    String
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([createdAt])
+}

@@ -244,22 +244,19 @@ export function SearchInput({
   )
 }
 
+/** Boş durum: yalnızca metin (süs ikonu rozeti kullanılmaz; `icon` geriye dönük uyumluluk için yok sayılır) */
 export function EmptyState({
-  icon: Icon,
   title,
   description,
   action,
 }: {
-  icon: React.ComponentType<{ className?: string }>
+  icon?: React.ComponentType<{ className?: string }>
   title: string
   description?: string
   action?: React.ReactNode
 }) {
   return (
     <div className="flex flex-col items-center justify-center text-center py-14 px-6">
-      <div className="w-12 h-12 rounded-xl bg-[#f1f4f8] flex items-center justify-center mb-3">
-        <Icon className="w-6 h-6 text-[#9aa8b6]" />
-      </div>
       <p className="text-sm font-semibold text-[#121926]">{title}</p>
       {description && <p className="text-[13px] text-[#5d6e80] mt-1 max-w-sm">{description}</p>}
       {action && <div className="mt-4">{action}</div>}

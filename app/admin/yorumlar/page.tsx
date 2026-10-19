@@ -28,7 +28,55 @@ type Review = {
   title: string
   comment: string
   status: 'pending' | 'approved' | 'rejected'
+  /** Bu ürünü içeren teslim edilmiş siparişi var */
+  verified?: boolean
+  /** Mağaza yanıtı (sitede yorumun altında görünür) */
+  reply?: string | null
   createdAt: string
+}
+
+/** Yorumun altına mağaza yanıtı (boş bırakılıp kaydedilirse yanıt kaldırılır) */
+function ReplyBox({ review, onSaved }: { review: Review; onSaved: (reply: string | null) => void }) {
+  const toast = useToast()
+  const [text, setText] = useState(review.reply ?? '')
+  const [saving, setSaving] = useState(false)
+  const save = async () => {
+    setSaving(true)
+    try {
+      const res = await fetch('/api/admin/reviews', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: review.id, reply: text }),
+      })
+      if (!res.ok) throw new Error()
+      onSaved(text.trim() || null)
+      toast.success(text.trim() ? 'Yanıt kaydedildi' : 'Yanıt kaldırıldı')
+    } catch {
+      toast.error('Yanıt kaydedilemedi')
+    } finally {
+      setSaving(false)
+    }
+  }
+  return (
+    <div className="mb-4">
+      <label htmlFor={`reply-${review.id}`} className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">
+        Mağaza yanıtı (sitede görünür)
+      </label>
+      <textarea
+        id={`reply-${review.id}`}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={2}
+        maxLength={2000}
+        className="w-full rounded-lg border border-slate-200 bg-white p-2.5 text-sm text-slate-700 outline-none focus:border-[#0b2540]"
+        placeholder="Teşekkür, çözüm veya bilgi notu"
+      />
+      <Button size="sm" variant="outline" disabled={saving || text.trim() === (review.reply ?? '')} onClick={save} className="mt-1.5 rounded-lg h-8 text-xs">
+        {saving && <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" />}Yanıtı kaydet
+      </Button>
+    </div>
+  )
 }
 
 function StarDisplay({ rating }: { rating: number }) {
@@ -278,6 +326,11 @@ export default function AdminYorumlarPage() {
                           </div>
                         )}
 
+                        {review.verified && (
+                          <p className="mb-2 inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
+                            Doğrulanmış alıcı (teslim edilmiş siparişi var)
+                          </p>
+                        )}
                         <div className="mb-4">
                           <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">
                             Yorum
@@ -289,6 +342,10 @@ export default function AdminYorumlarPage() {
                           </div>
                         </div>
 
+                        <ReplyBox
+                          review={review}
+                          onSaved={(reply) => setReviews((prev) => prev.map((r) => (r.id === review.id ? { ...r, reply } : r)))}
+                        />
                         <div className="flex items-center gap-2">
                           <Button
                             size="sm"

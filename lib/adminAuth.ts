@@ -1,71 +1,132 @@
 import { NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import { prisma } from '@/lib/prisma'
+import { canAccess, isAdminRole, type AdminRole } from '@/lib/admin-users'
+import { getClientIp } from '@/lib/rate-limit'
 
 const JWT_SECRET = process.env.JWT_SECRET ?? ''
 
-/** Admin session cookie (Firebase doğrulama sonrası set edilen JWT) geçerli mi? */
+/** Ana şifreyle (ADMIN_TOKEN) açılan oturumun kimliği: kullanıcı kaydı yoktur, rolü "owner" sayılır */
+export const MASTER_SESSION_SUB = 'admin'
+
+export type AdminActor = {
+  /** AdminUser.id; ana şifreyle girişte null */
+  userId: string | null
+  role: AdminRole
+  name: string
+  email: string | null
+  mustChangePassword: boolean
+}
+
+type SessionPayload = { sub?: string; admin?: boolean; uid?: string }
+
+function readSession(request: NextRequest): SessionPayload | null {
+  const cookie = request.cookies.get('admin_session')?.value
+  if (!cookie || !JWT_SECRET) return null
+  try {
+    const decoded = jwt.verify(cookie, JWT_SECRET) as SessionPayload
+    return decoded.admin === true && decoded.sub ? decoded : null
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Oturum sahibini çözer. Kullanıcı hesabıyla açılan oturumda rol ve durum her istekte veritabanından okunur:
+ * pasifleştirilen kullanıcının oturumu anında düşer, rol değişikliği anında geçerli olur.
+ */
+export async function getAdminActor(request: NextRequest): Promise<AdminActor | null> {
+  const s = readSession(request)
+  if (!s) return null
+  if (!s.uid) {
+    return { userId: null, role: 'owner', name: 'Ana yönetici şifresi', email: null, mustChangePassword: false }
+  }
+  const user = await prisma.adminUser.findUnique({ where: { id: s.uid } })
+  if (!user || !user.active || !isAdminRole(user.role)) return null
+  return { userId: user.id, role: user.role, name: user.name, email: user.email, mustChangePassword: user.mustChangePassword }
+}
+
+/** Admin session cookie geçerli mi (rol/izin kontrolü yapmaz; middleware ile aynı kural) */
 export function verifyAdminCookie(request: NextRequest): boolean {
-  const sessionCookie = request.cookies.get('admin_session')?.value
-  if (!sessionCookie) return false
-  try {
-    const decoded = jwt.verify(sessionCookie, JWT_SECRET) as { sub?: string; admin?: boolean }
-    return decoded.admin === true && Boolean(decoded.sub)
-  } catch {
-    return false
-  }
-}
-
-/** Eski token tabanlı doğrulama (artık kullanılmıyor; geriye dönük uyumluluk için bırakılabilir) */
-export function verifyAdminToken(request: NextRequest): boolean {
-  const token = request.headers.get('authorization')?.replace('Bearer ', '') ||
-                request.nextUrl?.searchParams?.get('token')
-  if (!token) return false
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId?: string; role?: string }
-    return decoded.role === 'admin'
-  } catch {
-    return false
-  }
-}
-
-export function getAdminTokenFromRequest(request: NextRequest): string | null {
-  return request.headers.get('authorization')?.replace('Bearer ', '') ||
-         request.nextUrl?.searchParams?.get('token')
+  return readSession(request) !== null
 }
 
 export type CheckAdminResult =
-  | { ok: true; userId?: string }
+  | { ok: true; userId?: string; actor: AdminActor }
   | { error: string; status: number }
 
-/**
- * Admin yetkisi: önce admin_session cookie (Firebase ile doğrulanmış), sonra Bearer JWT (rol Prisma'dan doğrulanır).
- */
-export async function checkAdmin(request: NextRequest): Promise<CheckAdminResult> {
-  if (verifyAdminCookie(request)) {
-    return { ok: true }
+/** İşlem kaydı (hata yönetimi akışını bozmaz) */
+export async function logAdminAction(
+  actor: AdminActor | null,
+  action: string,
+  extra: { method?: string; path?: string; ip?: string | null; details?: string } = {}
+): Promise<void> {
+  try {
+    await prisma.adminAuditLog.create({
+      data: {
+        adminUserId: actor?.userId ?? null,
+        actor: actor ? (actor.email ? `${actor.name} <${actor.email}>` : actor.name) : 'bilinmiyor',
+        action,
+        method: extra.method,
+        path: extra.path,
+        ip: extra.ip ?? null,
+        details: extra.details?.slice(0, 2000),
+      },
+    })
+  } catch (e) {
+    console.error('Admin audit log error:', e)
   }
-  const token = request.headers.get('authorization')?.replace('Bearer ', '')
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; role?: string }
-      const user = await prisma.user.findUnique({ where: { id: decoded.userId } })
-      if (user && user.role === 'admin') return { ok: true, userId: user.id }
-    } catch {
-      // ignore
-    }
-  }
-  return { error: 'Unauthorized', status: 401 }
 }
 
-export function requireAdminAuth(handler: Function) {
-  return async (request: NextRequest, ...args: any[]) => {
-    if (!verifyAdminCookie(request)) {
-      return new Response(
-        JSON.stringify({ success: false, error: 'Unauthorized' }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      )
-    }
-    return handler(request, ...args)
+/**
+ * Admin yetkisi + rol izni (lib/admin-users.ts → canAccess) + işlem kaydı.
+ * Değiştiren her istek (GET/HEAD dışı) kim, ne zaman, hangi yol olarak kaydedilir.
+ * Şifre değiştirmesi zorunlu kullanıcı yalnızca kendi hesap uçlarına erişebilir.
+ */
+export async function checkAdmin(request: NextRequest): Promise<CheckAdminResult> {
+  const actor = await getAdminActor(request)
+  if (!actor) return { error: 'Unauthorized', status: 401 }
+  const path = request.nextUrl.pathname
+  const method = request.method.toUpperCase()
+  if (actor.mustChangePassword && !path.startsWith('/api/admin/account') && !path.startsWith('/api/admin/me')) {
+    return { error: 'Devam etmek için şifrenizi değiştirin.', status: 403 }
   }
+  if (!canAccess(actor.role, path, method)) {
+    return { error: 'Bu işlem için yetkiniz yok.', status: 403 }
+  }
+  // Değiştiren istekler kaydedilir (kullanıcı ve hesap uçları kendi anlamlı kaydını yazar)
+  if (method !== 'GET' && method !== 'HEAD' && !path.startsWith('/api/admin/account') && !path.startsWith('/api/admin/users')) {
+    void logAdminAction(actor, describeAdminRequest(method, path), { method, path, ip: getClientIp(request), details: `${method} ${path}` })
+  }
+  return { ok: true, userId: actor.userId ?? undefined, actor }
+}
+
+const REQUEST_LABELS: [RegExp, string][] = [
+  [/^\/api\/admin\/orders\/[^/]+\/send-invoice$/, 'Fatura e-postası gönderildi'],
+  [/^\/api\/admin\/orders\/[^/]+\/packing-slip$/, 'Paketleme formu alındı'],
+  [/^\/api\/admin\/orders/, 'Sipariş güncellendi'],
+  [/^\/api\/admin\/shipping/, 'Kargo işlemi'],
+  [/^\/api\/admin\/catalog\/bulk/, 'Toplu ürün işlemi'],
+  [/^\/api\/admin\/catalog\/[^/]+\/images/, 'Ürün görseli değiştirildi'],
+  [/^\/api\/admin\/(catalog|products)/, 'Ürün güncellendi'],
+  [/^\/api\/admin\/(stok|stock-overrides)/, 'Stok güncellendi'],
+  [/^\/api\/admin\/imports/, 'Toplu içe aktarma'],
+  [/^\/api\/admin\/discounts/, 'Kampanya değiştirildi'],
+  [/^\/api\/admin\/coupons/, 'Kupon değiştirildi'],
+  [/^\/api\/admin\/customers/, 'Müşteri kaydı güncellendi'],
+  [/^\/api\/admin\/reviews/, 'Yorum moderasyonu'],
+  [/^\/api\/admin\/questions/, 'Soru moderasyonu / yanıt'],
+  [/^\/api\/admin\/ges-/, 'GES teklif kaydı güncellendi'],
+  [/^\/api\/admin\/system/, 'Sistem işlemi'],
+]
+
+/** İşlem kaydı için okunur ad (silme istekleri ayrıca belirtilir) */
+export function describeAdminRequest(method: string, path: string): string {
+  const label = REQUEST_LABELS.find(([re]) => re.test(path))?.[1] ?? 'Yönetim işlemi'
+  return method === 'DELETE' ? `${label} (silme)` : label
+}
+
+/** Eski token tabanlı doğrulama (kullanılmıyor; geriye dönük uyumluluk) */
+export function getAdminTokenFromRequest(request: NextRequest): string | null {
+  return request.headers.get('authorization')?.replace('Bearer ', '') || null
 }

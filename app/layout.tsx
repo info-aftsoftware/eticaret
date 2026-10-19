@@ -5,6 +5,7 @@ import './globals.css'
 import { getLocale } from 'next-intl/server'
 import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
+import { ClientErrorReporter } from '@/components/ClientErrorReporter'
 import { CartSync } from '@/components/CartSync'
 
 // latin-ext: Türkçe harfler (ş, ğ, ı, İ) aynı fonttan gelsin; yoksa yedek fonttan çizilip sonradan değişiyor (CLS)
@@ -128,6 +129,7 @@ export default async function RootLayout({
       <body className={inter.className} suppressHydrationWarning>
         <IntlProvider>
           <FirebaseAnalyticsInit />
+          <ClientErrorReporter />
           <CartSync />
           {children}
         </IntlProvider>

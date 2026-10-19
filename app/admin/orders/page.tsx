@@ -1,5 +1,7 @@
 'use client'
 
+import { BulkShipping, OrdersExport } from '@/components/admin/DataTransfer'
+import { useAdminMe } from '@/components/admin/AdminMeContext'
 import React, { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
@@ -42,6 +44,7 @@ const TABS = [
 const PAGE_SIZE = 20
 
 function OrdersContent() {
+  const me = useAdminMe()
   const router = useRouter()
   const pathname = usePathname()
   const sp = useSearchParams()
@@ -130,10 +133,14 @@ function OrdersContent() {
         title="Siparişler"
         description={data ? `${counts.all ?? 0} sipariş${hasFilters ? ' (filtreli)' : ''}` : 'Yükleniyor…'}
         actions={
-          <Btn variant="outline" onClick={afterAction} loading={loading && !!data}>
-            {!(loading && data) && <RefreshCw />}
-            Yenile
-          </Btn>
+          <>
+            <Btn variant="outline" onClick={afterAction} loading={loading && !!data}>
+              {!(loading && data) && <RefreshCw />}
+              Yenile
+            </Btn>
+            <BulkShipping onApplied={afterAction} />
+            {(me?.user.role === 'owner' || me?.user.role === 'manager') && <OrdersExport />}
+          </>
         }
       />
 

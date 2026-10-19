@@ -22,12 +22,16 @@ import {
   Bell,
   BellOff,
   ExternalLink,
-  Loader2,
+  UserCog,
+  ScrollText,
+  Activity,
+  CircleUser,
 } from 'lucide-react'
 import { ToastProvider } from '@/components/admin/toast'
 import { AdminLiveProvider, useAdminLive, type LiveCounts } from '@/components/admin/AdminLiveProvider'
 import { CountBadge } from '@/components/admin/ui'
 import { cn } from '@/lib/utils'
+import { AdminMeContext, useAdminMe, type AdminMe } from '@/components/admin/AdminMeContext'
 
 type NavItem = {
   href: string
@@ -65,14 +69,26 @@ const navSections: NavSection[] = [
       { href: '/admin/ges-teklifler', label: 'GES Teklif İstekleri', icon: FileText },
     ],
   },
+  {
+    title: 'Yönetim',
+    items: [
+      { href: '/admin/kullanicilar', label: 'Kullanıcılar', icon: UserCog },
+      { href: '/admin/islem-kaydi', label: 'İşlem Kaydı', icon: ScrollText },
+      { href: '/admin/sistem', label: 'Sistem Durumu', icon: Activity },
+    ],
+  },
 ]
 
-const allItems = navSections.flatMap((s) => s.items)
+const allItems = [...navSections.flatMap((s) => s.items), { href: '/admin/hesabim', label: 'Hesabım', icon: CircleUser } as NavItem]
 const isActive = (item: NavItem, pathname: string | null) =>
   item.exact ? pathname === item.href : !!pathname && (pathname === item.href || pathname.startsWith(item.href + '/'))
 
 function SidebarContent({ pathname, onLogout, onNavClick }: { pathname: string | null; onLogout: () => void; onNavClick?: () => void }) {
   const { counts } = useAdminLive()
+  const me = useAdminMe()
+  const sections = navSections
+    .map((s) => ({ ...s, items: s.items.filter((i) => !me || me.pages.includes(i.href)) }))
+    .filter((s) => s.items.length > 0)
   return (
     <>
       <div className="flex items-center px-5 h-16 border-b border-white/10 shrink-0">
@@ -83,7 +99,7 @@ function SidebarContent({ pathname, onLogout, onNavClick }: { pathname: string |
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5" aria-label="Yönetim menüsü">
-        {navSections.map((section) => (
+        {sections.map((section) => (
           <div key={section.title}>
             <p className="px-3 mb-1.5 text-[10px] font-semibold text-white/40 uppercase tracking-widest">{section.title}</p>
             <ul className="space-y-0.5">
@@ -116,6 +132,20 @@ function SidebarContent({ pathname, onLogout, onNavClick }: { pathname: string |
       </nav>
 
       <div className="p-3 border-t border-white/10 space-y-0.5 shrink-0">
+        {me && (
+          <Link
+            href="/admin/hesabim"
+            onClick={onNavClick}
+            aria-current={pathname === '/admin/hesabim' ? 'page' : undefined}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/5"
+          >
+            <CircleUser className="w-4 h-4 shrink-0 text-white/50" />
+            <span className="min-w-0">
+              <span className="block truncate text-[13px] font-medium">{me.user.name}</span>
+              <span className="block truncate text-[11px] text-white/45">{me.user.roleLabel}{!me.user.isMaster && !me.user.totpEnabled ? ' · 2FA kapalı' : ''}</span>
+            </span>
+          </Link>
+        )}
         <Link href="/" onClick={onNavClick} className="flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-white/60 hover:text-white hover:bg-white/5">
           <ArrowLeft className="w-4 h-4 shrink-0" />
           Siteye Dön
@@ -237,49 +267,38 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const [firebaseReady, setFirebaseReady] = useState(false)
+  const router = useRouter()
+  const [me, setMe] = useState<AdminMe | null>(null)
 
-  // Bazı sayfalar (iletişim, GES teklifleri) Firestore'u istemciden okur: admin custom token ile oturum aç
+  // Oturumdaki yönetici; şifresini değiştirmesi gereken kullanıcı yalnızca Hesabım sayfasını kullanabilir
   React.useEffect(() => {
-    if (pathname === '/admin/auth') {
-      setFirebaseReady(true)
-      return
+    if (pathname === '/admin/auth') return
+    let cancelled = false
+    fetch('/api/admin/me', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (cancelled || !d?.success) return
+        setMe({ user: d.user, pages: d.pages })
+        if (d.user.mustChangePassword && pathname !== '/admin/hesabim') router.replace('/admin/hesabim')
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
     }
-    const signIn = async () => {
-      try {
-        const { getAuth } = await import('@/lib/firebase/config')
-        const { signInWithCustomToken } = await import('firebase/auth')
-        const auth = getAuth()
-        if (auth.currentUser?.uid === 'admin-panel-user') {
-          setFirebaseReady(true)
-          return
-        }
-        const res = await fetch('/api/admin/firebase-token', { credentials: 'include' })
-        if (res.ok) {
-          const data = await res.json()
-          if (data.firebaseCustomToken) await signInWithCustomToken(auth, data.firebaseCustomToken)
-        }
-      } catch {}
-      setFirebaseReady(true)
-    }
-    signIn()
-  }, [pathname])
+  }, [pathname, router])
 
-  if (pathname === '/admin/auth') return <>{children}</>
-
-  if (!firebaseReady) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f5f7fa]">
-        <Loader2 className="w-6 h-6 animate-spin text-[#0b2540]" />
-      </div>
-    )
-  }
+  if (pathname === '/admin/auth') return <React.Suspense fallback={null}>{children}</React.Suspense>
 
   return (
     <ToastProvider>
-      <AdminLiveProvider>
-        <AdminShell>{children}</AdminShell>
-      </AdminLiveProvider>
+      <AdminMeContext.Provider value={me}>
+        <AdminLiveProvider>
+          <AdminShell>
+            {/* Sayfalar useSearchParams kullanır: derlemede istemci tarafına bırakılır */}
+            <React.Suspense fallback={<div className="py-16 text-center text-sm text-[#5d6e80]">Yükleniyor…</div>}>{children}</React.Suspense>
+          </AdminShell>
+        </AdminLiveProvider>
+      </AdminMeContext.Provider>
     </ToastProvider>
   )
 }

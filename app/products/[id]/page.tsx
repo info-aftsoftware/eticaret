@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { categoryHref } from '@/lib/seo/type-paths'
+import { reviewSummary } from '@/lib/reviews'
 import { mockProducts } from '@/lib/products-mock'
 import { notFound, permanentRedirect } from 'next/navigation'
 import ProductDetailClient from './ProductDetailClient'
@@ -137,7 +138,7 @@ function buildBreadcrumbJsonLd(product: StorefrontProduct) {
   }
 }
 
-function buildProductJsonLd(product: StorefrontProduct) {
+function buildProductJsonLd(product: StorefrontProduct, rating: { average: number; count: number }) {
   // Google: yapılandırılmış veri fiyatı sayfadaki satış fiyatıyla (KDV dahil) aynı olmalı
   const priceWithVat = Math.round(product.price * (1 + VAT_RATE / 100) * 100) / 100
   const shippingFee = shippingFeeFor(lineLogistics(product.id))
@@ -154,11 +155,12 @@ function buildProductJsonLd(product: StorefrontProduct) {
     ...(product.brand && {
       brand: { '@type': 'Brand', name: product.brand },
     }),
-    ...(product.rating && {
+    // Yalnızca sayfada görünen onaylı müşteri yorumlarından (Google: puan görünür, gerçek yorumlara dayanmalı)
+    ...(rating.count > 0 && {
       aggregateRating: {
         '@type': 'AggregateRating',
-        ratingValue: product.rating,
-        reviewCount: product.reviews ?? 1,
+        ratingValue: rating.average,
+        reviewCount: rating.count,
         bestRating: 5,
         worstRating: 1,
       },
@@ -221,11 +223,13 @@ export default async function ProductPage(props: { params: Promise<{ id: string 
     notFound()
   }
 
+  const rating = await reviewSummary(product.id).catch(() => ({ average: 0, count: 0 }))
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildProductJsonLd(product, rating)) }}
       />
       <script
         type="application/ld+json"

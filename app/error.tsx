@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { reportClientError } from '@/components/ClientErrorReporter'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
@@ -18,6 +19,8 @@ export default function Error({
 
   useEffect(() => {
     console.error('Error boundary:', error)
+    // React çizim hataları window.onerror'a düşmez: hata kaydına ayrıca gönderilir
+    reportClientError('sayfa hatası', error.message, error.stack)
   }, [error])
 
   return (

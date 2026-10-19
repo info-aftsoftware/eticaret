@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { EmailAuthProvider, FacebookAuthProvider, GoogleAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup } from 'firebase/auth'
+import { EmailAuthProvider, FacebookAuthProvider, GoogleAuthProvider, deleteUser, reauthenticateWithCredential, reauthenticateWithPopup } from 'firebase/auth'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -56,6 +56,16 @@ export function DeleteAccountCard() {
       const res = await fetch('/api/account', { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } })
       const data = await res.json().catch(() => null)
       if (!res.ok || !data?.success) throw new Error(tErr(data?.error) || L('Hesap silinemedi.', 'Your account could not be deleted.'))
+      if (data.clientDelete) {
+        // Sunucuda Firebase servis hesabı yok: kendi Firestore verilerini ve Firebase hesabını tarayıcı siler
+        const fs = await import('@/lib/firebase/firestore')
+        const uid = current.uid
+        await Promise.all([
+          fs.getFavorites(uid).then((list) => Promise.all(list.map((f) => fs.removeFavorite(uid, f.productId)))).catch(() => {}),
+          fs.getAddresses(uid).then((list) => Promise.all(list.map((a) => fs.deleteAddress(uid, a.id)))).catch(() => {}),
+        ])
+        await deleteUser(current)
+      }
       try {
         localStorage.removeItem('cart-storage')
       } catch {}
