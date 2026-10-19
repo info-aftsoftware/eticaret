@@ -2,11 +2,13 @@ import type { Metadata, Viewport } from 'next'
 import React from 'react'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { getLocale } from 'next-intl/server'
 import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
 import { CartSync } from '@/components/CartSync'
 
-const inter = Inter({ subsets: ['latin'] })
+// latin-ext: Türkçe harfler (ş, ğ, ı, İ) aynı fonttan gelsin; yoksa yedek fonttan çizilip sonradan değişiyor (CLS)
+const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' })
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const SITE_NAME = 'voltekno'
 
@@ -183,13 +185,20 @@ const localBusinessJsonLd = {
   areaServed: 'TR',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // İngilizce seçiliyken sunucu HTML'i de lang="en" gelsin (arama motorları, ekran okuyucular)
+  let lang = 'tr'
+  try {
+    lang = (await getLocale()) === 'en' ? 'en' : 'tr'
+  } catch {
+    lang = 'tr'
+  }
   return (
-    <html lang="tr" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
         <script
           type="application/ld+json"

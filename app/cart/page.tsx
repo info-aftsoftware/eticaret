@@ -35,6 +35,7 @@ import type { LegalSlug } from '@/lib/legal/documents'
 import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useCartValidation, type CartLineStatus } from '@/lib/useCartValidation'
 
@@ -54,6 +55,7 @@ function CartLine({
   formatPrice: (n: number) => string
 }) {
   const L = useL()
+  const tErr = useServerError()
   const removeItem = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const [draft, setDraft] = useState(String(item.quantity))
@@ -87,7 +89,7 @@ function CartLine({
           className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#e6ebf1] bg-white sm:h-24 sm:w-24"
         >
           {item.image && !imgError ? (
-            <Image src={item.image} alt={item.name || 'Ürün'} fill sizes="96px" className="object-contain p-1.5" onError={() => setImgError(true)} />
+            <Image src={item.image} alt={item.name || L('Ürün', 'Product')} fill sizes="96px" className="object-contain p-1.5" onError={() => setImgError(true)} />
           ) : (
             <Package className="h-8 w-8 text-slate-300" />
           )}
@@ -97,22 +99,22 @@ function CartLine({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <Link href={href} className="line-clamp-2 text-sm font-semibold leading-snug text-[#121926] hover:text-[#0b2540] hover:underline sm:text-[15px]">
-                {item.name || 'Ürün'}
+                {item.name || L('Ürün', 'Product')}
               </Link>
               <p className="mt-1 text-xs text-[#5d6e80]">
                 {formatPrice(grossPrice(item.price))} {L('/ adet', '/ unit')} <span className="text-[#9aa8b6]">· {L('KDV dahil', 'incl. VAT')}</span>
               </p>
               {status?.campaign && <p className="mt-0.5 text-xs font-medium text-[#b42318]">{status.campaign}</p>}
               {item.isCustom && (
-                <span className="mt-1 inline-block rounded bg-[#0b2540] px-1.5 py-0.5 text-[10px] font-semibold text-white">Özel konfigürasyon</span>
+                <span className="mt-1 inline-block rounded bg-[#0b2540] px-1.5 py-0.5 text-[10px] font-semibold text-white">{L('Özel konfigürasyon', 'Custom configuration')}</span>
               )}
             </div>
             <button
               type="button"
               onClick={() => removeItem(item.id)}
               className="-mr-1 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#5d6e80] transition-colors hover:bg-red-50 hover:text-[#b42318] touch-manipulation"
-              aria-label={`${item.name} sepetten kaldır`}
-              title="Sepetten kaldır"
+              aria-label={L(`${item.name} sepetten kaldır`, `Remove ${item.name} from cart`)}
+              title={L('Sepetten kaldır', 'Remove from cart')}
             >
               <Trash2 className="h-4 w-4" />
             </button>
@@ -124,7 +126,7 @@ function CartLine({
                 type="button"
                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
                 className="flex h-10 w-10 items-center justify-center text-[#20384e] transition-colors hover:bg-[#f5f7fa] disabled:opacity-40 touch-manipulation sm:h-9 sm:w-9"
-                aria-label="Miktarı azalt"
+                aria-label={L('Miktarı azalt', 'Decrease quantity')}
                 disabled={item.quantity <= 1}
               >
                 <Minus className="h-4 w-4" />
@@ -141,15 +143,15 @@ function CartLine({
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
                 }}
                 className="h-10 w-14 !min-h-0 border-x border-[#e6ebf1] bg-transparent !px-1 !py-0 text-center text-sm font-semibold tabular-nums text-[#121926] [appearance:textfield] focus:outline-none sm:h-9 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                aria-label={`${item.name} adedi`}
+                aria-label={L(`${item.name} adedi`, `${item.name} quantity`)}
               />
               <button
                 type="button"
                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
                 className="flex h-10 w-10 items-center justify-center text-[#20384e] transition-colors hover:bg-[#f5f7fa] disabled:opacity-40 touch-manipulation sm:h-9 sm:w-9"
-                aria-label="Miktarı artır"
+                aria-label={L('Miktarı artır', 'Increase quantity')}
                 disabled={atMax}
-                title={atMax ? `Stokta ${max} adet var` : undefined}
+                title={atMax ? L(`Stokta ${max} adet var`, `Only ${max} in stock`) : undefined}
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -157,7 +159,7 @@ function CartLine({
             <div className="text-right">
               <p className="text-base font-bold tabular-nums text-[#121926]">{formatPrice(grossPrice(item.price * item.quantity))}</p>
               <p className="text-[11px] text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</p>
-              {max != null && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">Son {max} adet</p>}
+              {max != null && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">{L(`Son ${max} adet`, `Only ${max} left`)}</p>}
             </div>
           </div>
 
@@ -165,7 +167,7 @@ function CartLine({
             <p className="mt-2 flex items-start gap-1.5 rounded-md bg-[#eef4fb] px-2.5 py-1.5 text-xs text-[#20384e]">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
               <span>
-                Fiyat güncellendi: <span className="line-through">{formatPrice(priceChange.from)}</span> → <strong>{formatPrice(priceChange.to)}</strong>
+                {L('Fiyat güncellendi:', 'Price updated:')} <span className="line-through">{formatPrice(priceChange.from)}</span> → <strong>{formatPrice(priceChange.to)}</strong>
               </span>
             </p>
           )}
@@ -174,21 +176,21 @@ function CartLine({
             <div role="alert" className="mt-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-2 text-xs text-red-900">
               <p className="flex items-start gap-1.5">
                 <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-                <span>{status?.error ?? 'Bu ürün şu anda satılamıyor.'}</span>
+                <span>{tErr(status?.error) ?? L('Bu ürün şu anda satılamıyor.', 'This product is currently unavailable.')}</span>
               </p>
               <div className="mt-1 flex flex-wrap items-center gap-x-4 pl-5">
                 {canFixQty && (
                   <button type="button" onClick={() => updateQuantity(item.id, lineMax!)} className="inline-flex min-h-8 items-center font-semibold underline underline-offset-2">
-                    Adedi {lineMax} yap
+                    {L(`Adedi ${lineMax} yap`, `Set quantity to ${lineMax}`)}
                   </button>
                 )}
                 {needsVariant && (
                   <Link href={href} className="inline-flex min-h-8 items-center font-semibold underline underline-offset-2">
-                    Seçenek seç
+                    {L('Seçenek seç', 'Select an option')}
                   </Link>
                 )}
                 <button type="button" onClick={() => removeItem(item.id)} className="inline-flex min-h-8 items-center font-semibold underline underline-offset-2">
-                  Sepetten çıkar
+                  {L('Sepetten çıkar', 'Remove from cart')}
                 </button>
               </div>
             </div>
@@ -203,6 +205,7 @@ export default function CartPage() {
   const router = useRouter()
   const t = useTranslations('cart')
   const L = useL()
+  const tErr = useServerError()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
@@ -266,18 +269,18 @@ export default function CartPage() {
       if (!res.ok || !data?.success) {
         setCouponDiscount(0)
         setStoredCouponCode(null)
-        setCouponError(data?.error || 'Kupon kontrol edilemedi.')
+        setCouponError(tErr(data?.error) || L('Kupon kontrol edilemedi.', 'The coupon could not be verified.'))
         return
       }
       setCouponDiscount(Number(data.discount) || 0)
       setStoredCouponCode(data.couponCode)
     } catch {
       setCouponDiscount(0)
-      setCouponError('Kupon kontrol edilemedi.')
+      setCouponError(L('Kupon kontrol edilemedi.', 'The coupon could not be verified.'))
     } finally {
       setCouponBusy(false)
     }
-  }, [items, setStoredCouponCode])
+  }, [items, setStoredCouponCode, L, tErr])
 
   const removeCoupon = () => {
     setCouponDiscount(0)
@@ -339,9 +342,9 @@ export default function CartPage() {
           </span>
           <h2 className="text-xl font-bold text-[#121926] sm:text-2xl">{t('emptyTitle')}</h2>
           <p className="mt-2 text-sm leading-relaxed text-[#5d6e80] sm:text-base">
-            Güneş paneli, inverter, akü ve aksesuarlarda aradığınızı keşfedin. B2B ve proje siparişleri için{' '}
+            {L('Güneş paneli, inverter, akü ve aksesuarlarda aradığınızı keşfedin. B2B ve proje siparişleri için', 'Discover what you need in solar panels, inverters, batteries and accessories. For B2B and project orders,')}{' '}
             <Link href="/contact" className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">
-              bize ulaşın
+              {L('bize ulaşın', 'contact us')}
             </Link>
             .
           </p>
@@ -358,7 +361,7 @@ export default function CartPage() {
               className="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-[#d3d9e1] bg-white px-6 text-sm font-semibold text-[#20384e] transition-colors hover:border-[#0b2540]"
             >
               <Heart className="h-4 w-4" />
-              Favorilerim
+              {L('Favorilerim', 'My Favorites')}
             </Link>
           </div>
         </div>
@@ -385,16 +388,16 @@ export default function CartPage() {
           <section className="rounded-xl border border-[#e6ebf1] bg-white" aria-labelledby="cart-items-heading">
             <div className="flex items-center justify-between gap-3 border-b border-[#f1f4f8] px-4 py-3 sm:px-5">
               <h2 id="cart-items-heading" className="text-base font-semibold text-[#121926]">
-                Ürünler <span className="font-normal text-[#5d6e80]">({getTotalItems()})</span>
+                {L('Ürünler', 'Products')} <span className="font-normal text-[#5d6e80]">({getTotalItems()})</span>
               </h2>
               {confirmClear ? (
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="text-[#5d6e80]">Sepet boşaltılsın mı?</span>
+                  <span className="text-[#5d6e80]">{L('Sepet boşaltılsın mı?', 'Empty the cart?')}</span>
                   <button type="button" onClick={() => { clearCart(); setConfirmClear(false) }} className="rounded-md bg-[#b42318] px-2.5 py-1.5 font-semibold text-white">
-                    Evet
+                    {L('Evet', 'Yes')}
                   </button>
                   <button type="button" onClick={() => setConfirmClear(false)} className="rounded-md border border-[#d3d9e1] px-2.5 py-1.5 font-semibold text-[#20384e]">
-                    Vazgeç
+                    {L('Vazgeç', 'Cancel')}
                   </button>
                 </div>
               ) : (
@@ -411,7 +414,7 @@ export default function CartPage() {
             {Object.keys(priceChanges).length > 0 && (
               <p role="status" className="mx-4 mt-4 flex items-start gap-2 rounded-lg border border-[#cfe0f2] bg-[#eef4fb] p-3 text-sm text-[#20384e] sm:mx-5">
                 <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                Bazı ürünlerin fiyatı güncellendi (kampanya veya fiyat değişikliği). Tutarlar güncel fiyatlarla gösteriliyor.
+                {L('Bazı ürünlerin fiyatı güncellendi (kampanya veya fiyat değişikliği). Tutarlar güncel fiyatlarla gösteriliyor.', 'Prices of some items have been updated (promotion or price change). Amounts are shown at current prices.')}
               </p>
             )}
             <ul className="divide-y divide-[#f1f4f8] px-4 py-4 sm:px-5">
@@ -433,7 +436,7 @@ export default function CartPage() {
             className="inline-flex items-center gap-2 text-sm font-semibold text-[#0b2540] underline-offset-2 hover:underline"
           >
             <ArrowLeft className="h-4 w-4" />
-            Alışverişe devam et
+            {L('Alışverişe devam et', 'Continue shopping')}
           </Link>
 
           {/* Tamamlayıcı / Birlikte alınan ürünler */}
@@ -445,25 +448,25 @@ export default function CartPage() {
 
         <aside className="min-w-0">
           <div className="rounded-xl border border-[#e6ebf1] bg-white p-4 sm:p-5 lg:sticky lg:top-24">
-            <h2 className="text-base font-semibold text-[#121926]">Sipariş özeti</h2>
+            <h2 className="text-base font-semibold text-[#121926]">{L('Sipariş özeti', 'Order summary')}</h2>
 
             <dl className="mt-4 space-y-2.5 text-sm">
               <div className="flex justify-between gap-3">
-                <dt className="text-[#5d6e80]">Ara toplam</dt>
+                <dt className="text-[#5d6e80]">{L('Ara toplam', 'Subtotal')}</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">{formatPrice(subtotal)}</dd>
               </div>
               {couponDiscount > 0 && (
                 <div className="flex justify-between gap-3 text-emerald-700">
-                  <dt>Kupon indirimi</dt>
+                  <dt>{L('Kupon indirimi', 'Coupon discount')}</dt>
                   <dd className="font-medium tabular-nums">-{formatPrice(couponDiscount)}</dd>
                 </div>
               )}
               <div className="flex justify-between gap-3">
-                <dt className="text-[#5d6e80]">KDV (%{VAT_RATE})</dt>
+                <dt className="text-[#5d6e80]">{L(`KDV (%${VAT_RATE})`, `VAT (${VAT_RATE}%)`)}</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">{formatPrice(tax)}</dd>
               </div>
               <div className="flex justify-between gap-3">
-                <dt className="text-[#5d6e80]">Kargo</dt>
+                <dt className="text-[#5d6e80]">{L('Kargo', 'Shipping')}</dt>
                 <dd className="font-medium tabular-nums text-[#121926]">
                   {formatPrice(shipping)}
                 </dd>
@@ -471,11 +474,11 @@ export default function CartPage() {
             </dl>
 
             <div className="mt-4 flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-4">
-              <span className="text-base font-semibold text-[#121926]">Toplam</span>
+              <span className="text-base font-semibold text-[#121926]">{L('Toplam', 'Total')}</span>
               <span className="text-xl font-bold tabular-nums text-[#121926]">{formatPrice(total)}</span>
             </div>
             <p className="mt-1 text-xs text-[#5d6e80]">
-              Havale/EFT ile ödemede ara toplam üzerinden <strong className="text-emerald-700">%{BANK_TRANSFER_DISCOUNT_RATE} indirim</strong>.
+              {L('Havale/EFT ile ödemede ara toplam üzerinden', 'Pay by Bank Transfer (EFT) and get')} <strong className="text-emerald-700">{L(`%${BANK_TRANSFER_DISCOUNT_RATE} indirim`, `${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</strong>{L('.', ' the subtotal.')}
             </p>
 
             {/* Kupon */}
@@ -486,7 +489,7 @@ export default function CartPage() {
                     <Tag className="h-4 w-4" aria-hidden />
                     {storedCouponCode}
                   </span>
-                  <button type="button" onClick={removeCoupon} className="inline-flex h-7 w-7 items-center justify-center rounded-md text-emerald-800 hover:bg-emerald-100" aria-label="Kuponu kaldır">
+                  <button type="button" onClick={removeCoupon} className="inline-flex h-7 w-7 items-center justify-center rounded-md text-emerald-800 hover:bg-emerald-100" aria-label={L('Kuponu kaldır', 'Remove coupon')}>
                     <X className="h-4 w-4" />
                   </button>
                 </div>
@@ -498,12 +501,12 @@ export default function CartPage() {
                   }}
                 >
                   <label htmlFor="coupon" className="mb-1.5 block text-xs font-medium text-[#20384e]">
-                    Kupon kodu
+                    {L('Kupon kodu', 'Coupon code')}
                   </label>
                   <div className="flex gap-2">
                     <input
                       id="coupon"
-                      placeholder="Kodunuzu girin"
+                      placeholder={L('Kodunuzu girin', 'Enter your code')}
                       value={couponCode}
                       onChange={(e) => {
                         setCouponCode(e.target.value)
@@ -516,7 +519,7 @@ export default function CartPage() {
                       disabled={!couponCode.trim() || couponBusy}
                       className="h-10 shrink-0 rounded-lg border border-[#0b2540] px-4 text-sm font-semibold text-[#0b2540] transition-colors hover:bg-[#0b2540] hover:text-white disabled:opacity-50"
                     >
-                      Uygula
+                      {L('Uygula', 'Apply')}
                     </button>
                   </div>
                   {couponError && <p className="mt-1.5 text-xs text-[#b42318]">{couponError}</p>}
@@ -528,10 +531,10 @@ export default function CartPage() {
 
             {/* Sözleşme ve şartlar */}
             <fieldset className={`mt-5 space-y-1 rounded-lg border p-3 transition-colors ${hasContractErrors ? 'border-red-200 bg-red-50/70' : 'border-[#e6ebf1] bg-[#f5f7fa]'}`}>
-              <legend className="sr-only">Sözleşme ve şartlar</legend>
+              <legend className="sr-only">{L('Sözleşme ve şartlar', 'Agreements and terms')}</legend>
               <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-[#20384e]">
                 <Shield className="h-3.5 w-3.5" aria-hidden />
-                Sözleşme ve şartlar
+                {L('Sözleşme ve şartlar', 'Agreements and terms')}
               </p>
               <label className="flex cursor-pointer items-start gap-2.5 py-1.5 touch-manipulation">
                 <input
@@ -544,8 +547,9 @@ export default function CartPage() {
                   className={checkboxClass(contractErrors.contracts)}
                 />
                 <span className="text-xs leading-relaxed text-[#20384e]">
-                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('sales') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">Mesafeli Satış Sözleşmesi</button>
-                  {"'ni okudum ve kabul ediyorum."}
+                  {L('', 'I have read and accept the ')}
+                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('sales') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">{L('Mesafeli Satış Sözleşmesi', 'Distance Sales Agreement')}</button>
+                  {L("'ni okudum ve kabul ediyorum.", '.')}
                 </span>
               </label>
               <label className="flex cursor-pointer items-start gap-2.5 py-1.5 touch-manipulation">
@@ -559,8 +563,9 @@ export default function CartPage() {
                   className={checkboxClass(contractErrors.privacy)}
                 />
                 <span className="text-xs leading-relaxed text-[#20384e]">
-                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('privacy') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">Gizlilik ve Çerez Politikası</button>
-                  {"'nı okudum."}
+                  {L('', 'I have read the ')}
+                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('privacy') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">{L('Gizlilik ve Çerez Politikası', 'Privacy and Cookie Policy')}</button>
+                  {L("'nı okudum.", '.')}
                 </span>
               </label>
               <label className="flex cursor-pointer items-start gap-2.5 py-1.5 touch-manipulation">
@@ -574,19 +579,25 @@ export default function CartPage() {
                   className={checkboxClass(contractErrors.kvkk)}
                 />
                 <span className="text-xs leading-relaxed text-[#20384e]">
-                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('kvkk') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">KVKK Aydınlatma Metni</button>
-                  {"'ni okudum, kişisel verilerimin işlenmesi hakkında bilgilendirildim."}
+                  {L('', 'I have read the ')}
+                  <button type="button" onClick={(e) => { e.preventDefault(); setShowModal('kvkk') }} className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">{L('KVKK Aydınlatma Metni', 'KVKK Privacy Notice')}</button>
+                  {L("'ni okudum, kişisel verilerimin işlenmesi hakkında bilgilendirildim.", ' and have been informed about the processing of my personal data.')}
                 </span>
               </label>
               {hasContractErrors && (
-                <p className="pt-1 text-xs font-medium text-[#b42318]">Devam etmek için tüm onayları işaretleyin.</p>
+                <p role="alert" className="pt-1 text-xs font-medium text-[#b42318]">{L('Devam etmek için tüm onayları işaretleyin.', 'Please tick all boxes to continue.')}</p>
               )}
             </fieldset>
 
             {hasBlocking && (
               <p role="alert" className="mt-4 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-900">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                Devam etmek için uyarı olan {blocking.length > 1 ? `${blocking.length} ürünü` : 'ürünü'} düzenleyin veya sepetten çıkarın.
+                {L(
+                  `Devam etmek için uyarı olan ${blocking.length > 1 ? `${blocking.length} ürünü` : 'ürünü'} düzenleyin veya sepetten çıkarın.`,
+                  blocking.length > 1
+                    ? `To continue, update or remove the ${blocking.length} flagged items from your cart.`
+                    : 'To continue, update or remove the flagged item from your cart.'
+                )}
               </p>
             )}
 
@@ -602,17 +613,17 @@ export default function CartPage() {
 
             {!isAuthenticated && (
               <p className="mt-3 text-center text-xs text-[#5d6e80]">
-                Üye olmadan da sipariş verebilirsiniz.{' '}
+                {L('Üye olmadan da sipariş verebilirsiniz.', 'You can order without an account.')}{' '}
                 <Link href="/login?redirect=/cart" className="inline !min-h-0 !min-w-0 p-0 text-left font-semibold text-[#0b2540] underline-offset-2 hover:underline">
-                  Giriş yapın
+                  {L('Giriş yapın', 'Sign in')}
                 </Link>
-                , sepetiniz hesabınıza taşınsın.
+                {L(', sepetiniz hesabınıza taşınsın.', ' to save your cart to your account.')}
               </p>
             )}
 
             <p className="mt-4 flex items-center justify-center gap-1.5 border-t border-[#f1f4f8] pt-4 text-xs text-[#5d6e80]">
               <Lock className="h-3.5 w-3.5" aria-hidden />
-              Güvenli ödeme · Kişisel verileriniz korunur
+              {L('Güvenli ödeme · Kişisel verileriniz korunur', 'Secure payment · Your personal data is protected')}
             </p>
           </div>
         </aside>

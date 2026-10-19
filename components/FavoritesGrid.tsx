@@ -10,6 +10,7 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useFavorites } from '@/lib/useFavorites'
 import { useToast } from '@/components/ui/toast'
 import { AddToCartButton } from '@/components/AddToCartButton'
+import { useL } from '@/lib/i18n-inline'
 
 export type FavoriteProductSummary = {
   id: string
@@ -68,10 +69,11 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
   const selected = product.variants.find((v) => v.key === key) ?? initial
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
+  const L = useL()
   return (
     <div className="space-y-2">
       <label className="sr-only" htmlFor={`fav-variant-${product.id}`}>
-        Seçenek
+        {L('Seçenek', 'Option')}
       </label>
       <select
         id={`fav-variant-${product.id}`}
@@ -99,6 +101,7 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (n: number) => fmtPrice(n, currency, rates?.rates ?? null)
+  const L = useL()
 
   if (!product) {
     return (
@@ -106,13 +109,13 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
         <div className="flex aspect-[4/3] items-center justify-center rounded-lg bg-white">
           <Package className="h-10 w-10 text-slate-300" />
         </div>
-        <p className="mt-3 text-sm font-semibold text-[#121926]">Bu ürün artık satışta değil</p>
-        <p className="mt-1 text-xs text-[#5d6e80]">Benzer ürünlere göz atabilirsiniz.</p>
+        <p className="mt-3 text-sm font-semibold text-[#121926]">{L('Bu ürün artık satışta değil', 'This product is no longer available')}</p>
+        <p className="mt-1 text-xs text-[#5d6e80]">{L('Benzer ürünlere göz atabilirsiniz.', 'You can browse similar products.')}</p>
         <div className="mt-auto flex gap-2 pt-3">
           <Link href={`/products/${id}`} className="inline-flex h-9 flex-1 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white text-xs font-semibold text-[#0b2540] hover:border-[#0b2540]">
-            Benzerlerini gör
+            {L('Benzerlerini gör', 'See similar')}
           </Link>
-          <button type="button" onClick={() => onRemove(id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white text-[#5d6e80] hover:text-[#b42318]" aria-label="Favorilerden kaldır">
+          <button type="button" onClick={() => onRemove(id)} className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white text-[#5d6e80] hover:text-[#b42318]" aria-label={L('Favorilerden kaldır', 'Remove from favorites')}>
             <Trash2 className="h-4 w-4" />
           </button>
         </div>
@@ -136,15 +139,15 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
           </span>
         )}
         {!!product.discount && !outOfStock && (
-          <span className="absolute left-2 top-2 rounded-md bg-[#f5b400] px-1.5 py-0.5 text-[11px] font-bold text-[#111]">%{product.discount} İndirim</span>
+          <span className="absolute left-2 top-2 rounded-md bg-[#f5b400] px-1.5 py-0.5 text-[11px] font-bold text-[#111]">{L(`%${product.discount} İndirim`, `${product.discount}% Off`)}</span>
         )}
       </Link>
       <button
         type="button"
         onClick={() => onRemove(id)}
         className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#f5b400] bg-[#f5b400] text-[#111] shadow-sm transition-colors hover:bg-[#e0a500] touch-manipulation"
-        aria-label={`${product.name} favorilerden kaldır`}
-        title="Favorilerden kaldır"
+        aria-label={L(`${product.name} favorilerden kaldır`, `Remove ${product.name} from favorites`)}
+        title={L('Favorilerden kaldır', 'Remove from favorites')}
       >
         <Heart className="h-4 w-4 fill-current" />
       </button>
@@ -162,14 +165,14 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
             <span className={`text-base font-bold ${product.oldPrice ? 'text-[#b42318]' : 'text-[#121926]'}`}>
               {formatPrice(product.price)}
             </span>
-            {product.variants.length > 1 && <span className="ml-1.5 text-[11px] text-[#5d6e80]">{product.variants.length} seçenek</span>}
+            {product.variants.length > 1 && <span className="ml-1.5 text-[11px] text-[#5d6e80]">{L(`${product.variants.length} seçenek`, `${product.variants.length} options`)}</span>}
           </div>
           {outOfStock ? (
-            <span className="rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[11px] font-semibold text-[#5d6e80]">Tükendi</span>
+            <span className="rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[11px] font-semibold text-[#5d6e80]">{L('Tükendi', 'Sold Out')}</span>
           ) : lowStock ? (
-            <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">Son {product.stock} adet</span>
+            <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[11px] font-semibold text-amber-700">{L(`Son ${product.stock} adet`, `Only ${product.stock} left`)}</span>
           ) : (
-            <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700">Stokta</span>
+            <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700">{L('Stokta', 'In stock')}</span>
           )}
         </div>
         {product.campaign && <p className="mt-1 text-[11px] text-[#5d6e80]">{product.campaign}</p>}
@@ -178,7 +181,7 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
           {outOfStock ? (
             <Link href={href} className="inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-lg border border-[#d3d9e1] bg-[#f5f7fa] text-sm font-semibold text-[#20384e] hover:border-[#0b2540]">
               <Bell className="h-4 w-4" />
-              Gelince haber ver
+              {L('Gelince haber ver', 'Notify me when available')}
             </Link>
           ) : hasVariants ? (
             <VariantAddToCart product={product} />
@@ -199,6 +202,7 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
 export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
   const { ids, ready, remove, isMember } = useFavorites()
   const { addToast } = useToast()
+  const L = useL()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   const { products, loading, error } = useFavoriteProducts(ids)
@@ -207,9 +211,9 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
   const handleRemove = async (id: string) => {
     try {
       await remove(id)
-      addToast({ type: 'success', title: 'Favorilerden kaldırıldı', description: products[id]?.name ?? '' })
+      addToast({ type: 'success', title: L('Favorilerden kaldırıldı', 'Removed from favorites'), description: products[id]?.name ?? '' })
     } catch {
-      addToast({ type: 'error', title: 'Kaldırılamadı', description: 'Lütfen tekrar deneyin.' })
+      addToast({ type: 'error', title: L('Kaldırılamadı', 'Could not remove'), description: L('Lütfen tekrar deneyin.', 'Please try again.') })
     }
   }
 
@@ -218,17 +222,17 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
   const guestHint = mounted && ready && !isMember && (
     <div className="mb-5 flex flex-col gap-3 rounded-xl border border-[#e6ebf1] bg-[#f5f7fa] p-4 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-sm text-[#20384e]">
-        Favorileriniz yalnızca bu cihazda saklanıyor. Tüm cihazlarınızda görmek için giriş yapın; listeniz hesabınıza taşınır.
+        {L('Favorileriniz yalnızca bu cihazda saklanıyor. Tüm cihazlarınızda görmek için giriş yapın; listeniz hesabınıza taşınır.', 'Your favorites are stored only on this device. Sign in to see them on all your devices; your list will be moved to your account.')}
       </p>
       <Link href="/login?redirect=/favorites" className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-[#0b2540] px-4 text-sm font-semibold text-white hover:bg-[#12335a]">
-        Giriş yap
+        {L('Giriş yap', 'Sign in')}
       </Link>
     </div>
   )
 
   if (!mounted || !ready || (loading && list.length === 0)) {
     return (
-      <div className={grid} aria-busy="true" aria-label="Favoriler yükleniyor">
+      <div className={grid} aria-busy="true" aria-label={L('Favoriler yükleniyor', 'Loading favorites')}>
         {Array.from({ length: compact ? 3 : 4 }).map((_, i) => (
           <div key={i} className="overflow-hidden rounded-xl border border-[#e6ebf1] bg-white">
             <div className="aspect-[4/3] animate-pulse bg-[#f1f4f8]" />
@@ -251,13 +255,13 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
           <span className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-[#fff6db]">
             <Heart className="h-7 w-7 text-[#e0a500]" />
           </span>
-          <h2 className="text-lg font-semibold text-[#121926]">Henüz favori ürününüz yok</h2>
+          <h2 className="text-lg font-semibold text-[#121926]">{L('Henüz favori ürününüz yok', 'You have no favorite products yet')}</h2>
           <p className="mt-2 max-w-sm text-sm text-[#5d6e80]">
-            Beğendiğiniz ürünlerdeki kalp simgesine dokunun; fiyatını ve stok durumunu buradan takip edin.
+            {L('Beğendiğiniz ürünlerdeki kalp simgesine dokunun; fiyatını ve stok durumunu buradan takip edin.', 'Tap the heart icon on products you like and track their price and stock status here.')}
           </p>
           <Link href="/products" className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">
             <ShoppingBag className="h-4 w-4" />
-            Ürünleri keşfet
+            {L('Ürünleri keşfet', 'Explore products')}
           </Link>
         </div>
       </div>
@@ -269,7 +273,7 @@ export function FavoritesGrid({ compact = false }: { compact?: boolean }) {
       {guestHint}
       {error && list.length < ids.length && (
         <p role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-800">
-          Bazı ürün bilgileri yüklenemedi. Sayfayı yenileyip tekrar deneyin.
+          {L('Bazı ürün bilgileri yüklenemedi. Sayfayı yenileyip tekrar deneyin.', 'Some product details could not be loaded. Please refresh the page and try again.')}
         </p>
       )}
       <div className={grid}>

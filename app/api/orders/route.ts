@@ -11,6 +11,7 @@ import { getCustomerFromRequest } from '@/lib/customerAuth'
 import { priceOrder, PricingError, StockError, VAT_RATE, reserveCouponUse, releaseCouponUse } from '@/lib/order-pricing'
 import { reserveStock, InsufficientStockError } from '@/lib/stock-reservation'
 import { notifyLowStockAfterOrder } from '@/lib/low-stock'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { onOrderCreated, changeOrderStatus } from '@/lib/order-service'
 import { toCustomerOrder } from '@/lib/customer-order'
 import { getLegalDocument } from '@/lib/legal/documents'
@@ -23,6 +24,9 @@ import {
   onlyDigits,
   validateBilling,
 } from '@/lib/checkout-validation'
+
+/** Aynı e-posta/telefona açık (ödenmemiş) havale siparişi üst sınırı */
+const MAX_OPEN_UNPAID_BANK_ORDERS = 3
 
 const str = (v: unknown, max = 500): string => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
@@ -81,6 +85,28 @@ export async function POST(request: NextRequest) {
     }
     // 5xx xxx xx xx biçiminde saklanır (e-posta, kargo etiketi ve misafir takibi aynı biçimi kullanır)
     const phone = formatTrPhone(phoneDigits)
+    // Ödenmemiş havale siparişleri stoğu ve kupon kullanımını ödeme süresi boyunca ayırır; uydurma siparişlerle
+    // katalogun "tükendi" gösterilmesini önlemek için aynı e-posta/telefona açık sipariş sayısı sınırlanır.
+    if (paymentMethod === 'bank_transfer') {
+      const openUnpaid = await prisma.order.count({
+        where: {
+          status: 'PENDING',
+          paymentMethod: 'bank_transfer',
+          paymentStatus: { not: 'PAID' },
+          OR: [{ shippingEmail: email.toLowerCase() }, { shippingPhone: phone }],
+        },
+      })
+      if (openUnpaid >= MAX_OPEN_UNPAID_BANK_ORDERS) {
+        return NextResponse.json(
+          {
+            success: false,
+            code: 'TOO_MANY_OPEN_ORDERS',
+            error: `Ödemesi bekleyen ${openUnpaid} siparişiniz var. Yeni sipariş vermeden önce mevcut siparişlerinizin ödemesini tamamlayın veya iptal edin.`,
+          },
+          { status: 429 }
+        )
+      }
+    }
     const billingType = c.billingType === 'company' ? 'company' : 'individual'
     const idNumber = onlyDigits(str(c.idNumber, 20))
     const taxId = onlyDigits(str(c.taxId, 20))
@@ -241,6 +267,8 @@ export async function POST(request: NextRequest) {
     void notifyLowStockAfterOrder(
       pricing.lines.filter((l) => decremented.has(l.productId)).map((l) => ({ productId: l.productId, quantity: l.quantity }))
     ).catch((e) => console.error('Düşük stok uyarısı:', e))
+    // Stok değişti: ürün sayfaları ve listeler yeni stokla üretilsin (admin paneliyle aynı kaynak)
+    if (decremented.size > 0) revalidateStorefront()
     // ───────────────────────────────────────────────────────────────────────
 
     // Üyenin sepet özeti (terk edilen sepet hatırlatması) artık gereksiz

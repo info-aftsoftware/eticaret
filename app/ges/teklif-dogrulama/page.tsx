@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { useL } from '@/lib/i18n-inline'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -94,6 +95,7 @@ const initialForm: FormState = {
 
 export default function GesTeklifDogrulamaPage() {
   const t = useTranslations('ges')
+  const L = useL()
   const [form, setForm] = useState<FormState>(initialForm)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
@@ -115,23 +117,23 @@ export default function GesTeklifDogrulamaPage() {
   const validate = (): boolean => {
     const next: Record<string, string> = {}
     if (!form.quoteDate)
-      next.quoteDate = 'Teklif tarihi zorunludur.'
+      next.quoteDate = L('Teklif tarihi zorunludur.', 'Quote date is required.')
     if (!form.totalPriceTry || (num(form.totalPriceTry) ?? 0) <= 0)
-      next.totalPriceTry = 'Toplam fiyat (TL) zorunludur ve 0\'dan büyük olmalıdır.'
+      next.totalPriceTry = L('Toplam fiyat (TL) zorunludur ve 0\'dan büyük olmalıdır.', 'Total price (TRY) is required and must be greater than 0.')
     if (!form.totalKwp || (num(form.totalKwp) ?? 0) <= 0)
-      next.totalKwp = 'Toplam sistem gücü (kWp) zorunludur.'
+      next.totalKwp = L('Toplam sistem gücü (kWp) zorunludur.', 'Total system power (kWp) is required.')
     if (!form.panelBrandModel.trim() || form.panelBrandModel.trim().length < 2)
-      next.panelBrandModel = 'Panel marka/model bilgisi zorunludur.'
+      next.panelBrandModel = L('Panel marka/model bilgisi zorunludur.', 'Panel brand/model is required.')
     if (!form.panelCount || (int(form.panelCount) ?? 0) <= 0)
-      next.panelCount = 'Panel adedi zorunludur.'
+      next.panelCount = L('Panel adedi zorunludur.', 'Number of panels is required.')
     if (!form.inverterBrandModel.trim() || form.inverterBrandModel.trim().length < 2)
-      next.inverterBrandModel = 'İnverter marka/model bilgisi zorunludur.'
+      next.inverterBrandModel = L('İnverter marka/model bilgisi zorunludur.', 'Inverter brand/model is required.')
     if (!form.contactName.trim() || form.contactName.trim().length < 2)
-      next.contactName = 'Ad soyad zorunludur.'
+      next.contactName = L('Ad soyad zorunludur.', 'Full name is required.')
     if (!form.contactEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.contactEmail.trim()))
-      next.contactEmail = 'Geçerli bir e-posta adresi zorunludur.'
+      next.contactEmail = L('Geçerli bir e-posta adresi zorunludur.', 'A valid email address is required.')
     if (!form.contactPhone.trim() || form.contactPhone.replace(/[\s\-().+]/g, '').length < 10)
-      next.contactPhone = 'Geçerli bir telefon numarası giriniz.'
+      next.contactPhone = L('Geçerli bir telefon numarası giriniz.', 'Please enter a valid phone number.')
     setErrors(next)
     if (Object.keys(next).length > 0) scrollToFirstError(next)
     return Object.keys(next).length === 0
@@ -190,6 +192,9 @@ export default function GesTeklifDogrulamaPage() {
 
       // Client-side red flag analizi
       const flags: string[] = []
+      // Kayıt Türkçe kalır (flags); ekranda seçili dil gösterilir (flagsEn)
+      const flagsEn: string[] = []
+      const flag = (tr: string, en: string) => { flags.push(tr); flagsEn.push(en) }
       const kwp = num(form.totalKwp)
       const priceTry = num(form.totalPriceTry)
       const panelCountVal = int(form.panelCount)
@@ -199,20 +204,20 @@ export default function GesTeklifDogrulamaPage() {
 
       if (kwp && priceTry) {
         const pricePerKwp = priceTry / kwp
-        if (pricePerKwp < 8000) flags.push('kWp başına fiyat çok düşük — ekipman kalitesini sorgulayın.')
-        if (pricePerKwp > 25000) flags.push('kWp başına fiyat ortalamanın üzerinde.')
+        if (pricePerKwp < 8000) flag('kWp başına fiyat çok düşük — ekipman kalitesini sorgulayın.', 'Price per kWp is very low — question the equipment quality.')
+        if (pricePerKwp > 25000) flag('kWp başına fiyat ortalamanın üzerinde.', 'Price per kWp is above average.')
       }
       if (panelCountVal && panelWattVal && kwp) {
         const calcKwp = (panelCountVal * panelWattVal) / 1000
         if (Math.abs(calcKwp - kwp) > 0.5)
-          flags.push(`Panel adedi × Watt (${calcKwp.toFixed(1)} kWp) ile belirtilen toplam kWp (${kwp}) uyuşmuyor.`)
+          flag(`Panel adedi × Watt (${calcKwp.toFixed(1)} kWp) ile belirtilen toplam kWp (${kwp}) uyuşmuyor.`, `Panel count × watts (${calcKwp.toFixed(1)} kWp) does not match the stated total kWp (${kwp}).`)
       }
-      if (paybackYears && paybackYears < 3) flags.push('Amortisman süresi gerçekçi olmayabilir (3 yıldan kısa).')
-      if (paybackYears && paybackYears > 12) flags.push('Amortisman süresi uzun — teklifin ekonomik fizibilitesini değerlendirin.')
+      if (paybackYears && paybackYears < 3) flag('Amortisman süresi gerçekçi olmayabilir (3 yıldan kısa).', 'The payback period may be unrealistic (under 3 years).')
+      if (paybackYears && paybackYears > 12) flag('Amortisman süresi uzun — teklifin ekonomik fizibilitesini değerlendirin.', 'The payback period is long — evaluate the economic feasibility of the quote.')
       if (annualProd && kwp) {
         const cf = annualProd / (kwp * 8760)
-        if (cf > 0.22) flags.push('Yıllık üretim tahmini iyimser olabilir.')
-        if (cf < 0.10) flags.push('Yıllık üretim tahmini düşük — panel yönelimi/gölgelenme kontrol edin.')
+        if (cf > 0.22) flag('Yıllık üretim tahmini iyimser olabilir.', 'The annual production estimate may be optimistic.')
+        if (cf < 0.10) flag('Yıllık üretim tahmini düşük — panel yönelimi/gölgelenme kontrol edin.', 'The annual production estimate is low — check panel orientation/shading.')
       }
 
       const { collection: col, addDoc, serverTimestamp: srvTs } = await import('firebase/firestore')
@@ -220,11 +225,11 @@ export default function GesTeklifDogrulamaPage() {
       const db = getDb()
       await addDoc(col(db, 'gesVerifications'), { ...body, redFlags: flags, createdAt: srvTs() })
 
-      setRedFlags(flags)
+      setRedFlags(flags.map((f, i) => L(f, flagsEn[i])))
       setSuccess(true)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch {
-      setErrors({ submit: 'Gönderilirken bir hata oluştu. Lütfen tekrar deneyin.' })
+      setErrors({ submit: L('Gönderilirken bir hata oluştu. Lütfen tekrar deneyin.', 'An error occurred while submitting. Please try again.') })
     } finally {
       setSubmitting(false)
     }
@@ -279,7 +284,7 @@ export default function GesTeklifDogrulamaPage() {
                 </a>
                 <span className="text-slate-300">|</span>
                 <Link href="/contact" className="text-sm text-brand font-medium hover:underline">
-                  İletişim Formu
+                  {L('İletişim Formu', 'Contact Form')}
                 </Link>
               </div>
             </CardContent>
@@ -291,10 +296,10 @@ export default function GesTeklifDogrulamaPage() {
               className="rounded-xl bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-500/20"
             >
               <FileCheck className="w-4 h-4 mr-2" />
-              Yeni Doğrulama
+              {L('Yeni Doğrulama', 'New Verification')}
             </Button>
             <Button asChild variant="outline" className="rounded-xl border-slate-200">
-              <Link href="/ges">GES Hesaplama</Link>
+              <Link href="/ges">{L('GES Hesaplama', 'Solar System Calculator')}</Link>
             </Button>
           </div>
         </div>
@@ -339,9 +344,9 @@ export default function GesTeklifDogrulamaPage() {
             {/* Stat chips */}
             <div className="flex flex-wrap justify-center gap-3">
               {[
-                { icon: ShieldCheck, text: 'Ücretsiz Analiz' },
-                { icon: Search, text: 'Kırmızı Bayrak Tespiti' },
-                { icon: Clock, text: '24 Saat İçinde Dönüş' },
+                { icon: ShieldCheck, text: L('Ücretsiz Analiz', 'Free Analysis') },
+                { icon: Search, text: L('Kırmızı Bayrak Tespiti', 'Red Flag Detection') },
+                { icon: Clock, text: L('24 Saat İçinde Dönüş', 'Response Within 24 Hours') },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 ring-1 ring-white/10">
                   <Icon className="w-4 h-4 text-white" />
@@ -388,9 +393,9 @@ export default function GesTeklifDogrulamaPage() {
                       <FileCheck className="w-5 h-5" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-slate-800">Teklif Bilgilerini Girin</h2>
+                      <h2 className="text-lg font-bold text-slate-800">{L('Teklif Bilgilerini Girin', 'Enter Quote Details')}</h2>
                       <p className="text-sm text-slate-500">
-                        <span className="text-red-500 font-bold">*</span> işaretli alanlar zorunludur
+                        {L('', 'Fields marked ')}<span className="text-red-500 font-bold">*</span>{L(' işaretli alanlar zorunludur', ' are required')}
                       </p>
                     </div>
                   </div>
@@ -444,7 +449,7 @@ export default function GesTeklifDogrulamaPage() {
                         inputMode="decimal"
                         value={form.totalPriceTry}
                         onChange={(e) => set({ totalPriceTry: e.target.value })}
-                        placeholder="Örn. 250000"
+                        placeholder={L('Örn. 250000', 'e.g. 250000')}
                         className={fieldCls(errors.totalPriceTry)}
                       />
                       {errors.totalPriceTry && <p className="text-xs text-red-600">{errors.totalPriceTry}</p>}
@@ -474,7 +479,7 @@ export default function GesTeklifDogrulamaPage() {
                       </Label>
                       <Select value={form.turnkey} onValueChange={(v) => set({ turnkey: v || '' })}>
                         <SelectTrigger id="turnkey" className={selectCls()}>
-                          <SelectValue placeholder="Anahtar teslim mi?" />
+                          <SelectValue placeholder={L('Anahtar teslim mi?', 'Turnkey?')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="evet">{t('quoteVerify.turnkeyYes')}</SelectItem>
@@ -490,7 +495,7 @@ export default function GesTeklifDogrulamaPage() {
                 <div className="space-y-4">
                   <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide flex items-center gap-2">
                     <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold">2</span>
-                    Panel ve İnverter
+                    {L('Panel ve İnverter', 'Panels & Inverter')}
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -503,7 +508,7 @@ export default function GesTeklifDogrulamaPage() {
                         id="panelBrandModel"
                         value={form.panelBrandModel}
                         onChange={(e) => set({ panelBrandModel: e.target.value })}
-                        placeholder="Marka / model"
+                        placeholder={L('Marka / model', 'Brand / model')}
                         className={fieldCls(errors.panelBrandModel)}
                       />
                       {errors.panelBrandModel && <p className="text-xs text-red-600">{errors.panelBrandModel}</p>}
@@ -520,7 +525,7 @@ export default function GesTeklifDogrulamaPage() {
                         inputMode="numeric"
                         value={form.panelCount}
                         onChange={(e) => set({ panelCount: e.target.value })}
-                        placeholder="Adet"
+                        placeholder={L('Adet', 'Quantity')}
                         className={fieldCls(errors.panelCount)}
                       />
                       {errors.panelCount && <p className="text-xs text-red-600">{errors.panelCount}</p>}
@@ -535,7 +540,7 @@ export default function GesTeklifDogrulamaPage() {
                         id="inverterBrandModel"
                         value={form.inverterBrandModel}
                         onChange={(e) => set({ inverterBrandModel: e.target.value })}
-                        placeholder="Marka / model"
+                        placeholder={L('Marka / model', 'Brand / model')}
                         className={fieldCls(errors.inverterBrandModel)}
                       />
                       {errors.inverterBrandModel && <p className="text-xs text-red-600">{errors.inverterBrandModel}</p>}
@@ -552,7 +557,7 @@ export default function GesTeklifDogrulamaPage() {
                         inputMode="numeric"
                         value={form.panelWatt}
                         onChange={(e) => set({ panelWatt: e.target.value })}
-                        placeholder="Örn. 550 Wp"
+                        placeholder={L('Örn. 550 Wp', 'e.g. 550 Wp')}
                         className={fieldCls()}
                       />
                     </div>
@@ -561,7 +566,7 @@ export default function GesTeklifDogrulamaPage() {
                   {/* Expandable panel details */}
                   <details className="group rounded-xl border border-slate-200 bg-slate-50/50 overflow-hidden">
                     <summary className="flex items-center justify-between gap-3 px-4 py-3 cursor-pointer list-none hover:bg-slate-50 transition-colors [&::-webkit-details-marker]:hidden">
-                      <span className="text-sm font-medium text-slate-600">Panel &amp; İnverter Detayları <span className="text-slate-400 font-normal">(isteğe bağlı)</span></span>
+                      <span className="text-sm font-medium text-slate-600">{L('Panel & İnverter Detayları', 'Panel & Inverter Details')} <span className="text-slate-400 font-normal">{L('(isteğe bağlı)', '(optional)')}</span></span>
                       <ChevronDown className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180 shrink-0" />
                     </summary>
                     <div className="p-4 pt-3 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -569,7 +574,7 @@ export default function GesTeklifDogrulamaPage() {
                         <Label htmlFor="panelTechnology" className="text-sm font-medium text-slate-700">{t('quoteVerify.panelTech')}</Label>
                         <Select value={form.panelTechnology} onValueChange={(v) => set({ panelTechnology: v || '' })}>
                           <SelectTrigger id="panelTechnology" className={selectCls()}>
-                            <SelectValue placeholder="Hücre teknolojisi" />
+                            <SelectValue placeholder={L('Hücre teknolojisi', 'Cell technology')} />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="monokristal">{t('quoteVerify.panelMono')}</SelectItem>
@@ -582,15 +587,15 @@ export default function GesTeklifDogrulamaPage() {
                       </div>
                       <div className="space-y-1.5">
                         <Label htmlFor="panelEfficiencyPct" className="text-sm font-medium text-slate-700">{t('quoteVerify.panelEfficiency')} (%)</Label>
-                        <Input id="panelEfficiencyPct" type="text" inputMode="decimal" value={form.panelEfficiencyPct} onChange={(e) => set({ panelEfficiencyPct: e.target.value })} placeholder="Örn. 22.5" className={fieldCls()} />
+                        <Input id="panelEfficiencyPct" type="text" inputMode="decimal" value={form.panelEfficiencyPct} onChange={(e) => set({ panelEfficiencyPct: e.target.value })} placeholder={L('Örn. 22.5', 'e.g. 22.5')} className={fieldCls()} />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="warrantyProductYears" className="text-sm font-medium text-slate-700">{t('quoteVerify.warrantyProduct')} (yıl)</Label>
-                        <Input id="warrantyProductYears" type="text" inputMode="numeric" value={form.warrantyProductYears} onChange={(e) => set({ warrantyProductYears: e.target.value })} placeholder="Yıl" className={fieldCls()} />
+                        <Label htmlFor="warrantyProductYears" className="text-sm font-medium text-slate-700">{t('quoteVerify.warrantyProduct')}{L(' (yıl)', ' (years)')}</Label>
+                        <Input id="warrantyProductYears" type="text" inputMode="numeric" value={form.warrantyProductYears} onChange={(e) => set({ warrantyProductYears: e.target.value })} placeholder={L('Yıl', 'Years')} className={fieldCls()} />
                       </div>
                       <div className="space-y-1.5">
-                        <Label htmlFor="warrantyPerformanceYears" className="text-sm font-medium text-slate-700">{t('quoteVerify.warrantyPerformance')} (yıl)</Label>
-                        <Input id="warrantyPerformanceYears" type="text" inputMode="numeric" value={form.warrantyPerformanceYears} onChange={(e) => set({ warrantyPerformanceYears: e.target.value })} placeholder="Yıl" className={fieldCls()} />
+                        <Label htmlFor="warrantyPerformanceYears" className="text-sm font-medium text-slate-700">{t('quoteVerify.warrantyPerformance')}{L(' (yıl)', ' (years)')}</Label>
+                        <Input id="warrantyPerformanceYears" type="text" inputMode="numeric" value={form.warrantyPerformanceYears} onChange={(e) => set({ warrantyPerformanceYears: e.target.value })} placeholder={L('Yıl', 'Years')} className={fieldCls()} />
                       </div>
                       <div className="space-y-1.5">
                         <Label htmlFor="inverterTotalKw" className="text-sm font-medium text-slate-700">{t('quoteVerify.inverterTotalKw')} (kW)</Label>
@@ -599,7 +604,7 @@ export default function GesTeklifDogrulamaPage() {
                       <div className="space-y-1.5">
                         <Label htmlFor="inverterType" className="text-sm font-medium text-slate-700">{t('quoteVerify.inverterType')}</Label>
                         <Select value={form.inverterType} onValueChange={(v) => set({ inverterType: v || '' })}>
-                          <SelectTrigger id="inverterType" className={selectCls()}><SelectValue placeholder="İnverter türü" /></SelectTrigger>
+                          <SelectTrigger id="inverterType" className={selectCls()}><SelectValue placeholder={L('İnverter türü', 'Inverter type')} /></SelectTrigger>
                           <SelectContent>
                             <SelectItem value="string">{t('quoteVerify.inverterString')}</SelectItem>
                             <SelectItem value="mikro">{t('quoteVerify.inverterMikro')}</SelectItem>
@@ -610,7 +615,7 @@ export default function GesTeklifDogrulamaPage() {
                       </div>
                       <div className="space-y-1.5">
                         <Label htmlFor="mpptCount" className="text-sm font-medium text-slate-700">{t('quoteVerify.mpptCount')}</Label>
-                        <Input id="mpptCount" type="text" inputMode="numeric" value={form.mpptCount} onChange={(e) => set({ mpptCount: e.target.value })} placeholder="Adet" className={fieldCls()} />
+                        <Input id="mpptCount" type="text" inputMode="numeric" value={form.mpptCount} onChange={(e) => set({ mpptCount: e.target.value })} placeholder={L('Adet', 'Quantity')} className={fieldCls()} />
                       </div>
                     </div>
                   </details>
@@ -622,8 +627,8 @@ export default function GesTeklifDogrulamaPage() {
                     <div className="flex items-center gap-3">
                       <span className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-400 text-white text-xs font-bold">3</span>
                       <div>
-                        <span className="font-semibold text-slate-700 text-sm">Depolama, Montaj &amp; Üretim</span>
-                        <span className="text-xs text-slate-400 ml-1.5">(isteğe bağlı)</span>
+                        <span className="font-semibold text-slate-700 text-sm">{L('Depolama, Montaj & Üretim', 'Storage, Mounting & Production')}</span>
+                        <span className="text-xs text-slate-400 ml-1.5">{L('(isteğe bağlı)', '(optional)')}</span>
                       </div>
                     </div>
                     <ChevronDown className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180 shrink-0" />
@@ -632,17 +637,17 @@ export default function GesTeklifDogrulamaPage() {
                     <div className="space-y-1.5">
                       <Label htmlFor="storageCompatible" className="text-sm font-medium text-slate-700">{t('quoteVerify.storageCompatible')}</Label>
                       <Select value={form.storageCompatible} onValueChange={(v) => set({ storageCompatible: v || '' })}>
-                        <SelectTrigger id="storageCompatible" className={selectCls()}><SelectValue placeholder="Depolama uyumlu mu?" /></SelectTrigger>
+                        <SelectTrigger id="storageCompatible" className={selectCls()}><SelectValue placeholder={L('Depolama uyumlu mu?', 'Storage compatible?')} /></SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="evet">Evet</SelectItem>
-                          <SelectItem value="hayir">Hayır</SelectItem>
-                          <SelectItem value="bilmiyorum">Bilmiyorum</SelectItem>
+                          <SelectItem value="evet">{L('Evet', 'Yes')}</SelectItem>
+                          <SelectItem value="hayir">{L('Hayır', 'No')}</SelectItem>
+                          <SelectItem value="bilmiyorum">{L('Bilmiyorum', "I don't know")}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="batteryBrandModel" className="text-sm font-medium text-slate-700">{t('quoteVerify.batteryBrandModel')}</Label>
-                      <Input id="batteryBrandModel" value={form.batteryBrandModel} onChange={(e) => set({ batteryBrandModel: e.target.value })} placeholder="Marka / model" className={fieldCls()} />
+                      <Input id="batteryBrandModel" value={form.batteryBrandModel} onChange={(e) => set({ batteryBrandModel: e.target.value })} placeholder={L('Marka / model', 'Brand / model')} className={fieldCls()} />
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="batteryKwh" className="text-sm font-medium text-slate-700">{t('quoteVerify.batteryKwh')} (kWh)</Label>
@@ -651,7 +656,7 @@ export default function GesTeklifDogrulamaPage() {
                     <div className="space-y-1.5">
                       <Label htmlFor="batteryChemistry" className="text-sm font-medium text-slate-700">{t('quoteVerify.batteryChemistry')}</Label>
                       <Select value={form.batteryChemistry} onValueChange={(v) => set({ batteryChemistry: v || '' })}>
-                        <SelectTrigger id="batteryChemistry" className={selectCls()}><SelectValue placeholder="Kimya türü" /></SelectTrigger>
+                        <SelectTrigger id="batteryChemistry" className={selectCls()}><SelectValue placeholder={L('Kimya türü', 'Chemistry')} /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="lfp">{t('quoteVerify.batteryLfp')}</SelectItem>
                           <SelectItem value="nmc">{t('quoteVerify.batteryNmc')}</SelectItem>
@@ -661,7 +666,7 @@ export default function GesTeklifDogrulamaPage() {
                     <div className="space-y-1.5">
                       <Label htmlFor="mountingType" className="text-sm font-medium text-slate-700">{t('quoteVerify.mountingType')}</Label>
                       <Select value={form.mountingType} onValueChange={(v) => set({ mountingType: v || '' })}>
-                        <SelectTrigger id="mountingType" className={selectCls()}><SelectValue placeholder="Montaj türü" /></SelectTrigger>
+                        <SelectTrigger id="mountingType" className={selectCls()}><SelectValue placeholder={L('Montaj türü', 'Mounting type')} /></SelectTrigger>
                         <SelectContent>
                           <SelectItem value="delinerek">{t('quoteVerify.mountingDrill')}</SelectItem>
                           <SelectItem value="balastli">{t('quoteVerify.mountingBallast')}</SelectItem>
@@ -672,20 +677,20 @@ export default function GesTeklifDogrulamaPage() {
                     <div className="space-y-1.5">
                       <Label htmlFor="staticProjectProvided" className="text-sm font-medium text-slate-700">{t('quoteVerify.staticProject')}</Label>
                       <Select value={form.staticProjectProvided} onValueChange={(v) => set({ staticProjectProvided: v || '' })}>
-                        <SelectTrigger id="staticProjectProvided" className={selectCls()}><SelectValue placeholder="Statik proje?" /></SelectTrigger>
+                        <SelectTrigger id="staticProjectProvided" className={selectCls()}><SelectValue placeholder={L('Statik proje?', 'Structural project?')} /></SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="evet">Evet</SelectItem>
-                          <SelectItem value="hayir">Hayır</SelectItem>
+                          <SelectItem value="evet">{L('Evet', 'Yes')}</SelectItem>
+                          <SelectItem value="hayir">{L('Hayır', 'No')}</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-1.5">
                       <Label htmlFor="annualProductionKwh" className="text-sm font-medium text-slate-700">{t('quoteVerify.annualProductionKwh')} (kWh)</Label>
-                      <Input id="annualProductionKwh" type="text" inputMode="decimal" value={form.annualProductionKwh} onChange={(e) => set({ annualProductionKwh: e.target.value })} placeholder="kWh/yıl" className={fieldCls()} />
+                      <Input id="annualProductionKwh" type="text" inputMode="decimal" value={form.annualProductionKwh} onChange={(e) => set({ annualProductionKwh: e.target.value })} placeholder={L('kWh/yıl', 'kWh/year')} className={fieldCls()} />
                     </div>
                     <div className="space-y-1.5">
-                      <Label htmlFor="paybackYearsQuoted" className="text-sm font-medium text-slate-700">{t('quoteVerify.paybackYearsQuoted')} (yıl)</Label>
-                      <Input id="paybackYearsQuoted" type="text" inputMode="decimal" value={form.paybackYearsQuoted} onChange={(e) => set({ paybackYearsQuoted: e.target.value })} placeholder="Yıl" className={fieldCls()} />
+                      <Label htmlFor="paybackYearsQuoted" className="text-sm font-medium text-slate-700">{t('quoteVerify.paybackYearsQuoted')}{L(' (yıl)', ' (years)')}</Label>
+                      <Input id="paybackYearsQuoted" type="text" inputMode="decimal" value={form.paybackYearsQuoted} onChange={(e) => set({ paybackYearsQuoted: e.target.value })} placeholder={L('Yıl', 'Years')} className={fieldCls()} />
                     </div>
                   </div>
                 </details>
@@ -694,7 +699,7 @@ export default function GesTeklifDogrulamaPage() {
                 <div className="space-y-4">
                   <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide flex items-center gap-2">
                     <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold">4</span>
-                    İletişim Bilgileriniz
+                    {L('İletişim Bilgileriniz', 'Your Contact Information')}
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -706,7 +711,7 @@ export default function GesTeklifDogrulamaPage() {
                         id="contactName"
                         value={form.contactName}
                         onChange={(e) => set({ contactName: e.target.value })}
-                        placeholder="Ad soyad"
+                        placeholder={L('Ad soyad', 'Full name')}
                         className={fieldCls(errors.contactName)}
                         autoComplete="name"
                       />
@@ -722,7 +727,7 @@ export default function GesTeklifDogrulamaPage() {
                         type="email"
                         value={form.contactEmail}
                         onChange={(e) => set({ contactEmail: e.target.value })}
-                        placeholder="ornek@email.com"
+                        placeholder={L('ornek@email.com', 'example@email.com')}
                         className={fieldCls(errors.contactEmail)}
                         autoComplete="email"
                       />
@@ -777,7 +782,7 @@ export default function GesTeklifDogrulamaPage() {
                     className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-brand transition-colors"
                   >
                     <Star className="w-4 h-4" />
-                    GES hesaplama &amp; teklif almak ister misiniz?
+                    {L('GES hesaplama & teklif almak ister misiniz?', 'Would you like a solar system calculation & quote?')}
                   </Link>
                 </div>
 

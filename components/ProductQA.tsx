@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
+import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type QAItem = {
   id: string
@@ -24,6 +26,8 @@ export function ProductQA({
   productName: string
 }) {
   const { user, isAuthenticated } = useAuthStore()
+  const L = useL()
+  const tErr = useServerError()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const [qas, setQas] = useState<QAItem[]>([])
@@ -67,11 +71,11 @@ export function ProductQA({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!question.trim()) {
-      setError('Lütfen sorunuzu yazın.')
+      setError(L('Lütfen sorunuzu yazın.', 'Please write your question.'))
       return
     }
     if (!isAuthenticated && (!guestName.trim() || !guestEmail.trim())) {
-      setError('Ad ve e-posta zorunludur.')
+      setError(L('Ad ve e-posta zorunludur.', 'Name and email are required.'))
       return
     }
     setSubmitting(true)
@@ -97,7 +101,7 @@ export function ProductQA({
 
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || 'Soru gönderilemedi. Lütfen tekrar deneyin.')
+        setError(tErr(data.error) || L('Soru gönderilemedi. Lütfen tekrar deneyin.', 'Your question could not be submitted. Please try again.'))
         return
       }
 
@@ -109,7 +113,7 @@ export function ProductQA({
       setLoading(true)
       await loadQAs()
     } catch {
-      setError('Soru gönderilemedi. Lütfen tekrar deneyin.')
+      setError(L('Soru gönderilemedi. Lütfen tekrar deneyin.', 'Your question could not be submitted. Please try again.'))
     } finally {
       setSubmitting(false)
     }
@@ -122,10 +126,10 @@ export function ProductQA({
       <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
         <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
           <HelpCircle className="w-5 h-5 text-brand" />
-          Soru & Cevap
+          {L('Soru & Cevap', 'Questions & Answers')}
           {qas.length > 0 && (
             <span className="text-sm font-normal text-slate-500">
-              ({answeredCount}/{qas.length} yanıtlandı)
+              {L(`(${answeredCount}/${qas.length} yanıtlandı)`, `(${answeredCount}/${qas.length} answered)`)}
             </span>
           )}
         </h2>
@@ -136,7 +140,7 @@ export function ProductQA({
             onClick={() => setShowForm((f) => !f)}
             className="rounded-xl border-slate-200 text-sm"
           >
-            {showForm ? 'İptal' : 'Soru Sor'}
+            {showForm ? L('İptal', 'Cancel') : L('Soru Sor', 'Ask a Question')}
           </Button>
         )}
       </div>
@@ -144,21 +148,21 @@ export function ProductQA({
       {submitted && (
         <div className="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-sm text-green-700 flex items-center gap-2">
           <span className="font-bold">✓</span>
-          Sorunuz alındı! Ekibimiz yanıtladığında soru ve yanıt bu sayfada yayınlanacak.
+          {L('Sorunuz alındı! Ekibimiz yanıtladığında soru ve yanıt bu sayfada yayınlanacak.', 'Your question has been received! Once our team answers, the question and answer will be published on this page.')}
         </div>
       )}
 
       {/* Soru formu */}
       {showForm && (
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6">
-          <h3 className="font-semibold text-slate-900 mb-4 text-sm">Soru Sor</h3>
+          <h3 className="font-semibold text-slate-900 mb-4 text-sm">{L('Soru Sor', 'Ask a Question')}</h3>
           <form onSubmit={handleSubmit} className="space-y-3">
             {/* Guest name/email - only shown when not logged in */}
             {!isAuthenticated && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
-                  placeholder="Adınız *"
-                  aria-label="Adınız"
+                  placeholder={L('Adınız *', 'Your name *')}
+                  aria-label={L('Adınız', 'Your name')}
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -166,8 +170,8 @@ export function ProductQA({
                 />
                 <Input
                   type="email"
-                  placeholder="E-posta *"
-                  aria-label="E-posta adresiniz"
+                  placeholder={L('E-posta *', 'Email *')}
+                  aria-label={L('E-posta adresiniz', 'Your email address')}
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -178,13 +182,13 @@ export function ProductQA({
 
             {isAuthenticated && user?.name && (
               <p className="text-xs text-slate-500">
-                Soru <span className="font-medium text-slate-700">{user.name}</span> adına gönderilecek.
+                {L('Soru ', 'Question will be submitted as ')}<span className="font-medium text-slate-700">{user.name}</span>{L(' adına gönderilecek.', '.')}
               </p>
             )}
 
             <Textarea
-              placeholder={`"${productName}" hakkında sorunuzu yazın...`}
-              aria-label="Sorunuz"
+              placeholder={L(`"${productName}" hakkında sorunuzu yazın...`, `Write your question about "${productName}"...`)}
+              aria-label={L('Sorunuz', 'Your question')}
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               rows={3}
@@ -195,7 +199,7 @@ export function ProductQA({
             <Turnstile onToken={setTurnstileToken} resetKey={turnstileReset} />
             <Button type="submit" disabled={submitting} size="sm" className="rounded-xl">
               <Send className="w-3.5 h-3.5 mr-1.5" />
-              {submitting ? 'Gönderiliyor...' : 'Soruyu Gönder'}
+              {submitting ? L('Gönderiliyor...', 'Submitting...') : L('Soruyu Gönder', 'Submit Question')}
             </Button>
           </form>
         </div>
@@ -209,7 +213,7 @@ export function ProductQA({
       ) : qas.length === 0 ? (
         <div className="text-center py-10 text-slate-400">
           <HelpCircle className="w-10 h-10 mx-auto mb-2 text-slate-200" />
-          <p className="text-sm">Henüz soru sorulmamış. İlk soruyu siz sorun!</p>
+          <p className="text-sm">{L('Henüz soru sorulmamış. İlk soruyu siz sorun!', 'No questions yet. Be the first to ask!')}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -228,7 +232,7 @@ export function ProductQA({
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-2.5 min-w-0">
                       <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand text-white text-xs font-bold shrink-0 mt-0.5">
-                        S
+                        {L('S', 'Q')}
                       </span>
                       <p className="text-sm font-medium text-slate-900 leading-snug">
                         {qa.question}
@@ -237,7 +241,7 @@ export function ProductQA({
                     <div className="flex items-center gap-2 shrink-0">
                       {qa.answer && (
                         <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                          Yanıtlandı
+                          {L('Yanıtlandı', 'Answered')}
                         </span>
                       )}
                       {isOpen ? (
@@ -250,7 +254,7 @@ export function ProductQA({
                   <p className="text-xs text-slate-400 mt-1.5 ml-7">
                     {qa.userName}
                     {qa.createdAt
-                      ? ` · ${new Date(qa.createdAt).toLocaleDateString('tr-TR')}`
+                      ? ` · ${new Date(qa.createdAt).toLocaleDateString(L('tr-TR', 'en-US'))}`
                       : ''}
                   </p>
                 </button>
@@ -260,13 +264,13 @@ export function ProductQA({
                     {qa.answer ? (
                       <div className="flex items-start gap-2.5">
                         <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand/10 text-brand text-xs font-bold shrink-0 mt-0.5">
-                          C
+                          {L('C', 'A')}
                         </span>
                         <p className="text-sm text-slate-700 leading-relaxed">{qa.answer}</p>
                       </div>
                     ) : (
                       <p className="text-sm text-slate-400 italic ml-7">
-                        Bu soru henüz yanıtlanmamış.
+                        {L('Bu soru henüz yanıtlanmamış.', 'This question has not been answered yet.')}
                       </p>
                     )}
                   </div>

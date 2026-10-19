@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
 import { useToast } from '@/components/ui/toast'
 import { useFavorites } from '@/lib/useFavorites'
+import { useL } from '@/lib/i18n-inline'
 
 interface FavoriteButtonProps {
   productId: string
@@ -15,6 +16,7 @@ interface FavoriteButtonProps {
 export function FavoriteButton({ productId, className = '' }: FavoriteButtonProps) {
   const { isFavorite, toggle } = useFavorites()
   const { addToast } = useToast()
+  const L = useL()
   const [mounted, setMounted] = useState(false)
   const [busy, setBusy] = useState(false)
 
@@ -31,12 +33,12 @@ export function FavoriteButton({ productId, className = '' }: FavoriteButtonProp
       addToast({
         type: 'success',
         variant: 'snackbar',
-        title: added ? 'Favorilere eklendi' : 'Favorilerden çıkarıldı',
-        action: added ? { label: 'Favorilere git', href: '/favorites' } : undefined,
+        title: added ? L('Favorilere eklendi', 'Added to favorites') : L('Favorilerden çıkarıldı', 'Removed from favorites'),
+        action: added ? { label: L('Favorilere git', 'Go to favorites'), href: '/favorites' } : undefined,
         duration: 4000,
       })
     } catch {
-      addToast({ type: 'error', title: 'Favori kaydedilemedi', description: 'Lütfen tekrar deneyin.' })
+      addToast({ type: 'error', title: L('Favori kaydedilemedi', 'Could not save favorite'), description: L('Lütfen tekrar deneyin.', 'Please try again.') })
     } finally {
       setBusy(false)
     }
@@ -48,8 +50,8 @@ export function FavoriteButton({ productId, className = '' }: FavoriteButtonProp
       onClick={handleToggle}
       disabled={busy}
       aria-pressed={active}
-      aria-label={active ? 'Favorilerden çıkar' : 'Favorilere ekle'}
-      title={active ? 'Favorilerden çıkar' : 'Favorilere ekle'}
+      aria-label={active ? L('Favorilerden çıkar', 'Remove from favorites') : L('Favorilere ekle', 'Add to favorites')}
+      title={active ? L('Favorilerden çıkar', 'Remove from favorites') : L('Favorilere ekle', 'Add to favorites')}
       className={`relative z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors touch-manipulation disabled:opacity-60 ${
         active
           ? 'border-[#f5b400] bg-[#f5b400] text-[#111]'

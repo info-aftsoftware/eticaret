@@ -39,6 +39,8 @@ export interface ProductCardProps {
   isVariantProduct?: boolean
   selectedVariant?: ProductVariant
   variant?: 'compact' | 'full'
+  /** İlk ekrandaki kartlar: görsel gecikmeli (lazy) değil, öncelikli yüklenir (LCP) */
+  priority?: boolean
   className?: string
 }
 
@@ -46,6 +48,7 @@ export function ProductCard({
   product,
   selectedVariant,
   variant = 'full',
+  priority = false,
   className = '',
   stock: stockProp,
   isVariantProduct,
@@ -168,6 +171,7 @@ export function ProductCard({
                 alt={product.name}
                 fill
                 sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                priority={priority}
                 className={`object-contain p-3 transition-transform duration-300 group-hover:scale-[1.04] ${outOfStock ? 'opacity-60' : ''}`}
                 onError={() => setImageError(true)}
               />
@@ -178,10 +182,10 @@ export function ProductCard({
 
           <div className="absolute left-2 top-2 z-10 flex flex-col items-start gap-1">
             {!!discount && discount > 0 && !outOfStock && (
-              <span className="rounded-md bg-[#f5b400] px-1.5 py-0.5 text-[11px] font-bold text-[#111]">%{discount} İndirim</span>
+              <span className="rounded-md bg-[#f5b400] px-1.5 py-0.5 text-[11px] font-bold text-[#111]">{L(`%${discount} İndirim`, `${discount}% Off`)}</span>
             )}
             {outOfStock && (
-              <span className="rounded-md bg-[#121926]/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">Tükendi</span>
+              <span className="rounded-md bg-[#121926]/80 px-1.5 py-0.5 text-[11px] font-semibold text-white">{L('Tükendi', 'Sold Out')}</span>
             )}
           </div>
         </div>
@@ -204,9 +208,9 @@ export function ProductCard({
               <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(displayPrice)}</span>
             </p>
             {hasVariants && variantCount > 1 ? (
-              <span className="shrink-0 rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[10px] font-semibold text-[#20384e]">{variantCount} seçenek</span>
+              <span className="shrink-0 rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[10px] font-semibold text-[#20384e]">{L(`${variantCount} seçenek`, `${variantCount} options`)}</span>
             ) : lowStock ? (
-              <span className="shrink-0 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">Son {stock} adet</span>
+              <span className="shrink-0 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">{L(`Son ${stock} adet`, `Only ${stock} left`)}</span>
             ) : null}
           </div>
         </div>
@@ -231,7 +235,7 @@ export function ProductCard({
       <div className={isCompact ? 'px-2.5 pb-2.5 sm:px-3 sm:pb-3' : 'px-3 pb-3'}>
         {outOfStock ? (
           <button type="button" disabled aria-disabled="true" className={`${btnBase} cursor-not-allowed bg-[#f1f4f8] text-[#5d6e80]`}>
-            Stokta yok
+            {L('Stokta yok', 'Out of stock')}
           </button>
         ) : hasVariants ? (
           <Link
@@ -247,19 +251,19 @@ export function ProductCard({
               type="button"
               onClick={handleDecrease}
               className="flex h-full w-10 items-center justify-center transition-colors hover:bg-white/10 touch-manipulation"
-              aria-label="Adet azalt"
+              aria-label={L('Adet azalt', 'Decrease quantity')}
             >
               <Minus className={icon} />
             </button>
             <span className={`flex-1 min-w-0 truncate text-center font-semibold tabular-nums ${isCompact ? 'text-xs' : 'text-sm'}`} aria-live="polite">
-              {quantity}<span className="hidden min-[420px]:inline font-normal text-white/70"> sepette</span>
+              {quantity}<span className="hidden min-[420px]:inline font-normal text-white/70">{L(' sepette', ' in cart')}</span>
             </span>
             <button
               type="button"
               onClick={handleIncrease}
               aria-disabled={atMax}
               className={`flex h-full w-10 items-center justify-center transition-colors touch-manipulation ${atMax ? 'opacity-40' : 'hover:bg-white/10'}`}
-              aria-label="Adet artır"
+              aria-label={L('Adet artır', 'Increase quantity')}
             >
               <Plus className={icon} />
             </button>
@@ -269,7 +273,7 @@ export function ProductCard({
             type="button"
             onClick={handleAddToCart}
             className={`${btnBase} border border-[#d3d9e1] bg-white text-[#0b2540] hover:border-[#0b2540] hover:bg-[#0b2540] hover:text-white [@media(hover:hover)]:group-hover:border-[#0b2540]`}
-            aria-label={`${product.name} sepete ekle`}
+            aria-label={L(`${product.name} sepete ekle`, `Add ${product.name} to cart`)}
           >
             <ShoppingCart className={`${icon} shrink-0`} />
             <span>{tCart('addToCart')}</span>

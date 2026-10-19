@@ -1,0 +1,23 @@
+rules_version = '2';
+
+// Firebase Storage kuralları.
+// Tek istemci yüklemesi: GES teklif formundaki fatura / çatı görseli (app/ges/page.tsx).
+// Yol: ges-attachments/{rastgele-uuid}/{alan}_{dosya}. Klasör adı tahmin edilemez olduğu için
+// tekil okuma (getDownloadURL) açık, listeleme kapalı. Sunucu tarafı Admin SDK kurallardan etkilenmez.
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /ges-attachments/{dir}/{fileName} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if request.resource.size < 10 * 1024 * 1024
+        && (request.resource.contentType.matches('image/.*')
+            || request.resource.contentType == 'application/pdf');
+      allow update, delete: if false;
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

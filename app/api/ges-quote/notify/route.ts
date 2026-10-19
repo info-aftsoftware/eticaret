@@ -142,6 +142,23 @@ function buildFormEmail(props: {
   )
 }
 
+/** Ek dosya bağlantısı yalnızca bu projenin Firebase Storage ges-attachments klasörüne işaret edebilir (admin e-postasındaki bağlantı kimlik avı için kullanılmasın) */
+function safeAttachmentUrl(v: unknown): string | undefined {
+  if (typeof v !== 'string') return undefined
+  const u = v.trim()
+  if (u.length > 1000) return undefined
+  try {
+    const url = new URL(u)
+    const bucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    if (url.protocol !== 'https:' || url.hostname !== 'firebasestorage.googleapis.com') return undefined
+    if (bucket && !url.pathname.startsWith('/v0/b/' + bucket + '/o/')) return undefined
+    if (!decodeURIComponent(url.pathname).includes('/o/ges-attachments/')) return undefined
+    return u
+  } catch {
+    return undefined
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     if (isRateLimited(request as unknown as Request, 'ges-quote-notify', 5, 10 * 60_000)) {
@@ -151,9 +168,9 @@ export async function POST(request: NextRequest) {
       )
     }
     const body = await request.json()
-    const fullName = typeof body.fullName === 'string' ? body.fullName.trim() : ''
+    const fullName = typeof body.fullName === 'string' ? body.fullName.trim().slice(0, 120) : ''
     const phone = typeof body.phone === 'string' ? body.phone.trim().replace(/\s/g, '') : ''
-    const city = typeof body.city === 'string' ? body.city.trim() : ''
+    const city = typeof body.city === 'string' ? body.city.trim().slice(0, 100) : ''
     if (!fullName || fullName.length < 2 || !phone || phone.length < 10 || !city || city.length < 2) {
       return NextResponse.json(
         { success: false, error: 'Ad, telefon ve şehir zorunludur.' },
@@ -162,25 +179,25 @@ export async function POST(request: NextRequest) {
     }
 
     const adminEmail = process.env.SMTP_EMAIL || process.env.SMTP_USER || 'info@voltekno.com'
-    const email = typeof body.email === 'string' ? body.email.trim() || undefined : undefined
-    const district = typeof body.district === 'string' ? body.district.trim() || undefined : undefined
+    const email = typeof body.email === 'string' ? body.email.trim().slice(0, 300) || undefined : undefined
+    const district = typeof body.district === 'string' ? body.district.trim().slice(0, 300) || undefined : undefined
     const monthlyKwh = typeof body.monthlyKwh === 'number' && Number.isFinite(body.monthlyKwh) ? body.monthlyKwh : (typeof body.monthlyKwh === 'string' ? parseFloat(body.monthlyKwh) : undefined)
-    const regionId = typeof body.regionId === 'string' ? body.regionId.trim() || undefined : undefined
+    const regionId = typeof body.regionId === 'string' ? body.regionId.trim().slice(0, 300) || undefined : undefined
     const suggestedKwp = typeof body.suggestedKwp === 'number' && Number.isFinite(body.suggestedKwp) ? body.suggestedKwp : undefined
-    const propertyType = typeof body.propertyType === 'string' ? body.propertyType.trim() || undefined : undefined
-    const monthlyBillRange = typeof body.monthlyBillRange === 'string' ? body.monthlyBillRange.trim() || undefined : undefined
-    const subscriberType = typeof body.subscriberType === 'string' ? body.subscriberType.trim() || undefined : undefined
-    const threePhase = typeof body.threePhase === 'string' ? body.threePhase.trim() || undefined : undefined
-    const installationAreaType = typeof body.installationAreaType === 'string' ? body.installationAreaType.trim() || undefined : undefined
-    const roofType = typeof body.roofType === 'string' ? body.roofType.trim() || undefined : undefined
-    const roofAreaRange = typeof body.roofAreaRange === 'string' ? body.roofAreaRange.trim() || undefined : undefined
-    const shading = typeof body.shading === 'string' ? body.shading.trim() || undefined : undefined
-    const deedStatus = typeof body.deedStatus === 'string' ? body.deedStatus.trim() || undefined : undefined
-    const usageGoal = typeof body.usageGoal === 'string' ? body.usageGoal.trim() || undefined : undefined
-    const storagePreference = typeof body.storagePreference === 'string' ? body.storagePreference.trim() || undefined : undefined
-    const budgetRange = typeof body.budgetRange === 'string' ? body.budgetRange.trim() || undefined : undefined
-    const attachmentBillUrl = typeof body.attachmentBillUrl === 'string' ? body.attachmentBillUrl.trim() || undefined : undefined
-    const attachmentRoofUrl = typeof body.attachmentRoofUrl === 'string' ? body.attachmentRoofUrl.trim() || undefined : undefined
+    const propertyType = typeof body.propertyType === 'string' ? body.propertyType.trim().slice(0, 300) || undefined : undefined
+    const monthlyBillRange = typeof body.monthlyBillRange === 'string' ? body.monthlyBillRange.trim().slice(0, 300) || undefined : undefined
+    const subscriberType = typeof body.subscriberType === 'string' ? body.subscriberType.trim().slice(0, 300) || undefined : undefined
+    const threePhase = typeof body.threePhase === 'string' ? body.threePhase.trim().slice(0, 300) || undefined : undefined
+    const installationAreaType = typeof body.installationAreaType === 'string' ? body.installationAreaType.trim().slice(0, 300) || undefined : undefined
+    const roofType = typeof body.roofType === 'string' ? body.roofType.trim().slice(0, 300) || undefined : undefined
+    const roofAreaRange = typeof body.roofAreaRange === 'string' ? body.roofAreaRange.trim().slice(0, 300) || undefined : undefined
+    const shading = typeof body.shading === 'string' ? body.shading.trim().slice(0, 300) || undefined : undefined
+    const deedStatus = typeof body.deedStatus === 'string' ? body.deedStatus.trim().slice(0, 300) || undefined : undefined
+    const usageGoal = typeof body.usageGoal === 'string' ? body.usageGoal.trim().slice(0, 300) || undefined : undefined
+    const storagePreference = typeof body.storagePreference === 'string' ? body.storagePreference.trim().slice(0, 300) || undefined : undefined
+    const budgetRange = typeof body.budgetRange === 'string' ? body.budgetRange.trim().slice(0, 300) || undefined : undefined
+    const attachmentBillUrl = safeAttachmentUrl(body.attachmentBillUrl)
+    const attachmentRoofUrl = safeAttachmentUrl(body.attachmentRoofUrl)
     const excludeInstallationCost = body.excludeInstallationCost === true
     const fullQuoteRequested = body.fullQuoteRequested === true
 

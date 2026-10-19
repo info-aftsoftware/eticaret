@@ -10,6 +10,20 @@ export const BANK_TRANSFER_DISCOUNT_RATE = 3
 /** Havale/EFT siparişlerinde ödemenin beklendiği süre (gün) */
 export const BANK_TRANSFER_PAYMENT_DAYS = 3
 
+/** Mağaza saat dilimi (Türkiye sabit UTC+3, yaz saati yok) */
+export const STORE_TIME_ZONE = 'Europe/Istanbul'
+const STORE_UTC_OFFSET_MS = 3 * 3_600_000
+
+/**
+ * Havale/EFT son ödeme anı: sipariş tarihinden BANK_TRANSFER_PAYMENT_DAYS gün sonrasının sonu (İstanbul saatiyle 23:59:59).
+ * E-postada/sayfada gösterilen tarih ile otomatik iptal aynı ana dayanır (müşteri o gün akşam ödese de iptal edilmez).
+ */
+export function bankTransferDeadline(createdAt: Date | string | number): Date {
+  const local = new Date(new Date(createdAt).getTime() + STORE_UTC_OFFSET_MS)
+  const endOfDayLocal = Date.UTC(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate() + BANK_TRANSFER_PAYMENT_DAYS, 23, 59, 59, 999)
+  return new Date(endOfDayLocal - STORE_UTC_OFFSET_MS)
+}
+
 /** Havale/EFT hesap sahibi (şirket hesapları) */
 export const BANK_ACCOUNT_HOLDER = 'AFET TEKNOLOJİLERİ TİC. VE SAN. LTD. ŞTİ.'
 

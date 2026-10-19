@@ -35,14 +35,27 @@ import { SELLER } from '@/lib/legal/company'
 import { ReturnSection } from './ReturnSection'
 import { PaymentNoticeForm } from './PaymentNoticeForm'
 import { BankTransferDetails } from '@/components/order/BankTransferDetails'
-import { BANK_TRANSFER_DISCOUNT_RATE, BANK_TRANSFER_PAYMENT_DAYS, VAT_RATE } from '@/lib/store-config'
+import { BANK_TRANSFER_DISCOUNT_RATE, STORE_TIME_ZONE, VAT_RATE, bankTransferDeadline } from '@/lib/store-config'
+import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type Creds = { email: string; phone: string }
 type OrderEvent = { id: string; type: string; status: string | null; message: string; createdAt: Date }
 
-const fmtDateTime = (d: Date) =>
-  d.toLocaleString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-const fmtDay = (d: Date) => d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' })
+const fmtDateTime = (d: Date, loc = 'tr-TR') =>
+  d.toLocaleString(loc, { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+const fmtDay = (d: Date, loc = 'tr-TR') => d.toLocaleDateString(loc, { day: '2-digit', month: 'short' })
+
+const ORDER_STATUS_LABELS_EN: Record<string, string> = {
+  pending: 'Pending',
+  paid: 'Paid',
+  confirmed: 'Preparing',
+  processing: 'Preparing',
+  shipped: 'Shipped',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
+  returned: 'Returned',
+}
 
 /** Sipariş (Prisma) için POST ile misafir sorgusu: e-posta + telefon URL'ye yazılmaz */
 async function fetchGuestOrder(orderNo: string, creds: Creds) {
@@ -88,8 +101,9 @@ const btnOutline = 'inline-flex h-10 items-center justify-center gap-1.5 rounded
 const btnPrimary = 'inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-[#0b2540] px-4 text-sm font-semibold text-white hover:bg-[#12335a] disabled:opacity-60'
 
 function StatusBadge({ order }: { order: any }) {
+  const L = useL()
   const st = order.status as string
-  const label = order.awaitingTransfer ? 'Ödeme bekleniyor' : ORDER_STATUS_LABELS[st] || st
+  const label = order.awaitingTransfer ? L('Ödeme bekleniyor', 'Awaiting payment') : L(ORDER_STATUS_LABELS[st] || st, ORDER_STATUS_LABELS_EN[st] || st)
   const cls =
     st === 'delivered' ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
       : st === 'shipped' ? 'bg-[#eaf1fb] text-[#0b2540] ring-[#c9d8ee]'
@@ -100,18 +114,19 @@ function StatusBadge({ order }: { order: any }) {
 }
 
 function ProgressTimeline({ order }: { order: any }) {
+  const L = useL()
   const current = stepIndex(order)
   const events: OrderEvent[] = order.events ?? []
   const pickingAt = events.find((e) => e.status === 'PICKING')?.createdAt
   const steps = [
-    { label: 'Sipariş alındı', icon: ReceiptText, date: order.createdAt as Date },
-    { label: 'Ödeme onaylandı', icon: CreditCard, date: order.dates?.paidAt as Date | null },
-    { label: 'Hazırlanıyor', icon: Package, date: pickingAt ?? null },
-    { label: 'Kargoda', icon: Truck, date: order.dates?.shippedAt as Date | null },
-    { label: 'Teslim edildi', icon: PackageCheck, date: order.dates?.deliveredAt as Date | null },
+    { label: L('Sipariş alındı', 'Order received'), icon: ReceiptText, date: order.createdAt as Date },
+    { label: L('Ödeme onaylandı', 'Payment confirmed'), icon: CreditCard, date: order.dates?.paidAt as Date | null },
+    { label: L('Hazırlanıyor', 'Preparing'), icon: Package, date: pickingAt ?? null },
+    { label: L('Kargoda', 'Shipped'), icon: Truck, date: order.dates?.shippedAt as Date | null },
+    { label: L('Teslim edildi', 'Delivered'), icon: PackageCheck, date: order.dates?.deliveredAt as Date | null },
   ]
   return (
-    <ol className="grid grid-cols-1 gap-0 sm:grid-cols-5 sm:gap-2" aria-label="Sipariş durumu">
+    <ol className="grid grid-cols-1 gap-0 sm:grid-cols-5 sm:gap-2" aria-label={L('Sipariş durumu', 'Order status')}>
       {steps.map((s, i) => {
         const done = i <= current
         const active = i === current
@@ -133,7 +148,7 @@ function ProgressTimeline({ order }: { order: any }) {
             </span>
             <span className="min-w-0 pt-1.5 sm:pt-0">
               <span className={`block text-sm leading-tight ${done ? 'font-semibold text-[#121926]' : 'text-[#5d6e80]'}`}>{s.label}</span>
-              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date)) : active ? 'Şu an' : ''}</span>
+              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date), L('tr-TR', 'en-GB')) : active ? L('Şu an', 'Now') : ''}</span>
             </span>
           </li>
         )
@@ -143,16 +158,17 @@ function ProgressTimeline({ order }: { order: any }) {
 }
 
 function CopyInline({ value }: { value: string }) {
+  const L = useL()
   const [done, setDone] = useState(false)
   return (
     <button
       type="button"
       onClick={async () => { try { await navigator.clipboard.writeText(value); setDone(true); setTimeout(() => setDone(false), 2000) } catch {} }}
       className="inline-flex h-8 items-center gap-1 rounded-md border border-[#d3d9e1] bg-white px-2 text-xs font-medium text-[#20384e] hover:bg-[#f5f7fa]"
-      aria-label="Takip numarasını kopyala"
+      aria-label={L('Takip numarasını kopyala', 'Copy tracking number')}
     >
       {done ? <Check className="h-3.5 w-3.5 text-emerald-600" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
-      {done ? 'Kopyalandı' : 'Kopyala'}
+      {done ? L('Kopyalandı', 'Copied') : L('Kopyala', 'Copy')}
     </button>
   )
 }
@@ -179,6 +195,9 @@ export default function OrderDetailPage() {
   const [actionError, setActionError] = useState('')
   const [actionNotice, setActionNotice] = useState('')
   const [downloading, setDownloading] = useState<string | null>(null)
+  const L = useL()
+  const tErr = useServerError()
+  const loc = L('tr-TR', 'en-GB')
 
   /** Misafir sipariş takibi: sipariş no + e-posta + telefon birlikte doğrulanır. */
   const lookupGuestOrder = async (e: React.FormEvent) => {
@@ -194,10 +213,10 @@ export default function OrderDetailPage() {
         setGuestCreds(creds)
         try { sessionStorage.setItem('order-lookup', JSON.stringify({ orderNo: id, ...creds })) } catch {}
       } else {
-        setLookupError(status === 429 ? 'Çok fazla deneme yaptınız. Lütfen biraz sonra tekrar deneyin.' : 'Bu bilgilerle eşleşen sipariş bulunamadı.')
+        setLookupError(status === 429 ? L('Çok fazla deneme yaptınız. Lütfen biraz sonra tekrar deneyin.', 'Too many attempts. Please try again in a moment.') : L('Bu bilgilerle eşleşen sipariş bulunamadı.', 'No order matches these details.'))
       }
     } catch {
-      setLookupError('Sipariş sorgulanamadı. Lütfen tekrar deneyin.')
+      setLookupError(L('Sipariş sorgulanamadı. Lütfen tekrar deneyin.', 'The order could not be looked up. Please try again.'))
     } finally {
       setLookupLoading(false)
     }
@@ -216,7 +235,7 @@ export default function OrderDetailPage() {
       })
       if (!res.ok) {
         const data = await res.json().catch(() => null)
-        throw new Error(data?.error || 'Belge indirilemedi.')
+        throw new Error(tErr(data?.error) || L('Belge indirilemedi.', 'The document could not be downloaded.'))
       }
       const url = URL.createObjectURL(await res.blob())
       const a = document.createElement('a')
@@ -225,7 +244,7 @@ export default function OrderDetailPage() {
       a.click()
       URL.revokeObjectURL(url)
     } catch (e) {
-      setActionError(e instanceof Error ? e.message : 'Belge indirilemedi.')
+      setActionError(e instanceof Error ? e.message : L('Belge indirilemedi.', 'The document could not be downloaded.'))
     } finally {
       setDownloading(null)
     }
@@ -241,11 +260,11 @@ export default function OrderDetailPage() {
         body: JSON.stringify({ ...body, ...(guestCreds ?? {}) }),
       })
       const data = await res.json().catch(() => null)
-      if (!res.ok || !data?.order) return { error: data?.error || 'İşlem yapılamadı.' }
+      if (!res.ok || !data?.order) return { error: tErr(data?.error) || L('İşlem yapılamadı.', 'The action could not be completed.') }
       setOrder(toOrderView(data.order))
       return { error: null, data }
     } catch {
-      return { error: 'İşlem yapılamadı. Lütfen tekrar deneyin.' }
+      return { error: L('İşlem yapılamadı. Lütfen tekrar deneyin.', 'The action could not be completed. Please try again.') }
     }
   }
   const simpleAction = async (path: 'returns' | 'payment-notice', method: 'POST' | 'PATCH', body: Record<string, unknown>) =>
@@ -261,8 +280,8 @@ export default function OrderDetailPage() {
     setCancelOpen(false)
     setCancelReason('')
     setActionNotice(data?.requested
-      ? 'İptal talebiniz alındı. Talebiniz incelendikten sonra e-posta ile bilgilendirileceksiniz.'
-      : 'Siparişiniz iptal edildi.')
+      ? L('İptal talebiniz alındı. Talebiniz incelendikten sonra e-posta ile bilgilendirileceksiniz.', 'Your cancellation request has been received. We will email you once it has been reviewed.')
+      : L('Siparişiniz iptal edildi.', 'Your order has been cancelled.'))
   }
 
   useEffect(() => {
@@ -381,10 +400,10 @@ export default function OrderDetailPage() {
 
   if (loading) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: 'Sipariş Detayı' }]} noTitle>
+      <ClassicPageShell breadcrumbs={[{ label: L('Sipariş Detayı', 'Order Details') }]} noTitle>
         <div className="flex items-center justify-center gap-3 py-20 text-[#20384e]">
           <Loader2 className="h-6 w-6 animate-spin" aria-hidden />
-          <span>Siparişiniz yükleniyor…</span>
+          <span>{L('Siparişiniz yükleniyor…', 'Loading your order…')}</span>
         </div>
       </ClassicPageShell>
     )
@@ -394,7 +413,7 @@ export default function OrderDetailPage() {
 
   if (!order) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: 'Sipariş Takibi', href: '/siparis-takip' }, { label: id }]} noTitle>
+      <ClassicPageShell breadcrumbs={[{ label: L('Sipariş Takibi', 'Order Tracking'), href: '/siparis-takip' }, { label: id }]} noTitle>
         <div className="flex justify-center py-4">
           <div className="w-full max-w-md rounded-xl border border-[#e6ebf1] bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)] sm:p-8">
             {isGuestOrderId ? (
@@ -402,36 +421,36 @@ export default function OrderDetailPage() {
                 <span className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-[#f1f4f8]">
                   <Package className="h-6 w-6 text-[#0b2540]" aria-hidden />
                 </span>
-                <h2 className="text-lg font-semibold text-[#121926]">Siparişinizi görüntüleyin</h2>
+                <h2 className="text-lg font-semibold text-[#121926]">{L('Siparişinizi görüntüleyin', 'View your order')}</h2>
                 <p className="mt-1 font-mono text-sm font-semibold text-[#0b2540]">{id}</p>
                 <p className="mb-5 mt-2 text-sm text-[#5d6e80]">
-                  Güvenliğiniz için siparişte kullandığınız e-posta adresi ve telefon numarasını girin.
+                  {L('Güvenliğiniz için siparişte kullandığınız e-posta adresi ve telefon numarasını girin.', 'For your security, enter the email address and phone number you used for the order.')}
                   {!isAuthenticated && (
-                    <> Üye iseniz <Link href={`/login?redirect=/orders/${encodeURIComponent(id)}`} className="font-medium text-[#0b2540] underline-offset-2 hover:underline">giriş yapın</Link>.</>
+                    <> {L('Üye iseniz', 'If you have an account,')} <Link href={`/login?redirect=/orders/${encodeURIComponent(id)}`} className="font-medium text-[#0b2540] underline-offset-2 hover:underline">{L('giriş yapın', 'sign in')}</Link>.</>
                   )}
                 </p>
                 <form onSubmit={lookupGuestOrder} className="space-y-3" noValidate>
                   <div>
-                    <label htmlFor="lookup-email" className="mb-1.5 block text-sm font-medium text-[#20384e]">E-posta</label>
+                    <label htmlFor="lookup-email" className="mb-1.5 block text-sm font-medium text-[#20384e]">{L('E-posta', 'Email')}</label>
                     <input id="lookup-email" type="email" required autoComplete="email" value={lookupEmail} onChange={(e) => setLookupEmail(e.target.value)}
                       className="h-12 w-full rounded-lg border border-[#d3d9e1] px-3.5 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
                   </div>
                   <div>
-                    <label htmlFor="lookup-phone" className="mb-1.5 block text-sm font-medium text-[#20384e]">Telefon</label>
+                    <label htmlFor="lookup-phone" className="mb-1.5 block text-sm font-medium text-[#20384e]">{L('Telefon', 'Phone')}</label>
                     <input id="lookup-phone" type="tel" required autoComplete="tel" placeholder="5xx xxx xx xx" value={lookupPhone} onChange={(e) => setLookupPhone(e.target.value)}
                       className="h-12 w-full rounded-lg border border-[#d3d9e1] px-3.5 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
                   </div>
                   {lookupError && <p role="alert" className="flex items-start gap-1.5 text-sm text-red-600"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />{lookupError}</p>}
                   <button type="submit" className={`${btnPrimary} h-12 w-full`} disabled={lookupLoading || !lookupEmail || !lookupPhone}>
-                    {lookupLoading ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden />Sorgulanıyor…</> : 'Siparişi görüntüle'}
+                    {lookupLoading ? <><Loader2 className="h-4 w-4 animate-spin" aria-hidden />{L('Sorgulanıyor…', 'Searching…')}</> : L('Siparişi görüntüle', 'View order')}
                   </button>
                 </form>
               </>
             ) : (
-              <p className="text-[#20384e]">Sipariş bulunamadı.</p>
+              <p className="text-[#20384e]">{L('Sipariş bulunamadı.', 'Order not found.')}</p>
             )}
             <Link href={isAuthenticated ? '/profile?tab=orders' : '/'} className="mt-5 inline-block text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">
-              {isAuthenticated ? '← Siparişlerime dön' : '← Ana sayfaya dön'}
+              {isAuthenticated ? L('← Siparişlerime dön', '← Back to my orders') : L('← Ana sayfaya dön', '← Back to home')}
             </Link>
           </div>
         </div>
@@ -443,7 +462,7 @@ export default function OrderDetailPage() {
   const events: OrderEvent[] = order.events ?? []
   const isCancelled = order.status === 'cancelled'
   const isReturned = order.status === 'returned'
-  const dueDate = new Date(new Date(order.createdAt).getTime() + BANK_TRANSFER_PAYMENT_DAYS * 86_400_000)
+  const dueDate = bankTransferDeadline(order.createdAt)
   const lastCancelReq = [...events].reverse().find((e) => e.type === 'cancel_request')
   const cancelReqStatus = lastCancelReq?.status ?? null
   // Ödenmiş ve henüz kargoya verilmemiş sipariş → iptal talebi (reddedilmiş talep tekrar açılamaz)
@@ -456,7 +475,7 @@ export default function OrderDetailPage() {
   return (
     <ClassicPageShell
       breadcrumbs={[
-        ...(isAuthenticated ? [{ label: 'Hesabım', href: '/profile' }, { label: 'Siparişlerim', href: '/profile?tab=orders' }] : [{ label: 'Sipariş Takibi', href: '/siparis-takip' }]),
+        ...(isAuthenticated ? [{ label: L('Hesabım', 'My Account'), href: '/profile' }, { label: L('Siparişlerim', 'My Orders'), href: '/profile?tab=orders' }] : [{ label: L('Sipariş Takibi', 'Order Tracking'), href: '/siparis-takip' }]),
         { label: order.orderId },
       ]}
       noTitle
@@ -464,8 +483,8 @@ export default function OrderDetailPage() {
       <div className="mx-auto max-w-6xl">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">Sipariş <span className="font-mono">{order.orderId}</span></h1>
-            <p className="mt-1 text-sm text-[#5d6e80]">{fmtDateTime(new Date(order.createdAt))}</p>
+            <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">{L('Sipariş', 'Order')} <span className="font-mono">{order.orderId}</span></h1>
+            <p className="mt-1 text-sm text-[#5d6e80]">{fmtDateTime(new Date(order.createdAt), loc)}</p>
           </div>
           <StatusBadge order={order} />
         </div>
@@ -485,27 +504,27 @@ export default function OrderDetailPage() {
                 <div className="flex items-start gap-3">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600"><XCircle className="h-5 w-5" aria-hidden /></span>
                   <div className="text-sm">
-                    <p className="text-base font-semibold text-[#121926]">{isCancelled ? 'Bu sipariş iptal edildi' : 'Bu sipariş iade alındı'}</p>
-                    {order.dates?.cancelledAt && isCancelled && <p className="text-[#5d6e80]">{fmtDateTime(new Date(order.dates.cancelledAt))}</p>}
+                    <p className="text-base font-semibold text-[#121926]">{isCancelled ? L('Bu sipariş iptal edildi', 'This order has been cancelled') : L('Bu sipariş iade alındı', 'This order has been returned')}</p>
+                    {order.dates?.cancelledAt && isCancelled && <p className="text-[#5d6e80]">{fmtDateTime(new Date(order.dates.cancelledAt), loc)}</p>}
                     {refunded ? (
                       <p className="mt-2 rounded-lg bg-emerald-50 px-3 py-2 text-emerald-800">
-                        Ücret iadeniz başlatıldı ({formatPrice(p.total || 0)}). {order.paymentMethod === 'bank_transfer'
-                          ? 'Tutar, havale yaptığınız hesaba gönderilir.'
-                          : 'Tutarın kartınıza yansıması bankanıza bağlı olarak 2–10 iş günü sürebilir.'}
+                        {L('Ücret iadeniz başlatıldı', 'Your refund has been initiated')} ({formatPrice(p.total || 0)}). {order.paymentMethod === 'bank_transfer'
+                          ? L('Tutar, havale yaptığınız hesaba gönderilir.', 'The amount will be sent to the account you transferred from.')
+                          : L('Tutarın kartınıza yansıması bankanıza bağlı olarak 2–10 iş günü sürebilir.', 'Depending on your bank, it may take 2–10 business days for the amount to appear on your card.')}
                       </p>
                     ) : isCancelled && order.paymentStatus !== 'PAID' ? (
-                      <p className="mt-1 text-[#5d6e80]">Ödeme alınmadığından yapmanız gereken bir işlem yok.</p>
+                      <p className="mt-1 text-[#5d6e80]">{L('Ödeme alınmadığından yapmanız gereken bir işlem yok.', 'No payment was taken, so there is nothing you need to do.')}</p>
                     ) : null}
                   </div>
                 </div>
               </Card>
             ) : isPrismaOrder ? (
-              <Card title="Sipariş durumu" icon={Clock}>
+              <Card title={L('Sipariş durumu', 'Order status')} icon={Clock}>
                 <ProgressTimeline order={order} />
                 {cancelReqStatus === 'REQUESTED' && (
                   <p className="mt-4 flex items-start gap-2 rounded-lg border border-[#f5d97a] bg-[#fff8e1] px-3 py-2.5 text-sm text-[#5c4300]">
                     <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                    İptal talebiniz inceleniyor. Sonuç e-posta ile bildirilecek.
+                    {L('İptal talebiniz inceleniyor. Sonuç e-posta ile bildirilecek.', 'Your cancellation request is being reviewed. We will email you the result.')}
                   </p>
                 )}
                 {cancelReqStatus === 'REJECTED' && (
@@ -514,7 +533,7 @@ export default function OrderDetailPage() {
               </Card>
             ) : (
               <Card>
-                <p className="text-sm text-[#20384e]">Durum: <strong>{ORDER_STATUS_LABELS[order.status] || order.status}</strong></p>
+                <p className="text-sm text-[#20384e]">{L('Durum:', 'Status:')} <strong>{L(ORDER_STATUS_LABELS[order.status] || order.status, ORDER_STATUS_LABELS_EN[order.status] || order.status)}</strong></p>
               </Card>
             )}
 
@@ -523,17 +542,17 @@ export default function OrderDetailPage() {
               <section className="rounded-xl border border-[#f5d97a] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
                 <header className="flex items-center gap-2 rounded-t-xl border-b border-[#f5e4a6] bg-[#fff8e1] px-4 py-3.5 sm:px-5">
                   <Banknote className="h-5 w-5 text-[#8a6400]" aria-hidden />
-                  <h2 className="text-[15px] font-semibold text-[#5c4300]">Ödemenizi bekliyoruz</h2>
+                  <h2 className="text-[15px] font-semibold text-[#5c4300]">{L('Ödemenizi bekliyoruz', 'We are awaiting your payment')}</h2>
                 </header>
                 <div className="space-y-4 px-4 py-4 sm:px-5">
                   <p className="text-sm leading-relaxed text-[#20384e]">
-                    Siparişinizin onaylanması için <strong>{dueDate.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long' })}</strong> tarihine kadar
-                    aşağıdaki hesaplardan birine havale/EFT yapın. Açıklama alanına yalnızca sipariş numaranızı yazın.
+                    {L('Siparişinizin onaylanması için', 'To have your order confirmed, please make a bank transfer/EFT to one of the accounts below by')} <strong>{dueDate.toLocaleDateString(loc, { day: '2-digit', month: 'long', timeZone: STORE_TIME_ZONE })}</strong>
+                    {L(' tarihine kadar aşağıdaki hesaplardan birine havale/EFT yapın. Açıklama alanına yalnızca sipariş numaranızı yazın.', '. Enter only your order number in the transfer description.')}
                   </p>
                   <BankTransferDetails
                     orderNo={order.orderId}
                     amount={formatPrice(p.total || 0)}
-                    dueDate={dueDate.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                    dueDate={dueDate.toLocaleDateString(loc, { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE })}
                   />
                   <PaymentNoticeForm
                     total={p.total || 0}
@@ -546,14 +565,14 @@ export default function OrderDetailPage() {
 
             {/* Kargo */}
             {order.trackingNumber && (
-              <Card title="Kargo bilgisi" icon={Truck}>
+              <Card title={L('Kargo bilgisi', 'Shipping information')} icon={Truck}>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                   <div>
-                    <p className="text-xs text-[#5d6e80]">Kargo firması</p>
+                    <p className="text-xs text-[#5d6e80]">{L('Kargo firması', 'Carrier')}</p>
                     <p className="text-sm font-semibold text-[#121926]">{order.carrierName || '—'}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-[#5d6e80]">Takip numarası</p>
+                    <p className="text-xs text-[#5d6e80]">{L('Takip numarası', 'Tracking number')}</p>
                     <p className="flex items-center gap-2 font-mono text-sm font-semibold text-[#121926]">
                       {order.trackingNumber}
                       <CopyInline value={order.trackingNumber} />
@@ -561,7 +580,7 @@ export default function OrderDetailPage() {
                   </div>
                   {order.trackingUrl && (
                     <a href={order.trackingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#f5b400] px-4 text-sm font-semibold text-[#111] hover:bg-[#e0a500] sm:ml-auto">
-                      Kargomu takip et <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                      {L('Kargomu takip et', 'Track my shipment')} <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                     </a>
                   )}
                 </div>
@@ -570,13 +589,13 @@ export default function OrderDetailPage() {
             )}
 
             {/* Ürünler */}
-            <Card title={`Ürünler (${(order.items || []).length})`} icon={Package}>
+            <Card title={L(`Ürünler (${(order.items || []).length})`, `Products (${(order.items || []).length})`)} icon={Package}>
               <ul className="divide-y divide-[#eef1f5]">
                 {(order.items || []).map((item: any, i: number) => (
                   <li key={item.id ?? i} className="flex items-start justify-between gap-4 py-3 text-sm first:pt-0 last:pb-0">
                     <span className="min-w-0 text-[#121926]">
                       {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{item.name}</Link> : <span className="font-medium">{item.name}</span>}
-                      <span className="block text-xs text-[#5d6e80]">{item.quantity} adet</span>
+                      <span className="block text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `Qty: ${item.quantity}`)}</span>
                     </span>
                     <span className="shrink-0 font-semibold tabular-nums text-[#121926]">{formatPrice((item.price || 0) * (item.quantity || 1))}</span>
                   </li>
@@ -593,13 +612,13 @@ export default function OrderDetailPage() {
             )}
 
             {events.length > 0 && (
-              <Card title="Sipariş geçmişi" icon={ReceiptText}>
+              <Card title={L('Sipariş geçmişi', 'Order history')} icon={ReceiptText}>
                 <ol className="relative ml-1.5 space-y-4 border-l-2 border-[#eef1f5]">
                   {[...events].reverse().map((e, i) => (
                     <li key={e.id} className="ml-4">
                       <span className={`absolute -left-[7px] mt-1.5 h-3 w-3 rounded-full ring-2 ring-white ${i === 0 ? 'bg-[#f5b400]' : 'bg-[#0b2540]'}`} />
                       <p className="text-sm text-[#121926]">{e.message}</p>
-                      <p className="text-xs text-[#5d6e80]">{fmtDateTime(new Date(e.createdAt))}</p>
+                      <p className="text-xs text-[#5d6e80]">{fmtDateTime(new Date(e.createdAt), loc)}</p>
                     </li>
                   ))}
                 </ol>
@@ -609,30 +628,30 @@ export default function OrderDetailPage() {
 
           {/* Sağ sütun */}
           <aside className="min-w-0 space-y-5">
-            <Card title="Ödeme özeti" icon={CreditCard}>
+            <Card title={L('Ödeme özeti', 'Payment summary')} icon={CreditCard}>
               {isPrismaOrder ? (
                 <dl className="space-y-2 text-sm">
-                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">Ara toplam (KDV hariç)</dt><dd className="tabular-nums">{formatPrice(p.subtotal)}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">{L('Ara toplam (KDV hariç)', 'Subtotal (excl. VAT)')}</dt><dd className="tabular-nums">{formatPrice(p.subtotal)}</dd></div>
                   {p.couponDiscount > 0 && (
-                    <div className="flex justify-between gap-3 text-emerald-700"><dt>Kupon {p.couponCode ? `(${p.couponCode})` : ''}</dt><dd className="tabular-nums">−{formatPrice(p.couponDiscount)}</dd></div>
+                    <div className="flex justify-between gap-3 text-emerald-700"><dt>{L('Kupon', 'Coupon')} {p.couponCode ? `(${p.couponCode})` : ''}</dt><dd className="tabular-nums">−{formatPrice(p.couponDiscount)}</dd></div>
                   )}
                   {p.paymentDiscount > 0 && (
-                    <div className="flex justify-between gap-3 text-emerald-700"><dt>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</dt><dd className="tabular-nums">−{formatPrice(p.paymentDiscount)}</dd></div>
+                    <div className="flex justify-between gap-3 text-emerald-700"><dt>{L(`Havale/EFT indirimi (%${BANK_TRANSFER_DISCOUNT_RATE})`, `Bank transfer discount (${BANK_TRANSFER_DISCOUNT_RATE}%)`)}</dt><dd className="tabular-nums">−{formatPrice(p.paymentDiscount)}</dd></div>
                   )}
-                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">KDV (%{VAT_RATE})</dt><dd className="tabular-nums">{formatPrice(p.tax)}</dd></div>
-                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">Kargo</dt><dd>{p.shipping > 0 ? formatPrice(p.shipping) : <span className="text-emerald-700">Ücretsiz</span>}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">{L(`KDV (%${VAT_RATE})`, `VAT (${VAT_RATE}%)`)}</dt><dd className="tabular-nums">{formatPrice(p.tax)}</dd></div>
+                  <div className="flex justify-between gap-3"><dt className="text-[#5d6e80]">{L('Kargo', 'Shipping')}</dt><dd>{p.shipping > 0 ? formatPrice(p.shipping) : <span className="text-emerald-700">{L('Ücretsiz', 'Free')}</span>}</dd></div>
                   <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-2.5">
-                    <dt className="font-semibold text-[#121926]">Toplam</dt>
+                    <dt className="font-semibold text-[#121926]">{L('Toplam', 'Total')}</dt>
                     <dd className="text-lg font-bold tabular-nums text-[#0b2540]">{formatPrice(p.total)}</dd>
                   </div>
                   <div className="flex justify-between gap-3 pt-1 text-xs text-[#5d6e80]">
-                    <dt>Ödeme yöntemi</dt>
-                    <dd>{order.paymentMethod === 'bank_transfer' ? 'Havale / EFT' : order.paymentMethod === 'card' ? 'Kredi / banka kartı' : '—'}</dd>
+                    <dt>{L('Ödeme yöntemi', 'Payment method')}</dt>
+                    <dd>{order.paymentMethod === 'bank_transfer' ? L('Havale / EFT', 'Bank transfer / EFT') : order.paymentMethod === 'card' ? L('Kredi / banka kartı', 'Credit / debit card') : '—'}</dd>
                   </div>
                 </dl>
               ) : (
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-[#121926]">Toplam</span>
+                  <span className="font-semibold text-[#121926]">{L('Toplam', 'Total')}</span>
                   <span className="text-lg font-bold text-[#0b2540]">{formatPrice(p.total || 0)}</span>
                 </div>
               )}
@@ -640,12 +659,12 @@ export default function OrderDetailPage() {
                 <div className="mt-4 flex flex-col gap-2">
                   <button type="button" className={btnOutline} onClick={() => downloadDocument('contract')} disabled={downloading !== null}>
                     {downloading === 'contract' ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <FileText className="h-4 w-4" aria-hidden />}
-                    Sözleşmeyi indir
+                    {L('Sözleşmeyi indir', 'Download contract')}
                   </button>
                   {order.paymentStatus === 'PAID' && (
                     <button type="button" className={btnOutline} onClick={() => downloadDocument('invoice')} disabled={downloading !== null}>
                       {downloading === 'invoice' ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <FileText className="h-4 w-4" aria-hidden />}
-                      Sipariş özeti (proforma)
+                      {L('Sipariş özeti (proforma)', 'Order summary (pro forma)')}
                     </button>
                   )}
                 </div>
@@ -653,42 +672,42 @@ export default function OrderDetailPage() {
             </Card>
 
             {order.customer && (
-              <Card title="Teslimat adresi" icon={MapPin}>
+              <Card title={L('Teslimat adresi', 'Delivery address')} icon={MapPin}>
                 <p className="text-sm leading-relaxed text-[#20384e]">
                   <span className="font-semibold text-[#121926]">{order.customer.name}</span><br />
                   {order.customer.addressLine}<br />
                   {order.customer.district} / {order.customer.city} {order.customer.postalCode}<br />
                   {order.customer.phone}
                 </p>
-                {order.customerNote && <p className="mt-3 rounded-lg bg-[#f5f7fa] px-3 py-2 text-sm text-[#20384e]"><span className="font-medium">Notunuz:</span> {order.customerNote}</p>}
+                {order.customerNote && <p className="mt-3 rounded-lg bg-[#f5f7fa] px-3 py-2 text-sm text-[#20384e]"><span className="font-medium">{L('Notunuz:', 'Your note:')}</span> {order.customerNote}</p>}
               </Card>
             )}
 
             {(canCancelNow || canRequestCancel) && (
-              <Card title={canCancelNow ? 'Siparişi iptal et' : 'İptal talebi'} icon={RotateCcw}>
+              <Card title={canCancelNow ? L('Siparişi iptal et', 'Cancel order') : L('İptal talebi', 'Cancellation request')} icon={RotateCcw}>
                 {!cancelOpen ? (
                   <>
                     <p className="text-sm text-[#5d6e80]">
                       {canCancelNow
-                        ? 'Ödemesi henüz alınmamış siparişinizi hemen iptal edebilirsiniz.'
-                        : 'Siparişiniz kargoya verilmeden iptal talebi oluşturabilirsiniz. Onaylanırsa ödemenizin tamamı iade edilir.'}
+                        ? L('Ödemesi henüz alınmamış siparişinizi hemen iptal edebilirsiniz.', 'Your order has not been paid yet, so you can cancel it right away.')
+                        : L('Siparişiniz kargoya verilmeden iptal talebi oluşturabilirsiniz. Onaylanırsa ödemenizin tamamı iade edilir.', 'You can request a cancellation before your order ships. If approved, your payment will be refunded in full.')}
                     </p>
                     <button type="button" onClick={() => { setCancelOpen(true); setActionNotice(''); setActionError('') }} className={`${btnOutline} mt-3 w-full border-red-200 text-red-700 hover:bg-red-50`}>
                       <XCircle className="h-4 w-4" aria-hidden />
-                      {canCancelNow ? 'Siparişi iptal et' : 'İptal talebi oluştur'}
+                      {canCancelNow ? L('Siparişi iptal et', 'Cancel order') : L('İptal talebi oluştur', 'Request cancellation')}
                     </button>
                   </>
                 ) : (
                   <div className="space-y-3">
-                    <label htmlFor="cancel-reason" className="block text-sm font-medium text-[#20384e]">İptal nedeni <span className="font-normal text-[#5d6e80]">(isteğe bağlı)</span></label>
+                    <label htmlFor="cancel-reason" className="block text-sm font-medium text-[#20384e]">{L('İptal nedeni', 'Reason for cancellation')} <span className="font-normal text-[#5d6e80]">{L('(isteğe bağlı)', '(optional)')}</span></label>
                     <textarea id="cancel-reason" rows={3} maxLength={500} value={cancelReason} onChange={(e) => setCancelReason(e.target.value)}
                       className="w-full rounded-lg border border-[#d3d9e1] px-3 py-2 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
                     <div className="flex gap-2">
                       <button type="button" onClick={submitCancel} disabled={cancelling} className="inline-flex h-10 flex-1 items-center justify-center gap-1.5 rounded-lg bg-red-600 px-3 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-60">
                         {cancelling && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
-                        {canCancelNow ? 'İptal et' : 'Talebi gönder'}
+                        {canCancelNow ? L('İptal et', 'Cancel') : L('Talebi gönder', 'Send request')}
                       </button>
-                      <button type="button" onClick={() => setCancelOpen(false)} className={btnOutline} disabled={cancelling}>Vazgeç</button>
+                      <button type="button" onClick={() => setCancelOpen(false)} className={btnOutline} disabled={cancelling}>{L('Vazgeç', 'Back')}</button>
                     </div>
                   </div>
                 )}
@@ -696,9 +715,9 @@ export default function OrderDetailPage() {
             )}
 
             <p className="px-1 text-xs leading-relaxed text-[#5d6e80]">
-              Sorularınız için <a href={SELLER.phoneHref} className="font-medium text-[#0b2540]">{SELLER.phone}</a> veya{' '}
-              <Link href="/contact" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">iletişim</Link> sayfamız.
-              İade koşulları: <Link href="/returns" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">İade ve cayma</Link>.
+              {L('Sorularınız için', 'For questions, call')} <a href={SELLER.phoneHref} className="font-medium text-[#0b2540]">{SELLER.phone}</a> {L('veya', 'or visit our')}{' '}
+              <Link href="/contact" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">{L('iletişim', 'contact')}</Link> {L('sayfamız.', 'page.')}{' '}
+              {L('İade koşulları:', 'Return terms:')} <Link href="/returns" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">{L('İade ve cayma', 'Returns and withdrawal')}</Link>.
             </p>
           </aside>
         </div>

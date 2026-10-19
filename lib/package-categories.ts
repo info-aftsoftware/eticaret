@@ -7,7 +7,7 @@
   imageAlt: string
   description: string
   /** İngilizce kısa ad ve kart açıklaması (ana sayfa kartları) */
-  en: { shortTitle: string; description: string }
+  en: { shortTitle: string; description: string; faq?: Array<{ question: string; answer: string }> }
   seoTitle: string
   seoDescription: string
   keywords: string[]
@@ -34,7 +34,7 @@
 export const PACKAGE_CATEGORIES: PackageCategory[] = [
   {
     slug: 'bag-evi-paketleri',
-    en: { shortTitle: 'Country House', description: 'Off-grid solar packages for country and holiday homes.' },
+    en: { shortTitle: 'Country House', description: 'Off-grid solar packages for country and holiday homes.', faq: [{ question: 'What power range is the country house package suitable for?', answer: 'Starter options between 1 kWp and 3 kWp are recommended depending on consumption. Our team analyses your needs and determines the right capacity.' }, { question: 'How does it perform in winter?', answer: 'Although sunshine hours are shorter in winter, the right panel and battery combination easily covers basic needs such as lighting and charging.' }, { question: 'How long does installation take?', answer: 'Small country house systems can usually be installed in one working day. Delivery time to remote locations is planned separately.' }] },
     title: 'Bağ Evi Paketleri',
     shortTitle: 'Bağ Evi',
     image: '/images/packages/custom/bahce.jpg',
@@ -63,7 +63,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'sulama-paketleri',
-    en: { shortTitle: 'Irrigation', description: 'Durable solar packages for agricultural irrigation.' },
+    en: { shortTitle: 'Irrigation', description: 'Durable solar packages for agricultural irrigation.', faq: [{ question: 'How do I choose a package for an irrigation pump?', answer: 'The right panel and inverter capacity is determined from the pump power (kW), operating time (hours/day) and daily water requirement.' }, { question: 'Do I need a battery for night irrigation?', answer: 'Yes. If you plan to irrigate at night or in cloudy weather, adding a battery module of suitable capacity is recommended.' }, { question: 'What does the system do during drought?', answer: 'With a well level sensor connected, the system automatically protects the pump against dry running and stops it.' }] },
     title: 'Sulama Paketleri',
     shortTitle: 'Sulama',
     image: '/images/packages/custom/tarla.webp',
@@ -92,7 +92,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'karavan-paketleri',
-    en: { shortTitle: 'Caravan', description: 'Portable energy packages for caravans and mobile living.' },
+    en: { shortTitle: 'Caravan', description: 'Portable energy packages for caravans and mobile living.', faq: [{ question: 'Is a fixed roof installation required on the caravan?', answer: 'Fixed or portable panels can be used depending on your needs. Portable panels can be positioned in different locations towards the sun.' }, { question: 'Does the package work independently of the grid?', answer: 'Yes. A power station and solar panel combination easily provides several days of independent use.' }, { question: 'Are there weight and size limits?', answer: 'Caravan packages are chosen with low weight as a priority. A 100 W foldable panel weighs about 2–3 kg and a power station between 5 and 15 kg.' }] },
     title: 'Karavan Paketleri',
     shortTitle: 'Karavan',
     image: '/images/packages/custom/karavan.webp',
@@ -121,7 +121,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'villa-paketleri',
-    en: { shortTitle: 'Villa', description: 'Hybrid energy packages for high-consumption villas.' },
+    en: { shortTitle: 'Villa', description: 'Hybrid energy packages for high-consumption villas.', faq: [{ question: 'Is a battery required in the villa package?', answer: 'Not required, but a battery is strongly recommended for uninterrupted use, night-time consumption and backup during grid outages.' }, { question: 'Can the package be expanded later?', answer: 'Yes. With a modular hybrid inverter and battery setup the system can easily be expanded with extra panels or modules.' }, { question: 'Can it power a pool pump?', answer: 'Yes. With the right inverter capacity, a pool pump and similar high-power loads are powered without problems.' }] },
     title: 'Villa Paketleri',
     shortTitle: 'Villa',
     image: '/images/packages/custom/villa.jpg',
@@ -150,7 +150,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'marin-paketleri',
-    en: { shortTitle: 'Marine', description: 'Low-voltage energy packages for boats and marine use.' },
+    en: { shortTitle: 'Marine', description: 'Low-voltage energy packages for boats and marine use.', faq: [{ question: 'Are marine packages suitable for salt water conditions?', answer: 'Yes. All recommended equipment is selected for marine suitability (IP67/IP68) and salt spray resistance.' }, { question: 'Which package is recommended if space on the boat is limited?', answer: 'A flexible solar panel combined with a high-density LiFePO4 battery takes up the least space while providing maximum capacity.' }, { question: 'Is it compatible with an existing lead-acid battery system?', answer: 'LiFePO4 systems are usually compatible with the existing electrical setup. Checking BMS and charge controller compatibility is enough for the switch.' }] },
     title: 'Marin Paketleri',
     shortTitle: 'Marin',
     image: '/images/packages/custom/marin.webp',

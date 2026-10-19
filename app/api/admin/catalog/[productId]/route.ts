@@ -13,6 +13,7 @@ import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProductById } from '@/lib/catalog-merge'
 import { mockProducts } from '@/lib/products-mock'
 import { notifyLowStockTransitions } from '@/lib/low-stock'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 const VARIANT_KEYS = ['key', 'label', 'price', 'basePrice', 'sku', 'specifications', 'dimensionsCm', 'weightKg', 'desi', 'desiSource'] as const
 
@@ -180,6 +181,7 @@ export async function PATCH(
         { productId, before: stockBefore?.stock, after: Math.max(0, Math.floor(Number(stock) || 0)), name: (name as string) || stockBefore?.name },
       ])
     }
+    revalidateStorefront()
     return NextResponse.json(updated)
   } catch (error) {
     console.error('Admin catalog PATCH error:', error)
@@ -200,6 +202,7 @@ export async function DELETE(
     const { productId } = await params
     const res = await prisma.productOverride.deleteMany({ where: { productId } })
     if (res.count === 0) return NextResponse.json({ error: 'Bu ürün için kayıtlı düzenleme yok' }, { status: 404 })
+    revalidateStorefront()
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Admin catalog DELETE error:', error)

@@ -43,19 +43,24 @@ export async function processStockAlerts(productIds?: string[]): Promise<{ notif
     if (!product || (product.stock ?? 0) <= 0) continue
     products.push(productId)
     for (const a of alerts) {
+      // Önce talep et, sonra gönder: aynı anda çalışan iki tarama (cron + admin stok güncellemesi) aynı kişiye
+      // iki e-posta göndermesin. Gönderim başarısız olursa işaret geri alınır, sonraki taramada yeniden denenir.
+      const claimedAt = new Date()
+      const claim = await prisma.stockAlert.updateMany({ where: { id: a.id, notifiedAt: null }, data: { notifiedAt: claimedAt } })
+      if (claim.count === 0) continue
+      let sent = false
       try {
         const res = await sendEmail(
           a.email,
           `${product.name} yeniden stokta`,
           React.createElement(BackInStockEmail, { productName: product.name, productUrl: `${site}/products/${product.slug ?? product.id}` })
         )
-        if (res.success) {
-          await prisma.stockAlert.update({ where: { id: a.id }, data: { notifiedAt: new Date() } })
-          notified++
-        }
+        sent = res.success
       } catch (e) {
         console.error('Stock alert email error:', e)
       }
+      if (sent) notified++
+      else await prisma.stockAlert.updateMany({ where: { id: a.id, notifiedAt: claimedAt }, data: { notifiedAt: null } })
     }
   }
   return { notified, products }

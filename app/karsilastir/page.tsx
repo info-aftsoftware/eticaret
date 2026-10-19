@@ -12,6 +12,7 @@ import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { fmtPrice } from '@/lib/format'
 import { VAT_RATE } from '@/lib/store-config'
+import { useL } from '@/lib/i18n-inline'
 
 type P = {
   id: string
@@ -31,6 +32,7 @@ type P = {
 
 /** Ürün karşılaştırma: seçilen ürünlerin teknik özellikleri yan yana (farklı değerler vurgulanır). */
 export default function ComparePage() {
+  const L = useL()
   const ids = useCompareStore((s) => s.ids)
   const remove = useCompareStore((s) => s.remove)
   const addItem = useCartStore((s) => s.addItem)
@@ -65,34 +67,34 @@ export default function ComparePage() {
   const rows = onlyDiff ? specKeys.filter(isDiff) : specKeys
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: 'Ürün Karşılaştırma' }]} title="Ürün Karşılaştırma" description="Seçtiğiniz ürünlerin teknik özelliklerini yan yana inceleyin.">
+    <ClassicPageShell breadcrumbs={[{ label: L('Ürün Karşılaştırma', 'Product Comparison') }]} title={L('Ürün Karşılaştırma', 'Product Comparison')} description={L('Seçtiğiniz ürünlerin teknik özelliklerini yan yana inceleyin.', 'Compare the technical specifications of your selected products side by side.')}>
       {products === null ? (
-        <div className="py-16 text-center text-ink-muted">Yükleniyor…</div>
+        <div className="py-16 text-center text-ink-muted">{L('Yükleniyor…', 'Loading…')}</div>
       ) : products.length === 0 ? (
         <div className="py-16 text-center space-y-3">
           <Package className="w-12 h-12 mx-auto text-slate-300" aria-hidden />
-          <p className="text-ink-muted">Karşılaştırma listeniz boş. Ürün sayfalarındaki “Karşılaştır” düğmesiyle en fazla 4 ürün ekleyebilirsiniz.</p>
-          <Button asChild><Link href="/products">Ürünlere Göz At</Link></Button>
+          <p className="text-ink-muted">{L('Karşılaştırma listeniz boş. Ürün sayfalarındaki “Karşılaştır” düğmesiyle en fazla 4 ürün ekleyebilirsiniz.', 'Your comparison list is empty. You can add up to 4 products using the “Compare” button on product pages.')}</p>
+          <Button asChild><Link href="/products">{L('Ürünlere Göz At', 'Browse Products')}</Link></Button>
         </div>
       ) : (
         <div className="space-y-3">
           {new Set(products.map((p) => p.category)).size > 1 && (
-            <p className="text-sm text-amber-700">Farklı kategorilerden ürünler seçtiniz; özellikler tam karşılaştırılabilir olmayabilir.</p>
+            <p className="text-sm text-amber-700">{L('Farklı kategorilerden ürünler seçtiniz; özellikler tam karşılaştırılabilir olmayabilir.', 'You have selected products from different categories; specifications may not be fully comparable.')}</p>
           )}
           <label className="inline-flex items-center gap-2 text-sm cursor-pointer">
             <input type="checkbox" checked={onlyDiff} onChange={(e) => setOnlyDiff(e.target.checked)} className="w-4 h-4" />
-            Yalnızca farklı özellikleri göster
+            {L('Yalnızca farklı özellikleri göster', 'Show only differing specifications')}
           </label>
           <div className="overflow-x-auto rounded-lg border border-palette bg-surface-elevated">
             <table className="w-full min-w-[640px] text-sm">
-              <caption className="sr-only">Seçilen ürünlerin karşılaştırması</caption>
+              <caption className="sr-only">{L('Seçilen ürünlerin karşılaştırması', 'Comparison of selected products')}</caption>
               <thead>
                 <tr className="align-top">
-                  <th scope="col" className="w-40 p-3 text-left text-ink-muted font-medium">Ürün</th>
+                  <th scope="col" className="w-40 p-3 text-left text-ink-muted font-medium">{L('Ürün', 'Product')}</th>
                   {products.map((p) => (
                     <th key={p.id} scope="col" className="p-3 text-left font-normal">
                       <div className="relative space-y-2">
-                        <button type="button" onClick={() => remove(p.id)} aria-label={`${p.name} ürününü karşılaştırmadan çıkar`} className="absolute -top-1 right-0 p-1 rounded hover:bg-slate-100">
+                        <button type="button" onClick={() => remove(p.id)} aria-label={L(`${p.name} ürününü karşılaştırmadan çıkar`, `Remove ${p.name} from comparison`)} className="absolute -top-1 right-0 p-1 rounded hover:bg-slate-100">
                           <X className="w-4 h-4" />
                         </button>
                         <div className="relative w-24 h-24 bg-white rounded">
@@ -106,25 +108,25 @@ export default function ComparePage() {
               </thead>
               <tbody className="divide-y divide-palette">
                 <tr>
-                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">Fiyat (KDV dahil)</th>
+                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Fiyat (KDV dahil)', 'Price (incl. VAT)')}</th>
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
                       {p.oldPrice && <span className="block text-xs text-slate-400 line-through">{price(p.oldPrice * (1 + VAT_RATE / 100))}</span>}
-                      <span className="font-bold text-ink">{p.isVariantProduct ? 'Başlangıç ' : ''}{price(p.price * (1 + VAT_RATE / 100))}</span>
+                      <span className="font-bold text-ink">{p.isVariantProduct ? L('Başlangıç ', 'From ') : ''}{price(p.price * (1 + VAT_RATE / 100))}</span>
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">Marka</th>
+                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Marka', 'Brand')}</th>
                   {products.map((p) => <td key={p.id} className="p-3">{p.brand ?? '—'}</td>)}
                 </tr>
                 <tr>
-                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">Stok</th>
-                  {products.map((p) => <td key={p.id} className="p-3">{(p.stock ?? 0) > 0 ? 'Stokta' : 'Tükendi'}</td>)}
+                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Stok', 'Stock')}</th>
+                  {products.map((p) => <td key={p.id} className="p-3">{(p.stock ?? 0) > 0 ? L('Stokta', 'In stock') : L('Tükendi', 'Out of stock')}</td>)}
                 </tr>
                 {products.some((p) => p.warranty) && (
                   <tr>
-                    <th scope="row" className="p-3 text-left text-ink-muted font-medium">Garanti</th>
+                    <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Garanti', 'Warranty')}</th>
                     {products.map((p) => <td key={p.id} className="p-3">{p.warranty ?? '—'}</td>)}
                   </tr>
                 )}
@@ -139,14 +141,14 @@ export default function ComparePage() {
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
                       {p.isVariantProduct ? (
-                        <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>Seçenekleri Gör</Link></Button>
+                        <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>{L('Seçenekleri Gör', 'View Options')}</Link></Button>
                       ) : (
                         <Button
                           size="sm"
                           disabled={(p.stock ?? 0) <= 0}
                           onClick={() => addItem({ id: p.id, productId: p.id, maxQuantity: p.stock, name: p.name, price: p.price, image: p.image, category: p.category })}
                         >
-                          Sepete Ekle
+                          {L('Sepete Ekle', 'Add to Cart')}
                         </Button>
                       )}
                     </td>
@@ -155,7 +157,7 @@ export default function ComparePage() {
               </tbody>
             </table>
           </div>
-          {rows.length === 0 && onlyDiff && <p className="text-sm text-ink-muted">Seçilen ürünlerin teknik özellikleri aynı.</p>}
+          {rows.length === 0 && onlyDiff && <p className="text-sm text-ink-muted">{L('Seçilen ürünlerin teknik özellikleri aynı.', 'The selected products have identical specifications.')}</p>}
         </div>
       )}
     </ClassicPageShell>

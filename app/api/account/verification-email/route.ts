@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
  * 503/502 dönerse istemci Firebase'in kendi doğrulama e-postasına (sendEmailVerification) düşer.
  */
 import { NextRequest, NextResponse } from 'next/server'
-import { getAdminAuth } from '@/lib/firebaseAdminServer'
+import { getAdminAuth, adminProjectMatchesClient } from '@/lib/firebaseAdminServer'
 import { isRateLimited } from '@/lib/rate-limit'
 import { sendEmailVerificationMessage } from '@/lib/notifications'
 import { siteOrigin, verifyBearer, oobCodeFromLink, inCooldown, clearCooldown } from '../_shared'
@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   if (isRateLimited(request, 'verify-email-send', 10, 10 * 60_000)) {
     return NextResponse.json({ success: false, error: 'Çok fazla istek. Lütfen biraz sonra tekrar deneyin.' }, { status: 429 })
   }
-  const auth = getAdminAuth()
+  const auth = adminProjectMatchesClient() ? getAdminAuth() : null
   if (!auth) return NextResponse.json({ success: false, error: 'Sunucu yapılandırılmamış.' }, { status: 503 })
 
   const decoded = await verifyBearer(request)

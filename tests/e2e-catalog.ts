@@ -20,7 +20,7 @@ export async function createE2EProduct() {
       brand: 'TommaTech',
       sku: 'E2E-TEST-10W',
       // Merchant akışı görselsiz ürünü almaz; katalogdaki bir panel görseli kullanılır
-      image: '/images/products/voltekno/1SfPNowoPDRUrusBcQf2n8JRxFaOjxZbe.jpg',
+      image: '/images/products/voltekno/1SfPNowoPDRUrusBcQf2n8JRxFaOjxZbe.webp',
       variants: [{ key: '10w', label: '10W', price: 450, sku: 'E2E-TEST-10W' }],
     }
     await prisma.productOverride.upsert({ where: { productId: E2E_PRODUCT_ID }, create: { productId: E2E_PRODUCT_ID, ...data }, update: data })

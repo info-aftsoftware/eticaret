@@ -43,6 +43,16 @@ async function loadProduct(id: string): Promise<StorefrontProduct | null> {
 }
 
 const SITE_NAME = 'voltekno'
+
+/** Excel'deki SEO başlığı birden çok üründe aynıysa (ör. aynı serinin iki modeli) ürün adından başlık üretilir */
+const DUPLICATE_META_TITLES = (() => {
+  const counts = new Map<string, number>()
+  for (const p of mockProducts) {
+    const t = withDetails(p).metaTitle
+    if (t) counts.set(t, (counts.get(t) ?? 0) + 1)
+  }
+  return new Set([...counts].filter(([, n]) => n > 1).map(([t]) => t))
+})()
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
 function truncate(str: string, max: number) {
@@ -56,7 +66,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   if (!product) return { title: 'Ürün Bulunamadı' }
 
   // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir
-  const title = product.metaTitle || `${product.name} | ${SITE_NAME}`
+  const title = product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
   const baseDesc = product.description || `${product.name} — ${product.category}.`
   const description = truncate(baseDesc, 160)
   const image = (product.images && product.images[0]) || product.image

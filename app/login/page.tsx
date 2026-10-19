@@ -12,8 +12,12 @@ import { AuthLayout, TextField, PasswordField, Checkbox, PrimaryButton, FormAler
 import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import type { LegalSlug } from '@/lib/legal/documents'
+import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 function LoginForm() {
+  const L = useL()
+  const tErr = useServerError()
   const router = useRouter()
   const searchParams = useSearchParams()
   const login = useAuthStore((state) => state.login)
@@ -39,9 +43,9 @@ function LoginForm() {
     e.preventDefault()
     setError('')
     const next: typeof errors = {}
-    if (!email.trim()) next.email = 'E-posta adresinizi girin.'
-    else if (!EMAIL_RE.test(email.trim())) next.email = 'Geçerli bir e-posta adresi girin (örn. ad@ornek.com).'
-    if (!password) next.password = 'Şifrenizi girin.'
+    if (!email.trim()) next.email = L('E-posta adresinizi girin.', 'Enter your email address.')
+    else if (!EMAIL_RE.test(email.trim())) next.email = L('Geçerli bir e-posta adresi girin (örn. ad@ornek.com).', 'Enter a valid email address (e.g. name@example.com).')
+    if (!password) next.password = L('Şifrenizi girin.', 'Enter your password.')
     setErrors(next)
     if (Object.keys(next).length) return
 
@@ -51,7 +55,7 @@ function LoginForm() {
       router.push(target)
       return
     }
-    setError(result.error || 'Giriş yapılamadı.')
+    setError(tErr(result.error) || L('Giriş yapılamadı.', 'Sign-in failed.'))
     setLoading(false)
   }
 
@@ -60,12 +64,12 @@ function LoginForm() {
   const registerHref = redirectParam ? `/register?redirect=${encodeURIComponent(target)}` : '/register'
 
   return (
-    <AuthLayout breadcrumb="Giriş Yap" title="Giriş Yap" subtitle="Hesabınıza giriş yaparak siparişlerinizi takip edin ve hızlıca alışveriş yapın.">
+    <AuthLayout breadcrumb={L('Giriş Yap', 'Sign In')} title={L('Giriş Yap', 'Sign In')} subtitle={L('Hesabınıza giriş yaparak siparişlerinizi takip edin ve hızlıca alışveriş yapın.', 'Sign in to your account to track your orders and shop faster.')}>
       <div className="space-y-5">
-        {verified && <FormAlert tone="success">E-posta adresiniz doğrulandı. Giriş yapabilirsiniz.</FormAlert>}
-        {reset && <FormAlert tone="success">Şifreniz güncellendi. Yeni şifrenizle giriş yapabilirsiniz.</FormAlert>}
+        {verified && <FormAlert tone="success">{L('E-posta adresiniz doğrulandı. Giriş yapabilirsiniz.', 'Your email address has been verified. You can now sign in.')}</FormAlert>}
+        {reset && <FormAlert tone="success">{L('Şifreniz güncellendi. Yeni şifrenizle giriş yapabilirsiniz.', 'Your password has been updated. You can sign in with your new password.')}</FormAlert>}
         {redirectParam && !verified && !reset && (
-          <FormAlert tone="info">Devam etmek için lütfen giriş yapın.</FormAlert>
+          <FormAlert tone="info">{L('Devam etmek için lütfen giriş yapın.', 'Please sign in to continue.')}</FormAlert>
         )}
         {error && <FormAlert>{error}</FormAlert>}
 
@@ -73,22 +77,22 @@ function LoginForm() {
           onSuccess={() => router.push(target)}
           onError={setError}
           disabled={loading}
-          dividerText="veya e-posta ile"
+          dividerText={L('veya e-posta ile', 'or with email')}
           notice={
             <>
-              Google veya Facebook ile ilk girişinizde hesabınız oluşturulur ve{' '}
-              <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>Üyelik ve Kullanım Koşulları</LegalLink>’nı kabul etmiş
-              olursunuz. Kişisel verileriniz <LegalLink slug="kvkk" onOpen={setLegalDoc}>KVKK Aydınlatma Metni</LegalLink> kapsamında işlenir.
+              {L('Google veya Facebook ile ilk girişinizde hesabınız oluşturulur ve', 'Your account is created the first time you sign in with Google or Facebook, and you accept the')}{' '}
+              <LegalLink slug="uyelik-ve-kullanim-kosullari" onOpen={setLegalDoc}>{L('Üyelik ve Kullanım Koşulları', 'Membership and Terms of Use')}</LegalLink>{L('’nı kabul etmiş olursunuz.', '.')}{' '}
+              {L('Kişisel verileriniz', 'Your personal data is processed under the')} <LegalLink slug="kvkk" onOpen={setLegalDoc}>{L('KVKK Aydınlatma Metni', 'KVKK Privacy Notice')}</LegalLink>{L(' kapsamında işlenir.', '.')}
             </>
           }
         />
 
         <form onSubmit={handleSubmit} noValidate className="space-y-4">
           <TextField
-            label="E-posta"
+            label={L('E-posta', 'Email')}
             type="email"
             inputMode="email"
-            placeholder="ornek@email.com"
+            placeholder={L('ornek@email.com', 'example@email.com')}
             value={email}
             onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors({ ...errors, email: undefined }) }}
             error={errors.email}
@@ -97,8 +101,8 @@ function LoginForm() {
             autoFocus
           />
           <PasswordField
-            label="Şifre"
-            placeholder="Şifreniz"
+            label={L('Şifre', 'Password')}
+            placeholder={L('Şifreniz', 'Your password')}
             value={password}
             onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors({ ...errors, password: undefined }) }}
             error={errors.password}
@@ -106,22 +110,22 @@ function LoginForm() {
             disabled={loading}
             labelExtra={
               <Link href={email ? `/forgot-password?email=${encodeURIComponent(email.trim())}` : '/forgot-password'} className="text-[13.5px] font-medium text-[#0b2540] hover:underline underline-offset-2">
-                Şifremi unuttum
+                {L('Şifremi unuttum', 'Forgot password?')}
               </Link>
             }
           />
           <Checkbox checked={rememberMe} onChange={setRememberMe} disabled={loading}>
-            Beni hatırla <span className="text-[#5d6e80]">— ortak kullanılan cihazlarda işaretlemeyin</span>
+            {L('Beni hatırla', 'Remember me')}
           </Checkbox>
 
-          <PrimaryButton type="submit" loading={loading} loadingText="Giriş yapılıyor…">
-            Giriş Yap
+          <PrimaryButton type="submit" loading={loading} loadingText={L('Giriş yapılıyor…', 'Signing in…')}>
+            {L('Giriş Yap', 'Sign In')}
           </PrimaryButton>
         </form>
 
         <p className="text-center text-[14.5px] text-[#5d6e80]">
-          Hesabınız yok mu?{' '}
-          <Link href={registerHref} className={linkClass}>Hemen üye olun</Link>
+          {L('Hesabınız yok mu?', 'Don’t have an account?')}{' '}
+          <Link href={registerHref} className={linkClass}>{L('Hemen üye olun', 'Sign up now')}</Link>
         </p>
 
         <LegalDocumentDialog slug={legalDoc} onClose={() => setLegalDoc(null)} />

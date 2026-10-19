@@ -24,6 +24,7 @@ import { gesCalculationRanges, type GesCalcRanges } from '@/lib/ges-calc'
 import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { getAddresses } from '@/lib/firebase/firestore'
+import { useL } from '@/lib/i18n-inline'
 
 const CONTACT_DRAFT_KEY = 'site_contact_draft'
 
@@ -96,6 +97,7 @@ function scrollToFirstError(errors: Record<string, string>) {
 
 export default function GesPage() {
   const t = useTranslations('ges')
+  const L = useL()
 
   const { user, isAuthenticated } = useAuthStore()
 
@@ -239,7 +241,7 @@ export default function GesPage() {
   const handleFileUpload = async (field: 'attachmentBillUrl' | 'attachmentRoofUrl', file: File) => {
     const MAX_SIZE_MB = 10
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      setFormErrors((p) => ({ ...p, [field]: `Dosya en fazla ${MAX_SIZE_MB} MB olabilir.` }))
+      setFormErrors((p) => ({ ...p, [field]: L(`Dosya en fazla ${MAX_SIZE_MB} MB olabilir.`, `File size can be at most ${MAX_SIZE_MB} MB.`) }))
       return
     }
     setUploading(field)
@@ -255,7 +257,7 @@ export default function GesPage() {
       const url = await getDownloadURL(storageRef)
       set({ [field]: url })
     } catch {
-      setFormErrors((p) => ({ ...p, [field]: 'Yükleme başarısız. Lütfen tekrar deneyin.' }))
+      setFormErrors((p) => ({ ...p, [field]: L('Yükleme başarısız. Lütfen tekrar deneyin.', 'Upload failed. Please try again.') }))
       set({ [field]: `${file.name} (${(file.size / 1024).toFixed(1)} KB)` })
     } finally {
       setUploading(null)
@@ -352,12 +354,12 @@ export default function GesPage() {
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <Button onClick={() => { setSuccess(false); setCalcResult(null); setForm(initialForm) }}
                   size="lg" className="rounded-xl px-8 bg-orange-500 hover:bg-orange-600">
-                  Yeni Form Doldur
+                  {L('Yeni Form Doldur', 'Fill Out a New Form')}
                 </Button>
                 <Button asChild variant="outline" size="lg" className="rounded-xl px-8">
                   <Link href="/ges/teklif-dogrulama">
                     <FileCheck className="w-4 h-4 mr-2" />
-                    Teklif Doğrula
+                    {L('Teklif Doğrula', 'Verify a Quote')}
                   </Link>
                 </Button>
               </div>
@@ -431,19 +433,18 @@ export default function GesPage() {
               <Sun className="w-9 h-9 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight mb-4 drop-shadow">
-              Güneş Enerjisi Analizi &amp; Ücretsiz Teklif
+              {L('Güneş Enerjisi Analizi & Ücretsiz Teklif', 'Solar Energy Analysis & Free Quote')}
             </h1>
             <p className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto leading-relaxed mb-8">
-              Aylık elektrik tüketiminizi girerek sistem büyüklüğünüzü hesaplayın,
-              kişiselleştirilmiş ücretsiz teklif alın.
+              {L('Aylık elektrik tüketiminizi girerek sistem büyüklüğünüzü hesaplayın, kişiselleştirilmiş ücretsiz teklif alın.', 'Enter your monthly electricity consumption to size your system and get a free, personalized quote.')}
             </p>
 
             {/* Stat chips */}
             <div className="flex flex-wrap justify-center gap-3">
               {[
-                { icon: ShieldCheck, text: 'Ücretsiz Analiz' },
-                { icon: Clock, text: '2 Dakikada Doldur' },
-                { icon: Star, text: '24 Saat İçinde Dönüş' },
+                { icon: ShieldCheck, text: L('Ücretsiz Analiz', 'Free Analysis') },
+                { icon: Clock, text: L('2 Dakikada Doldur', 'Takes 2 Minutes') },
+                { icon: Star, text: L('24 Saat İçinde Dönüş', 'Response Within 24 Hours') },
               ].map(({ icon: Icon, text }) => (
                 <div key={text} className="flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 ring-1 ring-white/10">
                   <Icon className="w-4 h-4 text-white" />
@@ -470,9 +471,9 @@ export default function GesPage() {
                     <Sun className="w-5 h-5" />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold text-slate-800">Ücretsiz Teklif Al</h2>
+                    <h2 className="text-lg font-bold text-slate-800">{L('Ücretsiz Teklif Al', 'Get a Free Quote')}</h2>
                     <p className="text-sm text-slate-500">
-                      <span className="text-red-500 font-bold">*</span> işaretli alanlar zorunludur
+                      {L('', 'Fields marked ')}<span className="text-red-500 font-bold">*</span>{L(' işaretli alanlar zorunludur', ' are required')}
                     </p>
                   </div>
                 </div>
@@ -481,7 +482,7 @@ export default function GesPage() {
                 <div className="space-y-4">
                   <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide flex items-center gap-2">
                     <span className="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500 text-white text-xs font-bold">1</span>
-                    Kişisel Bilgiler
+                    {L('Kişisel Bilgiler', 'Personal Information')}
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -587,7 +588,7 @@ export default function GesPage() {
                       <Label htmlFor="monthlyKwhForm" className="text-sm font-medium text-slate-700">
                         {t('quoteForm.monthlyKwhFree')}
                         {calcResult && (
-                          <span className="ml-2 text-xs text-green-600 font-normal">(hesaplamadan alındı)</span>
+                          <span className="ml-2 text-xs text-green-600 font-normal">{L('(hesaplamadan alındı)', '(from calculation)')}</span>
                         )}
                       </Label>
                       <input
@@ -600,7 +601,7 @@ export default function GesPage() {
                           set({ monthlyKwh: e.target.value })
                           if (calcErrors.monthlyKwh) setCalcErrors((p) => ({ ...p, monthlyKwh: undefined as any }))
                         }}
-                        placeholder="Örn. 350"
+                        placeholder={L('Örn. 350', 'e.g. 350')}
                         className={fieldCls()}
                       />
                     </div>
@@ -612,7 +613,7 @@ export default function GesPage() {
                       </Label>
                       <Select value={form.monthlyBillRange} onValueChange={(v) => set({ monthlyBillRange: v || '' })}>
                         <SelectTrigger id="monthlyBillRange" className={selectCls()}>
-                          <SelectValue placeholder="Aylık fatura aralığı" />
+                          <SelectValue placeholder={L('Aylık fatura aralığı', 'Monthly bill range')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="0_1000">{t('quoteForm.monthlyBill0_1000')}</SelectItem>
@@ -631,7 +632,7 @@ export default function GesPage() {
                       </Label>
                       <Select value={form.propertyType} onValueChange={(v) => set({ propertyType: v || '' })}>
                         <SelectTrigger id="propertyType" className={selectCls()}>
-                          <SelectValue placeholder="Tesis türü" />
+                          <SelectValue placeholder={L('Tesis türü', 'Property type')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="mustakil_ev">{t('quoteForm.propertyTypeMustakil')}</SelectItem>
@@ -654,7 +655,7 @@ export default function GesPage() {
                       </Label>
                       <Select value={form.budgetRange} onValueChange={(v) => set({ budgetRange: v || '' })}>
                         <SelectTrigger id="budgetRange" className={selectCls()}>
-                          <SelectValue placeholder="Bütçe aralığı" />
+                          <SelectValue placeholder={L('Bütçe aralığı', 'Budget range')} />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="100k_alti">{t('quoteForm.budget100kAlt')}</SelectItem>
@@ -674,8 +675,8 @@ export default function GesPage() {
                     <div className="flex items-center gap-3">
                       <span className="flex items-center justify-center w-6 h-6 rounded-full bg-slate-400 text-white text-xs font-bold">3</span>
                       <div>
-                        <span className="font-semibold text-slate-700 text-sm">Ek Detaylar</span>
-                        <span className="text-xs text-slate-400 ml-1.5">(isteğe bağlı — daha doğru teklif için)</span>
+                        <span className="font-semibold text-slate-700 text-sm">{L('Ek Detaylar', 'Additional Details')}</span>
+                        <span className="text-xs text-slate-400 ml-1.5">{L('(isteğe bağlı — daha doğru teklif için)', '(optional — for a more accurate quote)')}</span>
                       </div>
                     </div>
                     <ChevronDown className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-180 shrink-0" />
@@ -685,13 +686,13 @@ export default function GesPage() {
 
                     {/* Abone & şebeke */}
                     <div className="space-y-3">
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Abonelik ve Şebeke</p>
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{L('Abonelik ve Şebeke', 'Subscription & Grid')}</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                           <Label htmlFor="subscriberType" className="text-sm font-medium text-slate-700">{t('quoteForm.subscriberType')}</Label>
                           <Select value={form.subscriberType} onValueChange={(v) => set({ subscriberType: v || '' })}>
                             <SelectTrigger id="subscriberType" className={selectCls()}>
-                              <SelectValue placeholder="Abone türü" />
+                              <SelectValue placeholder={L('Abone türü', 'Subscriber type')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="mesken">{t('quoteForm.subscriberMesken')}</SelectItem>
@@ -705,7 +706,7 @@ export default function GesPage() {
                           <Label htmlFor="threePhase" className="text-sm font-medium text-slate-700">{t('quoteForm.threePhase')}</Label>
                           <Select value={form.threePhase} onValueChange={(v) => set({ threePhase: v || '' })}>
                             <SelectTrigger id="threePhase" className={selectCls()}>
-                              <SelectValue placeholder="Seçin" />
+                              <SelectValue placeholder={L('Seçin', 'Select')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="evet">{t('quoteForm.threePhaseYes')}</SelectItem>
@@ -725,7 +726,7 @@ export default function GesPage() {
                           <Label htmlFor="installationAreaType" className="text-sm font-medium text-slate-700">{t('quoteForm.installationAreaType')}</Label>
                           <Select value={form.installationAreaType} onValueChange={(v) => set({ installationAreaType: v || '' })}>
                             <SelectTrigger id="installationAreaType" className={selectCls()}>
-                              <SelectValue placeholder="Alan türü" />
+                              <SelectValue placeholder={L('Alan türü', 'Area type')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="cati">{t('quoteForm.areaCati')}</SelectItem>
@@ -740,7 +741,7 @@ export default function GesPage() {
                           <Label htmlFor="roofType" className="text-sm font-medium text-slate-700">{t('quoteForm.roofType')}</Label>
                           <Select value={form.roofType} onValueChange={(v) => set({ roofType: v || '' })}>
                             <SelectTrigger id="roofType" className={selectCls()}>
-                              <SelectValue placeholder="Çatı türü" />
+                              <SelectValue placeholder={L('Çatı türü', 'Roof type')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="betonarme_duz">{t('quoteForm.roofBetonarme')}</SelectItem>
@@ -755,7 +756,7 @@ export default function GesPage() {
                           <Label htmlFor="roofAreaRange" className="text-sm font-medium text-slate-700">{t('quoteForm.roofAreaRange')}</Label>
                           <Select value={form.roofAreaRange} onValueChange={(v) => set({ roofAreaRange: v || '' })}>
                             <SelectTrigger id="roofAreaRange" className={selectCls()}>
-                              <SelectValue placeholder="Çatı alanı" />
+                              <SelectValue placeholder={L('Çatı alanı', 'Roof area')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="0_50">{t('quoteForm.roofArea0_50')}</SelectItem>
@@ -769,7 +770,7 @@ export default function GesPage() {
                           <Label htmlFor="shading" className="text-sm font-medium text-slate-700">{t('quoteForm.shading')}</Label>
                           <Select value={form.shading} onValueChange={(v) => set({ shading: v || '' })}>
                             <SelectTrigger id="shading" className={selectCls()}>
-                              <SelectValue placeholder="Gölgelenme durumu" />
+                              <SelectValue placeholder={L('Gölgelenme durumu', 'Shading')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="hayir">{t('quoteForm.shadingNo')}</SelectItem>
@@ -784,7 +785,7 @@ export default function GesPage() {
                           <Label htmlFor="deedStatus" className="text-sm font-medium text-slate-700">{t('quoteForm.deedStatus')}</Label>
                           <Select value={form.deedStatus} onValueChange={(v) => set({ deedStatus: v || '' })}>
                             <SelectTrigger id="deedStatus" className={selectCls()}>
-                              <SelectValue placeholder="Mülkiyet" />
+                              <SelectValue placeholder={L('Mülkiyet', 'Ownership')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="kendi">{t('quoteForm.deedOwn')}</SelectItem>
@@ -797,7 +798,7 @@ export default function GesPage() {
                           <Label htmlFor="storagePreference" className="text-sm font-medium text-slate-700">{t('quoteForm.storagePreference')}</Label>
                           <Select value={form.storagePreference} onValueChange={(v) => set({ storagePreference: v || '' })}>
                             <SelectTrigger id="storagePreference" className={selectCls()}>
-                              <SelectValue placeholder="Depolama tercihi" />
+                              <SelectValue placeholder={L('Depolama tercihi', 'Storage preference')} />
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="hayir">{t('quoteForm.storageNo')}</SelectItem>
@@ -940,7 +941,7 @@ export default function GesPage() {
                     className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-brand transition-colors"
                   >
                     <FileCheck className="w-4 h-4" />
-                    Başka bir firmadan aldığınız teklifi doğrulatmak ister misiniz?
+                    {L('Başka bir firmadan aldığınız teklifi doğrulatmak ister misiniz?', 'Would you like to have a quote from another company verified?')}
                   </Link>
                 </div>
 
@@ -954,21 +955,21 @@ export default function GesPage() {
       <Dialog open={kvkkDialogOpen} onOpenChange={setKvkkDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-xl text-slate-900 pr-8">KVKK Aydınlatma Metni</DialogTitle>
+            <DialogTitle className="text-xl text-slate-900 pr-8">{L('KVKK Aydınlatma Metni', 'Personal Data Protection (KVKK) Notice')}</DialogTitle>
           </DialogHeader>
           <div className="text-sm text-slate-700 space-y-4 pr-2 leading-relaxed">
-            <p><strong>1. Veri Sorumlusu</strong></p>
-            <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verileriniz; veri sorumlusu olarak voltekno tarafından aşağıda açıklanan kapsamda işlenebilecektir.</p>
-            <p><strong>2. İşlenen Kişisel Veriler ve Amaçları</strong></p>
-            <p>GES teklif formu aracılığıyla toplanan ad soyad, telefon numarası, e-posta adresi, şehir/ilçe, mülk türü, tahmini bütçe, elektrik tüketim bilgileri ve kurulum alanına ilişkin bilgileriniz; teklif talebinizin değerlendirilmesi, sizinle iletişime geçilmesi, teknik keşif ve fiyat teklifi sunulması amacıyla işlenmektedir.</p>
-            <p><strong>3. Hukuki Sebep</strong></p>
-            <p>Bu verilerin işlenmesi, KVKK'nın 5. ve 6. maddelerine dayanmaktadır; özellikle açık rızanız, teklif ve sözleşme süreçlerinin yürütülmesi ile meşru menfaatlerimiz çerçevesinde gerçekleştirilmektedir.</p>
-            <p><strong>4. Verilerin Aktarımı</strong></p>
-            <p>Toplanan verileriniz, yalnızca hukuki zorunluluk veya hizmet sağlayıcılarımız ile sınırlı ve gerekli ölçüde paylaşılabilir.</p>
-            <p><strong>5. Saklama Süresi</strong></p>
-            <p>Kişisel verileriniz, teklif ve iletişim süreçlerinin gerektirdiği süre boyunca ve yasal saklama süreleriyle sınırlı olarak saklanacak; bu süreler sonunda silinecek veya anonim hale getirilecektir.</p>
-            <p><strong>6. Haklarınız (KVKK Md. 11)</strong></p>
-            <p>Kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, düzeltilmesini veya silinmesini isteme ve ilgili diğer haklarınızı kullanmak için veri sorumlusuna başvurabilirsiniz.</p>
+            <p><strong>{L('1. Veri Sorumlusu', '1. Data Controller')}</strong></p>
+            <p>{L('6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, kişisel verileriniz; veri sorumlusu olarak voltekno tarafından aşağıda açıklanan kapsamda işlenebilecektir.', 'Under the Turkish Personal Data Protection Law No. 6698 ("KVKK"), your personal data may be processed by voltekno, as the data controller, within the scope described below.')}</p>
+            <p><strong>{L('2. İşlenen Kişisel Veriler ve Amaçları', '2. Personal Data Processed and Purposes')}</strong></p>
+            <p>{L('GES teklif formu aracılığıyla toplanan ad soyad, telefon numarası, e-posta adresi, şehir/ilçe, mülk türü, tahmini bütçe, elektrik tüketim bilgileri ve kurulum alanına ilişkin bilgileriniz; teklif talebinizin değerlendirilmesi, sizinle iletişime geçilmesi, teknik keşif ve fiyat teklifi sunulması amacıyla işlenmektedir.', 'Your full name, phone number, email address, city/district, property type, estimated budget, electricity consumption details and installation area information collected through the solar quote form are processed to evaluate your quote request, contact you, carry out a technical survey and provide a price quote.')}</p>
+            <p><strong>{L('3. Hukuki Sebep', '3. Legal Basis')}</strong></p>
+            <p>{L(`Bu verilerin işlenmesi, KVKK'nın 5. ve 6. maddelerine dayanmaktadır; özellikle açık rızanız, teklif ve sözleşme süreçlerinin yürütülmesi ile meşru menfaatlerimiz çerçevesinde gerçekleştirilmektedir.`, 'Processing of this data is based on Articles 5 and 6 of the KVKK; in particular, it is carried out on the basis of your explicit consent, the execution of quote and contract processes, and our legitimate interests.')}</p>
+            <p><strong>{L('4. Verilerin Aktarımı', '4. Data Transfers')}</strong></p>
+            <p>{L('Toplanan verileriniz, yalnızca hukuki zorunluluk veya hizmet sağlayıcılarımız ile sınırlı ve gerekli ölçüde paylaşılabilir.', 'Your collected data may only be shared where legally required or with our service providers, to a limited and necessary extent.')}</p>
+            <p><strong>{L('5. Saklama Süresi', '5. Retention Period')}</strong></p>
+            <p>{L('Kişisel verileriniz, teklif ve iletişim süreçlerinin gerektirdiği süre boyunca ve yasal saklama süreleriyle sınırlı olarak saklanacak; bu süreler sonunda silinecek veya anonim hale getirilecektir.', 'Your personal data will be retained for as long as the quote and communication processes require and within statutory retention periods; at the end of these periods it will be deleted or anonymized.')}</p>
+            <p><strong>{L('6. Haklarınız (KVKK Md. 11)', '6. Your Rights (KVKK Art. 11)')}</strong></p>
+            <p>{L('Kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmişse bilgi talep etme, düzeltilmesini veya silinmesini isteme ve ilgili diğer haklarınızı kullanmak için veri sorumlusuna başvurabilirsiniz.', 'You may apply to the data controller to learn whether your personal data is processed, request information if it has been, request its correction or deletion, and exercise your other related rights.')}</p>
           </div>
         </DialogContent>
       </Dialog>

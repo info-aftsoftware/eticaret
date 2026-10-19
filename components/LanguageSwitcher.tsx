@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import {
   DropdownMenu,
@@ -19,13 +18,18 @@ const LOCALES = [
 ]
 
 export function LanguageSwitcher() {
-  const router = useRouter()
   const locale = useLocale() as 'tr' | 'en'
 
+  const [switching, setSwitching] = React.useState(false)
+
   const setLocale = (newLocale: 'tr' | 'en') => {
-    if (newLocale === locale) return
-    document.cookie = `${LOCALE_COOKIE}=${newLocale};path=/;max-age=31536000`
-    router.refresh()
+    if (newLocale === locale || switching) return
+    setSwitching(true)
+    document.cookie = `${LOCALE_COOKIE}=${newLocale};path=/;max-age=31536000;samesite=lax`
+    // router.refresh() yalnızca o anki sayfanın sunucu bileşenlerini tazeliyordu: istemci yönlendirici
+    // önbelleğindeki (önceden yüklenmiş) sayfalar ve istemci durumu eski dilde kalıyor, değişim geç
+    // ve parça parça görünüyordu. Tam yeniden yükleme her şeyi tek seferde yeni dile geçirir.
+    window.location.reload()
   }
 
   return (
@@ -34,7 +38,7 @@ export function LanguageSwitcher() {
         <button
           type="button"
           className="flex items-center gap-1 hover:text-brand transition-colors text-inherit font-medium"
-          aria-label={`${LOCALES.find((l) => l.code === locale)?.label ?? 'Türkçe'} — dil seçin`}
+          aria-label={`${LOCALES.find((l) => l.code === locale)?.label ?? 'Türkçe'} — ${locale === 'en' ? 'choose language' : 'dil seçin'}`}
         >
           {LOCALES.find((l) => l.code === locale)?.label ?? 'Türkçe'}
           <ChevronDown className="w-3 h-3" />

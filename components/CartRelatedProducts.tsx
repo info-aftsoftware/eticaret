@@ -11,6 +11,7 @@ import { mockProducts, COMPLEMENTARY_BY_CATEGORY, PLACEHOLDER_PRODUCT_IDS } from
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
+import { useL } from '@/lib/i18n-inline'
 
 interface CartRelatedProductsProps {
   cartItemIds: string[]
@@ -18,6 +19,7 @@ interface CartRelatedProductsProps {
 }
 
 export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelatedProductsProps) {
+  const L = useL()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
@@ -26,7 +28,7 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
   // Sepetteki kategorilere göre tamamlayıcı ürün ID'lerini topla
   const { relatedProducts, sectionTitle, sectionDesc } = useMemo(() => {
     const collectedIds = new Set<string>()
-    let title = 'Bunları alanlar şunları da aldı'
+    let title = L('Bunları alanlar şunları da aldı', 'Customers who bought these also bought')
     let desc = ''
 
     // Her kategori için COMPLEMENTARY_BY_CATEGORY'den ID'leri topla
@@ -35,8 +37,8 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
       if (entry) {
         entry.productIds.forEach((id) => collectedIds.add(id))
         if (!desc && entry.description) {
-          title = entry.title || title
-          desc = entry.description
+          title = entry.title ? L(entry.title, entry.en?.title ?? entry.title) : title
+          desc = L(entry.description, entry.en?.description ?? entry.description)
         }
       }
     }
@@ -55,8 +57,8 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
         )
         .slice(0, 6)
         .forEach((p) => collectedIds.add(p.id))
-      title = 'Benzer ürünler'
-      desc = 'Aynı kategorideki diğer ürünleri inceleyebilirsiniz.'
+      title = L('Benzer ürünler', 'Similar products')
+      desc = L('Aynı kategorideki diğer ürünleri inceleyebilirsiniz.', 'Explore other products in the same category.')
     }
 
     // ID'leri ürün objelerine dönüştür, sepette olanları ve placeholder'ları çıkar
@@ -67,7 +69,7 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
       .slice(0, 6)
 
     return { relatedProducts: products, sectionTitle: title, sectionDesc: desc }
-  }, [cartItemIds, cartCategories])
+  }, [cartItemIds, cartCategories, L])
 
   if (relatedProducts.length === 0) return null
 
@@ -172,10 +174,10 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
                           description: product.description,
                         })
                       }
-                      aria-label={`${product.name} sepete ekle`}
+                      aria-label={L(`${product.name} sepete ekle`, `Add ${product.name} to cart`)}
                     >
                       <ShoppingCart className="w-3.5 h-3.5 mr-1.5" aria-hidden />
-                      {soldOut ? 'Tükendi' : 'Sepete ekle'}
+                      {soldOut ? L('Tükendi', 'Sold out') : L('Sepete ekle', 'Add to Cart')}
                     </Button>
                   )
                 })()}

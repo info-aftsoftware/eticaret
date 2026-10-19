@@ -4,18 +4,20 @@ import { ChevronRight } from 'lucide-react'
 import { getLegalDocument, LEGAL_SLUGS, legalHref, type LegalSlug } from '@/lib/legal/documents'
 import { SELLER } from '@/lib/legal/company'
 import { LegalDocumentView } from '@/components/LegalDocumentView'
+import { useL } from '@/lib/i18n-inline'
 
 /** Yasal metin sayfası: /pages/[slug] ve eski adresler (/terms, /privacy, /cookies, /returns) bunu kullanır. */
 export function LegalPage({ slug }: { slug: LegalSlug }) {
   const doc = getLegalDocument(slug)
   if (!doc) notFound()
+  const L = useL()
 
   return (
     <div className="min-h-screen bg-surface">
       <div className="bg-surface-elevated border-b border-palette">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center gap-2 text-xs font-medium text-ink-muted mb-2" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-brand transition-colors">Ana Sayfa</Link>
+            <Link href="/" className="hover:text-brand transition-colors">{L('Ana Sayfa', 'Home')}</Link>
             <ChevronRight className="w-3.5 h-3.5 text-ink-muted" aria-hidden />
             <span className="text-ink font-semibold">{doc.title}</span>
           </nav>

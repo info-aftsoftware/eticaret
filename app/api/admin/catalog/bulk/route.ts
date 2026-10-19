@@ -17,6 +17,7 @@ import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProducts } from '@/lib/catalog-merge'
 import { notifyLowStockTransitions, readStocks } from '@/lib/low-stock'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
 export async function PATCH(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -120,6 +121,7 @@ export async function PATCH(request: NextRequest) {
       const after = action === 'reset_stock' ? 0 : typeof value === 'number' && value >= 0 ? Math.floor(value) : 0
       void notifyLowStockTransitions(ids.map((id) => ({ productId: id, before: before.get(id)?.stock, after, name: before.get(id)?.name })))
     }
+    revalidateStorefront()
     return NextResponse.json({ success: true, affected })
   } catch (error) {
     console.error('Admin bulk PATCH error:', error)

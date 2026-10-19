@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { ArrowRight, Clock } from 'lucide-react'
+import { getLocale } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Blog – Enerji Rehberi',
@@ -14,12 +15,12 @@ export const metadata: Metadata = {
 }
 
 const BLOG_CATEGORIES = [
-  { label: 'Tümü', value: 'all' },
-  { label: 'EV Şarj', value: 'ev-sarj' },
-  { label: 'Güneş Enerjisi', value: 'gunes-enerjisi' },
-  { label: 'Batarya', value: 'batarya' },
-  { label: 'İnverter', value: 'inverter' },
-  { label: 'GES', value: 'ges' },
+  { label: { tr: 'Tümü', en: 'All' }, value: 'all' },
+  { label: { tr: 'EV Şarj', en: 'EV Charging' }, value: 'ev-sarj' },
+  { label: { tr: 'Güneş Enerjisi', en: 'Solar Energy' }, value: 'gunes-enerjisi' },
+  { label: { tr: 'Batarya', en: 'Battery' }, value: 'batarya' },
+  { label: { tr: 'İnverter', en: 'Inverter' }, value: 'inverter' },
+  { label: { tr: 'GES', en: 'Solar Plant' }, value: 'ges' },
 ]
 
 const BLOG_POSTS: {
@@ -94,7 +95,13 @@ const BLOG_POSTS: {
   },
 ]
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const locale = await getLocale()
+  const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
+  const categoryLabel = (slug: string, fallback: string) => {
+    const cat = BLOG_CATEGORIES.find((c) => c.value === slug)
+    return cat ? L(cat.label.tr, cat.label.en) : fallback
+  }
   return (
     <div className="min-h-full bg-white">
       {/* Header */}
@@ -102,11 +109,13 @@ export default function BlogPage() {
         <div className="container mx-auto max-w-4xl text-center">
           <span className="inline-block text-xs font-bold uppercase tracking-widest text-brand mb-4">Blog</span>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
-            Enerji Rehberi
+            {L('Enerji Rehberi', 'Energy Guide')}
           </h1>
           <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar,
-            ürün karşılaştırmaları ve kurulum rehberleri.
+            {L(
+              'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, ürün karşılaştırmaları ve kurulum rehberleri.',
+              'Informative articles, product comparisons and installation guides on solar panels, batteries, EV charging and energy systems.'
+            )}
           </p>
         </div>
       </div>
@@ -124,7 +133,7 @@ export default function BlogPage() {
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
-                {cat.label}
+                {L(cat.label.tr, cat.label.en)}
               </span>
             ))}
           </div>
@@ -155,7 +164,7 @@ export default function BlogPage() {
                   {/* Kategori badge — üstte */}
                   <div className="absolute top-3 left-3">
                     <span className={`text-[10px] font-bold uppercase tracking-widest text-white rounded-full px-2.5 py-1 ${post.accent}`}>
-                      {post.category}
+                      {categoryLabel(post.categorySlug, post.category)}
                     </span>
                   </div>
                 </div>
@@ -163,7 +172,7 @@ export default function BlogPage() {
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="flex items-center gap-1 text-[10px] text-slate-400 font-medium">
-                      <Clock className="w-3 h-3" /> {post.readTime} okuma
+                      <Clock className="w-3 h-3" /> {L(`${post.readTime} okuma`, `${post.readTime.replace(' dk', ' min')} read`)}
                     </span>
                   </div>
                   <h2 className="font-bold text-slate-900 text-sm leading-snug mb-2 group-hover:text-brand transition-colors line-clamp-2">
@@ -173,7 +182,7 @@ export default function BlogPage() {
                     {post.desc}
                   </p>
                   <span className="inline-flex items-center gap-1.5 text-xs font-bold text-brand group-hover:gap-2.5 transition-all">
-                    Okumaya Devam Et <ArrowRight className="w-3 h-3" />
+                    {L('Okumaya Devam Et', 'Continue Reading')} <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
               </Link>
@@ -183,23 +192,23 @@ export default function BlogPage() {
           {/* CTA */}
           <div className="mt-16 text-center rounded-2xl border border-brand/20 bg-brand/5 p-8 sm:p-12">
             <h3 className="text-xl sm:text-2xl font-extrabold text-slate-900 mb-3">
-              Sorunuzu Sormak İster misiniz?
+              {L('Sorunuzu Sormak İster misiniz?', 'Have a Question?')}
             </h3>
             <p className="text-slate-500 text-sm sm:text-base mb-6 max-w-md mx-auto">
-              Enerji sistemi seçimi, kurulum veya teklif konularında uzman ekibimize ulaşın.
+              {L('Enerji sistemi seçimi, kurulum veya teklif konularında uzman ekibimize ulaşın.', 'Reach our expert team about energy system selection, installation or quotes.')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand hover:bg-brand-hover text-white font-bold px-6 py-3 text-sm transition-colors shadow-sm"
               >
-                İletişime Geç <ArrowRight className="w-4 h-4" />
+                {L('İletişime Geç', 'Contact Us')} <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/ges"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold px-6 py-3 text-sm transition-colors"
               >
-                Teklif Al
+                {L('Teklif Al', 'Get a Quote')}
               </Link>
             </div>
           </div>

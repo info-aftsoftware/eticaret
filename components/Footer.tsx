@@ -189,7 +189,7 @@ export function Footer() {
               <p>
                 <a href={ETBIS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white">
                   <ShieldCheck className="w-3.5 h-3.5" aria-hidden />
-                  ETBİS&apos;e kayıtlıdır — doğrula
+                  {L('ETBİS\'e kayıtlıdır — doğrula', 'Registered with ETBİS — verify')}
                 </a>
               </p>
             )}

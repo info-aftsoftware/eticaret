@@ -1,0 +1,47 @@
+{
+  "_comment": "ikas Excel'indeki kesin metin hataları için düzeltmeler (URUN-DENETIMI.md). Anahtar: ürünün (varyantlı üründe ilk satırın) SKU'su. import-ikas-excel.py her içe aktarımda uygular; 'descriptionReplace' içindeki eski metin bulunamazsa uyarı verir (Excel düzeltilmiş olabilir, kayıt silinebilir).",
+  "VICTRO-CEP122160000-01406": {
+    "note": "İnverter/şarj cihazı; PV girişi ve MPPT yok. SSS akıllı inverter şablonundan kopyalanmıştı.",
+    "descriptionReplace": [
+      [
+        "<p><strong>Akıllı (off-grid) inverter ne işe yarar?</strong><br>Akıllı inverter; MPPT şarj kontrol cihazı, akü şarj cihazı, inverter ve şebeke/jeneratör transfer anahtarını tek cihazda birleştirir. Şebekenin olmadığı yerlerde güneş ve aküyle, şebekeli yerlerde ise yedek güç kaynağı olarak kullanılır.</p>",
+        "<p><strong>İnverter/şarj cihazı ne işe yarar?</strong><br>İnverter/şarj cihazı; inverter, akü şarj cihazı ve otomatik transfer anahtarını tek gövdede birleştirir. Şebeke veya jeneratör varken yükleri bu kaynaktan besler ve aküyü şarj eder; kaynak kesildiğinde yükleri kesintisiz olarak aküden beslemeye devam eder. Dahili solar şarj kontrolü yoktur.</p>"
+      ],
+      [
+        "<p><strong>Kaç watt güneş paneli bağlanabilir?</strong><br>Bağlanabilecek panel gücü ve gerilimi, inverterin datasheet'inde belirtilen maksimum PV dizi gücü ve PV açık devre gerilimi ile sınırlıdır. Panel dizisinin Voc değeri soğuk havalarda dahi bu sınırı aşmamalıdır.</p>",
+        "<p><strong>Güneş paneli doğrudan bağlanabilir mi?</strong><br>Hayır. Cihazda PV girişi bulunmaz; güneş paneli kullanmak için akü tarafına ayrı bir MPPT şarj kontrol cihazı (ör. Victron SmartSolar) bağlanmalıdır.</p>"
+      ]
+    ]
+  },
+  "VICTRO-PMP482305102-01465": {
+    "note": "İnverter/şarj cihazı; PV girişi ve MPPT yok. SSS akıllı inverter şablonundan kopyalanmıştı.",
+    "descriptionReplace": [
+      [
+        "<p><strong>Akıllı (off-grid) inverter ne işe yarar?</strong><br>Akıllı inverter; MPPT şarj kontrol cihazı, akü şarj cihazı, inverter ve şebeke/jeneratör transfer anahtarını tek cihazda birleştirir. Şebekenin olmadığı yerlerde güneş ve aküyle, şebekeli yerlerde ise yedek güç kaynağı olarak kullanılır.</p>",
+        "<p><strong>İnverter/şarj cihazı ne işe yarar?</strong><br>İnverter/şarj cihazı; inverter, akü şarj cihazı ve otomatik transfer anahtarını tek gövdede birleştirir. Şebeke veya jeneratör varken yükleri bu kaynaktan besler ve aküyü şarj eder; kaynak kesildiğinde yükleri kesintisiz olarak aküden beslemeye devam eder. Dahili solar şarj kontrolü yoktur.</p>"
+      ],
+      [
+        "<p><strong>Kaç watt güneş paneli bağlanabilir?</strong><br>Bağlanabilecek panel gücü ve gerilimi, inverterin datasheet'inde belirtilen maksimum PV dizi gücü ve PV açık devre gerilimi ile sınırlıdır. Panel dizisinin Voc değeri soğuk havalarda dahi bu sınırı aşmamalıdır.</p>",
+        "<p><strong>Güneş paneli doğrudan bağlanabilir mi?</strong><br>Hayır. Cihazda PV girişi bulunmaz; güneş paneli, akü tarafına bağlanan ayrı bir MPPT şarj kontrol cihazıyla (ör. Victron SmartSolar) veya ESS sistemlerinde AC tarafına bağlanan bir şebeke inverteriyle sisteme eklenir.</p>"
+      ]
+    ]
+  },
+  "TOMMAT-OFGTT01NEW1K12MF-00231": {
+    "note": "Teknik tabloda solar şarj tipi PWM; SSS MPPT diyordu.",
+    "descriptionReplace": [
+      ["Akıllı inverter; MPPT şarj kontrol cihazı, akü şarj cihazı,", "Akıllı inverter; solar şarj kontrol cihazı (bu modelde PWM), akü şarj cihazı,"]
+    ]
+  },
+  "TOMMAT-OFGTT03NEW3K24MF-00233": {
+    "note": "Teknik tabloda solar şarj tipi PWM; SSS MPPT diyordu.",
+    "descriptionReplace": [
+      ["Akıllı inverter; MPPT şarj kontrol cihazı, akü şarj cihazı,", "Akıllı inverter; solar şarj kontrol cihazı (bu modelde PWM), akü şarj cihazı,"]
+    ]
+  },
+  "TOMMAT-OFGTT05NEW5K48MF-00234": {
+    "note": "Teknik tabloda solar şarj tipi PWM; SSS MPPT diyordu.",
+    "descriptionReplace": [
+      ["Akıllı inverter; MPPT şarj kontrol cihazı, akü şarj cihazı,", "Akıllı inverter; solar şarj kontrol cihazı (bu modelde PWM), akü şarj cihazı,"]
+    ]
+  }
+}

@@ -14,7 +14,7 @@ import { prisma } from '@/lib/prisma'
 import { reportError } from '@/lib/alerts'
 import { verifyPosCallback } from '@/lib/payments/bank-pos'
 import { applyPaymentResult } from '@/lib/payment-webhook'
-import { changeOrderStatus, logOrderEvent, markPaymentFailed } from '@/lib/order-service'
+import { changeOrderStatus, logOrderEvent, markPaymentFailed, OrderTransitionError } from '@/lib/order-service'
 import type { PosFailCode } from '@/lib/payments/pos-messages'
 
 function siteUrl(path: string) {
@@ -71,13 +71,27 @@ export async function POST(request: NextRequest) {
         return failRedirect('paid_cancelled', order.orderNo)
       }
 
-      const applied = await applyPaymentResult({
-        orderId: order.id,
-        status: 'PAID',
-        providerRef: order.paymentProviderRef ?? '',
-        amount: result.amount,
-        currency: result.currency,
-      })
+      let applied: Awaited<ReturnType<typeof applyPaymentResult>>
+      try {
+        applied = await applyPaymentResult({
+          orderId: order.id,
+          status: 'PAID',
+          providerRef: order.paymentProviderRef ?? '',
+          amount: result.amount,
+          currency: result.currency,
+        })
+      } catch (e) {
+        // Yukarıdaki kontrolden sonra sipariş bu arada iptal edildiyse: kart çekildi, elle iade gerekir
+        if (e instanceof OrderTransitionError) {
+          await reportError('IPTAL-EDILMIS-SIPARISE-ODEME', new Error('Ödeme onayı sırasında sipariş iptal edilmiş — bankadan iade/iptal gerekli'), {
+            orderNo: order.orderNo,
+            amount: `${result.amount} ${result.currency}`,
+            bankRef: bankRef || null,
+          })
+          return failRedirect('paid_cancelled', order.orderNo)
+        }
+        throw e
+      }
       if (applied === 'paid' && bankRef) {
         await logOrderEvent(order.id, { type: 'payment', message: `Sanal POS onayı: ${bankRef}.`, visibleToCustomer: false })
       }

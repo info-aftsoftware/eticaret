@@ -51,7 +51,9 @@ function main() {
   }
 
   // 1) Broken encoding markers
-  const mojibake = /Ã|Ä|Å|Â|�/
+  // UTF-8 baytlarının Latin-1 okunması (Ã§, Ä±, Å…: ikinci bayt 0x80–0xBF) veya U+FFFD.
+  // Türkçe şapkalı harfler (ŞİKÂYET, Elâzığ) bozulma sayılmaz.
+  const mojibake = /[ÃÄÅÂ][\u0080-¿]|�/
   for (const file of files) {
     const content = readText(file)
     if (mojibake.test(content)) report.critical.push(`Mojibake marker found: ${path.relative(ROOT, file)}`)

@@ -6,10 +6,11 @@ import Link from 'next/link'
 import { CheckCircle2, Clock, XCircle, Package, Mail, Truck, Banknote, UserPlus, ArrowRight, Loader2 } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useAuthStore } from '@/lib/store/useAuthStore'
-import { BANK_TRANSFER_PAYMENT_DAYS } from '@/lib/store-config'
+import { BANK_TRANSFER_PAYMENT_DAYS, STORE_TIME_ZONE, bankTransferDeadline } from '@/lib/store-config'
 import { BankTransferDetails } from '@/components/order/BankTransferDetails'
 import { fmtTRY } from '@/lib/format'
 import { trackPurchase } from '@/lib/analytics'
+import { useL } from '@/lib/i18n-inline'
 
 type LastOrder = {
   orderNo: string
@@ -58,6 +59,7 @@ function StatusIcon({ kind }: { kind: 'ok' | 'wait' | 'fail' }) {
 }
 
 function SuccessContent() {
+  const L = useL()
   const searchParams = useSearchParams()
   const orderId = searchParams.get('order_id') || searchParams.get('orderId')
   const sessionId = searchParams.get('session_id')
@@ -120,17 +122,17 @@ function SuccessContent() {
   }, [isBankTransfer, orderId, sessionId, clearCart])
 
   const view = isBankTransfer
-    ? { title: 'Siparişiniz alındı', description: 'Siparişinizi onaylamak için havale/EFT ödemenizi bekliyoruz.', icon: 'ok' as const }
+    ? { title: L('Siparişiniz alındı', 'Your order has been received'), description: L('Siparişinizi onaylamak için havale/EFT ödemenizi bekliyoruz.', 'We are awaiting your bank transfer (EFT) payment to confirm your order.'), icon: 'ok' as const }
     : cardState === 'paid'
-      ? { title: 'Siparişiniz alındı', description: 'Ödemeniz onaylandı. Siparişiniz hazırlanmaya alınacak.', icon: 'ok' as const }
+      ? { title: L('Siparişiniz alındı', 'Your order has been received'), description: L('Ödemeniz onaylandı. Siparişiniz hazırlanmaya alınacak.', 'Your payment has been confirmed. Your order will now be prepared.'), icon: 'ok' as const }
       : cardState === 'failed'
-        ? { title: 'Ödeme alınamadı', description: 'Kartınızdan ödeme alınamadı. Sepetiniz duruyor; tekrar deneyebilir veya Havale/EFT seçebilirsiniz.', icon: 'fail' as const }
+        ? { title: L('Ödeme alınamadı', 'Payment failed'), description: L('Kartınızdan ödeme alınamadı. Sepetiniz duruyor; tekrar deneyebilir veya Havale/EFT seçebilirsiniz.', 'We could not charge your card. Your cart is still saved; you can try again or choose Bank Transfer (EFT).'), icon: 'fail' as const }
         : cardState === 'checking'
-          ? { title: 'Ödemeniz doğrulanıyor', description: 'Bankanızdan onay bekleniyor, lütfen sayfayı kapatmayın.', icon: 'wait' as const }
-          : { title: 'Ödeme onayı bekleniyor', description: 'Ödemeniz henüz onaylanmadı. Onaylandığında e-posta ile bilgilendirileceksiniz.', icon: 'wait' as const }
+          ? { title: L('Ödemeniz doğrulanıyor', 'Verifying your payment'), description: L('Bankanızdan onay bekleniyor, lütfen sayfayı kapatmayın.', 'Waiting for confirmation from your bank, please do not close this page.'), icon: 'wait' as const }
+          : { title: L('Ödeme onayı bekleniyor', 'Awaiting payment confirmation'), description: L('Ödemeniz henüz onaylanmadı. Onaylandığında e-posta ile bilgilendirileceksiniz.', 'Your payment has not been confirmed yet. You will be notified by email once it is confirmed.'), icon: 'wait' as const }
 
-  const dueDate = new Date(Date.now() + BANK_TRANSFER_PAYMENT_DAYS * 86_400_000)
-    .toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' })
+  const dueDate = bankTransferDeadline(Date.now())
+    .toLocaleDateString(L('tr-TR', 'en-GB'), { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE })
   const ok = view.icon === 'ok'
   const showAccountCta = ok && authReady && !isAuthenticated && !!last?.guest
 
@@ -154,7 +156,7 @@ function SuccessContent() {
         <p className="mx-auto mt-2 max-w-md text-[15px] text-[#5d6e80]" role="status">{view.description}</p>
         {orderId && (
           <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#f1f4f8] px-4 py-2 text-sm text-[#20384e]">
-            Sipariş no: <span className="font-mono font-semibold text-[#0b2540]">{orderId}</span>
+            {L('Sipariş no:', 'Order no:')} <span className="font-mono font-semibold text-[#0b2540]">{orderId}</span>
           </p>
         )}
       </section>
@@ -163,12 +165,15 @@ function SuccessContent() {
         <section className="rounded-xl border border-[#f5d97a] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
           <header className="flex items-center gap-2 rounded-t-xl border-b border-[#f5e4a6] bg-[#fff8e1] px-5 py-3.5">
             <Banknote className="h-5 w-5 text-[#8a6400]" aria-hidden />
-            <h2 className="text-base font-semibold text-[#5c4300]">Havale / EFT ile ödeme</h2>
+            <h2 className="text-base font-semibold text-[#5c4300]">{L('Havale / EFT ile ödeme', 'Payment by Bank Transfer (EFT)')}</h2>
           </header>
           <div className="space-y-4 px-5 py-5">
             <p className="text-sm leading-relaxed text-[#20384e]">
-              Siparişinizin onaylanması için <strong>{BANK_TRANSFER_PAYMENT_DAYS} gün içinde</strong> aşağıdaki hesaplardan birine ödeme yapın ve
-              açıklama alanına <strong>yalnızca sipariş numaranızı</strong> yazın. Bu süre içinde ödemesi alınmayan siparişler otomatik iptal edilir.
+              {L('Siparişinizin onaylanması için ', 'To confirm your order, pay to one of the accounts below ')}
+              <strong>{L(`${BANK_TRANSFER_PAYMENT_DAYS} gün içinde`, `within ${BANK_TRANSFER_PAYMENT_DAYS} days`)}</strong>
+              {L(' aşağıdaki hesaplardan birine ödeme yapın ve açıklama alanına ', ' and enter ')}
+              <strong>{L('yalnızca sipariş numaranızı', 'only your order number')}</strong>
+              {L(' yazın. Bu süre içinde ödemesi alınmayan siparişler otomatik iptal edilir.', ' in the payment description. Orders not paid within this period are cancelled automatically.')}
             </p>
             <BankTransferDetails orderNo={orderId} amount={typeof last?.total === 'number' ? fmtTRY(last.total) : null} dueDate={dueDate} />
           </div>
@@ -177,13 +182,13 @@ function SuccessContent() {
 
       {ok && (
         <section className="rounded-xl border border-[#e6ebf1] bg-white px-5 py-5 shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
-          <h2 className="mb-4 text-base font-semibold text-[#121926]">Bundan sonra ne olacak?</h2>
+          <h2 className="mb-4 text-base font-semibold text-[#121926]">{L('Bundan sonra ne olacak?', 'What happens next?')}</h2>
           <ol className="space-y-4">
             {[
-              { icon: Mail, title: 'Onay e-postası', text: isBankTransfer ? 'Sipariş özeti, ödeme bilgileri ve sözleşmeniz e-posta adresinize gönderildi.' : 'Sipariş özeti ve sözleşmeniz e-posta adresinize gönderildi.' },
-              ...(isBankTransfer ? [{ icon: Banknote, title: 'Ödemenizin onayı', text: 'Havaleniz hesabımıza ulaştığında siparişinizi onaylayıp size haber veririz.' }] : []),
-              { icon: Package, title: 'Hazırlık', text: 'Siparişiniz depomuzda özenle paketlenir.' },
-              { icon: Truck, title: 'Kargo', text: 'Kargoya verildiğinde takip numarası e-posta ile gönderilir.' },
+              { icon: Mail, title: L('Onay e-postası', 'Confirmation email'), text: isBankTransfer ? L('Sipariş özeti, ödeme bilgileri ve sözleşmeniz e-posta adresinize gönderildi.', 'Your order summary, payment details and agreement have been sent to your email address.') : L('Sipariş özeti ve sözleşmeniz e-posta adresinize gönderildi.', 'Your order summary and agreement have been sent to your email address.') },
+              ...(isBankTransfer ? [{ icon: Banknote, title: L('Ödemenizin onayı', 'Payment confirmation'), text: L('Havaleniz hesabımıza ulaştığında siparişinizi onaylayıp size haber veririz.', 'Once your transfer reaches our account, we will confirm your order and let you know.') }] : []),
+              { icon: Package, title: L('Hazırlık', 'Preparation'), text: L('Siparişiniz depomuzda özenle paketlenir.', 'Your order is carefully packed at our warehouse.') },
+              { icon: Truck, title: L('Kargo', 'Shipping'), text: L('Kargoya verildiğinde takip numarası e-posta ile gönderilir.', 'Once shipped, the tracking number will be sent to you by email.') },
             ].map((s, i) => (
               <li key={s.title} className="flex gap-3">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f1f4f8] text-[#0b2540]">
@@ -205,9 +210,12 @@ function SuccessContent() {
             <UserPlus className="h-5 w-5 text-[#f5b400]" aria-hidden />
           </span>
           <div className="flex-1">
-            <h2 className="text-base font-semibold">Siparişlerinizi tek yerden takip edin</h2>
+            <h2 className="text-base font-semibold">{L('Siparişlerinizi tek yerden takip edin', 'Track all your orders in one place')}</h2>
             <p className="mt-0.5 text-[13px] text-white/75">
-              {last?.guest?.email} ile ücretsiz hesap oluşturun; e-postanızı doğruladığınızda bu sipariş hesabınıza otomatik eklenir.
+              {L(
+                `${last?.guest?.email ?? ''} ile ücretsiz hesap oluşturun; e-postanızı doğruladığınızda bu sipariş hesabınıza otomatik eklenir.`,
+                `Create a free account with ${last?.guest?.email ?? ''}; once you verify your email, this order will be added to your account automatically.`
+              )}
             </p>
           </div>
           <Link
@@ -215,7 +223,7 @@ function SuccessContent() {
             onClick={openRegister}
             className="inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#f5b400] px-4 text-sm font-semibold text-[#111] hover:bg-[#e0a500]"
           >
-            Hesap oluştur <ArrowRight className="h-4 w-4" aria-hidden />
+            {L('Hesap oluştur', 'Create account')} <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
         </section>
       )}
@@ -223,18 +231,18 @@ function SuccessContent() {
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         {view.icon === 'fail' ? (
           <Link href="/checkout" className="inline-flex h-12 items-center justify-center rounded-lg bg-[#0b2540] px-6 text-sm font-semibold text-white hover:bg-[#12335a]">
-            Ödemeyi tekrar dene
+            {L('Ödemeyi tekrar dene', 'Retry payment')}
           </Link>
         ) : (
           <Link
             href={orderId ? `/orders/${encodeURIComponent(orderId)}` : '/orders'}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#0b2540] px-6 text-sm font-semibold text-white hover:bg-[#12335a]"
           >
-            <Package className="h-4 w-4" aria-hidden /> Siparişimi görüntüle
+            <Package className="h-4 w-4" aria-hidden /> {L('Siparişimi görüntüle', 'View my order')}
           </Link>
         )}
         <Link href="/products" className="inline-flex h-12 items-center justify-center rounded-lg border border-[#d3d9e1] bg-white px-6 text-sm font-semibold text-[#20384e] hover:bg-[#f5f7fa]">
-          Alışverişe devam et
+          {L('Alışverişe devam et', 'Continue shopping')}
         </Link>
       </div>
     </div>

@@ -20,12 +20,13 @@ import React from 'react'
 import { reportError } from '@/lib/alerts'
 import type { Order, OrderLine, OrderStatus } from '@prisma/client'
 import { releaseCouponUse } from '@/lib/order-pricing'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { prisma } from '@/lib/prisma'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
 import { generateContractPdf } from '@/lib/legal/contract-pdf'
 import { getCarrier } from '@/lib/shipping/carriers'
 import { SELLER } from '@/lib/legal/company'
-import { BANK_TRANSFER_PAYMENT_DAYS, STORE_CONTACT } from '@/lib/store-config'
+import { STORE_CONTACT, STORE_TIME_ZONE, bankTransferDeadline } from '@/lib/store-config'
 import { buildInvoiceDataFromPrisma } from '@/lib/invoice-data'
 import { generateAndSendInvoice } from '@/lib/invoice-send'
 import OrderReceivedEmail from '@/emails/order/OrderReceivedEmail'
@@ -82,10 +83,10 @@ function parseCustomerNote(order: Order): string | null {
 
 export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
   const carrier = order.shippingCarrier ? getCarrier(order.shippingCarrier) : undefined
-  const due = new Date(order.createdAt.getTime() + BANK_TRANSFER_PAYMENT_DAYS * 86_400_000)
+  const due = bankTransferDeadline(order.createdAt)
   return {
     orderNo: order.orderNo,
-    createdAt: order.createdAt.toLocaleString('tr-TR'),
+    createdAt: order.createdAt.toLocaleString('tr-TR', { timeZone: STORE_TIME_ZONE }),
     customerName: order.shippingName,
     customerEmail: order.shippingEmail ?? '',
     customerPhone: order.shippingPhone,
@@ -115,7 +116,7 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     orderUrl: `${siteUrl()}/orders/${order.orderNo}`,
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,
     siteUrl: siteUrl(),
-    paymentDueDate: due.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' }),
+    paymentDueDate: due.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE }),
     billingAddress: order.billingAddress
       ? [order.billingAddress, [order.billingDistrict, order.billingCity].filter(Boolean).join(' / '), order.billingPostalCode]
           .filter(Boolean)
@@ -302,19 +303,33 @@ export async function markPaymentFailed(orderId: string, note: string) {
 }
 
 async function restoreStock(order: OrderWithLines) {
+  // İade talebiyle teslim alınıp stoğa zaten eklenmiş adetler (lib/return-service "receive") tekrar eklenmez;
+  // aksi hâlde kısmi iadeden sonra sipariş RETURNED yapılınca o adetler stoğa ikinci kez giriyordu.
+  const alreadyRestored = new Map<string, number>()
+  const received = await prisma.returnRequest.findMany({
+    where: { orderId: order.id, status: { in: ['RECEIVED', 'REFUNDED'] } },
+    select: { items: true },
+  })
+  for (const r of received) {
+    for (const i of (Array.isArray(r.items) ? r.items : []) as Array<{ lineId?: string; quantity?: number }>) {
+      if (i?.lineId && typeof i.quantity === 'number') alreadyRestored.set(i.lineId, (alreadyRestored.get(i.lineId) ?? 0) + i.quantity)
+    }
+  }
   for (const line of order.lines) {
     const vm = line.variantMatrix as { productId?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
     const productId = vm?.productId
     if (!productId) continue
+    const quantity = Math.max(0, line.quantity - (alreadyRestored.get(line.id) ?? 0))
+    if (quantity === 0) continue
     // Yeni siparişlerde yalnızca gerçekten düşülen stok geri eklenir; bayraksız eski siparişlerde eski davranış
     const hasFlags = typeof vm?.stockDecremented === 'boolean'
     if (!hasFlags || vm?.stockDecremented) {
-      await prisma.stockOverride.updateMany({ where: { productId }, data: { stock: { increment: line.quantity } } })
+      await prisma.stockOverride.updateMany({ where: { productId }, data: { stock: { increment: quantity } } })
     }
     if (!hasFlags || vm?.productStockDecremented) {
       await prisma.productOverride.updateMany({
         where: { productId, stock: { not: null } },
-        data: { stock: { increment: line.quantity } },
+        data: { stock: { increment: quantity } },
       })
     }
   }
@@ -377,6 +392,7 @@ export async function changeOrderStatus(
   if (next === 'CANCELLED' || next === 'RETURNED') {
     try {
       await restoreStock(order)
+      revalidateStorefront()
     } catch (e) {
       console.error('Stock restore error:', e)
     }

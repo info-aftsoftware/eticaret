@@ -12,6 +12,7 @@ import { sendEmail } from '@/lib/email'
 import { getCarrier } from '@/lib/shipping/carriers'
 import { STORE_CONTACT } from '@/lib/store-config'
 import { getNextReturnNo } from '@/lib/sequence'
+import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { logOrderEvent, OrderTransitionError, type Actor } from '@/lib/order-service'
 import ReturnEmail, { RETURN_EMAIL_SUBJECTS, type ReturnEmailData, type ReturnEmailKind } from '@/emails/order/ReturnEmail'
 
@@ -242,8 +243,9 @@ export async function updateReturnRequest(
     case 'receive': {
       expect('APPROVED')
       updated = await prisma.returnRequest.update({ where: { id: r.id }, data: { status: 'RECEIVED', receivedAt: now } })
-      // İade gelen ürünler stoğa geri eklenir
-      for (const i of itemsOf(r)) {
+      // İade gelen ürünler stoğa geri eklenir. Sipariş zaten RETURNED ise tüm satırlar o anda stoğa eklenmiştir
+      // (order-service restoreStock) — tekrar eklenmez.
+      for (const i of order.status === 'RETURNED' ? [] : itemsOf(r)) {
         const line = order.lines.find((l) => l.id === i.lineId)
         const vm = line?.variantMatrix as { productId?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
         const productId = vm?.productId
@@ -257,6 +259,7 @@ export async function updateReturnRequest(
           await prisma.productOverride.updateMany({ where: { productId, stock: { not: null } }, data: { stock: { increment: i.quantity } } })
         }
       }
+      revalidateStorefront()
       await logOrderEvent(orderId, { type: 'return', status: 'RECEIVED', message: `İade edilen ürünler teslim alındı (${r.requestNo}), stoğa eklendi.`, actor: opts.actor })
       break
     }

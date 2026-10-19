@@ -27,7 +27,20 @@ import { toOrderView, ORDER_STATUS_LABELS } from '@/lib/order-view'
 import { getAuthToken } from '@/lib/store/useAuthStore'
 import { DeleteAccountCard } from '@/components/profile/DeleteAccountCard'
 import { MarketingConsentCard } from '@/components/profile/MarketingConsentCard'
+import { PrivacyDocumentsCard } from '@/components/profile/PrivacyDocumentsCard'
 import { EmailVerifyBanner } from '@/components/EmailVerifyBanner'
+import { useL } from '@/lib/i18n-inline'
+
+const ORDER_STATUS_LABELS_EN: Record<string, string> = {
+  pending: 'Pending',
+  paid: 'Paid',
+  confirmed: 'Preparing',
+  processing: 'Preparing',
+  shipped: 'Shipped',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
+  returned: 'Returned',
+}
 
 function ProfilePageContent() {
   const router = useRouter()
@@ -35,6 +48,13 @@ function ProfilePageContent() {
   const { user, isAuthenticated, token } = useAuthStore()
   const authReady = useFirebaseAuthStore((s) => s.authReady)
   const { addToast } = useToast()
+  const L = useL()
+  // Yalnızca Google/Facebook ile giriş yapan kullanıcının şifresi yoktur: şifre değiştirme kartı gösterilmez
+  const [hasPasswordLogin, setHasPasswordLogin] = useState(true)
+  useEffect(() => {
+    const providers = getAuth().currentUser?.providerData.map((p) => p.providerId) ?? []
+    if (providers.length > 0) setHasPasswordLogin(providers.includes('password'))
+  }, [user?.id])
   const addToCart = useCartStore((state) => state.addItem)
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -144,34 +164,34 @@ function ProfilePageContent() {
   const handleSaveAddress = async () => {
     if (!user?.id) return
     if (!addressForm.title?.trim() || !addressForm.name?.trim() || !addressForm.phone?.trim() || !addressForm.addressLine?.trim() || !addressForm.city?.trim() || !addressForm.district?.trim() || !addressForm.postalCode?.trim()) {
-      addToast({ type: 'error', title: 'Hata', description: 'Zorunlu alanları doldurun.' })
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Zorunlu alanları doldurun.', 'Please fill in the required fields.') })
       return
     }
     try {
       if (editingAddressId) {
         await updateAddress(user.id, editingAddressId, addressForm)
-        addToast({ type: 'success', title: 'Başarılı', description: 'Adres güncellendi.' })
+        addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Adres güncellendi.', 'Address updated.') })
       } else {
         await addAddress(user.id, addressForm)
-        addToast({ type: 'success', title: 'Başarılı', description: 'Adres eklendi.' })
+        addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Adres eklendi.', 'Address added.') })
       }
       setAddressDialogOpen(false)
       resetAddressForm()
       loadAddresses()
     } catch (error) {
       console.error('Error saving address:', error)
-      addToast({ type: 'error', title: 'Hata', description: 'Adres kaydedilemedi.' })
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Adres kaydedilemedi.', 'Address could not be saved.') })
     }
   }
 
   const handleDeleteAddress = async (addressId: string) => {
-    if (!user?.id || !confirm('Bu adresi silmek istediğinize emin misiniz?')) return
+    if (!user?.id || !confirm(L('Bu adresi silmek istediğinize emin misiniz?', 'Are you sure you want to delete this address?'))) return
     try {
       await deleteAddress(user.id, addressId)
-      addToast({ type: 'success', title: 'Başarılı', description: 'Adres silindi.' })
+      addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Adres silindi.', 'Address deleted.') })
       loadAddresses()
     } catch (error) {
-      addToast({ type: 'error', title: 'Hata', description: 'Adres silinemedi.' })
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Adres silinemedi.', 'Address could not be deleted.') })
     }
   }
 
@@ -179,10 +199,10 @@ function ProfilePageContent() {
     if (!user?.id) return
     try {
       await updateAddress(user.id, addressId, { isDefault: true })
-      addToast({ type: 'success', title: 'Başarılı', description: 'Varsayılan adres güncellendi.' })
+      addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Varsayılan adres güncellendi.', 'Default address updated.') })
       loadAddresses()
     } catch (error) {
-      addToast({ type: 'error', title: 'Hata', description: 'Güncellenemedi.' })
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Güncellenemedi.', 'Could not be updated.') })
     }
   }
 
@@ -216,9 +236,9 @@ function ProfilePageContent() {
         phone: profileEdit.phone.trim() || undefined,
       })
       await refreshUserProfile(user.id)
-      addToast({ type: 'success', title: 'Başarılı', description: 'Profil güncellendi.' })
+      addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Profil güncellendi.', 'Profile updated.') })
     } catch (error) {
-      addToast({ type: 'error', title: 'Hata', description: 'Profil güncellenemedi.' })
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Profil güncellenemedi.', 'Profile could not be updated.') })
     }
   }
 
@@ -226,21 +246,21 @@ function ProfilePageContent() {
     setPasswordError('')
     setPasswordSuccess(false)
     if (!passwordForm.current.trim()) {
-      setPasswordError('Mevcut şifrenizi girin.')
+      setPasswordError(L('Mevcut şifrenizi girin.', 'Enter your current password.'))
       return
     }
     if (passwordForm.new.length < 6) {
-      setPasswordError('Yeni şifre en az 6 karakter olmalıdır.')
+      setPasswordError(L('Yeni şifre en az 6 karakter olmalıdır.', 'The new password must be at least 6 characters.'))
       return
     }
     if (passwordForm.new !== passwordForm.confirm) {
-      setPasswordError('Yeni şifre ve tekrarı eşleşmiyor.')
+      setPasswordError(L('Yeni şifre ve tekrarı eşleşmiyor.', 'The new passwords do not match.'))
       return
     }
     const auth = getAuth()
     const currentUser = auth.currentUser
     if (!currentUser?.email) {
-      setPasswordError('Oturum bulunamadı. Lütfen tekrar giriş yapın.')
+      setPasswordError(L('Oturum bulunamadı. Lütfen tekrar giriş yapın.', 'Session not found. Please sign in again.'))
       return
     }
     setUpdatingPassword(true)
@@ -250,17 +270,17 @@ function ProfilePageContent() {
       await updatePassword(currentUser, passwordForm.new)
       setPasswordForm({ current: '', new: '', confirm: '' })
       setPasswordSuccess(true)
-      addToast({ type: 'success', title: 'Başarılı', description: 'Şifreniz güncellendi.' })
+      addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Şifreniz güncellendi.', 'Your password has been updated.') })
     } catch (err: unknown) {
       const message = err && typeof err === 'object' && 'code' in err
         ? (err as { code: string }).code === 'auth/wrong-password'
-          ? 'Mevcut şifre hatalı.'
+          ? L('Mevcut şifre hatalı.', 'Your current password is incorrect.')
           : (err as { code: string }).code === 'auth/requires-recent-login'
-            ? 'Güvenlik için lütfen tekrar giriş yapıp şifre değiştirmeyi deneyin.'
-            : 'Şifre güncellenemedi.'
-        : 'Şifre güncellenemedi.'
+            ? L('Güvenlik için lütfen tekrar giriş yapıp şifre değiştirmeyi deneyin.', 'For security, please sign in again and then try changing your password.')
+            : L('Şifre güncellenemedi.', 'Password could not be updated.')
+        : L('Şifre güncellenemedi.', 'Password could not be updated.')
       setPasswordError(message)
-      addToast({ type: 'error', title: 'Hata', description: message })
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: message })
     } finally {
       setUpdatingPassword(false)
     }
@@ -269,7 +289,7 @@ function ProfilePageContent() {
   // Oturum doğrulanana (veya girişe yönlendirilene) kadar boş hesap sayfası gösterilmez
   if (!authReady || !isAuthenticated) {
     return (
-      <ClassicPageShell breadcrumbs={[{ label: 'Hesabım' }]} noTitle>
+      <ClassicPageShell breadcrumbs={[{ label: L('Hesabım', 'My Account') }]} noTitle>
         <div className="flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-10 w-10 border-2 border-brand border-t-transparent" />
         </div>
@@ -278,21 +298,21 @@ function ProfilePageContent() {
   }
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: 'Hesabım' }]} title="Hesabım" description="Siparişler, adresler ve ayarlar">
+    <ClassicPageShell breadcrumbs={[{ label: L('Hesabım', 'My Account') }]} title={L('Hesabım', 'My Account')} description={L('Siparişler, adresler ve ayarlar', 'Orders, addresses and settings')}>
       <EmailVerifyBanner className="mb-6" />
       <Tabs value={activeTab} onValueChange={(value) => router.push(`/profile?tab=${value}`)} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto rounded-lg bg-surface p-1 min-w-0">
-          <TabsTrigger value="orders" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">Siparişlerim</TabsTrigger>
-          <TabsTrigger value="addresses" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">Adreslerim</TabsTrigger>
-          <TabsTrigger value="favorites" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">Favorilerim</TabsTrigger>
-          <TabsTrigger value="settings" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">Ayarlar</TabsTrigger>
+          <TabsTrigger value="orders" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">{L('Siparişlerim', 'My Orders')}</TabsTrigger>
+          <TabsTrigger value="addresses" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">{L('Adreslerim', 'My Addresses')}</TabsTrigger>
+          <TabsTrigger value="favorites" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">{L('Favorilerim', 'My Favorites')}</TabsTrigger>
+          <TabsTrigger value="settings" className="rounded-lg py-3 min-h-[44px] touch-manipulation data-[state=active]:bg-surface-elevated data-[state=active]:shadow-sm data-[state=active]:text-brand">{L('Ayarlar', 'Settings')}</TabsTrigger>
         </TabsList>
 
         <TabsContent value="orders" className="space-y-4">
               {loading ? (
                 <Card className="classic-card rounded-lg">
                   <CardContent className="py-12 text-center">
-                    <p className="text-ink-muted">Yükleniyor...</p>
+                    <p className="text-ink-muted">{L('Yükleniyor...', 'Loading...')}</p>
                   </CardContent>
                 </Card>
               ) : orders.length === 0 ? (
@@ -301,13 +321,13 @@ function ProfilePageContent() {
                     <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-surface mb-4">
                       <ShoppingCart className="w-8 h-8 text-ink-muted" />
                     </div>
-                    <h3 className="text-lg font-semibold text-ink mb-2">Henüz sipariş yok</h3>
+                    <h3 className="text-lg font-semibold text-ink mb-2">{L('Henüz sipariş yok', 'No orders yet')}</h3>
                     <p className="text-ink-muted mb-4">
-                      Siparişleriniz burada görünecek.
+                      {L('Siparişleriniz burada görünecek.', 'Your orders will appear here.')}
                     </p>
                     <Button asChild className="btn-classic-primary rounded-lg">
                       <Link href="/products">
-                        Ürünlere Git
+                        {L('Ürünlere Git', 'Browse Products')}
                       </Link>
                     </Button>
                   </CardContent>
@@ -319,9 +339,9 @@ function ProfilePageContent() {
                       <CardHeader>
                         <div className="flex items-start justify-between">
                           <div>
-                            <CardTitle className="text-lg">Sipariş #{order.orderId}</CardTitle>
+                            <CardTitle className="text-lg">{L('Sipariş', 'Order')} #{order.orderId}</CardTitle>
                             <p className="text-sm text-ink-muted mt-1">
-                              {new Date(order.createdAt).toLocaleDateString('tr-TR', {
+                              {new Date(order.createdAt).toLocaleDateString(L('tr-TR', 'en-GB'), {
                                 day: '2-digit',
                                 month: 'long',
                                 year: 'numeric',
@@ -342,7 +362,7 @@ function ProfilePageContent() {
                                   : 'bg-yellow-100 text-yellow-800'
                               }
                             >
-                              {order.awaitingTransfer ? 'Ödeme bekleniyor' : ORDER_STATUS_LABELS[order.status] || order.status}
+                              {order.awaitingTransfer ? L('Ödeme bekleniyor', 'Awaiting payment') : L(ORDER_STATUS_LABELS[order.status] || order.status, ORDER_STATUS_LABELS_EN[order.status] || order.status)}
                             </Badge>
                             <div className="text-lg font-bold text-brand">
                               {formatPrice(order.pricing?.total || 0)}
@@ -356,17 +376,17 @@ function ProfilePageContent() {
                             {order.trackingNumber && (
                               <div className="flex items-center gap-1">
                                 <Truck className="w-4 h-4" />
-                                <span>Takip: {order.trackingNumber}</span>
+                                <span>{L('Takip:', 'Tracking:')} {order.trackingNumber}</span>
                               </div>
                             )}
                             <div className="flex items-center gap-1">
                               <Package className="w-4 h-4" />
-                              <span>{order.items?.length || order.pricing?.items?.length || 0} ürün</span>
+                              <span>{order.items?.length || order.pricing?.items?.length || 0} {L('ürün', 'items')}</span>
                             </div>
                           </div>
                           <Button asChild variant="outline" size="sm" className="rounded-xl">
                             <Link href={`/orders/${order.id}`}>
-                              Detayları Gör
+                              {L('Detayları Gör', 'View Details')}
                             </Link>
                           </Button>
                         </div>
@@ -379,34 +399,34 @@ function ProfilePageContent() {
 
             <TabsContent value="addresses" className="space-y-4">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold">Kayıtlı Adreslerim</h3>
+                <h3 className="text-lg font-semibold">{L('Kayıtlı Adreslerim', 'My Saved Addresses')}</h3>
                         <Dialog open={addressDialogOpen} onOpenChange={(open) => { setAddressDialogOpen(open); if (!open) resetAddressForm() }}>
                   <DialogTrigger asChild>
                     <Button size="sm" className="rounded-xl" onClick={() => { resetAddressForm(); setAddressDialogOpen(true) }}>
                       <Plus className="w-4 h-4 mr-2" />
-                      Yeni Adres Ekle
+                      {L('Yeni Adres Ekle', 'Add New Address')}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
                     <DialogHeader>
-                      <DialogTitle>Yeni Adres Ekle</DialogTitle>
+                      <DialogTitle>{L('Yeni Adres Ekle', 'Add New Address')}</DialogTitle>
                       <DialogDescription>
-                        Teslimat adresinizi ekleyin.
+                        {L('Teslimat adresinizi ekleyin.', 'Add your delivery address.')}
                       </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label htmlFor="title">Adres Başlığı *</Label>
+                          <Label htmlFor="title">{L('Adres Başlığı *', 'Address Title *')}</Label>
                           <Input
                             id="title"
-                            placeholder="Ev, İş, vb."
+                            placeholder={L('Ev, İş, vb.', 'Home, Work, etc.')}
                             value={addressForm.title}
                             onChange={(e) => setAddressForm({ ...addressForm, title: e.target.value })}
                           />
                         </div>
                         <div>
-                          <Label htmlFor="name">Ad Soyad *</Label>
+                          <Label htmlFor="name">{L('Ad Soyad *', 'Full Name *')}</Label>
                           <Input
                             id="name"
                             value={addressForm.name}
@@ -415,7 +435,7 @@ function ProfilePageContent() {
                         </div>
                       </div>
                       <div>
-                        <Label htmlFor="phone">Telefon *</Label>
+                        <Label htmlFor="phone">{L('Telefon *', 'Phone *')}</Label>
                         <Input
                           id="phone"
                           type="tel"
@@ -424,7 +444,7 @@ function ProfilePageContent() {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="addressLine">Adres *</Label>
+                        <Label htmlFor="addressLine">{L('Adres *', 'Address *')}</Label>
                         <Input
                           id="addressLine"
                           value={addressForm.addressLine}
@@ -433,7 +453,7 @@ function ProfilePageContent() {
                       </div>
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <Label htmlFor="district">İlçe *</Label>
+                          <Label htmlFor="district">{L('İlçe *', 'District *')}</Label>
                           <Input
                             id="district"
                             value={addressForm.district}
@@ -441,7 +461,7 @@ function ProfilePageContent() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="city">Şehir *</Label>
+                          <Label htmlFor="city">{L('Şehir *', 'City *')}</Label>
                           <Input
                             id="city"
                             value={addressForm.city}
@@ -449,7 +469,7 @@ function ProfilePageContent() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="postalCode">Posta Kodu *</Label>
+                          <Label htmlFor="postalCode">{L('Posta Kodu *', 'Postal Code *')}</Label>
                           <Input
                             id="postalCode"
                             value={addressForm.postalCode}
@@ -458,7 +478,7 @@ function ProfilePageContent() {
                         </div>
                       </div>
                       <div>
-                        <Label htmlFor="country">Ülke</Label>
+                        <Label htmlFor="country">{L('Ülke', 'Country')}</Label>
                         <Input
                           id="country"
                           value={addressForm.country}
@@ -474,16 +494,16 @@ function ProfilePageContent() {
                           className="w-4 h-4 text-brand border-palette rounded focus:ring-brand"
                         />
                         <Label htmlFor="isDefault" className="cursor-pointer">
-                          Varsayılan adres olarak ayarla
+                          {L('Varsayılan adres olarak ayarla', 'Set as default address')}
                         </Label>
                       </div>
                     </div>
                     <DialogFooter>
                       <Button variant="outline" className="rounded-xl" onClick={() => setAddressDialogOpen(false)}>
-                        İptal
+                        {L('İptal', 'Cancel')}
                       </Button>
                       <Button className="rounded-full" onClick={handleSaveAddress}>
-                        {editingAddressId ? 'Güncelle' : 'Kaydet'}
+                        {editingAddressId ? L('Güncelle', 'Update') : L('Kaydet', 'Save')}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -495,37 +515,37 @@ function ProfilePageContent() {
                     <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-surface mb-4">
                       <MapPin className="w-8 h-8 text-ink-muted" />
                     </div>
-                    <h3 className="text-lg font-semibold text-ink mb-2">Henüz adres yok</h3>
+                    <h3 className="text-lg font-semibold text-ink mb-2">{L('Henüz adres yok', 'No addresses yet')}</h3>
                     <p className="text-ink-muted mb-4">
-                      Teslimat adreslerinizi kaydedin.
+                      {L('Teslimat adreslerinizi kaydedin.', 'Save your delivery addresses.')}
                     </p>
                     <Dialog open={addressDialogOpen} onOpenChange={setAddressDialogOpen}>
                       <DialogTrigger asChild>
                         <Button className="rounded-full">
                           <Plus className="w-4 h-4 mr-2" />
-                          İlk Adresimi Ekle
+                          {L('İlk Adresimi Ekle', 'Add My First Address')}
                         </Button>
                       </DialogTrigger>
                       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
                         <DialogHeader>
-                          <DialogTitle>Yeni Adres Ekle</DialogTitle>
+                          <DialogTitle>{L('Yeni Adres Ekle', 'Add New Address')}</DialogTitle>
                           <DialogDescription>
-                            Teslimat adresinizi ekleyin.
+                            {L('Teslimat adresinizi ekleyin.', 'Add your delivery address.')}
                           </DialogDescription>
                         </DialogHeader>
                         <div className="space-y-4 py-4">
                           <div className="grid grid-cols-2 gap-4">
                             <div>
-                              <Label htmlFor="title-empty">Adres Başlığı *</Label>
+                              <Label htmlFor="title-empty">{L('Adres Başlığı *', 'Address Title *')}</Label>
                               <Input
                                 id="title-empty"
-                                placeholder="Ev, İş, vb."
+                                placeholder={L('Ev, İş, vb.', 'Home, Work, etc.')}
                                 value={addressForm.title}
                                 onChange={(e) => setAddressForm({ ...addressForm, title: e.target.value })}
                               />
                             </div>
                             <div>
-                              <Label htmlFor="name-empty">Ad Soyad *</Label>
+                              <Label htmlFor="name-empty">{L('Ad Soyad *', 'Full Name *')}</Label>
                               <Input
                                 id="name-empty"
                                 value={addressForm.name}
@@ -534,7 +554,7 @@ function ProfilePageContent() {
                             </div>
                           </div>
                           <div>
-                            <Label htmlFor="phone-empty">Telefon *</Label>
+                            <Label htmlFor="phone-empty">{L('Telefon *', 'Phone *')}</Label>
                             <Input
                               id="phone-empty"
                               type="tel"
@@ -543,7 +563,7 @@ function ProfilePageContent() {
                             />
                           </div>
                           <div>
-                            <Label htmlFor="addressLine-empty">Adres *</Label>
+                            <Label htmlFor="addressLine-empty">{L('Adres *', 'Address *')}</Label>
                             <Input
                               id="addressLine-empty"
                               value={addressForm.addressLine}
@@ -552,7 +572,7 @@ function ProfilePageContent() {
                           </div>
                           <div className="grid grid-cols-3 gap-4">
                             <div>
-                              <Label htmlFor="district-empty">İlçe *</Label>
+                              <Label htmlFor="district-empty">{L('İlçe *', 'District *')}</Label>
                               <Input
                                 id="district-empty"
                                 value={addressForm.district}
@@ -560,7 +580,7 @@ function ProfilePageContent() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="city-empty">Şehir *</Label>
+                              <Label htmlFor="city-empty">{L('Şehir *', 'City *')}</Label>
                               <Input
                                 id="city-empty"
                                 value={addressForm.city}
@@ -568,7 +588,7 @@ function ProfilePageContent() {
                               />
                             </div>
                             <div>
-                              <Label htmlFor="postalCode-empty">Posta Kodu *</Label>
+                              <Label htmlFor="postalCode-empty">{L('Posta Kodu *', 'Postal Code *')}</Label>
                               <Input
                                 id="postalCode-empty"
                                 value={addressForm.postalCode}
@@ -577,7 +597,7 @@ function ProfilePageContent() {
                             </div>
                           </div>
                           <div>
-                            <Label htmlFor="country-empty">Ülke</Label>
+                            <Label htmlFor="country-empty">{L('Ülke', 'Country')}</Label>
                             <Input
                               id="country-empty"
                               value={addressForm.country}
@@ -593,16 +613,16 @@ function ProfilePageContent() {
                               className="w-4 h-4 text-brand border-palette rounded focus:ring-brand"
                             />
                             <Label htmlFor="isDefault-empty" className="cursor-pointer">
-                              Varsayılan adres olarak ayarla
+                              {L('Varsayılan adres olarak ayarla', 'Set as default address')}
                             </Label>
                           </div>
                         </div>
                         <DialogFooter>
                           <Button variant="outline" className="rounded-xl" onClick={() => setAddressDialogOpen(false)}>
-                            İptal
+                            {L('İptal', 'Cancel')}
                           </Button>
                           <Button className="rounded-full" onClick={handleSaveAddress}>
-                            {editingAddressId ? 'Güncelle' : 'Kaydet'}
+                            {editingAddressId ? L('Güncelle', 'Update') : L('Kaydet', 'Save')}
                           </Button>
                         </DialogFooter>
                       </DialogContent>
@@ -617,7 +637,7 @@ function ProfilePageContent() {
                         <div className="flex items-start justify-between">
                           <CardTitle className="text-base">{address.title}</CardTitle>
                           {address.isDefault && (
-                            <Badge className="bg-brand-light text-brand">Varsayılan</Badge>
+                            <Badge className="bg-brand-light text-brand">{L('Varsayılan', 'Default')}</Badge>
                           )}
                         </div>
                       </CardHeader>
@@ -633,12 +653,12 @@ function ProfilePageContent() {
                         <div className="flex flex-wrap gap-2 mt-4">
                           {!address.isDefault && (
                             <Button variant="outline" size="sm" className="rounded-xl" onClick={() => handleSetDefaultAddress(address.id)}>
-                              Varsayılan yap
+                              {L('Varsayılan yap', 'Set as default')}
                             </Button>
                           )}
                           <Button variant="outline" size="sm" className="flex-1 rounded-xl" onClick={() => openEditAddress(address)}>
                             <Edit className="w-4 h-4 mr-2" />
-                            Düzenle
+                            {L('Düzenle', 'Edit')}
                           </Button>
                           <Button variant="outline" size="sm" className="text-brand rounded-xl" onClick={() => handleDeleteAddress(address.id)}>
                             <Trash2 className="w-4 h-4" />
@@ -660,13 +680,13 @@ function ProfilePageContent() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <User className="w-5 h-5" />
-                    Kişisel Bilgiler
+                    {L('Kişisel Bilgiler', 'Personal Information')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="profile-name">Ad Soyad</Label>
+                      <Label htmlFor="profile-name">{L('Ad Soyad', 'Full Name')}</Label>
                       <Input
                         id="profile-name"
                         value={profileEdit.name}
@@ -675,11 +695,11 @@ function ProfilePageContent() {
                       />
                     </div>
                     <div>
-                      <Label htmlFor="email">E-posta</Label>
+                      <Label htmlFor="email">{L('E-posta', 'Email')}</Label>
                       <Input id="email" type="email" value={user?.email || ''} disabled className="rounded-xl" />
                     </div>
                     <div>
-                      <Label htmlFor="profile-phone">Telefon</Label>
+                      <Label htmlFor="profile-phone">{L('Telefon', 'Phone')}</Label>
                       <Input
                         id="profile-phone"
                         value={profileEdit.phone}
@@ -689,35 +709,36 @@ function ProfilePageContent() {
                     </div>
                     {profileCustomerNo && (
                       <div>
-                        <Label>Müşteri No</Label>
+                        <Label>{L('Müşteri No', 'Customer No.')}</Label>
                         <p className="text-sm font-mono text-ink mt-1">{profileCustomerNo}</p>
                       </div>
                     )}
                   </div>
                   <Button variant="outline" className="rounded-xl" onClick={handleSaveProfile}>
                     <Edit className="w-4 h-4 mr-2" />
-                    Bilgileri Güncelle
+                    {L('Bilgileri Güncelle', 'Update Information')}
                   </Button>
                 </CardContent>
               </Card>
 
+              {hasPasswordLogin && (
               <Card className="classic-card rounded-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Settings className="w-5 h-5" />
-                    Hesap Ayarları
+                    {L('Hesap Ayarları', 'Account Settings')}
                   </CardTitle>
-                  <p className="text-sm text-ink-muted">Şifrenizi değiştirmek için mevcut şifrenizi girin.</p>
+                  <p className="text-sm text-ink-muted">{L('Şifrenizi değiştirmek için mevcut şifrenizi girin.', 'Enter your current password to change your password.')}</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {passwordSuccess && (
-                    <p className="text-sm text-green-600 font-medium">Şifreniz başarıyla güncellendi.</p>
+                    <p className="text-sm text-green-600 font-medium">{L('Şifreniz başarıyla güncellendi.', 'Your password has been updated successfully.')}</p>
                   )}
                   {passwordError && (
                     <p className="text-sm text-brand">{passwordError}</p>
                   )}
                   <div>
-                    <Label htmlFor="currentPassword">Mevcut Şifre</Label>
+                    <Label htmlFor="currentPassword">{L('Mevcut Şifre', 'Current Password')}</Label>
                     <Input
                       id="currentPassword"
                       type="password"
@@ -729,11 +750,11 @@ function ProfilePageContent() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="newPassword">Yeni Şifre</Label>
+                    <Label htmlFor="newPassword">{L('Yeni Şifre', 'New Password')}</Label>
                     <Input
                       id="newPassword"
                       type="password"
-                      placeholder="En az 6 karakter"
+                      placeholder={L('En az 6 karakter', 'At least 6 characters')}
                       value={passwordForm.new}
                       onChange={(e) => setPasswordForm((p) => ({ ...p, new: e.target.value }))}
                       className="rounded-xl"
@@ -741,7 +762,7 @@ function ProfilePageContent() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="confirmNewPassword">Yeni Şifre Tekrar</Label>
+                    <Label htmlFor="confirmNewPassword">{L('Yeni Şifre Tekrar', 'Confirm New Password')}</Label>
                     <Input
                       id="confirmNewPassword"
                       type="password"
@@ -758,23 +779,25 @@ function ProfilePageContent() {
                     onClick={handleUpdatePassword}
                     disabled={updatingPassword}
                   >
-                    {updatingPassword ? 'Güncelleniyor...' : 'Şifreyi Güncelle'}
+                    {updatingPassword ? L('Güncelleniyor...', 'Updating...') : L('Şifreyi Güncelle', 'Update Password')}
                   </Button>
                 </CardContent>
               </Card>
+              )}
               <MarketingConsentCard />
+              <PrivacyDocumentsCard />
               <DeleteAccountCard />
             </TabsContent>
 
             <TabsContent value="havale" className="space-y-4">
               <Card className="classic-card rounded-lg">
                 <CardHeader>
-                  <CardTitle>Havale Bildirimi</CardTitle>
-                  <p className="text-sm text-ink-muted">Ödeme yaptıktan sonra havale/EFT bilgilerinizi buradan iletebilirsiniz.</p>
+                  <CardTitle>{L('Havale Bildirimi', 'Bank Transfer Notice')}</CardTitle>
+                  <p className="text-sm text-ink-muted">{L('Ödeme yaptıktan sonra havale/EFT bilgilerinizi buradan iletebilirsiniz.', 'After paying, you can submit your bank transfer details here.')}</p>
                 </CardHeader>
                 <CardContent>
                   {orders.filter((o: any) => o.awaitingTransfer).length === 0 ? (
-                    <p className="text-ink-muted">Ödeme bekleyen havale/EFT siparişiniz yok.</p>
+                    <p className="text-ink-muted">{L('Ödeme bekleyen havale/EFT siparişiniz yok.', 'You have no bank transfer orders awaiting payment.')}</p>
                   ) : (
                     <ul className="space-y-2">
                       {orders.filter((o: any) => o.awaitingTransfer).map((o: any) => (
@@ -783,7 +806,7 @@ function ProfilePageContent() {
                             <strong>#{o.orderId}</strong> · {formatPrice(o.pricing?.total || 0)}
                           </span>
                           <Button asChild size="sm" variant="outline" className="bg-white">
-                            <Link href={`/orders/${o.id}`}>Ödeme bilgileri ve bildirim</Link>
+                            <Link href={`/orders/${o.id}`}>{L('Ödeme bilgileri ve bildirim', 'Payment details and notice')}</Link>
                           </Button>
                         </li>
                       ))}

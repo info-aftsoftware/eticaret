@@ -6,7 +6,7 @@
 
 import nodemailer from 'nodemailer'
 import type { Transporter, TransportOptions, SendMailOptions, SentMessageInfo } from 'nodemailer'
-import { render } from '@react-email/render'
+import { render, toPlainText } from '@react-email/render'
 import React from 'react'
 import { captureEmail, emailCaptureEnabled } from './email-capture'
 
@@ -107,13 +107,17 @@ export async function sendEmailSMTP(
       ])
     }
 
+    const sender = senderAddress()
     const mailOptions: SendMailOptions = {
-      // Görünen ad SMTP_FROM_NAME (varsayılan Voltekno); adres SMTP_FROM / SMTP_USER'dan (gönderim adresi sonra değişecek)
-      from: `"${process.env.SMTP_FROM_NAME || 'Voltekno'}" <${senderAddress()}>`,
+      // Görünen ad SMTP_FROM_NAME (varsayılan Voltekno); adres SMTP_FROM / SMTP_USER'dan.
+      // SPF/DKIM/DMARC hizası için adres, kimliği doğrulanan SMTP kutusuyla aynı alan adında (@voltekno.com) olmalı.
+      from: `"${process.env.SMTP_FROM_NAME || 'Voltekno'}" <${sender}>`,
+      replyTo: process.env.SMTP_REPLY_TO || sender,
       to: to,
       subject: subject,
       html: htmlContent,
-      text: htmlContent.replace(/<[^>]*>/g, '').substring(0, 500),
+      // Tam metin sürümü: kesik / stil artığı içeren metin parçası spam puanını yükseltir
+      text: toPlainText(htmlContent),
     }
     if (attachments?.length) {
       mailOptions.attachments = attachments.map((a) => ({

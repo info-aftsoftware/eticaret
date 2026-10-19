@@ -4,6 +4,12 @@
  * Çalıştırma: PLAYWRIGHT_BASE_URL=http://localhost:3005 npx playwright test tests/checkout.spec.ts --project=chromium
  */
 import { test, expect, type Page } from '@playwright/test'
+import { computeOrderTotals } from '../lib/store-config'
+import { shippingFeeFor } from '../lib/shipping/fee'
+
+/** Test ürününün ölçü/ağırlık verisi yok (0 desi): kargo, desi tarifesinin en düşük basamağıdır */
+const E2E_SHIPPING = shippingFeeFor({ desi: 0, kg: 0 })
+const tl = (n: number) => n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
 const LEGAL_SLUGS = [
   'mesafeli-satis-sozlesmesi',
@@ -27,6 +33,11 @@ async function skipIfCampaign(request: import('@playwright/test').APIRequestCont
 }
 
 /** Misafir sepetini (sessionStorage) doğrudan doldurur: 2 × 450 TL = 900 TL */
+/** Kart seçeneği yalnızca sanal POS tanımlıysa açılır; testler POS'u açık varsayar. */
+async function enableCard(page: Page) {
+  await page.route('**/api/payments/methods', (route) => route.fulfill({ json: { bankTransfer: true, card: true } }))
+}
+
 async function seedCart(page: Page) {
   await page.addInitScript(() => {
     sessionStorage.setItem('cart-storage', JSON.stringify({
@@ -69,14 +80,15 @@ test.describe('yasal metinler', () => {
 test.describe('ödeme sayfası', () => {
   test('havale %3 indirimi gösterir, kartta kalkar', async ({ page, request }) => {
     await skipIfCampaign(request)
+    await enableCard(page)
     await seedCart(page)
     await page.goto('/checkout')
     const summary = page.locator('text=Havale/EFT indirimi (%3)')
     await expect(summary.first()).toBeVisible({ timeout: 20_000 })
-    await expect(page.locator('body')).toContainText('1.097,60')
+    await expect(page.locator('body')).toContainText(tl(computeOrderTotals({ subtotal: 900, paymentMethod: 'bank_transfer', shippingFee: E2E_SHIPPING }).total))
     await page.locator('input[name=paymentMethod]').nth(1).check()
     await expect(summary).toHaveCount(0)
-    await expect(page.locator('body')).toContainText('1.130,00')
+    await expect(page.locator('body')).toContainText(tl(computeOrderTotals({ subtotal: 900, paymentMethod: 'card', shippingFee: E2E_SHIPPING }).total))
   })
 
   test('sözleşme onayı olmadan sipariş verilemez', async ({ page }) => {
@@ -98,12 +110,12 @@ test.describe('ödeme sayfası', () => {
 })
 
 test.describe('sepet', () => {
-  test('ücretsiz kargo için kalan tutar gösterilir', async ({ page, request }) => {
+  test('kargo ücreti desiye göre gösterilir', async ({ page, request }) => {
     await skipIfCampaign(request)
     await seedCart(page)
     await page.goto('/cart')
-    await expect(page.locator('body')).toContainText('2.100,00', { timeout: 20_000 })
-    await expect(page.locator('body')).toContainText('Ücretsiz kargo için')
+    await expect(page.locator('body')).toContainText('hacim/ağırlığına göre', { timeout: 20_000 })
+    await expect(page.locator('body')).toContainText(tl(E2E_SHIPPING))
   })
 })
 
@@ -192,10 +204,10 @@ test.describe('faz 4: iade, hesap, stok, SEO', () => {
     expect(res.headers()['content-type']).toContain('application/xml')
     const body = await res.text()
     expect(body).toContain('<g:id>e2e-test-urunu</g:id>')
-    // 450 TL + %20 KDV = 540 TL; ara toplam 3000 altı → 50 TL kargo
+    // 450 TL + %20 KDV = 540 TL; kargo desi tarifesinden (test ürünü 0 desi)
     const item = body.split('<item>').find((x) => x.includes('<g:id>e2e-test-urunu</g:id>'))!
     expect(item).toContain('<g:price>540.00 TRY</g:price>')
-    expect(item).toContain('<g:price>50.00 TRY</g:price></g:shipping>')
+    expect(item).toContain(`<g:price>${E2E_SHIPPING.toFixed(2)} TRY</g:price></g:shipping>`)
   })
 
   test('site haritası yasal sayfaları içerir', async ({ request }) => {
@@ -204,13 +216,13 @@ test.describe('faz 4: iade, hesap, stok, SEO', () => {
     expect(body).toContain('/pages/mesafeli-satis-sozlesmesi')
   })
 
-  test('ürün sayfası JSON-LD: KDV dahil fiyat, 50 TL kargo, iade politikası', async ({ page, request }) => {
+  test('ürün sayfası JSON-LD: KDV dahil fiyat, desi kargosu, iade politikası', async ({ page, request }) => {
     await skipIfCampaign(request)
     await page.goto('/products/e2e-test-urunu')
     const blocks = await page.locator('script[type="application/ld+json"]').evaluateAll((els) => els.map((e) => e.textContent ?? ''))
     const ld = blocks.map((b) => JSON.parse(b)).find((x) => x['@type'] === 'Product')
     expect(ld.offers.price).toBe(540)
-    expect(ld.offers.shippingDetails.shippingRate.value).toBe(50)
+    expect(ld.offers.shippingDetails.shippingRate.value).toBe(E2E_SHIPPING)
     expect(ld.offers.hasMerchantReturnPolicy.merchantReturnDays).toBe(14)
     await expect(page).toHaveTitle(/^E2E Test Ürünü \| voltekno$/)
   })
@@ -300,11 +312,14 @@ test.describe('banka hesapları ve WhatsApp', () => {
   })
 
   test('WhatsApp düğmesi: ürün sayfasında var, ödeme sayfasında yok', async ({ page }) => {
+    // Sepet boşken ödeme sayfası /cart'a yönlenir; ödeme sayfasının kendisini sınamak için sepet doldurulur
+    await seedCart(page)
     await page.goto('/products/e2e-test-urunu')
     // Sabit düğme (footer'daki genel bağlantı değil): ürün adresiyle hazır mesaj içerir
     const wa = page.locator('a.fixed[href^="https://wa.me/"]')
     await expect(wa).toHaveAttribute('href', /^https:\/\/wa\.me\/905518291613\?text=/)
     await page.goto('/checkout')
+    await expect(page.getByRole('button', { name: /Siparişi onayla/ })).toBeVisible({ timeout: 20_000 })
     await expect(page.locator('a.fixed[href^="https://wa.me/"]')).toHaveCount(0)
   })
 })
@@ -345,6 +360,7 @@ test.describe('kart ödemesi (banka sanal POS)', () => {
   })
 
   test('ödeme sayfasında kart seçeneği 3D Secure açıklamasıyla görünür; footerda kart rozetleri', async ({ page }) => {
+    await enableCard(page)
     await seedCart(page)
     await page.goto('/checkout')
     await page.locator('input[name=paymentMethod]').nth(1).check()

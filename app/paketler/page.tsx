@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
+import { getLocale } from 'next-intl/server'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 
@@ -53,7 +54,9 @@ function buildPackageListSchema() {
   }
 }
 
-export default function PaketlerPage() {
+export default async function PaketlerPage() {
+  const locale = await getLocale()
+  const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
   return (
     <div className="min-h-screen bg-slate-50">
       <script
@@ -62,8 +65,8 @@ export default function PaketlerPage() {
       />
       <div className={`${PAGE_CONTAINER} py-10 md:py-14`}>
         <header className="mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Paket Kategorileri</h1>
-          <p className="mt-2 text-slate-600">İhtiyaca göre hazırlanmış enerji paketlerini inceleyin.</p>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">{L('Paket Kategorileri', 'Package Categories')}</h1>
+          <p className="mt-2 text-slate-600">{L('İhtiyaca göre hazırlanmış enerji paketlerini inceleyin.', 'Explore energy packages tailored to your needs.')}</p>
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-7">
@@ -77,7 +80,7 @@ export default function PaketlerPage() {
                 <div className="relative aspect-[11/14] bg-slate-100 overflow-hidden">
                   <Image
                     src={item.image}
-                    alt={item.imageAlt}
+                    alt={L(item.imageAlt, `${item.en.shortTitle} solar energy package`)}
                     fill
                     className="object-cover group-hover:scale-[1.05] transition-transform duration-700"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -91,10 +94,10 @@ export default function PaketlerPage() {
                       <span className="mb-2.5 block h-px w-10 bg-gradient-to-r from-[#e7c15b] to-transparent" />
                       <h2 className="text-[1.8rem] sm:text-[1.95rem] font-black uppercase leading-[0.92] tracking-[-0.045em] [text-wrap:balance]">
                         <span className="block text-[#e7c15b] drop-shadow-[0_6px_20px_rgba(15,23,42,0.35)]">
-                          {item.shortTitle}
+                          {L(item.shortTitle, item.en.shortTitle)}
                         </span>
                         <span className="mt-1 block text-white drop-shadow-[0_6px_20px_rgba(15,23,42,0.38)]">
-                          Paketleri
+                          {L('Paketleri', 'Packages')}
                         </span>
                       </h2>
                     </div>

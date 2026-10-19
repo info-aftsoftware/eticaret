@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
+import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type Review = {
   id: string
@@ -40,6 +42,8 @@ function StarRow({
 
 export function ProductReviews({ productId }: { productId: string }) {
   const { user, isAuthenticated } = useAuthStore()
+  const L = useL()
+  const tErr = useServerError()
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)
   const [reviews, setReviews] = useState<Review[]>([])
@@ -83,11 +87,11 @@ export function ProductReviews({ productId }: { productId: string }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!comment.trim()) {
-      setError('Lütfen bir yorum yazın.')
+      setError(L('Lütfen bir yorum yazın.', 'Please write a review.'))
       return
     }
     if (!isAuthenticated && (!guestName.trim() || !guestEmail.trim())) {
-      setError('Ad ve e-posta zorunludur.')
+      setError(L('Ad ve e-posta zorunludur.', 'Name and email are required.'))
       return
     }
     setSubmitting(true)
@@ -114,7 +118,7 @@ export function ProductReviews({ productId }: { productId: string }) {
 
       const data = await res.json()
       if (!res.ok) {
-        setError(data.error || 'Yorum gönderilemedi. Lütfen tekrar deneyin.')
+        setError(tErr(data.error) || L('Yorum gönderilemedi. Lütfen tekrar deneyin.', 'Your review could not be submitted. Please try again.'))
         return
       }
 
@@ -127,7 +131,7 @@ export function ProductReviews({ productId }: { productId: string }) {
       setLoading(true)
       await loadReviews()
     } catch {
-      setError('Yorum gönderilemedi. Lütfen tekrar deneyin.')
+      setError(L('Yorum gönderilemedi. Lütfen tekrar deneyin.', 'Your review could not be submitted. Please try again.'))
     } finally {
       setSubmitting(false)
     }
@@ -138,28 +142,28 @@ export function ProductReviews({ productId }: { productId: string }) {
       {submitted ? (
         <div className="text-center py-2">
           <p className="text-sm font-semibold text-green-700">
-            ✓ Değerlendirmeniz alındı, onaylandıktan sonra yayımlanacak. Teşekkürler!
+            {L('✓ Değerlendirmeniz alındı, onaylandıktan sonra yayımlanacak. Teşekkürler!', '✓ Your review has been received and will be published after approval. Thank you!')}
           </p>
           <button
             onClick={() => setSubmitted(false)}
             className="text-xs text-brand hover:underline mt-1"
           >
-            Tekrar değerlendir
+            {L('Tekrar değerlendir', 'Write another review')}
           </button>
         </div>
       ) : (
         <>
-          <h3 className="font-semibold text-slate-900 mb-4 text-sm">Değerlendirme Yaz</h3>
+          <h3 className="font-semibold text-slate-900 mb-4 text-sm">{L('Değerlendirme Yaz', 'Write a Review')}</h3>
           <form onSubmit={handleSubmit} className="space-y-3">
             {/* Yıldız seçici */}
-            <div className="flex items-center gap-1" role="radiogroup" aria-label="Puanınız">
+            <div className="flex items-center gap-1" role="radiogroup" aria-label={L('Puanınız', 'Your rating')}>
               {[1, 2, 3, 4, 5].map((s) => (
                 <button
                   key={s}
                   type="button"
                   role="radio"
                   aria-checked={rating === s}
-                  aria-label={`${s} yıldız`}
+                  aria-label={L(`${s} yıldız`, `${s} star${s > 1 ? 's' : ''}`)}
                   onMouseEnter={() => setHoverRating(s)}
                   onMouseLeave={() => setHoverRating(0)}
                   onClick={() => setRating(s)}
@@ -175,7 +179,14 @@ export function ProductReviews({ productId }: { productId: string }) {
                 </button>
               ))}
               <span className="ml-2 text-sm text-slate-500">
-                {['', 'Berbat', 'Kötü', 'Orta', 'İyi', 'Mükemmel'][hoverRating || rating]}
+                {[
+                  '',
+                  L('Berbat', 'Terrible'),
+                  L('Kötü', 'Poor'),
+                  L('Orta', 'Average'),
+                  L('İyi', 'Good'),
+                  L('Mükemmel', 'Excellent'),
+                ][hoverRating || rating]}
               </span>
             </div>
 
@@ -183,8 +194,8 @@ export function ProductReviews({ productId }: { productId: string }) {
             {!isAuthenticated && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Input
-                  placeholder="Adınız *"
-                  aria-label="Adınız"
+                  placeholder={L('Adınız *', 'Your name *')}
+                  aria-label={L('Adınız', 'Your name')}
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -192,8 +203,8 @@ export function ProductReviews({ productId }: { productId: string }) {
                 />
                 <Input
                   type="email"
-                  placeholder="E-posta *"
-                  aria-label="E-posta adresiniz"
+                  placeholder={L('E-posta *', 'Email *')}
+                  aria-label={L('E-posta adresiniz', 'Your email address')}
                   value={guestEmail}
                   onChange={(e) => setGuestEmail(e.target.value)}
                   className="rounded-xl border-slate-200 text-sm"
@@ -204,20 +215,20 @@ export function ProductReviews({ productId }: { productId: string }) {
 
             {isAuthenticated && user?.name && (
               <p className="text-xs text-slate-500">
-                Değerlendirme <span className="font-medium text-slate-700">{user.name}</span> olarak gönderilecek.
+                {L('Değerlendirme ', 'Review will be submitted as ')}<span className="font-medium text-slate-700">{user.name}</span>{L(' olarak gönderilecek.', '.')}
               </p>
             )}
 
             <Input
-              placeholder="Başlık (opsiyonel)"
-              aria-label="Değerlendirme başlığı"
+              placeholder={L('Başlık (opsiyonel)', 'Title (optional)')}
+              aria-label={L('Değerlendirme başlığı', 'Review title')}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="rounded-xl border-slate-200 text-sm"
             />
             <Textarea
-              placeholder="Ürün hakkında deneyiminizi paylaşın..."
-              aria-label="Değerlendirmeniz"
+              placeholder={L('Ürün hakkında deneyiminizi paylaşın...', 'Share your experience with this product...')}
+              aria-label={L('Değerlendirmeniz', 'Your review')}
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
@@ -233,7 +244,7 @@ export function ProductReviews({ productId }: { productId: string }) {
               className="rounded-xl"
             >
               <Send className="w-3.5 h-3.5 mr-1.5" />
-              {submitting ? 'Gönderiliyor...' : 'Değerlendirmeyi Gönder'}
+              {submitting ? L('Gönderiliyor...', 'Submitting...') : L('Değerlendirmeyi Gönder', 'Submit Review')}
             </Button>
           </form>
         </>
@@ -244,7 +255,7 @@ export function ProductReviews({ productId }: { productId: string }) {
   return (
     <div className="mt-10 pt-8 border-t border-slate-200">
       <h2 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-        Değerlendirmeler
+        {L('Değerlendirmeler', 'Reviews')}
         {reviews.length > 0 && (
           <span className="text-sm font-normal text-slate-500">({reviews.length})</span>
         )}
@@ -257,7 +268,7 @@ export function ProductReviews({ productId }: { productId: string }) {
             <span className="text-5xl font-bold text-slate-900">{avgRating.toFixed(1)}</span>
             <div>
               <StarRow rating={avgRating} size="lg" />
-              <p className="text-sm text-slate-500 mt-1">{reviews.length} değerlendirme</p>
+              <p className="text-sm text-slate-500 mt-1">{L(`${reviews.length} değerlendirme`, `${reviews.length} ${reviews.length === 1 ? 'review' : 'reviews'}`)}</p>
             </div>
           </div>
           <div className="flex-1 space-y-1.5">
@@ -286,7 +297,7 @@ export function ProductReviews({ productId }: { productId: string }) {
       ) : reviews.length === 0 ? (
         <div className="text-center py-10 text-slate-400">
           <MessageSquare className="w-10 h-10 mx-auto mb-2 text-slate-200" />
-          <p className="text-sm">Henüz değerlendirme yok. İlk değerlendirmeyi siz yapın!</p>
+          <p className="text-sm">{L('Henüz değerlendirme yok. İlk değerlendirmeyi siz yapın!', 'No reviews yet. Be the first to review!')}</p>
         </div>
       ) : (
         <div className="space-y-3 mb-8">
@@ -300,7 +311,7 @@ export function ProductReviews({ productId }: { productId: string }) {
                   <div>
                     <p className="text-sm font-semibold text-slate-900">{r.userName}</p>
                     <p className="text-xs text-slate-400">
-                      {r.createdAt ? new Date(r.createdAt).toLocaleDateString('tr-TR') : ''}
+                      {r.createdAt ? new Date(r.createdAt).toLocaleDateString(L('tr-TR', 'en-US')) : ''}
                     </p>
                   </div>
                 </div>

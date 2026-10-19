@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
-import { mockProducts } from '@/lib/products-mock'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 
 export type NavGroup = {
@@ -14,25 +13,8 @@ export type NavGroup = {
   categories: { value: string; labelKey: string }[]
 }
 
-/** Alt kategori → katalogdaki markalar (ürün sayısına göre azalan) */
-export const BRANDS_BY_CATEGORY: Record<string, string[]> = (() => {
-  const counts: Record<string, Record<string, number>> = {}
-  for (const p of mockProducts) {
-    if (!p.category || !p.brand) continue
-    const byBrand = (counts[p.category] ??= {})
-    byBrand[p.brand] = (byBrand[p.brand] ?? 0) + 1
-  }
-  return Object.fromEntries(
-    Object.entries(counts).map(([category, byBrand]) => [
-      category,
-      Object.entries(byBrand).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'tr')).map(([brand]) => brand),
-    ])
-  )
-})()
-
 const PACKAGES_ID = '__packages'
-export const productsHref = (category: string, brand?: string) =>
-  `/products?category=${encodeURIComponent(category)}${brand ? `&brand=${encodeURIComponent(brand)}` : ''}`
+export const productsHref = (category: string) => `/products?category=${encodeURIComponent(category)}`
 
 /** voltekno.com'daki dört kareli kategori ikonu (sarı) */
 export function CategoryGridIcon({ className = '' }: { className?: string }) {
@@ -157,29 +139,15 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
               ) : activeGroup ? (
                 <>
                   <PanelHeading title={t(activeGroup.labelKey)} href={activeGroup.href} onClick={close} />
-                  <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
-                    {activeGroup.categories.map((cat) => {
-                      const brands = BRANDS_BY_CATEGORY[cat.value] ?? []
-                      return (
-                        <div key={cat.value} className="min-w-0">
-                          <Link href={productsHref(cat.value)} onClick={close} className="block text-[13.5px] font-semibold text-[#20384e] hover:text-[#0b2540] mb-1.5">
-                            {t(cat.labelKey)}
-                          </Link>
-                          {brands.length > 0 && (
-                            <ul className="space-y-0.5">
-                              {brands.map((brand) => (
-                                <li key={brand}>
-                                  <Link href={productsHref(cat.value, brand)} onClick={close} className="block text-[13px] text-[#5d6e80] hover:text-[#0b2540] py-0.5">
-                                    {brand}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
+                  <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
+                    {activeGroup.categories.map((cat) => (
+                      <li key={cat.value} className="min-w-0">
+                        <Link href={productsHref(cat.value)} onClick={close} className="block text-[13.5px] font-medium text-[#20384e] hover:text-[#0b2540] py-1.5">
+                          {t(cat.labelKey)}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </>
               ) : null}
             </div>

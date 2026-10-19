@@ -45,6 +45,8 @@ import {
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import type { LegalSlug } from '@/lib/legal/documents'
+import { useL } from '@/lib/i18n-inline'
+import { useServerError } from '@/lib/server-error-i18n'
 
 type FormState = {
   name: string
@@ -116,11 +118,12 @@ function Field({
   className?: string
   children: React.ReactNode
 }) {
+  const L = useL()
   return (
     <div className={`min-w-0 ${className}`}>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[#20384e]">
         {label}
-        {required ? <span className="text-red-600"> *</span> : <span className="font-normal text-[#5d6e80]"> (isteğe bağlı)</span>}
+        {required ? <span className="text-red-600"> *</span> : <span className="font-normal text-[#5d6e80]"> {L('(isteğe bağlı)', '(optional)')}</span>}
       </label>
       {children}
       {error ? (
@@ -164,6 +167,7 @@ function CitySelect({ id, value, onChange, invalid, describedBy }: {
   invalid?: boolean
   describedBy?: string
 }) {
+  const L = useL()
   const known = TR_CITIES.some((c) => c.name === value)
   return (
     <div className="relative">
@@ -176,7 +180,7 @@ function CitySelect({ id, value, onChange, invalid, describedBy }: {
         autoComplete="address-level1"
         className={`${inputCls(invalid)} appearance-none pr-10 ${value ? '' : 'text-[#8a99a8]'}`}
       >
-        <option value="">İl seçin</option>
+        <option value="">{L('İl seçin', 'Select province')}</option>
         {!known && value && <option value={value}>{value}</option>}
         {TR_CITIES.map((c) => (
           <option key={c.name} value={c.name} className="text-[#121926]">{c.name}</option>
@@ -195,6 +199,7 @@ function DistrictSelect({ id, city, value, onChange, invalid, describedBy }: {
   invalid?: boolean
   describedBy?: string
 }) {
+  const L = useL()
   const districts = getDistrictsByCity(city)
   const known = districts.includes(value)
   return (
@@ -209,7 +214,7 @@ function DistrictSelect({ id, city, value, onChange, invalid, describedBy }: {
         autoComplete="address-level2"
         className={`${inputCls(invalid)} appearance-none pr-10 ${value ? '' : 'text-[#8a99a8]'}`}
       >
-        <option value="">{city ? 'İlçe seçin' : 'Önce il seçin'}</option>
+        <option value="">{city ? L('İlçe seçin', 'Select district') : L('Önce il seçin', 'Select a province first')}</option>
         {!known && value && <option value={value}>{value}</option>}
         {districts.map((d) => (
           <option key={d} value={d} className="text-[#121926]">{d}</option>
@@ -221,13 +226,14 @@ function DistrictSelect({ id, city, value, onChange, invalid, describedBy }: {
 }
 
 function Stepper() {
+  const L = useL()
   const steps = [
-    { label: 'Sepet', href: '/cart', state: 'done' as const },
-    { label: 'Bilgiler ve ödeme', state: 'current' as const },
-    { label: 'Onay', state: 'todo' as const },
+    { label: L('Sepet', 'Cart'), href: '/cart', state: 'done' as const },
+    { label: L('Bilgiler ve ödeme', 'Details & payment'), state: 'current' as const },
+    { label: L('Onay', 'Confirmation'), state: 'todo' as const },
   ]
   return (
-    <ol className="flex items-center gap-2 text-[13px] sm:text-sm" aria-label="Sipariş adımları">
+    <ol className="flex items-center gap-2 text-[13px] sm:text-sm" aria-label={L('Sipariş adımları', 'Checkout steps')}>
       {steps.map((s, i) => (
         <li key={s.label} className="flex min-w-0 items-center gap-2" aria-current={s.state === 'current' ? 'step' : undefined}>
           {i > 0 && <span className="h-px w-4 bg-[#d3d9e1] sm:w-8" aria-hidden />}
@@ -257,6 +263,8 @@ const FIELD_ORDER = [
 ]
 
 export default function CheckoutPage() {
+  const L = useL()
+  const tErr = useServerError()
   const router = useRouter()
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -298,6 +306,20 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [generalError, setGeneralError] = useState('')
   const [paymentMethod, setPaymentMethod] = useState<'havale' | 'card'>('havale')
+  /** Banka sanal POS yapılandırılmamışsa kart seçeneği pasif (null: henüz bilinmiyor) */
+  const [cardAvailable, setCardAvailable] = useState<boolean | null>(null)
+  React.useEffect(() => {
+    let cancelled = false
+    fetch('/api/payments/methods')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (cancelled || !d) return
+        setCardAvailable(d.card === true)
+        if (d.card !== true) setPaymentMethod('havale')
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
   const [acceptedTerms, setAcceptedTerms] = useState(false)
   const [legalDoc, setLegalDoc] = useState<LegalSlug | null>(null)
   const [couponDiscount, setCouponDiscount] = useState(0)
@@ -429,11 +451,11 @@ export default function CheckoutPage() {
   /** Tek alan doğrulaması (alandan çıkınca); boş zorunlu alanlar yalnızca gönderimde işaretlenir */
   const validateField = (name: string, value: string) => {
     let msg = ''
-    if (name === 'email' && value && !isValidEmail(value)) msg = 'Geçerli bir e-posta adresi girin.'
-    if (name === 'phone' && value && !isValidTrPhone(value)) msg = 'Telefon numarası 10 haneli olmalı (5xx xxx xx xx).'
-    if ((name === 'postalCode' || name === 'billingPostalCode') && value && !isValidPostalCode(value)) msg = 'Geçerli bir posta kodu girin (5 hane).'
+    if (name === 'email' && value && !isValidEmail(value)) msg = L('Geçerli bir e-posta adresi girin.', 'Enter a valid email address.')
+    if (name === 'phone' && value && !isValidTrPhone(value)) msg = L('Telefon numarası 10 haneli olmalı (5xx xxx xx xx).', 'Phone number must be 10 digits (5xx xxx xx xx).')
+    if ((name === 'postalCode' || name === 'billingPostalCode') && value && !isValidPostalCode(value)) msg = L('Geçerli bir posta kodu girin (5 hane).', 'Enter a valid postal code (5 digits).')
     if (['idNumber', 'taxId'].includes(name) && value) {
-      msg = validateBilling({ ...formData, [name]: value })[name] ?? ''
+      msg = tErr(validateBilling({ ...formData, [name]: value })[name]) ?? ''
     }
     setErrors((prev) => ({ ...prev, [name]: msg }))
   }
@@ -441,23 +463,23 @@ export default function CheckoutPage() {
   const validateAll = (): Record<string, string> => {
     const f = formData
     const err: Record<string, string> = {}
-    if (!f.name.trim() || f.name.trim().length < 3) err.name = 'Ad ve soyadınızı girin.'
-    if (!f.email.trim()) err.email = 'E-posta zorunludur.'
-    else if (!isValidEmail(f.email)) err.email = 'Geçerli bir e-posta adresi girin.'
-    if (!f.phone.trim()) err.phone = 'Telefon zorunludur.'
-    else if (!isValidTrPhone(f.phone)) err.phone = 'Telefon numarası 10 haneli olmalı (5xx xxx xx xx).'
-    if (!f.city) err.city = 'İl seçin.'
-    if (!f.district) err.district = 'İlçe seçin.'
-    if (f.postalCode && !isValidPostalCode(f.postalCode)) err.postalCode = 'Geçerli bir posta kodu girin (5 hane).'
-    if (f.addressLine.trim().length < 10) err.addressLine = f.addressLine.trim() ? 'Adresinizi mahalle, sokak ve kapı no ile eksiksiz yazın.' : 'Adres zorunludur.'
-    Object.assign(err, validateBilling(f))
+    if (!f.name.trim() || f.name.trim().length < 3) err.name = L('Ad ve soyadınızı girin.', 'Enter your full name.')
+    if (!f.email.trim()) err.email = L('E-posta zorunludur.', 'Email is required.')
+    else if (!isValidEmail(f.email)) err.email = L('Geçerli bir e-posta adresi girin.', 'Enter a valid email address.')
+    if (!f.phone.trim()) err.phone = L('Telefon zorunludur.', 'Phone is required.')
+    else if (!isValidTrPhone(f.phone)) err.phone = L('Telefon numarası 10 haneli olmalı (5xx xxx xx xx).', 'Phone number must be 10 digits (5xx xxx xx xx).')
+    if (!f.city) err.city = L('İl seçin.', 'Select a province.')
+    if (!f.district) err.district = L('İlçe seçin.', 'Select a district.')
+    if (f.postalCode && !isValidPostalCode(f.postalCode)) err.postalCode = L('Geçerli bir posta kodu girin (5 hane).', 'Enter a valid postal code (5 digits).')
+    if (f.addressLine.trim().length < 10) err.addressLine = f.addressLine.trim() ? L('Adresinizi mahalle, sokak ve kapı no ile eksiksiz yazın.', 'Enter your full address including neighborhood, street and building number.') : L('Adres zorunludur.', 'Address is required.')
+    Object.assign(err, Object.fromEntries(Object.entries(validateBilling(f)).map(([k, v]) => [k, tErr(v) ?? v])))
     if (f.useDifferentBillingAddress) {
-      if (!f.billingCity) err.billingCity = 'İl seçin.'
-      if (!f.billingDistrict) err.billingDistrict = 'İlçe seçin.'
-      if (f.billingPostalCode && !isValidPostalCode(f.billingPostalCode)) err.billingPostalCode = 'Geçerli bir posta kodu girin (5 hane).'
-      if (f.billingAddressLine.trim().length < 10) err.billingAddressLine = 'Fatura adresini eksiksiz yazın.'
+      if (!f.billingCity) err.billingCity = L('İl seçin.', 'Select a province.')
+      if (!f.billingDistrict) err.billingDistrict = L('İlçe seçin.', 'Select a district.')
+      if (f.billingPostalCode && !isValidPostalCode(f.billingPostalCode)) err.billingPostalCode = L('Geçerli bir posta kodu girin (5 hane).', 'Enter a valid postal code (5 digits).')
+      if (f.billingAddressLine.trim().length < 10) err.billingAddressLine = L('Fatura adresini eksiksiz yazın.', 'Enter the full billing address.')
     }
-    if (!acceptedTerms) err.terms = "Siparişi tamamlamak için Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi'ni onaylamalısınız."
+    if (!acceptedTerms) err.terms = L("Siparişi tamamlamak için Ön Bilgilendirme Formu ve Mesafeli Satış Sözleşmesi'ni onaylamalısınız.", 'To place your order, you must accept the Preliminary Information Form and the Distance Sales Agreement.')
     return err
   }
 
@@ -510,7 +532,7 @@ export default function CheckoutPage() {
 
     const data = await response.json().catch(() => null)
     if (!response.ok || !data?.success) {
-      const e = new Error(data?.error || 'Sipariş oluşturulamadı.') as Error & { code?: string; fields?: Record<string, string> }
+      const e = new Error(tErr(data?.error) || L('Sipariş oluşturulamadı.', 'The order could not be created.')) as Error & { code?: string; fields?: Record<string, string> }
       e.code = data?.code
       e.fields = data?.fields
       throw e
@@ -581,7 +603,7 @@ export default function CheckoutPage() {
       if (paymentMethod === 'card') {
         const data = await createOrderWithApi('card')
         if (!data.payment?.form) {
-          showGeneralError('Banka ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.')
+          showGeneralError(L('Banka ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.', 'The bank payment page could not be opened. Please try again or choose Bank Transfer (EFT).'))
           return
         }
         lastOrder(data.orderId, data.pricing)
@@ -600,12 +622,12 @@ export default function CheckoutPage() {
       const ex = error as Error & { code?: string; fields?: Record<string, string> }
       if (ex.code === 'CARD_UNAVAILABLE') {
         setPaymentMethod('havale')
-        showGeneralError('Kartla ödeme şu anda kullanılamıyor. Ödeme yöntemi Havale/EFT olarak değiştirildi; siparişi bu şekilde tamamlayabilirsiniz.')
+        showGeneralError(L('Kartla ödeme şu anda kullanılamıyor. Ödeme yöntemi Havale/EFT olarak değiştirildi; siparişi bu şekilde tamamlayabilirsiniz.', 'Card payment is currently unavailable. Your payment method has been switched to Bank Transfer (EFT); you can complete your order this way.'))
       } else if (ex.fields && Object.keys(ex.fields).length > 0) {
         setErrors(ex.fields)
         focusFirstError(ex.fields)
       } else {
-        showGeneralError(ex?.message || 'Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.')
+        showGeneralError(ex?.message || L('Sipariş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.', 'An error occurred while creating your order. Please try again.'))
       }
     } finally {
       // Yönlendirme sürerken düğme kilitli kalır
@@ -618,7 +640,7 @@ export default function CheckoutPage() {
       <div className="flex min-h-[60vh] items-center justify-center bg-[#f5f7fa] px-4">
         <div className="flex items-center gap-3 text-[#20384e]">
           <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-          <span>{leavingRef.current ? 'Siparişiniz tamamlanıyor…' : 'Sepetiniz yükleniyor…'}</span>
+          <span>{leavingRef.current ? L('Siparişiniz tamamlanıyor…', 'Completing your order…') : L('Sepetiniz yükleniyor…', 'Loading your cart…')}</span>
         </div>
       </div>
     )
@@ -631,10 +653,10 @@ export default function CheckoutPage() {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#f1f4f8]">
             <ShoppingCart className="h-7 w-7 text-[#0b2540]" aria-hidden />
           </div>
-          <h1 className="text-xl font-semibold text-[#121926]">Sepetiniz boş</h1>
-          <p className="mt-2 text-sm text-[#5d6e80]">Ödeme adımına geçmek için önce sepetinize ürün ekleyin.</p>
+          <h1 className="text-xl font-semibold text-[#121926]">{L('Sepetiniz boş', 'Your cart is empty')}</h1>
+          <p className="mt-2 text-sm text-[#5d6e80]">{L('Ödeme adımına geçmek için önce sepetinize ürün ekleyin.', 'Add products to your cart before proceeding to checkout.')}</p>
           <Link href="/products" className="mt-6 inline-flex h-11 items-center justify-center rounded-lg bg-[#0b2540] px-5 text-sm font-semibold text-white hover:bg-[#12335a]">
-            Ürünlere göz atın
+            {L('Ürünlere göz atın', 'Browse products')}
           </Link>
         </div>
       </div>
@@ -648,33 +670,33 @@ export default function CheckoutPage() {
   const summaryLines = (
     <dl className="space-y-2.5 text-sm">
       <div className="flex justify-between gap-3">
-        <dt className="text-[#5d6e80]">Ara toplam <span className="text-xs">(KDV hariç)</span></dt>
+        <dt className="text-[#5d6e80]">{L('Ara toplam', 'Subtotal')} <span className="text-xs">{L('(KDV hariç)', '(excl. VAT)')}</span></dt>
         <dd className="font-medium text-[#121926] tabular-nums">{formatPrice(subtotal)}</dd>
       </div>
       {couponDiscount > 0 && (
         <div className="flex justify-between gap-3 text-emerald-700">
-          <dt>Kupon <span className="rounded bg-emerald-50 px-1.5 py-0.5 font-mono text-xs">{couponCode}</span></dt>
+          <dt>{L('Kupon', 'Coupon')} <span className="rounded bg-emerald-50 px-1.5 py-0.5 font-mono text-xs">{couponCode}</span></dt>
           <dd className="font-medium tabular-nums">−{formatPrice(couponDiscount)}</dd>
         </div>
       )}
       {paymentDiscount > 0 && (
         <div className="flex justify-between gap-3 text-emerald-700">
-          <dt>Havale/EFT indirimi (%{BANK_TRANSFER_DISCOUNT_RATE})</dt>
+          <dt>{L(`Havale/EFT indirimi (%${BANK_TRANSFER_DISCOUNT_RATE})`, `Bank transfer discount (${BANK_TRANSFER_DISCOUNT_RATE}%)`)}</dt>
           <dd className="font-medium tabular-nums">−{formatPrice(paymentDiscount)}</dd>
         </div>
       )}
       <div className="flex justify-between gap-3">
-        <dt className="text-[#5d6e80]">KDV (%{VAT_RATE})</dt>
+        <dt className="text-[#5d6e80]">{L(`KDV (%${VAT_RATE})`, `VAT (${VAT_RATE}%)`)}</dt>
         <dd className="font-medium text-[#121926] tabular-nums">{formatPrice(tax)}</dd>
       </div>
       <div className="flex justify-between gap-3">
-        <dt className="text-[#5d6e80]">Kargo</dt>
+        <dt className="text-[#5d6e80]">{L('Kargo', 'Shipping')}</dt>
         <dd className="font-medium tabular-nums">
           <span className="text-[#121926]">{formatPrice(shipping)}</span>
         </dd>
       </div>
       <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-3">
-        <dt className="text-base font-semibold text-[#121926]">Toplam <span className="text-xs font-normal text-[#5d6e80]">(KDV dahil)</span></dt>
+        <dt className="text-base font-semibold text-[#121926]">{L('Toplam', 'Total')} <span className="text-xs font-normal text-[#5d6e80]">{L('(KDV dahil)', '(VAT incl.)')}</span></dt>
         <dd className="text-xl font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</dd>
       </div>
     </dl>
@@ -695,7 +717,7 @@ export default function CheckoutPage() {
           <div className="min-w-0 flex-1">
             <p className="line-clamp-2 text-sm font-medium leading-snug text-[#121926]">{item.name}</p>
             {item.selectedVariant?.label && <p className="mt-0.5 text-xs text-[#5d6e80]">{item.selectedVariant.label}</p>}
-            <p className="mt-0.5 text-xs text-[#5d6e80]">{item.quantity} adet × {formatPrice(item.price)}</p>
+            <p className="mt-0.5 text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `${item.quantity} pcs`)} × {formatPrice(item.price)}</p>
           </div>
           <span className="shrink-0 text-sm font-semibold text-[#121926] tabular-nums">{formatPrice(item.price * item.quantity)}</span>
         </li>
@@ -708,12 +730,12 @@ export default function CheckoutPage() {
       <div className="border-b border-[#e6ebf1] bg-white">
         <div className="container mx-auto flex max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div className="flex items-center gap-3">
-            <Link href="/cart" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e6ebf1] text-[#20384e] hover:bg-[#f5f7fa]" aria-label="Sepete dön">
+            <Link href="/cart" className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[#e6ebf1] text-[#20384e] hover:bg-[#f5f7fa]" aria-label={L('Sepete dön', 'Back to cart')}>
               <ArrowLeft className="h-4 w-4" aria-hidden />
             </Link>
-            <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">Güvenli Ödeme</h1>
+            <h1 className="text-xl font-bold text-[#121926] sm:text-2xl">{L('Güvenli Ödeme', 'Secure Checkout')}</h1>
             <span className="hidden items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 sm:inline-flex">
-              <Lock className="h-3 w-3" aria-hidden /> SSL korumalı
+              <Lock className="h-3 w-3" aria-hidden /> {L('SSL korumalı', 'SSL secured')}
             </span>
           </div>
           <Stepper />
@@ -731,7 +753,7 @@ export default function CheckoutPage() {
           >
             <span className="flex items-center gap-2 text-sm font-medium text-[#20384e]">
               <ShoppingCart className="h-4 w-4" aria-hidden />
-              Sipariş özeti ({itemCount} ürün)
+              {L(`Sipariş özeti (${itemCount} ürün)`, `Order summary (${itemCount} ${itemCount === 1 ? 'item' : 'items'})`)}
               <ChevronDown className={`h-4 w-4 transition-transform ${mobileSummaryOpen ? 'rotate-180' : ''}`} aria-hidden />
             </span>
             <span className="text-base font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</span>
@@ -748,7 +770,7 @@ export default function CheckoutPage() {
           <div ref={errorBannerRef} role="alert" className="mb-5 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
             <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden />
             <div>
-              {generalError ? <p>{generalError}</p> : <p>Lütfen işaretli {errorCount > 1 ? `${errorCount} alanı` : 'alanı'} kontrol edin.</p>}
+              {generalError ? <p>{generalError}</p> : <p>{L(`Lütfen işaretli ${errorCount > 1 ? `${errorCount} alanı` : 'alanı'} kontrol edin.`, errorCount > 1 ? `Please check the ${errorCount} highlighted fields.` : 'Please check the highlighted field.')}</p>}
             </div>
           </div>
         )}
@@ -759,23 +781,23 @@ export default function CheckoutPage() {
               {/* 1. İletişim */}
               <Section
                 step={1}
-                title="İletişim bilgileri"
+                title={L('İletişim bilgileri', 'Contact information')}
                 icon={User}
                 aside={!isAuthenticated ? (
-                  <span className="text-[#5d6e80]">Üye misiniz? <Link href="/login?redirect=/checkout" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Giriş yapın</Link></span>
+                  <span className="text-[#5d6e80]">{L('Üye misiniz?', 'Have an account?')} <Link href="/login?redirect=/checkout" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">{L('Giriş yapın', 'Sign in')}</Link></span>
                 ) : undefined}
               >
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <Field id="name" label="Ad Soyad" required error={errors.name} className="sm:col-span-2">
+                  <Field id="name" label={L('Ad Soyad', 'Full name')} required error={errors.name} className="sm:col-span-2">
                     <input id="name" name="name" autoComplete="name" value={f.name} onChange={handleInputChange}
                       aria-invalid={!!errors.name || undefined} aria-describedby={describe('name')} className={inputCls(!!errors.name)} />
                   </Field>
-                  <Field id="email" label="E-posta" required error={errors.email} hint="Sipariş onayı ve kargo bilgisi bu adrese gönderilir.">
+                  <Field id="email" label={L('E-posta', 'Email')} required error={errors.email} hint={L('Sipariş onayı ve kargo bilgisi bu adrese gönderilir.', 'Order confirmation and shipping updates will be sent to this address.')}>
                     <input id="email" name="email" type="email" autoComplete="email" inputMode="email" value={f.email} onChange={handleInputChange}
                       onBlur={(e) => validateField('email', e.target.value)}
                       aria-invalid={!!errors.email || undefined} aria-describedby={errors.email ? 'email-error' : 'email-hint'} className={inputCls(!!errors.email)} />
                   </Field>
-                  <Field id="phone" label="Cep telefonu" required error={errors.phone} hint="Kargo firması teslimat için arayabilir.">
+                  <Field id="phone" label={L('Cep telefonu', 'Mobile phone')} required error={errors.phone} hint={L('Kargo firması teslimat için arayabilir.', 'The courier may call you about the delivery.')}>
                     <div className="relative">
                       <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-base text-[#5d6e80]">+90</span>
                       <input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel-national" placeholder="5xx xxx xx xx"
@@ -789,15 +811,15 @@ export default function CheckoutPage() {
               {/* 2. Teslimat adresi */}
               <Section
                 step={2}
-                title="Teslimat adresi"
+                title={L('Teslimat adresi', 'Shipping address')}
                 icon={MapPin}
                 aside={isAuthenticated && savedAddresses.length > 0 ? (
-                  <Link href="/profile?tab=addresses" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">Adreslerim</Link>
+                  <Link href="/profile?tab=addresses" className="font-medium text-[#0b2540] underline-offset-2 hover:underline">{L('Adreslerim', 'My addresses')}</Link>
                 ) : undefined}
               >
                 {isAuthenticated && savedAddresses.length > 0 && (
                   <fieldset className="mb-5">
-                    <legend className="mb-2 text-sm font-medium text-[#20384e]">Kayıtlı adreslerim</legend>
+                    <legend className="mb-2 text-sm font-medium text-[#20384e]">{L('Kayıtlı adreslerim', 'My saved addresses')}</legend>
                     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                       {savedAddresses.map((address) => {
                         const active = selectedAddressId === address.id
@@ -812,8 +834,8 @@ export default function CheckoutPage() {
                             />
                             <span className="min-w-0 text-sm">
                               <span className="flex items-center gap-2 font-medium text-[#121926]">
-                                {address.title || 'Adres'}
-                                {address.isDefault && <span className="rounded bg-[#e6ebf1] px-1.5 py-0.5 text-[11px] font-medium text-[#20384e]">Varsayılan</span>}
+                                {address.title || L('Adres', 'Address')}
+                                {address.isDefault && <span className="rounded bg-[#e6ebf1] px-1.5 py-0.5 text-[11px] font-medium text-[#20384e]">{L('Varsayılan', 'Default')}</span>}
                               </span>
                               <span className="mt-0.5 block truncate text-[#5d6e80]">{address.addressLine}</span>
                               <span className="block text-xs text-[#5d6e80]">{address.district} / {address.city}</span>
@@ -825,20 +847,20 @@ export default function CheckoutPage() {
                   </fieldset>
                 )}
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
-                  <Field id="city" label="İl" required error={errors.city} className="sm:col-span-2">
+                  <Field id="city" label={L('İl', 'Province')} required error={errors.city} className="sm:col-span-2">
                     <CitySelect id="city" value={f.city} invalid={!!errors.city} describedBy={describe('city')}
                       onChange={(city) => { setSelectedAddressId(null); setFormData((p) => ({ ...p, city, district: '' })); setErrors((p) => ({ ...p, city: '', district: '' })) }} />
                   </Field>
-                  <Field id="district" label="İlçe" required error={errors.district} className="sm:col-span-2">
+                  <Field id="district" label={L('İlçe', 'District')} required error={errors.district} className="sm:col-span-2">
                     <DistrictSelect id="district" city={f.city} value={f.district} invalid={!!errors.district} describedBy={describe('district')}
                       onChange={(d) => { setSelectedAddressId(null); setField('district', d) }} />
                   </Field>
-                  <Field id="postalCode" label="Posta kodu" error={errors.postalCode} className="sm:col-span-2">
+                  <Field id="postalCode" label={L('Posta kodu', 'Postal code')} error={errors.postalCode} className="sm:col-span-2">
                     <input id="postalCode" name="postalCode" inputMode="numeric" autoComplete="postal-code" placeholder="34000"
                       value={f.postalCode} onChange={handleInputChange} onBlur={(e) => validateField('postalCode', e.target.value)}
                       aria-invalid={!!errors.postalCode || undefined} aria-describedby={describe('postalCode')} className={inputCls(!!errors.postalCode)} />
                   </Field>
-                  <Field id="addressLine" label="Açık adres" required error={errors.addressLine} hint="Mahalle, cadde/sokak, bina ve daire numarası" className="sm:col-span-6">
+                  <Field id="addressLine" label={L('Açık adres', 'Street address')} required error={errors.addressLine} hint={L('Mahalle, cadde/sokak, bina ve daire numarası', 'Neighborhood, street, building and apartment number')} className="sm:col-span-6">
                     <textarea id="addressLine" name="addressLine" autoComplete="street-address" rows={3} value={f.addressLine} onChange={handleInputChange}
                       aria-invalid={!!errors.addressLine || undefined} aria-describedby={errors.addressLine ? 'addressLine-error' : 'addressLine-hint'}
                       className={`${inputCls(!!errors.addressLine)} h-auto min-h-[88px] py-3 leading-relaxed`} />
@@ -846,25 +868,25 @@ export default function CheckoutPage() {
                 </div>
                 <div className="mt-4">
                   {showNote || f.notes ? (
-                    <Field id="notes" label="Sipariş notu">
+                    <Field id="notes" label={L('Sipariş notu', 'Order note')}>
                       <textarea id="notes" name="notes" rows={2} maxLength={2000} value={f.notes} onChange={handleInputChange}
-                        placeholder="Teslimat veya sipariş ile ilgili eklemek istedikleriniz"
+                        placeholder={L('Teslimat veya sipariş ile ilgili eklemek istedikleriniz', 'Anything you would like to add about your delivery or order')}
                         className={`${inputCls(false)} h-auto py-3`} />
                     </Field>
                   ) : (
                     <button type="button" onClick={() => setShowNote(true)} className="text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">
-                      + Sipariş notu ekle
+                      {L('+ Sipariş notu ekle', '+ Add order note')}
                     </button>
                   )}
                 </div>
               </Section>
 
               {/* 3. Fatura */}
-              <Section step={3} title="Fatura bilgileri" icon={Building2}>
-                <div role="radiogroup" aria-label="Fatura türü" className="mb-5 inline-flex rounded-lg border border-[#d3d9e1] bg-[#f5f7fa] p-1">
+              <Section step={3} title={L('Fatura bilgileri', 'Billing information')} icon={Building2}>
+                <div role="radiogroup" aria-label={L('Fatura türü', 'Invoice type')} className="mb-5 inline-flex rounded-lg border border-[#d3d9e1] bg-[#f5f7fa] p-1">
                   {([
-                    ['individual', 'Bireysel'],
-                    ['company', 'Kurumsal'],
+                    ['individual', L('Bireysel', 'Individual')],
+                    ['company', L('Kurumsal', 'Corporate')],
                   ] as const).map(([value, label]) => (
                     <button
                       key={value}
@@ -881,24 +903,24 @@ export default function CheckoutPage() {
 
                 {f.billingType === 'individual' ? (
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field id="idNumber" label="T.C. kimlik no" error={errors.idNumber} hint="E-arşiv faturanız için; boş bırakabilirsiniz.">
-                      <input id="idNumber" name="idNumber" inputMode="numeric" autoComplete="off" placeholder="11 haneli"
+                    <Field id="idNumber" label={L('T.C. kimlik no', 'Turkish ID number')} error={errors.idNumber} hint={L('E-arşiv faturanız için; boş bırakabilirsiniz.', 'For your e-archive invoice; you may leave this blank.')}>
+                      <input id="idNumber" name="idNumber" inputMode="numeric" autoComplete="off" placeholder={L('11 haneli', '11 digits')}
                         value={f.idNumber} onChange={handleInputChange} onBlur={(e) => validateField('idNumber', e.target.value)}
                         aria-invalid={!!errors.idNumber || undefined} aria-describedby={errors.idNumber ? 'idNumber-error' : 'idNumber-hint'} className={inputCls(!!errors.idNumber)} />
                     </Field>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field id="companyName" label="Firma ünvanı" required error={errors.companyName} className="sm:col-span-2">
+                    <Field id="companyName" label={L('Firma ünvanı', 'Company name')} required error={errors.companyName} className="sm:col-span-2">
                       <input id="companyName" name="companyName" autoComplete="organization" value={f.companyName} onChange={handleInputChange}
                         aria-invalid={!!errors.companyName || undefined} aria-describedby={describe('companyName')} className={inputCls(!!errors.companyName)} />
                     </Field>
-                    <Field id="taxId" label="Vergi numarası" required error={errors.taxId}>
-                      <input id="taxId" name="taxId" inputMode="numeric" autoComplete="off" placeholder="10 haneli"
+                    <Field id="taxId" label={L('Vergi numarası', 'Tax number')} required error={errors.taxId}>
+                      <input id="taxId" name="taxId" inputMode="numeric" autoComplete="off" placeholder={L('10 haneli', '10 digits')}
                         value={f.taxId} onChange={handleInputChange} onBlur={(e) => validateField('taxId', e.target.value)}
                         aria-invalid={!!errors.taxId || undefined} aria-describedby={describe('taxId')} className={inputCls(!!errors.taxId)} />
                     </Field>
-                    <Field id="taxOffice" label="Vergi dairesi" required error={errors.taxOffice}>
+                    <Field id="taxOffice" label={L('Vergi dairesi', 'Tax office')} required error={errors.taxOffice}>
                       <input id="taxOffice" name="taxOffice" autoComplete="off" value={f.taxOffice} onChange={handleInputChange}
                         aria-invalid={!!errors.taxOffice || undefined} aria-describedby={describe('taxOffice')} className={inputCls(!!errors.taxOffice)} />
                     </Field>
@@ -912,25 +934,25 @@ export default function CheckoutPage() {
                     onChange={(e) => setField('useDifferentBillingAddress', !e.target.checked)}
                     className="mt-0.5 h-4 w-4 accent-[#0b2540]"
                   />
-                  <span className="text-sm text-[#20384e]">Fatura adresim teslimat adresiyle aynı</span>
+                  <span className="text-sm text-[#20384e]">{L('Fatura adresim teslimat adresiyle aynı', 'Billing address is the same as shipping address')}</span>
                 </label>
 
                 {f.useDifferentBillingAddress && (
                   <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-6">
-                    <Field id="billingCity" label="Fatura ili" required error={errors.billingCity} className="sm:col-span-2">
+                    <Field id="billingCity" label={L('Fatura ili', 'Billing province')} required error={errors.billingCity} className="sm:col-span-2">
                       <CitySelect id="billingCity" value={f.billingCity} invalid={!!errors.billingCity} describedBy={describe('billingCity')}
                         onChange={(city) => { setFormData((p) => ({ ...p, billingCity: city, billingDistrict: '' })); setErrors((p) => ({ ...p, billingCity: '', billingDistrict: '' })) }} />
                     </Field>
-                    <Field id="billingDistrict" label="Fatura ilçesi" required error={errors.billingDistrict} className="sm:col-span-2">
+                    <Field id="billingDistrict" label={L('Fatura ilçesi', 'Billing district')} required error={errors.billingDistrict} className="sm:col-span-2">
                       <DistrictSelect id="billingDistrict" city={f.billingCity} value={f.billingDistrict} invalid={!!errors.billingDistrict} describedBy={describe('billingDistrict')}
                         onChange={(d) => setField('billingDistrict', d)} />
                     </Field>
-                    <Field id="billingPostalCode" label="Posta kodu" error={errors.billingPostalCode} className="sm:col-span-2">
+                    <Field id="billingPostalCode" label={L('Posta kodu', 'Postal code')} error={errors.billingPostalCode} className="sm:col-span-2">
                       <input id="billingPostalCode" name="billingPostalCode" inputMode="numeric" autoComplete="billing postal-code" placeholder="34000"
                         value={f.billingPostalCode} onChange={handleInputChange} onBlur={(e) => validateField('billingPostalCode', e.target.value)}
                         aria-invalid={!!errors.billingPostalCode || undefined} aria-describedby={describe('billingPostalCode')} className={inputCls(!!errors.billingPostalCode)} />
                     </Field>
-                    <Field id="billingAddressLine" label="Fatura adresi" required error={errors.billingAddressLine} className="sm:col-span-6">
+                    <Field id="billingAddressLine" label={L('Fatura adresi', 'Billing address')} required error={errors.billingAddressLine} className="sm:col-span-6">
                       <textarea id="billingAddressLine" name="billingAddressLine" autoComplete="billing street-address" rows={3} value={f.billingAddressLine} onChange={handleInputChange}
                         aria-invalid={!!errors.billingAddressLine || undefined} aria-describedby={describe('billingAddressLine')}
                         className={`${inputCls(!!errors.billingAddressLine)} h-auto min-h-[88px] py-3 leading-relaxed`} />
@@ -940,34 +962,37 @@ export default function CheckoutPage() {
               </Section>
 
               {/* 4. Ödeme */}
-              <Section step={4} title="Ödeme yöntemi" icon={CreditCard}>
-                <div role="radiogroup" aria-label="Ödeme yöntemi" className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <Section step={4} title={L('Ödeme yöntemi', 'Payment method')} icon={CreditCard}>
+                <div role="radiogroup" aria-label={L('Ödeme yöntemi', 'Payment method')} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {([
                     {
                       value: 'havale' as const,
-                      title: 'Havale / EFT',
+                      title: L('Havale / EFT', 'Bank Transfer (EFT)'),
                       icon: Banknote,
-                      badge: `%${BANK_TRANSFER_DISCOUNT_RATE} indirim`,
-                      text: `Sipariş sonrası IBAN bilgileri gösterilir. ${BANK_TRANSFER_PAYMENT_DAYS} gün içinde ödeme yapmanız yeterli.`,
+                      badge: L(`%${BANK_TRANSFER_DISCOUNT_RATE} indirim`, `${BANK_TRANSFER_DISCOUNT_RATE}% off`),
+                      text: L(`Sipariş sonrası IBAN bilgileri gösterilir. ${BANK_TRANSFER_PAYMENT_DAYS} gün içinde ödeme yapmanız yeterli.`, `IBAN details are shown after you place your order. Simply pay within ${BANK_TRANSFER_PAYMENT_DAYS} days.`),
                     },
                     {
                       value: 'card' as const,
-                      title: 'Kredi / banka kartı',
+                      title: L('Kredi / banka kartı', 'Credit / debit card'),
                       icon: CreditCard,
                       badge: '3D Secure',
-                      text: 'Bankanın güvenli ödeme sayfasına yönlendirilirsiniz; kart bilgileriniz sitemizde saklanmaz.',
+                      text: L('Bankanın güvenli ödeme sayfasına yönlendirilirsiniz; kart bilgileriniz sitemizde saklanmaz.', "You'll be redirected to the bank's secure payment page; your card details are never stored on our site."),
                     },
                   ]).map((m) => {
                     const active = paymentMethod === m.value
+                    const unavailable = m.value === 'card' && cardAvailable === false
                     return (
-                      <label key={m.value} className={`relative flex cursor-pointer flex-col gap-2 rounded-lg border p-4 transition-colors ${active ? 'border-[#0b2540] bg-[#f1f4f8] ring-1 ring-[#0b2540]' : 'border-[#d3d9e1] bg-white hover:border-[#b8c2ce]'}`}>
+                      <label key={m.value} className={`relative flex flex-col gap-2 rounded-lg border p-4 transition-colors ${unavailable ? 'cursor-not-allowed border-[#e6ebf1] bg-[#f7f8fa] opacity-70' : active ? 'cursor-pointer border-[#0b2540] bg-[#f1f4f8] ring-1 ring-[#0b2540]' : 'cursor-pointer border-[#d3d9e1] bg-white hover:border-[#b8c2ce]'}`}>
                         <span className="flex items-center gap-3">
-                          <input type="radio" name="paymentMethod" checked={active} onChange={() => setPaymentMethod(m.value)} className="h-4 w-4 accent-[#0b2540]" />
+                          <input type="radio" name="paymentMethod" checked={active} disabled={unavailable} onChange={() => setPaymentMethod(m.value)} className="h-4 w-4 accent-[#0b2540]" />
                           <m.icon className="h-5 w-5 text-[#20384e]" aria-hidden />
                           <span className="text-[15px] font-semibold text-[#121926]">{m.title}</span>
                           <span className={`ml-auto shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${m.value === 'havale' ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200' : 'bg-white text-[#20384e] ring-1 ring-[#d3d9e1]'}`}>{m.badge}</span>
                         </span>
-                        <span className="pl-7 text-[13px] leading-relaxed text-[#5d6e80]">{m.text}</span>
+                        <span className="pl-7 text-[13px] leading-relaxed text-[#5d6e80]">
+                          {unavailable ? L('Kartla ödeme yakında kullanıma açılacak. Şimdilik Havale/EFT ile sipariş verebilirsiniz.', 'Card payment will be available soon. For now you can order by bank transfer (EFT).') : m.text}
+                        </span>
                       </label>
                     )
                   })}
@@ -980,8 +1005,8 @@ export default function CheckoutPage() {
               <div className="space-y-4 lg:sticky lg:top-24">
                 <div className="rounded-xl border border-[#e6ebf1] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
                   <div className="flex items-center justify-between border-b border-[#eef1f5] px-5 py-3.5">
-                    <h2 className="text-base font-semibold text-[#121926]">Sipariş özeti</h2>
-                    <Link href="/cart" className="text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">Sepeti düzenle</Link>
+                    <h2 className="text-base font-semibold text-[#121926]">{L('Sipariş özeti', 'Order summary')}</h2>
+                    <Link href="/cart" className="text-sm font-medium text-[#0b2540] underline-offset-2 hover:underline">{L('Sepeti düzenle', 'Edit cart')}</Link>
                   </div>
                   <div className="space-y-4 px-5 py-4">
                     <CartQuoteNotice />
@@ -1004,9 +1029,10 @@ export default function CheckoutPage() {
                           aria-describedby={errors.terms ? 'terms-error' : undefined}
                         />
                         <span className="text-[13px] leading-relaxed text-[#20384e] [&_button]:inline [&_button]:min-h-0 [&_button]:p-0 [&_button]:align-baseline">
-                          <LegalLink slug="on-bilgilendirme-formu" onOpen={setLegalDoc}>Ön Bilgilendirme Formu</LegalLink>{"'nu ve "}
-                          <LegalLink slug="mesafeli-satis-sozlesmesi" onOpen={setLegalDoc}>Mesafeli Satış Sözleşmesi</LegalLink>
-                          {"'ni okudum, onaylıyorum."}
+                          {L('', 'I have read and accept the ')}
+                          <LegalLink slug="on-bilgilendirme-formu" onOpen={setLegalDoc}>{L('Ön Bilgilendirme Formu', 'Preliminary Information Form')}</LegalLink>{L("'nu ve ", ' and the ')}
+                          <LegalLink slug="mesafeli-satis-sozlesmesi" onOpen={setLegalDoc}>{L('Mesafeli Satış Sözleşmesi', 'Distance Sales Agreement')}</LegalLink>
+                          {L("'ni okudum, onaylıyorum.", '.')}
                         </span>
                       </label>
                       {errors.terms && (
@@ -1024,17 +1050,17 @@ export default function CheckoutPage() {
                       className="flex h-[52px] w-full items-center justify-center gap-2 rounded-lg bg-[#f5b400] px-4 text-base font-semibold text-[#111] shadow-sm transition-colors hover:bg-[#e0a500] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2540] focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70"
                     >
                       {isSubmitting ? (
-                        <><Loader2 className="h-5 w-5 animate-spin" aria-hidden />{paymentMethod === 'card' ? 'Bankaya yönlendiriliyor…' : 'Sipariş oluşturuluyor…'}</>
+                        <><Loader2 className="h-5 w-5 animate-spin" aria-hidden />{paymentMethod === 'card' ? L('Bankaya yönlendiriliyor…', 'Redirecting to your bank…') : L('Sipariş oluşturuluyor…', 'Creating your order…')}</>
                       ) : paymentMethod === 'card' ? (
-                        <><Lock className="h-[18px] w-[18px]" aria-hidden />Kartla öde</>
+                        <><Lock className="h-[18px] w-[18px]" aria-hidden />{L('Kartla öde', 'Pay by card')}</>
                       ) : (
-                        <><Check className="h-5 w-5" aria-hidden />Siparişi onayla</>
+                        <><Check className="h-5 w-5" aria-hidden />{L('Siparişi onayla', 'Place Order')}</>
                       )}
                     </button>
                     <p className="text-center text-xs text-[#5d6e80]">
                       {paymentMethod === 'card'
-                        ? 'Ödeme, bankanızın 3D Secure sayfasında tamamlanır.'
-                        : 'Siparişiniz oluşturulur; ödeme bilgileri ekranda ve e-postanızda yer alır.'}
+                        ? L('Ödeme, bankanızın 3D Secure sayfasında tamamlanır.', "Payment is completed on your bank's 3D Secure page.")
+                        : L('Siparişiniz oluşturulur; ödeme bilgileri ekranda ve e-postanızda yer alır.', 'Your order will be created; payment details will be shown on screen and sent to your email.')}
                     </p>
                   </div>
                 </div>

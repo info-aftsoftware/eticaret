@@ -9,6 +9,7 @@ import React, { useId, useState } from 'react'
 import { Eye, EyeOff, AlertCircle, CheckCircle2, Info, Loader2 } from 'lucide-react'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { passwordStrength } from '@/lib/auth-errors'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Sade, kurumsal üyelik kartı: ortada tek kart, başlık + kısa açıklama, ardından form.
@@ -26,7 +27,7 @@ export function AuthLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClassicPageShell breadcrumbs={[{ label: breadcrumb }]} noTitle>
+    <ClassicPageShell breadcrumbs={[{ label: breadcrumb }]} noTitle pageHasOwnH1>
       <div className="flex justify-center py-2 sm:py-6 min-w-0">
         <div className="w-full max-w-[440px] min-w-0 sm:bg-white sm:border sm:border-[#e3e8ee] sm:rounded-lg sm:p-8">
           <div className="mb-6">
@@ -117,6 +118,7 @@ export function PasswordField({
   labelExtra,
   ...input
 }: FieldProps & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>) {
+  const L = useL()
   const id = useId()
   const [show, setShow] = useState(false)
   return (
@@ -141,7 +143,7 @@ export function PasswordField({
           type="button"
           onClick={() => setShow((v) => !v)}
           className="absolute right-1 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-lg text-[#5d6e80] hover:text-[#0b2540] hover:bg-[#f1f4f8] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0b2540]/30 touch-manipulation"
-          aria-label={show ? 'Şifreyi gizle' : 'Şifreyi göster'}
+          aria-label={show ? L('Şifreyi gizle', 'Hide password') : L('Şifreyi göster', 'Show password')}
           aria-pressed={show}
         >
           {show ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
@@ -157,8 +159,9 @@ export function PasswordField({
 }
 
 export function PasswordStrength({ password }: { password: string }) {
+  const L = useL()
   const { score, label } = passwordStrength(password)
-  if (!password) return <span>En az 8 karakter; harf ve rakam kullanmanızı öneririz.</span>
+  if (!password) return <span>{L('En az 8 karakter; harf ve rakam kullanmanızı öneririz.', 'At least 8 characters; we recommend using letters and numbers.')}</span>
   const colors = ['bg-red-500', 'bg-red-500', 'bg-amber-500', 'bg-emerald-500', 'bg-emerald-600']
   const text = ['text-red-600', 'text-red-600', 'text-amber-700', 'text-emerald-700', 'text-emerald-700']
   return (
@@ -169,8 +172,8 @@ export function PasswordStrength({ password }: { password: string }) {
         ))}
       </span>
       <span className="mt-1.5 flex flex-wrap justify-between gap-x-3">
-        <span className={`font-medium ${text[score]}`}>Şifre gücü: {label}</span>
-        {password.length < 8 && <span>En az 8 karakter önerilir</span>}
+        <span className={`font-medium ${text[score]}`}>{L('Şifre gücü:', 'Password strength:')} {L(label, ['Very weak', 'Weak', 'Fair', 'Good', 'Strong'][score])}</span>
+        {password.length < 8 && <span>{L('En az 8 karakter önerilir', 'At least 8 characters recommended')}</span>}
       </span>
     </span>
   )

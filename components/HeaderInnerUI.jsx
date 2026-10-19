@@ -19,6 +19,7 @@ import {
 } from './ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTitle } from './ui/sheet'
 import { ShoppingBag, ShoppingCart, Heart, User, Search, Menu, ChevronDown, ChevronRight, Home, Phone } from 'lucide-react'
+import { useL } from '@/lib/i18n-inline'
 
 /**
  * Site başlığı — voltekno.com ile birebir yapı:
@@ -52,6 +53,7 @@ export function HeaderInnerUI(props) {
     exchangeRates = null,
     navGroups,
   } = props
+  const L = useL()
 
   const [expandedGroups, setExpandedGroups] = React.useState(new Set())
   const desktopSearchRef = useRef(null)
@@ -173,7 +175,7 @@ export function HeaderInnerUI(props) {
       <Input
         ref={inputRef}
         type="text"
-        placeholder="Ürün, marka veya model arayın"
+        placeholder={L('Ürün, marka veya model arayın', 'Search products, brands or models')}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         {...comboboxProps(listId)}
@@ -197,7 +199,7 @@ export function HeaderInnerUI(props) {
           {cartItemsCount}
         </Badge>
       </span>
-      <span className="hidden min-[1025px]:inline text-[13px] font-semibold">Sepetim</span>
+      <span className="hidden min-[1025px]:inline text-[13px] font-semibold">{L('Sepetim', 'My Cart')}</span>
       <span className="sr-only min-[1025px]:hidden">{t('cartAria')}</span>
     </Link>
   )
@@ -262,7 +264,7 @@ export function HeaderInnerUI(props) {
               ) : (
                 <Link href="/login" className="flex items-center gap-3 text-[#142b40] hover:text-[#0b2540] text-[13px] font-semibold whitespace-nowrap">
                   <User className="w-[18px] h-[18px]" strokeWidth={1.75} />
-                  Giriş Yap / Üye Ol
+                  {L('Giriş Yap / Üye Ol', 'Sign In / Register')}
                 </Link>
               )}
               {cartLink}
@@ -276,7 +278,7 @@ export function HeaderInnerUI(props) {
           <AllCategoriesMenu navGroups={navGroups} t={t} />
           {/* Daralınca önce boşluklar azalır (justify-evenly), sonra sondaki kategoriler gizlenir (6 → 5 → 4);
               gizlenenler "Tüm Kategoriler" menüsünde. ≤1024 px'te mobil/tablet header (hamburger) devreye girer. */}
-          <nav className="flex-1 min-w-0 flex items-center justify-evenly gap-0.5 pl-4" aria-label="Ana menü">
+          <nav className="flex-1 min-w-0 flex items-center justify-evenly gap-0.5 pl-4" aria-label={L('Ana menü', 'Main menu')}>
             <Link href="/products" className={navLinkClass(isAllProducts)}>
               {t('catNavAllProducts')}
             </Link>
@@ -345,7 +347,7 @@ export function HeaderInnerUI(props) {
               {renderSearchDropdown(undefined, 'search-suggestions-mobile')}
             </div>
           </div>
-          <nav className="flex gap-2 overflow-x-auto -mx-4 px-4 min-[541px]:-mx-6 min-[541px]:px-6 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label="Kategoriler">
+          <nav className="flex gap-2 overflow-x-auto -mx-4 px-4 min-[541px]:-mx-6 min-[541px]:px-6 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" aria-label={L('Kategoriler', 'Categories')}>
             <Link href="/products" className={pillClass(isAllProducts)}>{t('catNavAllProducts')}</Link>
             {navGroups.map((g) => (
               <Link key={g.id} href={g.href} className={pillClass(pathname?.startsWith(g.href))}>
