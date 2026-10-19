@@ -3,7 +3,35 @@
 _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**19.10.2026 turu tamamlandı:** katalog denetimi, İngilizce/Türkçe tam çeviri, mobil görsel düzeltmesi, uçtan uca site denetimi ve düzeltmeleri, admin ↔ vitrin senkronu, müşteri hesabı gizlilik/belgeler. Ayrıntı aşağıda "19.10.2026 turu" bölümünde.
+**Profesyonel seviye turu tamamlandı (`e8806cf`), canlıya alınmadı.** Yönetici hesapları/rolleri/2FA/işlem kaydı, izleme, sunucu dışı yedek, yorum-soru-iletişimin Firebase'den çıkarılması, CSV ile stok/fiyat ve muhasebe aktarımı, toplu kargo ve etiket, izin defteri. Ayrıntı aşağıda "Profesyonel seviye". SEO çalışması (`6a30301`) da aynı dalda ve canlıda değil.
+
+## Profesyonel seviye (19.10.2026 akşam, `e8806cf`, canlıda değil)
+**İstek:** kartla ödeme, e-Arşiv ve alan adı dışındaki eksikleri profesyonel bir e-ticaret sistemi seviyesine getirmek.
+
+| Alan | Yapılan | Not |
+|---|---|---|
+| Yönetici hesapları | Kişiye özel hesap, 4 rol (Sahip, Yönetici, Sipariş operatörü, Katalog editörü), her istekte rol ve yol kontrolü, kişiye özel iki adımlı doğrulama (QR), geçici şifreyle açılan hesapta ilk girişte şifre değişimi | Sayfalar: Kullanıcılar, Hesabım. Rol değişikliği ve pasifleştirme anında etkili. Ana şifre (`ADMIN_TOKEN`) acil durum girişi olarak kalır ve "Sahip" sayılır |
+| İşlem kaydı | Paneldeki her değişiklik (giriş, sipariş durumu, stok, fiyat, kampanya, içe aktarma, yedek indirme…) kim, ne zaman, hangi IP ile kaydedilir | Sayfa: İşlem Kaydı (Sahip ve Yönetici), arama |
+| İzleme | Sunucu ve tarayıcı hataları gruplanarak kaydedilir (tekrar sayısı, son görülme), `/api/health` uptime izleyicileri için (veritabanı kontrolü, 200/503) | Sayfa: Sistem Durumu: veritabanı, zamanlanmış görevler, yedekler, son hatalar, 12 yapılandırma kontrolü (değerler gösterilmez) |
+| Veritabanı ve yedek | SQLite WAL kipi (eşzamanlı okuma/yazma), günlük yedek sıkıştırılıp e-postayla sunucu dışına gönderilir (`BACKUP_EMAIL`, yoksa `ADMIN_EMAIL`, yoksa mağaza e-postası; `BACKUP_EMAIL=0` kapatır), elle yedek ve indirme, 30 günden eski hata kayıtları temizlenir | PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek bu açığı kapatır |
+| Firebase bağımlılığı | Ürün yorumları, ürün soruları ve iletişim mesajları artık kendi veritabanımızda. Yorumlarda "Doğrulanmış alıcı" (teslim edilmiş sipariş), mağaza yanıtı, ürün şemasında gerçek puan. GES teklif sayfası, admin girişi ve hesap silme Firebase servis hesabı olmadan çalışır | Eski Firestore yorum/iletişim kayıtları taşınmadı (veri taşınmayacak kararı) |
+| Toplu stok ve fiyat | Katalog CSV dışa aktarma (Excel uyumlu), CSV ile stok/fiyat içe aktarma: önce ön izleme, sonra uygula. Ürün kodu veya SKU ile eşleşir, 3 kattan büyük fiyat değişimi ve tekrarlanan satır reddedilir | Ürünler sayfasında Dışa aktar / İçe aktar |
+| Muhasebe aktarımı | Tarih aralığına göre sipariş özeti (KDV matrahı, KDV, kupon ve havale indirimi, kargo) ve satır detayı CSV | Siparişler sayfası (Sahip ve Yönetici) |
+| Kargo | Toplu kargolama: sipariş no, kargo firması, takip no CSV'si → ön izleme → siparişler kargoda, müşteriye takip e-postası. 10×15 cm kargo etiketi PDF (gönderici, alıcı, desi, kg, QR) | Siparişler sayfası ve sipariş detayı. Kargo firması API'si yok, takip no elle/CSV ile girilir |
+| Pazarlama izinleri | Ticari ileti izni tarihli defterde (kim, ne zaman, hangi kaynaktan, IP) tutulur: İYS ispatı için. Kayıt ve profil buraya yazar; terk edilmiş sepet e-postası ve müşteri listesi buradan okur. İzinli kişiler CSV | Müşteriler sayfası |
+| Yorum isteme | Teslimattan 7 gün sonra (30 güne kadar) sipariş başına bir kez değerlendirme isteği e-postası | `REVIEW_REQUESTS=0` kapatır |
+
+**Doğrulama (yerel test sunucusu, veritabanı kopyası, e-posta kapalı):** ana şifreyle giriş, kullanıcı ekleme, zorunlu şifre değişimi, 2FA kurulumu ve kodla giriş, operatör ve editör kısıtları, pasifleştirilen kullanıcının oturumunun anında düşmesi, işlem kaydı, sağlık ucu, tarayıcı hata kaydı, elle yedek ve indirme; yorum onayı ve yanıtı, ürün şemasında puan, soru-cevap, iletişim formu, katalog/sipariş/izinli kişi CSV'leri, stok içe aktarma (yeni stok vitrinde), toplu kargo ön izlemesi, etiket PDF'i. Tip kontrolü, birim testleri 82/82, üretim derlemesi 471 sayfa, Playwright Chromium + Mobile Chrome 98/98. Tarayıcıda Sistem Durumu, Kullanıcılar, Hesabım ve yeni düğmeler kontrol edildi.
+
+**Yayından sonra yapılacaklar (sizde):**
+1. Ana şifreyle girip Kullanıcılar sayfasından kendinize "Sahip" hesabı açın, o hesapla girip Hesabım'dan iki adımlı doğrulamayı açın. Diğer çalışanlara ayrı hesap açın.
+2. İsteğe bağlı ortam değişkenleri: `ADMIN_EMAIL` (hata uyarıları), `BACKUP_EMAIL` (günlük yedeğin gideceği adres, mağaza kutusundan farklı olması önerilir).
+3. Ücretsiz bir uptime izleyiciyi (UptimeRobot, Better Stack vb.) `/api/health` adresine bağlayın.
+4. Kişisel hesaplara geçince ana şifreyi uzun ve rastgele bir değerle değiştirin, `ADMIN_TOTP_SECRET` tanımlayın.
+
+**Hesap veya sağlayıcı gerektirdiği için yapılamayanlar:** pazaryeri entegrasyonu (Trendyol/Hepsiburada API anahtarı), kargo firması API'si (otomatik takip no ve barkod), ERP/muhasebe yazılımı bağlantısı (şimdilik CSV), Sentry gibi dış hata servisi (şimdilik panel içi kayıt), PostgreSQL, katalog verisi (GTIN/barkod, ölçülmüş desi, eksik görseller; tedarikçiden), Firebase yeni proje ve servis hesabı (markalı doğrulama e-postaları). İngilizce katalog: iki eski çalışma kopyasında commit'lenmemiş iş var, çakışma riski nedeniyle dokunulmadı.
+
+**Katalog uyarısı (tekrar):** Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8 katalogda 120 V sürüm olarak geçiyor; Türkiye şebekesine (230 V) uygun değil, kontrol edilmeli.
 
 ## Eksikler ve tutarsızlıklar (19.10.2026 kontrolü ve çözümü)
 _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, herkese açık API) ve `YAPILACAKLAR.md` ile karşılaştırıldı, ardından çözüldü. Doğrulama: tip kontrolü, lint, 63 birim testi, üretim derlemesi (425 sayfa), Playwright Chromium + Mobile Chrome 98 geçti / 0 kaldı (veritabanı kopyası, e-posta kapalı)._
@@ -209,5 +237,6 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
 - Son yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü (uygulama içi zamanlayıcı, header menüleri, Firebase/SMTP), mobil başlık + hero, süs ikonlarının kaldırılması, KDV etiketi, üyelere özel favoriler. Canlı kontrol: 16 sayfa/uç 200, eski kategori adresi 308, cron ucu yetkisiz 401, ürün sayfasında "+KDV" yok, mobil arama satırı var. Zamanlayıcı canlıda çalıştı: `expire-orders` (iptal 0) ve ilk otomatik yedek (`voltekno-2026-10-19T12-57-41-391Z.db`, 636 KB), durum dosyası veritabanının yanında. Önceki yayın: `28f5fb7` (19.10 12:11)
-- Bu turdaki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
+- Canlıda olmayanlar: `6a30301` (SEO tür ve marka sayfaları; "SEO yayınlamıyoruz" kararıyla bekliyor) ve `e8806cf` (profesyonel seviye). İkisi aynı dalda art arda; yalnızca profesyonel seviyeyi yayınlamak için SEO commit'i ayrı bir daldan geri alınarak yayın paketi hazırlanmalı
+- 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.
