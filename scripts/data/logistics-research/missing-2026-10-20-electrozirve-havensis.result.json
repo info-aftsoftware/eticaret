@@ -1,0 +1,266 @@
+{
+ "HAVENS-00620": {
+  "dimsCm": [
+   28.0,
+   23.5,
+   10.0
+  ],
+  "weightKg": 5.4,
+  "basis": "series",
+  "source": "https://havensis.com.tr/urunler/80a-mppt-solar-sarj-kontrol",
+  "note": "Sayfadaki 'Havensis Solar-MPS 60A-70A-80A Datasheet.pdf' (Belgeler): Solar-80AMPS 5.40 kg, 280x230x100 mm; kullanım kılavuzu da 280x230x100 mm, 5.4 kg diyor. Ürün adı hem '80AMPS' hem '45A 60/72V' içeriyor; ölçü HV 45A sayfasıyla (280x235x100) aynı kasa. Net ürün ağırlığı; koli brütü muhtemelen ~6 kg."
+ },
+ "HAVENS-00621": {
+  "dimsCm": [
+   28.0,
+   23.5,
+   10.0
+  ],
+  "weightKg": 5.4,
+  "basis": "series",
+  "source": "https://havensis.com.tr/urunler/solar-45amps-6072v-45a-hv-mppt-1",
+  "note": "Ölçü sayfadan: 280x235x100 mm (ürün). HV 45A için ağırlık yayımlanmamış; aynı MPS kasasındaki Solar-80AMPS datasheet ağırlığı 5.40 kg (80a-mppt-solar-sarj-kontrol sayfasındaki datasheet) seri değeri olarak alındı. Net ağırlık; koli brütü biraz daha yüksek."
+ },
+ "HAVENS-00627": {
+  "dimsCm": [
+   22.4,
+   19.7,
+   8.0
+  ],
+  "weightKg": 2.2,
+  "basis": "estimate",
+  "source": "https://havensis.com.tr/urunler/50a-dualcharger-3020amd-mpptdc-dc-69426f665e2fe",
+  "note": "Ölçü resmî sayfadan: 197.2x224x80 mm (ürün). Ağırlık sitede ve belgelerde yok; alüminyum soğutuculu MPPT+DC-DC kasası için koli dahil ~2.2 kg tahmin."
+ },
+ "HAVENS-00632": {
+  "dimsCm": [
+   37.5,
+   22.5,
+   11.0
+  ],
+  "weightKg": 5.0,
+  "basis": "estimate",
+  "source": "https://havensis.com.tr/urunler/1300w-tam-sinus-sarjli-invertor-ups-69a54b9b19b5d",
+  "note": "Ölçü resmî sayfadan: 375x225x110 mm (ürün). Ağırlık yayımlanmamış; bu boyutta 1300W yüksek frekanslı tam sinüs şarjlı inverter için koli dahil ~5 kg tahmin (trafolu tip ise 10 kg+ olabilir, teyit edilmeli)."
+ },
+ "HAVENS-HVSS50070DC-00633": {
+  "dimsCm": [
+   12.0,
+   5.4,
+   4.6
+  ],
+  "weightKg": 0.35,
+  "basis": "estimate",
+  "source": "https://havensis.com.tr/urunler/hvss-smart-shunt-500a-69a549f16f30e",
+  "note": "Sayfadaki 'HVSS SmartShunt-TR.pdf': 500A boyut 46x120x54 mm (ürün), ölçü doğrulandı. Ağırlık belgede yok; şönt + kablo + kutu için ~0.35 kg tahmin."
+ },
+ "ELECTR-00447": {
+  "dimsCm": [
+   52.2,
+   24.0,
+   22.0
+  ],
+  "weightKg": 26.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com ürün listesinde (WooCommerce, 167 ürün) 12.8V 200Ah lityum yok; pazaryeri ilanlarında (idefix) ölçü/ağırlık yok. 522x240x218 mm tipik 12.8V 200Ah ABS kasa ölçüsü; 26 kg brüt tahmin korundu."
+ },
+ "ELECTR-00473": {
+  "dimsCm": [
+   20.0,
+   15.0,
+   6.0
+  ],
+  "weightKg": 0.4,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/cr80-5m-cable-with-remote-controller/ sayfasında yalnız marka (Apex) var, ölçü/ağırlık yok. 5 m kablolu kumanda için tahmin korundu (desi <1)."
+ },
+ "ELECTR-00474": {
+  "dimsCm": [
+   18.0,
+   12.0,
+   6.0
+  ],
+  "weightKg": 0.3,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/crw80-wireles-remote-controller/ sayfasında ölçü/ağırlık yok (marka Apex). Tahmin korundu."
+ },
+ "ELECTR-00475": {
+  "dimsCm": [
+   18.0,
+   12.0,
+   6.0
+  ],
+  "weightKg": 0.3,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/crw88-wireles-remote-controller-car-designe/ ve idefix ilanında ölçü/ağırlık yok. Tahmin korundu."
+ },
+ "ELECTR-00476": {
+  "dimsCm": [
+   20.0,
+   15.0,
+   6.0
+  ],
+  "weightKg": 0.45,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/crd80-kablolu-ekranli-inverter-kumandasi/ sayfasında ölçü/ağırlık yok. Tahmin korundu."
+ },
+ "ELECTR-00516": {
+  "dimsCm": [
+   22.0,
+   16.0,
+   9.0
+  ],
+  "weightKg": 1.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/electrozirve-20a-dc-dc-charger-ec1212-20/ sayfasında açıklama/teknik veri boş. Eşleşen SRNE veya OEM veri sayfası bulunamadı. Tahmin korundu."
+ },
+ "ELECTR-00517": {
+  "dimsCm": [
+   26.0,
+   19.0,
+   10.0
+  ],
+  "weightKg": 1.7,
+  "basis": "estimate",
+  "source": "",
+  "note": "EC12-12 40A modeli electrozirve.com'da listelenmiyor; resmî ya da eşleşen veri sayfası yok. Tahmin korundu."
+ },
+ "ELECTR-00518": {
+  "dimsCm": [
+   30.0,
+   21.0,
+   11.0
+  ],
+  "weightKg": 2.4,
+  "basis": "estimate",
+  "source": "",
+  "note": "EC12-12 60A modeli electrozirve.com'da listelenmiyor; veri sayfası yok. Tahmin korundu."
+ },
+ "ELECTR-00519": {
+  "dimsCm": [
+   24.0,
+   18.0,
+   11.0
+  ],
+  "weightKg": 1.8,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/30a-dc-dc-charger-aku-sarj-kontrolekran/ sayfasında ölçü/ağırlık yok. Tahmin korundu."
+ },
+ "ELECTR-00521": {
+  "dimsCm": [
+   26.0,
+   19.0,
+   11.0
+  ],
+  "weightKg": 2.2,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com'da 40A yalnızca 'Bidirection' (çift yönlü) olarak listeleniyor; tek yönlü 40A yok, ad teyit edilmeli. Ölçü/ağırlık yok, tahmin korundu."
+ },
+ "ELECTR-00520": {
+  "dimsCm": [
+   24.0,
+   18.0,
+   11.0
+  ],
+  "weightKg": 2.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "electrozirve.com/urun/30a-dc-dc-bidirection-charger-aku-sarj-kontrolekran/ sayfasında ölçü/ağırlık yok. Tahmin korundu."
+ },
+ "HAVENS-00600": {
+  "dimsCm": [
+   12,
+   9,
+   5
+  ],
+  "weightKg": 0.12,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmî MS3AES kullanma kılavuzunda (minisolar-3-amper sayfası) 'Ölçüler' tablosu boş bırakılmış. Eko seri 10AES gövdesi 108x54 mm, 0.07 kg; 3AES daha küçük. Koli dahil tahmin korundu."
+ },
+ "HAVENS-00601": {
+  "dimsCm": [
+   13,
+   8,
+   5
+  ],
+  "weightKg": 0.15,
+  "basis": "series",
+  "source": "https://havensis.com.tr/urunler/minisolar-eko-seri",
+  "note": "Sayfadaki 'MiniSolar10AES Tanıtım Kılavuzu' (Eko seri): dış ölçü 108.0x54.0 mm (yükseklik ~30 mm), 0.07 kg net. 5AES aynı eko kasa varsayıldı; ölçü 15x10x5'ten küçük koliye (13x8x5) düzeltildi, koli dahil 0.15 kg. Desi etkisi ihmal edilebilir."
+ },
+ "HAVENS-00604": {
+  "dimsCm": [
+   18,
+   12,
+   6
+  ],
+  "weightKg": 0.3,
+  "basis": "estimate",
+  "source": "",
+  "note": "20AES için resmî veri yok. Referans: Dijital seri MiniSolar-20ADS 156x68.3 mm, 0.18-0.23 kg (dijital-seri-solar-sarj-kontrol sayfası belgesi); 18x12x6 koli ve 0.3 kg tahmini makul, korundu."
+ },
+ "HAVENS-00609": {
+  "dimsCm": [
+   12,
+   9,
+   5
+  ],
+  "weightKg": 0.15,
+  "basis": "estimate",
+  "source": "",
+  "note": "MiniSolar MPS 3A MPPT havensis.com.tr ürün listesinde (TR+EN, 91 sayfa tarandı) bulunamadı. Tahmin korundu."
+ },
+ "HAVENS-00634": {
+  "dimsCm": [
+   15,
+   10,
+   4
+  ],
+  "weightKg": 0.12,
+  "basis": "estimate",
+  "source": "",
+  "note": "minisolar-solar-wifi-modul sayfasında yalnız teknik özellik var, ölçü/ağırlık yok (belge bir PNG). Tahmin korundu."
+ },
+ "HAVENS-00635": {
+  "dimsCm": [
+   12,
+   8,
+   3
+  ],
+  "weightKg": 0.06,
+  "basis": "estimate",
+  "source": "",
+  "note": "minisolar-bt-bluetooth-modul sayfası ve BLE kılavuzunda ölçü/ağırlık yok; 60 cm kablo ve RJ11 soketle gönderildiği belirtiliyor. Tahmin korundu."
+ },
+ "HAVENS-00636": {
+  "dimsCm": [
+   15,
+   12,
+   6
+  ],
+  "weightKg": 0.25,
+  "basis": "estimate",
+  "source": "",
+  "note": "C216DSP havensis.com.tr'de ve web aramasında bulunamadı. Tahmin korundu."
+ },
+ "HAVENS-00637": {
+  "dimsCm": [
+   15,
+   12,
+   6
+  ],
+  "weightKg": 0.25,
+  "basis": "estimate",
+  "source": "",
+  "note": "EKBT havensis.com.tr'de ve web aramasında bulunamadı. Tahmin korundu."
+ }
+}
