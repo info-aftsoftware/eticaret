@@ -24,7 +24,7 @@ import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { prisma } from '@/lib/prisma'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
 import { generateContractPdf } from '@/lib/legal/contract-pdf'
-import { getCarrier } from '@/lib/shipping/carriers'
+import { getCarrier, orderTrackingUrl } from '@/lib/shipping/carriers'
 import { SELLER } from '@/lib/legal/company'
 import { STORE_CONTACT, STORE_TIME_ZONE, bankTransferDeadline } from '@/lib/store-config'
 import { buildInvoiceDataFromPrisma } from '@/lib/invoice-data'
@@ -110,8 +110,9 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     total: order.total,
     carrierName: carrier?.name ?? order.shippingCarrier,
     trackingNumber: order.trackingNumber,
-    trackingUrl: carrier && order.trackingNumber ? carrier.trackingUrl(order.trackingNumber) : null,
-    trackingHint: carrier?.trackingHint ?? null,
+    trackingUrl: orderTrackingUrl(order),
+    // Navlungo linki numarayı kendisi açar; firma sayfasına yönelik ipucu gerekmez
+    trackingHint: order.trackingUrl ? null : carrier?.trackingHint ?? null,
     customerNote: parseCustomerNote(order),
     orderUrl: `${siteUrl()}/orders/${order.orderNo}`,
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,

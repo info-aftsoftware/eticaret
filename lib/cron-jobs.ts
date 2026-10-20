@@ -16,6 +16,7 @@ import { sendEmail } from '@/lib/email'
 import { STORE_CONTACT } from '@/lib/store-config'
 import { pruneErrors } from '@/lib/error-log'
 import { processReviewRequests } from '@/lib/review-requests'
+import { syncNavlungoShipments } from '@/lib/shipping/navlungo-shipments'
 
 const DAY = 86_400_000
 
@@ -118,6 +119,21 @@ export async function runExpireOrders({ dry = false }: { dry?: boolean } = {}) {
   // Teslimattan 7 gün sonra yorum isteği (sipariş başına bir kez)
   const reviewRequests = await processReviewRequests({ dry }).catch((e) => ({ error: String(e) }))
   return { ok: true, dry, ...result, cardUnresolved, stockAlerts, abandonedCarts, reviewRequests }
+}
+
+/**
+ * Navlungo gönderi takibi: kargodaki siparişlerin durumu post/check ile çekilir.
+ * Taşıyıcı takip numarası gelince siparişe yazılır, teslimde sipariş "Teslim Edildi" olur (lib/order-service, müşteriye e-posta).
+ * İade / iptal / tazmin durumlarında yöneticiye uyarı. Entegrasyon yapılandırılmamışsa hiçbir şey yapmaz.
+ * dry: Navlungo'yu sorgular ama siparişe hiçbir şey yazmaz.
+ */
+export async function runNavlungoTracking({ dry = false }: { dry?: boolean } = {}) {
+  try {
+    return { ok: true as const, dry, ...(await syncNavlungoShipments({ dry })) }
+  } catch (e) {
+    await reportError('cron-navlungo-takip', e)
+    return { ok: false as const, dry, error: e instanceof Error ? e.message : 'hata' }
+  }
 }
 
 /** Yerel yedek dizini (Sistem Durumu sayfası ve indirme ucu da kullanır) */

@@ -3,7 +3,129 @@
 _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**19.10.2026 turu tamamlandı:** katalog denetimi, İngilizce/Türkçe tam çeviri, mobil görsel düzeltmesi, uçtan uca site denetimi ve düzeltmeleri, admin ↔ vitrin senkronu, müşteri hesabı gizlilik/belgeler. Ayrıntı aşağıda "19.10.2026 turu" bölümünde.
+**Kargo fiyatı Geliver ve Navlungo kıyaslı, canlıda (20.10.2026 20:52, yayın dalında `7381cb9`, SEO hariç).** Her sepet için iki kaynaktan teklif alınıyor, en ucuzu müşteriye yansıyor, akülü sepette yalnızca Navlungo. Fiyatın kaynağı yönetim panelinde siparişte yazıyor. Ayrıntı aşağıda "Kargo: Geliver + Navlungo". **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
+
+**Navlungo API entegrasyonu kodda hazır, canlıda değil, gerçek API ile denenmedi (20.10.2026).** Kimlik bilgisi girilene kadar özellik kapalıdır; her şey sahte yanıtlarla test edildi. Ayrıntı aşağıda "Navlungo gönderi entegrasyonu".
+
+## Navlungo gönderi entegrasyonu (20.10.2026, yayında değil)
+**İstek:** Gönderiler Navlungo'dan çıkıyor; "Kargoya ver" adımında gönderi Navlungo'da oluşsun, takip numarası, takip bağlantısı ve durum taşıyıcı sitelerinden değil Navlungo'dan gelsin.
+
+**Önemli:** Navlungo kimlik bilgisi olmadığı için **gerçek API'ye hiç istek atılmadı.** İstek ve yanıt alanları `tcgunel/omniship-navlungo` paketinin kaynağından ve test verilerinden alındı (token `data.access_token`; oluşturma yanıtı belgede düz nesne, QA'da `data: [...]`; etiket base64 PDF ya da bağlantı). İlk gerçek denemede QA hesabıyla bir gönderi açılıp yanıtlar kontrol edilmeli.
+
+**Sizden gerekenler (Navlungo panelinde):**
+1. Entegrasyonlar → API kullanıcısı açın. Şifre yalnızca bir kez gösterilir. Panel girişi API'de çalışmaz.
+2. Kargo Şirketleri → en az bir anlaşma ve fiyat listesi tanımlı olmalı. Yoksa oluşturma "fiyat listesi tanımı bulunmamaktadır" hatası verir.
+3. Adres Defteri → Depo Konumları → gönderici (depo) adresi. Kaydın id'si `NAVLUNGO_SENDER_ADDRESS_ID` olur.
+4. Sunucu ortamına `NAVLUNGO_API_USERNAME`, `NAVLUNGO_API_PASSWORD`, `NAVLUNGO_SENDER_ADDRESS_ID` yazın. `NAVLUNGO_TEST_MODE` `0`/`false` yazılmadıkça QA ortamı kullanılır (yanlışlıkla gerçek gönderi açılmasın). QA ve üretim ayrı hesaplardır, ayrı API kullanıcısı ister. İsteğe bağlı `NAVLUNGO_CARRIER_ID` (1 = Navlungo en uygun firmayı seçer, varsayılan).
+
+**Yönetim paneli (sipariş detayı → Kargo kartı):**
+- Ödenmiş ve kargoya verilebilir siparişte "Navlungo ile kargoya ver" kutusu: desi (sipariş anındaki teklifin desisi, ağırlık büyükse kg) ve koli adedi (varsayılan 1) düzenlenebilir. "Navlungo'da gönderi oluştur" onay sorar, gönderiyi açar (reference_id = sipariş no), sipariş "Kargoda" olur, müşteriye Navlungo takip bağlantısıyla e-posta gider. Elle takip numarası girişi alternatif olarak altta kalır.
+- Gönderi açıldıktan sonra: Navlungo gönderi no, son durum, son sorgu zamanı, "Etiketi indir (PDF)" ve "Durumu güncelle". Etiket gönderiden birkaç dakika sonra hazır olur, o zamana kadar "henüz hazırlanıyor" der.
+- Aynı sipariş no ile gönderi zaten açılmışsa (önceki denemenin yanıtı kaybolduysa) yeni gönderi açılmaz, mevcut gönderi kullanılır.
+- Sistem Durumu sayfasında "Navlungo gönderi entegrasyonu" kontrolü (kapalı / QA / üretim) ve "Navlungo kargo takibi" görevi.
+
+**Takip (zamanlayıcı, 2 saatte bir; elle `POST /api/cron/navlungo-tracking`, `?dry=1` değişiklik yapmaz):**
+- Kargodaki Navlungo gönderilerinin durumu `post/check` ile çekilir (kargoya verilişten sonra 45 gün).
+- Taşıyıcı gönderiyi kabul edince verdiği takip numarası siparişe yazılır, kargo firması Navlungo'nun bildirdiği taşıyıcıya göre düzeltilir.
+- Teslim Alındı, Yolda, Dağıtıma Çıktı gibi durum değişiklikleri müşterinin zaman çizelgesine düşer; sipariş sayfasında "Kargo durumu" görünür.
+- Teslim Edildi (kod 2) → sipariş `lib/order-service` üzerinden "Teslim Edildi" olur, müşteriye e-posta gider.
+- İade, iptal ve tazmin durumları (7/9/21, 10, 19/20) **otomatik uygulanmaz**, çünkü stok ve ücret iadesi sizin kararınız. Zaman çizelgesine panel notu düşer, Sistem Durumu'na uyarı yazılır.
+- Navlungo'nun bildirim (webhook) URL'si kullanılmadı: yük biçimi belgelenmemiş, doğruluk kaynağı `post/check`.
+
+**Müşteri tarafı:** Takip bağlantısı Navlungo'nun sayfasıdır (sipariş sayfası ve e-postalar). Navlungo linkinde "numarayı sayfaya yapıştırın" ipucu gösterilmez. Etiket bağlantısı ve iç alanlar müşteri yanıtına girmez.
+
+**Kod:** `lib/shipping/navlungo-api.ts` (istemci, token önbelleği 8 saat ve 5 dk pay, 401'de bir kez yenileme, durum kodları, takip kararı), `lib/shipping/navlungo-shipments.ts` (sipariş tarafı), `app/api/admin/orders/[id]/navlungo-label`, `app/api/cron/navlungo-tracking`. Order'a yeni alanlar: `trackingUrl`, `navlungoPostNumber`, `navlungoStatusCode`, `navlungoStatusName`, `navlungoLabelUrl`, `navlungoTestMode`, `navlungoSyncedAt`. Hepsi boş bırakılabilir; derlemedeki `prisma db push` onay istemeden uygular (bu yüzden gönderi no'ya benzersiz kısıt yerine indeks kondu).
+
+**Doğrulama (yalnızca sahte yanıtlarla):**
+- Birim testleri 16 yeni, toplam 104/104: token önbelleği ve süre, eşzamanlı tek token, 401 sonrası yenileme, QA/üretim adresi, oluşturma gövdesi (adres defteri gönderici, telefon biçimi, desi), iki yanıt biçimi, aynı reference_id, doğrulama hataları, durum ve loglar, etiket base64 / hazır değil, iptal, ağ hatası, takip kararları.
+- Yerel veritabanı kopyasında uçtan uca: ödenmiş sipariş → Navlungo gönderisi + Kargoda → etiket → Dağıtıma Çıktı → zamanlayıcı → Teslim Edildi. Taşıyıcı numarası yazıldı, müşteri e-postasında Navlungo linki çıktı. E-postalar diske yazıldı, dışarı gitmedi.
+- Tip kontrolü ve lint temiz. **Admin ekranı tarayıcıda görülmedi** (yönetici girişi gerekiyor).
+
+**Kalan:** QA hesabıyla ilk gerçek deneme. Gönderi iptali API istemcisinde var (`cancelPost`), ama panelde düğme yok. Kargodaki sipariş geri alınamadığı için akış ayrıca kararlaştırılmalı. İade toplama (return post) yok.
+
+## Kargo: Geliver + Navlungo (20.10.2026, `5acce2b`; canlıda `7381cb9`)
+**İstek:** Navlungo Domestic Fiyat Teklifi 2026 PDF'i incelensin, kapıda ödeme dışındaki seçenekler eklensin, her seçenek eklenmeden kıyaslansın. Fiyat önceki firma listesinden verildiyse "Geliver", PDF'ten verildiyse "Navlungo" olarak yönetim panelinde yazsın. Akülerde yalnızca Navlungo fiyatı.
+
+**Kaynaklar:** Geliver "Fiyat Listesi" (masaüstünde `Kargo Fiyat Listesi.pdf`, app.geliver.io, 3.10.2026, şehirler arası "En iyi fiyatlar", vergiler hariç, +%22,35). Navlungo PDF (taşıyıcı tarifeleri 17.07.2026'dan itibaren, KDV ve EPH dahil, 81 ile tek fiyat).
+
+**PDF'teki seçenekler (kapıda ödeme hariç):**
+| Seçenek | Sitede |
+|---|---|
+| Aras, hepsiJET, Sürat, Yurtiçi, Kolay Gelsin, PTT tarifeleri | ✅ fiyat kıyasına girdi |
+| hepsiJET XL (42 desi üstü, ₺21/desi, kata teslim) | ✅ fiyat kıyasına girdi. PDF: ilk kullanımdan önce Navlungo operasyondan uygunluk bilgisi alınmalı |
+| Ağır taşıma (tek parça 100 desi üstü, parça başı) | ✅ Aras 5.610, Sürat 5.940, Yurtiçi 7.062, PTT 4.700; Kolay Gelsin ve hepsiJET almıyor |
+| Kuryetel | ❌ PDF'te fiyat yok ("danışmanınıza ulaşın") |
+| Randevulu kapıdan iade toplama (hepsiJET ₺172 / ₺195), başarısız teslimde gidiş ücretinin %50'si | ℹ️ müşteri ücreti değil, iade sürecinde gider |
+| SMS/WhatsApp takip, adres düzeltme, cüzdan, tek fatura, Single API | ℹ️ Navlungo panelinin hizmetleri; sitede karşılığı Navlungo API entegrasyonu (aşağıda) |
+
+**Kıyas (tek gönderi, vergiler dahil ₺, Geliver = o desideki en ucuz firma):**
+| Desi | Geliver | Aras | hepsiJET | hepsiJET XL | Sürat | Yurtiçi | Kolay Gelsin | PTT | Seçilen |
+|---|---|---|---|---|---|---|---|---|---|
+| 1–2 | 110 (Sürat) | 119 | 109 | — | 127 | 175–219 | 150 | 99 | Navlungo · PTT |
+| 3–4 | 111 (hepsiJET) | 129–157 | 110 | — | 127–161 | 219–252 | 150–176 | 106 | Navlungo · PTT |
+| 5 | 138 (Kolay Gelsin) | 169 | 155 | — | 161 | 252 | 176 | 120 | Navlungo · PTT |
+| 6–10 | 153 (Kolay Gelsin) | 199–227 | 155 | — | 205 | 327 | 176–213 | 149 | Navlungo · PTT |
+| 12–15 | 233–241 | 259–289 | 233 | — | 287–319 | 447 | 313 | 225 | Navlungo · PTT |
+| 18–20 | 241 (Kolay Gelsin) | 349 | 233 | — | 377–390 | 535 | 313 | 299 | Navlungo · hepsiJET |
+| 25–30 | 326 (Kolay Gelsin) | 399–479 | 315 | — | 476–571 | 665–738 | 489 | 349–399 | Navlungo · hepsiJET |
+| 35–40 | 448–570 | 544–609 | 420 | — | 646–721 | 828–918 | 559–629 | — | Navlungo · hepsiJET |
+| 45 | 693 | 674 | — | 945 | 796 | 1.008 | 699 | — | Navlungo · Aras |
+| 60 | 1.060 | 869 | — | 1.260 | 1.021 | 1.278 | 909 | — | Navlungo · Aras |
+Not: hepsiJET paket başı en fazla 25 kg, Kolay Gelsin (Geliver) en fazla 30 kg. Ağır sepetlerde bu sınırlar nedeniyle Geliver öne geçebiliyor (ör. 26 desi 26 kg panel: Geliver · Kolay Gelsin 325,76 < PTT 399).
+
+**Ürün bazında etki (tek adet, 340 ürün):** 314 üründe kargo düştü, 5 üründe arttı, 21'inde aynı; ortalama 983 ₺ → 530 ₺. Seçilen kaynak: Navlungo PTT 248, Aras 27, hepsiJET XL 25, hepsiJET 19; Geliver 21. Artan 5 ürünün hepsi akü (Geliver devre dışı olduğu için): 2 lityum batarya 546 → 596, 2 jel akü 326 → 399, 1 jel akü 350 → 492. Büyük düşüşler ağır ürünlerde: ısı pompaları ve 280Ah batarya artık hepsiJET XL fiyatıyla (ör. 8.432 → 3.129).
+
+**Kurallar:**
+- Sepet tek gönderi sayılır, fiyat toplam desiye göre. Ağır taşıma bedeli yalnızca 100 desiyi aşan tek parça için, parça başına.
+- Geliver 30 desi üstünde ve ağır parçada firma belirtmiyor. 30 üstü "her ek desi 20 ₺ + vergiler" fiyatı kullanılır. Ağır parçalı sepete Geliver teklifi verilmez, çünkü listede o firmaların taban fiyatı yok.
+- Akü: Lityum Akü, Jel Akü, Taşınabilir Güç İstasyonu kategorileri (25 ürün). "Batarya Yönetimi ve Aksesuar" akü sayılmadı.
+- Fiyat hâlâ desiye göre. Kg desiden büyük olsa da kg ile fiyatlanmıyor; katalogda çoğu üründe desi zaten kg'a eşit.
+
+**Yönetim paneli:** Sipariş listesinde tutarın altında "Kargo: Navlungo / Geliver". Sipariş detayında fiyat özetinde "Fiyat: Navlungo · Aras Kargo". Kargo kartında kaynak, desi/kg, akü notu ve sipariş anındaki tüm teklifler (verilemeyenler nedeniyle). Kargo firması seçimi teklifi veren firmayla açılır. Muhasebe dökümünde "Kargo fiyat kaynağı" ve "Fiyatı veren firma" sütunları var. Bu değişiklikten önceki siparişler "Geliver (önceki fiyat listesi)" yazar.
+
+**Doğrulama (yerel kopya, e-posta kapalı):** tip kontrolü, birim testleri 88/88 (yeni: kaynak kıyası, basamaklar, ağır taşıma, akü kuralı, firma eşleme), derleme 471 sayfa, Playwright 98 geçti / 0 kaldı. Akülü test siparişi: Navlungo · Aras 596 ₺, Geliver "Akü / batarya" gerekçesiyle dışarıda. Panel siparişi: Geliver · Kolay Gelsin 325,76 ₺. Panel listesinde, detayda ve CSV'de kaynak görüldü.
+
+**Navlungo'dan bilgi almak (öneri, sizde):** Navlungo'nun Domestic API'si (v2.1) gönderi oluşturma, etiket PDF'i, durum takibi, takip bağlantısı, iptal ve iade toplama sunuyor. Fiyat sorgulama ucu yok; fiyat paneldeki fiyat listesinden geliyor. Bağlantı için Navlungo panelinde Entegrasyonlar bölümünden API kullanıcısı açılması ve bir gönderici (depo) adresi tanımlanması gerekiyor. Bilgiler gelince "Kargoya ver" Navlungo'da gönderi açıp takip numarasını ve bağlantısını kendisi yazabilir. Geliver için de aynı soru geçerli. → Navlungo tarafı yapıldı, yukarıda "Navlungo gönderi entegrasyonu".
+
+## İstek turu 5 (20.10.2026)
+| İstek | Durum | Not |
+|---|---|---|
+| Koyu tema kullanılmasın | ✅ `79f95bf` | Açık zemine geçti: yönetici giriş ekranı, yönetim yan menüsü ve mobil üst çubuğu, footer (iletişim ikonları kutusuz), üst şerit, blog başlık alanları, karşılaştırma çubuğu, ana sayfadaki "Öne çıkan kategori" kartı, bildirim kutusu, ürün listesindeki toplu seçim çubuğu. Lacivert yalnızca düğme rengi. Fotoğraflı teklif bandındaki karartma, yazının okunması için kaldı. Sitede koyu mod anahtarı yok |
+| Site varsayılan Türkçe gelsin | ✅ `79f95bf` | Sunucu zaten çerezsiz her ziyaretçiye Türkçe veriyordu (tarayıcı dili İngilizce olsa bile). İngilizce görünmesinin nedeni, önceki testlerden kalan bir yıllık "English" çereziydi. Dil seçimi artık oturumluk: tarayıcı kapanınca yeni ziyaret Türkçe başlar. Önceden "English" seçmiş bir tarayıcı, bir kez "Türkçe" seçince düzelir |
+| Adet kutusunda "2 sepette" yerine "2" | ✅ `79f95bf` | Ürün kartı ve ürün sayfası. "sepette" yalnızca ekran okuyucular için |
+| Sepete eklendi bildiriminde "Sepete git" | ✅ `79f95bf` | Ürün kartı, ürün sayfası ve sepete ekle düğmesi. Düğmeli bildirim 5 saniye kalır |
+
+**Doğrulama (yayın dalı `yayin-pro-seo-haric` = `3008ea6`, test sunucusunun okuduğu klasöre derlendi):** tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 98 geçti / 0 kaldı, ticaret akışları 21/21, yönetici rolleri 11/11. Tarayıcıda açık giriş ekranı, açık yan menü, "Sepete git" düğmesi ve yalnızca sayı gösteren adet kutusu görüldü. **Canlı (20.10 19:12):** 29/29 genel kontrol, çerezsiz ana sayfa `lang="tr"`, footer/üst şerit/giriş ekranı/blog açık zeminde, sunucu kaydında hata yok.
+
+**Düzeltme notu (19.10 yayını):** `25ae00a` öncesi yerel testler, derleme farklı klasöre gittiği için yayın dalının değil bir önceki (SEO'lu, aksi hâlde aynı) derlemenin üzerinde koşmuştu. Yayından sonraki canlı kontroller geçmişti; bu turda testler doğru derlemeye karşı yeniden koşuldu ve geçti.
+
+## Profesyonel seviye (19.10.2026 akşam, `e8806cf`; canlıda `25ae00a` olarak, SEO hariç)
+**İstek:** kartla ödeme, e-Arşiv ve alan adı dışındaki eksikleri profesyonel bir e-ticaret sistemi seviyesine getirmek.
+
+| Alan | Yapılan | Not |
+|---|---|---|
+| Yönetici hesapları | Kişiye özel hesap, 4 rol (Sahip, Yönetici, Sipariş operatörü, Katalog editörü), her istekte rol ve yol kontrolü, kişiye özel iki adımlı doğrulama (QR), geçici şifreyle açılan hesapta ilk girişte şifre değişimi | Sayfalar: Kullanıcılar, Hesabım. Rol değişikliği ve pasifleştirme anında etkili. Ana şifre (`ADMIN_TOKEN`) acil durum girişi olarak kalır ve "Sahip" sayılır |
+| İşlem kaydı | Paneldeki her değişiklik (giriş, sipariş durumu, stok, fiyat, kampanya, içe aktarma, yedek indirme…) kim, ne zaman, hangi IP ile kaydedilir | Sayfa: İşlem Kaydı (Sahip ve Yönetici), arama |
+| İzleme | Sunucu ve tarayıcı hataları gruplanarak kaydedilir (tekrar sayısı, son görülme), `/api/health` uptime izleyicileri için (veritabanı kontrolü, 200/503) | Sayfa: Sistem Durumu: veritabanı, zamanlanmış görevler, yedekler, son hatalar, 12 yapılandırma kontrolü (değerler gösterilmez) |
+| Veritabanı ve yedek | SQLite WAL kipi (eşzamanlı okuma/yazma), günlük yedek sıkıştırılıp e-postayla sunucu dışına gönderilir (`BACKUP_EMAIL`, yoksa `ADMIN_EMAIL`, yoksa mağaza e-postası; `BACKUP_EMAIL=0` kapatır), elle yedek ve indirme, 30 günden eski hata kayıtları temizlenir | PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek bu açığı kapatır |
+| Firebase bağımlılığı | Ürün yorumları, ürün soruları ve iletişim mesajları artık kendi veritabanımızda. Yorumlarda "Doğrulanmış alıcı" (teslim edilmiş sipariş), mağaza yanıtı, ürün şemasında gerçek puan. GES teklif sayfası, admin girişi ve hesap silme Firebase servis hesabı olmadan çalışır | Eski Firestore yorum/iletişim kayıtları taşınmadı (veri taşınmayacak kararı) |
+| Toplu stok ve fiyat | Katalog CSV dışa aktarma (Excel uyumlu), CSV ile stok/fiyat içe aktarma: önce ön izleme, sonra uygula. Ürün kodu veya SKU ile eşleşir, 3 kattan büyük fiyat değişimi ve tekrarlanan satır reddedilir | Ürünler sayfasında Dışa aktar / İçe aktar |
+| Muhasebe aktarımı | Tarih aralığına göre sipariş özeti (KDV matrahı, KDV, kupon ve havale indirimi, kargo) ve satır detayı CSV | Siparişler sayfası (Sahip ve Yönetici) |
+| Kargo | Toplu kargolama: sipariş no, kargo firması, takip no CSV'si → ön izleme → siparişler kargoda, müşteriye takip e-postası. 10×15 cm kargo etiketi PDF (gönderici, alıcı, desi, kg, QR) | Siparişler sayfası ve sipariş detayı. Kargo firması API'si yok, takip no elle/CSV ile girilir |
+| Pazarlama izinleri | Ticari ileti izni tarihli defterde (kim, ne zaman, hangi kaynaktan, IP) tutulur: İYS ispatı için. Kayıt ve profil buraya yazar; terk edilmiş sepet e-postası ve müşteri listesi buradan okur. İzinli kişiler CSV | Müşteriler sayfası |
+| Yorum isteme | Teslimattan 7 gün sonra (30 güne kadar) sipariş başına bir kez değerlendirme isteği e-postası | `REVIEW_REQUESTS=0` kapatır |
+
+**Doğrulama (yerel test sunucusu, veritabanı kopyası, e-posta kapalı):** ana şifreyle giriş, kullanıcı ekleme, zorunlu şifre değişimi, 2FA kurulumu ve kodla giriş, operatör ve editör kısıtları, pasifleştirilen kullanıcının oturumunun anında düşmesi, işlem kaydı, sağlık ucu, tarayıcı hata kaydı, elle yedek ve indirme; yorum onayı ve yanıtı, ürün şemasında puan, soru-cevap, iletişim formu, katalog/sipariş/izinli kişi CSV'leri, stok içe aktarma (yeni stok vitrinde), toplu kargo ön izlemesi, etiket PDF'i. Tip kontrolü, birim testleri 82/82, üretim derlemesi 471 sayfa, Playwright Chromium + Mobile Chrome 98/98. Tarayıcıda Sistem Durumu, Kullanıcılar, Hesabım ve yeni düğmeler kontrol edildi.
+
+**Yayından sonra yapılacaklar (sizde):**
+1. Ana şifreyle girip Kullanıcılar sayfasından kendinize "Sahip" hesabı açın, o hesapla girip Hesabım'dan iki adımlı doğrulamayı açın. Diğer çalışanlara ayrı hesap açın.
+2. İsteğe bağlı ortam değişkenleri: `ADMIN_EMAIL` (hata uyarıları), `BACKUP_EMAIL` (günlük yedeğin gideceği adres, mağaza kutusundan farklı olması önerilir).
+3. Ücretsiz bir uptime izleyiciyi (UptimeRobot, Better Stack vb.) `/api/health` adresine bağlayın.
+4. Kişisel hesaplara geçince ana şifreyi uzun ve rastgele bir değerle değiştirin, `ADMIN_TOTP_SECRET` tanımlayın.
+
+**Hesap veya sağlayıcı gerektirdiği için yapılamayanlar:** pazaryeri entegrasyonu (Trendyol/Hepsiburada API anahtarı), kargo firması API'si (otomatik takip no ve barkod), ERP/muhasebe yazılımı bağlantısı (şimdilik CSV), Sentry gibi dış hata servisi (şimdilik panel içi kayıt), PostgreSQL, katalog verisi (GTIN/barkod, ölçülmüş desi, eksik görseller; tedarikçiden), Firebase yeni proje ve servis hesabı (markalı doğrulama e-postaları). İngilizce katalog: iki eski çalışma kopyasında commit'lenmemiş iş var, çakışma riski nedeniyle dokunulmadı.
+
+**Katalog uyarısı (tekrar):** Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8 katalogda 120 V sürüm olarak geçiyor; Türkiye şebekesine (230 V) uygun değil, kontrol edilmeli.
 
 ## Eksikler ve tutarsızlıklar (19.10.2026 kontrolü ve çözümü)
 _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, herkese açık API) ve `YAPILACAKLAR.md` ile karşılaştırıldı, ardından çözüldü. Doğrulama: tip kontrolü, lint, 63 birim testi, üretim derlemesi (425 sayfa), Playwright Chromium + Mobile Chrome 98 geçti / 0 kaldı (veritabanı kopyası, e-posta kapalı)._
@@ -23,6 +145,30 @@ _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, he
 | E11 | Katalog teyitleri (tedarikçi) | ❌ sizde | Deye model kuşağı (41 SKU), Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, eksik 16 görsel, barkod/GTIN boş (Merchant Center GTIN'siz ürünleri sınırlar), İstabreeze kanat seti ağırlığı, koli ölçüleri |
 | E12 | Sağlayıcı / iş kararı gerektirenler | ❌ sizde | e-Arşiv entegratörü, SQLite → PostgreSQL, IBAN hesap sahibi adı kontrolü, kargo API, SMS, taksit tablosu, Turnstile, ETBİS, İYS, Meta Pixel (çerez politikasına eklenmeli), PayTR kararı, kapıda ödeme (`YAPILACAKLAR.md` 125–128, 242, 261) |
 | E13 | Playwright testleri üretim derlemesinde kırmızıydı | ✅ `220407d` | Mobilde havale testi gizli masaüstü özet kopyasına bakıyordu (sayfa doğru, test hatalı). Merchant testi önceden üretilmiş akışta (ISR) gerekçeli atlanıyor. Not: e2e testleri sunucuyla aynı `DATABASE_URL` ile çalıştırılmalı (test ürünü/kuponu oraya yazılır) |
+
+## SEO kapsamı (19.10.2026 akşam)
+**İstek:** ürün türünü arayan kişi doğrudan bizi bulsun.
+
+**Önceki durum (denetim):** 371 adresin hepsi 200, yinelenen başlık yok, her sayfada tek H1. Ama ürün türleri (lityum akü, MPPT şarj kontrol cihazı, hibrit inverter…) yalnızca `/products?category=…` filtresiydi ve canonical'ı `/products` → Google'da tür aramasına karşılık gelen sayfa yoktu. Kök düzen her sayfaya ana sayfa canonical'ı + hreflang veriyordu: /categories, /shipping, /siparis-takip, /hakkimizda, /blog ve 6 blog yazısı ana sayfanın kopyası sayılıyordu; blog site haritasında yoktu. Kurum şeması her sayfadaydı, ürün sayfasında kırıntı şeması yoktu, 2 üründe açıklama yineleniyordu.
+
+| Yapılan | Not |
+|---|---|
+| Ürün türü sayfaları | `/category/<grup>/<tür>`, 29 tür (ısı pompası tek türlü grup, grup sayfası yeterli). Sunucuda: kırıntı yolu, H1, giriş, katalogdan özet (ürün sayısı, markalar, KDV dahil başlangıç fiyatı), tüm ürünler, alım rehberi (H2), SSS, ilgili türler ve blog. Şema: BreadcrumbList + CollectionPage/ItemList. İçerik `lib/seo/product-types.ts` |
+| Marka sayfaları | `/marka/<slug>`, 13 marka; türler ve sayılar katalogdan, tanıtım yalnızca doğrulanabilir bilgi (`lib/seo/brands.ts`) |
+| İç bağlantılar | Menüler, mobil menü, ana sayfa kategori kartları/hero, marka şeridi, ürün sayfası kırıntı yolu ve kategori/marka bağlantıları, grup sayfaları, blog yazıları → tür/marka sayfaları (`lib/seo/type-paths.ts`) |
+| Canonical / hreflang | Kök düzendeki genel canonical ve hreflang kaldırıldı; ana sayfa ve canonical'ı eksik sayfalara kendi adresi |
+| Blog | Canonical, BlogPosting + BreadcrumbList şeması, ilgili ürün türü bağlantıları; veri `lib/blog-posts.ts` |
+| Kurum şeması | Yalnızca ana sayfada `OnlineStore` + `WebSite` (@id ile), unvan/adres/vergi no/e-posta firma bilgisinden; doğrulanmamış sosyal medya adresleri kaldırıldı |
+| SEO dalı birleştirildi | Eski voltekno.com adresleri (132) → yeni sayfalara 308; kategori/marka filtresine gidenler artık tür/marka sayfalarına |
+| Site haritası | Tür, marka, blog, hakkımızda eklendi; sahte "bugün" tarihi ve Google'ın yok saydığı alanlar kaldırıldı |
+
+| Diğer düzeltmeler | Kök düzen her sayfaya Organization + WebSite (kaldırılmış SearchAction ile) + LocalBusiness basıyordu → kaldırıldı; boş Google doğrulama etiketi yalnızca değer varsa; teklif doğrulama aracı noindex + kendi başlığı; 2 üründe yinelenen açıklama ayrıştı; tür ve marka sayfalarında çerçeve etiketleri EN modda İngilizce, Türkçe içerik `lang="tr"` |
+
+**Doğrulama (yerel üretim derlemesi, 467 sayfa):** iç bağlantılardan 425 adres tarandı, hepsi 200; dizinlenebilir 420 sayfanın hepsinde canonical kendine, yinelenen başlık 0, her sayfada tek H1, JSON-LD hatası 0, kurum şeması yalnızca ana sayfada; site haritası (420) dizinlenebilir sayfalarla birebir. Eski voltekno.com adresleri 308 → tür/marka sayfaları (örnek: `/ac-dc-sarj` → akü şarj cihazı türü, `/deye` → `/marka/deye`). Birim testi 68/68 (yeni: tür/marka eşleme tutarlılığı), Playwright 98/98.
+
+**Tür metinlerinde teyit edilmesi iyi olanlar** (genel kabul gören kurallar veya katalogdan türetilmiş hesaplar; hatalı değil ama tedarikçi kılavuzuyla kontrol önerilir): hibrit inverterlerin bataryasız çalışabilmesi (TommaTech Uno/Trio), Victron BMS–akü eşleşmeleri, Digital Multi Control GX önerisi, dizi başına panel sayıları (−10 °C kabulüyle), kurşun-asit şarj akımı %10–20, jel akü %50 deşarj, kablo gerilim düşümü ≤ %3, rüzgar türbini yerleşim kuralı. **Katalog uyarısı:** Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8 katalogda 120 V sürüm olarak geçiyor; doğruysa Türkiye şebekesine (230 V) uygun değildir, ürün sayfalarında belirtilmeli veya satıştan kaldırılmalı.
+
+**Sıralama için kodla yapılamayanlar (sizde):** voltekno.com geçişi (test ortamı arama motorlarına kapalı, hiçbir şey sıralanmaz), Search Console alan adı doğrulaması + site haritası gönderimi + önemli sayfalar için "Dizine eklenmesini iste", Merchant Center ücretsiz ürün listelemeleri (akış hazır: `/feed/google-merchant.xml`; barkod/GTIN boş olması görünürlüğü sınırlar), Google Business Profile (Elazığ adresi), Bing Webmaster Tools. Yeni alan adında sıralama haftalar–aylar sürer.
 
 ## İstek turu 4 (19.10.2026 öğleden sonra)
 | İstek | Durum | Not |
@@ -184,6 +330,10 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü (uygulama içi zamanlayıcı, header menüleri, Firebase/SMTP), mobil başlık + hero, süs ikonlarının kaldırılması, KDV etiketi, üyelere özel favoriler. Canlı kontrol: 16 sayfa/uç 200, eski kategori adresi 308, cron ucu yetkisiz 401, ürün sayfasında "+KDV" yok, mobil arama satırı var. Zamanlayıcı canlıda çalıştı: `expire-orders` (iptal 0) ve ilk otomatik yedek (`voltekno-2026-10-19T12-57-41-391Z.db`, 636 KB), durum dosyası veritabanının yanında. Önceki yayın: `28f5fb7` (19.10 12:11)
-- Bu turdaki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
+- Son yayın: `7381cb9` (20.10.2026 20:52), dal `yayin-pro-seo-haric`: Geliver + Navlungo kargo kıyası. Yayın öncesi bu dalın kendi derlemesinde: tip kontrolü, birim testleri 83/83, derleme 429 sayfa, Playwright 98 geçti / 0 kaldı, test siparişlerinde kaynak listede, detayda ve dökümde doğru. Canlı: 29/29 genel kontrol, ürün akışında kargo 110,42 → 99 ₺ (1–2 desi), sunucu kaydında hata yok. Yayın dalı, ortak klasörde başka oturum çalıştığı için ayrı bir git çalışma kopyasında hazırlandı
+- Bir önceki yayın: `3008ea6` (20.10.2026 19:12): koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git"
+- Bir önceki yayın: `25ae00a` (19.10.2026 19:27): profesyonel seviye, SEO hariç. dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
+- Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
+- Canlıda olmayanlar: `9ad9119` ve `6a30301` (SEO; "SEO yayınlamıyoruz" kararıyla bekliyor). SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; profesyonel seviye zaten içinde
+- 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.

@@ -65,6 +65,19 @@ type OrderDetail = {
   shippingQuote?: ShippingQuoteView
   trackingNumber?: string
   trackingUrl?: string | null
+  /** Navlungo gönderisi (lib/shipping/navlungo-shipments.ts → navlungoShipmentView) */
+  navlungo?: {
+    enabled: boolean
+    testMode: boolean | null
+    postNumber: string | null
+    statusCode: number | null
+    statusName: string | null
+    labelUrl: string | null
+    createdInTestMode: boolean | null
+    syncedAt: string | null
+    envMismatch: boolean
+    defaultDesi: number
+  }
   carriers?: { id: string; name: string }[]
   customerNote?: string | null
   adminNote?: string | null
@@ -127,6 +140,8 @@ export default function AdminOrderDetailPage() {
   const [reason, setReason] = useState('')
   const [notifyCustomer, setNotifyCustomer] = useState(true)
   const [adminNote, setAdminNote] = useState('')
+  const [navDesi, setNavDesi] = useState('')
+  const [navPackages, setNavPackages] = useState('1')
 
   const apiUrl = source === 'firestore' && userId
     ? `/api/admin/orders/${id}?source=firestore&userId=${userId}`
@@ -137,6 +152,7 @@ export default function AdminOrderDetailPage() {
     setCarrier(data.shippingCarrier || data.shippingQuote?.carrierId || data.carriers?.[0]?.id || '')
     setTrackingNumber(data.trackingNumber || '')
     setAdminNote(data.adminNote || '')
+    setNavDesi(data.navlungo ? String(data.navlungo.defaultDesi) : '')
   }, [])
 
   useEffect(() => {
@@ -230,6 +246,11 @@ export default function AdminOrderDetailPage() {
   const next = order.allowedNextStatuses ?? []
   const canShip = next.some((s) => s.value === 'SHIPPED')
   const otherNext = next.filter((s) => s.value !== 'SHIPPED')
+  const nav = order.navlungo
+  const navCreate = Boolean(nav?.enabled && canShip && !nav.postNumber)
+  const navDesiValue = Number(navDesi.replace(',', '.'))
+  const navPackagesValue = Number(navPackages)
+  const navInputsOk = navDesiValue > 0 && navDesiValue <= 1000 && Number.isInteger(navPackagesValue) && navPackagesValue > 0 && navPackagesValue <= 50
 
   return (
     <div className="space-y-6">
@@ -468,8 +489,76 @@ export default function AdminOrderDetailPage() {
                       {order.deliveredAt && <span className="block text-xs text-slate-500">Teslim: {fmtDate(order.deliveredAt)}</span>}
                     </p>
                   )}
+                  {nav?.postNumber && (
+                    <div className="rounded-lg border border-[#e6ebf1] bg-[#f8fafc] px-3 py-2.5 space-y-1.5">
+                      <p className="font-medium text-slate-900">
+                        Navlungo gönderisi <span className="font-mono">{nav.postNumber}</span>
+                        {nav.createdInTestMode && <span className="ml-1 text-xs font-normal text-amber-700">(QA test ortamı)</span>}
+                      </p>
+                      <p className="text-slate-600">
+                        Durum: {nav.statusName ?? 'henüz sorgulanmadı'}
+                        {nav.syncedAt && <span className="block text-xs text-slate-500">Son sorgu: {fmtDate(nav.syncedAt)}</span>}
+                      </p>
+                      {nav.envMismatch && (
+                        <p className="text-xs text-amber-800">Gönderi şimdiki Navlungo ortamından farklı ortamda açılmış; durum ve etiket sorgulanamaz.</p>
+                      )}
+                      {nav.enabled && !nav.envMismatch && (
+                        <div className="flex flex-wrap gap-2 pt-1">
+                          <Button asChild variant="outline" size="sm">
+                            <a href={`/api/admin/orders/${order.id}/navlungo-label`} target="_blank" rel="noopener noreferrer">Etiketi indir (PDF)</a>
+                          </Button>
+                          {order.status === 'SHIPPED' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              disabled={busy !== null}
+                              onClick={() => patch('navsync', { action: 'navlungo_sync' }, "Kargo durumu Navlungo'dan güncellendi.")}
+                            >
+                              {busy === 'navsync' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                              Durumu güncelle
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {navCreate && nav && (
+                    <div className="rounded-lg border border-[#e6ebf1] px-3 py-2.5 space-y-2">
+                      <p className="font-medium text-slate-900">
+                        Navlungo ile kargoya ver
+                        {nav.testMode && <span className="ml-1 text-xs font-normal text-amber-700">(QA test ortamı)</span>}
+                      </p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                          <Label htmlFor="nav-desi">Desi</Label>
+                          <Input id="nav-desi" inputMode="decimal" value={navDesi} onChange={(e) => setNavDesi(e.target.value)} />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="nav-packages">Koli adedi</Label>
+                          <Input id="nav-packages" inputMode="numeric" value={navPackages} onChange={(e) => setNavPackages(e.target.value.replace(/\D/g, ''))} />
+                        </div>
+                      </div>
+                      <Button
+                        className="w-full bg-[#f5b400] text-[#111] hover:bg-[#e0a500]"
+                        disabled={busy !== null || !navInputsOk}
+                        onClick={() => patch(
+                          'navcreate',
+                          { action: 'navlungo_create', desi: navDesiValue, packageCount: navPackagesValue, notifyCustomer },
+                          'Navlungo gönderisi oluşturuldu, sipariş kargoya verildi.',
+                          `Navlungo'da ${navDesiValue} desi, ${navPackagesValue} koli gönderi oluşturulacak ve sipariş "Kargoda" olacak${notifyCustomer ? '; müşteriye takip linkiyle e-posta gider' : ''}. Devam edilsin mi?`
+                        )}
+                      >
+                        {busy === 'navcreate' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                        Navlungo'da gönderi oluştur
+                      </Button>
+                      <p className="text-xs text-slate-500">
+                        Takip numarası, takip linki ve durum Navlungo'dan gelir. Etiket gönderi oluştuktan birkaç dakika sonra hazır olur.
+                      </p>
+                    </div>
+                  )}
                   {(canShip || order.status === 'SHIPPED') && (
                     <>
+                      {navCreate && <p className="text-xs font-medium text-slate-600 pt-1">Ya da takip numarasını elle girin</p>}
                       <div className="space-y-1">
                         <Label htmlFor="carrier">Kargo firması</Label>
                         <select
@@ -487,7 +576,8 @@ export default function AdminOrderDetailPage() {
                       </div>
                       {canShip ? (
                         <Button
-                          className="w-full bg-[#f5b400] text-[#111] hover:bg-[#e0a500]"
+                          variant={navCreate ? 'outline' : 'default'}
+                          className={navCreate ? 'w-full' : 'w-full bg-[#f5b400] text-[#111] hover:bg-[#e0a500]'}
                           disabled={busy !== null || !trackingNumber.trim()}
                           onClick={() => patch('ship', { action: 'status', status: 'SHIPPED', carrier, trackingNumber, notifyCustomer },
                             'Sipariş kargoya verildi olarak işaretlendi.')}
