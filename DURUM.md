@@ -1,11 +1,67 @@
 # Proje Durumu — Voltekno e-ticaret
 
-_Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
+_Son güncelleme: 20.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**Kargo fiyatı Geliver ve Navlungo kıyaslı, canlıda (20.10.2026 20:52, yayın dalında `7381cb9`, SEO hariç).** Her sepet için iki kaynaktan teklif alınıyor, en ucuzu müşteriye yansıyor, akülü sepette yalnızca Navlungo. Fiyatın kaynağı yönetim panelinde siparişte yazıyor. Ayrıntı aşağıda "Kargo: Geliver + Navlungo". **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
+**Canlıda (nextfirststep.com, son yayın `7381cb9`, 20.10.2026 20:52, SEO hariç):** profesyonel seviye (yönetici rolleri, 2FA, işlem kaydı, izleme, yedek, CSV aktarımları, toplu kargo), açık tema ve varsayılan Türkçe, Geliver + Navlungo kargo fiyatı kıyası.
 
-**Navlungo API entegrasyonu kodda hazır, canlıda değil, gerçek API ile denenmedi (20.10.2026).** Kimlik bilgisi girilene kadar özellik kapalıdır; her şey sahte yanıtlarla test edildi. Ayrıntı aşağıda "Navlungo gönderi entegrasyonu".
+**Kodda hazır, canlıda değil (kararınız: "şimdilik bekle"):** Navlungo gönderi entegrasyonu (`1dfd6ce`, kimlik bilgisi bekleniyor) ve Geliver kargo takibi (`9929e0d`). İkisi birlikte yayınlanmalı, çünkü Geliver kodu Navlungo'nun değiştirdiği dosyaların üstüne yazıldı. SEO (`9ad9119`, `6a30301`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+
+## Kalanlar (20.10.2026 kontrolü)
+_DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
+
+**1. Yayın ve kod (sizin kararınız)**
+| # | Kalan | Not |
+|---|---|---|
+| K1 | Navlungo + Geliver kodunun yayını | `1dfd6ce` + `9929e0d` canlıda değil. Yayında `GELIVER_API_TOKEN` Hostinger'a eklenmeli. Navlungo, bilgileri girilene kadar kapalı kalır |
+| K2 | SEO yayını | Tür ve marka sayfaları, eski voltekno.com yönlendirmeleri (`9ad9119`, `6a30301`) bekliyor |
+| K3 | `main` dalı ve GitHub adresi | `urun-katalogu-ikas`, `origin/main`'den 81 commit ileride; yerel `main` 19 commit ileride ama gönderilmemiş. `origin` hâlâ eski adres (`aysenur-23/eticaret`, yeni adrese yönlendiriyor). İkisi de izin sisteminde reddedildi, sizin yapmanız gerekiyor (aşağıda "Yayın") |
+
+**2. Hostinger ortam değişkenleri (nextfirststep.com)**
+| Durum | Değişken |
+|---|---|
+| ✅ tanımlı | `DATABASE_URL` (mutlak), `ADMIN_TOKEN`, `ADMIN_EMAIL`, `CRON_SECRET`, `BACKUP_DIR`, `SMTP_*`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_NOINDEX`, Firebase değişkenleri |
+| ❌ eksik | `ADMIN_TOTP_SECRET` (ana şifrede iki adımlı doğrulama kapalı), `GELIVER_API_TOKEN` (K1 ile), `NAVLUNGO_API_USERNAME` / `NAVLUNGO_API_PASSWORD` / `NAVLUNGO_SENDER_ADDRESS_ID` (bilgiler gelince), `POS_*` (banka sanal POS gelince) |
+| İsteğe bağlı | `BACKUP_EMAIL` (yoksa günlük yedek `ADMIN_EMAIL`'e gider), `SMTP_FROM_NAME` (varsayılan Voltekno), `NEXT_PUBLIC_META_PIXEL_ID` |
+
+**3. Yönetim paneli (sizde; panele giriş gerektiği için doğrulanamadı)**
+- Ana şifreyle girip Kullanıcılar sayfasından kendinize "Sahip" hesabı açın, Hesabım'dan iki adımlı doğrulamayı açın, çalışanlara ayrı hesap açın. Sonra ana şifreyi uzun ve rastgele bir değerle değiştirin.
+- Ücretsiz bir uptime izleyiciyi `/api/health` adresine bağlayın.
+- Gerçek stokları girin: 338 ürün 17, 2 ürün 16 (E10).
+
+**4. Hesap ve sağlayıcı gerektirenler**
+| Konu | Durum |
+|---|---|
+| Navlungo API | Firmayla görüşülecek: API kullanıcısı, depo adresi numarası, kargo anlaşması + fiyat listesi, cüzdan bakiyesi. İlk deneme test (QA) hesabıyla |
+| Geliver | Anahtar alındı, yerelde çalışıyor. Sohbette paylaşıldığı için canlıya almadan önce Geliver panelinden yeni anahtar üretilmesi önerilir. Hesapta henüz gönderi yok; ilk gerçek gönderiyle bağlama ve durum geçişi denenmeli. Etiket satın almak için hesap onayı (sözleşme + vergi levhası) gerekli |
+| hepsiJET XL | Fiyat kıyasında kullanılıyor (42 desi üstü). Navlungo PDF'ine göre ilk kullanımdan önce operasyon ekibinden uygunluk bilgisi alınmalı |
+| Firebase yeni proje (E4) | `voltekno-eticaret` projesinde Firestore/Auth/Storage açılışı ve servis hesabı; canlı hâlâ eski proje değerleriyle |
+| E-posta | Gönderen `@voltekno.com` kutusu olmalı (şu an `info@bataryakit.com`) |
+| Diğer | Banka sanal POS, e-Arşiv entegratörü, SMS, pazaryeri (Trendyol/Hepsiburada), ERP/muhasebe, Sentry, Meta Pixel kararı, kapıda ödeme kararı |
+
+**5. Katalog ve veri (tedarikçi)**
+- Barkod/GTIN boş (Merchant Center görünürlüğünü sınırlar), Excel'de eksik 16 görsel, 12 yanlış/temsilî görsel, Apex APX2440 gerçek fotoğrafı.
+- Teyitler (E11): Deye model kuşağı, Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, Havensis "Solar-80AMPS 45A", İstabreeze kanat seti ağırlığı, tahmini desi değerleri (Altech, Apex 280Ah, SPI), ilk sevkiyatlarda koli ölçüleri.
+- **Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8** katalogda 120 V sürüm; Türkiye şebekesine uygun değil, düzeltilmeli ya da satıştan kaldırılmalı.
+- Büyük ve tehlikeli gönderiler: 490 kg ısı pompası, büyük sürücüler, türbinler (ambar/palet); lityum aküler UN3480, kargo firmasıyla kısıtlar konuşulmalı.
+
+**6. voltekno.com geçişi:** aşağıda "voltekno.com geçişi" (SEO kararı, DNS, ortam değişkenleri, Firebase, e-posta, Search Console).
+
+**7. Klasör ve depo düzeni**
+| Konu | Not |
+|---|---|
+| Ortak klasörde başkasına ait commit'lenmemiş değişiklikler | Bir Codex aracı bu klasörde çalışıyor. Commit'lenmemiş değişiklikleri: ödeme sayfası, SSS, kargo sayfası, sipariş ve kategori sayfaları, hero, sipariş e-postaları, `lib/order-service.ts`, site denetim raporları; ayrıca 4 hero görseli siliniyor ve eski günlük dosyaları git'ten çıkarılıyor. Bunlar hiçbir commit'te ve yayında yok. Sahibi gözden geçirip commit'lemeli ya da geri almalı. 20.10 akşamı kontrolde klasör hatasız derleniyordu |
+| İngilizce katalog | İki eski çalışma kopyasında yarım iş var: `.claude/worktrees/admiring-mahavira-309b7b` (68 dosya) ve `awesome-greider-503600` (34 dosya), ikisi de 19.10'dan beri commit'lenmemiş. Devam mı, silme mi kararı sizde |
+| Eski dallar | `claude/crazy-feynman` (Nisan), `seo-alan-adi` (ana dala birleşti; klasörü `../voltekno-seo`), eski bir stash. Temizlenebilir |
+| Repo temizliği | Kökteki büyük zip'ler ve geçici dosyalar (`YAPILACAKLAR.md` 295) |
+
+**8. Teknik öneriler (kod; karar verilirse yapılır)**
+- Kargo ücreti yalnızca desiye göre; kg desiden büyükse kg ile fiyatlanmıyor (katalogda çoğu üründe desi zaten kg'a eşit).
+- Navlungo: panelde gönderi iptali ve iade toplama yok.
+- `SITE-DENETIMI.md` §4: sipariş tekrar anahtarı (idempotency), fiyat değişince uyarı, istemci paketinden kataloğun çıkarılması, nonce tabanlı CSP. "Kargodan N gün sonra otomatik teslim edildi" önerisi, Geliver/Navlungo takibi yayına girince gereksizleşir.
+- `npm audit`: 7 yüksek açığın hepsi `braces`, yalnızca derleme araçlarında; çözüm Tailwind 4 geçişi. SQLite → PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek var.
+
+**YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
 
 ## Navlungo gönderi entegrasyonu (20.10.2026, yayında değil)
 **İstek:** Gönderiler Navlungo'dan çıkıyor; "Kargoya ver" adımında gönderi Navlungo'da oluşsun, takip numarası, takip bağlantısı ve durum taşıyıcı sitelerinden değil Navlungo'dan gelsin.
@@ -129,7 +185,7 @@ Not: hepsiJET paket başı en fazla 25 kg, Kolay Gelsin (Geliver) en fazla 30 kg
 | Firebase bağımlılığı | Ürün yorumları, ürün soruları ve iletişim mesajları artık kendi veritabanımızda. Yorumlarda "Doğrulanmış alıcı" (teslim edilmiş sipariş), mağaza yanıtı, ürün şemasında gerçek puan. GES teklif sayfası, admin girişi ve hesap silme Firebase servis hesabı olmadan çalışır | Eski Firestore yorum/iletişim kayıtları taşınmadı (veri taşınmayacak kararı) |
 | Toplu stok ve fiyat | Katalog CSV dışa aktarma (Excel uyumlu), CSV ile stok/fiyat içe aktarma: önce ön izleme, sonra uygula. Ürün kodu veya SKU ile eşleşir, 3 kattan büyük fiyat değişimi ve tekrarlanan satır reddedilir | Ürünler sayfasında Dışa aktar / İçe aktar |
 | Muhasebe aktarımı | Tarih aralığına göre sipariş özeti (KDV matrahı, KDV, kupon ve havale indirimi, kargo) ve satır detayı CSV | Siparişler sayfası (Sahip ve Yönetici) |
-| Kargo | Toplu kargolama: sipariş no, kargo firması, takip no CSV'si → ön izleme → siparişler kargoda, müşteriye takip e-postası. 10×15 cm kargo etiketi PDF (gönderici, alıcı, desi, kg, QR) | Siparişler sayfası ve sipariş detayı. Kargo firması API'si yok, takip no elle/CSV ile girilir |
+| Kargo | Toplu kargolama: sipariş no, kargo firması, takip no CSV'si → ön izleme → siparişler kargoda, müşteriye takip e-postası. 10×15 cm kargo etiketi PDF (gönderici, alıcı, desi, kg, QR) | Siparişler sayfası ve sipariş detayı. 20.10: Geliver takibi ve Navlungo gönderi entegrasyonu eklendi (canlıda değil, yukarıda) |
 | Pazarlama izinleri | Ticari ileti izni tarihli defterde (kim, ne zaman, hangi kaynaktan, IP) tutulur: İYS ispatı için. Kayıt ve profil buraya yazar; terk edilmiş sepet e-postası ve müşteri listesi buradan okur. İzinli kişiler CSV | Müşteriler sayfası |
 | Yorum isteme | Teslimattan 7 gün sonra (30 güne kadar) sipariş başına bir kez değerlendirme isteği e-postası | `REVIEW_REQUESTS=0` kapatır |
 
@@ -161,7 +217,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, he
 | E9 | `docs/su-urunleri-otomasyon/` kopyası | ✅ | Asıl depodakiyle karşılaştırıldı (4 dosya aynı, 1 dosyanın asıl depodaki sürümü daha yeni ve kapsıyor), Geri Dönüşüm Kutusu'na taşındı |
 | E10 | Canlı veritabanı işleri | ✅ / ❌ | Canlı API'de 340 ürün, eski katalog ürünü yok; aktif kampanya yok, "yeni10" kuponu geçersiz. **Kalan (sizde):** gerçek stoklar girilmemiş (338 ürün 17, 2 ürün 16) |
 | E11 | Katalog teyitleri (tedarikçi) | ❌ sizde | Deye model kuşağı (41 SKU), Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, eksik 16 görsel, barkod/GTIN boş (Merchant Center GTIN'siz ürünleri sınırlar), İstabreeze kanat seti ağırlığı, koli ölçüleri |
-| E12 | Sağlayıcı / iş kararı gerektirenler | ❌ sizde | e-Arşiv entegratörü, SQLite → PostgreSQL, IBAN hesap sahibi adı kontrolü, kargo API, SMS, taksit tablosu, Turnstile, ETBİS, İYS, Meta Pixel (çerez politikasına eklenmeli), PayTR kararı, kapıda ödeme (`YAPILACAKLAR.md` 125–128, 242, 261) |
+| E12 | Sağlayıcı / iş kararı gerektirenler | ❌ sizde | e-Arşiv entegratörü, SQLite → PostgreSQL, IBAN hesap sahibi adı kontrolü, kargo API (20.10: Navlungo ve Geliver bağlantıları kodda, canlıda değil), SMS, taksit tablosu, Turnstile, ETBİS, İYS, Meta Pixel (çerez politikasına eklenmeli), PayTR kararı, kapıda ödeme (`YAPILACAKLAR.md` 125–128, 242, 261) |
 | E13 | Playwright testleri üretim derlemesinde kırmızıydı | ✅ `220407d` | Mobilde havale testi gizli masaüstü özet kopyasına bakıyordu (sayfa doğru, test hatalı). Merchant testi önceden üretilmiş akışta (ISR) gerekçeli atlanıyor. Not: e2e testleri sunucuyla aynı `DATABASE_URL` ile çalıştırılmalı (test ürünü/kuponu oraya yazılır) |
 
 ## SEO kapsamı (19.10.2026 akşam)
@@ -202,9 +258,9 @@ _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, he
 | Ortam | Adres | Şifre | İki adımlı doğrulama |
 |---|---|---|---|
 | Yerel | http://localhost:3005/admin/auth | `.env.local` → `ADMIN_TOKEN` (37. satır) | Kapalı (`ADMIN_TOTP_SECRET` tanımlı değil) |
-| Test (nextfirststep.com) | https://nextfirststep.com/admin/auth | hPanel → Web siteleri → nextfirststep.com → Node.js → Ortam değişkenleri → `ADMIN_TOKEN` (Hostinger değeri gizli gösterir; ilk yayında `.env.local`'daki değer girildi) | **Kapalı — açılmalı** |
+| Test (nextfirststep.com) | https://nextfirststep.com/admin/auth | Kişisel hesap: e-posta + şifre (Kullanıcılar sayfasından açılır). Ana şifre: e-posta boş bırakılır; değeri hPanel → Node.js → Ortam değişkenleri → `ADMIN_TOKEN` | Kişisel hesaplarda Hesabım'dan açılır. Ana şifrede **kapalı** (`ADMIN_TOTP_SECRET` canlıda tanımlı değil, 20.10 kontrolü) |
 
-- Şifre tek alanlı (kullanıcı adı yok). Değiştirmek için `ADMIN_TOKEN` değerini güncelleyip yeniden yayınlayın.
+- 19.10'dan beri kişisel hesaplar var (e-posta + şifre, rol, iki adımlı doğrulama). Ana şifre acil durum girişi olarak kalır; değiştirmek için `ADMIN_TOKEN` değerini güncelleyip yeniden yayınlayın.
 - İki adımlı doğrulamayı açmak için: `node scripts/admin-2fa-setup.mjs` → çıkan `ADMIN_TOTP_SECRET` değerini ortam değişkenine girin, `otpauth://` bağlantısını Google/Microsoft Authenticator'a ekleyin. Sonrasında girişte 6 haneli kod istenir.
 - Hatalı denemelerde: IP başına 15 dakikada 5 deneme + IP'den bağımsız genel kilit (15 dakikada 20 hata → 15 dakika kapalı).
 
@@ -222,7 +278,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, cron, ortam değişkeni adları, he
 | DNS: Firebase e-posta alan adı | ✅ / ⏳ | hPanel'e eklendi: SPF birleştirildi (`include:_spf.mail.hostinger.com include:_spf.firebasemail.com`), `firebase=voltekno-eticaret` TXT, `firebase1/2._domainkey` CNAME. CNAME'ler yayında; TXT'ler Hostinger'da henüz eski haliyle dönüyor → yayılınca Firebase'de **Verify** |
 | SMTP metin sürümü | ✅ | `lib/email-smtp.ts`: metin sürümü artık `toPlainText` ile tam üretiliyor (önceden HTML'den kaba kırpılıp 500 karakterde kesiliyordu), `replyTo` eklendi (`SMTP_REPLY_TO`, varsayılan gönderen) |
 | Gönderen adresi @voltekno.com | ❌ sizde | Yerelde ve büyük ihtimalle canlıda `SMTP_USER`/`SMTP_FROM` = `info@bataryakit.com`. Spam'e düşmemesi için Hostinger'da `@voltekno.com` kutusu (örn. `info@` veya `noreply@`) ile SMTP; SPF + Hostinger DKIM zaten hazır, alan adı hizası tutar |
-| Servis hesabı anahtarı | ❌ sizde | Müşteri oturumu artık anahtarsız doğrulanıyor (19.10, `lib/firebase-id-token.ts`, Google açık anahtarları): Siparişlerim, sipariş sahipliği, üye siparişinin hesaba bağlanması çalışır. Anahtar gelene kadar çalışmayanlar: markalı doğrulama/şifre/hoş geldin e-postaları (Firebase'in kendi e-postaları gidiyor), hesap silme, terk edilmiş sepet e-postası, yorum ve soru-cevap (Firestore) |
+| Servis hesabı anahtarı | ❌ sizde | Müşteri oturumu artık anahtarsız doğrulanıyor (19.10, `lib/firebase-id-token.ts`, Google açık anahtarları): Siparişlerim, sipariş sahipliği, üye siparişinin hesaba bağlanması çalışır. Anahtar gelene kadar çalışmayanlar: markalı doğrulama/şifre/hoş geldin e-postaları (Firebase'in kendi e-postaları gidiyor). 19.10 akşamından beri anahtarsız çalışanlar: hesap silme, yorum ve soru-cevap, iletişim mesajları (kendi veritabanımızda), terk edilmiş sepet e-postası (izin defterinden) |
 | Firestore / Auth / Storage açılışı | ❌ sizde | Yeni projede Firestore API kapalı (veritabanı yok); Storage Blaze plan istiyor |
 | Eski favori / adres / sipariş verisi | ✅ karar verildi | 18.10.2026 kararı: veri ve kullanıcı taşınmayacak, yeni proje boş başlıyor (sonucu aşağıda) |
 
@@ -333,11 +389,11 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 ## Bilinen sınırlamalar
 - Gerçek Firebase hesabı açılmadan giriş yapılmış kullanıcı ekranları (profil, doğrulama bandı) tarayıcıda denenemiyor.
 - Kart ödemesi: banka sanal POS bilgileri (`POS_CLIENT_ID`, `POS_STORE_KEY`, `POS_GATEWAY_URL`) girilene kadar kapalı; girilince ödeme sayfasında kendiliğinden açılır (Havale/EFT çalışıyor).
-- Kargo ücreti desiye göre (fiyat listesi + %22,35 vergi); ücretsiz kargo eşiği yok.
+- Kargo ücreti desiye göre, Geliver ve Navlungo tekliflerinin en ucuzu (akülü sepette yalnızca Navlungo); ücretsiz kargo eşiği yok. Ayrıntı: "Kargo: Geliver + Navlungo".
 - Açık öneriler (`SITE-DENETIMI.md` §4): sipariş idempotency anahtarı, fiyat değişince 409 uyarısı, kargodan N gün sonra otomatik "teslim edildi", istemci paketinden kataloğun çıkarılması, nonce tabanlı CSP.
 
 ## voltekno.com geçişi (sizde)
-1. `seo-alan-adi` dalını ana dala birleştir (bana "birleştir" demeniz yeterli)
+1. SEO kararı: `seo-alan-adi` 19.10'da `urun-katalogu-ikas`'a birleşti (`9ad9119`) ama yayına alınmadı. voltekno.com'a geçişte eski adres yönlendirmeleri (132 adres) gerekli; SEO'yu yayınlamak için bana "yayınla" demeniz yeterli
 2. voltekno.com ortam değişkenleri: `NEXT_PUBLIC_SITE_URL=https://voltekno.com`, `NEXT_PUBLIC_NOINDEX` **olmamalı**, mutlak `DATABASE_URL`, yeni güçlü `ADMIN_TOKEN` + `ADMIN_TOTP_SECRET` (`node scripts/admin-2fa-setup.mjs`; test ortamında da şu an kapalı), `SMTP_FROM` yeni gönderim adresi (görünen ad `SMTP_FROM_NAME`, varsayılan Voltekno), `CRON_SECRET`, banka POS bilgileri, `MEDIA_DIR`
 2a. Zamanlanmış görevler: uygulama içi zamanlayıcı havale takibini ve yedeği kendisi çalıştırır (E1); `BACKUP_DIR` derleme klasörünün dışında olmalı
 3. Firebase (yeni proje `voltekno-eticaret`, adımlar `FIREBASE_SETUP.md`): Firestore/Auth/Storage açılışı, Authorized domains'a voltekno.com + www, servis hesabı anahtarı; Google/Facebook girişi için sağlayıcıları açıp `NEXT_PUBLIC_GOOGLE_SIGNIN_ENABLED=true` / `NEXT_PUBLIC_FACEBOOK_SIGNIN_ENABLED=true` (Facebook için App ID/Secret); `firebase deploy --only firestore,storage --project voltekno-eticaret`. Canlı sunucuda `NEXT_PUBLIC_FIREBASE_*` + `FIREBASE_ADMIN_*` güncellenip yeniden derlenmeli
@@ -352,6 +408,6 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 - Bir önceki yayın: `3008ea6` (20.10.2026 19:12): koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git"
 - Bir önceki yayın: `25ae00a` (19.10.2026 19:27): profesyonel seviye, SEO hariç. dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
 - Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
-- Canlıda olmayanlar: `9ad9119` ve `6a30301` (SEO; "SEO yayınlamıyoruz" kararıyla bekliyor). SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; profesyonel seviye zaten içinde
+- Canlıda olmayanlar (20.10 kontrolü; Hostinger'daki son yayın `deploy-7381cb9.zip`): `1dfd6ce` Navlungo entegrasyonu, `9929e0d` Geliver takibi, `9ad9119` ve `6a30301` SEO. SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; diğer her şey zaten içinde. Ortak klasördeki commit'lenmemiş değişiklikler hiçbir yayında yok
 - 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.
