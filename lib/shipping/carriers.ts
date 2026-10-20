@@ -85,6 +85,12 @@ export const carriers: Record<string, Carrier> = {
     name: 'Navlungo',
     trackingUrl: (n) => `https://domestic-track.navlungo.com/check/${enc(n)}`,
   },
+  geliver: {
+    // Geliver gönderisinde firma bilinmiyorsa; asıl link siparişteki trackingUrl (lib/shipping/geliver-api.ts)
+    id: 'geliver',
+    name: 'Geliver',
+    trackingUrl: (n) => `https://app.geliver.io/tracking/${enc(n)}`,
+  },
 }
 
 export function getCarrier(carrierId: string): Carrier | undefined {

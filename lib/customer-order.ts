@@ -9,6 +9,7 @@ export function toCustomerOrder<T extends Order & { lines?: OrderLine[]; returnR
   const {
     adminNote: _a, notes: _n, paymentProviderRef: _p, eArsivRef: _e,
     navlungoLabelUrl: _l, navlungoTestMode: _t, navlungoSyncedAt: _s, navlungoStatusCode: _c,
+    geliverShipmentId: _gi, geliverStatusCode: _gc, geliverSyncedAt: _gs,
     returnRequests, ...rest
   } = order
   const elig = order.lines && returnRequests

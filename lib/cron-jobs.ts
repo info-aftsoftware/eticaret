@@ -17,6 +17,7 @@ import { STORE_CONTACT } from '@/lib/store-config'
 import { pruneErrors } from '@/lib/error-log'
 import { processReviewRequests } from '@/lib/review-requests'
 import { syncNavlungoShipments } from '@/lib/shipping/navlungo-shipments'
+import { syncGeliverShipments } from '@/lib/shipping/geliver-shipments'
 
 const DAY = 86_400_000
 
@@ -132,6 +133,20 @@ export async function runNavlungoTracking({ dry = false }: { dry?: boolean } = {
     return { ok: true as const, dry, ...(await syncNavlungoShipments({ dry })) }
   } catch (e) {
     await reportError('cron-navlungo-takip', e)
+    return { ok: false as const, dry, error: e instanceof Error ? e.message : 'hata' }
+  }
+}
+
+/**
+ * Geliver gönderi takibi: ödemesi alınmış siparişleri Geliver'de sipariş no ile arayıp bağlar, bağlı gönderilerin
+ * durumunu çeker (kargoya verildi → "Kargoda" + müşteri e-postası, teslim → "Teslim Edildi"). Token yoksa boş geçer.
+ * dry: Geliver'i sorgular ama siparişe hiçbir şey yazmaz.
+ */
+export async function runGeliverTracking({ dry = false }: { dry?: boolean } = {}) {
+  try {
+    return { ok: true as const, dry, ...(await syncGeliverShipments({ dry })) }
+  } catch (e) {
+    await reportError('cron-geliver-takip', e)
     return { ok: false as const, dry, error: e instanceof Error ? e.message : 'hata' }
   }
 }

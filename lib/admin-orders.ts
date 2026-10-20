@@ -11,6 +11,8 @@ import { getAllCarriers, getCarrier, orderTrackingUrl } from '@/lib/shipping/car
 import { shippingQuoteView } from '@/lib/shipping/quote-view'
 import { NavlungoError } from '@/lib/shipping/navlungo-api'
 import { createNavlungoShipment, navlungoShipmentView, syncNavlungoShipment } from '@/lib/shipping/navlungo-shipments'
+import { GeliverError } from '@/lib/shipping/geliver-api'
+import { geliverShipmentView, linkGeliverShipment, syncGeliverShipment, unlinkGeliverShipment } from '@/lib/shipping/geliver-shipments'
 import {
   allowedNextStatuses,
   approveCancellationRequest,
@@ -120,6 +122,8 @@ export async function getAdminOrderDetail(id: string) {
     trackingUrl: orderTrackingUrl(order),
     /** Navlungo gönderisi (yapılandırılmamışsa enabled: false) */
     navlungo: navlungoShipmentView(order),
+    /** Geliver gönderi takibi (yapılandırılmamışsa enabled: false) */
+    geliver: geliverShipmentView(order),
     carriers: getAllCarriers().map((c) => ({ id: c.id, name: c.name })),
     customerNote: order.customerNote,
     adminNote: order.adminNote,
@@ -173,6 +177,8 @@ export async function getAdminOrderDetail(id: string) {
  *  { action: 'shipment', carrier, trackingNumber, notifyCustomer? }
  *  { action: 'navlungo_create', desi?, packageCount?, notifyCustomer? }  (Navlungo'da gönderi + "Kargoda")
  *  { action: 'navlungo_sync' }  (durumu Navlungo'dan hemen çek)
+ *  { action: 'geliver_link', ref }  (Geliver gönderi linki / kimliği / takip no ile bağla, durumu uygula)
+ *  { action: 'geliver_sync' } · { action: 'geliver_unlink' }
  *  { action: 'note', adminNote }
  *  { action: 'cancel_request', op: 'approve' | 'reject', reason? (ret için zorunlu), note? }
  *  { action: 'return', returnId, op: 'approve' | 'reject' | 'receive' | 'refund', carrier?, code?, reason?, amount? }
@@ -225,6 +231,18 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
         })
         break
       }
+      case 'geliver_link': {
+        await linkGeliverShipment(id, String(body.ref ?? '').slice(0, 300))
+        break
+      }
+      case 'geliver_sync': {
+        await syncGeliverShipment(id)
+        break
+      }
+      case 'geliver_unlink': {
+        await unlinkGeliverShipment(id)
+        break
+      }
       case 'navlungo_sync': {
         const r = await syncNavlungoShipment(id)
         if (r.skipped) return NextResponse.json({ error: `Durum sorgulanmadı: ${r.skipped}.` }, { status: 409 })
@@ -271,6 +289,9 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
   } catch (e) {
     if (e instanceof OrderTransitionError) {
       return NextResponse.json({ error: e.message }, { status: 409 })
+    }
+    if (e instanceof GeliverError) {
+      return NextResponse.json({ error: `Geliver: ${e.message}` }, { status: 502 })
     }
     if (e instanceof NavlungoError) {
       return NextResponse.json({ error: `Navlungo: ${e.message}` }, { status: 502 })
