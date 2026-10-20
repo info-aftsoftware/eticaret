@@ -3,7 +3,51 @@
 _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**20.10.2026 düzeltmeleri canlıda (`3008ea6`, SEO hariç).** Koyu tema kaldırıldı, site varsayılan Türkçe, adet kutusunda yalnızca sayı, sepete eklendi bildiriminde "Sepete git". Ayrıntı aşağıda "İstek turu 5". **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
+**Kargo fiyatı Geliver ve Navlungo kıyaslı (`5acce2b`), canlıda değil.** Her sepet için iki kaynaktan teklif alınıyor, en ucuzu müşteriye yansıyor, akülü sepette yalnızca Navlungo. Fiyatın kaynağı yönetim panelinde siparişte yazıyor. Ayrıntı aşağıda "Kargo: Geliver + Navlungo". Son yayın `3008ea6` (20.10 19:12). **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
+
+## Kargo: Geliver + Navlungo (20.10.2026, `5acce2b`, canlıda değil)
+**İstek:** Navlungo Domestic Fiyat Teklifi 2026 PDF'i incelensin, kapıda ödeme dışındaki seçenekler eklensin, her seçenek eklenmeden kıyaslansın. Fiyat önceki firma listesinden verildiyse "Geliver", PDF'ten verildiyse "Navlungo" olarak yönetim panelinde yazsın. Akülerde yalnızca Navlungo fiyatı.
+
+**Kaynaklar:** Geliver "Fiyat Listesi" (masaüstünde `Kargo Fiyat Listesi.pdf`, app.geliver.io, 3.10.2026, şehirler arası "En iyi fiyatlar", vergiler hariç, +%22,35). Navlungo PDF (taşıyıcı tarifeleri 17.07.2026'dan itibaren, KDV ve EPH dahil, 81 ile tek fiyat).
+
+**PDF'teki seçenekler (kapıda ödeme hariç):**
+| Seçenek | Sitede |
+|---|---|
+| Aras, hepsiJET, Sürat, Yurtiçi, Kolay Gelsin, PTT tarifeleri | ✅ fiyat kıyasına girdi |
+| hepsiJET XL (42 desi üstü, ₺21/desi, kata teslim) | ✅ fiyat kıyasına girdi. PDF: ilk kullanımdan önce Navlungo operasyondan uygunluk bilgisi alınmalı |
+| Ağır taşıma (tek parça 100 desi üstü, parça başı) | ✅ Aras 5.610, Sürat 5.940, Yurtiçi 7.062, PTT 4.700; Kolay Gelsin ve hepsiJET almıyor |
+| Kuryetel | ❌ PDF'te fiyat yok ("danışmanınıza ulaşın") |
+| Randevulu kapıdan iade toplama (hepsiJET ₺172 / ₺195), başarısız teslimde gidiş ücretinin %50'si | ℹ️ müşteri ücreti değil, iade sürecinde gider |
+| SMS/WhatsApp takip, adres düzeltme, cüzdan, tek fatura, Single API | ℹ️ Navlungo panelinin hizmetleri; sitede karşılığı Navlungo API entegrasyonu (aşağıda) |
+
+**Kıyas (tek gönderi, vergiler dahil ₺, Geliver = o desideki en ucuz firma):**
+| Desi | Geliver | Aras | hepsiJET | hepsiJET XL | Sürat | Yurtiçi | Kolay Gelsin | PTT | Seçilen |
+|---|---|---|---|---|---|---|---|---|---|
+| 1–2 | 110 (Sürat) | 119 | 109 | — | 127 | 175–219 | 150 | 99 | Navlungo · PTT |
+| 3–4 | 111 (hepsiJET) | 129–157 | 110 | — | 127–161 | 219–252 | 150–176 | 106 | Navlungo · PTT |
+| 5 | 138 (Kolay Gelsin) | 169 | 155 | — | 161 | 252 | 176 | 120 | Navlungo · PTT |
+| 6–10 | 153 (Kolay Gelsin) | 199–227 | 155 | — | 205 | 327 | 176–213 | 149 | Navlungo · PTT |
+| 12–15 | 233–241 | 259–289 | 233 | — | 287–319 | 447 | 313 | 225 | Navlungo · PTT |
+| 18–20 | 241 (Kolay Gelsin) | 349 | 233 | — | 377–390 | 535 | 313 | 299 | Navlungo · hepsiJET |
+| 25–30 | 326 (Kolay Gelsin) | 399–479 | 315 | — | 476–571 | 665–738 | 489 | 349–399 | Navlungo · hepsiJET |
+| 35–40 | 448–570 | 544–609 | 420 | — | 646–721 | 828–918 | 559–629 | — | Navlungo · hepsiJET |
+| 45 | 693 | 674 | — | 945 | 796 | 1.008 | 699 | — | Navlungo · Aras |
+| 60 | 1.060 | 869 | — | 1.260 | 1.021 | 1.278 | 909 | — | Navlungo · Aras |
+Not: hepsiJET paket başı en fazla 25 kg, Kolay Gelsin (Geliver) en fazla 30 kg. Ağır sepetlerde bu sınırlar nedeniyle Geliver öne geçebiliyor (ör. 26 desi 26 kg panel: Geliver · Kolay Gelsin 325,76 < PTT 399).
+
+**Ürün bazında etki (tek adet, 340 ürün):** 314 üründe kargo düştü, 5 üründe arttı, 21'inde aynı; ortalama 983 ₺ → 530 ₺. Seçilen kaynak: Navlungo PTT 248, Aras 27, hepsiJET XL 25, hepsiJET 19; Geliver 21. Artan 5 ürünün hepsi akü (Geliver devre dışı olduğu için): 2 lityum batarya 546 → 596, 2 jel akü 326 → 399, 1 jel akü 350 → 492. Büyük düşüşler ağır ürünlerde: ısı pompaları ve 280Ah batarya artık hepsiJET XL fiyatıyla (ör. 8.432 → 3.129).
+
+**Kurallar:**
+- Sepet tek gönderi sayılır, fiyat toplam desiye göre. Ağır taşıma bedeli yalnızca 100 desiyi aşan tek parça için, parça başına.
+- Geliver 30 desi üstünde ve ağır parçada firma belirtmiyor. 30 üstü "her ek desi 20 ₺ + vergiler" fiyatı kullanılır. Ağır parçalı sepete Geliver teklifi verilmez, çünkü listede o firmaların taban fiyatı yok.
+- Akü: Lityum Akü, Jel Akü, Taşınabilir Güç İstasyonu kategorileri (25 ürün). "Batarya Yönetimi ve Aksesuar" akü sayılmadı.
+- Fiyat hâlâ desiye göre. Kg desiden büyük olsa da kg ile fiyatlanmıyor; katalogda çoğu üründe desi zaten kg'a eşit.
+
+**Yönetim paneli:** Sipariş listesinde tutarın altında "Kargo: Navlungo / Geliver". Sipariş detayında fiyat özetinde "Fiyat: Navlungo · Aras Kargo". Kargo kartında kaynak, desi/kg, akü notu ve sipariş anındaki tüm teklifler (verilemeyenler nedeniyle). Kargo firması seçimi teklifi veren firmayla açılır. Muhasebe dökümünde "Kargo fiyat kaynağı" ve "Fiyatı veren firma" sütunları var. Bu değişiklikten önceki siparişler "Geliver (önceki fiyat listesi)" yazar.
+
+**Doğrulama (yerel kopya, e-posta kapalı):** tip kontrolü, birim testleri 88/88 (yeni: kaynak kıyası, basamaklar, ağır taşıma, akü kuralı, firma eşleme), derleme 471 sayfa, Playwright 98 geçti / 0 kaldı. Akülü test siparişi: Navlungo · Aras 596 ₺, Geliver "Akü / batarya" gerekçesiyle dışarıda. Panel siparişi: Geliver · Kolay Gelsin 325,76 ₺. Panel listesinde, detayda ve CSV'de kaynak görüldü.
+
+**Navlungo'dan bilgi almak (öneri, sizde):** Navlungo'nun Domestic API'si (v2.1) gönderi oluşturma, etiket PDF'i, durum takibi, takip bağlantısı, iptal ve iade toplama sunuyor. Fiyat sorgulama ucu yok; fiyat paneldeki fiyat listesinden geliyor. Bağlantı için Navlungo panelinde Entegrasyonlar bölümünden API kullanıcısı açılması ve bir gönderici (depo) adresi tanımlanması gerekiyor. Bilgiler gelince "Kargoya ver" Navlungo'da gönderi açıp takip numarasını ve bağlantısını kendisi yazabilir. Geliver için de aynı soru geçerli.
 
 ## İstek turu 5 (20.10.2026)
 | İstek | Durum | Not |
