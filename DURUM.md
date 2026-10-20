@@ -3,9 +3,9 @@
 _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**Kargo fiyatı Geliver ve Navlungo kıyaslı (`5acce2b`), canlıda değil.** Her sepet için iki kaynaktan teklif alınıyor, en ucuzu müşteriye yansıyor, akülü sepette yalnızca Navlungo. Fiyatın kaynağı yönetim panelinde siparişte yazıyor. Ayrıntı aşağıda "Kargo: Geliver + Navlungo". Son yayın `3008ea6` (20.10 19:12). **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
+**Kargo fiyatı Geliver ve Navlungo kıyaslı, canlıda (20.10.2026 20:52, yayın dalında `7381cb9`, SEO hariç).** Her sepet için iki kaynaktan teklif alınıyor, en ucuzu müşteriye yansıyor, akülü sepette yalnızca Navlungo. Fiyatın kaynağı yönetim panelinde siparişte yazıyor. Ayrıntı aşağıda "Kargo: Geliver + Navlungo". **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
 
-## Kargo: Geliver + Navlungo (20.10.2026, `5acce2b`, canlıda değil)
+## Kargo: Geliver + Navlungo (20.10.2026, `5acce2b`; canlıda `7381cb9`)
 **İstek:** Navlungo Domestic Fiyat Teklifi 2026 PDF'i incelensin, kapıda ödeme dışındaki seçenekler eklensin, her seçenek eklenmeden kıyaslansın. Fiyat önceki firma listesinden verildiyse "Geliver", PDF'ten verildiyse "Navlungo" olarak yönetim panelinde yazsın. Akülerde yalnızca Navlungo fiyatı.
 
 **Kaynaklar:** Geliver "Fiyat Listesi" (masaüstünde `Kargo Fiyat Listesi.pdf`, app.geliver.io, 3.10.2026, şehirler arası "En iyi fiyatlar", vergiler hariç, +%22,35). Navlungo PDF (taşıyıcı tarifeleri 17.07.2026'dan itibaren, KDV ve EPH dahil, 81 ile tek fiyat).
@@ -292,7 +292,8 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `3008ea6` (20.10.2026 19:12), dal `yayin-pro-seo-haric`: koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git". Canlı kontroller yukarıda "İstek turu 5"
+- Son yayın: `7381cb9` (20.10.2026 20:52), dal `yayin-pro-seo-haric`: Geliver + Navlungo kargo kıyası. Yayın öncesi bu dalın kendi derlemesinde: tip kontrolü, birim testleri 83/83, derleme 429 sayfa, Playwright 98 geçti / 0 kaldı, test siparişlerinde kaynak listede, detayda ve dökümde doğru. Canlı: 29/29 genel kontrol, ürün akışında kargo 110,42 → 99 ₺ (1–2 desi), sunucu kaydında hata yok. Yayın dalı, ortak klasörde başka oturum çalıştığı için ayrı bir git çalışma kopyasında hazırlandı
+- Bir önceki yayın: `3008ea6` (20.10.2026 19:12): koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git"
 - Bir önceki yayın: `25ae00a` (19.10.2026 19:27): profesyonel seviye, SEO hariç. dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
 - Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
 - Canlıda olmayanlar: `9ad9119` ve `6a30301` (SEO; "SEO yayınlamıyoruz" kararıyla bekliyor). SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; profesyonel seviye zaten içinde
