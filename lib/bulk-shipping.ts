@@ -23,10 +23,13 @@ const fold = (s: string) => headerKey(s).replace(/\s+/g, '')
 export function matchCarrier(input: string): { id: string; name: string } | null {
   const q = fold(input)
   if (!q) return null
-  for (const c of getAllCarriers()) {
+  const all = getAllCarriers()
+  // Önce birebir (ör. "hepsiJET XL" düz hepsiJET'e değil XL'e eşlensin), sonra esnek eşleşme
+  for (const c of all) if (q === fold(c.id) || q === fold(c.name)) return { id: c.id, name: c.name }
+  for (const c of all) {
     const id = fold(c.id)
     const name = fold(c.name)
-    if (q === id || name.startsWith(q) || q.startsWith(id) || name.includes(q)) return { id: c.id, name: c.name }
+    if (name.startsWith(q) || q.startsWith(id) || name.includes(q)) return { id: c.id, name: c.name }
   }
   return null
 }

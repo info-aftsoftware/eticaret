@@ -261,7 +261,10 @@ function OrdersContent() {
                         </p>
                         <p className="text-xs text-[#5d6e80] truncate">{o.customerEmail || o.phone}</p>
                       </td>
-                      <td className="px-3 py-3 text-right font-semibold text-[#121926] tabular-nums whitespace-nowrap">{fmtTRY(o.total)}</td>
+                      <td className="px-3 py-3 text-right whitespace-nowrap">
+                        <span className="font-semibold text-[#121926] tabular-nums">{fmtTRY(o.total)}</span>
+                        {o.shippingProvider && <p className="text-xs text-[#5d6e80] mt-0.5">Kargo: {o.shippingProvider}</p>}
+                      </td>
                       <td className="px-3 py-3">
                         <div className="flex flex-wrap gap-1">
                           <Pill tone={ORDER_STATUS_TONE[o.status] ?? 'slate'} dot>{statusLabel(o.status)}</Pill>
@@ -295,6 +298,7 @@ function OrdersContent() {
                       <p className="text-[13px] font-medium text-[#121926] truncate">{o.customerName}</p>
                       <p className="text-xs text-[#5d6e80] truncate">
                         {fmtDateTime(o.createdAt)} · {methodLabel(o.paymentMethod)}
+                        {o.shippingProvider && <> · Kargo: {o.shippingProvider}</>}
                       </p>
                     </Link>
                     <span className="text-sm font-semibold tabular-nums text-[#121926] whitespace-nowrap">{fmtTRY(o.total)}</span>

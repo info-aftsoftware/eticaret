@@ -472,6 +472,10 @@ model Order {
   currency        String   @default("TRY")
   // Additional
   shippingCarrier String?  // lib/shipping/carriers.ts id (yurtici, aras, ...)
+  // Kargo ücretinin nereden verildiği (lib/shipping/fee.ts): "geliver" (önceki firma listesi) veya "navlungo" (Navlungo teklifi)
+  shippingQuoteProvider String?
+  shippingQuoteCarrier  String?  // teklifi veren firma (carriers.ts id); Geliver 30 desi üstünde firma belirtmez
+  shippingQuote         Json?    // sipariş anındaki tüm teklifler, desi/kg, akü, tarife sürümü
   trackingNumber  String?
   eArsivRef       String?  // E-arşiv invoice reference
   invoicePdfUrl   String?  // Generated invoice PDF

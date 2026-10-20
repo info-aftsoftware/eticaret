@@ -8,6 +8,7 @@ import { reportError } from '@/lib/alerts'
 import type { OrderStatus } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import { getAllCarriers, getCarrier } from '@/lib/shipping/carriers'
+import { shippingQuoteView } from '@/lib/shipping/quote-view'
 import {
   allowedNextStatuses,
   approveCancellationRequest,
@@ -111,6 +112,8 @@ export async function getAdminOrderDetail(id: string) {
     allowedNextStatuses: allowedNextStatuses(order.status).map((s) => ({ value: s, label: ORDER_STATUS_LABELS_TR[s] })),
     shippingCarrier: order.shippingCarrier,
     shippingCarrierName: carrier?.name ?? null,
+    /** Kargo ücretinin kaynağı (Geliver / Navlungo) ve firması */
+    shippingQuote: shippingQuoteView(order),
     trackingNumber: order.trackingNumber ?? undefined,
     trackingUrl: carrier && order.trackingNumber ? carrier.trackingUrl(order.trackingNumber) : null,
     carriers: getAllCarriers().map((c) => ({ id: c.id, name: c.name })),

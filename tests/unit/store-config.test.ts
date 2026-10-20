@@ -34,14 +34,10 @@ test('kupon + havale birlikte, toplam indirim ara toplamı aşamaz', () => {
   assert.equal(capped.tax, 0)
 })
 
-test('kargo: fiyat listesi (desi), 30 üstü +20 ₺/desi, ağır yük, vergiler %22,35', () => {
-  assert.equal(shippingFeeFor({ desi: 0, kg: 0 }), 110.42) // 90,25 × 1,2235
-  assert.equal(shippingFeeFor({ desi: 4.2, kg: 0 }), 137.64) // 5 desiye yuvarlanır: 112,5 × 1,2235
-  assert.equal(shippingFeeFor({ desi: 30, kg: 0 }), 325.76) // 266,25 × 1,2235
-  assert.equal(shippingFeeFor({ desi: 35, kg: 0 }), 448.11) // (266,25 + 5×20) × 1,2235
-  assert.equal(shippingFeeFor({ desi: 10, kg: 120 }), 5348.53) // ağır yük (kg): (125,25 + 4246,25) × 1,2235
+test('kargo: iki kaynağın en ucuzu (ayrıntılı testler shipping-quote.test.ts)', () => {
+  assert.equal(shippingFeeFor({ desi: 0, kg: 0 }), 99) // Navlungo PTT 1–2 desi
   const l = cartLogistics([{ id: 'yok', quantity: 3 }])
-  assert.deepEqual(l, { desi: 0, kg: 0 })
+  assert.deepEqual(l, { desi: 0, kg: 0, desiExact: 0, heavyPieces: 0, heavyKgPieces: 0, battery: false })
 })
 
 test('negatif / sıfır girişler güvenli', () => {

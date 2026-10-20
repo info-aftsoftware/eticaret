@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkAdmin, logAdminAction } from '@/lib/adminAuth'
 import { prisma } from '@/lib/prisma'
 import { ORDER_STATUS_LABELS_TR } from '@/lib/order-service'
+import { shippingQuoteView } from '@/lib/shipping/quote-view'
 import { getCarrier } from '@/lib/shipping/carriers'
 import { csvResponseHeaders, toCsv } from '@/lib/csv'
 
@@ -55,7 +56,7 @@ export async function GET(request: NextRequest) {
         'Fatura tipi', 'Fatura adı / unvan', 'VKN / TCKN', 'Vergi dairesi', 'Fatura adresi', 'Fatura il', 'Fatura ilçe',
         'E-posta', 'Telefon',
         'Ara toplam (KDV hariç)', 'Kupon', 'Kupon indirimi', 'Havale indirimi', 'Toplam indirim (kupon + havale)', 'KDV matrahı', 'KDV', 'Kargo', 'Toplam',
-        'Kargo firması', 'Takip no', 'e-Arşiv no', 'Kargoya veriliş', 'Teslim', 'İptal',
+        'Kargo fiyat kaynağı', 'Fiyatı veren firma', 'Kargo firması', 'Takip no', 'e-Arşiv no', 'Kargoya veriliş', 'Teslim', 'İptal',
       ],
       orders.map((o) => [
         o.orderNo, tr(o.createdAt), ORDER_STATUS_LABELS_TR[o.status],
@@ -64,6 +65,7 @@ export async function GET(request: NextRequest) {
         o.billingAddress ?? o.shippingAddress, o.billingCity ?? o.shippingCity, o.billingDistrict ?? o.shippingDistrict,
         o.shippingEmail ?? '', o.shippingPhone,
         o.subtotal, o.couponCode ?? '', o.couponDiscount, o.paymentDiscount, o.discount, Math.round((o.subtotal - o.discount) * 100) / 100, o.vatTotal, o.shippingCost, o.total,
+        shippingQuoteView(o).summary, shippingQuoteView(o).carrierName ?? '',
         o.shippingCarrier ? getCarrier(o.shippingCarrier)?.name ?? o.shippingCarrier : '', o.trackingNumber ?? '', o.eArsivRef ?? '',
         tr(o.shippedAt), tr(o.deliveredAt), tr(o.cancelledAt),
       ])

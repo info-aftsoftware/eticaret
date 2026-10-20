@@ -1,6 +1,7 @@
 /**
  * Shipping Carriers Adapter Interface
- * Türkiye kargo firmaları: takip linkleri (Yurtiçi, Aras, MNG/DHL eCommerce, Sürat, PTT, UPS, DHL Express).
+ * Türkiye kargo firmaları: takip linkleri (Yurtiçi, Aras, MNG/DHL eCommerce, Sürat, hepsiJET, hepsiJET XL, Kolay Gelsin, PTT,
+ * UPS, DHL Express).
  * Admin panelinde kargo firması seçimi, müşteri e-postası ve sipariş sayfasındaki takip linki buradan gelir.
  * Biçimler 18.10.2026'da firmaların canlı takip sayfalarında doğrulandı.
  */
@@ -40,6 +41,26 @@ export const carriers: Record<string, Carrier> = {
     id: 'surat',
     name: 'Sürat Kargo',
     trackingUrl: (n) => `https://www.suratkargo.com.tr/KargoTakip/?kargotakipno=${enc(n)}`,
+  },
+  hepsijet: {
+    // hepsiJET takip numarasını URL'den almıyor; sonuç ana sayfadaki "Gönderi Takip" kutusunda (20.10.2026)
+    id: 'hepsijet',
+    name: 'hepsiJET',
+    trackingUrl: () => 'https://www.hepsijet.com/',
+    trackingHint: 'Açılan sayfadaki "Gönderi Takip" alanına takip numaranızı yapıştırın.',
+  },
+  'hepsijet-xl': {
+    id: 'hepsijet-xl',
+    name: 'hepsiJET XL',
+    trackingUrl: () => 'https://www.hepsijet.com/',
+    trackingHint: 'Açılan sayfadaki "Gönderi Takip" alanına takip numaranızı yapıştırın.',
+  },
+  kolaygelsin: {
+    // Kolay Gelsin takip sayfası numarayı URL'den almıyor (20.10.2026)
+    id: 'kolaygelsin',
+    name: 'Kolay Gelsin',
+    trackingUrl: () => 'https://www.kolaygelsin.com/tracking',
+    trackingHint: 'Açılan sayfadaki "Takip No" alanına takip numaranızı yapıştırın.',
   },
   ptt: {
     // PTT'nin yeni sitesi URL'den takip numarası almıyor

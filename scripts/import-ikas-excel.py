@@ -644,13 +644,16 @@ def main():
         json.dump(details, f, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(OUT_DIR, 'descriptions.json'), 'w', encoding='utf-8') as f:
         json.dump(descriptions, f, ensure_ascii=False, separators=(',', ':'))
-    # Kargo hesabı için küçük harita (istemci sepeti + sunucu): sepet satır id'si -> [desi, kg]
+    # Kargo hesabı için küçük harita (istemci sepeti + sunucu): sepet satır id'si -> [desi, kg] (+ akü ise 1)
     # Basit ürün: ürün id; varyantlı ürün: "<ürün id>-<varyant key>" (sepetle aynı biçim) + ürün id (varsayılan varyant)
+    # Akü / batarya içeren ürünlerde kargo fiyatı yalnızca Navlungo'dan verilir (lib/shipping/fee.ts)
+    BATTERY_CATEGORIES = {'Lityum Akü', 'Jel Akü', 'Taşınabilir Güç İstasyonu'}
     desi_map = {}
     for p in products:
+        flag = [1] if p.get('category') in BATTERY_CATEGORIES else []
         for v in p.get('variants') or []:
-            desi_map[f"{p['id']}-{v['key']}"] = [v.get('desi', 0), v.get('weightKg', 0)]
-        desi_map[p['id']] = [p.get('desi', 0), p.get('weightKg', 0)]
+            desi_map[f"{p['id']}-{v['key']}"] = [v.get('desi', 0), v.get('weightKg', 0)] + flag
+        desi_map[p['id']] = [p.get('desi', 0), p.get('weightKg', 0)] + flag
     with open(os.path.join(OUT_DIR, 'desi.json'), 'w', encoding='utf-8') as f:
         json.dump(desi_map, f, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(OUT_DIR, 'fx-snapshot.json'), 'w', encoding='utf-8') as f:
