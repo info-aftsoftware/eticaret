@@ -256,7 +256,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
       addToast({ type: 'info', title: tCart('stockLimit'), description: tCart('stockLimitDesc', { maxQty: stock }) })
       return false
     }
-    if (!silent) addToast({ type: 'success', title: tCart('addedToCart'), description: L(`${displayName} sepete eklendi.`, `${displayName} added to cart.`) })
+    if (!silent) addToast({ type: 'success', title: tCart('addedToCart'), description: L(`${displayName} sepete eklendi.`, `${displayName} added to cart.`), action: { label: L('Sepete git', 'Go to cart'), href: '/cart' } })
     return true
   }
 
@@ -537,7 +537,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       <Minus className="w-4 h-4" />
                     </button>
                     <span className="flex-1 text-center text-[#0b2540] font-bold tabular-nums select-none" aria-live="polite">
-                      {cartQty} <span className="font-normal text-[13px] text-[#5d6e80]">{L('sepette', 'in cart')}</span>
+                      {cartQty}<span className="sr-only">{L(' adet sepette', ' in cart')}</span>
                     </span>
                     <button
                       type="button"

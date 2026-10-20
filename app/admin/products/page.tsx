@@ -312,24 +312,24 @@ function ProductsContent() {
         </div>
 
         {selected.size > 0 && (
-          <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 bg-[#0b2540] text-white text-[13px]">
+          <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 bg-[#eef3f9] border-y border-[#d6e2ef] text-[#0b2540] text-[13px]">
             <span className="font-semibold mr-1">{selected.size} ürün seçildi</span>
             <Btn size="xs" variant="accent" onClick={() => runBulk('feature')} disabled={bulkBusy}>
               <Star />
               Öne çıkar
             </Btn>
-            <Btn size="xs" variant="subtle" onClick={() => runBulk('unfeature')} disabled={bulkBusy}>
+            <Btn size="xs" variant="outline" onClick={() => runBulk('unfeature')} disabled={bulkBusy}>
               Öne çıkarmayı kaldır
             </Btn>
-            <Btn size="xs" variant="subtle" onClick={() => setBulk('stock')} disabled={bulkBusy}>
+            <Btn size="xs" variant="outline" onClick={() => setBulk('stock')} disabled={bulkBusy}>
               <Layers />
               Stok ayarla
             </Btn>
-            <Btn size="xs" variant="subtle" onClick={() => setBulk('discount')} disabled={bulkBusy}>
+            <Btn size="xs" variant="outline" onClick={() => setBulk('discount')} disabled={bulkBusy}>
               <Percent />
               İndirim kampanyası
             </Btn>
-            <button type="button" onClick={() => setSelected(new Set())} className="ml-auto inline-flex items-center gap-1 text-white/70 hover:text-white">
+            <button type="button" onClick={() => setSelected(new Set())} className="ml-auto inline-flex items-center gap-1 text-[#3b4a5a] hover:text-[#121926]">
               <X className="w-4 h-4" />
               Seçimi temizle
             </button>

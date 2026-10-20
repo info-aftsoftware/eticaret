@@ -22,11 +22,11 @@ export function Footer() {
   const L = useL()
   const currentYear = new Date().getFullYear()
 
-  const headingClass = 'text-white/60 font-semibold text-[11px] uppercase tracking-widest mb-4'
-  const linkClass = 'text-slate-400 text-sm py-1.5 block hover:text-white transition-colors'
+  const headingClass = 'text-[#121926] font-semibold text-[11px] uppercase tracking-widest mb-4'
+  const linkClass = 'text-[#3b4a5a] text-sm py-1.5 block hover:text-[#0b2540] transition-colors'
 
   return (
-    <footer className="bg-slate-900 text-slate-400 pb-safe">
+    <footer className="bg-[#f5f7fa] border-t border-[#e6ebf1] text-[#5d6e80] pb-safe">
 
       {/* Ana içerik */}
       <div className={`${PAGE_CONTAINER} pt-12 pb-8`}>
@@ -34,44 +34,43 @@ export function Footer() {
 
           {/* Kolon 1: Marka + iletişim (4 col) */}
           <div className="sm:col-span-2 lg:col-span-4 space-y-5">
-            {/* Logo — beyaz bg kutusunda net görünür */}
-            <div className="bg-white rounded-2xl px-6 py-4 flex items-center justify-center w-fit">
+            <div className="flex items-center w-fit">
               <Logo size="lg" href="/" align="center" />
             </div>
 
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <p className="text-sm text-[#5d6e80] leading-relaxed">
               {t('aboutDesc')}
             </p>
 
             {/* İletişim bilgileri — logo kolonunda, göze çarpan */}
             <ul className="space-y-3 text-sm">
               <li>
-                <a href={SELLER.phoneHref} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
-                  <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
-                    <Phone className="w-3.5 h-3.5 text-white" aria-hidden />
+                <a href={SELLER.phoneHref} className="flex items-center gap-3 text-[#20384e] hover:text-[#0b2540] transition-colors group">
+                  <span className="w-4 flex items-center justify-center shrink-0">
+                    <Phone className="w-3.5 h-3.5 text-[#0b2540]" aria-hidden />
                   </span>
                   <span className="font-semibold">{SELLER.phone}</span>
                 </a>
               </li>
               <li>
-                <a href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
-                  <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
+                <a href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-[#20384e] hover:text-[#0b2540] transition-colors group">
+                  <span className="w-4 flex items-center justify-center shrink-0">
                     <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
                   </span>
                   <span>{L('WhatsApp ile yazın', 'Chat on WhatsApp')}</span>
                 </a>
               </li>
               <li>
-                <a href={`mailto:${SELLER.email}`} className="flex items-center gap-3 text-slate-300 hover:text-white transition-colors group">
-                  <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-brand/20 transition-colors">
-                    <Mail className="w-3.5 h-3.5 text-white" aria-hidden />
+                <a href={`mailto:${SELLER.email}`} className="flex items-center gap-3 text-[#20384e] hover:text-[#0b2540] transition-colors group">
+                  <span className="w-4 flex items-center justify-center shrink-0">
+                    <Mail className="w-3.5 h-3.5 text-[#0b2540]" aria-hidden />
                   </span>
                   <span>{SELLER.email}</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-slate-400">
-                <span className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center shrink-0">
-                  <MapPin className="w-3.5 h-3.5 text-white" aria-hidden />
+              <li className="flex items-center gap-3 text-[#5d6e80]">
+                <span className="w-4 flex items-center justify-center shrink-0">
+                  <MapPin className="w-3.5 h-3.5 text-[#0b2540]" aria-hidden />
                 </span>
                 <span className="text-sm leading-relaxed">{SELLER.address}</span>
               </li>
@@ -171,16 +170,16 @@ export function Footer() {
       </div>
 
       {/* Alt bar */}
-      <div className="border-t border-white/5">
+      <div className="border-t border-[#e6ebf1]">
         <div className={`${PAGE_CONTAINER} py-4 flex flex-col lg:flex-row justify-between items-center gap-3`}>
-          <div className="text-xs text-slate-500 space-y-0.5 text-center sm:text-left">
+          <div className="text-xs text-[#5d6e80] space-y-0.5 text-center sm:text-left">
             <p>© {currentYear} Voltekno · {SELLER.shortLegalName} {t('copyright')}</p>
             <p>
               MERSİS: {SELLER.mersisNo} · {SELLER.taxOffice} / VKN {SELLER.taxNo} · KEP: {SELLER.kep}
             </p>
             {ETBIS_URL && (
               <p>
-                <a href={ETBIS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white">
+                <a href={ETBIS_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-[#3b4a5a] hover:text-[#0b2540]">
                   {L('ETBİS\'e kayıtlıdır — doğrula', 'Registered with ETBİS — verify')}
                 </a>
               </p>
@@ -194,7 +193,7 @@ export function Footer() {
               { href: legalHref('uyelik-ve-kullanim-kosullari'), labelKey: 'terms' as const },
               { href: legalHref('gizlilik-ve-cerez-politikasi'), labelKey: 'cookies' as const },
             ].map((item) => (
-              <Link key={item.labelKey} href={item.href} className="text-slate-600 hover:text-slate-400 transition-colors">
+              <Link key={item.labelKey} href={item.href} className="text-[#5d6e80] hover:text-[#121926] transition-colors">
                 {t(item.labelKey)}
               </Link>
             ))}

@@ -198,27 +198,27 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
         <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }} />
       ))}
       {/* Hero */}
-      <div className="bg-slate-950 pt-12 pb-14 px-4 mt-5 lg:mt-7">
+      <div className="bg-[#f5f7fa] border-b border-[#e6ebf1] pt-12 pb-14 px-4 mt-5 lg:mt-7">
         <div className="container mx-auto max-w-3xl">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white text-sm mb-8 transition-colors"
+            className="inline-flex items-center gap-1.5 text-[#3b4a5a] hover:text-[#0b2540] text-sm mb-8 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Blog
           </Link>
           <div className="flex items-center gap-3 mb-5">
-            <span className="text-xs font-bold uppercase tracking-widest bg-brand/20 text-brand rounded-lg px-3 py-1.5">
+            <span className="text-xs font-bold uppercase tracking-widest bg-white border border-[#e6ebf1] text-[#0b2540] rounded-lg px-3 py-1.5">
               {categoryLabel(post.categorySlug, post.category)}
             </span>
-            <span className="flex items-center gap-1 text-xs text-slate-500">
+            <span className="flex items-center gap-1 text-xs text-[#5d6e80]">
               <Clock className="w-3.5 h-3.5" /> {L(`${post.readTime} okuma`, `${readTimeLabel(post.readTime)} read`)}
             </span>
-            <span className="text-xs text-slate-600">{L(post.date, dateEn(post.date))}</span>
+            <span className="text-xs text-[#5d6e80]">{L(post.date, dateEn(post.date))}</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#121926] leading-tight mb-4">
             {post.title}
           </h1>
-          <p className="text-slate-400 text-base leading-relaxed max-w-2xl">
+          <p className="text-[#5d6e80] text-base leading-relaxed max-w-2xl">
             {post.desc}
           </p>
         </div>

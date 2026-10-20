@@ -106,13 +106,13 @@ export default async function BlogPage() {
   return (
     <div className="min-h-full bg-white">
       {/* Header */}
-      <div className="bg-slate-950 pt-14 pb-16 px-4 mt-5 lg:mt-7">
+      <div className="bg-[#f5f7fa] border-b border-[#e6ebf1] pt-14 pb-16 px-4 mt-5 lg:mt-7">
         <div className="container mx-auto max-w-4xl text-center">
           <span className="inline-block text-xs font-bold uppercase tracking-widest text-brand mb-4">Blog</span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#121926] tracking-tight mb-4">
             {L('Enerji Rehberi', 'Energy Guide')}
           </h1>
-          <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[#5d6e80] text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             {L(
               'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, ürün karşılaştırmaları ve kurulum rehberleri.',
               'Informative articles, product comparisons and installation guides on solar panels, batteries, EV charging and energy systems.'

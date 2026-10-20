@@ -90,7 +90,7 @@ export function CategoryShowcase() {
         <ul className="grid grid-cols-2 min-[641px]:grid-cols-3 min-[1025px]:grid-cols-4 gap-3 min-[641px]:gap-4 min-[1025px]:gap-[18px]">
           {featured && (
             <li className="col-span-2 min-[641px]:row-span-2">
-              <div className="group relative h-full flex flex-col min-[641px]:flex-row min-[1025px]:flex-col rounded-xl border border-[#e6ebf1] bg-[#0b2540] overflow-hidden">
+              <div className="group relative h-full flex flex-col min-[641px]:flex-row min-[1025px]:flex-col rounded-xl border border-[#e6ebf1] bg-white overflow-hidden">
                 <Link href={featured.href} className="relative block aspect-[16/10] min-[641px]:aspect-auto min-[641px]:flex-1 min-[641px]:min-h-[260px] bg-[#f5f7fa]">
                   <Image
                     src={featured.image}
@@ -100,28 +100,28 @@ export function CategoryShowcase() {
                     className="object-contain p-6 mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-500"
                   />
                 </Link>
-                <div className="flex flex-col p-5 min-[901px]:p-6 text-white min-[641px]:w-1/2 min-[1025px]:w-auto">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#f5b400]">{L('Öne çıkan kategori', 'Featured category')}</span>
-                  <Link href={featured.href} className="mt-1.5 text-xl min-[901px]:text-2xl font-bold hover:text-[#f5b400] transition-colors">
+                <div className="flex flex-col p-5 min-[901px]:p-6 text-[#121926] min-[641px]:w-1/2 min-[1025px]:w-auto">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#5d6e80]">{L('Öne çıkan kategori', 'Featured category')}</span>
+                  <Link href={featured.href} className="mt-1.5 text-xl min-[901px]:text-2xl font-bold hover:text-[#0b2540] transition-colors">
                     {featured.label}
                   </Link>
-                  <span className="mt-1 text-sm text-[#cfdbe8]">{featured.count} {L('ürün', 'products')}</span>
+                  <span className="mt-1 text-sm text-[#5d6e80]">{featured.count} {L('ürün', 'products')}</span>
                   <ul className="mt-4 flex flex-wrap gap-2">
                     {featured.subs.map((s) => (
                       <li key={s.href}>
                         <Link
                           href={s.href}
-                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-white/10 hover:bg-white/20 text-[13px] font-medium transition-colors"
+                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-[#f1f4f8] hover:bg-[#e6ebf1] text-[#20384e] text-[13px] font-medium transition-colors"
                         >
                           {s.label}
-                          <span className="text-[11px] text-[#cfdbe8]">{s.count}</span>
+                          <span className="text-[11px] text-[#5d6e80]">{s.count}</span>
                         </Link>
                       </li>
                     ))}
                   </ul>
                   <Link
                     href={featured.href}
-                    className="mt-5 min-[641px]:mt-auto min-[1025px]:mt-5 pt-0 min-[641px]:pt-5 min-[1025px]:pt-0 self-start inline-flex items-center gap-2 text-sm font-semibold text-[#f5b400] hover:text-[#ffc933]"
+                    className="mt-5 min-[641px]:mt-auto min-[1025px]:mt-5 pt-0 min-[641px]:pt-5 min-[1025px]:pt-0 self-start inline-flex items-center gap-2 text-sm font-semibold text-[#0b2540] hover:text-[#12335a]"
                   >
                     {L('Kategoriyi incele', 'Explore category')} <ArrowRight className="w-4 h-4" aria-hidden />
                   </Link>

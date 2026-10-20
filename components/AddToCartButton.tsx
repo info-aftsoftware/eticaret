@@ -6,6 +6,7 @@ import { ShoppingCart, Plus, Minus } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { useTranslations } from 'next-intl'
+import { useL } from '@/lib/i18n-inline'
 
 export interface ProductVariant {
   key: string
@@ -47,6 +48,7 @@ export function AddToCartButton({
   const addItem = useCartStore((s) => s.addItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
   const { addToast } = useToast()
+  const L = useL()
   const t = useTranslations('addToCart')
   const [mounted, setMounted] = useState(false)
 
@@ -92,7 +94,8 @@ export function AddToCartButton({
       addToast({
         type: 'success',
         title: t('addedToCart'),
-        description: `${displayName} sepete eklendi.`,
+        description: L(`${displayName} sepete eklendi.`, `${displayName} added to cart.`),
+        action: { label: L('Sepete git', 'Go to cart'), href: '/cart' },
       })
     } catch {
       addToast({

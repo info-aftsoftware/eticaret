@@ -25,7 +25,9 @@ export function LanguageSwitcher() {
   const setLocale = (newLocale: 'tr' | 'en') => {
     if (newLocale === locale || switching) return
     setSwitching(true)
-    document.cookie = `${LOCALE_COOKIE}=${newLocale};path=/;max-age=31536000;samesite=lax`
+    // Oturum çerezi: site varsayılan olarak Türkçe açılır. İngilizce seçimi yalnızca bu tarayıcı oturumu boyunca
+    // geçerlidir, tarayıcı kapanınca yeni ziyaret yine Türkçe başlar (önceden bir yıl saklanıyordu)
+    document.cookie = `${LOCALE_COOKIE}=${newLocale};path=/;samesite=lax`
     // router.refresh() yalnızca o anki sayfanın sunucu bileşenlerini tazeliyordu: istemci yönlendirici
     // önbelleğindeki (önceden yüklenmiş) sayfalar ve istemci durumu eski dilde kalıyor, değişim geç
     // ve parça parça görünüyordu. Tam yeniden yükleme her şeyi tek seferde yeni dile geçirir.
