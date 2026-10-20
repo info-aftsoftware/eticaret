@@ -16,6 +16,8 @@ import { useToast } from '@/components/ui/toast'
 import { FavoriteButton } from '@/components/FavoriteButton'
 import { StockAlertForm } from '@/components/StockAlertForm'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
+import { BatteryContactBox } from '@/components/BatteryContactBox'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { CompareButton } from '@/components/CompareButton'
 import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
@@ -235,6 +237,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
   /** Stok: varyant yoksa ürün stoku, varyantlı ürünlerde şimdilik ürün stoku kullanılıyor */
   const stock = typeof product.stock === 'number' ? product.stock : 0
   const outOfStock = stock === 0
+  // Akü / batarya: kargo kısıtları kontrol edilene kadar çevrim içi satılmaz, iletişim kutusu gösterilir
+  const contactOnly = isContactOnlyProduct(product)
   const isLowStock = stock > 0 && stock <= 5
 
   /** Seçili seçeneği 1 adet sepete ekler (stok sınırı aşılırsa eklemez); eklendiyse true */
@@ -507,15 +511,18 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       </span>
                       <span className="text-[#5d6e80]"> {L(`KDV dahil · %${BANK_TRANSFER_DISCOUNT_RATE} indirimli`, `incl. VAT · ${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</span>
                     </dd>
-                    <dt className="text-[#5d6e80]">{L('Teslimat', 'Delivery')}</dt>
-                    <dd><DeliveryEstimate compact /></dd>
+                    <dt className="text-[#5d6e80]">{contactOnly ? L('Kargo', 'Shipping') : L('Teslimat', 'Delivery')}</dt>
+                    <dd>{contactOnly ? <span className="font-medium text-[#0b2540]">{L('Kargo ve nakliye için iletişime geçin', 'Contact us for shipping')}</span> : <DeliveryEstimate compact />}</dd>
                   </>
                 )}
               </dl>
 
               {outOfStock && <div className="mt-5"><StockAlertForm productId={product.id} /></div>}
 
-              {/* Sepet butonları */}
+              {/* Sepet butonları (akü / bataryada yerine iletişim kutusu) */}
+              {contactOnly ? (
+                <BatteryContactBox className="mt-5" productName={product.name} sku={effectiveVariant?.sku || product.sku} />
+              ) : (
               <div className="mt-5 grid grid-cols-2 gap-2.5">
                 {cartQty === 0 ? (
                   <Button
@@ -569,6 +576,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   {outOfStock ? tCart('outOfStock') : tProduct('buyNow')}
                 </Button>
               </div>
+              )}
 
               {/* Uyumlu ürünler (eski "Bu ürün size uygun mu?" alanının yerinde) */}
               {(() => {

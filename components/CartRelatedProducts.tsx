@@ -12,6 +12,7 @@ import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useL } from '@/lib/i18n-inline'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 
 interface CartRelatedProductsProps {
   cartItemIds: string[]
@@ -153,6 +154,14 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
                   // Tüm önerilerde aynı buton: varyantlı üründe varsayılan seçenek (ürün sayfasındakiyle aynı) eklenir
                   const v = product.variants?.find((x) => x.key === product.defaultVariantKey) ?? product.variants?.[0]
                   const soldOut = product.stock <= 0
+                  // Akü / batarya sepete eklenmez (lib/shipping/battery.ts)
+                  if (isContactOnlyProduct(product)) {
+                    return (
+                      <Link href={`/products/${product.id}`} className="h-8 px-3 inline-flex items-center rounded-md border border-[#d3d9e1] text-[#0b2540] text-xs font-semibold flex-shrink-0 hover:bg-[#f5f7fa]">
+                        {L('İletişime geç', 'Contact us')}
+                      </Link>
+                    )
+                  }
                   return (
                     <Button
                       size="sm"

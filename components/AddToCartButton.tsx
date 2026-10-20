@@ -7,6 +7,8 @@ import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
+import Link from 'next/link'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 
 export interface ProductVariant {
   key: string
@@ -133,6 +135,15 @@ export function AddToCartButton({
         description: `${displayName} sepetten kaldırıldı.`,
       })
     }
+  }
+
+  // Akü / batarya: sepete eklenmez, ürün sayfasındaki iletişim kutusuna gider (lib/shipping/battery.ts)
+  if (isContactOnlyProduct(product)) {
+    return (
+      <Button asChild variant="outline" size={size} className={className}>
+        <Link href={`/products/${product.id}`}>{L('İletişime geç', 'Contact us')}</Link>
+      </Button>
+    )
   }
 
   if (outOfStock) {

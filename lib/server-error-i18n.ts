@@ -106,6 +106,7 @@ const PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
   [/^"(.+)" için stokta yalnızca (\d+) adet var\.$/, (m) => `Only ${m[2]} of "${m[1]}" are in stock.`],
   [/^"(.+)" için stokta yalnızca (\d+) adet var\. Lütfen adedi azaltın\.$/, (m) => `Only ${m[2]} of "${m[1]}" are in stock. Please reduce the quantity.`],
   [/^"(.+)" şu anda stokta yok\. Lütfen sepetinizden çıkarın\.$/, (m) => `"${m[1]}" is currently out of stock. Please remove it from your cart.`],
+  [/^"(.+)" çevrim içi sipariş edilemiyor\. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin\.$/, (m) => `"${m[1]}" cannot be ordered online. For batteries, please contact us about shipping and delivery.`],
   [/^(.+) için fiyat bilgisi bulunamadı\.$/, (m) => `No price is available for ${m[1]}.`],
   [/^Bu kupon en az (.+) TL \(KDV hariç\) alışverişlerde geçerlidir\.$/, (m) => `This coupon is valid for orders of at least ${m[1]} TL (excluding VAT).`],
   [/^Ödemesi bekleyen (\d+) siparişiniz var\./, (m) => `You have ${m[1]} orders awaiting payment. Please complete or cancel their payment before placing a new order.`],
