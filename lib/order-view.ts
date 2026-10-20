@@ -38,6 +38,8 @@ type ApiOrder = {
   trackingUrl?: string | null
   /** Navlungo'dan gelen son kargo durumu ("Dağıtıma Çıktı" vb.) */
   navlungoStatusName?: string | null
+  /** Geliver'den gelen son kargo durumu ("Kargo dağıtımda" vb.) */
+  geliverStatusLabel?: string | null
   shippingCarrier?: string | null
   shippingName?: string
   shippingPhone?: string
@@ -101,7 +103,7 @@ export function toOrderView(o: ApiOrder) {
     carrierName: carrier?.name ?? o.shippingCarrier ?? null,
     trackingUrl: orderTrackingUrl(o),
     trackingHint: o.trackingUrl ? null : carrier?.trackingHint ?? null,
-    shipmentStatus: o.status === 'SHIPPED' ? o.navlungoStatusName ?? null : null,
+    shipmentStatus: o.status === 'SHIPPED' ? o.navlungoStatusName ?? o.geliverStatusLabel ?? null : null,
     dates: {
       paidAt: o.paidAt ? new Date(o.paidAt) : null,
       shippedAt: o.shippedAt ? new Date(o.shippedAt) : null,

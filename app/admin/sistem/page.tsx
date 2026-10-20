@@ -20,6 +20,7 @@ type SystemData = {
 const JOBS: Record<string, { label: string; every: string }> = {
   'expire-orders': { label: 'Havale süresi takibi', every: '6 saatte bir' },
   backup: { label: 'Veritabanı yedeği', every: 'günde bir' },
+  'geliver-tracking': { label: 'Geliver kargo takibi', every: 'saatte bir' },
   'navlungo-tracking': { label: 'Navlungo kargo takibi', every: '2 saatte bir' },
 }
 const kb = (n: number | null) => (n == null ? '—' : n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`)

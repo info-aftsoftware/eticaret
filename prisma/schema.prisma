@@ -487,6 +487,11 @@ model Order {
   navlungoLabelUrl   String?
   navlungoTestMode   Boolean? // QA ortamında mı oluşturuldu
   navlungoSyncedAt   DateTime?
+  // Geliver gönderisi (lib/shipping/geliver-shipments.ts): panelde açılır, site bağlar ve durumunu çeker
+  geliverShipmentId  String?
+  geliverStatusCode  String?   // trackingStatusCode (TRANSIT, DELIVERED …) ya da gönderi durumu
+  geliverStatusLabel String?   // Türkçe son durum ("Kargo dağıtımda")
+  geliverSyncedAt    DateTime?
   eArsivRef       String?  // E-arşiv invoice reference
   invoicePdfUrl   String?  // Generated invoice PDF
   notes           String?
@@ -508,6 +513,7 @@ model Order {
   @@index([paymentStatus])
   @@index([createdAt])
   @@index([navlungoPostNumber])
+  @@index([geliverShipmentId])
 }
 
 // İade / cayma talepleri (müşteri "Siparişlerim"den oluşturur, admin onaylar → iade kodu → teslim alındı → ücret iadesi)

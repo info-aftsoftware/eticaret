@@ -65,6 +65,15 @@ type OrderDetail = {
   shippingQuote?: ShippingQuoteView
   trackingNumber?: string
   trackingUrl?: string | null
+  /** Geliver gönderi takibi (lib/shipping/geliver-shipments.ts → geliverShipmentView) */
+  geliver?: {
+    enabled: boolean
+    shipmentId: string | null
+    statusCode: string | null
+    statusLabel: string | null
+    syncedAt: string | null
+    trackingUrl: string | null
+  }
   /** Navlungo gönderisi (lib/shipping/navlungo-shipments.ts → navlungoShipmentView) */
   navlungo?: {
     enabled: boolean
@@ -142,6 +151,7 @@ export default function AdminOrderDetailPage() {
   const [adminNote, setAdminNote] = useState('')
   const [navDesi, setNavDesi] = useState('')
   const [navPackages, setNavPackages] = useState('1')
+  const [geliverRef, setGeliverRef] = useState('')
 
   const apiUrl = source === 'firestore' && userId
     ? `/api/admin/orders/${id}?source=firestore&userId=${userId}`
@@ -489,6 +499,20 @@ export default function AdminOrderDetailPage() {
                       {order.deliveredAt && <span className="block text-xs text-slate-500">Teslim: {fmtDate(order.deliveredAt)}</span>}
                     </p>
                   )}
+                  {order.geliver?.enabled && (order.geliver.shipmentId || (!nav?.postNumber && ['PAID', 'CONFIRMED', 'PROCESSING', 'PICKING', 'SHIPPED'].includes(order.status))) && (
+                    <GeliverBox
+                      orderNo={order.orderId}
+                      geliver={order.geliver}
+                      busy={busy}
+                      value={geliverRef}
+                      onChange={setGeliverRef}
+                      onLink={async () => {
+                        if (await patch('glvlink', { action: 'geliver_link', ref: geliverRef }, 'Geliver gönderisi bağlandı, durum güncellendi.')) setGeliverRef('')
+                      }}
+                      onSync={() => patch('glvsync', { action: 'geliver_sync' }, "Kargo durumu Geliver'den güncellendi.")}
+                      onUnlink={() => patch('glvunlink', { action: 'geliver_unlink' }, 'Geliver bağlantısı kaldırıldı.', 'Geliver gönderi bağlantısı kaldırılsın mı? Sipariş durumu ve takip numarası değişmez.')}
+                    />
+                  )}
                   {nav?.postNumber && (
                     <div className="rounded-lg border border-[#e6ebf1] bg-[#f8fafc] px-3 py-2.5 space-y-1.5">
                       <p className="font-medium text-slate-900">
@@ -727,6 +751,70 @@ function ShippingQuoteBox({ quote }: { quote: ShippingQuoteView }) {
           </table>
         </details>
       )}
+    </div>
+  )
+}
+
+/** Geliver gönderi takibi: bağlıysa durum ve işlemler, değilse bağlama alanı */
+function GeliverBox({
+  orderNo,
+  geliver,
+  busy,
+  value,
+  onChange,
+  onLink,
+  onSync,
+  onUnlink,
+}: {
+  orderNo: string
+  geliver: NonNullable<OrderDetail['geliver']>
+  busy: string | null
+  value: string
+  onChange: (v: string) => void
+  onLink: () => void
+  onSync: () => void
+  onUnlink: () => void
+}) {
+  if (geliver.shipmentId) {
+    return (
+      <div className="rounded-lg border border-[#e6ebf1] bg-[#f8fafc] px-3 py-2.5 space-y-1.5">
+        <p className="font-medium text-slate-900">Geliver gönderisi</p>
+        <p className="text-slate-600">
+          Durum: {geliver.statusLabel ?? 'henüz sorgulanmadı'}
+          {geliver.syncedAt && <span className="block text-xs text-slate-500">Son sorgu: {new Date(geliver.syncedAt).toLocaleString('tr-TR')}</span>}
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          {geliver.trackingUrl && (
+            <a href={geliver.trackingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex h-8 items-center gap-1 rounded-md border border-[#d3d9e1] bg-white px-3 text-[13px] font-medium text-[#0b2540] hover:bg-[#f5f7fa]">
+              Takip sayfası <ExternalLink className="w-3 h-3" />
+            </a>
+          )}
+          <button type="button" disabled={busy !== null} onClick={onSync} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#d3d9e1] bg-white px-3 text-[13px] font-medium text-[#0b2540] hover:bg-[#f5f7fa] disabled:opacity-50">
+            {busy === 'glvsync' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+            Durumu güncelle
+          </button>
+          <button type="button" disabled={busy !== null} onClick={onUnlink} className="inline-flex h-8 items-center rounded-md px-2 text-[13px] text-slate-500 hover:text-red-700 disabled:opacity-50">
+            Bağlantıyı kaldır
+          </button>
+        </div>
+        <p className="text-xs text-slate-500">Durum saatte bir kendiliğinden güncellenir. Kargo firması teslim alınca sipariş "Kargoda" olur ve müşteriye takip linki gider; teslimde "Teslim Edildi".</p>
+      </div>
+    )
+  }
+  return (
+    <div className="rounded-lg border border-[#e6ebf1] px-3 py-2.5 space-y-2">
+      <p className="font-medium text-slate-900">Geliver ile takip</p>
+      <p className="text-xs text-slate-600">
+        Gönderiyi Geliver panelinde açın. Sipariş numarası alanına <span className="font-mono font-semibold text-slate-800">{orderNo}</span> yazarsanız
+        saatte bir kendiliğinden bağlanır. Hemen bağlamak için Geliver gönderi linkini veya takip numarasını yapıştırın.
+      </p>
+      <div className="flex gap-2">
+        <Input aria-label="Geliver gönderi linki veya takip numarası" placeholder="Geliver gönderi linki veya takip no" value={value} onChange={(e) => onChange(e.target.value)} />
+        <button type="button" disabled={busy !== null || !value.trim()} onClick={onLink} className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-md bg-[#0b2540] px-3 text-[13px] font-semibold text-white hover:bg-[#12335a] disabled:opacity-50">
+          {busy === 'glvlink' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+          Bağla
+        </button>
+      </div>
     </div>
   )
 }
