@@ -43,6 +43,24 @@ _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 
 **Kalan:** QA hesabıyla ilk gerçek deneme. Gönderi iptali API istemcisinde var (`cancelPost`), ama panelde düğme yok. Kargodaki sipariş geri alınamadığı için akış ayrıca kararlaştırılmalı. İade toplama (return post) yok.
 
+## Geliver kargo takibi (20.10.2026, `9929e0d`, canlıda değil)
+**İstek:** sipariş takibi şimdilik Geliver'den yapılsın. Gönderiler Geliver panelinde açılıyor; site gönderiyi siparişe bağlıyor ve durumu Geliver'den çekiyor.
+
+| Konu | Nasıl |
+|---|---|
+| Kendiliğinden bağlama | Geliver'de gönderinin sipariş numarası alanına sitedeki sipariş no (ör. `ORD-2026-02356`) yazılırsa, ödemesi alınmış siparişler saatte bir bu numarayla aranıp bağlanır |
+| Elle bağlama | Yönetimde sipariş sayfası, Kargo kartı, "Geliver ile takip": Geliver gönderi linki, gönderi kimliği veya takip numarası yapıştırılıp "Bağla" |
+| Durum | Saatte bir (zamanlayıcı) ya da "Durumu güncelle". Takip no, takip linki ve kargo firması siparişe yazılır |
+| Kargoda | Kargo firması teslim alınca (Geliver TRANSIT), ödemesi alınmış sipariş "Kargoda" olur, müşteriye takip linkiyle e-posta gider |
+| Teslim | Geliver DELIVERED: sipariş "Teslim Edildi", müşteriye e-posta |
+| İade / iptal / kayıp | Otomatik uygulanmaz: zaman çizelgesine not, yöneticiye uyarı |
+| Test gönderisi | Sipariş durumunu değiştirmez |
+| Müşteri | Sipariş sayfasında takip linki (firmanınki, yoksa `app.geliver.io/tracking/…`) ve son durum ("Kargo dağıtımda") |
+
+**Ayar:** `GELIVER_API_TOKEN` (yerel `.env.local`'a yazıldı). Canlıda Hostinger ortam değişkenlerine eklenmesi gerekiyor. Elle tetikleme: `POST /api/cron/geliver-tracking` (Bearer CRON_SECRET, `?dry=1` yalnızca okur). Sistem Durumu sayfasında "Geliver kargo takibi" satırı.
+
+**Doğrulama:** Ortak klasördeki başkasına ait yarım değişiklikler dışarıda kalsın diye temiz çalışma kopyasında yapıldı. Tip kontrolü temiz, birim testleri 110/110 (Geliver: yanıt çözümleme, firma eşleme, kargoya verme ve teslim kararları, iade/iptal/test, sahte HTTP ile istemci), derleme 471 sayfa. Gerçek Geliver hesabına karşı yalnızca okuma: anahtar geçerli, hesapta 0 gönderi ve Elazığ'da varsayılan gönderici adresi var. Zamanlanmış görev deneme kipinde çalıştı, yetkisiz istek 401, olmayan takip no ve link anlaşılır hatayla reddedildi. Yönetim sipariş sayfasında Geliver kutusu görüldü. **Doğrulanamayan:** Gerçek bir Geliver gönderisiyle bağlama ve durum geçişi; hesapta henüz gönderi yok (Geliver'in test gönderisi oluşturulursa denenebilir).
+
 ## Kargo: Geliver + Navlungo (20.10.2026, `5acce2b`; canlıda `7381cb9`)
 **İstek:** Navlungo Domestic Fiyat Teklifi 2026 PDF'i incelensin, kapıda ödeme dışındaki seçenekler eklensin, her seçenek eklenmeden kıyaslansın. Fiyat önceki firma listesinden verildiyse "Geliver", PDF'ten verildiyse "Navlungo" olarak yönetim panelinde yazsın. Akülerde yalnızca Navlungo fiyatı.
 
