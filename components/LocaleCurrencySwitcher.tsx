@@ -23,9 +23,9 @@ export function LocaleCurrencySwitcher() {
   const setCurrency = useCurrencyStore((s) => s.setCurrency)
 
   return (
-    <div className="flex items-center gap-4 text-xs text-slate-400 [&_button:hover]:text-white">
+    <div className="flex items-center gap-4 text-xs text-[#3b4a5a] [&_button:hover]:text-[#0b2540]">
       <LanguageSwitcher />
-      <span className="w-px h-3.5 bg-white/15" aria-hidden />
+      <span className="w-px h-3.5 bg-[#d3d9e1]" aria-hidden />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button type="button" className="flex items-center gap-1 transition-colors" aria-label={`${CURRENCIES.find((c) => c.code === currency)?.label ?? 'TL'} — para birimi`}>

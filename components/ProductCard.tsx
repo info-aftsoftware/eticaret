@@ -115,7 +115,7 @@ export function ProductCard({
       image: product.image,
       category: product.category,
     })
-    if (added > 0) addToast({ type: 'success', title: tCart('addedToCart'), description: displayName })
+    if (added > 0) addToast({ type: 'success', title: tCart('addedToCart'), description: displayName, action: { label: L('Sepete git', 'Go to cart'), href: '/cart' } })
     else showStockLimit()
   }
 
@@ -264,7 +264,7 @@ export function ProductCard({
               <Minus className={icon} />
             </button>
             <span className={`flex-1 min-w-0 truncate text-center font-semibold tabular-nums ${isCompact ? 'text-xs' : 'text-sm'}`} aria-live="polite">
-              {quantity}<span className="hidden min-[420px]:inline font-normal text-white/70">{L(' sepette', ' in cart')}</span>
+              {quantity}<span className="sr-only">{L(' adet sepette', ' in cart')}</span>
             </span>
             <button
               type="button"

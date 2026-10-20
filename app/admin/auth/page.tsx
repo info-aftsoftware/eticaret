@@ -62,29 +62,25 @@ export default function AdminAuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
-      {/* Arka plan desen */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(30,58,110,0.4),transparent_60%)] pointer-events-none" />
-
-      <div className="relative w-full max-w-sm">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Image src="/voltekno-logo-transparent.png" alt="Voltekno" width={180} height={54} style={{ height: 'auto' }} className="object-contain brightness-0 invert" priority />
+    <div className="min-h-screen bg-[#f5f7fa] flex items-center justify-center p-4">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-6">
+          <div className="flex justify-center mb-3">
+            <Image src="/voltekno-logo-transparent.png" alt="Voltekno" width={180} height={54} style={{ height: 'auto' }} className="object-contain" priority />
           </div>
-          <p className="text-sm text-white/40 mt-1">Yönetim paneline giriş yapın</p>
+          <p className="text-sm text-[#5d6e80]">Yönetim paneline giriş yapın</p>
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-7 backdrop-blur-sm shadow-2xl">
+        <div className="bg-white border border-[#e6ebf1] rounded-xl p-6 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="flex items-center gap-2 rounded-xl bg-red-500/10 border border-red-500/20 text-red-300 px-3 py-2.5 text-sm">
+              <div role="alert" className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2.5 text-sm">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 {error}
               </div>
             )}
             <div className="space-y-1.5">
-              <label htmlFor="admin-email" className="block text-white/60 text-xs font-semibold uppercase tracking-wider">
+              <label htmlFor="admin-email" className="block text-[13px] font-medium text-[#121926]">
                 E-posta
               </label>
               <input
@@ -94,19 +90,18 @@ export default function AdminAuthPage() {
                 placeholder="ad@voltekno.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ background: 'rgba(255,255,255,0.08)', color: 'white' }}
-                className="w-full h-11 px-3 rounded-xl border border-white/15 text-sm outline-none focus:border-[#f4a11a] placeholder-white/25 transition-colors"
+                className="w-full h-11 rounded-lg border border-[#d3d9e1] bg-white text-sm text-[#121926] placeholder:text-[#9aa8b6] outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/10 transition-colors px-3"
                 disabled={loading}
                 autoFocus
               />
-              <p className="text-[11px] text-white/35">Ana yönetici şifresiyle girmek için boş bırakın.</p>
+              <p className="text-[12px] text-[#5d6e80]">Ana yönetici şifresiyle girmek için boş bırakın.</p>
             </div>
             <div className="space-y-1.5">
-              <label htmlFor="admin-password" className="block text-white/60 text-xs font-semibold uppercase tracking-wider">
+              <label htmlFor="admin-password" className="block text-[13px] font-medium text-[#121926]">
                 Şifre
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none z-10" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9aa8b6] pointer-events-none z-10" />
                 <input
                   id="admin-password"
                   type={showPassword ? 'text' : 'password'}
@@ -114,15 +109,15 @@ export default function AdminAuthPage() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  style={{ background: 'rgba(255,255,255,0.08)', color: 'white' }}
-                  className="w-full h-11 pl-10 pr-10 rounded-xl border border-white/15 text-sm outline-none focus:border-[#f4a11a] placeholder-white/25 transition-colors"
+                  className="w-full h-11 rounded-lg border border-[#d3d9e1] bg-white text-sm text-[#121926] placeholder:text-[#9aa8b6] outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/10 transition-colors pl-10 pr-10"
                   required
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/80 transition-colors z-10"
+                  aria-label={showPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5d6e80] hover:text-[#121926] transition-colors z-10"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -131,7 +126,7 @@ export default function AdminAuthPage() {
             </div>
             {otpRequired && (
               <div className="space-y-1.5">
-                <label htmlFor="admin-otp" className="block text-white/60 text-xs font-semibold uppercase tracking-wider">
+                <label htmlFor="admin-otp" className="block text-[13px] font-medium text-[#121926]">
                   Doğrulama kodu
                 </label>
                 <input
@@ -144,18 +139,17 @@ export default function AdminAuthPage() {
                   placeholder="123456"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                  style={{ background: 'rgba(255,255,255,0.08)', color: 'white' }}
-                  className="w-full h-11 px-4 rounded-xl border border-white/15 text-sm tracking-[0.4em] outline-none focus:border-[#f4a11a] placeholder-white/25 transition-colors"
+                  className="w-full h-11 rounded-lg border border-[#d3d9e1] bg-white text-sm text-[#121926] placeholder:text-[#9aa8b6] outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/10 transition-colors px-4 tracking-[0.4em]"
                   required
                   disabled={loading}
                   autoFocus
                 />
-                <p className="text-white/40 text-xs">Doğrulama uygulamanızdaki (Google/Microsoft Authenticator) 6 haneli kod.</p>
+                <p className="text-[12px] text-[#5d6e80]">Doğrulama uygulamanızdaki (Google/Microsoft Authenticator) 6 haneli kod.</p>
               </div>
             )}
             <Button
               type="submit"
-              className="w-full h-11 rounded-xl bg-[#f4a11a] hover:bg-[#e09510] text-white font-semibold gap-2 shadow-lg shadow-amber-500/20 transition-all"
+              className="w-full h-11 rounded-lg bg-[#0b2540] hover:bg-[#12335a] text-white font-semibold gap-2 transition-colors"
               disabled={loading}
             >
               {loading ? (
@@ -171,8 +165,8 @@ export default function AdminAuthPage() {
         </div>
 
         <div className="mt-5 text-center">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition-colors">
-            <ArrowLeft className="w-3 h-3" />
+          <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] text-[#5d6e80] hover:text-[#121926] transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5" />
             Siteye Dön
           </Link>
         </div>

@@ -91,17 +91,17 @@ function SidebarContent({ pathname, onLogout, onNavClick }: { pathname: string |
     .filter((s) => s.items.length > 0)
   return (
     <>
-      <div className="flex items-center px-5 h-16 border-b border-white/10 shrink-0">
+      <div className="flex items-center px-5 h-16 border-b border-[#e6ebf1] shrink-0">
         <Link href="/admin" onClick={onNavClick} className="flex items-center gap-2">
-          <Image src="/voltekno-logo-transparent.png" alt="Voltekno" width={132} height={38} style={{ height: 'auto' }} className="object-contain brightness-0 invert" priority />
+          <Image src="/voltekno-logo-transparent.png" alt="Voltekno" width={132} height={38} style={{ height: 'auto' }} className="object-contain" priority />
         </Link>
-        <span className="ml-auto text-[10px] font-semibold uppercase tracking-wider text-[#f5b400] bg-[#f5b400]/10 rounded px-1.5 py-0.5">Panel</span>
+        <span className="ml-auto text-[10px] font-semibold uppercase tracking-wider text-[#5d6e80] bg-[#f1f4f8] rounded px-1.5 py-0.5">Panel</span>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-5" aria-label="Yönetim menüsü">
         {sections.map((section) => (
           <div key={section.title}>
-            <p className="px-3 mb-1.5 text-[10px] font-semibold text-white/40 uppercase tracking-widest">{section.title}</p>
+            <p className="px-3 mb-1.5 text-[10px] font-semibold text-[#7a8a9b] uppercase tracking-widest">{section.title}</p>
             <ul className="space-y-0.5">
               {section.items.map((item) => {
                 const Icon = item.icon
@@ -115,11 +115,11 @@ function SidebarContent({ pathname, onLogout, onNavClick }: { pathname: string |
                       aria-current={active ? 'page' : undefined}
                       className={cn(
                         'group relative flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium transition-colors',
-                        active ? 'bg-white/10 text-white' : 'text-white/65 hover:bg-white/5 hover:text-white'
+                        active ? 'bg-[#eef3f9] text-[#0b2540]' : 'text-[#3b4a5a] hover:bg-[#f5f7fa] hover:text-[#121926]'
                       )}
                     >
-                      {active && <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-[#f5b400]" />}
-                      <Icon className={cn('w-4 h-4 shrink-0', active ? 'text-[#f5b400]' : 'text-white/45 group-hover:text-white/80')} />
+                      {active && <span className="absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-[#0b2540]" />}
+                      <Icon className={cn('w-4 h-4 shrink-0', active ? 'text-[#0b2540]' : 'text-[#7a8a9b] group-hover:text-[#3b4a5a]')} />
                       <span className="flex-1 truncate">{item.label}</span>
                       <CountBadge value={badge} />
                     </Link>
@@ -131,26 +131,26 @@ function SidebarContent({ pathname, onLogout, onNavClick }: { pathname: string |
         ))}
       </nav>
 
-      <div className="p-3 border-t border-white/10 space-y-0.5 shrink-0">
+      <div className="p-3 border-t border-[#e6ebf1] space-y-0.5 shrink-0">
         {me && (
           <Link
             href="/admin/hesabim"
             onClick={onNavClick}
             aria-current={pathname === '/admin/hesabim' ? 'page' : undefined}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-white/80 hover:text-white hover:bg-white/5"
+            className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#121926] hover:bg-[#f5f7fa]"
           >
-            <CircleUser className="w-4 h-4 shrink-0 text-white/50" />
+            <CircleUser className="w-4 h-4 shrink-0 text-[#7a8a9b]" />
             <span className="min-w-0">
               <span className="block truncate text-[13px] font-medium">{me.user.name}</span>
-              <span className="block truncate text-[11px] text-white/45">{me.user.roleLabel}{!me.user.isMaster && !me.user.totpEnabled ? ' · 2FA kapalı' : ''}</span>
+              <span className="block truncate text-[11px] text-[#5d6e80]">{me.user.roleLabel}{!me.user.isMaster && !me.user.totpEnabled ? ' · 2FA kapalı' : ''}</span>
             </span>
           </Link>
         )}
-        <Link href="/" onClick={onNavClick} className="flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-white/60 hover:text-white hover:bg-white/5">
+        <Link href="/" onClick={onNavClick} className="flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-[#3b4a5a] hover:text-[#121926] hover:bg-[#f5f7fa]">
           <ArrowLeft className="w-4 h-4 shrink-0" />
           Siteye Dön
         </Link>
-        <button type="button" onClick={onLogout} className="w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-red-300/80 hover:text-red-200 hover:bg-red-500/10">
+        <button type="button" onClick={onLogout} className="w-full flex items-center gap-3 px-3 h-9 rounded-lg text-[13px] font-medium text-red-700 hover:bg-red-50">
           <LogOut className="w-4 h-4 shrink-0" />
           Çıkış Yap
         </button>
@@ -167,7 +167,7 @@ function SoundToggle({ dark = false }: { dark?: boolean }) {
       onClick={() => setSoundOn(!soundOn)}
       className={cn(
         'h-9 px-2.5 rounded-lg inline-flex items-center gap-1.5 text-[13px] font-medium transition-colors',
-        dark ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-[#20384e] hover:bg-[#f1f4f8]'
+        'text-[#20384e] hover:bg-[#f1f4f8]'
       )}
       aria-pressed={soundOn}
       title={soundOn ? 'Yeni sipariş sesi açık' : 'Yeni sipariş sesi kapalı'}
@@ -201,35 +201,35 @@ function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-[#f5f7fa] flex">
-      <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-[#0b2540] z-30">
+      <aside className="hidden lg:flex lg:flex-col lg:w-60 lg:fixed lg:inset-y-0 bg-white border-r border-[#e6ebf1] z-30">
         <SidebarContent pathname={pathname} onLogout={handleLogout} />
       </aside>
 
       {/* Mobil/tablet üst çubuk */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 h-14 bg-[#0b2540] flex items-center justify-between px-3">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 h-14 bg-white border-b border-[#e6ebf1] flex items-center justify-between px-3">
         <button
           type="button"
           onClick={() => setSidebarOpen(true)}
-          className="relative w-10 h-10 flex items-center justify-center rounded-lg text-white/80 hover:text-white hover:bg-white/10"
+          className="relative w-10 h-10 flex items-center justify-center rounded-lg text-[#20384e] hover:bg-[#f1f4f8]"
           aria-label="Menüyü aç"
         >
           <Menu className="w-5 h-5" />
           {totalBadge > 0 && <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#f5b400]" />}
         </button>
         <Link href="/admin" className="flex items-center">
-          <Image src="/voltekno-logo-transparent.png" alt="Voltekno" width={110} height={32} style={{ height: 'auto' }} className="object-contain brightness-0 invert" />
+          <Image src="/voltekno-logo-transparent.png" alt="Voltekno" width={110} height={32} style={{ height: 'auto' }} className="object-contain" />
         </Link>
         <SoundToggle dark />
       </div>
 
       {sidebarOpen && (
         <>
-          <div className="fixed inset-0 z-40 bg-[#0b2540]/60 lg:hidden" onClick={() => setSidebarOpen(false)} aria-hidden />
-          <aside className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#0b2540] shadow-2xl lg:hidden flex flex-col">
+          <div className="fixed inset-0 z-40 bg-[#121926]/30 lg:hidden" onClick={() => setSidebarOpen(false)} aria-hidden />
+          <aside className="fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-white shadow-xl lg:hidden flex flex-col">
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
-              className="absolute top-4 right-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/60 hover:text-white hover:bg-white/10 z-10"
+              className="absolute top-4 right-3 w-8 h-8 flex items-center justify-center rounded-lg text-[#5d6e80] hover:text-[#121926] hover:bg-[#f1f4f8] z-10"
               aria-label="Menüyü kapat"
             >
               <X className="w-4 h-4" />
