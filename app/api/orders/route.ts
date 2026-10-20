@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { reportError } from '@/lib/alerts'
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { isRateLimited } from '@/lib/rate-limit'
 import crypto from 'node:crypto'
 import { getBankPosConfig, buildPosForm, type PosForm } from '@/lib/payments/bank-pos'
@@ -198,6 +199,10 @@ export async function POST(request: NextRequest) {
         subtotal: pricing.subtotal,
         vatTotal: pricing.tax,
         shippingCost: pricing.shipping,
+        // Ücretin kaynağı yönetim panelinde gösterilir (Geliver / Navlungo, firma, tüm teklifler)
+        shippingQuoteProvider: pricing.shippingQuote.provider,
+        shippingQuoteCarrier: pricing.shippingQuote.carrierId,
+        shippingQuote: pricing.shippingQuote as unknown as Prisma.InputJsonValue,
         discount: pricing.discount,
         couponCode: pricing.couponCode,
         couponDiscount: pricing.couponDiscount,

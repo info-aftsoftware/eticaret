@@ -8,7 +8,7 @@ import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById } from '@/lib/discounts'
 import { prisma } from '@/lib/prisma'
 import { computeOrderTotals, VAT_RATE, type CheckoutPaymentMethod, type OrderTotals } from '@/lib/store-config'
-import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { cartLogistics, quoteShipping, type ShippingQuote } from '@/lib/shipping/fee'
 
 export { VAT_RATE }
 const MAX_QTY_PER_LINE = 999
@@ -34,6 +34,8 @@ export type PricedLine = {
 export type OrderPricing = OrderTotals & {
   lines: PricedLine[]
   couponCode: string | null
+  /** Kargo teklifi: hangi kaynak (Geliver / Navlungo) ve firma, tüm adaylar */
+  shippingQuote: ShippingQuote
 }
 
 const round2 = (n: number) => Math.round(n * 100) / 100
@@ -164,8 +166,8 @@ export async function priceOrder(
   const subtotal = round2(lines.reduce((s, l) => s + l.lineSubtotal, 0))
   const code = couponCode?.trim() ? normalizeCouponCode(couponCode) : null
   const couponDiscount = code ? await computeCouponDiscount(code, subtotal) : 0
-  const shippingFee = shippingFeeFor(cartLogistics(lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity }))))
-  const totals = computeOrderTotals({ subtotal, couponDiscount, paymentMethod, shippingFee })
+  const shippingQuote = quoteShipping(cartLogistics(lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity }))))
+  const totals = computeOrderTotals({ subtotal, couponDiscount, paymentMethod, shippingFee: shippingQuote.fee })
 
-  return { lines, ...totals, couponCode: code }
+  return { lines, ...totals, couponCode: code, shippingQuote }
 }

@@ -69,6 +69,8 @@ export type AdminOrderRow = {
   paymentStatus: string
   paymentMethod: string | null
   trackingNumber: string | null
+  /** Kargo ücretinin kaynağı: Geliver veya Navlungo */
+  shippingProvider?: string
   itemCount: number
   openReturns: number
   paymentNotified: boolean

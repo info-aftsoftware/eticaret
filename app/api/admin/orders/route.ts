@@ -111,6 +111,7 @@ export async function GET(request: NextRequest) {
           paymentStatus: true,
           paymentMethod: true,
           trackingNumber: true,
+          shippingQuoteProvider: true,
           notes: true,
           user: { select: { email: true, customerNo: true } },
           _count: { select: { lines: true } },
@@ -136,6 +137,8 @@ export async function GET(request: NextRequest) {
       paymentStatus: o.paymentStatus,
       paymentMethod: o.paymentMethod,
       trackingNumber: o.trackingNumber,
+      // Kargo ücretinin kaynağı; kayıt öncesi siparişler Geliver listesiyle fiyatlanmıştı
+      shippingProvider: o.shippingQuoteProvider === 'navlungo' ? 'Navlungo' : 'Geliver',
       itemCount: o._count.lines,
       openReturns: o.returnRequests.length,
       paymentNotified: o.events.length > 0,

@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { ArrowLeft, Loader2, Package, FileText, Truck, CreditCard, Banknote, Clock, StickyNote, ExternalLink, UserRound } from 'lucide-react'
 import { fmtTRY } from '@/lib/format'
+import type { ShippingQuoteView } from '@/lib/shipping/quote-view'
 import { ReturnRequestsCard, type AdminReturnRequest } from './ReturnRequestsCard'
 import { CancelRequestCard, type AdminCancelRequest } from './CancelRequestCard'
 
@@ -60,6 +61,8 @@ type OrderDetail = {
   allowedNextStatuses?: { value: string; label: string }[]
   shippingCarrier?: string | null
   shippingCarrierName?: string | null
+  /** Kargo ücretinin kaynağı: Geliver (önceki firma listesi) veya Navlungo */
+  shippingQuote?: ShippingQuoteView
   trackingNumber?: string
   trackingUrl?: string | null
   carriers?: { id: string; name: string }[]
@@ -131,7 +134,7 @@ export default function AdminOrderDetailPage() {
 
   const applyOrder = useCallback((data: OrderDetail) => {
     setOrder(data)
-    setCarrier(data.shippingCarrier || data.carriers?.[0]?.id || '')
+    setCarrier(data.shippingCarrier || data.shippingQuote?.carrierId || data.carriers?.[0]?.id || '')
     setTrackingNumber(data.trackingNumber || '')
     setAdminNote(data.adminNote || '')
   }, [])
@@ -298,7 +301,13 @@ export default function AdminOrderDetailPage() {
                   <div className="flex justify-between text-green-700"><dt>Havale/EFT indirimi</dt><dd className="tabular-nums">-{fmtTRY(p.paymentDiscount)}</dd></div>
                 )}
                 <div className="flex justify-between"><dt className="text-slate-600">KDV</dt><dd className="tabular-nums">{fmtTRY(p.tax ?? 0)}</dd></div>
-                <div className="flex justify-between"><dt className="text-slate-600">Kargo</dt><dd className="tabular-nums">{p.shipping ? fmtTRY(p.shipping) : 'Ücretsiz'}</dd></div>
+                <div className="flex justify-between">
+                  <dt className="text-slate-600">
+                    Kargo
+                    {order.shippingQuote && <span className="block text-xs text-slate-500">Fiyat: {order.shippingQuote.summary}</span>}
+                  </dt>
+                  <dd className="tabular-nums">{p.shipping ? fmtTRY(p.shipping) : 'Ücretsiz'}</dd>
+                </div>
                 <div className="flex justify-between font-bold text-base pt-1"><dt>Toplam</dt><dd className="tabular-nums">{fmtTRY(p.total ?? 0)}</dd></div>
               </dl>
             </CardContent>
@@ -446,6 +455,7 @@ export default function AdminOrderDetailPage() {
               <Card id="kargo" className="border-[#e6ebf1] bg-white shadow-none rounded-xl">
                 <CardHeader><CardTitle className="text-base flex items-center gap-2"><Truck className="w-4 h-4" />Kargo</CardTitle></CardHeader>
                 <CardContent className="space-y-3 text-sm">
+                  {order.shippingQuote && <ShippingQuoteBox quote={order.shippingQuote} />}
                   {order.trackingNumber && (
                     <p>
                       {order.shippingCarrierName} · <span className="font-mono">{order.trackingNumber}</span>
@@ -588,6 +598,45 @@ Emin misiniz?`
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+/** Kargo ücretinin hangi kaynaktan (Geliver / Navlungo) ve firmadan verildiği; sipariş anındaki tüm teklifler */
+function ShippingQuoteBox({ quote }: { quote: ShippingQuoteView }) {
+  const offers = quote.candidates
+  return (
+    <div className="rounded-lg border border-[#e6ebf1] bg-[#f8fafc] px-3 py-2.5">
+      <p className="text-[13px] text-slate-700">
+        Kargo ücreti teklifi: <b className="text-[#0b2540]">{quote.providerLabel}</b>
+        {quote.carrierName && <> · {quote.carrierName}</>}
+        {quote.legacy && <span className="text-slate-500"> (kaynak kaydı eklenmeden önceki sipariş; ücret Geliver listesiyle hesaplanmıştı)</span>}
+      </p>
+      {(quote.desi != null || quote.battery) && (
+        <p className="mt-0.5 text-xs text-slate-500">
+          {quote.desi != null && <>{quote.desi} desi{quote.kg != null && <> · {quote.kg} kg</>}</>}
+          {quote.battery && <> · Akü içeriyor: yalnızca Navlungo fiyatı verildi</>}
+        </p>
+      )}
+      {offers.length > 0 && (
+        <details className="mt-2">
+          <summary className="cursor-pointer text-xs font-medium text-[#0b2540]">Sipariş anındaki tüm teklifler</summary>
+          <table className="mt-2 w-full text-xs">
+            <tbody>
+              {offers.map((c, i) => {
+                const chosen = c.provider === quote.provider && c.carrierId === quote.carrierId && c.fee != null
+                return (
+                  <tr key={i} className={chosen ? 'font-semibold text-[#0b2540]' : 'text-slate-600'}>
+                    <td className="py-0.5 pr-2">{c.provider === 'navlungo' ? 'Navlungo' : 'Geliver'}</td>
+                    <td className="py-0.5 pr-2">{c.carrierName}</td>
+                    <td className="py-0.5 text-right tabular-nums">{c.fee != null ? fmtTRY(c.fee) : <span className="font-normal text-slate-400">{c.reason ?? 'teklif yok'}</span>}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </details>
+      )}
     </div>
   )
 }
