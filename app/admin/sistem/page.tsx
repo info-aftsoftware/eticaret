@@ -20,6 +20,7 @@ type SystemData = {
 const JOBS: Record<string, { label: string; every: string }> = {
   'expire-orders': { label: 'Havale süresi takibi', every: '6 saatte bir' },
   backup: { label: 'Veritabanı yedeği', every: 'günde bir' },
+  'navlungo-tracking': { label: 'Navlungo kargo takibi', every: '2 saatte bir' },
 }
 const kb = (n: number | null) => (n == null ? '—' : n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`)
 const uptime = (s: number) => (s > 86400 ? `${Math.floor(s / 86400)} gün` : s > 3600 ? `${Math.floor(s / 3600)} saat` : `${Math.floor(s / 60)} dk`)

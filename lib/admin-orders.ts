@@ -7,8 +7,10 @@ import { NextResponse } from 'next/server'
 import { reportError } from '@/lib/alerts'
 import type { OrderStatus } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
-import { getAllCarriers, getCarrier } from '@/lib/shipping/carriers'
+import { getAllCarriers, getCarrier, orderTrackingUrl } from '@/lib/shipping/carriers'
 import { shippingQuoteView } from '@/lib/shipping/quote-view'
+import { NavlungoError } from '@/lib/shipping/navlungo-api'
+import { createNavlungoShipment, navlungoShipmentView, syncNavlungoShipment } from '@/lib/shipping/navlungo-shipments'
 import {
   allowedNextStatuses,
   approveCancellationRequest,
@@ -115,7 +117,9 @@ export async function getAdminOrderDetail(id: string) {
     /** Kargo ücretinin kaynağı (Geliver / Navlungo) ve firması */
     shippingQuote: shippingQuoteView(order),
     trackingNumber: order.trackingNumber ?? undefined,
-    trackingUrl: carrier && order.trackingNumber ? carrier.trackingUrl(order.trackingNumber) : null,
+    trackingUrl: orderTrackingUrl(order),
+    /** Navlungo gönderisi (yapılandırılmamışsa enabled: false) */
+    navlungo: navlungoShipmentView(order),
     carriers: getAllCarriers().map((c) => ({ id: c.id, name: c.name })),
     customerNote: order.customerNote,
     adminNote: order.adminNote,
@@ -167,6 +171,8 @@ export async function getAdminOrderDetail(id: string) {
  *  { action: 'mark_paid', note? }
  *  { action: 'status', status, carrier?, trackingNumber?, reason?, notifyCustomer? }
  *  { action: 'shipment', carrier, trackingNumber, notifyCustomer? }
+ *  { action: 'navlungo_create', desi?, packageCount?, notifyCustomer? }  (Navlungo'da gönderi + "Kargoda")
+ *  { action: 'navlungo_sync' }  (durumu Navlungo'dan hemen çek)
  *  { action: 'note', adminNote }
  *  { action: 'cancel_request', op: 'approve' | 'reject', reason? (ret için zorunlu), note? }
  *  { action: 'return', returnId, op: 'approve' | 'reject' | 'receive' | 'refund', carrier?, code?, reason?, amount? }
@@ -207,6 +213,21 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
       }
       case 'shipment': {
         await updateShipment(id, String(body.carrier ?? ''), String(body.trackingNumber ?? ''), body.notifyCustomer === true)
+        break
+      }
+      case 'navlungo_create': {
+        const desi = Number(String(body.desi ?? '').replace(',', '.'))
+        const packageCount = Number(body.packageCount)
+        await createNavlungoShipment(id, {
+          desi: Number.isFinite(desi) && desi > 0 && desi <= 1000 ? desi : undefined,
+          packageCount: Number.isInteger(packageCount) && packageCount > 0 && packageCount <= 50 ? packageCount : undefined,
+          notifyCustomer: body.notifyCustomer !== false,
+        })
+        break
+      }
+      case 'navlungo_sync': {
+        const r = await syncNavlungoShipment(id)
+        if (r.skipped) return NextResponse.json({ error: `Durum sorgulanmadı: ${r.skipped}.` }, { status: 409 })
         break
       }
       case 'return': {
@@ -250,6 +271,9 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
   } catch (e) {
     if (e instanceof OrderTransitionError) {
       return NextResponse.json({ error: e.message }, { status: 409 })
+    }
+    if (e instanceof NavlungoError) {
+      return NextResponse.json({ error: `Navlungo: ${e.message}` }, { status: 502 })
     }
     await reportError('admin-siparis-islemi', e, { orderId: id, action: body.action })
     return NextResponse.json({ error: 'Sipariş güncellenirken bir hata oluştu' }, { status: 500 })

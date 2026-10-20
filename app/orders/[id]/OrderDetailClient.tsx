@@ -450,6 +450,8 @@ export default function OrderDetailPage() {
   const canCancelNow = !!order.canCancel
   const refunded = order.paymentStatus === 'REFUNDED' || order.paymentStatus === 'PARTIALLY_REFUNDED'
   const carrier = order.carrierName ? getAllCarriers().find((c) => c.name === order.carrierName) : undefined
+  // toOrderView Navlungo linkinde ipucunu boşaltır (null); eski Firestore siparişlerinde alan yok
+  const trackingHint = order.trackingHint !== undefined ? order.trackingHint : carrier?.trackingHint
 
   return (
     <ClassicPageShell
@@ -557,13 +559,19 @@ export default function OrderDetailPage() {
                       <CopyInline value={order.trackingNumber} />
                     </p>
                   </div>
+                  {order.shipmentStatus && (
+                    <div>
+                      <p className="text-xs text-[#5d6e80]">{L('Kargo durumu', 'Shipment status')}</p>
+                      <p className="text-sm font-semibold text-[#121926]">{order.shipmentStatus}</p>
+                    </div>
+                  )}
                   {order.trackingUrl && (
                     <a href={order.trackingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-[#f5b400] px-4 text-sm font-semibold text-[#111] hover:bg-[#e0a500] sm:ml-auto">
                       {L('Kargomu takip et', 'Track my shipment')} <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                     </a>
                   )}
                 </div>
-                {carrier?.trackingHint && <p className="mt-3 text-[13px] text-[#5d6e80]">{carrier.trackingHint}</p>}
+                {trackingHint && <p className="mt-3 text-[13px] text-[#5d6e80]">{trackingHint}</p>}
               </Card>
             )}
 

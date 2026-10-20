@@ -4,6 +4,7 @@
  *
  * - expire-orders: 6 saatte bir (lib/cron-jobs.ts → runExpireOrders)
  * - backup: günde bir (lib/cron-jobs.ts → runBackup)
+ * - navlungo-tracking: 2 saatte bir (lib/cron-jobs.ts → runNavlungoTracking; Navlungo yapılandırılmamışsa boş geçer)
  *
  * Son çalışma zamanı kalıcı klasörde tutulur (lib/scheduler-core.ts); süreç yeniden başlasa da görev erken tekrarlanmaz.
  * Sunucu cron'u da kuruluysa sorun olmaz: HTTP uçları aynı işi yapar, iptal koşullu güncelleme ile tek seferliktir.
@@ -11,7 +12,7 @@
  * uygulama yeniden açıldıktan sonraki ilk turda (≈1 dk) çalışır.
  */
 import { acquireLock, isDue, readState, resolveStateDir, writeJobState } from './scheduler-core'
-import { runBackup, runExpireOrders } from './cron-jobs'
+import { runBackup, runExpireOrders, runNavlungoTracking } from './cron-jobs'
 
 const HOUR = 3_600_000
 const TICK_MS = 10 * 60_000
@@ -38,6 +39,17 @@ const JOBS: Job[] = [
       if (status === 400) return `atlandı: ${String(body.error)}`
       if (status !== 200) throw new Error(String(body.error ?? `durum ${status}`))
       return `${String(body.file)} (${Math.round(Number(body.sizeBytes) / 1024)} KB, saklanan ${String(body.kept)}, sunucu dışı: ${String(body.offsite)})`
+    },
+  },
+  {
+    name: 'navlungo-tracking',
+    everyMs: 2 * HOUR,
+    run: async () => {
+      const r = await runNavlungoTracking()
+      if (!r.ok) throw new Error(r.error)
+      if (!r.enabled) return 'kapalı (Navlungo yapılandırılmamış)'
+      if (r.errors.length && r.checked === 0) throw new Error(`${r.errors.length} gönderi sorgulanamadı: ${r.errors.slice(0, 3).join('; ')}`)
+      return `sorgulanan ${r.checked}, teslim ${r.delivered.length}, uyarı ${r.alerts.length}, hata ${r.errors.length}`
     },
   },
 ]

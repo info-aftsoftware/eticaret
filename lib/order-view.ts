@@ -3,7 +3,7 @@
  * Profil > Siparişlerim ve /orders/[id] aynı biçimi (eski Firestore siparişleriyle uyumlu) kullanır.
  */
 
-import { getCarrier } from '@/lib/shipping/carriers'
+import { getCarrier, orderTrackingUrl } from '@/lib/shipping/carriers'
 
 type ApiOrderLine = { id: string; productName: string; quantity: number; lineTotal: number; variantMatrix?: { productId?: string } | null }
 export type ApiReturnRequest = {
@@ -34,6 +34,10 @@ type ApiOrder = {
   deliveredAt?: string | null
   cancelledAt?: string | null
   trackingNumber?: string | null
+  /** Navlungo gönderisinde Navlungo'nun takip linki */
+  trackingUrl?: string | null
+  /** Navlungo'dan gelen son kargo durumu ("Dağıtıma Çıktı" vb.) */
+  navlungoStatusName?: string | null
   shippingCarrier?: string | null
   shippingName?: string
   shippingPhone?: string
@@ -95,7 +99,9 @@ export function toOrderView(o: ApiOrder) {
     canCancel: !!o.canCancel,
     trackingNumber: o.trackingNumber,
     carrierName: carrier?.name ?? o.shippingCarrier ?? null,
-    trackingUrl: carrier && o.trackingNumber ? carrier.trackingUrl(o.trackingNumber) : null,
+    trackingUrl: orderTrackingUrl(o),
+    trackingHint: o.trackingUrl ? null : carrier?.trackingHint ?? null,
+    shipmentStatus: o.status === 'SHIPPED' ? o.navlungoStatusName ?? null : null,
     dates: {
       paidAt: o.paidAt ? new Date(o.paidAt) : null,
       shippedAt: o.shippedAt ? new Date(o.shippedAt) : null,

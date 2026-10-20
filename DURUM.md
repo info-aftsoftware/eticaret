@@ -5,6 +5,44 @@ _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 ## Şu an yapılan
 **Kargo fiyatı Geliver ve Navlungo kıyaslı, canlıda (20.10.2026 20:52, yayın dalında `7381cb9`, SEO hariç).** Her sepet için iki kaynaktan teklif alınıyor, en ucuzu müşteriye yansıyor, akülü sepette yalnızca Navlungo. Fiyatın kaynağı yönetim panelinde siparişte yazıyor. Ayrıntı aşağıda "Kargo: Geliver + Navlungo". **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
 
+**Navlungo API entegrasyonu kodda hazır, canlıda değil, gerçek API ile denenmedi (20.10.2026).** Kimlik bilgisi girilene kadar özellik kapalıdır; her şey sahte yanıtlarla test edildi. Ayrıntı aşağıda "Navlungo gönderi entegrasyonu".
+
+## Navlungo gönderi entegrasyonu (20.10.2026, yayında değil)
+**İstek:** Gönderiler Navlungo'dan çıkıyor; "Kargoya ver" adımında gönderi Navlungo'da oluşsun, takip numarası, takip bağlantısı ve durum taşıyıcı sitelerinden değil Navlungo'dan gelsin.
+
+**Önemli:** Navlungo kimlik bilgisi olmadığı için **gerçek API'ye hiç istek atılmadı.** İstek ve yanıt alanları `tcgunel/omniship-navlungo` paketinin kaynağından ve test verilerinden alındı (token `data.access_token`; oluşturma yanıtı belgede düz nesne, QA'da `data: [...]`; etiket base64 PDF ya da bağlantı). İlk gerçek denemede QA hesabıyla bir gönderi açılıp yanıtlar kontrol edilmeli.
+
+**Sizden gerekenler (Navlungo panelinde):**
+1. Entegrasyonlar → API kullanıcısı açın. Şifre yalnızca bir kez gösterilir. Panel girişi API'de çalışmaz.
+2. Kargo Şirketleri → en az bir anlaşma ve fiyat listesi tanımlı olmalı. Yoksa oluşturma "fiyat listesi tanımı bulunmamaktadır" hatası verir.
+3. Adres Defteri → Depo Konumları → gönderici (depo) adresi. Kaydın id'si `NAVLUNGO_SENDER_ADDRESS_ID` olur.
+4. Sunucu ortamına `NAVLUNGO_API_USERNAME`, `NAVLUNGO_API_PASSWORD`, `NAVLUNGO_SENDER_ADDRESS_ID` yazın. `NAVLUNGO_TEST_MODE` `0`/`false` yazılmadıkça QA ortamı kullanılır (yanlışlıkla gerçek gönderi açılmasın). QA ve üretim ayrı hesaplardır, ayrı API kullanıcısı ister. İsteğe bağlı `NAVLUNGO_CARRIER_ID` (1 = Navlungo en uygun firmayı seçer, varsayılan).
+
+**Yönetim paneli (sipariş detayı → Kargo kartı):**
+- Ödenmiş ve kargoya verilebilir siparişte "Navlungo ile kargoya ver" kutusu: desi (sipariş anındaki teklifin desisi, ağırlık büyükse kg) ve koli adedi (varsayılan 1) düzenlenebilir. "Navlungo'da gönderi oluştur" onay sorar, gönderiyi açar (reference_id = sipariş no), sipariş "Kargoda" olur, müşteriye Navlungo takip bağlantısıyla e-posta gider. Elle takip numarası girişi alternatif olarak altta kalır.
+- Gönderi açıldıktan sonra: Navlungo gönderi no, son durum, son sorgu zamanı, "Etiketi indir (PDF)" ve "Durumu güncelle". Etiket gönderiden birkaç dakika sonra hazır olur, o zamana kadar "henüz hazırlanıyor" der.
+- Aynı sipariş no ile gönderi zaten açılmışsa (önceki denemenin yanıtı kaybolduysa) yeni gönderi açılmaz, mevcut gönderi kullanılır.
+- Sistem Durumu sayfasında "Navlungo gönderi entegrasyonu" kontrolü (kapalı / QA / üretim) ve "Navlungo kargo takibi" görevi.
+
+**Takip (zamanlayıcı, 2 saatte bir; elle `POST /api/cron/navlungo-tracking`, `?dry=1` değişiklik yapmaz):**
+- Kargodaki Navlungo gönderilerinin durumu `post/check` ile çekilir (kargoya verilişten sonra 45 gün).
+- Taşıyıcı gönderiyi kabul edince verdiği takip numarası siparişe yazılır, kargo firması Navlungo'nun bildirdiği taşıyıcıya göre düzeltilir.
+- Teslim Alındı, Yolda, Dağıtıma Çıktı gibi durum değişiklikleri müşterinin zaman çizelgesine düşer; sipariş sayfasında "Kargo durumu" görünür.
+- Teslim Edildi (kod 2) → sipariş `lib/order-service` üzerinden "Teslim Edildi" olur, müşteriye e-posta gider.
+- İade, iptal ve tazmin durumları (7/9/21, 10, 19/20) **otomatik uygulanmaz**, çünkü stok ve ücret iadesi sizin kararınız. Zaman çizelgesine panel notu düşer, Sistem Durumu'na uyarı yazılır.
+- Navlungo'nun bildirim (webhook) URL'si kullanılmadı: yük biçimi belgelenmemiş, doğruluk kaynağı `post/check`.
+
+**Müşteri tarafı:** Takip bağlantısı Navlungo'nun sayfasıdır (sipariş sayfası ve e-postalar). Navlungo linkinde "numarayı sayfaya yapıştırın" ipucu gösterilmez. Etiket bağlantısı ve iç alanlar müşteri yanıtına girmez.
+
+**Kod:** `lib/shipping/navlungo-api.ts` (istemci, token önbelleği 8 saat ve 5 dk pay, 401'de bir kez yenileme, durum kodları, takip kararı), `lib/shipping/navlungo-shipments.ts` (sipariş tarafı), `app/api/admin/orders/[id]/navlungo-label`, `app/api/cron/navlungo-tracking`. Order'a yeni alanlar: `trackingUrl`, `navlungoPostNumber`, `navlungoStatusCode`, `navlungoStatusName`, `navlungoLabelUrl`, `navlungoTestMode`, `navlungoSyncedAt`. Hepsi boş bırakılabilir; derlemedeki `prisma db push` onay istemeden uygular (bu yüzden gönderi no'ya benzersiz kısıt yerine indeks kondu).
+
+**Doğrulama (yalnızca sahte yanıtlarla):**
+- Birim testleri 16 yeni, toplam 104/104: token önbelleği ve süre, eşzamanlı tek token, 401 sonrası yenileme, QA/üretim adresi, oluşturma gövdesi (adres defteri gönderici, telefon biçimi, desi), iki yanıt biçimi, aynı reference_id, doğrulama hataları, durum ve loglar, etiket base64 / hazır değil, iptal, ağ hatası, takip kararları.
+- Yerel veritabanı kopyasında uçtan uca: ödenmiş sipariş → Navlungo gönderisi + Kargoda → etiket → Dağıtıma Çıktı → zamanlayıcı → Teslim Edildi. Taşıyıcı numarası yazıldı, müşteri e-postasında Navlungo linki çıktı. E-postalar diske yazıldı, dışarı gitmedi.
+- Tip kontrolü ve lint temiz. **Admin ekranı tarayıcıda görülmedi** (yönetici girişi gerekiyor).
+
+**Kalan:** QA hesabıyla ilk gerçek deneme. Gönderi iptali API istemcisinde var (`cancelPost`), ama panelde düğme yok. Kargodaki sipariş geri alınamadığı için akış ayrıca kararlaştırılmalı. İade toplama (return post) yok.
+
 ## Kargo: Geliver + Navlungo (20.10.2026, `5acce2b`; canlıda `7381cb9`)
 **İstek:** Navlungo Domestic Fiyat Teklifi 2026 PDF'i incelensin, kapıda ödeme dışındaki seçenekler eklensin, her seçenek eklenmeden kıyaslansın. Fiyat önceki firma listesinden verildiyse "Geliver", PDF'ten verildiyse "Navlungo" olarak yönetim panelinde yazsın. Akülerde yalnızca Navlungo fiyatı.
 
@@ -47,7 +85,7 @@ Not: hepsiJET paket başı en fazla 25 kg, Kolay Gelsin (Geliver) en fazla 30 kg
 
 **Doğrulama (yerel kopya, e-posta kapalı):** tip kontrolü, birim testleri 88/88 (yeni: kaynak kıyası, basamaklar, ağır taşıma, akü kuralı, firma eşleme), derleme 471 sayfa, Playwright 98 geçti / 0 kaldı. Akülü test siparişi: Navlungo · Aras 596 ₺, Geliver "Akü / batarya" gerekçesiyle dışarıda. Panel siparişi: Geliver · Kolay Gelsin 325,76 ₺. Panel listesinde, detayda ve CSV'de kaynak görüldü.
 
-**Navlungo'dan bilgi almak (öneri, sizde):** Navlungo'nun Domestic API'si (v2.1) gönderi oluşturma, etiket PDF'i, durum takibi, takip bağlantısı, iptal ve iade toplama sunuyor. Fiyat sorgulama ucu yok; fiyat paneldeki fiyat listesinden geliyor. Bağlantı için Navlungo panelinde Entegrasyonlar bölümünden API kullanıcısı açılması ve bir gönderici (depo) adresi tanımlanması gerekiyor. Bilgiler gelince "Kargoya ver" Navlungo'da gönderi açıp takip numarasını ve bağlantısını kendisi yazabilir. Geliver için de aynı soru geçerli.
+**Navlungo'dan bilgi almak (öneri, sizde):** Navlungo'nun Domestic API'si (v2.1) gönderi oluşturma, etiket PDF'i, durum takibi, takip bağlantısı, iptal ve iade toplama sunuyor. Fiyat sorgulama ucu yok; fiyat paneldeki fiyat listesinden geliyor. Bağlantı için Navlungo panelinde Entegrasyonlar bölümünden API kullanıcısı açılması ve bir gönderici (depo) adresi tanımlanması gerekiyor. Bilgiler gelince "Kargoya ver" Navlungo'da gönderi açıp takip numarasını ve bağlantısını kendisi yazabilir. Geliver için de aynı soru geçerli. → Navlungo tarafı yapıldı, yukarıda "Navlungo gönderi entegrasyonu".
 
 ## İstek turu 5 (20.10.2026)
 | İstek | Durum | Not |

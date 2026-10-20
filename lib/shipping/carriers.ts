@@ -1,7 +1,7 @@
 /**
  * Shipping Carriers Adapter Interface
  * Türkiye kargo firmaları: takip linkleri (Yurtiçi, Aras, MNG/DHL eCommerce, Sürat, hepsiJET, hepsiJET XL, Kolay Gelsin, PTT,
- * UPS, DHL Express).
+ * UPS, DHL Express) ve Navlungo.
  * Admin panelinde kargo firması seçimi, müşteri e-postası ve sipariş sayfasındaki takip linki buradan gelir.
  * Biçimler 18.10.2026'da firmaların canlı takip sayfalarında doğrulandı.
  */
@@ -79,6 +79,12 @@ export const carriers: Record<string, Carrier> = {
     name: 'DHL Express',
     trackingUrl: (n) => `https://www.dhl.com/tr-tr/home/tracking.html?tracking-id=${enc(n)}&submit=1`,
   },
+  navlungo: {
+    // Navlungo gönderisinde taşıyıcı adı eşleşmezse; asıl link siparişteki trackingUrl (lib/shipping/navlungo-api.ts)
+    id: 'navlungo',
+    name: 'Navlungo',
+    trackingUrl: (n) => `https://domestic-track.navlungo.com/check/${enc(n)}`,
+  },
 }
 
 export function getCarrier(carrierId: string): Carrier | undefined {
@@ -87,4 +93,14 @@ export function getCarrier(carrierId: string): Carrier | undefined {
 
 export function getAllCarriers(): Carrier[] {
   return Object.values(carriers)
+}
+
+/**
+ * Siparişin takip linki: Navlungo gönderisinde Navlungo'nun verdiği link (Order.trackingUrl),
+ * yoksa kargo firmasının sayfası. Müşteri sayfası, e-postalar ve yönetim paneli bunu kullanır.
+ */
+export function orderTrackingUrl(o: { trackingUrl?: string | null; shippingCarrier?: string | null; trackingNumber?: string | null }): string | null {
+  if (o.trackingUrl) return o.trackingUrl
+  const carrier = o.shippingCarrier ? getCarrier(o.shippingCarrier) : undefined
+  return carrier && o.trackingNumber ? carrier.trackingUrl(o.trackingNumber) : null
 }

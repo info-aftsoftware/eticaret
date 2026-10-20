@@ -3,10 +3,17 @@ export const dynamic = 'force-dynamic'
 import path from 'path'
 import { promises as fs } from 'fs'
 import { NextRequest, NextResponse } from 'next/server'
+import { isNavlungoEnabled, navlungoConfigFromEnv } from '@/lib/shipping/navlungo-api'
 import { checkAdmin } from '@/lib/adminAuth'
 import { prisma } from '@/lib/prisma'
 import { backupDir, runBackup } from '@/lib/cron-jobs'
 import { readState, resolveStateDir } from '@/lib/scheduler-core'
+
+function navlungoHint(): string {
+  const c = navlungoConfigFromEnv()
+  if (!c) return 'NAVLUNGO_API_USERNAME, NAVLUNGO_API_PASSWORD ve NAVLUNGO_SENDER_ADDRESS_ID girilince sipariş sayfasında Navlungo gönderisi oluşturma açılır (API kullanıcısı: Navlungo paneli > Entegrasyonlar).'
+  return c.testMode ? 'QA (test) ortamı açık. Gerçek gönderiler için NAVLUNGO_TEST_MODE=0 ve üretim hesabının API kullanıcısı.' : 'Üretim ortamı.'
+}
 
 type Check = { key: string; label: string; ok: boolean; level: 'error' | 'warn' | 'info'; hint: string }
 
@@ -32,6 +39,7 @@ async function configChecks(): Promise<Check[]> {
     { key: 'admins-2fa', label: 'Tüm yönetici hesaplarında iki adımlı doğrulama', ok: admins > 0 && admins2fa === admins, level: 'warn', hint: `${admins2fa}/${admins} hesapta açık. Her kullanıcı Hesabım sayfasından açabilir.` },
     { key: 'master-2fa', label: 'Ana yönetici şifresinde iki adımlı doğrulama', ok: !has('ADMIN_TOKEN') || has('ADMIN_TOTP_SECRET'), level: 'warn', hint: 'ADMIN_TOKEN tanımlıysa ADMIN_TOTP_SECRET de tanımlanmalı (node scripts/admin-2fa-setup.mjs) ya da kişisel hesaplara geçince ADMIN_TOKEN kaldırılmalı.' },
     { key: 'pos', label: 'Kartla ödeme (sanal POS)', ok: has('POS_CLIENT_ID') && has('POS_STORE_KEY') && has('POS_GATEWAY_URL'), level: 'info', hint: 'Banka sanal POS bilgileri girilince ödeme sayfasında kart seçeneği açılır.' },
+    { key: 'navlungo', label: 'Navlungo gönderi entegrasyonu', ok: isNavlungoEnabled(), level: 'info', hint: navlungoHint() },
     { key: 'firebase-admin', label: 'Firebase servis hesabı', ok: has('FIREBASE_ADMIN_PRIVATE_KEY') && process.env.FIREBASE_ADMIN_PROJECT_ID === process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID, level: 'warn', hint: 'Markalı doğrulama/şifre e-postaları ve hesap silme için; proje kimliği istemci yapılandırmasıyla aynı olmalı (FIREBASE_SETUP.md).' },
     { key: 'site-url', label: 'Site adresi', ok: has('NEXT_PUBLIC_SITE_URL'), level: 'warn', hint: 'Canonical, site haritası ve e-postalardaki bağlantılar için NEXT_PUBLIC_SITE_URL.' },
     { key: 'indexing', label: 'Arama motorlarına açık', ok: process.env.NEXT_PUBLIC_NOINDEX !== 'true', level: 'info', hint: 'NEXT_PUBLIC_NOINDEX=true: test ortamı, arama motorlarına kapalı. Canlı alan adında kaldırılmalı.' },

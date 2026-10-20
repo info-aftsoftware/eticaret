@@ -6,7 +6,11 @@ import type { Order, OrderLine, ReturnRequest } from '@prisma/client'
 import { returnEligibility, toCustomerReturn } from '@/lib/return-service'
 
 export function toCustomerOrder<T extends Order & { lines?: OrderLine[]; returnRequests?: ReturnRequest[] }>(order: T) {
-  const { adminNote: _a, notes: _n, paymentProviderRef: _p, eArsivRef: _e, returnRequests, ...rest } = order
+  const {
+    adminNote: _a, notes: _n, paymentProviderRef: _p, eArsivRef: _e,
+    navlungoLabelUrl: _l, navlungoTestMode: _t, navlungoSyncedAt: _s, navlungoStatusCode: _c,
+    returnRequests, ...rest
+  } = order
   const elig = order.lines && returnRequests
     ? returnEligibility({ ...order, lines: order.lines, returnRequests })
     : null
