@@ -3,7 +3,19 @@
 _Son güncelleme: 19.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Ayrıntılı geçmiş ve sahibine kalan işler: `YAPILACAKLAR.md` (son güncellemesi 18.10 17:09; bazı açık maddeleri o tarihten sonra yapıldı, aşağıdaki "Eksikler" bölümü günceldir). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**Profesyonel seviye turu tamamlandı ve SEO hariç canlıya alındı (19.10.2026 19:27, yayın dalı `yayin-pro-seo-haric`, `25ae00a`).** Yönetici hesapları/rolleri/2FA/işlem kaydı, izleme, sunucu dışı yedek, yorum-soru-iletişimin Firebase'den çıkarılması, CSV ile stok/fiyat ve muhasebe aktarımı, toplu kargo ve etiket, izin defteri. Ayrıntı aşağıda "Profesyonel seviye". SEO çalışması (`9ad9119` + `6a30301`) kararla canlıda değil.
+**20.10.2026 düzeltmeleri canlıda (`3008ea6`, SEO hariç).** Koyu tema kaldırıldı, site varsayılan Türkçe, adet kutusunda yalnızca sayı, sepete eklendi bildiriminde "Sepete git". Ayrıntı aşağıda "İstek turu 5". **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır.
+
+## İstek turu 5 (20.10.2026)
+| İstek | Durum | Not |
+|---|---|---|
+| Koyu tema kullanılmasın | ✅ `79f95bf` | Açık zemine geçti: yönetici giriş ekranı, yönetim yan menüsü ve mobil üst çubuğu, footer (iletişim ikonları kutusuz), üst şerit, blog başlık alanları, karşılaştırma çubuğu, ana sayfadaki "Öne çıkan kategori" kartı, bildirim kutusu, ürün listesindeki toplu seçim çubuğu. Lacivert yalnızca düğme rengi. Fotoğraflı teklif bandındaki karartma, yazının okunması için kaldı. Sitede koyu mod anahtarı yok |
+| Site varsayılan Türkçe gelsin | ✅ `79f95bf` | Sunucu zaten çerezsiz her ziyaretçiye Türkçe veriyordu (tarayıcı dili İngilizce olsa bile). İngilizce görünmesinin nedeni, önceki testlerden kalan bir yıllık "English" çereziydi. Dil seçimi artık oturumluk: tarayıcı kapanınca yeni ziyaret Türkçe başlar. Önceden "English" seçmiş bir tarayıcı, bir kez "Türkçe" seçince düzelir |
+| Adet kutusunda "2 sepette" yerine "2" | ✅ `79f95bf` | Ürün kartı ve ürün sayfası. "sepette" yalnızca ekran okuyucular için |
+| Sepete eklendi bildiriminde "Sepete git" | ✅ `79f95bf` | Ürün kartı, ürün sayfası ve sepete ekle düğmesi. Düğmeli bildirim 5 saniye kalır |
+
+**Doğrulama (yayın dalı `yayin-pro-seo-haric` = `3008ea6`, test sunucusunun okuduğu klasöre derlendi):** tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 98 geçti / 0 kaldı, ticaret akışları 21/21, yönetici rolleri 11/11. Tarayıcıda açık giriş ekranı, açık yan menü, "Sepete git" düğmesi ve yalnızca sayı gösteren adet kutusu görüldü. **Canlı (20.10 19:12):** 29/29 genel kontrol, çerezsiz ana sayfa `lang="tr"`, footer/üst şerit/giriş ekranı/blog açık zeminde, sunucu kaydında hata yok.
+
+**Düzeltme notu (19.10 yayını):** `25ae00a` öncesi yerel testler, derleme farklı klasöre gittiği için yayın dalının değil bir önceki (SEO'lu, aksi hâlde aynı) derlemenin üzerinde koşmuştu. Yayından sonraki canlı kontroller geçmişti; bu turda testler doğru derlemeye karşı yeniden koşuldu ve geçti.
 
 ## Profesyonel seviye (19.10.2026 akşam, `e8806cf`; canlıda `25ae00a` olarak, SEO hariç)
 **İstek:** kartla ödeme, e-Arşiv ve alan adı dışındaki eksikleri profesyonel bir e-ticaret sistemi seviyesine getirmek.
@@ -236,7 +248,8 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `25ae00a` (19.10.2026 19:27), dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
+- Son yayın: `3008ea6` (20.10.2026 19:12), dal `yayin-pro-seo-haric`: koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git". Canlı kontroller yukarıda "İstek turu 5"
+- Bir önceki yayın: `25ae00a` (19.10.2026 19:27): profesyonel seviye, SEO hariç. dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
 - Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
 - Canlıda olmayanlar: `9ad9119` ve `6a30301` (SEO; "SEO yayınlamıyoruz" kararıyla bekliyor). SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; profesyonel seviye zaten içinde
 - 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
