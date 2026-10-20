@@ -3,6 +3,7 @@ ikas ürün dışa aktarım Excel'ini (.xlsx) site kataloğuna dönüştürür.
 
 Kullanım:
   python scripts/import-ikas-excel.py <excel.xlsx>
+  python scripts/import-ikas-excel.py <excel.xlsx> --keep-fx   (önceki kurla; fiyatlar değişmez)
 
 Üretilen dosyalar:
   lib/catalog/products.json      – hafif katalog (liste, filtre, sepet; istemciye de gider)
@@ -488,6 +489,9 @@ def main():
     print(f'{len(rows)} satır okundu')
 
     try:
+        # --keep-fx: fiyatlar değişmesin diye önceki kur kullanılır (yalnızca desi/görsel gibi veri düzeltmelerinde)
+        if '--keep-fx' in sys.argv:
+            raise RuntimeError('--keep-fx: güncel kur alınmadı')
         fx = fetch_tcmb()
         fx_date = time.strftime('%Y-%m-%d')
     except Exception as ex:  # noqa: BLE001
