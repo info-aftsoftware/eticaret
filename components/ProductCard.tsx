@@ -13,6 +13,7 @@ import { useToast } from '@/components/ui/toast'
 import { useRouter } from 'next/navigation'
 import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { useTranslations } from 'next-intl'
 
 export interface ProductCardProduct {
@@ -83,6 +84,8 @@ export function ProductCard({
   const hasVariants = !selectedVariant && Boolean(isVariantProduct ?? product.isVariantProduct ?? (product.variants?.length ?? 0) > 0)
   const variantCount = product.variants?.length ?? 0
   const outOfStock = typeof stock === 'number' && stock <= 0
+  // Akü / batarya: sepete eklenmez, ürün sayfasındaki iletişim kutusuna gider (lib/shipping/battery.ts)
+  const contactOnly = isContactOnlyProduct(product)
   const lowStock = typeof stock === 'number' && stock > 0 && stock <= 5
 
   const cartId = selectedVariant ? `${product.id}-${selectedVariant.key}` : product.id
@@ -241,7 +244,16 @@ export function ProductCard({
 
       {/* Sepet aksiyonu — her cihazda görünür; masaüstünde kart üzerine gelince vurgulanır */}
       <div className={isCompact ? 'px-2.5 pb-2.5 sm:px-3 sm:pb-3' : 'px-3 pb-3'}>
-        {outOfStock ? (
+        {contactOnly ? (
+          <Link
+            href={href}
+            className={`${btnBase} border border-[#d3d9e1] bg-white text-[#0b2540] hover:border-[#0b2540] hover:bg-[#0b2540] hover:text-white [@media(hover:hover)]:group-hover:border-[#0b2540]`}
+            aria-label={L(`${product.name}: kargo ve nakliye için iletişime geçin`, `${product.name}: contact us for shipping`)}
+          >
+            <span>{L('İletişime geç', 'Contact us')}</span>
+            <ChevronRight className={`${icon} shrink-0`} />
+          </Link>
+        ) : outOfStock ? (
           <button type="button" disabled aria-disabled="true" className={`${btnBase} cursor-not-allowed bg-[#f1f4f8] text-[#5d6e80]`}>
             {L('Stokta yok', 'Out of stock')}
           </button>

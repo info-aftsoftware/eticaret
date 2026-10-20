@@ -9,6 +9,7 @@ import { getStorefrontProductById } from '@/lib/discounts'
 import { prisma } from '@/lib/prisma'
 import { computeOrderTotals, VAT_RATE, type CheckoutPaymentMethod, type OrderTotals } from '@/lib/store-config'
 import { cartLogistics, quoteShipping, type ShippingQuote } from '@/lib/shipping/fee'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 
 export { VAT_RATE }
 const MAX_QTY_PER_LINE = 999
@@ -134,6 +135,10 @@ export async function priceOrder(
     const resolved = await resolveCartId(cartId)
     if (!resolved) throw new PricingError('Sepetteki bir ürün artık satışta değil. Lütfen sepetinizi güncelleyin.')
     const { product, variantKey } = resolved
+    // Akü / batarya: kargo kısıtları kontrol edilene kadar çevrim içi satılmaz (lib/shipping/battery.ts)
+    if (isContactOnlyProduct(product)) {
+      throw new PricingError(`"${product.name}" çevrim içi sipariş edilemiyor. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin.`)
+    }
     // Stok kontrolü (aynı ürünün farklı varyantları ürün stoğunu paylaşır)
     if (typeof product.stock === 'number') {
       const alreadyInCart = lines.filter((l) => l.productId === product.id).reduce((n, l) => n + l.quantity, 0)

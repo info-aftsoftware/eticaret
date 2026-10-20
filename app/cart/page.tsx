@@ -34,6 +34,8 @@ import { trackViewCart, cartItemToGa } from '@/lib/analytics'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { isContactOnlyLine } from '@/lib/shipping/battery'
+import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { useL } from '@/lib/i18n-inline'
 import { useServerError } from '@/lib/server-error-i18n'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
@@ -251,6 +253,8 @@ export default function CartPage() {
   // Sunucuyla aynı hesaplayıcı; ödeme yöntemi ödeme adımında seçildiği için havale indirimi burada uygulanmaz
   const logistics = useMemo(() => cartLogistics(items), [items])
   const shippingDesi = logistics.desi
+  // Akü / batarya satırları (eski sepetten kalmış olabilir): çevrim içi satılmaz, iletişim kutusu gösterilir
+  const batteryItems = useMemo(() => items.filter((i) => isContactOnlyLine(i.id, i.productId)), [items])
   const { subtotal, tax, shipping, total } = computeOrderTotals({ subtotal: getTotalPrice(), couponDiscount, shippingFee: shippingFeeFor(logistics) })
 
   /** Kupon sunucuda doğrulanır (ödeme sırasında aynı hesaplayıcı kullanılır). */
@@ -376,6 +380,10 @@ export default function CartPage() {
     <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={`${getTotalItems()} ${t('itemsCount')}`}>
       <div className="grid min-w-0 max-w-full grid-cols-1 gap-5 pb-safe lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
         <div className="min-w-0 space-y-5">
+          {batteryItems.length > 0 && (
+            <BatteryContactBox productName={batteryItems.map((i) => i.name).join(', ')} />
+          )}
+
           {/* Kargo: sepetin desisine göre fiyat listesinden */}
           <div className="flex items-start gap-3 rounded-xl border border-[#e6ebf1] bg-white p-4 text-sm">
             <Truck className="mt-0.5 h-5 w-5 shrink-0 text-[#0b2540]" aria-hidden />
