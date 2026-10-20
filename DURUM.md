@@ -5,7 +5,7 @@ _Son güncelleme: 20.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 ## Şu an yapılan
 **Canlıda (nextfirststep.com, son yayın `7381cb9`, 20.10.2026 20:52, SEO hariç):** profesyonel seviye (yönetici rolleri, 2FA, işlem kaydı, izleme, yedek, CSV aktarımları, toplu kargo), açık tema ve varsayılan Türkçe, Geliver + Navlungo kargo fiyatı kıyası.
 
-**Kodda hazır, canlıda değil (kararınız: "şimdilik bekle"):** Navlungo gönderi entegrasyonu (`1dfd6ce`, kimlik bilgisi bekleniyor) ve Geliver kargo takibi (`9929e0d`). İkisi birlikte yayınlanmalı, çünkü Geliver kodu Navlungo'nun değiştirdiği dosyaların üstüne yazıldı. SEO (`9ad9119`, `6a30301`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+**Kodda hazır, canlıda değil (kararınız: "şimdilik bekle"):** Navlungo gönderi entegrasyonu (`1dfd6ce`, kimlik bilgisi bekleniyor) ve Geliver kargo takibi (`9929e0d`). İkisi birlikte yayınlanmalı, çünkü Geliver kodu Navlungo'nun değiştirdiği dosyaların üstüne yazıldı. Akü kısıtı, tamamlanan desiler ve görseller `aku-iletisim` dalında (ana dala birleştirilmedi, aşağıda). SEO (`9ad9119`, `6a30301`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
 
 ## Kalanlar (20.10.2026 kontrolü)
 _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
@@ -14,6 +14,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 | # | Kalan | Not |
 |---|---|---|
 | K1 | Navlungo + Geliver kodunun yayını | `1dfd6ce` + `9929e0d` canlıda değil. Yayında `GELIVER_API_TOKEN` Hostinger'a eklenmeli. Navlungo, bilgileri girilene kadar kapalı kalır |
+| K1b | `aku-iletisim` dalı | Akü kısıtı, desiler ve görseller (`409abe9`, `963a38d`, `5cc31e0`, `672724a`). Ana dala birleştirilmedi (Codex değişiklikleri ürün sayfasıyla çakışıyor), canlıda değil |
 | K2 | SEO yayını | Tür ve marka sayfaları, eski voltekno.com yönlendirmeleri (`9ad9119`, `6a30301`) bekliyor |
 | K3 | `main` dalı ve GitHub adresi | `urun-katalogu-ikas`, `origin/main`'den 81 commit ileride; yerel `main` 19 commit ileride ama gönderilmemiş. `origin` hâlâ eski adres (`aysenur-23/eticaret`, yeni adrese yönlendiriyor). İkisi de izin sisteminde reddedildi, sizin yapmanız gerekiyor (aşağıda "Yayın") |
 
@@ -40,10 +41,10 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 | Diğer | Banka sanal POS, e-Arşiv entegratörü, SMS, pazaryeri (Trendyol/Hepsiburada), ERP/muhasebe, Sentry, Meta Pixel kararı, kapıda ödeme kararı |
 
 **5. Katalog ve veri (tedarikçi)**
-- Barkod/GTIN boş (Merchant Center görünürlüğünü sınırlar), Excel'de eksik 16 görsel, 12 yanlış/temsilî görsel, Apex APX2440 gerçek fotoğrafı.
-- Teyitler (E11): Deye model kuşağı, Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, Havensis "Solar-80AMPS 45A", İstabreeze kanat seti ağırlığı, tahmini desi değerleri (Altech, Apex 280Ah, SPI), ilk sevkiyatlarda koli ölçüleri.
+- Barkod/GTIN boş (Merchant Center görünürlüğünü sınırlar). Excel'deki silinmiş görseller 20.10'da tamamlandı (`aku-iletisim`); hâlâ eksik: Apex APX2440 gerçek fotoğrafı, Frecon 450 kW dolap fotoğrafı.
+- Teyitler (E11): Deye model kuşağı, Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, Havensis "Solar-80AMPS 45A", İstabreeze kanat seti ağırlığı. Desiler 20.10'da tamamlandı (eksik kalmadı), 46 üründe hâlâ tahmin; ilk sevkiyatlarda koli ölçüsü ve brüt ağırlık alınmalı.
 - **Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8** katalogda 120 V sürüm; Türkiye şebekesine uygun değil, düzeltilmeli ya da satıştan kaldırılmalı.
-- Büyük ve tehlikeli gönderiler: 490 kg ısı pompası, büyük sürücüler, türbinler (ambar/palet); lityum aküler UN3480, kargo firmasıyla kısıtlar konuşulmalı.
+- Büyük ve tehlikeli gönderiler: 490 kg ısı pompası, büyük sürücüler, türbinler (ambar/palet). **Akü/batarya gönderim kısıtları** (lityum UN3480, jel akü) Navlungo/Geliver ve kargo firmalarıyla konuşulmalı; o zamana kadar aküler sitede iletişimle satılıyor (`aku-iletisim`).
 
 **6. voltekno.com geçişi:** aşağıda "voltekno.com geçişi" (SEO kararı, DNS, ortam değişkenleri, Firebase, e-posta, Search Console).
 
@@ -62,6 +63,38 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 - `npm audit`: 7 yüksek açığın hepsi `braces`, yalnızca derleme araçlarında; çözüm Tailwind 4 geçişi. SQLite → PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek var.
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
+
+## Akü kısıtı, desi ve görseller (20.10.2026, dal `aku-iletisim`, canlıda değil)
+**İstek:** akü ve batarya gönderiminde kısıtlama olup olmadığı kontrol edilecek; o zamana kadar sitede "kargo ve nakliye için iletişime geçiniz" olsun. Eksik görseller ve eksik desiler tamamlansın.
+
+**Akü / batarya (`409abe9`):** Lityum Akü, Jel Akü ve Taşınabilir Güç İstasyonu kategorilerindeki 25 ürün şimdilik çevrim içi satılmıyor. "Batarya Yönetimi ve Aksesuar" (BMS) ile şarj cihazları normal satılıyor.
+| Yer | Ne oluyor |
+|---|---|
+| Ürün sayfası | Fiyat görünür; kargo satırında "Kargo ve nakliye için iletişime geçin". Sepet düğmeleri yerine iletişim kutusu: ürün adıyla hazır WhatsApp mesajı, telefon, e-posta, iletişim formu |
+| Ürün kartı, karşılaştırma, sepet önerileri | "Sepete ekle" yerine "İletişime geç" (ürün sayfasına gider) |
+| Sepet | Eski sepette akü kalmışsa satır "çevrim içi sipariş edilemiyor" uyarısı alır, ödemeye geçiş kapanır, iletişim kutusu çıkar |
+| Sunucu | Sipariş ve kupon fiyatlaması akü satırını reddeder (sipariş 400). İngilizce çevirisi var |
+| Google Merchant akışı | Aküler akıştan çıkarıldı (satın alınamayan ürün listelenmemeli) |
+| Ürün şeması | Akülerde kargo bilgisi (shippingDetails) yok |
+Kısıt kalkınca `lib/shipping/battery.ts` içinde `BATTERY_CONTACT_ONLY = false` yapmak yeterli. Fiyat kıyasındaki "akülerde yalnızca Navlungo" kuralı yerinde duruyor.
+
+**Desiler (`5cc31e0`):** 155 SKU araştırıldı (33'ünün ağırlığı yoktu, 122'si tahmindi). Sonuçlar kaynak adresi ve türüyle `scripts/data/logistics-research/missing-2026-10-20-*.result.json` dosyalarında.
+- Ağırlığı ya da ölçüsü eksik SKU kalmadı (önceden 33).
+- Ürün bazında desi kaynağı: tahmin 62 → 46, ürün ölçüsü 76 → 87, seri 26 → 31.
+- 69 sepet satırının desisi değişti. Örnekler: SPI sürücülere ağırlık geldi (ör. 200 kW 89 → 145 desi), Heli 2.0/4.0 resmî koli koli ölçüsüyle (160 → 106, 240 → 150), Altech Boreas resmî ağırlıklarla (6 kW 140 → 108), NP Power 51,2V 100Ah ağırlıkla (14 → 52).
+- **Hâlâ tahmin olanlar:** Victron aksesuarları (resmî ölçü yayımlanmamış, hepsi 1 desinin altında), Electrozirve ürünleri, Apex şarj cihazları ve inverterleri, TommaTech diyot modülleri ve split ısı pompaları, SPI sürücülerin ağırlıkları (ölçüleri resmî kılavuzdan, ağırlık yayımlanmamış), Altech Nova ölçüleri, 7 m kafes direk. Kesin değer için tedarikçiden koli ölçüsü ve brüt ağırlık alınmalı.
+- İçe aktarıcı: yeni `--keep-fx` seçeneği önceki TCMB kurunu kullanır; bu turda fiyatlar değişmedi. Tarihli araştırma turları en son okunur.
+
+**Görseller (`672724a`):** Excel'de Drive'dan silinmiş 15 görselin hepsi tamamlandı; içe aktarıcı artık eksik görsel bildirmiyor. Ürün sayfası seçilen varyantın görselini gösteriyor.
+- Birebir model: TommaTech 80V duvar tipi şarj ünitesi (100A, 200A), Power serisi R290 14,8 kW ve R32 13 kW ısı pompaları (3 görünüm).
+- Seri görseli: entegre (su geçirmez) şarj ünitesi 48V 50A/60A, 72V 25A; 80V 80A ve 300A; SPI 900VDC sürücüler gövdesine göre (18,5/45/132 kW duvar tipi metal kasa, 160/200 kW dolap); 40 Wp 36TN10 panel (aynı serinin 45 Wp fotoğrafı).
+- **Hâlâ doğru fotoğrafı olmayan:** Apex APX2440 (distribütör de APX2420 fotoğrafını kullanıyor; Electrozirve'den gerçek fotoğraf istenmeli), Frecon PV500 450 kW dolabı (hiçbir yerde fotoğrafı yok).
+
+**Araştırmada çıkan katalog uyarıları (teyit edilmeli):** Havensis HAVENS-00620 adında hem "80AMPS" hem "45A" geçiyor; Electrozirve sitesinde 40A DC-DC yalnızca çift yönlü, EC12-12 40A/60A modelleri yok; İstabreeze kanat SKU'larında ağırlık tek kanat için (3'lü set satılıyorsa düzeltilmeli); Havensis 1300W UPS trafolu ise 10 kg'ı geçebilir.
+
+**Doğrulama (dalın kendi derlemesi, temiz çalışma kopyası):** tip kontrolü temiz, birim testleri 113/113 (yeni: akü kategorileri, desi.json akü işareti, İngilizce hata), derleme 471 sayfa, Playwright 98 geçti / 0 kaldı. Yerel kopyada: akü ürün sayfasında iletişim kutusu, kategori sayfasında 25 "İletişime geç" kartı, sepet doğrulaması aküyü satılamaz işaretliyor, akülü sipariş 400, akü ürün akışında yok, şemasında kargo bilgisi yok. SPI ürününde 160 kW seçilince dolap tipi görsel geliyor.
+
+**Birleştirme:** Bu iş `aku-iletisim` dalında, `urun-katalogu-ikas`'a birleştirilmedi. Ortak klasördeki commit'lenmemiş Codex değişiklikleri aynı dosyaya (ürün sayfası) dokunduğu için birleştirme şu an yapılamıyor. Codex değişiklikleri commit'lenince ya da geri alınınca birleştirilebilir.
 
 ## Navlungo gönderi entegrasyonu (20.10.2026, yayında değil)
 **İstek:** Gönderiler Navlungo'dan çıkıyor; "Kargoya ver" adımında gönderi Navlungo'da oluşsun, takip numarası, takip bağlantısı ve durum taşıyıcı sitelerinden değil Navlungo'dan gelsin.
