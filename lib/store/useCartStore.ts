@@ -6,6 +6,7 @@
  * Girişte misafir sepeti üye sepetiyle birleşir, çıkışta sepet boşalır (components/CartSync.tsx).
  */
 import { create } from 'zustand'
+import { isContactOnlyLine, isContactOnlyProduct } from '@/lib/shipping/battery'
 import { persist, PersistStorage } from 'zustand/middleware'
 import { cartItemToGa, trackAddToCart, trackRemoveFromCart } from '@/lib/analytics'
 
@@ -121,6 +122,8 @@ export const useCartStore = create<CartState>()(
       _hasHydrated: false,
 
       addItem: (item) => {
+        // Akü / batarya çevrim içi satılmaz (lib/shipping/battery.ts); arayüz zaten iletişim yolunu gösterir
+        if (isContactOnlyLine(item.id, item.productId) || isContactOnlyProduct(item)) return 0
         const items = get().items
         const existing = items.find((i) => i.id === item.id)
         const requested = Math.max(1, Math.floor(item.quantity ?? 1))

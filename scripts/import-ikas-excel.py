@@ -3,6 +3,7 @@ ikas ürün dışa aktarım Excel'ini (.xlsx) site kataloğuna dönüştürür.
 
 Kullanım:
   python scripts/import-ikas-excel.py <excel.xlsx>
+  python scripts/import-ikas-excel.py <excel.xlsx> --keep-fx   (önceki kurla; fiyatlar değişmez)
 
 Üretilen dosyalar:
   lib/catalog/products.json      – hafif katalog (liste, filtre, sepet; istemciye de gider)
@@ -424,9 +425,10 @@ def load_logistics_overrides():
     data = {}
     research_dir = os.path.join(ROOT, 'scripts', 'data', 'logistics-research')
     if os.path.isdir(research_dir):
-        # Sonraki tamamlama turları (missing-*) en son okunur; alan bazında birleşir, boş değer doluyu ezmez
+        # Sonraki tamamlama turları (missing-*) en son okunur, tarihli turlar (missing-YYYY-MM-DD-*) hepsinden sonra ve
+        # tarih sırasıyla; alan bazında birleşir, boş değer doluyu ezmez (en yeni araştırma kazanır)
         names = sorted(n for n in os.listdir(research_dir) if n.endswith('.result.json'))
-        names.sort(key=lambda n: n.startswith('missing-'))
+        names.sort(key=lambda n: (n.startswith('missing-'), bool(re.match(r'missing-\d{4}-\d{2}-\d{2}-', n)), n))
         for name in names:
             with open(os.path.join(research_dir, name), encoding='utf-8') as f:
                 for sku, value in json.load(f).items():
@@ -488,6 +490,9 @@ def main():
     print(f'{len(rows)} satır okundu')
 
     try:
+        # --keep-fx: fiyatlar değişmesin diye önceki kur kullanılır (yalnızca desi/görsel gibi veri düzeltmelerinde)
+        if '--keep-fx' in sys.argv:
+            raise RuntimeError('--keep-fx: güncel kur alınmadı')
         fx = fetch_tcmb()
         fx_date = time.strftime('%Y-%m-%d')
     except Exception as ex:  # noqa: BLE001

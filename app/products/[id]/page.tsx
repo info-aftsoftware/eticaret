@@ -8,6 +8,7 @@ import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discounts'
 import { VAT_RATE } from '@/lib/store-config'
 import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { SELLER } from '@/lib/legal/company'
 import { getGroupIdForCategory } from '@/lib/categories'
 import { CATEGORY_META } from '@/app/category/[id]/category-meta'
@@ -189,7 +190,8 @@ function buildProductJsonLd(product: StorefrontProduct, rating: { average: numbe
         returnMethod: 'https://schema.org/ReturnByMail',
         returnFees: 'https://schema.org/FreeReturn',
       },
-      shippingDetails: {
+      // Akü / batarya: kargo ücreti verilmiyor (iletişimle satılıyor), kargo bilgisi şemaya girmez
+      ...(isContactOnlyProduct(product) ? {} : { shippingDetails: {
         '@type': 'OfferShippingDetails',
         shippingRate: {
           '@type': 'MonetaryAmount',
@@ -207,7 +209,7 @@ function buildProductJsonLd(product: StorefrontProduct, rating: { average: numbe
           handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
           transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' },
         },
-      },
+      } }),
     },
   }
 }

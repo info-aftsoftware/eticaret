@@ -13,6 +13,7 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import { fmtPrice } from '@/lib/format'
 import { VAT_RATE } from '@/lib/store-config'
 import { useL } from '@/lib/i18n-inline'
+import { isContactOnlyProduct } from '@/lib/shipping/battery'
 
 type P = {
   id: string
@@ -140,7 +141,9 @@ export default function ComparePage() {
                   <th scope="row" className="p-3" />
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
-                      {p.isVariantProduct ? (
+                      {isContactOnlyProduct(p) ? (
+                        <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>{L('İletişime geç', 'Contact us')}</Link></Button>
+                      ) : p.isVariantProduct ? (
                         <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>{L('Seçenekleri Gör', 'View Options')}</Link></Button>
                       ) : (
                         <Button

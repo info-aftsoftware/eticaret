@@ -1,0 +1,695 @@
+{
+ "TOMMAT-BTRYTTLVBMSS51A-00166": {
+  "dimsCm": [
+   72.0,
+   25.5,
+   24.0
+  ],
+  "weightKg": 18.5,
+  "basis": "product",
+  "source": "https://tommatech.de/images/down_file/739-tommatech-51kwh-hightech-power-s-series-lv-all-in-one-battery-system-user-manual-739-en.pdf",
+  "note": "Resmî kullanım kılavuzu Bölüm 12 Teknik Özellikler: Hightech Power S LV BMS AIO 720x255x240 mm (W/D/H, terminalsiz), ağırlık 18.5 kg (net, kutusuz). Yükseklik 22.8 -> 24.0 cm düzeltildi."
+ },
+ "TOMMAT-SRJTTACMBL72V40A-00218": {
+  "dimsCm": [
+   35.2,
+   27.9,
+   18.4
+  ],
+  "weightKg": 14.5,
+  "basis": "series",
+  "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-mobil-72v-80a-1552-tr.pdf",
+  "note": "72V 40A için ayrı datasheet bulunamadı. Aynı mobil kasa (352.4x279.4x183.8 mm, mevcut ölçüyle birebir) kullanan 72V 80A mobil model: 14.5 kg (net). 24V 100A mobil 12.4 kg; ihtiyatlı olarak 14.5 alındı."
+ },
+ "TOMMAT-SPITT0222MF-00286": {
+  "dimsCm": [
+   18.0,
+   12.0,
+   15.4
+  ],
+  "weightKg": 2.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 180x120x154 mm plastik kasa (1.5-2.2 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT0540TF-00288": {
+  "dimsCm": [
+   25.0,
+   16.1,
+   18.4
+  ],
+  "weightKg": 4.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 250x161x184 mm plastik kasa (4.0-5.5 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT0655TF-00289": {
+  "dimsCm": [
+   25.0,
+   16.1,
+   18.4
+  ],
+  "weightKg": 4.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 250x161x184 mm plastik kasa (4.0-5.5 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT11220TF-00291": {
+  "dimsCm": [
+   46.7,
+   29.0,
+   23.0
+  ],
+  "weightKg": 18,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 467x290x230 mm metal kasa (18.5-37 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT12300TF-00292": {
+  "dimsCm": [
+   46.7,
+   29.0,
+   23.0
+  ],
+  "weightKg": 18,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 467x290x230 mm metal kasa (18.5-37 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT13370TF-00293": {
+  "dimsCm": [
+   46.7,
+   29.0,
+   23.0
+  ],
+  "weightKg": 18,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 467x290x230 mm metal kasa (18.5-37 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT15550TF-00295": {
+  "dimsCm": [
+   58.0,
+   37.5,
+   27.0
+  ],
+  "weightKg": 33,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 580x375x270 mm (45-55 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT16750TF-00296": {
+  "dimsCm": [
+   75.5,
+   46.0,
+   33.0
+  ],
+  "weightKg": 58,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 755x460x330 mm (75-110 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT17900TF-00297": {
+  "dimsCm": [
+   75.5,
+   46.0,
+   33.0
+  ],
+  "weightKg": 58,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 755x460x330 mm (75-110 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT181100TF-00298": {
+  "dimsCm": [
+   75.5,
+   46.0,
+   33.0
+  ],
+  "weightKg": 58,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 755x460x330 mm (75-110 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT222500TF-00304": {
+  "dimsCm": [
+   140.0,
+   75.0,
+   40.5
+  ],
+  "weightKg": 190,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 1400x750x405 mm, dikey taban (250-315 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT0422TF-00287": {
+  "dimsCm": [
+   18.0,
+   12.0,
+   15.4
+  ],
+  "weightKg": 2.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 180x120x154 mm plastik kasa (1.5-2.2 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT10185TF-00290": {
+  "dimsCm": [
+   46.7,
+   29.0,
+   23.0
+  ],
+  "weightKg": 18,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 467x290x230 mm metal kasa (18.5-37 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT14450TF-00294": {
+  "dimsCm": [
+   58.0,
+   37.5,
+   27.0
+  ],
+  "weightKg": 33,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 580x375x270 mm (45-55 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT191320TF-00299": {
+  "dimsCm": [
+   81.0,
+   49.0,
+   37.5
+  ],
+  "weightKg": 75,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 810x490x375 mm (132 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT201600TF-00300": {
+  "dimsCm": [
+   120.0,
+   55.0,
+   38.5
+  ],
+  "weightKg": 130,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 1200x550x385 mm, dikey taban (160-185 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT211850TF-00301": {
+  "dimsCm": [
+   120.0,
+   55.0,
+   38.5
+  ],
+  "weightKg": 130,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 1200x550x385 mm, dikey taban (160-185 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT200TF-00302": {
+  "dimsCm": [
+   125.0,
+   55.0,
+   38.5
+  ],
+  "weightKg": 145,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 1250x550x385 mm, dikey taban (200-220 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-SPITT220TF-00303": {
+  "dimsCm": [
+   125.0,
+   55.0,
+   38.5
+  ],
+  "weightKg": 145,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 1250x550x385 mm, dikey taban (200-220 kW) (https://cw-enerji.com/images/down_file/tommatech-900v-spi-series-515-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-INVSLMTFV275KW-00311": {
+  "dimsCm": [
+   32.0,
+   22.1,
+   19.0
+  ],
+  "weightKg": 7.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 320x221x190 mm plastik kasa (1000VDC 5.5-15 kW) (https://tommatech.de/images/down_file/337-spi-series-1000v-datasheet-337-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-INVSLMTFV211KW-00312": {
+  "dimsCm": [
+   32.0,
+   22.1,
+   19.0
+  ],
+  "weightKg": 7.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 320x221x190 mm plastik kasa (1000VDC 5.5-15 kW) (https://tommatech.de/images/down_file/337-spi-series-1000v-datasheet-337-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-INVSLMTFV215KW-00313": {
+  "dimsCm": [
+   32.0,
+   22.1,
+   19.0
+  ],
+  "weightKg": 7.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî ürün (kutusuz) ölçüsü: 320x221x190 mm plastik kasa (1000VDC 5.5-15 kW) (https://tommatech.de/images/down_file/337-spi-series-1000v-datasheet-337-en.pdf). TommaTech datasheet/kılavuzunda ağırlık yok; brüt ağırlık kasa boyutuna göre tahmin (karton/ambalaj dahil)."
+ },
+ "TOMMAT-KBLMC4XT6012AWG1M-00109": {
+  "dimsCm": [
+   20,
+   15,
+   5
+  ],
+  "weightKg": 0.25,
+  "basis": "estimate",
+  "source": "",
+  "note": "V Serisi MC4-XT60 12AWG 1 m panel kablosu: tommatech.de/cw-enerji.com site haritası, ürün sayfaları ve EV/aksesuar kataloglarında ölçü-ağırlık bulunamadı. Mevcut tahmin korundu."
+ },
+ "TOMMAT-KBLMC4DC552518AWG1-00110": {
+  "dimsCm": [
+   20,
+   15,
+   5
+  ],
+  "weightKg": 0.15,
+  "basis": "estimate",
+  "source": "",
+  "note": "R Serisi daire soket 18AWG 1 m panel kablosu: tommatech.de/cw-enerji.com site haritası, ürün sayfaları ve EV/aksesuar kataloglarında ölçü-ağırlık bulunamadı. Mevcut tahmin korundu."
+ },
+ "TOMMAT-BTRYTTHVBMS40S-00164": {
+  "dimsCm": [
+   54,
+   38.5,
+   21
+  ],
+  "weightKg": 19,
+  "basis": "series",
+  "source": "https://cw-enerji.com/images/down_file/tommatech-4kwh-hightech-power-s-serisi-hv-batarya-sistemi-tr.pdf",
+  "note": "Resmî datasheet'te tek BMS değeri yok; sistem tablosundan türetildi: AIO-S8..S24 ağırlıkları 97/136/175/214/253 kg (modül başı 39 kg), yükseklik 650/870/1090/1310/1530 mm (modül başı 220 mm). BMS + taban = 97-2x39 = 19 kg, 540x385x210 mm (net, kutusuz). Kılavuz kapsam listesine göre BMS paketi tabanla birlikte gelir."
+ },
+ "TOMMAT-AKSKBLSETTTRM15CM-00200": {
+  "dimsCm": [
+   20,
+   15,
+   5
+  ],
+  "weightKg": 0.3,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmî aksesuar föyünde (AKS-KBL-SET-TT-R-M-15CM: 15 cm, 5 AWG, IP67-120A konnektör; https://cw-enerji.com/images/down_file/lityum-batarya-aksesuarlari-954-tr.pdf) ölçü/ağırlık yok. Tahmin korundu."
+ },
+ "TOMMAT-AKSKBLSETTTRM15M-00201": {
+  "dimsCm": [
+   35,
+   25,
+   8
+  ],
+  "weightKg": 1.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmî föyde (AKS-KBL-SET-TT-R-M-1.5M: 2x1.5 m, 4 AWG, konnektör + M8 pabuç; https://cw-enerji.com/images/down_file/lityum-batarya-aksesuarlari-954-tr.pdf) ağırlık yok. Kablo kesitinden ~1 kg hesaplanır; 1.5 kg ihtiyatlı tahmin korundu."
+ },
+ "TOMMAT-AKSKBLSETTPE5015M-00202": {
+  "dimsCm": [
+   30,
+   25,
+   6
+  ],
+  "weightKg": 0.9,
+  "basis": "estimate",
+  "source": "",
+  "note": "TPE 50 mm² 1.5 m kablo için resmî veri bulunamadı (tommatech.de, cw-enerji.com, aksesuar föyü tarandı). 50 mm² bakır ~0.6 kg/m ile tahmin uyumlu."
+ },
+ "TOMMAT-KSAMTLTBN256V512V-00203": {
+  "dimsCm": [
+   67.8,
+   39.6,
+   5.0
+  ],
+  "weightKg": 6,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî: AKS-ALT-TBN-MTL-TT-MDL metal alt taban 396x678x50 mm, DKP sac (https://cw-enerji.com/images/down_file/lityum-batarya-aksesuarlari-954-tr.pdf). Ağırlık verilmemiş; 6 kg tahmini korundu. Koli için birkaç cm pay eklenmeli."
+ },
+ "TOMMAT-SRJTTADJ30100V200A-00228": {
+  "dimsCm": [
+   70,
+   56.2,
+   12.9
+  ],
+  "weightKg": 32,
+  "basis": "series",
+  "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-80v-200a-1550-tr.pdf",
+  "note": "Ayarlanabilir 30-100V 200A için resmî kaynak: SRJ-TT-AC-DVR-80V-200A (çıkış 30-100 VDC, 200 A, 20 kW) 700x562x129 mm, 32 kg (net). Mobil varyant için ayrı veri yok; kasası farklıysa ölçü değişebilir."
+ },
+ "TOMMAT-SRJTTADJ40100V200A-00229": {
+  "dimsCm": [
+   70,
+   56.2,
+   12.9
+  ],
+  "weightKg": 32,
+  "basis": "series",
+  "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-80v-200a-1550-tr.pdf",
+  "note": "40-100V 200A için ayrı datasheet yok; aynı akım sınıfındaki SRJ-TT-AC-DVR-80V-200A (30-100 VDC, 200 A) 700x562x129 mm, 32 kg (net) kullanıldı."
+ },
+ "TOMMAT-SRJTTADJ40100V300A-00230": {
+  "dimsCm": [
+   72,
+   58,
+   20
+  ],
+  "weightKg": 45,
+  "basis": "estimate",
+  "source": "",
+  "note": "300A model için resmî veri bulunamadı. 200A duvar tipi (700x562x129 mm, 32 kg; https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-80v-200a-1550-tr.pdf) baz alınıp güce göre ölçeklendi; eski 70x50x55 cm / 60 kg tahmini küçültüldü."
+ },
+ "TOMMAT-EVCTTCVSTANT22KW-00247": {
+  "dimsCm": [
+   150,
+   40,
+   30
+  ],
+  "weightKg": 22,
+  "basis": "estimate",
+  "source": "",
+  "note": "22 kW şarj istasyonu LED ışıklı stand (boş pano): tommatech.de/cw-enerji.com site haritası, ürün sayfaları ve EV/aksesuar kataloglarında ölçü-ağırlık bulunamadı. Mevcut tahmin korundu."
+ },
+ "TOMMAT-EVCTTTFCBLTYPE2-00248": {
+  "dimsCm": [
+   40,
+   40,
+   12
+  ],
+  "weightKg": 3,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmî EV kataloğunda (EVC-TT-TF-CBL-TYPE2, 400V 32A 22kW, IP55; https://cw-enerji.com/tr/qr/1190) ölçü/ağırlık yok. 5 m 3 faz Type 2 kablo için tahmin korundu."
+ },
+ "TOMMAT-00249": {
+  "dimsCm": [
+   25,
+   18,
+   2
+  ],
+  "weightKg": 0.1,
+  "basis": "estimate",
+  "source": "",
+  "note": "Şarj Takip yazılımı (fiziksel ürün değil; lisans/kart zarfı): tommatech.de/cw-enerji.com site haritası, ürün sayfaları ve EV/aksesuar kataloglarında ölçü-ağırlık bulunamadı. Mevcut tahmin korundu."
+ },
+ "TOMMAT-00250": {
+  "dimsCm": [
+   15,
+   10,
+   1
+  ],
+  "weightKg": 0.05,
+  "basis": "estimate",
+  "source": "",
+  "note": "RFID şarj kartı: tommatech.de/cw-enerji.com site haritası, ürün sayfaları ve EV/aksesuar kataloglarında ölçü-ağırlık bulunamadı. Mevcut tahmin korundu."
+ },
+ "TOMMAT-SPITT243150TF-00305": {
+  "dimsCm": [
+   140,
+   75,
+   40.5
+  ],
+  "weightKg": 210,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî: kullanım kılavuzu Ek D tablosunda 250/280/315 kW ortak kasa 1400x750x405 mm, dikey taban (https://tommatech.de/images/down_file/255-spi-series-user-manual-255-en.pdf). Ağırlık resmî kaynakta yok; 250 kW ile aynı kasa, tahmin."
+ },
+ "TOMMAT-SPITT243550TF-00306": {
+  "dimsCm": [
+   170,
+   80,
+   39
+  ],
+  "weightKg": 260,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü: kılavuz Ek D'de 350/400 kW ortak kasa 1700x800x390 mm (https://tommatech.de/images/down_file/255-spi-series-user-manual-255-en.pdf); 355 kW tabloda yok, 350 kW kasası varsayıldı. Ağırlık tahmin."
+ },
+ "TOMMAT-SPITT245000TF-00309": {
+  "dimsCm": [
+   198.5,
+   120,
+   50
+  ],
+  "weightKg": 400,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî: kılavuz Ek D'de 500 kW kasa 1985x1200x500 mm, dikey taban (https://tommatech.de/images/down_file/255-spi-series-user-manual-255-en.pdf). Ağırlık resmî kaynakta yok, tahmin."
+ },
+ "TOMMAT-SPITT246300TF-00310": {
+  "dimsCm": [
+   200,
+   120,
+   60
+  ],
+  "weightKg": 500,
+  "basis": "estimate",
+  "source": "",
+  "note": "630 kW hiçbir resmî tabloda yok (kılavuzdaki en büyük model 500 kW: 1985x1200x500 mm, https://tommatech.de/images/down_file/255-spi-series-user-manual-255-en.pdf). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SPITT244000TF-00307": {
+  "dimsCm": [
+   170,
+   80,
+   39
+  ],
+  "weightKg": 280,
+  "basis": "estimate",
+  "source": "",
+  "note": "Ölçü resmî: kılavuz Ek D'de 350/400 kW kasa 1700x800x390 mm (https://tommatech.de/images/down_file/255-spi-series-user-manual-255-en.pdf). Ağırlık resmî kaynakta yok, tahmin."
+ },
+ "TOMMAT-SPITT244500TF-00308": {
+  "dimsCm": [
+   198.5,
+   120,
+   50
+  ],
+  "weightKg": 380,
+  "basis": "estimate",
+  "source": "",
+  "note": "450 kW kılavuz tablosunda yok; bir üst kasa (500 kW: 1985x1200x500 mm) varsayıldı (https://tommatech.de/images/down_file/255-spi-series-user-manual-255-en.pdf). Ağırlık tahmin."
+ },
+ "TOMMAT-UECINVSLM4G-00314": {
+  "dimsCm": [
+   20,
+   15,
+   6
+  ],
+  "weightKg": 0.4,
+  "basis": "estimate",
+  "source": "",
+  "note": "Solar pompa sürücüsü 4G uzaktan erişim cihazı için resmî veri yok. Referans: inverter 4G dongle 112x45.7x28.5 mm, 135 g (https://cw-enerji.com/images/down_file/dongle-datasheet-1479-tr.pdf), ancak aynı ürün olduğu doğrulanamadı; adaptör/anten payıyla tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK25A-00315": {
+  "dimsCm": [
+   15,
+   10,
+   6
+  ],
+  "weightKg": 0.15,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK55A-00316": {
+  "dimsCm": [
+   15,
+   10,
+   6
+  ],
+  "weightKg": 0.2,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK90A-00318": {
+  "dimsCm": [
+   15,
+   10,
+   6
+  ],
+  "weightKg": 0.25,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK70A-00317": {
+  "dimsCm": [
+   15,
+   10,
+   6
+  ],
+  "weightKg": 0.22,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK90A-00319": {
+  "dimsCm": [
+   20,
+   15,
+   8
+  ],
+  "weightKg": 0.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK110A-00321": {
+  "dimsCm": [
+   20,
+   15,
+   8
+  ],
+  "weightKg": 0.6,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK110A-00320": {
+  "dimsCm": [
+   20,
+   15,
+   8
+  ],
+  "weightKg": 0.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK110A-00322": {
+  "dimsCm": [
+   25,
+   20,
+   8
+  ],
+  "weightKg": 0.8,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK110A-00323": {
+  "dimsCm": [
+   25,
+   20,
+   8
+  ],
+  "weightKg": 1,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDK110A-00324": {
+  "dimsCm": [
+   25,
+   20,
+   8
+  ],
+  "weightKg": 1.2,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-SLMDIYODMDC15016-00325": {
+  "dimsCm": [
+   25,
+   20,
+   10
+  ],
+  "weightKg": 1.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "MDK/MDC diyot modülü TommaTech/CW Enerji sitelerinde, SPI datasheet/kılavuzlarında ve sulama kataloğunda yok (jenerik PV ters akım diyot modülü). Mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTTPOOL515R410TF-00348": {
+  "dimsCm": [
+   125,
+   80,
+   135
+  ],
+  "weightKg": 220,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTT12R32MFDIS-00349": {
+  "dimsCm": [
+   110,
+   45,
+   90
+  ],
+  "weightKg": 80,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTT18R32MFDIS-00350": {
+  "dimsCm": [
+   110,
+   47,
+   145
+  ],
+  "weightKg": 115,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTT12R32TFDIS-00351": {
+  "dimsCm": [
+   110,
+   45,
+   90
+  ],
+  "weightKg": 82,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTT22R32TFDIS-00352": {
+  "dimsCm": [
+   110,
+   47,
+   145
+  ],
+  "weightKg": 125,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTT812R32MFIC-00353": {
+  "dimsCm": [
+   60,
+   40,
+   95
+  ],
+  "weightKg": 45,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ },
+ "TOMMAT-HPTT1822R32MFIC-00354": {
+  "dimsCm": [
+   60,
+   42,
+   100
+  ],
+  "weightKg": 55,
+  "basis": "estimate",
+  "source": "",
+  "note": "Split R32 ve R410 51,5 kW havuz modelleri güncel TommaTech ısı pompası kataloğunda ve sitelerde yok (yalnız monoblok Titan/Power/Triome/Aquavera; https://cw-enerji.com/images/down_file/isi-pompasi-katalogu-1184-tr.pdf). Eski ürün; mevcut tahmin korundu."
+ }
+}

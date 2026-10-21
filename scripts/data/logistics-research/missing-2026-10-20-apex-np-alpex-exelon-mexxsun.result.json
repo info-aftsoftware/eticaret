@@ -1,0 +1,255 @@
+{
+ "NPPOWE-00449": {
+  "dimsCm": [
+   49.0,
+   50.0,
+   17.0
+  ],
+  "weightKg": 52.0,
+  "basis": "estimate",
+  "source": "https://www.enfsolar.com/pv/storage-system-datasheet/16764",
+  "note": "Ölçü Electrozirve NPP-ITJ-RCK sayfasından (Wayback 2026-07-11: 'Ürün Ölçüleri En:49 Boy:50 Yükseklik:17', ürün ölçüsü, ağırlık yok; bağlı kılavuz Apex-51.2V-100Ah.TR PDF'inde de ölçü/ağırlık yok). Ağırlık vekil değer: neredeyse aynı kasadaki PaqPOWER 51.2V 100Ah rack, 502x485x173.5 mm, 50 kg net (ENF). Koli payı +2 kg. Koli ~56x57x24 cm olur, desi yine ağırlıktan (52) gelir"
+ },
+ "EXELON-00533": {
+  "dimsCm": [
+   60.1,
+   36.0,
+   16.3
+  ],
+  "weightKg": 19.0,
+  "basis": "estimate",
+  "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/EXELON-3-KW-11-KW-SMART-INV.pdf",
+  "note": "Exelon 3-11 kW veri sayfası, 11KW sütunu (çift MPPT, paralel): yalnızca cihaz ölçüsü 601x360x163 mm, ağırlık yok. PMAX-11P artık exelon.com.tr'de listelenmiyor. Ağırlık tahmini: kardeş ürün EMAX PRO-10.2KW (cihaz 530x390x170, 16.2 kg net / 16.8 kg brüt, koli 618x463x242), daha büyük 11 kW kasa için ~19 kg brüt. Ölçüler cihaz ölçüsü. Kardeş ürünün koli payları uygulanırsa koli ~69x43x23.5 cm çıkar (~23 desi)"
+ },
+ "ALPEX-00381": {
+  "dimsCm": [
+   50.0,
+   41.5,
+   18.0
+  ],
+  "weightKg": 10.0,
+  "basis": "series",
+  "source": "https://exelon.com.tr/magaza/wp-content/uploads/2024/12/ECP-6200-48-SMART-INV-1.pdf",
+  "note": "Alpex mağaza sayfasında (alpexpower.com) ölçü/ağırlık yok. Alpex'in açıkladığı özellikler (6.2 kW, 48V, 120A MPPT, 100A AC şarj, 500V PV, şebekeye enerji basabilme) aynı OEM sınıfındaki Exelon ECP 6200/48 ile birebir uyuşuyor: cihaz 420x350x110 mm, koli 500x415x180 mm, 8.9 kg net / 10.0 kg brüt. Aynı OEM olduğu doğrulanmadı. Önceki tahmin 50x41x19, 14 kg idi"
+ },
+ "APEX-00448": {
+  "dimsCm": [
+   57.0,
+   56.0,
+   24.0
+  ],
+  "weightKg": 52.0,
+  "basis": "estimate",
+  "source": "http://web.archive.org/web/20260711052658/https://electrozirve.com/npp-itj-rck-np-power-51-2v-100ah-lityum-lifepo4-batarya/",
+  "note": "Apex APX-YRO-RCK için ölçü/ağırlık yayımlanmamış. Aynı distribütörün NP Power NPP-ITJ-RCK 51.2V 100Ah rack aküsü aynı Apex-51.2V-100Ah kılavuzuna bağlı ve 49x50x17 cm. Aynı kasa varsayıldı: koli ~57x56x24 cm. Ağırlık PaqPOWER 502x485x173.5 mm 50 kg (ENF 16764) + koli"
+ },
+ "APEX-00450": {
+  "dimsCm": [
+   85.0,
+   60.0,
+   35.0
+  ],
+  "weightKg": 120.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Apex 51.2V 280Ah için ölçü/ağırlık bulunamadı (Electrozirve 100Ah ve 314Ah listeliyor, sayfalarında ölçü yok). Benzer 14.3 kWh LFP üniteleri 105-130 kg net. Palet veya sandıkla paketli tahmin; ambar veya palet kargosu gerekir"
+ },
+ "NPPOWE-00454": {
+  "dimsCm": [
+   33.0,
+   17.2,
+   22.3
+  ],
+  "weightKg": 28.5,
+  "basis": "series",
+  "source": "http://web.archive.org/web/20250324094951/https://electrozirve.com/dacegug/2025/03/GE100-12-Safepower-TR.pdf",
+  "note": "NP Power jel akü veri sayfası yok. Standart 12V 100Ah kasa: aynı distribütörün Apex Safepower GE100-12 veri sayfasında 330x172x218 mm (toplam yükseklik 223 mm), 28.2 kg ±%3. Ağırlıkta küçük ambalaj payı bırakıldı"
+ },
+ "NPPOWE-00455": {
+  "dimsCm": [
+   52.2,
+   24.0,
+   22.6
+  ],
+  "weightKg": 58.0,
+  "basis": "series",
+  "source": "http://web.archive.org/web/20260711044713/https://electrozirve.com/apex-safepower-12-volt-200-amper-jel-aku/",
+  "note": "NP Power 200Ah sayfasında ölçü yok. Standart 12V 200Ah kasa: aynı distribütörün Apex Safepower GE200-12 sayfasında 522x240x221/226 mm, 57.0 kg ±%3. Ağırlıkta küçük ambalaj payı bırakıldı"
+ },
+ "APEX-00477": {
+  "dimsCm": [
+   25.0,
+   16.5,
+   9.5
+  ],
+  "weightKg": 1.1,
+  "basis": "estimate",
+  "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/300-watt-12-volt-modifiye-sinus-inverter-6942775ae0a1a.pdf",
+  "note": "Apex NS serisi için ölçü yayımlanmamış (Electrozirve sayfaları ve katalog). Benzer Alpex JYM-300 modifiye sinüs: paket 250x165x95 mm, 800/1100 g net/kutu"
+ },
+ "APEX-00478": {
+  "dimsCm": [
+   28.0,
+   17.0,
+   10.5
+  ],
+  "weightKg": 1.35,
+  "basis": "estimate",
+  "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/600-watt-12-volt-modifiye-sinus-inverter-6942774e022e3.pdf",
+  "note": "Apex NS için veri yok. Benzer Alpex JYM-600: paket 280x170x105 mm, 1000/1350 g net/kutu"
+ },
+ "APEX-00479": {
+  "dimsCm": [
+   37.5,
+   24.5,
+   10.5
+  ],
+  "weightKg": 3.0,
+  "basis": "estimate",
+  "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/1500-watt-12-volt-modifiye-sinus-inverter-6942777277b4e.pdf",
+  "note": "Apex NS için veri yok. Alpex JYM-1000 (paket 355x180x95, 2288 g brüt) ile JYM-1500 (paket 375x245x105, 3550 g brüt) arası; koli JYM-1500 boyutunda alındı"
+ },
+ "APEX-00480": {
+  "dimsCm": [
+   39.5,
+   24.0,
+   10.5
+  ],
+  "weightKg": 4.4,
+  "basis": "estimate",
+  "source": "https://cdn.qukasoft.com/f/640994/bzR6WWFta24rcTQ4TmkwZ0g0TnI/p/2000-watt-12-volt-modifiye-sinus-inverter-6942773bc1496.pdf",
+  "note": "Apex NS için veri yok. Benzer Alpex JYM-2000: paket 395x240x105 mm, 3600/4400 g net/brüt"
+ },
+ "APEX-00506": {
+  "dimsCm": [
+   30.0,
+   20.0,
+   12.0
+  ],
+  "weightKg": 2.8,
+  "basis": "estimate",
+  "source": "",
+  "note": "APX şarj cihazlarının ölçü/ağırlığı Electrozirve'nin güncel ve eski (Wayback 2024/2026) sayfalarında, 2025 kataloğunda ya da pazaryerlerinde yok. ~500 W switch-mode cihaz için kutulu tahmin"
+ },
+ "APEX-00507": {
+  "dimsCm": [
+   30.0,
+   20.0,
+   12.0
+  ],
+  "weightKg": 2.8,
+  "basis": "estimate",
+  "source": "",
+  "note": "Veri yok. 24V 20A, APX1240 ile aynı güç sınıfında. Kutulu tahmin"
+ },
+ "APEX-00508": {
+  "dimsCm": [
+   34.0,
+   22.0,
+   13.0
+  ],
+  "weightKg": 3.8,
+  "basis": "estimate",
+  "source": "",
+  "note": "Veri yok (Electrozirve sayfası Wayback 2026-07). ~800 W cihaz için kutulu tahmin"
+ },
+ "APEX-00509": {
+  "dimsCm": [
+   38.0,
+   24.0,
+   14.0
+  ],
+  "weightKg": 5.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Veri yok. ~1.1 kW cihaz için kutulu tahmin"
+ },
+ "APEX-00510": {
+  "dimsCm": [
+   38.0,
+   24.0,
+   14.0
+  ],
+  "weightKg": 5.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "Veri yok. 24V 40A, APX1280 ile aynı sınıfta. Kutulu tahmin"
+ },
+ "APEX-00511": {
+  "dimsCm": [
+   42.0,
+   26.0,
+   15.0
+  ],
+  "weightKg": 6.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "Veri yok (Electrozirve sayfası Wayback 2026-07). ~1.4 kW cihaz için kutulu tahmin"
+ },
+ "NPPOWE-00512": {
+  "dimsCm": [
+   22.0,
+   14.0,
+   8.0
+  ],
+  "weightKg": 1.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "NP serisi veri sayfası (electrozirve.com/wp-content/uploads/2024/10/NP-AKU-SARJ-CIHAZI-1.pdf) modeli doğruluyor (fanlı switch-mode) ama ölçü/ağırlık vermiyor. Kutulu tahmin"
+ },
+ "NPPOWE-00513": {
+  "dimsCm": [
+   25.0,
+   16.0,
+   9.0
+  ],
+  "weightKg": 1.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "NP veri sayfasında ölçü/ağırlık yok. 12V 20A için kutulu tahmin"
+ },
+ "NPPOWE-00514": {
+  "dimsCm": [
+   25.0,
+   16.0,
+   9.0
+  ],
+  "weightKg": 1.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "NP veri sayfasında ölçü/ağırlık yok. 24V 10A, 12V 20A ile aynı güçte. Kutulu tahmin"
+ },
+ "NPPOWE-00515": {
+  "dimsCm": [
+   28.0,
+   18.0,
+   10.0
+  ],
+  "weightKg": 2.0,
+  "basis": "estimate",
+  "source": "",
+  "note": "NP veri sayfasında ve idefix ilanında ölçü/ağırlık yok. 12V 30A için kutulu tahmin"
+ },
+ "APEX-00528": {
+  "dimsCm": [
+   25.0,
+   20.0,
+   12.0
+  ],
+  "weightKg": 1.5,
+  "basis": "estimate",
+  "source": "",
+  "note": "Electrozirve 80A/40A/30A sayfalarında (Wayback 2026-07) ölçü yok. Referans: Electrozirve 10A transfer switch kutusu 190x80x80 mm, 0.65 kg (2024 sayfası). 80A otomatik transfer şalteri için kutulu tahmin, düşük güven"
+ },
+ "MEXXSU-RG06018MPMX005-00809": {
+  "dimsCm": [
+   26.5,
+   22.0,
+   8.8
+  ],
+  "weightKg": 3.5,
+  "basis": "product",
+  "source": "https://www.idefix.com/mexxsun-sarj-kontrol-cihazi-60a-mppt-12243648v-mpk8-p-20136969",
+  "note": "Pazaryeri ilanı (düşük-orta güven): 'Ürün Ölçüleri: 265 x 220 x 88 mm', 'Net Ağırlık: 3,5 kg' (alüminyum kasa, fanlı). Değerler ürünün kendisine ait. Kutulu hali ~30x24x13 cm, ~4 kg olur. Önceki tahmin 3.0 kg idi"
+ }
+}

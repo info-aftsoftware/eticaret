@@ -1,0 +1,420 @@
+{
+ "İSTABR-00677": {
+  "dimsCm": [
+   50,
+   5,
+   5
+  ],
+  "weightKg": 0.5,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=193",
+  "note": "İstabreeze TR resmî sayfa: alüminyum kuyruk borusu, uzunluk 50 cm, boru çapı 50 mm, ağırlık 500 g. Koli ölçüsü verilmemiş; ürün ölçüsü."
+ },
+ "İSTABR-00678": {
+  "dimsCm": [
+   100,
+   5,
+   5
+  ],
+  "weightKg": 1.0,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=229",
+  "note": "İstabreeze TR resmî sayfa (i-1000/i-2000 kuyruk borusu): uzunluk 100 cm, çap 50 mm, ağırlık 1 kg. istabreeze.store 'Windturbine Hinteres Rohr' kargo ağırlığı da 1000 g. Koli ölçüsü yok."
+ },
+ "ALTECH-00384": {
+  "dimsCm": [
+   120,
+   45,
+   35
+  ],
+  "weightKg": 53,
+  "basis": "product",
+  "source": "https://www.ruzgarturbini.com.tr/image/catalog/urunler/yatay/altech/altech_boreas_2Kw_2000w_ruzgar_turbini_wind_turbine_datasheet.pdf",
+  "note": "Ağırlık Altech resmî Boreas 2000 datasheet'inden (altechturbine.com markalı PDF, bayi sunucusunda): türbin toplam ağırlığı 53 kg, rotor çapı 2,42 m, 24/48 V (bayi tablosunda 55 kg da geçiyor). Koli ölçüsü hiçbir kaynakta yok; ölçü TAHMİN: kanat ~1,1 m olduğundan eski 80 cm uzunluk sığmaz; gövde kolisi (~65x45x45) + kanat kolisi (~120x30x15) hacmine eşdeğer zarf verildi. Brüt ağırlık ambalajla ~5-10 kg fazla olabilir. altechturbine.com bu ağdan erişilemedi (web filtresi)."
+ },
+ "ALTECH-00385": {
+  "dimsCm": [
+   120,
+   45,
+   35
+  ],
+  "weightKg": 53,
+  "basis": "product",
+  "source": "https://www.ruzgarturbini.com.tr/image/catalog/urunler/yatay/altech/altech_boreas_2Kw_2000w_ruzgar_turbini_wind_turbine_datasheet.pdf",
+  "note": "24V sürüm; datasheet 24/48 V için tek değer veriyor: 53 kg, rotor 2,42 m. Ölçü tahmin (kanat uzunluğu ~1,1 m esas alındı), koli verisi yok."
+ },
+ "ALTECH-00387": {
+  "dimsCm": [
+   140,
+   45,
+   40
+  ],
+  "weightKg": 68,
+  "basis": "product",
+  "source": "https://www.ruzgarturbini.com.tr/image/catalog/urunler/yatay/altech/altech_4Kw_ruzgar_turbini_boreas_4000_wind_turbine_datasheet.pdf",
+  "note": "Altech resmî Boreas 4000 datasheet: türbin toplam ağırlığı 68 kg (152 lbs), rotor çapı 2,85 m, 48 V. Koli ölçüsü yok; ölçü TAHMİN (kanat ~1,3 m; gövde ~70x50x50 + kanat ~140x35x15 hacmine eşdeğer zarf). Gerçekte büyük olasılıkla 2 koli (gövde + kanatlar)."
+ },
+ "ALTECH-00388": {
+  "dimsCm": [
+   140,
+   45,
+   40
+  ],
+  "weightKg": 68,
+  "basis": "series",
+  "source": "https://www.ruzgarturbini.com.tr/image/catalog/urunler/yatay/altech/altech_4Kw_ruzgar_turbini_boreas_4000_wind_turbine_datasheet.pdf",
+  "note": "Resmî datasheet yalnız 48 V sürümü listeliyor (68 kg, rotor 2,85 m); bayi 24 V sayfası (product_id=179) da aynı 68 kg'ı veriyor. Ölçü tahmin, koli verisi yok."
+ },
+ "ALTECH-00390": {
+  "dimsCm": [
+   170,
+   45,
+   42
+  ],
+  "weightKg": 81,
+  "basis": "product",
+  "source": "https://www.ruzgarturbini.com.tr/image/catalog/urunler/yatay/altech/altech_boreas_6kw_wind_turbine_ruzgar_turbini_datasheet.pdf",
+  "note": "Altech resmî Boreas 6000 datasheet: türbin toplam ağırlığı 81 kg, rotor çapı 3,41 m. Eski tahmin 120 kg idi. Koli ölçüsü yok; ölçü TAHMİN (kanat ~1,6 m; gövde ~75x55x55 + kanat ~170x35x15 hacmine eşdeğer). Muhtemelen 2 koli."
+ },
+ "ALTECH-00391": {
+  "dimsCm": [
+   240,
+   60,
+   60
+  ],
+  "weightKg": 200,
+  "basis": "estimate",
+  "source": "",
+  "note": "Altech 7 m kafes tipi direk için ağırlık/koli verisi bulunamadı (bayi Hayat Solar sayfasında yalnız modüler, ankrajlı, 40 m/s dayanımlı olduğu yazıyor; altechturbine.com erişilemedi). Mevcut tahmin korundu; modüler parçalar halinde paletli/ambar sevkiyatı beklenir."
+ },
+ "ALTECH-AT3KWNOVA3000-00392": {
+  "dimsCm": [
+   150,
+   70,
+   60
+  ],
+  "weightKg": 120,
+  "basis": "product",
+  "source": "https://www.teknovasyonarge.com/urun/altech-turbine-nova-3000-3-kw-ruzgar-turbini-13475",
+  "note": "Bayi (Teknovasyon ARGE) Altech Nova 3000 sayfası: türbin ağırlığı yaklaşık 120 kg (kule hariç), rotor çapı 3,0 m. Orta güven (resmî site erişilemedi). Ölçü TAHMİN: eski hacim korunup uzun kenar kanat boyuna (~1,4 m) göre 150 cm'e çıkarıldı. Koli verisi yok."
+ },
+ "ALTECH-AT5KWNOVA5000-00393": {
+  "dimsCm": [
+   190,
+   75,
+   65
+  ],
+  "weightKg": 180,
+  "basis": "product",
+  "source": "https://www.teknovasyonarge.com/urun/altech-turbine-nova-5000-5-kw-ruzgar-turbini-13476",
+  "note": "Bayi sayfası: yaklaşık 180 kg (kule hariç), rotor çapı 3,8 m (eski tahmin 200 kg). Ölçü TAHMİN: uzun kenar kanat boyuna (~1,8 m) göre, hacim eski tahminle aynı. Koli verisi yok; paletli sevk beklenir."
+ },
+ "ALTECH-AT8KWNOVA8000-00394": {
+  "dimsCm": [
+   240,
+   75,
+   70
+  ],
+  "weightKg": 260,
+  "basis": "product",
+  "source": "https://www.teknovasyonarge.com/urun/altech-turbine-nova-8000-8-kw-ruzgar-turbini-13477",
+  "note": "Bayi sayfası: yaklaşık 260 kg (kule hariç), rotor çapı 4,8 m (eski tahmin 320 kg). Ölçü TAHMİN: uzun kenar kanat boyuna (~2,3 m) göre, hacim eski tahminle aynı. Koli verisi yok."
+ },
+ "ALTECH-AT12KWNOVAPRE-00395": {
+  "dimsCm": [
+   270,
+   85,
+   77
+  ],
+  "weightKg": 320,
+  "basis": "product",
+  "source": "https://www.teknovasyonarge.com/urun/altech-turbine-nova-premium-12-kw-ruzgar-turbini-13478",
+  "note": "Bayi sayfası (Nova Premium 12 kW): yaklaşık 320 kg (kule hariç), rotor çapı 5,5 m (eski tahmin 450 kg). Ölçü TAHMİN: uzun kenar kanat boyuna (~2,6 m) göre, hacim eski tahminle aynı. Koli verisi yok."
+ },
+ "İSTABR-00647": {
+  "dimsCm": [
+   65,
+   63,
+   40
+  ],
+  "weightKg": 87,
+  "basis": "package",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=220",
+  "note": "İstabreeze TR resmî sayfa 'Paket Ölçüleri': 3 koli -> 1) 65x40x63 cm, 2) 25x153x25 cm, 3) 70x15x54 cm; toplam 87 kg (koli bazında ağırlık verilmemiş). dimsCm en büyük koli. Toplam desi ~105,4 (54,6+31,9+18,9) > 87 kg. istabreeze.store kargo ağırlığı 86,12 kg ile uyumlu. Manuel: türbin 55 kg.",
+  "parcels": [
+   {
+    "dimsCm": [
+     65,
+     63,
+     40
+    ],
+    "weightKg": null
+   },
+   {
+    "dimsCm": [
+     153,
+     25,
+     25
+    ],
+    "weightKg": null
+   },
+   {
+    "dimsCm": [
+     70,
+     54,
+     15
+    ],
+    "weightKg": null
+   }
+  ]
+ },
+ "İSTABR-00648": {
+  "dimsCm": [
+   85,
+   60,
+   60
+  ],
+  "weightKg": 136,
+  "basis": "package",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=194",
+  "note": "İstabreeze TR resmî sayfa 'Paket Ölçüleri': 2 koli -> 1) 60x60x85 cm 113 kg, 2) 160x30x30 cm 23 kg; toplam 136 kg (eski tahmin 100 kg). Koli bazında ücretlendirilebilir ağırlık: max(102 desi,113)=113 + max(48 desi,23)=48 -> ~161. istabreeze.store kargo ağırlığı 146 kg.",
+  "parcels": [
+   {
+    "dimsCm": [
+     85,
+     60,
+     60
+    ],
+    "weightKg": 113
+   },
+   {
+    "dimsCm": [
+     160,
+     30,
+     30
+    ],
+    "weightKg": 23
+   }
+  ]
+ },
+ "İSTABR-00651": {
+  "dimsCm": [
+   36,
+   30,
+   30
+  ],
+  "weightKg": 14.4,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=182",
+  "note": "Pro Wind (I/HCC-PRO) 24V-48V ailesi. TR resmî sayfa: ağırlık 7 kg, 'Ölçüler 30x30x20 cm / 36x30x10 cm' (büyük olasılıkla kontrol cihazı + dump load direnci). dimsCm bu iki parçanın üst üste zarfı (tahmini birleşik). istabreeze.store'da I/HCC-1500/24V varyantının kargo ağırlığı 14,4 kg; brüt kargo ağırlığı olarak o korundu."
+ },
+ "İSTABR-00652": {
+  "dimsCm": [
+   36,
+   30,
+   30
+  ],
+  "weightKg": 14.4,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=182",
+  "note": "TR resmî sayfa 'Pro Wind Şarj Kontrol 24V-48V 2000W': 7 kg, ölçüler 30x30x20 cm ve 36x30x10 cm (iki parça). istabreeze.store I/HCC-2000/48V kargo ağırlığı 14,4 kg; brüt için o kullanıldı. Ayrı 2 koli gidebilir, kesin değil."
+ },
+ "İSTABR-00653": {
+  "dimsCm": [
+   40,
+   30,
+   20
+  ],
+  "weightKg": 12,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=215",
+  "note": "TR resmî sayfa Pro Wind 48V/4000W: ağırlık 12 kg, ölçüler 40x30x20 cm (ürün). istabreeze.store kargo ağırlığı da 12 kg. Koli ölçüsü verilmemiş; desi 8 < 12 kg, ağırlık belirleyici."
+ },
+ "İSTABR-00660": {
+  "dimsCm": [
+   25,
+   25,
+   20
+  ],
+  "weightKg": 3.85,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=90",
+  "note": "TR resmî sayfa G-500: ağırlık 3,85 kg (eski değer 2,7 kg, istabreeze.store 12/24V eski varyant kargo ağırlığı). Ölçü tahmin korundu, kaynakta boyut yok."
+ },
+ "İSTABR-00661": {
+  "dimsCm": [
+   30,
+   30,
+   25
+  ],
+  "weightKg": 8.75,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=99",
+  "note": "TR resmî sayfa ve istabreeze.store i-800G: 8,75 kg. Ölçü tahmin (kaynakta boyut yok)."
+ },
+ "İSTABR-00662": {
+  "dimsCm": [
+   32,
+   32,
+   28
+  ],
+  "weightKg": 10,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=238",
+  "note": "TR resmî sayfa G-1000: ağırlık 10 kg (istabreeze.store i-1000G de 10 kg; kargo ağırlığı 11 kg). Ölçü tahmin."
+ },
+ "İSTABR-00663": {
+  "dimsCm": [
+   32,
+   32,
+   30
+  ],
+  "weightKg": 11.5,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=219",
+  "note": "TR resmî sayfa G-1500: 11,5 kg (istabreeze.store kargo ağırlığı 12 kg). Ölçü tahmin."
+ },
+ "İSTABR-00664": {
+  "dimsCm": [
+   35,
+   35,
+   30
+  ],
+  "weightKg": 13.6,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=104",
+  "note": "TR resmî sayfa G-2000: 13,6 kg (istabreeze.store kargo ağırlığı 14 kg). Ölçü tahmin."
+ },
+ "İSTABR-00665": {
+  "dimsCm": [
+   45,
+   45,
+   35
+  ],
+  "weightKg": 25,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=211",
+  "note": "TR resmî sayfa Heli 2.0 alternatörü: 25 kg (istabreeze.store da 25 kg). Ölçü tahmin; kaynakta boyut yok."
+ },
+ "İSTABR-00666": {
+  "dimsCm": [
+   50,
+   50,
+   40
+  ],
+  "weightKg": 33.5,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=212",
+  "note": "TR resmî sayfa Heli 4.0 alternatörü: 33,5 kg (istabreeze.store açıklaması da 33,5 kg). Ölçü tahmin."
+ },
+ "İSTABR-00667": {
+  "dimsCm": [
+   55,
+   15,
+   5
+  ],
+  "weightKg": 0.19,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=68",
+  "note": "TR resmî: 50 cm kompozit kanat 190 g (tek kanat), rotor çapı 103 cm. Resmî sitede 3'lü set satılıyor; Voltekno set satıyorsa ağırlık ~0,57 kg + ambalaj. Ölçü tahmin."
+ },
+ "İSTABR-00668": {
+  "dimsCm": [
+   61,
+   15,
+   5
+  ],
+  "weightKg": 0.18,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=223",
+  "note": "TR resmî: 56 cm karbon kanat 180 g (tek kanat), çap 115 cm. 3'lü set ise ~0,54 kg. Ölçü tahmin."
+ },
+ "İSTABR-00669": {
+  "dimsCm": [
+   62,
+   15,
+   5
+  ],
+  "weightKg": 0.21,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=221",
+  "note": "TR resmî: 57 cm kompozit kanat 210 g (tek kanat), çap 117 cm. 3'lü set ise ~0,63 kg. Ölçü tahmin."
+ },
+ "İSTABR-00670": {
+  "dimsCm": [
+   65,
+   15,
+   5
+  ],
+  "weightKg": 0.27,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=118",
+  "note": "TR resmî: 60 cm kompozit kanat 270 g (tek kanat), çap 125 cm. 3'lü set ise ~0,81 kg. Ölçü tahmin."
+ },
+ "İSTABR-00672": {
+  "dimsCm": [
+   112,
+   17,
+   6
+  ],
+  "weightKg": 0.65,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=156",
+  "note": "TR resmî: 107 cm kompozit kanat 650 g (tek kanat), çap 220 cm. 3'lü set ise ~1,95 kg; uzun kenar nedeniyle desi belirleyici (112x17x6 ≈ 3,8 desi). Ölçü tahmin."
+ },
+ "İSTABR-00671": {
+  "dimsCm": [
+   95,
+   17,
+   6
+  ],
+  "weightKg": 0.62,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=216",
+  "note": "TR resmî: 90 cm kompozit kanat 620 g (tek kanat), çap 186 cm. 3'lü set ise ~1,86 kg. Ölçü tahmin."
+ },
+ "İSTABR-00676": {
+  "dimsCm": [
+   60,
+   40,
+   5
+  ],
+  "weightKg": 0.79,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=230",
+  "note": "TR resmî: 700W-2000W kuyruk, kompozit, 790 g. Boyut verilmemiş; ölçü tahmin korundu."
+ },
+ "İSTABR-00679": {
+  "dimsCm": [
+   15,
+   15,
+   6
+  ],
+  "weightKg": 0.285,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=145",
+  "note": "TR resmî: alüminyum kanat flanşı 285 g, çap 132 mm (istabreeze.store 265 g). Ölçü çapa uygun; yükseklik tahmin."
+ },
+ "İSTABR-00680": {
+  "dimsCm": [
+   42,
+   42,
+   8
+  ],
+  "weightKg": 2.7,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=109",
+  "note": "TR resmî: 3 kollu kanat flanşı 2,7 kg, çap 390 mm, 5 mm galvaniz çelik (istabreeze.store kargo ağırlığı 2,8 kg). Ölçü çapa göre, yükseklik tahmin."
+ },
+ "İSTABR-00681": {
+  "dimsCm": [
+   42,
+   42,
+   8
+  ],
+  "weightKg": 3.2,
+  "basis": "product",
+  "source": "https://www.istabreeze.com.tr/online/index.php?route=product/product&product_id=146",
+  "note": "TR resmî: 5 kollu kanat flanşı 3,2 kg, çap 390 mm (istabreeze.store açıklaması 2 kg, kargo ağırlığı 4 kg; çelişkili). Ölçü çapa göre, yükseklik tahmin."
+ }
+}

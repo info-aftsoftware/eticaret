@@ -1,0 +1,123 @@
+{
+ "VICTRO-ASS030066018-01813": {
+  "dimsCm": [
+   15,
+   10,
+   3
+  ],
+  "weightKg": 0.044,
+  "basis": "estimate",
+  "source": "",
+  "note": "Victron urun sayfasinda (victronenergy.com/cables/rj12-utp-cable) olcu/agirlik yok. 44 g yalnizca bir perakendeci aramasinda goruldu, dogrulanmadi; inverterrus.com 'Weight N/A'. Tahmin korundu."
+ },
+ "VICTRO-ASS030560100-01840": {
+  "dimsCm": [
+   20,
+   15,
+   4
+  ],
+  "weightKg": 0.066,
+  "basis": "estimate",
+  "source": "",
+  "note": "Urun: Male to Female 3 pole 1 m (2'li poset). Resmi Victron sayfasi/veri sayfasi bulunamadi; perakendecilerde agirlik yok. Tahmin korundu."
+ },
+ "VICTRO-ASS030532010-01849": {
+  "dimsCm": [
+   15,
+   10,
+   4
+  ],
+  "weightKg": 0.07,
+  "basis": "estimate",
+  "source": "",
+  "note": "Victron urun sayfasi ve Manual-CANUSB-EN.pdf acildi; olcu/agirlik yok. Perakendeci degerleri celisiyor: wattuneed.com 0,5 kg (yer tutucu gibi), fvcomponentes 0,07 kg / 1 kg. Tahmin korundu; 0,5 kg alinsa bile desi <1."
+ },
+ "VICTRO-ASS030200000-01852": {
+  "dimsCm": [
+   15,
+   10,
+   4
+  ],
+  "weightKg": 0.1,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmi veri yok. Perakendeci aramalarinda 45 g / 50 g / 1 kg (yer tutucu) goruldu, hicbiri resmi degil. Mevcut 0,1 kg ambalajli icin makul; tahmin korundu."
+ },
+ "VICTRO-ASS030550120-01860": {
+  "dimsCm": [
+   12,
+   8,
+   3
+  ],
+  "weightKg": 0.014,
+  "basis": "estimate",
+  "source": "",
+  "note": "Inverting-remote-on-off-cable-EN.pdf (victronenergy.com) acildi; yalnizca elektriksel ozellik var, olcu/agirlik yok. 14 g ambalajli urun icin dusuk olabilir (~0,03-0,05 kg daha gercekci) ama desi etkisi yok."
+ },
+ "VICTRO-ASS030550220-01861": {
+  "dimsCm": [
+   12,
+   8,
+   3
+  ],
+  "weightKg": 0.12,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmi Victron PDF'i bulunamadi (tahmin edilen URL'ler 404). wattuneed.com/fr 0,6 kg diyor (yer tutucu gibi), voltaconsolar 0,11 kg. Tahmin korundu."
+ },
+ "VICTRO-ASS000100000-01874": {
+  "dimsCm": [
+   15,
+   10,
+   3
+  ],
+  "weightKg": 0.075,
+  "basis": "estimate",
+  "source": "",
+  "note": "Victron urun sayfasi (accessories/temperature-sensor-for-bmv-702) acildi; olcu/agirlik yok. Perakendecide urun agirligi 50 g, 2 m kablo; ambalajli 0,075 kg makul. Tahmin korundu."
+ },
+ "VICTRO-ASS030572018-01886": {
+  "dimsCm": [
+   15,
+   12,
+   4
+  ],
+  "weightKg": 0.09,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmi veri sayfasi bulunamadi (Datasheet-RS485-to-USB-interface-EN.pdf 404). Perakendeci aramasinda 0,090 kg (fvcomponentes) ve 1 kg/0 kg yer tutucular. Tahmin korundu."
+ },
+ "VICTRO-SCC940100100-01956": {
+  "dimsCm": [
+   15,
+   10,
+   3
+  ],
+  "weightKg": 0.065,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmi veri yok. offgridtec.com 0,03 kg (EAN 8719076025658, 2,90 m kablo); diger perakendeciler 0,06-0,065 kg. Ambalajli icin 0,065 kg korundu."
+ },
+ "VICTRO-SCC940100200-01957": {
+  "dimsCm": [
+   15,
+   10,
+   3
+  ],
+  "weightKg": 0.05,
+  "basis": "estimate",
+  "source": "",
+  "note": "Resmi veri yok. offgridtec.com 0,2 kg (EAN 8719076025665; ambalaj/sevk agirligi olabilir), fvcomponentes 0,05 kg, callidus 0,045 kg. Tahmin korundu; 0,2 kg alinsa bile desi <1."
+ },
+ "VICTRO-ASS070200100-02116": {
+  "dimsCm": [
+   20,
+   15,
+   4
+  ],
+  "weightKg": 0.1,
+  "basis": "estimate",
+  "source": "",
+  "note": "Smart BMS CL 12/100 - MultiPlus kablosu, ~0,61 m (perakendeci). Resmi olcu/agirlik yok; 1,6 kg degerleri BMS cihazinin kendisine ait, karistirilmamali. Tahmin korundu."
+ }
+}

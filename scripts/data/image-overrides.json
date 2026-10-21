@@ -1986,5 +1986,114 @@
     ],
     "source": "https://www.victronenergy.com/batteries/peak-power-pack",
     "note": "Resmi PPP 12.8V 30Ah 384Wh görselleri (sol açı, ön, üst). Eski görsel 40Ah/512Wh etiketliydi (üç varyant ortak)."
+  },
+  "TOMMAT-SRJTTACENT48V50A-00213": {
+    "images": [
+      "tommatech-srjttacent-entegre-50a-seri-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charger-integrated-24v-50a-1808.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). Resmî TommaTech 'Waterproof Charger' (SRJ-TT-AC-ENT) serisinin 24V-50A modeline ait ürün görseli. Mavi kapak, taşıma kolu, fan ızgarası ve alüminyum soğutuculu IP65 gövde, 1200x1200 webp. 48V 50A için resmî sayfa ya da veri sayfası yok. Seride listelenen modeller 24V-30A, 24V-50A, 48V-30A ve 60V-15A; 48V-30A sayfası da aynı tasarımı kullanıyor. 24V-50A veri sayfasındaki ölçü 335x192x149 mm. 48V 50A daha yüksek güçte olduğu için gövde ölçüsü farklı olabilir. Seri görseli olarak kullanılmalı. [20.10.2026]"
+  },
+  "TOMMAT-SRJTTACENT48V60A-00214": {
+    "images": [
+      "tommatech-srjttacent-entegre-50a-seri-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charger-integrated-24v-50a-1808.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). 48V 60A için resmî sayfa ya da veri sayfası yok. Aynı entegre (su geçirmez, IP65) serinin 24V-50A görseli kullanıldı (1200x1200 webp). Gövde ölçüsü doğrulanamadı; seri görseli. [20.10.2026]"
+  },
+  "TOMMAT-SRJTTACENT72V25A-00215": {
+    "images": [
+      "tommatech-srjttacent-entegre-50a-seri-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charger-integrated-24v-50a-1808.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). 72V 25A için resmî sayfa ya da veri sayfası yok. Aynı entegre (su geçirmez, IP65) serinin 24V-50A görseli kullanıldı (1200x1200 webp). Gövde ölçüsü doğrulanamadı; seri görseli. [20.10.2026]"
+  },
+  "TOMMAT-SRJTTACDVR80V80A-00224": {
+    "images": [
+      "tommatech-srjttacdvr-80v-duvar-tipi-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charging-unit-wall-mounted-80v-100a-1806.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). 80V 80A için resmî sayfa yok. Görsel, üreticinin 80V-100A ve 80V-200A sayfalarında kullandığı birebir aynı fotoğraf: önden mavi duvar tipi gövde, LCD panel ve spiral kablolu şarj soketi, 1200x1200 webp. 72V-80A modeli farklı ve daha küçük bir gövde kullanıyor (Anderson soketli). 80V 80A'nın gerçekte hangi gövdeyi kullandığı doğrulanamadı; 80V seri görseli olarak işaretlendi. [20.10.2026]"
+  },
+  "TOMMAT-SRJTTACDVR80V100A-00225": {
+    "images": [
+      "tommatech-srjttacdvr-80v-duvar-tipi-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charging-unit-wall-mounted-80v-100a-1806.html",
+    "note": "Birebir model. Üreticinin bu modele ait ürün sayfasındaki ana görsel (SRJ-TT-AC-DVR-80V-100A), 1200x1200 webp; tommatech.de'de de aynı ürün var. Aynı fotoğraf 80V-200A veri sayfasının kapağında da kullanılıyor. Veri sayfasına göre 10 kW, 24 kg. [20.10.2026]"
+  },
+  "TOMMAT-SRJTTACDVR80V200A-00226": {
+    "images": [
+      "tommatech-srjttacdvr-80v-duvar-tipi-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charging-unit-wall-mounted-80v-200a-1807.html",
+    "note": "Birebir model. Üreticinin 80V-200A ürün sayfasındaki ana görsel, 1200x1200 webp. Bu dosya 80V-100A sayfasındakiyle bayt bayt aynı (md5 eşleşiyor). Veri sayfası: 700x562x129 mm, 32 kg, 20 kW. [20.10.2026]"
+  },
+  "TOMMAT-SRJTTACDVR80V300A-00227": {
+    "images": [
+      "tommatech-srjttacdvr-80v-duvar-tipi-1.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-battery-charging-unit-wall-mounted-80v-200a-1807.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). 80V 300A için resmî sayfa ya da veri sayfası yok; resmî serinin en büyük modeli 80V-200A. Görsel 80V duvar tipi serinin fotoğrafı (1200x1200 webp). 30 kW'lık 300A modelin gövdesi muhtemelen daha büyük ve bu doğrulanamadı; yalnızca seri görseli. [20.10.2026]"
+  },
+  "TOMMAT-SPITT10185TF-00290": {
+    "images": [
+      "tommatech-spi-900vdc-duvar-tipi-metal-kasa-1.jpg"
+    ],
+    "source": "https://tommatech.de/en/product/tommatech185-kw-900vdc-3-phase380vac-irrigation-pump-inverter-586.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). Üreticinin 18,5 kW SPI sayfasındaki fotoğraf: lacivert metal duvar tipi kasa, önden, keypad'li, 1080x1080 jpg. Bu, cw-enerji'deki aynı fotoğrafın 35 KB'lık düşük kaliteli sürümü yerine kullanılan 147 KB'lık yüksek kaliteli sürüm. SPI 900V veri sayfasına göre 18,5–132 kW 'metal enclosure', 18,5–37 kW gövdesi H467xW290xD230 mm. Üretici aynı fotoğrafı 18,5/30/37/45/55/75/90/110/132 kW sayfalarının hepsinde kullanıyor; doğru gövde tipi (duvar tipi metal kasa) ama bu çerçeve boyutuna özel bir fotoğraf değil. [20.10.2026]"
+  },
+  "TOMMAT-SPITT14450TF-00294": {
+    "images": [
+      "tommatech-spi-900vdc-duvar-tipi-metal-kasa-1.jpg"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-45-kw-900vdc-3-phase380vac-irrigation-pump-inverter-605.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). Üreticinin 45 kW sayfasında da kullanılan ortak SPI metal duvar tipi kasa fotoğrafı (1080x1080 jpg; dosya tommatech.de'deki yüksek kaliteli sürüm). Veri sayfasına göre 45–55 kW gövdesi H580xW375xD270 mm, duvara monte metal kasa. Gövde tipi doğru, çerçeveye özel fotoğraf değil. [20.10.2026]"
+  },
+  "TOMMAT-SPITT191320TF-00299": {
+    "images": [
+      "tommatech-spi-900vdc-duvar-tipi-metal-kasa-1.jpg"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-132-kw-900vdc-3-phase380vac-irrigation-pump-inverter-610.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). Üreticinin 132 kW sayfasında da kullanılan ortak SPI metal duvar tipi kasa fotoğrafı (1080x1080 jpg). Veri sayfasına göre 132 kW, metal duvar kasalı en büyük model: H810xW490xD375 mm. Dolap tipi 160 kW'tan başlıyor, bu yüzden duvar tipi doğru gövde; ancak bu boyuta özel fotoğraf değil. [20.10.2026]"
+  },
+  "TOMMAT-SPITT201600TF-00300": {
+    "images": [
+      "tommatech-spi-900vdc-dolap-tipi-160-250kw-1.jpg"
+    ],
+    "source": "https://tommatech.de/en/product/tommatech-160-kw-900vdc-3-phase380vac-irrigation-pump-inverter-1170.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). Üreticinin 160 kW sayfasındaki fotoğraf: lacivert, yere oturan dolap tipi gövde, alt kaideli ve çift kapılı, 1200x1200 jpg. Veri sayfasına göre 160–185 kW gövdesi H1200xW550xD385 mm, 'vertical base'. Aynı fotoğraf 185 ve 250 kW sayfalarında da kullanılıyor; gövde tipi doğru, tek başına 160 kW'a özel olduğu teyit edilemedi. Not: cw-enerji'deki '185 kW' sayfası (1369) duvar tipi, 3 fanlı bir kasa gösteriyor; bu veri sayfasıyla çelişiyor (185 kW dolap tipi olmalı), o yüzden kullanılmadı. [20.10.2026]"
+  },
+  "TOMMAT-SPITT200TF-00302": {
+    "images": [
+      "tommatech-spi-900vdc-dolap-tipi-160-250kw-1.jpg"
+    ],
+    "source": "https://tommatech.de/en/product/tommatech-250-kw-900vdc-3-phase380vac-irrigation-pump-inverter-1172.html",
+    "note": "Seri görseli (birebir model fotoğrafı yok). 200 kW için ayrı resmî ürün sayfası yok. 160/185/250 kW sayfalarında kullanılan dolap tipi SPI fotoğrafı (1200x1200 jpg). Veri sayfasına göre 200–220 kW gövdesi H1250xW550xD385 mm, 'vertical base' (160 kW'tan sadece 5 cm yüksek, genişlik aynı); doğru gövde ailesi, seri görseli. [20.10.2026]"
+  },
+  "TOMMAT-HPTTR290TF148-00339": {
+    "images": [
+      "tommatech-power-serisi-isi-pompasi-trifaze-1.webp",
+      "tommatech-power-serisi-isi-pompasi-trifaze-2.webp",
+      "tommatech-power-serisi-isi-pompasi-trifaze-3.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-148kw-r290-power-series-heat-pumpthree-phase-1839.html",
+    "note": "Birebir model. Üreticinin 14,8 kW R290 Power Serisi trifaze ürün sayfasındaki 3 render görsel (her biri 1200x1200 webp): 1 önden, 2 açılı ön, 3 arka/yan (su bağlantıları ve kontrol paneli). Koyu antrasit kasa, tek fanlı. Aynı 3 görsel üreticinin 13 kW R32 sayfasında da birebir kullanılıyor. tommatech.de'de daha açık gri, eski bir render seti de var (1200x1200 jpg); daha güncel olan cw-enerji seti seçildi. [20.10.2026]"
+  },
+  "TOMMAT-HPTTEVIR32TF13-00343": {
+    "images": [
+      "tommatech-power-serisi-isi-pompasi-trifaze-1.webp",
+      "tommatech-power-serisi-isi-pompasi-trifaze-2.webp",
+      "tommatech-power-serisi-isi-pompasi-trifaze-3.webp"
+    ],
+    "source": "https://cw-enerji.com/en/product/tommatech-13kw-r32-power-series-heat-pumpthree-phase-1843.html",
+    "note": "Birebir model. Üreticinin 13 kW R32 Power Serisi trifaze ürün sayfasındaki 3 görsel (1200x1200 webp), 14,8 kW R290 sayfasındakilerle bayt bayt aynı (md5 eşleşiyor). Üretici iki modele de aynı render'ı koyuyor. Sayfada 'EVI' ifadesi geçmiyor ama model kodu ve güç birebir. [20.10.2026]"
+  },
+  "TOMMAT-TT04036TN10-00075": {
+    "images": [
+      "tommatech-36tn10-topcon-seri-1.webp"
+    ],
+    "source": "Excel (voltekno_ikas_nihai.xlsx) TOMMAT-TT04536TN10-00076 satırının görseli",
+    "note": "Seri görseli: 40Wp için resmî fotoğraf yok (Excel görseli Drive'da silinmiş, TommaTech sitelerinde 36TN10 ürün sayfası yok). Aynı 36TN10 TOPCon serisinin 45Wp panel fotoğrafı. [20.10.2026]"
   }
 }
