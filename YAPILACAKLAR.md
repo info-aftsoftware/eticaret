@@ -1,5 +1,7 @@
 # E-Ticaret Uçtan Uca Kontrol — Yapılacaklar Listesi
 
+> **21.10.2026:** Bu dosya tarihî kayıttır; yapılan maddeler işaretlendi. Güncel ve tek yapılacaklar listesi `DURUM.md` → "Kalanlar".
+
 _Kontrol tarihi: 12.10.2026 · Kapsam: kod denetimi (sepet → ödeme → sipariş → bildirim, hesap/admin), çalışan dev sunucusunda (port 3005) sayfa/API duman testi, `tsc --noEmit`._
 
 **Özet durum:** Tüm sayfalar 200 dönüyor, tip kontrolü temiz. Fakat **ödeme ve sipariş hattı canlıya çıkmaya hazır değil**: fiyatlar istemciden alınıyor, siparişler yetkisiz okunup değiştirilebiliyor, admin yetkisi ele geçirilebiliyor, arama ve ürün yorumları 500 veriyor, yasal zorunlu onaylar eksik.
@@ -49,11 +51,11 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - **voltekno.com alan adı şu an ikas'a yönleniyor** (DNS 75.2.120.200, yanıtlar `Server: ikas`). Ziyaretçiler ikas mağazasını görüyor; Hostinger'daki bu Next.js uygulaması yalnızca geçici adreste yayında: https://purple-goose-825288.hostingersite.com. Alan adı Hostinger'a ancak uygulama hazır olunca (aşağıdaki veritabanı düzeltmesinden sonra) yönlendirilmeli.
 - Hostinger'da uygulama kaydı voltekno.com (kullanıcı u718952521) adına; daha önce GitHub `web-projelerim/eticaret` → `main` ile yayın alıyordu (son 16.04.2026, `9b6045e`).
 - [x] Çalışmalar `main`'e push edildi (`31f0184`); Hostinger GitHub'a bağlı olmadığı için 16.10.2026'da **arşivle (MCP) yayınlandı** (build `01a143b9`). Arşiv `git archive` ile yalnızca kaynak dosyalardan oluşturuldu (`public_html_standalone/`, `docs/`, `.claude/` hariç).
-- [ ] **Veritabanı tabloları çalışan uygulamada yok (16.10 yayını sonrası, ÖNEMLİ):** derlemede `prisma db push` tabloları bir `dev.db`'de oluşturuyor, çalışan uygulama (`hbuilds/versions/<sürüm>/nodejs`) göreli `file:./dev.db` yüzünden başka bir dosyayı açıyor → `/api/products`, sepet fiyatı ve sipariş 500 veriyor (sayfalar koddaki katalogla açılıyor). **Çözüm:** hPanel > voltekno.com > Node.js > Ortam değişkenleri'nde `DATABASE_URL=file:/home/u718952521/domains/voltekno.com/voltekno.db` (mutlak yol, `public_html` ve `hbuilds` dışında) yapın, ardından yeniden yayınlayın. Bu aynı zamanda verilerin yayınlar arasında korunmasını sağlar.
-- [ ] **Canlı veritabanı kalıcı değil:** `DATABASE_URL=file:./dev.db` derleme klasöründe; her yayında sıfırdan oluşturuluyor. 16.10 öncesi canlı veritabanında sipariş tablosu bile yoktu (yalnızca eski 8 tablo; loglarda sipariş kaydı yok), bu yüzden bu yayında veri kaybı olmadı. **Bundan sonraki her yayın siparişleri, kuponları, kampanyaları siler** → hPanel > Node.js > Ortam değişkenleri'nde `DATABASE_URL`'i derleme dışında kalıcı bir yola alın (ör. `file:/home/u718952521/voltekno-data/voltekno.db`) ya da PostgreSQL'e geçin; bir sonraki yayından **önce** yapılmalı.
-- [ ] `public_html_standalone/` (eski derleme çıktısı, 2056 dosya) hâlâ git'te; depodan çıkarılmalı.
-- [ ] **Canlıda eksik ortam değişkenleri** (hPanel > Node.js > Ortam değişkenleri): `CRON_SECRET`, `ADMIN_EMAIL`, `POS_BANK_NAME` / `POS_CLIENT_ID` / `POS_STORE_KEY` / `POS_GATEWAY_URL` (banka gelince), `ADMIN_TOTP_SECRET` (önerilir), `BACKUP_DIR`, isteğe bağlı `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_ETBIS_VERIFY_URL`, `NEXT_PUBLIC_SITE_URL`. Eskiden kalan `NEXTAUTH_URL` / `NEXTAUTH_SECRET` artık kullanılmıyor.
-- [ ] **Cron görevi yok** (hesapta yalnızca başka bir siteye ait PHP görevi var): `expire-orders` (6 saatte bir) ve `backup` (günde bir) kurulmalı — önce `CRON_SECRET` girilmeli.
+- [x] **Veritabanı tabloları çalışan uygulamada yok (16.10 yayını sonrası, ÖNEMLİ):** derlemede `prisma db push` tabloları bir `dev.db`'de oluşturuyor, çalışan uygulama (`hbuilds/versions/<sürüm>/nodejs`) göreli `file:./dev.db` yüzünden başka bir dosyayı açıyor → `/api/products`, sepet fiyatı ve sipariş 500 veriyor (sayfalar koddaki katalogla açılıyor). **Çözüm:** hPanel > voltekno.com > Node.js > Ortam değişkenleri'nde `DATABASE_URL=file:/home/u718952521/domains/voltekno.com/voltekno.db` (mutlak yol, `public_html` ve `hbuilds` dışında) yapın, ardından yeniden yayınlayın. Bu aynı zamanda verilerin yayınlar arasında korunmasını sağlar. _(✓ canlı `DATABASE_URL` mutlak ve kalıcı, derleme tabloları oraya kuruyor)_
+- [x] **Canlı veritabanı kalıcı değil:** `DATABASE_URL=file:./dev.db` derleme klasöründe; her yayında sıfırdan oluşturuluyor. 16.10 öncesi canlı veritabanında sipariş tablosu bile yoktu (yalnızca eski 8 tablo; loglarda sipariş kaydı yok), bu yüzden bu yayında veri kaybı olmadı. **Bundan sonraki her yayın siparişleri, kuponları, kampanyaları siler** → hPanel > Node.js > Ortam değişkenleri'nde `DATABASE_URL`'i derleme dışında kalıcı bir yola alın (ör. `file:/home/u718952521/voltekno-data/voltekno.db`) ya da PostgreSQL'e geçin; bir sonraki yayından **önce** yapılmalı. _(✓ canlı `DATABASE_URL=/home/u718952521/domains/nextfirststep.com/voltekno.db`)_
+- [x] `public_html_standalone/` (eski derleme çıktısı, 2056 dosya) hâlâ git'te; depodan çıkarılmalı. _(✓ git takibinden çıkarıldı (`0859e22`))_
+- [ ] **Canlıda eksik ortam değişkenleri** (hPanel > Node.js > Ortam değişkenleri): `CRON_SECRET`, `ADMIN_EMAIL`, `POS_BANK_NAME` / `POS_CLIENT_ID` / `POS_STORE_KEY` / `POS_GATEWAY_URL` (banka gelince), `ADMIN_TOTP_SECRET` (önerilir), `BACKUP_DIR`, isteğe bağlı `NEXT_PUBLIC_META_PIXEL_ID`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_ETBIS_VERIFY_URL`, `NEXT_PUBLIC_SITE_URL`. Eskiden kalan `NEXTAUTH_URL` / `NEXTAUTH_SECRET` artık kullanılmıyor. _(21.10 kontrolü: `CRON_SECRET`, `ADMIN_EMAIL`, `BACKUP_DIR` tanımlı; `ADMIN_TOTP_SECRET`, `POS_*`, `GELIVER_API_TOKEN` eksik)_
+- [x] **Cron görevi yok** (hesapta yalnızca başka bir siteye ait PHP görevi var): `expire-orders` (6 saatte bir) ve `backup` (günde bir) kurulmalı — önce `CRON_SECRET` girilmeli. _(✓ uygulama içi zamanlayıcı (havale takibi, yedek, Geliver ve Navlungo takibi), `CRON_SECRET` canlıda tanımlı)_
 
 ### ✅ Faz 10 — güvenlik ve test ortamı (16.10.2026)
 
@@ -72,8 +74,8 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [x] **Markalar şeridi:** voltekno.com'daki 10 marka + katalogdaki TommaTech, Victron ve Mexxsun (logolar resmi sitelerinden, `public/images/brands/`); her logo marka filtresine gidiyor.
 - [x] **Header ve hero voltekno.com ile birebir** (ölçüler voltekno.com'dan alındı): üst şerit, logo + arama + hesap/sepet satırı, "TÜM KATEGORİLER" açılır listesi + 7 kategori linki, mobilde kategori butonu + arama + kaydırmalı kategori hapları; yatay kayan hero ve alta binen 4 güven kartı. Dil/para birimi seçimi footer'a taşındı.
 - [x] **Yanlış ürün görselleri (16/28 düzeltildi):** 10 Deye on-grid, Apex 80A ATS (2 görsel), TommaTech batarya alt tabanı, TommaTech SPI 2,2 kW, Victron BMS CL kablosu — resmî kaynaklardan. Excel'i yeniden import etseniz de korunur: `scripts/data/image-overrides.json` (SKU → `public/images/products/override/`), yeni görsel `node scripts/prepare-override-image.mjs` ile hazırlanır.
-- [ ] **Kalan 12 yanlış görsel — sizden fotoğraf gerekiyor:** TommaTech diyot modülleri (MDK25A/55A/70A/90A/110A, MDC150-16; 7 ürün) ve R32 Split Isı Pompası İç Ünite. Üreticinin (TommaTech/CW Enerji) sitesinde ve kataloglarında bu ürünlerin görseli yok.
-- [ ] **Düşük kaliteli görseller (232 kayıt, 187 ürün)** ve şüpheli 17 görsel: rapor `docs/urun-gorsel-denetimi.md`.
+- [x] **Kalan 12 yanlış görsel — sizden fotoğraf gerekiyor:** TommaTech diyot modülleri (MDK25A/55A/70A/90A/110A, MDC150-16; 7 ürün) ve R32 Split Isı Pompası İç Ünite. Üreticinin (TommaTech/CW Enerji) sitesinde ve kataloglarında bu ürünlerin görseli yok. _(✓ aynı OEM modelin / serinin resmî fotoğraflarıyla değiştirildi (DURUM.md "İstek turu 2" ve 20.10 görselleri))_
+- [x] **Düşük kaliteli görseller (232 kayıt, 187 ürün)** ve şüpheli 17 görsel: rapor `docs/urun-gorsel-denetimi.md`. _(✓ 238 SKU resmî görsellerle yenilendi; 500 px altı, filigranlı görsel kalmadı)_
 - [x] **Eski alt kategori filtre linkleri** (`/products?category=Panel`, `MPPT/PWM`, `Lityum Batarya` …) yeni kategoriye eşleniyor (`LEGACY_SUBCATEGORY_MAP`, lib/categories.ts). Ana sayfadaki görünmeyen SSS yapılandırılmış verisi kaldırıldı (Google kuralı: işaretlenen SSS sayfada görünmeli).
 
 ### ✅ Faz 12 — e-ticaret altyapısı uçtan uca (18.10.2026)
@@ -91,19 +93,19 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 **Sizin yapmanız gerekenler:**
 - [ ] `firebase deploy --only firestore:rules` (eski sipariş yolu kilidi).
 - [ ] Firebase Console → Authentication → Authorized domains: `voltekno.com`, `www.voltekno.com`, `nextfirststep.com`. Google ile giriş isteniyorsa Sign-in method → Google → Enable ve ortama `NEXT_PUBLIC_GOOGLE_SIGNIN_ENABLED=true`.
-- [ ] Canlıda `MEDIA_DIR` (admin'den yüklenen görseller için kalıcı klasör; varsayılan SQLite dosyasının yanındaki `media/`).
+- [x] Canlıda `MEDIA_DIR` (admin'den yüklenen görseller için kalıcı klasör; varsayılan SQLite dosyasının yanındaki `media/`). _(✓ gerek yok: görseller kalıcı veritabanının yanındaki `media/` klasörüne gidiyor)_
 - [x] 24 "görsel hazırlanıyor" ürünü için fotoğraf (TommaTech diyot modülleri, R32 split iç/dış ünite, Frecon 315–450 kW, Exelon PMAX, Havensis 20AES/MPS 3A vb.). — tamamlandı (18.10.2026, gerçek fotoğraflar)
-- [ ] Desi bazlı kargo ücreti kuralı (şu an sabit 50 TL, 3.000 TL üstü ücretsiz) ve taksit tablosu: bilgiler gelince eklenecek.
+- [x] Desi bazlı kargo ücreti kuralı (şu an sabit 50 TL, 3.000 TL üstü ücretsiz) ve taksit tablosu: bilgiler gelince eklenecek. _(✓ desi bazlı kargo yapıldı; 20.10'dan beri Geliver + Navlungo kıyası (taksit tablosu bankadan bekleniyor))_
 
 ### 🔴 P0 — Yayından önce (sizde)
 
-- [ ] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi.
-- [ ] **"yeni10" kampanyası** yerelde kapatıldı; canlıda da varsa Admin > İndirimler'den kapatın.
+- [x] **Canlı veritabanı temizliği:** `npx tsx scripts/clear-legacy-catalog.ts` (kuru çalıştırma) → `--apply`. Yalnızca yerel `dev.db` temizlendi. _(✓ canlı API'de yalnızca güncel 340 ürün var (19.10 kontrolü))_
+- [x] **"yeni10" kampanyası** yerelde kapatıldı; canlıda da varsa Admin > İndirimler'den kapatın. _(✓ canlıda kupon geçersiz (19.10 kontrolü))_
 - [ ] **Admin 2FA'yı açın:** `node scripts/admin-2fa-setup.mjs` → `ADMIN_TOTP_SECRET` (canlı ortam).
 - [ ] **Meta Pixel kullanılacaksa:** `NEXT_PUBLIC_META_PIXEL_ID` girin ve çerez politikasına (lib/legal/documents.json) Meta pikselini ekletin.
 - [ ] **Gerçek stok:** Excel'de tüm ürünlerin stoğu 17; varyantlar ürün stoğunu paylaşıyor.
-- [ ] **Kargo ücreti kuralı** (siz verecektiniz): şu an 50 TL, 3.000 TL üstü ücretsiz. Desi verisi hazır; kural gelince `lib/store-config.ts`'e desi bazlı hesap eklenir.
-- [ ] **Yayın yöntemi:** statik `public_html` yerine Node (standalone) yayın — canlı kur, sepet, sipariş ve ödeme sunucu ister; eski URL yönlendirmeleri de yalnızca Node yayında çalışır.
+- [x] **Kargo ücreti kuralı** (siz verecektiniz): şu an 50 TL, 3.000 TL üstü ücretsiz. Desi verisi hazır; kural gelince `lib/store-config.ts`'e desi bazlı hesap eklenir. _(✓ desi bazlı kargo, Geliver + Navlungo kıyası)_
+- [x] **Yayın yöntemi:** statik `public_html` yerine Node (standalone) yayın — canlı kur, sepet, sipariş ve ödeme sunucu ister; eski URL yönlendirmeleri de yalnızca Node yayında çalışır. _(✓ Node (standalone) yayın yapılıyor)_
 - [ ] **Merchant Center**'da akışı yeniden getirin; **Search Console**'a sitemap'i yeniden gönderin.
 - [ ] Banka sanal POS bilgileri (`POS_*`) ve test; Hostinger cron'ları (`expire-orders`, `backup`) + `CRON_SECRET`; IBAN hesap sahibi adı kontrolü; e-Arşiv entegratörü; canlıdaki eski fatura PDF'lerinin silinmesi; SQLite → PostgreSQL.
 
@@ -113,17 +115,17 @@ _ikas Excel'iyle katalog değişimi (340 ürün, 322 varyant, 13 marka) ve ardı
 - [ ] **Electrozirve:** ölçüler, model kodları birebir eşleşen SRNE kaynaklarından alındı; Electrozirve'nin SRNE markalı ürün sattığını teyit edin.
 - [ ] **Apex / NP Power:** distribütör sayfalarında özellik yok; değerler arşivlenmiş sayfalar ve pazaryeri ilanlarından (düşük güven: NP 8,5/11 kW inverterler 3,5 kW ile aynı kasa görünüyor, NP2440 için iki farklı ölçü). APX şarj cihazları, NP şarj cihazları, Apex 51,2V lityumlar, NS serisi ve 80A transfer switch için veri yok.
 - [ ] **Exelon:** ELH-24 ve PMAX-12P için veri sayfası yok; ELH-12/15 ağırlığı veri sayfasındaki üst sınır (≤45 kg).
-- [ ] **Ölçüsü bulunamayanlar** (`missing-logistics.json`): Altech türbin ve direkleri (tedarikçiden koli listesi), Mexxsun MPK8, TommaTech duvar/entegre/SC/ayarlanabilir şarj üniteleri, R32 split ısı pompaları, SPI 315–630 kW sürücüler (paletli/ambar), kablolar ve küçük aksesuarlar, Electrozirve DC-DC ve uzaktan kumandalar, bazı Havensis aksesuarları.
+- [x] **Ölçüsü bulunamayanlar** (`missing-logistics.json`): Altech türbin ve direkleri (tedarikçiden koli listesi), Mexxsun MPK8, TommaTech duvar/entegre/SC/ayarlanabilir şarj üniteleri, R32 split ısı pompaları, SPI 315–630 kW sürücüler (paletli/ambar), kablolar ve küçük aksesuarlar, Electrozirve DC-DC ve uzaktan kumandalar, bazı Havensis aksesuarları. _(✓ ölçüsü/ağırlığı eksik SKU kalmadı (20.10); 46 üründe değer tahmin)_
 - [ ] **Büyük/özel gönderiler:** 50 kW R290 ısı pompası (490 kg), büyük Frecon/SPI sürücüler, Heli 2.0/4.0 türbinler, Altech Nova → ambar/palet; Lithium SuperPack'ler UN3480 (lityum) — kargo firmasıyla kısıtları kontrol edin.
 - [ ] **İstabreeze kanatları** araştırmada tek kanat ağırlığıyla; set (3'lü) satılıyorsa düzeltin. İstabreeze i-1000…Windsafe türbinleri iki koliyle gidiyor (tanımlandı).
 - [ ] **Ölçüler çoğunlukla ürün (kutusuz) ölçüsü**; üreticiler koli ölçüsü yayımlamıyor. Kesin desi için ilk sevkiyatlarda koli ölçüsü alınıp `product-logistics.json`'a yazılması önerilir.
-- [ ] Excel'de **eksik 16 görsel** (Drive'da silinmiş) yeniden yüklenmeli; **barkod/GTIN** sütunu boş.
-- [ ] **Veri kaynağı kararı:** admin panelindeki ürün düzenlemeleri Excel yeniden aktarılınca da geçerli kalır.
+- [ ] Excel'de **eksik 16 görsel** (Drive'da silinmiş) yeniden yüklenmeli; **barkod/GTIN** sütunu boş. _(20.10: silinen görsellerin hepsi resmî görsellerle tamamlandı; barkod/GTIN hâlâ boş)_
+- [x] **Veri kaynağı kararı:** admin panelindeki ürün düzenlemeleri Excel yeniden aktarılınca da geçerli kalır. _(✓ öyle çalışıyor: admin düzenlemeleri veritabanında, Excel yeniden aktarılınca ezilmez)_
 
 ### 🟡 P2 ve sonrası
 
 - [ ] Ürün adları/açıklamaları yalnızca Türkçe (İngilizce arayüz).
-- [ ] Ana sayfa için yeni banner/slayt tasarımları (şu an tek slayt).
+- [x] Ana sayfa için yeni banner/slayt tasarımları (şu an tek slayt). _(✓ ana sayfada çok slaytlı hero var)_
 - [ ] **Hesap/sağlayıcı gerektirenler:** kargo firması API (gönderi oluşturma), SMS sağlayıcı, bankadan taksit tablosu ve ORDERSTATUS sorgusu, Sentry (DSN), Redis/Upstash (yalnızca çok sunuculu kurulumda gerekli), Turnstile anahtarları, ETBİS bağlantısı, İYS kaydı, Google Ads dönüşüm etiketi, ERP/muhasebe, staging ortamı.
 - [ ] **İş kararı gerektirenler:** PayTR (entegre et ya da kaldır — şu an ödeme başlatma yok), kapıda ödeme, kurumsal müşteri (vergi no profili, bayi fiyatı), X al Y öde ve sadakat puanı, kâr marjı raporu (ürün maliyetleri gerekli), sonuçlanmamış kart siparişlerinin otomatik iptali (ORDERSTATUS gelmeden önerilmez).
 
@@ -292,7 +294,7 @@ Arama (yazım hatası toleransı, eş anlamlılar, sıralama, klavye ile gezinme
 - [~] **Yedekleme:** günlük DB yedeği + geri yükleme testi. _(POST /api/cron/backup: SQLite VACUUM INTO, son 14 yedek; Hostinger cron kurulmalı, geri yükleme denemesi yapılmalı)_
 - [x] **Ürün soruları moderasyonsuz yayınlanıyor** _(yalnızca admin yanıtlayınca yayınlanıyor; uzunluk ve deneme sınırı)_ (`questions/route.ts`) → `status: pending` + admin onayı + uzunluk limiti.
 - [x] **`.env.example` güncelle:** _(tek dosya, kodun kullandığı tüm değişkenler; eski env.example silindi)_ `JWT_SECRET`, `ADMIN_EMAIL`, `NEXT_PUBLIC_SITE_URL`, `SMTP_*`, `STRIPE_*`, `PAYTR_*`. Gizli değerlerde boş string fallback'lerini kaldır (fail-fast).
-- [ ] **Repo temizliği:** kökteki ~380 MB zip'ler (`public_html*.zip`, `tommatech-*.zip`), `nul`, boş `product-*.html`, `.codex-*.log`, `build_output.txt`, `dev.log` → sil veya `.gitignore`.
+- [ ] **Repo temizliği:** kökteki ~380 MB zip'ler (`public_html*.zip`, `tommatech-*.zip`), `nul`, boş `product-*.html`, `.codex-*.log`, `build_output.txt`, `dev.log` → sil veya `.gitignore`. _(21.10: `.codex-*.log` git dışında; kökteki 4 eski zip (yaklaşık 380 MB) git'te değil, diskte duruyor (eski site yedeği olabilir, silme kararı sizde))_
 
 ## 7. 🟡 P2 — Test ve kalite
 
@@ -306,12 +308,12 @@ Arama (yazım hatası toleransı, eş anlamlılar, sıralama, klavye ile gezinme
 - [x] **Stok gelince haber ver** (yok). _(ürün sayfasında form; admin stok güncellemesi ve cron sonrası tek seferlik e-posta)_
 - [x] **Terk edilen sepet hatırlatma e-postası** (yok). _(yalnızca ticari ileti izni olan üyeler, 24 saat sonra, sepet başına bir kez; profilde izin verme/geri alma)_
 - [x] Ücretsiz kargo eşiği göstergesi ("X TL daha ekleyin").
-- [ ] Tahmini teslim tarihi ürün ve sepet sayfasında.
+- [x] Tahmini teslim tarihi ürün ve sepet sayfasında. _(✓ ürün, sepet, ödeme, sipariş sayfası ve e-postalarda (`9b73f14`))_
 - [x] Hesapta: sipariş geçmişi _(çalışıyor; detay, takip, ödenmemiş siparişi iptal)_, fatura indirme, iade talebi, kayıtlı adresler, şifre değiştirme, **hesap silme (KVKK)**. _(fatura/sözleşme indirme, iade talebi, havale bildirimi, hesap silme (KVKK) eklendi)_
 - [x] Arama: otomatik tamamlama, yazım toleransı, sonuç yoksa öneri. _(puanlı sıralama, kelime bazlı eşleşme, eş anlamlılar, tek harf yazım hatası toleransı; öneri kutusunda kategori önerisi, eski fiyat, ok tuşları/Enter/Esc ve ekran okuyucu desteği; hafif API yanıtı)_
 - [ ] Ürün sayfası: stok durumu, teknik doküman/datasheet indirme, garanti bilgisi, benzer/tamamlayıcı ürünler.
 - [ ] Kurumsal müşteriler için: fatura profili (vergi no), toplu sipariş/teklif iste (RFQ modeli şemada var), bayi fiyatı.
-- [ ] Canlı destek / WhatsApp butonu.
+- [x] Canlı destek / WhatsApp butonu. _(✓ sabit WhatsApp düğmesi ve footer bağlantısı var)_
 - [x] Erişilebilirlik (klavye, kontrast, form etiketleri) ve mobil checkout testi. _(mobil denetim: yinelenen main-content kimliği (13 dosya), eksik h1, etiketsiz arama/adet/yorum alanları, isimsiz kupon ve yıldız butonları, 10px slayt noktaları düzeltildi; ödeme sayfasında yatay taşma yok — otomatik testte)_
 
 ## 9. 🟡 P2 — SEO ve ölçümleme
