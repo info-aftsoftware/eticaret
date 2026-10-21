@@ -151,7 +151,7 @@ export async function getAdminOrderDetail(id: string) {
         returnCarrierName: r.returnCarrier ? getCarrier(r.returnCarrier)?.name ?? r.returnCarrier : null,
         returnCode: r.returnCode,
         refundAmount: r.refundAmount,
-        suggestedRefund: suggestedRefund(order, items),
+        suggestedRefund: suggestedRefund(order, items, r.id),
         createdAt: r.createdAt.toISOString(),
         approvedAt: r.approvedAt?.toISOString() ?? null,
         receivedAt: r.receivedAt?.toISOString() ?? null,

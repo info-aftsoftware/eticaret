@@ -101,6 +101,7 @@ const EXACT: Record<string, string> = {
 
 /** Değişken içeren mesajlar: ürün adları ve sayılar olduğu gibi aktarılır */
 const PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Sepet tutarınız güncellendi: yeni toplam (.+) TL \(önceki (.+) TL\)\. Lütfen kontrol edip siparişi yeniden onaylayın\.$/, (m) => `Your cart total has changed: new total ${m[1]} TL (previously ${m[2]} TL). Please review and confirm your order again.`],
   [/^"(.+)" için bir seçenek \(model\) seçmelisiniz\. Lütfen ürünü sepetten çıkarıp seçenekle yeniden ekleyin\.$/, (m) => `You must choose an option (model) for "${m[1]}". Please remove the product from your cart and add it again with an option.`],
   [/^"(.+)" için en fazla (\d+) adet iade edilebilir\.$/, (m) => `At most ${m[2]} of "${m[1]}" can be returned.`],
   [/^"(.+)" için stokta yalnızca (\d+) adet var\.$/, (m) => `Only ${m[2]} of "${m[1]}" are in stock.`],

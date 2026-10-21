@@ -492,6 +492,9 @@ model Order {
   geliverStatusCode  String?   // trackingStatusCode (TRANSIT, DELIVERED …) ya da gönderi durumu
   geliverStatusLabel String?   // Türkçe son durum ("Kargo dağıtımda")
   geliverSyncedAt    DateTime?
+  // Ödeme sayfasının deneme anahtarı: aynı anahtarla gelen ikinci istek yeni sipariş açmaz (çift tıklama, ağ tekrarı).
+  // @unique değil: derlemedeki "prisma db push" yeni benzersiz kısıtta onay ister; tekillik uygulamada sağlanır
+  idempotencyKey     String?
   eArsivRef       String?  // E-arşiv invoice reference
   invoicePdfUrl   String?  // Generated invoice PDF
   notes           String?
@@ -514,6 +517,7 @@ model Order {
   @@index([createdAt])
   @@index([navlungoPostNumber])
   @@index([geliverShipmentId])
+  @@index([idempotencyKey])
 }
 
 // İade / cayma talepleri (müşteri "Siparişlerim"den oluşturur, admin onaylar → iade kodu → teslim alındı → ücret iadesi)

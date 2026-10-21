@@ -31,6 +31,45 @@ const MAX_OPEN_UNPAID_BANK_ORDERS = 3
 
 const str = (v: unknown, max = 500): string => (typeof v === 'string' ? v.trim().slice(0, max) : '')
 
+/** Ödeme sayfasının deneme anahtarı (çift tıklama / ağ tekrarı): biçim ve geçerlilik süresi */
+const IDEMPOTENCY_KEY_RE = /^[A-Za-z0-9_-]{16,80}$/
+const IDEMPOTENCY_WINDOW_MS = 24 * 60 * 60 * 1000
+/** Aynı anahtarla eşzamanlı gelen istekler sırayla işlenir (tek süreçli Node uygulaması) */
+const inflight = new Map<string, Promise<unknown>>()
+
+const fmtTl = (n: number) => n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+
+function siteBase() {
+  return (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
+}
+
+/** Aynı anahtarla daha önce açılmış sipariş varsa ilk yanıtın aynısı döner (yeni sipariş açılmaz) */
+async function replayOrder(key: string) {
+  const order = await prisma.order.findFirst({
+    where: { idempotencyKey: key, createdAt: { gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS) } },
+    orderBy: { createdAt: 'desc' },
+  })
+  if (!order) return null
+  let payment: { form: PosForm; bank: string } | undefined
+  const posConfig = order.paymentMethod === 'card' && order.status === 'PENDING' && order.paymentStatus !== 'PAID' ? getBankPosConfig() : null
+  if (posConfig) {
+    payment = {
+      bank: posConfig.bankName,
+      form: buildPosForm(
+        { orderNo: order.orderNo, amount: order.total, callbackUrl: `${siteBase()}/api/payments/pos/callback`, customer: { name: order.shippingName, email: order.shippingEmail ?? '', phone: order.shippingPhone } },
+        posConfig
+      ),
+    }
+  }
+  return NextResponse.json({
+    success: true,
+    replayed: true,
+    orderId: order.orderNo,
+    pricing: { subtotal: order.subtotal, couponDiscount: order.couponDiscount, paymentDiscount: order.paymentDiscount, tax: order.vatTotal, shipping: order.shippingCost, total: order.total },
+    payment,
+  })
+}
+
 /**
  * Sipariş oluşturur. Fiyat, KDV, kargo ve kupon indirimi sunucuda hesaplanır;
  * istemcinin gönderdiği fiyat/toplam alanları yok sayılır. Ödeme durumu her zaman PENDING başlar
@@ -38,6 +77,27 @@ const str = (v: unknown, max = 500): string => (typeof v === 'string' ? v.trim()
  * Body: { customer, items: [{ id, quantity }], couponCode?, paymentMethod: 'bank_transfer' | 'card', acceptedTerms: true, notes? }
  */
 export async function POST(request: NextRequest) {
+  const raw = await request.text().catch(() => '')
+  let parsed: Record<string, unknown> | null = null
+  try {
+    parsed = raw ? JSON.parse(raw) : null
+  } catch {
+    parsed = null
+  }
+  const key = typeof parsed?.idempotencyKey === 'string' && IDEMPOTENCY_KEY_RE.test(parsed.idempotencyKey) ? parsed.idempotencyKey : null
+  if (!key) return createOrder(request, parsed)
+  // Aynı anahtarla gelen istekler sırayla: önceki bitince sipariş açılmışsa onun yanıtı döner
+  while (inflight.has(key)) await inflight.get(key)!.catch(() => {})
+  const run = (async () => (await replayOrder(key)) ?? createOrder(request, parsed, key))()
+  inflight.set(key, run)
+  try {
+    return await run
+  } finally {
+    inflight.delete(key)
+  }
+}
+
+async function createOrder(request: NextRequest, parsedBody: Record<string, unknown> | null, idempotencyKey: string | null = null) {
   try {
     if (isRateLimited(request, 'orders', 20, 60_000)) {
       return NextResponse.json(
@@ -45,7 +105,7 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       )
     }
-    const body = await request.json().catch(() => null)
+    const body = parsedBody as Record<string, any> | null
     if (!body || typeof body !== 'object') {
       return NextResponse.json({ success: false, error: 'Geçersiz istek' }, { status: 400 })
     }
@@ -138,6 +198,21 @@ export async function POST(request: NextRequest) {
       throw e
     }
 
+    // Fiyat değişimi: müşterinin onayladığı toplam (expectedTotal) sunucunun hesabından farklıysa sipariş açılmaz,
+    // yeni toplam bildirilir; müşteri yeni toplamı onaylayıp tekrar gönderince geçer (kur, kampanya, stok değişimi).
+    const expectedTotal = typeof body.expectedTotal === 'number' && Number.isFinite(body.expectedTotal) ? body.expectedTotal : null
+    if (expectedTotal !== null && Math.abs(expectedTotal - pricing.total) > 0.01) {
+      return NextResponse.json(
+        {
+          success: false,
+          code: 'PRICE_CHANGED',
+          error: `Sepet tutarınız güncellendi: yeni toplam ${fmtTl(pricing.total)} TL (önceki ${fmtTl(expectedTotal)} TL). Lütfen kontrol edip siparişi yeniden onaylayın.`,
+          pricing: { subtotal: pricing.subtotal, couponDiscount: pricing.couponDiscount, paymentDiscount: pricing.paymentDiscount, tax: pricing.tax, shipping: pricing.shipping, total: pricing.total },
+        },
+        { status: 409 }
+      )
+    }
+
     // Kullanıcı yalnızca doğrulanmış token'dan belirlenir; gövdedeki userId yok sayılır.
     let resolvedUserId: string | null = null
     const tokenUserId = (await getCustomerFromRequest(request))?.userId ?? null
@@ -199,6 +274,7 @@ export async function POST(request: NextRequest) {
         subtotal: pricing.subtotal,
         vatTotal: pricing.tax,
         shippingCost: pricing.shipping,
+        idempotencyKey,
         // Ücretin kaynağı yönetim panelinde gösterilir (Geliver / Navlungo, firma, tüm teklifler)
         shippingQuoteProvider: pricing.shippingQuote.provider,
         shippingQuoteCarrier: pricing.shippingQuote.carrierId,
@@ -289,7 +365,7 @@ export async function POST(request: NextRequest) {
       try {
         const returnToken = crypto.randomBytes(18).toString('base64url')
         await prisma.order.update({ where: { id: order.id }, data: { paymentProviderRef: returnToken } })
-        const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
+        const baseUrl = siteBase()
         payment = {
           bank: posConfig.bankName,
           form: buildPosForm(

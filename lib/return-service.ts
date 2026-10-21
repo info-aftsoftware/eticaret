@@ -70,16 +70,8 @@ export function returnEligibility(order: OrderWithReturns) {
   }
 }
 
-/** Önerilen iade tutarı: iade edilen satırların indirimli payı (+ tamamı iade ise kargo ücreti). */
-export function suggestedRefund(order: OrderWithReturns, items: ReturnItem[]): number {
-  const unit = Object.fromEntries(order.lines.map((l) => [l.id, l.unitPrice]))
-  const returnedSubtotal = items.reduce((s, i) => s + (unit[i.lineId] ?? 0) * i.quantity, 0)
-  if (order.subtotal <= 0) return 0
-  const ratio = Math.min(1, returnedSubtotal / order.subtotal)
-  const goods = (order.total - order.shippingCost) * ratio
-  const fullReturn = order.lines.every((l) => items.find((i) => i.lineId === l.id)?.quantity === l.quantity)
-  return round2(goods + (fullReturn ? order.shippingCost : 0))
-}
+import { suggestedRefund } from '@/lib/return-refund'
+export { suggestedRefund }
 
 function toEmailData(order: Order, r: ReturnRequest): ReturnEmailData {
   const site = STORE_CONTACT.siteUrl.replace(/\/$/, '')
@@ -265,7 +257,7 @@ export async function updateReturnRequest(
     }
     case 'refund': {
       expect('RECEIVED')
-      const amount = round2(Number(opts.amount ?? suggestedRefund(order, itemsOf(r))))
+      const amount = round2(Number(opts.amount ?? suggestedRefund(order, itemsOf(r), r.id)))
       if (!Number.isFinite(amount) || amount <= 0) throw new OrderTransitionError('Geçerli bir iade tutarı girin.')
       const alreadyRefunded = order.returnRequests
         .filter((x) => x.status === 'REFUNDED')
