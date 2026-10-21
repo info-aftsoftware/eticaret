@@ -1,11 +1,11 @@
 # Proje Durumu — Voltekno e-ticaret
 
-_Son güncelleme: 20.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
+_Son güncelleme: 21.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
 **Canlıda (nextfirststep.com, son yayın `7381cb9`, 20.10.2026 20:52, SEO hariç):** profesyonel seviye (yönetici rolleri, 2FA, işlem kaydı, izleme, yedek, CSV aktarımları, toplu kargo), açık tema ve varsayılan Türkçe, Geliver + Navlungo kargo fiyatı kıyası.
 
-**Kodda hazır, canlıda değil (kararınız: "şimdilik bekle"):** Navlungo gönderi entegrasyonu (`1dfd6ce`, kimlik bilgisi bekleniyor) ve Geliver kargo takibi (`9929e0d`). İkisi birlikte yayınlanmalı, çünkü Geliver kodu Navlungo'nun değiştirdiği dosyaların üstüne yazıldı. Akü kısıtı, tamamlanan desiler ve görseller `aku-iletisim` dalında (ana dala birleştirilmedi, aşağıda). SEO (`9ad9119`, `6a30301`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+**Kodda hazır, canlıda değil (kararınız: "şimdilik bekle"):** Navlungo gönderi entegrasyonu (`1dfd6ce`, kimlik bilgisi bekleniyor) ve Geliver kargo takibi (`9929e0d`). İkisi birlikte yayınlanmalı, çünkü Geliver kodu Navlungo'nun değiştirdiği dosyaların üstüne yazıldı. Akü kısıtı, tamamlanan desiler, görseller ve Codex'in teslimat tahmini işi ana çalışma dalında (`595f87b`), canlıda değil. SEO (`9ad9119`, `6a30301`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
 
 ## Kalanlar (20.10.2026 kontrolü)
 _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
@@ -14,7 +14,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 | # | Kalan | Not |
 |---|---|---|
 | K1 | Navlungo + Geliver kodunun yayını | `1dfd6ce` + `9929e0d` canlıda değil. Yayında `GELIVER_API_TOKEN` Hostinger'a eklenmeli. Navlungo, bilgileri girilene kadar kapalı kalır |
-| K1b | `aku-iletisim` dalı | Akü kısıtı, desiler ve görseller (`409abe9`, `963a38d`, `5cc31e0`, `672724a`). Ana dala birleştirilmedi (Codex değişiklikleri ürün sayfasıyla çakışıyor), canlıda değil |
+| K1b | Akü kısıtı, desi, görseller, teslimat tahmini | `urun-katalogu-ikas`'ta (`4f351a4`, `9b73f14`, `595f87b`), canlıda değil. Yayınlanırken K1 ile birlikte gider |
 | K2 | SEO yayını | Tür ve marka sayfaları, eski voltekno.com yönlendirmeleri (`9ad9119`, `6a30301`) bekliyor |
 | K3 | `main` dalı ve GitHub adresi | `urun-katalogu-ikas`, `origin/main`'den 81 commit ileride; yerel `main` 19 commit ileride ama gönderilmemiş. `origin` hâlâ eski adres (`aysenur-23/eticaret`, yeni adrese yönlendiriyor). İkisi de izin sisteminde reddedildi, sizin yapmanız gerekiyor (aşağıda "Yayın") |
 
@@ -51,7 +51,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 **7. Klasör ve depo düzeni**
 | Konu | Not |
 |---|---|
-| Ortak klasörde başkasına ait commit'lenmemiş değişiklikler | Bir Codex aracı bu klasörde çalışıyor. Commit'lenmemiş değişiklikleri: ödeme sayfası, SSS, kargo sayfası, sipariş ve kategori sayfaları, hero, sipariş e-postaları, `lib/order-service.ts`, site denetim raporları; ayrıca 4 hero görseli siliniyor ve eski günlük dosyaları git'ten çıkarılıyor. Bunlar hiçbir commit'te ve yayında yok. Sahibi gözden geçirip commit'lemeli ya da geri almalı. 20.10 akşamı kontrolde klasör hatasız derleniyordu |
+| Ortak klasörde başkasına ait commit'lenmemiş değişiklikler | ✅ 21.10.2026: Codex'in değişiklikleri gözden geçirilip `9b73f14` olarak commit'lendi; klasörde bekleyen değişiklik kalmadı |
 | İngilizce katalog | İki eski çalışma kopyasında yarım iş var: `.claude/worktrees/admiring-mahavira-309b7b` (68 dosya) ve `awesome-greider-503600` (34 dosya), ikisi de 19.10'dan beri commit'lenmemiş. Devam mı, silme mi kararı sizde |
 | Eski dallar | `claude/crazy-feynman` (Nisan), `seo-alan-adi` (ana dala birleşti; klasörü `../voltekno-seo`), eski bir stash. Temizlenebilir |
 | Repo temizliği | Kökteki büyük zip'ler ve geçici dosyalar (`YAPILACAKLAR.md` 295) |
@@ -64,7 +64,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
 
-## Akü kısıtı, desi ve görseller (20.10.2026, dal `aku-iletisim`, canlıda değil)
+## Akü kısıtı, desi ve görseller (20.10.2026, `urun-katalogu-ikas`'a birleşti `4f351a4`, canlıda değil)
 **İstek:** akü ve batarya gönderiminde kısıtlama olup olmadığı kontrol edilecek; o zamana kadar sitede "kargo ve nakliye için iletişime geçiniz" olsun. Eksik görseller ve eksik desiler tamamlansın.
 
 **Akü / batarya (`409abe9`):** Lityum Akü, Jel Akü ve Taşınabilir Güç İstasyonu kategorilerindeki 25 ürün şimdilik çevrim içi satılmıyor. "Batarya Yönetimi ve Aksesuar" (BMS) ile şarj cihazları normal satılıyor.
@@ -94,7 +94,9 @@ Kısıt kalkınca `lib/shipping/battery.ts` içinde `BATTERY_CONTACT_ONLY = fals
 
 **Doğrulama (dalın kendi derlemesi, temiz çalışma kopyası):** tip kontrolü temiz, birim testleri 113/113 (yeni: akü kategorileri, desi.json akü işareti, İngilizce hata), derleme 471 sayfa, Playwright 98 geçti / 0 kaldı. Yerel kopyada: akü ürün sayfasında iletişim kutusu, kategori sayfasında 25 "İletişime geç" kartı, sepet doğrulaması aküyü satılamaz işaretliyor, akülü sipariş 400, akü ürün akışında yok, şemasında kargo bilgisi yok. SPI ürününde 160 kW seçilince dolap tipi görsel geliyor.
 
-**Birleştirme:** Bu iş `aku-iletisim` dalında, `urun-katalogu-ikas`'a birleştirilmedi. Ortak klasördeki commit'lenmemiş Codex değişiklikleri aynı dosyaya (ürün sayfası) dokunduğu için birleştirme şu an yapılamıyor. Codex değişiklikleri commit'lenince ya da geri alınınca birleştirilebilir.
+**Birleştirme (21.10.2026):** Codex'in değişiklikleri gözden geçirilip ayrı commit olarak kaydedildi (`9b73f14`, aşağıda), ardından `aku-iletisim` çakışmasız birleşti (`4f351a4`). Codex'in kargo sayfasına yazdığı "akülü siparişler tehlikeli madde taşımaya uygun firmayla gönderilir" cümlesi akü kuralıyla çelişiyordu, "şimdilik çevrim içi sipariş edilemiyor, iletişime geçin" olarak düzeltildi (`595f87b`). Birleşik halde: tip kontrolü temiz, birim testleri 113/113, derleme 471 sayfa, Playwright 98 geçti / 0 kaldı, akü kontrollerinin hepsi ve kargo/SSS metinleri doğrulandı.
+
+**Codex'in işi (`9b73f14`):** teslimat tahmini (hafta içi 15:00 öncesi aynı gün, sonrası ertesi iş günü kargoya; kargoda 1–3 iş günü) ödeme sayfasına, müşteri sipariş sayfasına (kargoya verilene kadar) ve sipariş alındı / ödeme alındı / onaylandı e-postalarına eklendi; SSS ve kargo sayfası metinleri aynı kurala göre; kargo firması listesine hepsiJET XL ve PTT; ana sayfa hero görselinde öncelik ve duyarlı boyutlar; kullanılmayan 4 görsel (yaklaşık 10 MB) silindi; `.codex-*.log` dosyaları git dışında; site denetim raporu yenilendi. Gözden geçirmede: silinen görsellerin hiçbir yerde kullanılmadığı, tip kontrolü, 110 birim testi ve değişen dosyalarda lint temiz.
 
 ## Navlungo gönderi entegrasyonu (20.10.2026, yayında değil)
 **İstek:** Gönderiler Navlungo'dan çıkıyor; "Kargoya ver" adımında gönderi Navlungo'da oluşsun, takip numarası, takip bağlantısı ve durum taşıyıcı sitelerinden değil Navlungo'dan gelsin.
@@ -441,6 +443,6 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 - Bir önceki yayın: `3008ea6` (20.10.2026 19:12): koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git"
 - Bir önceki yayın: `25ae00a` (19.10.2026 19:27): profesyonel seviye, SEO hariç. dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
 - Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
-- Canlıda olmayanlar (20.10 kontrolü; Hostinger'daki son yayın `deploy-7381cb9.zip`): `1dfd6ce` Navlungo entegrasyonu, `9929e0d` Geliver takibi, `9ad9119` ve `6a30301` SEO. SEO yayınlanacağı zaman `urun-katalogu-ikas` dalı doğrudan yayınlanabilir; diğer her şey zaten içinde. Ortak klasördeki commit'lenmemiş değişiklikler hiçbir yayında yok
+- Canlıda olmayanlar (21.10 kontrolü; Hostinger'daki son yayın `deploy-7381cb9.zip`): `1dfd6ce` Navlungo entegrasyonu, `9929e0d` Geliver takibi, akü kısıtı + desi + görseller (`4f351a4`), Codex'in teslimat tahmini (`9b73f14`), `9ad9119` ve `6a30301` SEO. SEO'suz yayın için bunlar `yayin-pro-seo-haric` dalına alınmalı; SEO da yayınlanacaksa `urun-katalogu-ikas` doğrudan yayınlanabilir
 - 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.
