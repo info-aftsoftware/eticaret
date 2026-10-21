@@ -82,8 +82,8 @@ export default async function ShippingPage() {
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
               {L(
-                'Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, HepsiJET XL, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo, PTT) üzerinden gönderilmektedir. Akü / batarya içeren siparişler yalnızca tehlikeli madde taşımacılığına uygun firmayla gönderilir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.',
-                'Orders are shipped via our partner carriers (Sürat Kargo, HepsiJET, HepsiJET XL, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo, PTT). Orders containing batteries ship only with a carrier approved for hazardous-goods transport. The most suitable carrier is selected automatically based on your region and order weight.'
+                'Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, HepsiJET XL, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo, PTT) üzerinden gönderilmektedir. Akü ve bataryalarda kargo kısıtlamaları kontrol edildiğinden bu ürünler şimdilik çevrim içi sipariş edilemiyor; kargo ve nakliye için bizimle iletişime geçin. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.',
+                'Orders are shipped via our partner carriers (Sürat Kargo, HepsiJET, HepsiJET XL, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo, PTT). Because carrier restrictions on batteries are being checked, these products cannot be ordered online for now; please contact us about shipping and delivery. The most suitable carrier is selected automatically based on your region and order weight.'
               )}
             </p>
             <p className="text-ink-muted leading-relaxed">
