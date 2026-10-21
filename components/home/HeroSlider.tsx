@@ -108,7 +108,8 @@ export function HeroSlider() {
                       alt={copy.alt}
                       fill
                       priority={i === 0}
-                      sizes="100vw"
+                      fetchPriority={i === 0 ? 'high' : 'low'}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
                       className={`object-cover ${'mobileFocus' in slide ? slide.mobileFocus : 'object-center'} min-[641px]:object-[50%_45%]`}
                     />
                   </div>

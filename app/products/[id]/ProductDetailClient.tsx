@@ -19,7 +19,7 @@ import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { CompareButton } from '@/components/CompareButton'
-import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds } from '@/lib/products-mock'
+import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds, type MockProduct } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
 import { useTranslations } from 'next-intl'
@@ -35,7 +35,7 @@ import { ProductReviews } from '@/components/ProductReviews'
 import { ProductQA } from '@/components/ProductQA'
 import { useL } from '@/lib/i18n-inline'
 
-const mockProductsMap: Record<string, (typeof mockProducts)[number]> = {}
+const mockProductsMap: Record<string, MockProduct> = {}
 mockProducts.forEach((p) => { mockProductsMap[p.id] = p })
 
 /** fullDescription içinde bu başlıklar varsa akordiyon bölümüne çevrilir */
@@ -69,12 +69,12 @@ function parseDescriptionSections(text: string): { intro: string; sections: { ti
   return { intro, sections }
 }
 
-type Props = { initialProduct?: (typeof mockProducts)[number] | null; productId?: string }
+type Props = { initialProduct?: MockProduct | null; productId?: string }
 
 export default function ProductDetailClient({ initialProduct, productId: productIdProp }: Props = {}) {
   const params = useParams()
   const productId = (productIdProp ?? params?.id) as string
-  const [product, setProduct] = useState<(typeof mockProducts)[number] | null>(initialProduct ?? null)
+  const [product, setProduct] = useState<MockProduct | null>(initialProduct ?? null)
   const [loading, setLoading] = useState(!initialProduct)
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -191,7 +191,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
     }
     return ids
       .map((id) => mockProductsMap[id])
-      .filter(Boolean) as (typeof mockProducts)[number][]
+      .filter(Boolean) as MockProduct[]
   }, [product?.id, product?.category, product?.brand])
 
   if (loading) {
@@ -584,7 +584,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   .filter((id) => mockProductsMap[id])
                   .slice(0, 4)
                   .map((id) => mockProductsMap[id])
-                  .filter(Boolean) as (typeof mockProducts)[number][]
+                  .filter(Boolean) as MockProduct[]
                 if (compatProducts.length === 0) return null
                 return (
                   <section className="mt-7" aria-labelledby="compat-heading">

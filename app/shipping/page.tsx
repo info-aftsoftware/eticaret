@@ -55,8 +55,8 @@ export default async function ShippingPage() {
             </div>
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
               {L(
-                'Teslimat süresi siparişin içeriğine, stok durumuna ve bulunduğunuz bölgeye göre değişiklik gösterebilir. Hafta sonu ve resmi tatil günleri iş günü sayılmaz.',
-                'Delivery time may vary depending on the order contents, stock availability and your region. Weekends and public holidays are not counted as business days.'
+                'Hafta içi 15:00 öncesi verilen siparişler aynı gün, sonrası ertesi iş günü kargoya verilir; kargoda 1–3 iş günü sürer (hafta sonu hariç). Resmî tatiller iş günü sayılmaz. Stok dışı / özel sipariş ürünlerde süre sipariş öncesi bildirilir.',
+                'Orders placed before 15:00 on business days ship the same day, otherwise the next business day; transit takes 1–3 business days (excluding weekends). Public holidays are not business days. Lead times for out-of-stock / made-to-order items are quoted before ordering.'
               )}
             </div>
           </div>
@@ -81,8 +81,8 @@ export default async function ShippingPage() {
             </div>
             <p className="text-ink-muted leading-relaxed mb-4">
               {L(
-                'Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo) üzerinden gönderilmektedir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.',
-                'Orders are shipped via our partner carriers (Sürat Kargo, HepsiJET, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo). The most suitable carrier is selected automatically based on your region and order weight.'
+                'Siparişler, anlaşmalı kargo firmalarımız (Sürat Kargo, HepsiJET, HepsiJET XL, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo, PTT) üzerinden gönderilmektedir. Akü / batarya içeren siparişler yalnızca tehlikeli madde taşımacılığına uygun firmayla gönderilir. Bölgeniz ve sipariş ağırlığına göre en uygun firma otomatik seçilir.',
+                'Orders are shipped via our partner carriers (Sürat Kargo, HepsiJET, HepsiJET XL, Kolay Gelsin, Yurtiçi Kargo, Aras Kargo, PTT). Orders containing batteries ship only with a carrier approved for hazardous-goods transport. The most suitable carrier is selected automatically based on your region and order weight.'
               )}
             </p>
             <p className="text-ink-muted leading-relaxed">

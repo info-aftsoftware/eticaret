@@ -1,11 +1,14 @@
 # Site Audit Report
 
-Generated: 2026-04-14T20:04:27.657Z
+Generated: 2026-10-20T18:41:59.768Z
 
 - Critical: 0
-- Warnings: 0
+- Warnings: 1
 - Info: 2
 
+## Warnings
+- Multiple h1 (2): app/checkout/page.tsx
+
 ## Info
-- i18n key count tr=671, en=671
-- Admin API routes checked: 19
+- i18n key count tr=734, en=734
+- Admin API routes checked: 44
