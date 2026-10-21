@@ -445,6 +445,15 @@ export default function CheckoutPage() {
     if (!isFromCart) router.push('/cart')
   }, [cartHydrated, isFromCart, router])
 
+  // Sayfa açılınca birim fiyatları sunucuyla eşitle: gösterilen toplam ile sunucu toplamı aynı olsun (yoksa sipariş PRICE_CHANGED alır)
+  const pricesSynced = useRef(false)
+  React.useEffect(() => {
+    if (!cartHydrated || !isFromCart || pricesSynced.current) return
+    pricesSynced.current = true
+    void refreshCartPrices()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartHydrated, isFromCart])
+
   // GA4: ödeme adımına başlama (sayfa başına bir kez)
   const beginCheckoutSent = useRef(false)
   React.useEffect(() => {
