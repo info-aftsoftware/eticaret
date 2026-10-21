@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Slider } from '@/components/ui/slider'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
-import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
+import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE, type MockProduct } from '@/lib/products-mock'
 import { getCategoryValuesByGroupId, getCategoryKey, CATEGORY_GROUPS } from '@/lib/categories'
 import { useL } from '@/lib/i18n-inline'
 import { buildSpecFacets } from '@/lib/spec-facets'
@@ -39,7 +39,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
 
   // Güncel katalog (admin fiyat/stok düzenlemeleri + aktif kampanyalar); ilk çizim için koddaki liste
-  const [catalog, setCatalog] = useState<(typeof mockProducts)[number][]>(mockProducts)
+  const [catalog, setCatalog] = useState<MockProduct[]>(mockProducts)
   React.useEffect(() => {
     fetch('/api/products')
       .then((res) => (res.ok ? res.json() : null))

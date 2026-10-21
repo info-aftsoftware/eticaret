@@ -33,6 +33,7 @@ export default function OrderReceivedEmail({ order }: { order: OrderEmailData })
         <Text style={s.p}>
           Siparişiniz için teşekkür ederiz. <strong>{fmtTRY(order.total)}</strong> tutarındaki ödemeniz alındı; siparişiniz en kısa sürede
           hazırlanıp kargoya verilecek.
+          {order.estimatedDelivery && (<> Tahmini teslimat aralığınız: <strong>{order.estimatedDelivery}</strong>.</>)}
         </Text>
       )}
       <OrderSummary order={order} />

@@ -111,6 +111,11 @@ export default function OrderStatusEmail({ order, kind, reason }: {
           verildiğinde takip bilgilerini ayrıca göndereceğiz.
         </Text>
       )}
+      {order.estimatedDelivery && (kind === 'payment_received' || kind === 'confirmed') && (
+        <Text style={s.p}>
+          Tahmini teslimat aralığınız: <strong>{order.estimatedDelivery}</strong> (iş günü 15:00 öncesi siparişler aynı gün, sonrası ertesi iş günü kargoya verilir; kargoda 1–3 iş günü).
+        </Text>
+      )}
 
       {kind === 'payment_failed' && (
         <>

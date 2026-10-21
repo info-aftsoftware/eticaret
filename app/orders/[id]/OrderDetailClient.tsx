@@ -18,6 +18,7 @@ import { ReturnSection } from './ReturnSection'
 import { PaymentNoticeForm } from './PaymentNoticeForm'
 import { BankTransferDetails } from '@/components/order/BankTransferDetails'
 import { BANK_TRANSFER_DISCOUNT_RATE, STORE_TIME_ZONE, VAT_RATE, bankTransferDeadline } from '@/lib/store-config'
+import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useL } from '@/lib/i18n-inline'
 import { useServerError } from '@/lib/server-error-i18n'
 
@@ -502,6 +503,13 @@ export default function OrderDetailPage() {
             ) : isPrismaOrder ? (
               <Card title={L('Sipariş durumu', 'Order status')} icon={Clock}>
                 <ProgressTimeline order={order} />
+                {/* Ödeme onayı öncesi de tahmini aralık görünür (ödeme günü baz alınır) */}
+                {!['shipped', 'delivered'].includes(order.status) && (
+                  <p className="mt-4 flex items-start gap-2 rounded-lg border border-[#e6ebf1] bg-[#f5f7fa] px-3 py-2.5 text-sm text-[#20384e]">
+                    <Truck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden />
+                    <DeliveryEstimate compact />
+                  </p>
+                )}
                 {cancelReqStatus === 'REQUESTED' && (
                   <p className="mt-4 flex items-start gap-2 rounded-lg border border-[#f5d97a] bg-[#fff8e1] px-3 py-2.5 text-sm text-[#5c4300]">
                     <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />

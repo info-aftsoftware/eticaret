@@ -37,8 +37,8 @@ const faqItems = [
       {
         q: { tr: 'Kargo süresi ne kadar?', en: 'How long does shipping take?' },
         a: {
-          tr: 'Teslimat süresi siparişin içeriğine, stok durumuna ve bölgenize göre değişir. Tahmini süre sipariş onay e-postanızda belirtilir.',
-          en: 'Delivery time varies depending on the order contents, stock availability and your region. The estimated time is stated in your order confirmation email.',
+          tr: 'Hafta içi 15:00 öncesi verilen siparişler aynı gün, sonrası ertesi iş günü kargoya verilir; kargoda 1–3 iş günü sürer (hafta sonu hariç). Örneğin perşembe sabahı verilen sipariş cuma–salı arası elinizde olur. Tahmini tarih aralığını ürün ve sepet sayfasında da görebilirsiniz.',
+          en: 'Orders placed before 15:00 on business days ship the same day, otherwise the next business day; transit takes 1–3 business days (excluding weekends). For example, an order placed Thursday morning arrives between Friday and Tuesday. You can also see the estimated range on the product and cart pages.',
         },
       },
       {

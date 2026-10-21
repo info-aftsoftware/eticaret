@@ -40,6 +40,8 @@ export type OrderEmailData = {
   adminUrl: string
   siteUrl?: string
   paymentDueDate?: string | null
+  /** Ödeme onay anındaki tahmini teslimat aralığı (örn. "21–23 Ekim") */
+  estimatedDelivery?: string | null
   /** İptal / iade edilen (başlatılan) ücret iadesi tutarı */
   refundAmount?: number | null
 }

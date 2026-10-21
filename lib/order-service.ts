@@ -20,6 +20,7 @@ import React from 'react'
 import { reportError } from '@/lib/alerts'
 import type { Order, OrderLine, OrderStatus } from '@prisma/client'
 import { releaseCouponUse } from '@/lib/order-pricing'
+import { estimateDelivery, formatDeliveryRange } from '@/lib/delivery-estimate'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { prisma } from '@/lib/prisma'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
@@ -84,6 +85,12 @@ function parseCustomerNote(order: Order): string | null {
 export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
   const carrier = order.shippingCarrier ? getCarrier(order.shippingCarrier) : undefined
   const due = bankTransferDeadline(order.createdAt)
+  // Ödeme onay anındaki teslimat tahmini: 15:00 kuralıyla aynı gün / ertesi iş günü çıkış + 1–3 iş günü taşıma
+  let estimatedDelivery: string | null = null
+  try {
+    const { from, to } = estimateDelivery(order.paidAt ?? order.createdAt)
+    estimatedDelivery = formatDeliveryRange(from, to)
+  } catch { estimatedDelivery = null }
   return {
     orderNo: order.orderNo,
     createdAt: order.createdAt.toLocaleString('tr-TR', { timeZone: STORE_TIME_ZONE }),
@@ -118,6 +125,7 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,
     siteUrl: siteUrl(),
     paymentDueDate: due.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE }),
+    estimatedDelivery,
     billingAddress: order.billingAddress
       ? [order.billingAddress, [order.billingDistrict, order.billingCity].filter(Boolean).join(' / '), order.billingPostalCode]
           .filter(Boolean)
