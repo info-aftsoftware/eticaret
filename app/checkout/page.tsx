@@ -35,6 +35,14 @@ import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
 import { useServerError } from '@/lib/server-error-i18n'
 
+/** Sipariş denemesi anahtarı: çift tıklama / ağ tekrarında sunucu ikinci sipariş açmaz, ilkini döner */
+function newAttemptKey(): string {
+  try {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID().replace(/-/g, '')
+  } catch {}
+  return Array.from({ length: 32 }, () => Math.floor(Math.random() * 36).toString(36)).join('')
+}
+
 type FormState = {
   name: string
   email: string
@@ -402,6 +410,33 @@ export default function CheckoutPage() {
   const { subtotal, tax, shipping, total, paymentDiscount } = totals
   const itemCount = cartItems.reduce((n, i) => n + i.quantity, 0)
 
+  // Sayfa başına bir deneme anahtarı (sunucu aynı anahtarla gelen ikinci isteğe ilk siparişi döner)
+  const attemptKeyRef = useRef('')
+  if (!attemptKeyRef.current) attemptKeyRef.current = newAttemptKey()
+  // Fiyat değişimi bildirilince müşterinin gördüğü yeni sunucu toplamı; sepet içeriği değişince sıfırlanır
+  const [acceptedTotal, setAcceptedTotal] = useState<number | null>(null)
+  const cartShape = useMemo(
+    () => `${cartItems.map((i) => `${i.id}:${i.quantity}`).join('|')}|${couponCode ?? ''}|${paymentMethod}`,
+    [cartItems, couponCode, paymentMethod]
+  )
+  React.useEffect(() => setAcceptedTotal(null), [cartShape])
+
+  /** Sepetteki birim fiyatları sunucudaki güncel fiyatlarla tazeler (fiyat değişimi bildiriminden sonra) */
+  const refreshCartPrices = async () => {
+    try {
+      const items = useCartStore.getState().items
+      const res = await fetch('/api/cart/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
+      })
+      const data = (await res.json().catch(() => null)) as { lines?: { id: string; unitPrice?: number }[] } | null
+      const prices: Record<string, number> = {}
+      for (const l of data?.lines ?? []) if (typeof l.unitPrice === 'number') prices[l.id] = l.unitPrice
+      if (Object.keys(prices).length) useCartStore.getState().syncPrices(prices)
+    } catch {}
+  }
+
   /** Sipariş oluştu ve sayfadan ayrılınıyor (banka / başarı sayfası): sepet boşalınca /cart'a atlamasın */
   const leavingRef = useRef(false)
 
@@ -514,14 +549,18 @@ export default function CheckoutPage() {
         notes: f.notes.trim() || undefined,
         acceptedTerms,
         paymentMethod: method,
+        idempotencyKey: attemptKeyRef.current,
+        // Müşterinin onayladığı toplam: sunucunun hesabı farklıysa sipariş açılmaz, yeni toplam bildirilir
+        expectedTotal: acceptedTotal ?? total,
       }),
     })
 
     const data = await response.json().catch(() => null)
     if (!response.ok || !data?.success) {
-      const e = new Error(tErr(data?.error) || L('Sipariş oluşturulamadı.', 'The order could not be created.')) as Error & { code?: string; fields?: Record<string, string> }
+      const e = new Error(tErr(data?.error) || L('Sipariş oluşturulamadı.', 'The order could not be created.')) as Error & { code?: string; fields?: Record<string, string>; pricing?: { total: number } }
       e.code = data?.code
       e.fields = data?.fields
+      e.pricing = data?.pricing
       throw e
     }
     return data as {
@@ -606,8 +645,13 @@ export default function CheckoutPage() {
       router.push(`/checkout/success?order_id=${encodeURIComponent(data.orderId)}&payment=bank_transfer`)
       if (isFromCart) clearCart()
     } catch (error) {
-      const ex = error as Error & { code?: string; fields?: Record<string, string> }
-      if (ex.code === 'CARD_UNAVAILABLE') {
+      const ex = error as Error & { code?: string; fields?: Record<string, string>; pricing?: { total: number } }
+      if (ex.code === 'PRICE_CHANGED' && typeof ex.pricing?.total === 'number') {
+        // Yeni toplam gösterilir; müşteri tekrar onaylayınca bu toplamla gönderilir
+        setAcceptedTotal(ex.pricing.total)
+        await refreshCartPrices()
+        showGeneralError(ex.message)
+      } else if (ex.code === 'CARD_UNAVAILABLE') {
         setPaymentMethod('havale')
         showGeneralError(L('Kartla ödeme şu anda kullanılamıyor. Ödeme yöntemi Havale/EFT olarak değiştirildi; siparişi bu şekilde tamamlayabilirsiniz.', 'Card payment is currently unavailable. Your payment method has been switched to Bank Transfer (EFT); you can complete your order this way.'))
       } else if (ex.fields && Object.keys(ex.fields).length > 0) {
