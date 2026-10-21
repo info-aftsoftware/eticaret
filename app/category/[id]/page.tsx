@@ -2,10 +2,9 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { CATEGORY_GROUPS, LEGACY_CATEGORY_REDIRECTS } from '@/lib/categories'
 import { CategoryPageClient } from './CategoryPageClient'
+import { CategoryTypeLinks } from './CategoryTypeLinks'
 import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
-import Link from 'next/link'
-import { PAGE_CONTAINER } from '@/lib/page-container'
 import { categoryHref } from '@/lib/seo/type-paths'
 import { typeByCategory } from '@/lib/seo/taxonomy'
 
@@ -79,7 +78,7 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
   // Gruptaki ürün türleri → dizinlenebilir tür sayfaları (Google bu bağlantılardan tür sayfalarını keşfeder)
   const typeLinks = group
     ? (group.categoryValues as readonly string[])
-        .map((c) => ({ label: typeByCategory(c)?.h1 ?? c, href: categoryHref(c), count: mockProducts.filter((p) => p.category === c).length }))
+        .map((c) => ({ category: c, label: typeByCategory(c)?.h1 ?? c, href: categoryHref(c), count: mockProducts.filter((p) => p.category === c).length }))
         .filter((t) => t.count > 0)
     : []
 
@@ -122,18 +121,7 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
       )}
       <CategoryPageClient id={params.id} />
       {typeLinks.length > 1 && (
-        <nav aria-label={`${title} ürün türleri`} className={`${PAGE_CONTAINER} pb-12`}>
-          <h2 className="text-[18px] font-semibold text-[#121926]">{title} ürün türleri</h2>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {typeLinks.map((t) => (
-              <li key={t.href}>
-                <Link href={t.href} className="inline-flex items-center gap-1.5 rounded-full border border-[#d3d9e1] bg-white px-3.5 py-1.5 text-[13.5px] font-medium text-[#20384e] hover:border-[#0b2540]">
-                  {t.label} <span className="text-[#5d6e80]">({t.count})</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <CategoryTypeLinks groupId={params.id} title={title} links={typeLinks} />
       )}
     </>
   )
