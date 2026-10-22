@@ -30,6 +30,7 @@ import { MarketingConsentCard } from '@/components/profile/MarketingConsentCard'
 import { PrivacyDocumentsCard } from '@/components/profile/PrivacyDocumentsCard'
 import { EmailVerifyBanner } from '@/components/EmailVerifyBanner'
 import { useL } from '@/lib/i18n-inline'
+import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 
 const ORDER_STATUS_LABELS_EN: Record<string, string> = {
   pending: 'Pending',
@@ -167,6 +168,10 @@ function ProfilePageContent() {
       addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Zorunlu alanları doldurun.', 'Please fill in the required fields.') })
       return
     }
+    if (!isValidTrPhone(addressForm.phone)) {
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L(PHONE_ERROR_TR, PHONE_ERROR_EN) })
+      return
+    }
     try {
       if (editingAddressId) {
         await updateAddress(user.id, editingAddressId, addressForm)
@@ -229,6 +234,10 @@ function ProfilePageContent() {
   const refreshUserProfile = useFirebaseAuthStore((s) => s.refreshUserProfile)
   const handleSaveProfile = async () => {
     if (!user?.id) return
+    if (profileEdit.phone.trim() && !isValidTrPhone(profileEdit.phone)) {
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L(PHONE_ERROR_TR, PHONE_ERROR_EN) })
+      return
+    }
     try {
       await setUserProfile(user.id, {
         email: user.email,

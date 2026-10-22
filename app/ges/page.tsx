@@ -21,6 +21,7 @@ import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { getAddresses } from '@/lib/firebase/firestore'
 import { useL } from '@/lib/i18n-inline'
+import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 
 const CONTACT_DRAFT_KEY = 'site_contact_draft'
 
@@ -209,8 +210,8 @@ export default function GesPage() {
     const next: Record<string, string> = {}
     if (!form.fullName.trim() || form.fullName.trim().length < 2)
       next.fullName = t('quoteForm.errorFullName')
-    if (!form.phone.trim() || form.phone.replace(/\s/g, '').length < 10)
-      next.phone = t('quoteForm.errorPhone')
+    if (!isValidTrPhone(form.phone))
+      next.phone = form.phone.trim() ? L(PHONE_ERROR_TR, PHONE_ERROR_EN) : t('quoteForm.errorPhone')
     if (!form.city.trim())
       next.city = t('quoteForm.errorCity')
     if (!form.kvkkAccepted)

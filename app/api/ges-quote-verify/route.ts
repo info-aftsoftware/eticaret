@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import { prisma } from '@/lib/prisma'
 import { isRateLimited } from '@/lib/rate-limit'
 
@@ -66,6 +67,14 @@ export async function POST(request: NextRequest) {
       )
     }
     const body = await request.json()
+
+    // İletişim bilgileri sitedeki formlarla aynı kuralla (lib/checkout-validation)
+    if (!isValidEmail(body.contactEmail)) {
+      return NextResponse.json({ success: false, error: 'Geçerli bir e-posta adresi girin (örn. ad@ornek.com).' }, { status: 400 })
+    }
+    if (!isValidTrPhone(body.contactPhone)) {
+      return NextResponse.json({ success: false, error: 'Geçerli bir telefon numarası girin (11 hane, örn. 0532 123 45 67).' }, { status: 400 })
+    }
 
     const companyName = typeof body.companyName === 'string' ? body.companyName.trim() : ''
     // Firma adı isteğe bağlı

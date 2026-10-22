@@ -15,6 +15,7 @@ import { AuthLayout, TextField, PasswordField, PasswordStrength, Checkbox, Prima
 import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { saveSignupConsents } from '@/components/auth/consents'
 import { useL } from '@/lib/i18n-inline'
+import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 
 const MIN_PASSWORD = 8
@@ -73,8 +74,7 @@ function RegisterPageContent() {
     const email = formData.email.trim()
     if (!email) next.email = L('E-posta adresinizi girin.', 'Enter your email address.')
     else if (!EMAIL_RE.test(email)) next.email = L('Geçerli bir e-posta adresi girin (örn. ad@ornek.com).', 'Enter a valid email address (e.g. name@example.com).')
-    const digits = formData.phone.replace(/\D/g, '')
-    if (formData.phone.trim() && (digits.length < 10 || digits.length > 13)) next.phone = L('Geçerli bir telefon numarası girin (örn. 0555 123 45 67).', 'Enter a valid phone number (e.g. 0555 123 45 67).')
+    if (formData.phone.trim() && !isValidTrPhone(formData.phone)) next.phone = L(PHONE_ERROR_TR, PHONE_ERROR_EN)
     if (!formData.password) next.password = L('Bir şifre belirleyin.', 'Choose a password.')
     else if (formData.password.length < MIN_PASSWORD) next.password = L(`Şifre en az ${MIN_PASSWORD} karakter olmalıdır.`, `Password must be at least ${MIN_PASSWORD} characters.`)
     if (!formData.confirmPassword) next.confirmPassword = L('Şifrenizi tekrar girin.', 'Re-enter your password.')

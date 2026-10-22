@@ -53,4 +53,4 @@ export function passwordStrength(pw: string): { score: 0 | 1 | 2 | 3 | 4; label:
   return { score: s, label }
 }
 
-export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+export { EMAIL_RE } from '@/lib/checkout-validation'

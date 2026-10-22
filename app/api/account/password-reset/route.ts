@@ -11,7 +11,7 @@ import { isRateLimited } from '@/lib/rate-limit'
 import { sendPasswordResetMessage } from '@/lib/notifications'
 import { siteOrigin, oobCodeFromLink, inCooldown, clearCooldown } from '../_shared'
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+import { EMAIL_RE } from '@/lib/checkout-validation'
 
 export async function POST(request: NextRequest) {
   if (isRateLimited(request, 'password-reset', 5, 15 * 60_000)) {

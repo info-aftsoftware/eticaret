@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useL } from '@/lib/i18n-inline'
+import { isValidEmail, isValidTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 import { Phone, Send, Loader2 } from 'lucide-react'
 
@@ -68,7 +69,8 @@ export default function ContactPage() {
     const next: Record<string, string> = {}
     if (!formData.name?.trim()) next.name = L('Ad Soyad zorunludur.', 'Full name is required.')
     if (!formData.email?.trim()) next.email = L('E-posta zorunludur.', 'Email is required.')
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) next.email = L('Geçerli bir e-posta adresi girin.', 'Please enter a valid email address.')
+    else if (!isValidEmail(formData.email)) next.email = L(EMAIL_ERROR_TR, EMAIL_ERROR_EN)
+    if (formData.phone?.trim() && !isValidTrPhone(formData.phone)) next.phone = L(PHONE_ERROR_TR, PHONE_ERROR_EN)
     if (!formData.subject?.trim()) next.subject = L('Konu zorunludur.', 'Subject is required.')
     if (!formData.message?.trim()) next.message = L('Mesaj zorunludur.', 'Message is required.')
     else if (formData.message.trim().length < 10) next.message = L('Mesaj en az 10 karakter olmalıdır.', 'Message must be at least 10 characters.')
@@ -173,10 +175,14 @@ export default function ContactPage() {
                         name="phone"
                         type="tel"
                         value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="+90 (555) 123 45 67"
-                        className="rounded-xl border-slate-200 focus:ring-2 focus:ring-slate-400 focus:border-slate-400"
+                        onChange={(e) => { handleChange(e); setErrors((prev) => ({ ...prev, phone: '' })) }}
+                        placeholder="0532 123 45 67"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        aria-invalid={Boolean(errors.phone)}
+                        className={`rounded-xl border-slate-200 focus:ring-2 focus:ring-slate-400 focus:border-slate-400 ${errors.phone ? 'border-red-500' : ''}`}
                       />
+                      {errors.phone && <p className="text-sm text-destructive">{errors.phone}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="subject">{L('Konu *', 'Subject *')}</Label>

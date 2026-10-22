@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isValidEmail } from '@/lib/checkout-validation'
 import { prisma } from '@/lib/prisma'
 import { isRateLimited, getClientIp } from '@/lib/rate-limit'
 import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
   }
   const productId = typeof body.productId === 'string' ? body.productId.slice(0, 200) : ''
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase().slice(0, 200) : ''
-  if (!productId || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!productId || !isValidEmail(email)) {
     return NextResponse.json({ success: false, error: 'Geçerli bir e-posta adresi girin.' }, { status: 400 })
   }
   const product = await getMergedProductById(productId)

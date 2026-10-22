@@ -17,6 +17,8 @@ const EXACT: Record<string, string> = {
   'Bu sipariş için iptal talebiniz zaten inceleniyor.': 'Your cancellation request for this order is already under review.',
   'Bu sipariş için ödeme bildirimi yapılamaz.': 'A payment notice cannot be submitted for this order.',
   'Bu ürün şu anda stokta.': 'This product is currently in stock.',
+  'Geçerli bir e-posta adresi girin (örn. ad@ornek.com).': 'Enter a valid email address (e.g. name@example.com).',
+  'Geçerli bir telefon numarası girin (11 hane, örn. 0532 123 45 67).': 'Enter a valid phone number (11 digits, e.g. 0532 123 45 67).',
   'Bu ürün için değerlendirmenizi zaten gönderdiniz.': 'You have already submitted a review for this product.',
   'Değerlendirme yazmak için giriş yapın.': 'Please sign in to write a review.',
   'Yalnızca bu ürünü satın alıp teslim alan müşterilerimiz değerlendirme yazabilir.': 'Only customers who have purchased and received this product can write a review.',

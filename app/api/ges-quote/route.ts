@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import React from 'react'
 import { prisma } from '@/lib/prisma'
 import { sendEmailSMTP } from '@/lib/email-smtp'
@@ -188,7 +189,8 @@ export async function POST(request: NextRequest) {
     const fullName = typeof body.fullName === 'string' ? body.fullName.trim().slice(0, 120) : ''
     const phone = typeof body.phone === 'string' ? body.phone.trim().replace(/\s/g, '') : ''
     const city = typeof body.city === 'string' ? body.city.trim().slice(0, 100) : ''
-    const email = typeof body.email === 'string' ? body.email.trim().slice(0, 300) || undefined : undefined
+    // Geçersiz e-posta kaydedilmez (formda e-posta alanı oturumdan dolar, zorunlu değildir)
+    const email = typeof body.email === 'string' && isValidEmail(body.email) ? body.email.trim().slice(0, 300) : undefined
     const monthlyKwh = typeof body.monthlyKwh === 'number' && Number.isFinite(body.monthlyKwh) ? body.monthlyKwh : undefined
     const regionId = typeof body.regionId === 'string' ? body.regionId.trim().slice(0, 300) || undefined : undefined
     const suggestedKwp = typeof body.suggestedKwp === 'number' && Number.isFinite(body.suggestedKwp) ? body.suggestedKwp : undefined
@@ -223,9 +225,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    if (!phone || phone.length < 10) {
+    if (!isValidTrPhone(phone)) {
       return NextResponse.json(
-        { success: false, error: 'Geçerli bir telefon numarası girin.' },
+        { success: false, error: 'Geçerli bir telefon numarası girin (11 hane, örn. 0532 123 45 67).' },
         { status: 400 }
       )
     }

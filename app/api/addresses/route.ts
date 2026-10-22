@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isValidTrPhone } from '@/lib/checkout-validation'
 import jwt from 'jsonwebtoken'
 import { getAdminFirestore, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 
@@ -76,6 +77,10 @@ export async function POST(request: NextRequest) {
       country = 'Türkiye',
       isDefault = false,
     } = body
+
+    if (!isValidTrPhone(String(phone))) {
+      return NextResponse.json({ success: false, error: 'Geçerli bir telefon numarası girin (11 hane, örn. 0532 123 45 67).' }, { status: 400 })
+    }
 
     if (!isFirebaseAdminConfigured()) {
       return NextResponse.json(
