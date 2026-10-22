@@ -2,6 +2,8 @@
 
 import { Turnstile } from '@/components/Turnstile'
 import React, { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Star, Loader2, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -56,9 +58,10 @@ export function ProductReviews({ productId }: { productId: string }) {
   const [hoverRating, setHoverRating] = useState(0)
   const [title, setTitle] = useState('')
   const [comment, setComment] = useState('')
-  const [guestName, setGuestName] = useState('')
-  const [guestEmail, setGuestEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const pathname = usePathname()
+  /** Değerlendirme yalnızca bu ürünü satın alıp teslim almış üyeye açık (sunucu da aynı kuralı uygular) */
+  const [eligibility, setEligibility] = useState<{ canReview: boolean; reason: string } | null>(null)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
 
@@ -80,6 +83,30 @@ export function ProductReviews({ productId }: { productId: string }) {
     loadReviews()
   }, [loadReviews])
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setEligibility({ canReview: false, reason: 'login' })
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      try {
+        const token = await getAuthToken()
+        const res = await fetch(`/api/products/${productId}/reviews/eligibility`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          cache: 'no-store',
+        })
+        const data = await res.json().catch(() => null)
+        if (!cancelled) setEligibility(data && typeof data.canReview === 'boolean' ? data : { canReview: false, reason: 'login' })
+      } catch {
+        if (!cancelled) setEligibility({ canReview: false, reason: 'login' })
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [isAuthenticated, productId])
+
   const avgRating =
     reviews.length > 0 ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length : 0
 
@@ -94,15 +121,11 @@ export function ProductReviews({ productId }: { productId: string }) {
       setError(L('Lütfen bir yorum yazın.', 'Please write a review.'))
       return
     }
-    if (!isAuthenticated && (!guestName.trim() || !guestEmail.trim())) {
-      setError(L('Ad ve e-posta zorunludur.', 'Name and email are required.'))
-      return
-    }
     setSubmitting(true)
     setError('')
     try {
       const headers: Record<string, string> = { 'Content-Type': 'application/json' }
-      const token = isAuthenticated ? await getAuthToken() : null
+      const token = await getAuthToken()
       if (token) headers['Authorization'] = `Bearer ${token}`
 
       const res = await fetch(`/api/products/${productId}/reviews`, {
@@ -112,9 +135,8 @@ export function ProductReviews({ productId }: { productId: string }) {
           rating,
           title: title.trim() || undefined,
           comment: comment.trim(),
-          // Guests provide their own; logged-in users send profile as fallback
-          guestName: isAuthenticated ? user?.name : guestName.trim() || undefined,
-          guestEmail: isAuthenticated ? user?.email : guestEmail.trim() || undefined,
+          // Oturumda ad yoksa profildeki ad kullanılır
+          guestName: user?.name || undefined,
           turnstileToken,
         }),
       })
@@ -130,8 +152,7 @@ export function ProductReviews({ productId }: { productId: string }) {
       setComment('')
       setTitle('')
       setRating(5)
-      setGuestName('')
-      setGuestEmail('')
+      setEligibility({ canReview: false, reason: 'already_reviewed' })
       setLoading(true)
       await loadReviews()
     } catch {
@@ -146,14 +167,8 @@ export function ProductReviews({ productId }: { productId: string }) {
       {submitted ? (
         <div className="text-center py-2">
           <p className="text-sm font-semibold text-green-700">
-            {L('✓ Değerlendirmeniz alındı, onaylandıktan sonra yayımlanacak. Teşekkürler!', '✓ Your review has been received and will be published after approval. Thank you!')}
+            {L('Değerlendirmeniz alındı, onaylandıktan sonra yayımlanacak. Teşekkürler!', 'Your review has been received and will be published after approval. Thank you!')}
           </p>
-          <button
-            onClick={() => setSubmitted(false)}
-            className="text-xs text-brand hover:underline mt-1"
-          >
-            {L('Tekrar değerlendir', 'Write another review')}
-          </button>
         </div>
       ) : (
         <>
@@ -194,30 +209,7 @@ export function ProductReviews({ productId }: { productId: string }) {
               </span>
             </div>
 
-            {/* Guest name/email - only shown when not logged in */}
-            {!isAuthenticated && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Input
-                  placeholder={L('Adınız *', 'Your name *')}
-                  aria-label={L('Adınız', 'Your name')}
-                  value={guestName}
-                  onChange={(e) => setGuestName(e.target.value)}
-                  className="rounded-xl border-slate-200 text-sm"
-                  required
-                />
-                <Input
-                  type="email"
-                  placeholder={L('E-posta *', 'Email *')}
-                  aria-label={L('E-posta adresiniz', 'Your email address')}
-                  value={guestEmail}
-                  onChange={(e) => setGuestEmail(e.target.value)}
-                  className="rounded-xl border-slate-200 text-sm"
-                  required
-                />
-              </div>
-            )}
-
-            {isAuthenticated && user?.name && (
+            {user?.name && (
               <p className="text-xs text-slate-500">
                 {L('Değerlendirme ', 'Review will be submitted as ')}<span className="font-medium text-slate-700">{user.name}</span>{L(' olarak gönderilecek.', '.')}
               </p>
@@ -338,10 +330,27 @@ export function ProductReviews({ productId }: { productId: string }) {
         </div>
       )}
 
-      {/* Form — always visible, guest or logged-in */}
-      <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
-        {ReviewForm}
-      </div>
+      {/* Form yalnızca ürünü satın alıp teslim almış üyeye; diğerlerine kısa bilgi */}
+      {(submitted || eligibility?.canReview) ? (
+        <div className="bg-slate-50 rounded-2xl border border-slate-200 p-5">
+          {ReviewForm}
+        </div>
+      ) : eligibility ? (
+        <p className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+          {eligibility.reason === 'already_reviewed'
+            ? L('Bu ürün için değerlendirmenizi gönderdiniz. Teşekkürler!', 'You have already reviewed this product. Thank you!')
+            : eligibility.reason === 'not_purchased'
+              ? L('Bu ürünü satın alıp teslim aldıktan sonra değerlendirme yazabilirsiniz.', 'You can write a review after you purchase and receive this product.')
+              : (
+                <>
+                  {L('Değerlendirmeleri yalnızca bu ürünü satın alan müşterilerimiz yazabilir.', 'Only customers who purchased this product can write a review.')}{' '}
+                  <Link href={`/login?redirect=${encodeURIComponent(`${pathname}#degerlendirmeler`)}`} className="font-semibold text-brand hover:underline">
+                    {L('Giriş yapın', 'Sign in')}
+                  </Link>
+                </>
+              )}
+        </p>
+      ) : null}
     </div>
   )
 }
