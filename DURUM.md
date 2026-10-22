@@ -3,9 +3,9 @@
 _Son güncelleme: 22.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**Canlıda (nextfirststep.com, son yayın `f1025fa`, 21.10.2026, SEO hariç):** profesyonel seviye (yönetici rolleri, 2FA, işlem kaydı, izleme, yedek, CSV aktarımları, toplu kargo), açık tema ve varsayılan Türkçe, Geliver + Navlungo kargo fiyatı kıyası, Navlungo gönderi entegrasyonu (kimlik bilgisi girilene kadar kapalı), Geliver kargo takibi (`GELIVER_API_TOKEN` Hostinger'a eklenince çalışır), akü/batarya için iletişimle satış, tamamlanan desiler ve görseller, teslimat tahmini, sipariş tekrar koruması ve fiyat değişimi onayı, kısmi iadelerde kargo iadesi.
+**Canlıda (nextfirststep.com, son yayın `953b9ba`, 22.10.2026, SEO hariç):** 21.10'daki her şey (Navlungo entegrasyonu, Geliver takibi, akü için iletişim, desi ve görseller, teslimat tahmini, sipariş korumaları) ve 22.10 turları: mobil hero ve paket kartları, yorum yalnızca teslim almış üyeye, sayfalama ve gezinme kuralları, açılır menünün ekrana sığması, yönetim girişi düzeltmesi, Victron 120 V ürünlerin kaldırılması (338 ürün), kısa akü metni, resmî kaynaklı desiler, kargo kaynağı etiketi, iptal ve iadelerin cirodan düşmesi, Geliver'den gönderi oluşturma (anahtar girilene kadar kapalı), hesaba özel favoriler, telefon ve e-posta doğrulaması.
 
-**Kodda hazır, canlıda değil:** 22.10 turları (aşağıda "İstek turu 6" ve "İstek turu 7"): mobil düzen, yalnız alıcıya yorum, sayfalama kuralları, açılır menü, yönetim girişi, Victron'un kaldırılması, akü metni, resmî desiler, kargo kaynağı etiketi, iptallerin cirodan düşmesi, **Geliver'den gönderi oluşturma**, hesaba özel favoriler, telefon/e-posta doğrulaması. İngilizce site `ingilizce-tam` dalında hazır (3 commit), ana dala birleştirilmedi. SEO (`9ad9119`, `6a30301`, `5122e7a`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+**Kodda hazır, canlıda değil:** İngilizce site (`ingilizce-tam` dalı, 3 commit, ana dala birleştirilmedi) ve SEO (`9ad9119`, `6a30301`, `5122e7a`, "SEO yayınlamıyoruz" kararıyla bekliyor). **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
 
 ## Kalanlar (21.10.2026 kontrolü)
 _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
@@ -13,7 +13,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 **1. Yayın ve kod (sizin kararınız)**
 | # | Kalan | Not |
 |---|---|---|
-| K1 | Navlungo + Geliver kodunun yayını | ✅ 21.10.2026 `f1025fa` ile canlıda (takip). Geliver'den gönderi oluşturma 22.10'da eklendi, canlıda değil. Canlıda çalışması için Hostinger'a `GELIVER_API_TOKEN` (anahtar sohbette paylaşıldığı için önce Geliver panelinden yenisi) ve gerçek etiket için `GELIVER_TEST_MODE=0` eklenmeli; ikincisi yokken gönderiler test gönderisidir. Navlungo, bilgileri girilene kadar kapalı |
+| K1 | Navlungo + Geliver kodunun yayını | ✅ canlıda (takip 21.10, gönderi oluşturma 22.10 `953b9ba`). Çalışması için Hostinger'a `GELIVER_API_TOKEN` (anahtar sohbette paylaşıldığı için önce Geliver panelinden yenisi) ve gerçek etiket için `GELIVER_TEST_MODE=0` eklenmeli; ikincisi yokken gönderiler test gönderisidir. Navlungo, bilgileri girilene kadar kapalı |
 | K1b | Akü kısıtı, desi, görseller, teslimat tahmini, sipariş iyileştirmeleri | ✅ 21.10.2026 `f1025fa` ile canlıda |
 | K2 | SEO yayını | Tür ve marka sayfaları, eski voltekno.com yönlendirmeleri (`9ad9119`, `6a30301`; İngilizce tür listesi düzeltmesi `5122e7a`) bekliyor |
 | K3 | `main` dalı ve GitHub adresi | `urun-katalogu-ikas`, `origin/main`'den 81 commit ileride; yerel `main` 19 commit ileride ama gönderilmemiş. `origin` hâlâ eski adres (`aysenur-23/eticaret`, yeni adrese yönlendiriyor). İkisi de izin sisteminde reddedildi, sizin yapmanız gerekiyor (aşağıda "Yayın") |
@@ -64,7 +64,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
 
-## İstek turu 7 (22.10.2026, `1273400`..`9079788`, canlıda değil)
+## İstek turu 7 (22.10.2026, `1273400`..`9079788`; canlıda `953b9ba`)
 | İstek | Yapılan |
 |---|---|
 | Kargo kaynağında "önceki fiyat listesi" yazmasın | Yönetim panelinde yalnızca "Geliver" ya da "Navlungo" |
@@ -85,7 +85,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 
 **Doğrulama:** tip kontrolü ve lint temiz, birim testleri 130/130 (yeni: Geliver gönderi oluşturma, adres eşleme, koli ölçüsü, telefon/e-posta kuralları), derleme temiz, Playwright (akış testleri dahil) 98 geçti / 0 kaldı.
 
-## İstek turu 6 (22.10.2026, `fe166ff`..`eb657ae`, canlıda değil)
+## İstek turu 6 (22.10.2026, `fe166ff`..`eb657ae`; canlıda `953b9ba`)
 | İstek | Yapılan |
 |---|---|
 | Akü kutusunda bu kadar detay olmasın | Kutuda yalnızca "Kargo ve nakliye için iletişime geçin" başlığı ve iletişim düğmeleri; kargo sayfası ve sunucu mesajı da tek cümle |
@@ -485,11 +485,12 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 
 ## Yayın
 - Test ortamı: https://nextfirststep.com (arama motorlarına kapalı)
-- Son yayın: `f1025fa` (21.10.2026), dal `yayin-pro-seo-haric`: Navlungo gönderi entegrasyonu, Geliver takibi, akü/batarya iletişimle satış, desi ve görseller, Codex'in teslimat tahmini, sipariş tekrar koruması, fiyat değişimi onayı, kısmi iadede kargo, ödeme sayfasında fiyat eşitleme. `7381cb9`'dan sonraki SEO dışı 10 commit cherry-pick edildi, yalnızca DURUM.md çakıştı. Yayın öncesi bu dalın kendi derlemesinde: tip kontrolü temiz, birim testleri 112/112, derleme 429 sayfa, Playwright (akış testleri dahil) 92 geçti / 0 kaldı; yerelde 25 akü iletişim kutusunda, akülü sipariş 400, aküler akışta yok. Sunucuda `prisma db push` yeni sipariş alanını ekledi. Canlı: 29/29 genel kontrol (sayfalar, sağlık ucu, yetki korumaları, SEO adresleri 404, noindex), 9/9 akü kontrolü (340 ürün, 25 akü iletişim kutusunda, akülü sipariş ve sepet doğrulaması reddediyor, Merchant akışında 315 ürün ve akü yok, kargo sayfası cümlesi, ödeme sayfası açılıyor), sunucu kaydında `journal_mode=wal`, zamanlayıcı başladı, hata yok.
-- Bir önceki yayın: `7381cb9` (20.10.2026 20:52): Geliver + Navlungo kargo kıyası
+- Son yayın: `953b9ba` (22.10.2026), dal `yayin-pro-seo-haric`: 22.10 turlarının SEO dışı 13 commit'i cherry-pick edildi. Tek çakışma mobil düzendeydi: yayın dalında ana sayfa içeriği `app/page.tsx`'te ve hero SEO tür sayfalarına bağlanmıyor; değişiklik bu dosyalara elle uygulandı. Yayın öncesi bu dalın kendi derlemesinde: tip kontrolü temiz, birim testleri 125/125, derleme 427 sayfa, Playwright (akış testleri dahil) 98 geçti / 0 kaldı. Sunucuda `prisma db push` yeni Geliver alanlarını ekledi. Canlı: 29/29 genel kontrol, 16/16 akü ve 22.10 kontrolü (338 ürün, Victron 120 V ürünleri 404, misafir yorumu 401, ?page=2 sunucuda çiziliyor, iletişimde geçersiz e-posta ve siparişte eksik haneli telefon 400, yanlış yönetici şifresi 401, akülü sipariş 400, Merchant akışında 313 ürün ve akü yok), 1145 px'te açılır menü ekranın içinde, mobilde paket kartları iki sütun; sunucu kaydında yeni sürümde hata yok.
+- Bir önceki yayın: `f1025fa` (21.10.2026), dal `yayin-pro-seo-haric`: Navlungo gönderi entegrasyonu, Geliver takibi, akü/batarya iletişimle satış, desi ve görseller, Codex'in teslimat tahmini, sipariş tekrar koruması, fiyat değişimi onayı, kısmi iadede kargo, ödeme sayfasında fiyat eşitleme. `7381cb9`'dan sonraki SEO dışı 10 commit cherry-pick edildi, yalnızca DURUM.md çakıştı. Yayın öncesi bu dalın kendi derlemesinde: tip kontrolü temiz, birim testleri 112/112, derleme 429 sayfa, Playwright (akış testleri dahil) 92 geçti / 0 kaldı; yerelde 25 akü iletişim kutusunda, akülü sipariş 400, aküler akışta yok. Sunucuda `prisma db push` yeni sipariş alanını ekledi. Canlı: 29/29 genel kontrol (sayfalar, sağlık ucu, yetki korumaları, SEO adresleri 404, noindex), 9/9 akü kontrolü (340 ürün, 25 akü iletişim kutusunda, akülü sipariş ve sepet doğrulaması reddediyor, Merchant akışında 315 ürün ve akü yok, kargo sayfası cümlesi, ödeme sayfası açılıyor), sunucu kaydında `journal_mode=wal`, zamanlayıcı başladı, hata yok.
+- Daha önceki yayın: `7381cb9` (20.10.2026 20:52): Geliver + Navlungo kargo kıyası
 - Bir önceki yayın: `3008ea6` (20.10.2026 19:12): koyu temanın kaldırılması, varsayılan Türkçe, adet kutusu, "Sepete git"
 - Bir önceki yayın: `25ae00a` (19.10.2026 19:27): profesyonel seviye, SEO hariç. dal `yayin-pro-seo-haric` = `f6d2f1f` + profesyonel seviye (`e8806cf`) cherry-pick. SEO commit'leri (`9ad9119` eski adres yönlendirmeleri, `6a30301` tür/marka sayfaları) bilerek dışarıda. Tek çakışma ürün sayfasındaydı: SEO'nun kırıntı şeması alınmadı, gerçek puan alındı. Yayın öncesi: tip kontrolü, birim testleri 77/77, derleme 429 sayfa, Playwright 99 geçti / 0 kaldı, yönetici, rol ve ticaret akışları yerel kopyada geçti. Canlı kontrol: 14 sayfa 200, `/api/health` 200 (veritabanı ok), yorum/soru API'leri Prisma'dan, 7 yönetim ucu yetkisiz 401, giriş ekranında e-posta alanı, ürün şemasında sahte puan yok, SEO tür/marka adresleri 404, site noindex. Sunucu kaydında `journal_mode=wal` ve zamanlayıcı başladı, hata yok
 - Önceki yayın: `df5aa58` (19.10.2026 15:56): eksiklerin çözümü, mobil başlık + hero, süs ikonları, KDV etiketi, üyelere özel favoriler. Zamanlayıcı canlıda doğrulandı
-- Canlıda olmayanlar (21.10 yayından sonra): yalnızca SEO (`9ad9119`, `6a30301`, `5122e7a`). SEO da yayınlanacaksa `urun-katalogu-ikas` doğrudan yayınlanabilir
+- Canlıda olmayanlar (22.10 yayından sonra): İngilizce site (`ingilizce-tam`) ve SEO (`9ad9119`, `6a30301`, `5122e7a`)
 - 19.10 öğleden sonraki commit'lerin hepsi `df5aa58` ile canlıda; `urun-katalogu-ikas` GitHub'a gönderildi. `main`'e ileri sarma (çakışmasız) ve `origin` adresinin değiştirilmesi izin sisteminde reddedildi, sizin yapmanız gerekiyor
 - GitHub deposu taşınmış: `https://github.com/info-aftsoftware/eticaret.git` (eski adres yönlendiriyor, aynı depo olduğu doğrulandı; `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`). Dal: `urun-katalogu-ikas`.
