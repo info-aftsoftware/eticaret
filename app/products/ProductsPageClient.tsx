@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { pageItems, parsePageParam } from '@/lib/pagination'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
 import { Button } from '@/components/ui/button'
@@ -52,7 +53,17 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
   const [selectedBrand, setSelectedBrand] = useState<string | null>(query.brand)
   const [selectedSpecs, setSelectedSpecs] = useState<SpecFilters>({})
   const [sortBy, setSortBy] = useState<SortOption>(query.sort ?? 'newest')
-  const [currentPage, setCurrentPage] = useState(1)
+  // Sayfa numarası adres çubuğunda (?page=): geri tuşu önceki sayfaya döner, yenileme ve paylaşılan bağlantı aynı sayfayı açar
+  const searchParams = useSearchParams()
+  const requestedPage = parsePageParam(searchParams.get('page'))
+  const setPageInUrl = useCallback((page: number, mode: 'push' | 'replace') => {
+    const url = new URL(window.location.href)
+    if (page > 1) url.searchParams.set('page', String(page))
+    else url.searchParams.delete('page')
+    if (url.href === window.location.href) return
+    if (mode === 'push') window.history.pushState(null, '', url)
+    else window.history.replaceState(null, '', url)
+  }, [])
   /** null: tam liste henüz yüklenmedi, sunucunun hazırladığı ilk sayfa (initial) gösterilir */
   const [allProducts, setAllProducts] = useState<ProductListItem[] | null>(null)
 
@@ -129,7 +140,8 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         const valid = values.filter((v) => allowedValues.has(v))
         if (valid.length > 0) next[key] = valid
       }
-      return next
+      // Değişmediyse aynı nesne: gereksiz yere 1. sayfaya dönülmesin
+      return JSON.stringify(next) === JSON.stringify(prev) ? prev : next
     })
   }, [specFacets])
 
@@ -141,12 +153,28 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
     [categoryAndSearchFiltered, selectedBrand, priceRange, selectedSpecs, sortBy]
   )
 
+  // Filtre, arama veya sıralama değişince 1. sayfaya dönülür (ilk çizimde değil; fiyat aralığı kendi işleyicisinde)
+  const filtersMounted = useRef(false)
   useEffect(() => {
-    setCurrentPage(1)
-  }, [searchQuery, selectedCategory, selectedBrand, priceRange, selectedSpecs, sortBy])
+    if (!filtersMounted.current) {
+      filtersMounted.current = true
+      return
+    }
+    setPageInUrl(1, 'replace')
+  }, [searchQuery, selectedCategory, selectedBrand, selectedSpecs, sortBy, setPageInUrl])
+  const changePriceRange = (range: [number, number]) => {
+    setPriceRange(range)
+    setPageInUrl(1, 'replace')
+  }
 
   const totalCount = filteredProducts ? filteredProducts.length : initial.total
   const totalPages = Math.ceil(totalCount / PRODUCTS_PER_PAGE)
+  const currentPage = Math.min(requestedPage, Math.max(1, totalPages))
+  /** Yeni sayfa en baştan başlar */
+  const goToPage = (page: number) => {
+    setPageInUrl(page, 'push')
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE
   // Tam liste gelene kadar sunucunun hazırladığı ilk sayfa
   const paginatedProducts = filteredProducts
@@ -192,7 +220,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
           type="search"
           placeholder={tProducts('searchPlaceholder')}
           value={searchQuery}
-          onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1) }}
+          onChange={(e) => setSearchQuery(e.target.value)}
           className="flex-1 min-w-0 max-w-full h-10 rounded-lg border-slate-200 bg-slate-50 text-sm"
           autoComplete="off"
         />
@@ -308,7 +336,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         </div>
         <Slider
           value={priceRange}
-          onValueChange={(value) => setPriceRange([value[0], value[1]])}
+          onValueChange={(value) => changePriceRange([value[0], value[1]])}
           min={dynamicMinPrice}
           max={dynamicMaxPrice}
           step={100}
@@ -321,7 +349,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             onBlur={() => {
               const parsed = Number(minInput || dynamicMinPrice)
               const nextMin = Math.max(dynamicMinPrice, Math.min(parsed, priceRange[1]))
-              setPriceRange([nextMin, priceRange[1]])
+              changePriceRange([nextMin, priceRange[1]])
               setMinInput(String(nextMin))
             }}
             className="h-10 rounded-lg border-slate-200"
@@ -333,7 +361,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             onBlur={() => {
               const parsed = Number(maxInput || dynamicMaxPrice)
               const nextMax = Math.min(dynamicMaxPrice, Math.max(parsed, priceRange[0]))
-              setPriceRange([priceRange[0], nextMax])
+              changePriceRange([priceRange[0], nextMax])
               setMaxInput(String(nextMax))
             }}
             className="h-10 rounded-lg border-slate-200"
@@ -498,7 +526,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
                 variant="outline"
                 size="sm"
                 className="rounded-lg border-slate-300 min-h-[44px] min-w-[44px] touch-manipulation text-slate-700 hover:bg-slate-50"
-                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                onClick={() => goToPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
                 aria-label={tProducts('prevPage')}
               >
@@ -508,23 +536,29 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
                 {tProducts('pageOf', { current: currentPage, total: totalPages })}
               </span>
               <div className="hidden md:flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <Button
-                    key={page}
-                    variant={currentPage === page ? 'default' : 'outline'}
-                    size="sm"
-                    className={`min-h-[44px] min-w-[44px] rounded-lg touch-manipulation ${currentPage === page ? 'bg-brand hover:bg-brand-hover text-white' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'}`}
-                    onClick={() => setCurrentPage(page)}
-                  >
-                    {page}
-                  </Button>
-                ))}
+                {pageItems(currentPage, totalPages).map((page, i) =>
+                  page === 'gap' ? (
+                    <span key={`gap-${i}`} className="min-w-[28px] text-center text-slate-400" aria-hidden>…</span>
+                  ) : (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? 'default' : 'outline'}
+                      size="sm"
+                      aria-current={currentPage === page ? 'page' : undefined}
+                      aria-label={L(`${page}. sayfa`, `Page ${page}`)}
+                      className={`min-h-[44px] min-w-[44px] rounded-lg touch-manipulation ${currentPage === page ? 'bg-brand hover:bg-brand-hover text-white' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50'}`}
+                      onClick={() => goToPage(page)}
+                    >
+                      {page}
+                    </Button>
+                  )
+                )}
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 className="rounded-lg border-slate-300 min-h-[44px] min-w-[44px] touch-manipulation text-slate-700 hover:bg-slate-50"
-                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
                 aria-label={tProducts('nextPage')}
               >

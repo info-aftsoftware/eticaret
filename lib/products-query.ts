@@ -1,7 +1,8 @@
+import { parsePageParam } from '@/lib/pagination'
 import { CATEGORY_GROUPS, ALL_CATEGORY_VALUES, LEGACY_SUBCATEGORY_MAP, getGroupIdForCategory } from '@/lib/categories'
 
 /**
- * /products URL parametrelerinin (category, q, brand, sort) çözümlenmesi.
+ * /products URL parametrelerinin (category, q, brand, sort, page) çözümlenmesi.
  * Sunucu ilk listeyi bununla çizer, istemci aynı değerlerle başlar (hydration uyumu).
  */
 
@@ -14,6 +15,8 @@ export type ProductsQuery = {
   brand: string | null
   /** URL'de geçerli sort yoksa null: istemci mevcut sıralamayı korur */
   sort: ProductSortOption | null
+  /** 1'den başlar; sonuç sayısını aşarsa son sayfaya sınırlanır */
+  page: number
 }
 
 type RawParam = string | string[] | null | undefined
@@ -50,5 +53,6 @@ export function resolveProductsQuery(params: Record<string, RawParam>): Products
     q: first(params.q) ?? '',
     brand: first(params.brand),
     sort: parseSortParam(first(params.sort)),
+    page: parsePageParam(first(params.page)),
   }
 }
