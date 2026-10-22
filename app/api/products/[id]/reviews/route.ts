@@ -1,8 +1,8 @@
 /**
  * Ürün yorumları (Prisma StoreReview — Firebase servis hesabı gerekmez)
  * GET:  onaylı yorumlar + puan özeti
- * POST: yeni yorum (misafir veya üye); moderasyon onayından sonra yayınlanır.
- *       Bu ürünü içeren teslim edilmiş siparişi olanlar "doğrulanmış alıcı" işaretlenir.
+ * POST: yeni yorum; yalnızca bu ürünü satın alıp teslim almış üye (lib/reviews → reviewEligibility), ürün başına bir kez.
+ *       Moderasyon onayından sonra yayınlanır.
  */
 
 export const dynamic = 'force-dynamic'
@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isRateLimited, getClientIp } from '@/lib/rate-limit'
 import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
 import { prisma } from '@/lib/prisma'
-import { EMAIL_RE, hasDeliveredPurchase, reviewAuthorFromRequest } from '@/lib/reviews'
+import { reviewAuthorFromRequest, reviewEligibility } from '@/lib/reviews'
 
 export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest, props: { params: Promise<{ id: 
   const { id } = await props.params
   try {
     const body = await request.json().catch(() => ({}))
-    const { rating, title, comment, guestName, guestEmail } = body
+    const { rating, title, comment, guestName } = body
     if (!(await verifyTurnstile(body.turnstileToken, getClientIp(request)))) {
       return NextResponse.json({ success: false, error: TURNSTILE_ERROR }, { status: 400 })
     }
@@ -66,23 +66,30 @@ export async function POST(request: NextRequest, props: { params: Promise<{ id: 
     }
 
     const author = await reviewAuthorFromRequest(request)
-    const name = (author?.name || (typeof guestName === 'string' ? guestName.trim() : '')).slice(0, 100)
-    const email = (author?.email || (typeof guestEmail === 'string' ? guestEmail.trim() : '')).slice(0, 200).toLowerCase()
-    if (!name || !email) return NextResponse.json({ success: false, error: 'Ad ve e-posta gereklidir' }, { status: 400 })
-    if (!EMAIL_RE.test(email)) return NextResponse.json({ success: false, error: 'Geçerli bir e-posta adresi girin.' }, { status: 400 })
-
-    const verifiedPurchase = await hasDeliveredPurchase(id, { userId: author?.userId, email }).catch(() => false)
+    const eligibility = await reviewEligibility(id, author)
+    if (!author || eligibility.reason === 'login') {
+      return NextResponse.json({ success: false, error: 'Değerlendirme yazmak için giriş yapın.' }, { status: 401 })
+    }
+    if (eligibility.reason === 'not_purchased') {
+      return NextResponse.json({ success: false, error: 'Yalnızca bu ürünü satın alıp teslim alan müşterilerimiz değerlendirme yazabilir.' }, { status: 403 })
+    }
+    if (eligibility.reason === 'already_reviewed') {
+      return NextResponse.json({ success: false, error: 'Bu ürün için değerlendirmenizi zaten gönderdiniz.' }, { status: 409 })
+    }
+    // Ad: oturumdaki ad, yoksa profildeki ad (istemci gönderir); e-posta yalnızca oturumdan
+    const name = (author.name || (typeof guestName === 'string' ? guestName.trim() : '') || 'Müşteri').slice(0, 100)
+    const email = (author.email ?? '').slice(0, 200).toLowerCase()
     const review = await prisma.storeReview.create({
       data: {
         productId: id,
-        userId: author?.userId ?? null,
+        userId: author.userId,
         userName: name,
         userEmail: email,
         rating: stars,
         title: typeof title === 'string' && title.trim() ? title.trim() : null,
         comment: comment.trim(),
         status: 'pending',
-        verifiedPurchase,
+        verifiedPurchase: true,
       },
     })
     return NextResponse.json({ success: true, id: review.id }, { status: 201 })

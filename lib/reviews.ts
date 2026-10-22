@@ -6,14 +6,14 @@ import type { NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { verifyFirebaseIdToken } from '@/lib/firebase-id-token'
 
-export type ReviewAuthor = { userId: string; name?: string; email?: string }
+export type ReviewAuthor = { userId: string; name?: string; email?: string; emailVerified?: boolean }
 
 /** Authorization: Bearer <Firebase ID token> → oturumdaki müşteri (yoksa misafir) */
 export async function reviewAuthorFromRequest(request: NextRequest): Promise<ReviewAuthor | null> {
   const token = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '')
   if (!token) return null
   const decoded = await verifyFirebaseIdToken(token).catch(() => null)
-  return decoded ? { userId: decoded.uid, name: decoded.name, email: decoded.email } : null
+  return decoded ? { userId: decoded.uid, name: decoded.name, email: decoded.email, emailVerified: decoded.email_verified === true } : null
 }
 
 /**
@@ -33,6 +33,22 @@ export async function hasDeliveredPurchase(productId: string, who: { userId?: st
     take: 50,
   })
   return orders.some((o) => o.lines.some((l) => (l.variantMatrix as { productId?: string } | null)?.productId === productId))
+}
+
+export type ReviewEligibility = { canReview: boolean; reason: 'ok' | 'login' | 'not_purchased' | 'already_reviewed' }
+
+/**
+ * Değerlendirme yalnızca bu ürünü satın alıp teslim almış üyeye açıktır (ürün başına bir değerlendirme).
+ * Sipariş üye kimliğiyle ya da doğrulanmış hesap e-postasıyla eşleşir (üye olmadan verilen sipariş, aynı e-postayla açılan hesapta sayılır).
+ */
+export async function reviewEligibility(productId: string, author: ReviewAuthor | null): Promise<ReviewEligibility> {
+  if (!author) return { canReview: false, reason: 'login' }
+  const email = author.emailVerified ? author.email : undefined
+  const bought = await hasDeliveredPurchase(productId, { userId: author.userId, email }).catch(() => false)
+  if (!bought) return { canReview: false, reason: 'not_purchased' }
+  const existing = await prisma.storeReview.count({ where: { productId, userId: author.userId, status: { not: 'rejected' } } })
+  if (existing > 0) return { canReview: false, reason: 'already_reviewed' }
+  return { canReview: true, reason: 'ok' }
 }
 
 /** Onaylı yorumların puan özeti (ürün sayfası ve JSON-LD aggregateRating için) */
