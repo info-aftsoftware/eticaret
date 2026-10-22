@@ -1,3 +1,4 @@
+import { isQuoteOnly } from '@/lib/sale-mode'
 import type { StorefrontProduct } from '@/lib/discounts'
 import { getCategoryValuesByGroupId } from '@/lib/categories'
 import { productMatchesQuery, type ProductLike } from '@/lib/search-product'
@@ -21,6 +22,7 @@ export type ListingProduct = ProductLike & {
   category: string
   brand?: string
   specifications?: Record<string, string>
+  saleMode?: string
 }
 
 /** /api/products liste öğesi: varyant özellikleri, döviz fiyatı ve kargo kaynağı yalnızca ürün detay API'sinde */
@@ -52,6 +54,7 @@ export function toCardItem(p: StorefrontProduct) {
     tags: p.tags,
     isVariantProduct: p.isVariantProduct,
     variants: p.variants?.map((v) => ({ key: v.key, label: v.label, price: v.price, sku: v.sku })),
+    saleMode: p.saleMode,
   }
 }
 
@@ -69,7 +72,9 @@ export function filterByCategoryAndSearch<T extends ListingProduct>(products: T[
   })
 }
 
-export function getPriceBounds(products: { price: number }[]): [number, number] {
+/** Fiyat aralığı; teklifle satılan (fiyatı olmayan) ürünler sayılmaz */
+export function getPriceBounds(all: { price: number; saleMode?: string }[]): [number, number] {
+  const products = all.filter((p) => !isQuoteOnly(p))
   if (products.length === 0) return [0, 0]
   let min = Infinity
   let max = -Infinity
@@ -98,7 +103,8 @@ export function applyListingFilters<T extends ListingProduct>(
   const { brand, priceRange, specs, sort } = opts
   const result = products.filter((product) => {
     if (brand && product.brand !== brand) return false
-    if (priceRange && (product.price < priceRange[0] || product.price > priceRange[1])) return false
+    // Teklifle satılan ürünün fiyatı yok: fiyat aralığı onu elemez
+    if (priceRange && !isQuoteOnly(product) && (product.price < priceRange[0] || product.price > priceRange[1])) return false
     return Object.entries(specs).every(([specKey, selectedValues]) => {
       if (selectedValues.length === 0) return true
       const specValue = product.specifications?.[specKey]
@@ -107,6 +113,8 @@ export function applyListingFilters<T extends ListingProduct>(
   })
 
   return [...result].sort((a, b) => {
+    // Fiyata göre sıralamada teklifle satılan ürünler sona
+    if ((sort === 'price-asc' || sort === 'price-desc') && isQuoteOnly(a) !== isQuoteOnly(b)) return isQuoteOnly(a) ? 1 : -1
     switch (sort) {
       case 'price-asc':
         return a.price - b.price

@@ -13,7 +13,8 @@ import { priceOrder, PricingError, StockError, VAT_RATE, reserveCouponUse, relea
 import { reserveStock, InsufficientStockError } from '@/lib/stock-reservation'
 import { notifyLowStockAfterOrder } from '@/lib/low-stock'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
-import { onOrderCreated, changeOrderStatus } from '@/lib/order-service'
+import { onOrderCreated, changeOrderStatus, logOrderEvent } from '@/lib/order-service'
+import { cartLogistics } from '@/lib/shipping/fee'
 import { toCustomerOrder } from '@/lib/customer-order'
 import { getLegalDocument } from '@/lib/legal/documents'
 import {
@@ -357,6 +358,15 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
 
     // Zaman çizelgesi + e-postalar (havalede hemen; kartlı siparişte ödeme onaylanınca)
     await onOrderCreated(order).catch((e) => reportError('siparis-bildirimi', e, { orderNo: order.orderNo }))
+    // Kurulumlu ürün (şarj istasyonu): nakliye ve kurulum fiyata dahil değil, müşteriyle iletişime geçilecek
+    if (cartLogistics(pricing.lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity }))).hasInstall) {
+      await logOrderEvent(order.id, {
+        type: 'note',
+        message: 'Şarj istasyonu: kurulum ve nakliye fiyata dahil değildir; saha, kurulum ve nakliye planı için sizinle iletişime geçeceğiz.',
+        actor: 'system',
+        visibleToCustomer: true,
+      }).catch((e) => reportError('siparis-kurulum-notu', e, { orderNo: order.orderNo }))
+    }
 
     // Kartlı ödeme: tarayıcı bu imzalı formla bankanın 3D Secure sayfasına gider.
     // paymentProviderRef = ödeme dönüş sayfasının durumu sorgularken kullandığı tek kullanımlık anahtar.

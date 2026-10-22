@@ -34,6 +34,7 @@ import { trackViewCart, cartItemToGa } from '@/lib/analytics'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
 import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
 import { isContactOnlyLine } from '@/lib/shipping/battery'
 import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { useL } from '@/lib/i18n-inline'
@@ -384,13 +385,18 @@ export default function CartPage() {
             <BatteryContactBox productName={batteryItems.map((i) => i.name).join(', ')} />
           )}
 
-          {/* Kargo: sepetin desisine göre fiyat listesinden */}
+          {/* Kargo: sepetin desisine göre fiyat listesinden; kurulumlu ürünler (şarj istasyonu) kargoya girmez */}
           <div className="flex items-start gap-3 rounded-xl border border-[#e6ebf1] bg-white p-4 text-sm">
             <Truck className="mt-0.5 h-5 w-5 shrink-0 text-[#0b2540]" aria-hidden />
-            <p className="text-[#20384e]">
-              {L('Kargo ücreti sepetinizin hacim/ağırlığına göre hesaplanır:', 'Shipping is calculated from your cart volume/weight:')} <strong className="text-[#121926]">{shippingDesi} desi</strong> ·{' '}
-              <strong className="text-[#121926] tabular-nums">{formatPrice(shipping)}</strong> <span className="text-[#5d6e80]">{L('(vergiler dahil)', '(incl. taxes)')}</span>
-            </p>
+            <div className="space-y-1 text-[#20384e]">
+              {!logistics.installOnly && (
+                <p>
+                  {L('Kargo ücreti sepetinizin hacim/ağırlığına göre hesaplanır:', 'Shipping is calculated from your cart volume/weight:')} <strong className="text-[#121926]">{shippingDesi} desi</strong> ·{' '}
+                  <strong className="text-[#121926] tabular-nums">{formatPrice(shipping)}</strong> <span className="text-[#5d6e80]">{L('(vergiler dahil)', '(incl. taxes)')}</span>
+                </p>
+              )}
+              {logistics.hasInstall && <p>{L(`Şarj istasyonu: ${INSTALL_NOTE_TR}`, `Charging station: ${INSTALL_NOTE_EN}`)}</p>}
+            </div>
           </div>
 
           <section className="rounded-xl border border-[#e6ebf1] bg-white" aria-labelledby="cart-items-heading">
@@ -475,8 +481,8 @@ export default function CartPage() {
               </div>
               <div className="flex justify-between gap-3">
                 <dt className="text-[#5d6e80]">{L('Kargo', 'Shipping')}</dt>
-                <dd className="font-medium tabular-nums text-[#121926]">
-                  {formatPrice(shipping)}
+                <dd className="font-medium tabular-nums text-right text-[#121926]">
+                  {logistics.installOnly ? L('Ayrıca planlanır', 'Arranged separately') : formatPrice(shipping)}
                 </dd>
               </div>
             </dl>

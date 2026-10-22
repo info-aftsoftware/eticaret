@@ -26,6 +26,7 @@ export const BRANDS: BrandSeo[] = [
     about: 'Frecon, frekans invertörleri ve güneş enerjisiyle çalışan pompa sürücüleri üreten bir markadır; ürünleri tarımsal sulamada dalgıç ve yüzey pompalarını doğrudan panelden çalıştırmak için kullanılır.',
   },
   { slug: 'havensis', name: 'Havensis' },
+  { slug: 'aft-power', name: 'AFT Power' },
   { slug: 'istabreeze', name: 'İstabreeze' },
   { slug: 'electrozirve', name: 'Electrozirve' },
   { slug: 'apex', name: 'Apex' },

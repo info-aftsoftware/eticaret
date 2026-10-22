@@ -163,7 +163,7 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
               <span className="block text-xs text-[#5d6e80] line-through">{formatPrice(product.oldPrice)}</span>
             )}
             <span className={`text-base font-bold ${product.oldPrice ? 'text-[#b42318]' : 'text-[#121926]'}`}>
-              {formatPrice(product.price)}
+              {product.price > 0 ? formatPrice(product.price) : L('Fiyat için teklif alın', 'Request a quote')}
             </span>
             {product.variants.length > 1 && <span className="ml-1.5 text-[11px] text-[#5d6e80]">{L(`${product.variants.length} seçenek`, `${product.variants.length} options`)}</span>}
           </div>

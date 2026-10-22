@@ -1,0 +1,133 @@
+{
+  "_aciklama": "ikas Excel'inde olmayan ürünler. Satırlar Excel sütun adlarıyla yazılır; scripts/import-ikas-excel.py Excel satırlarına ekler. variants: her biri ayrı satır (SKU, fiyat, SEO adı). _saleMode: 'install' (satın alınır, nakliye ve kurulum fiyata dahil değil, siparişten sonra iletişime geçilir) | 'quote' (fiyat yok, teklif alınır). _noImageFallback: görsel yoksa başka modelin fotoğrafı konmaz. Fiyatlar USD, KDV hariç (Excel'deki satış fiyatı sütunu gibi). Kaynak: AFT Power ürün föyleri (22.10.2026).",
+  "products": [
+    {
+      "Slug": "aft-dc-hizli-elektrikli-arac-sarj-istasyonu-45-180kw",
+      "Ürün Grup ID": "AFT-GRID-CORE",
+      "İsim": "AFT DC Hızlı Elektrikli Araç Şarj İstasyonu (45 kW - 180 kW)",
+      "Metadata Başlık": "AFT DC Hızlı Elektrikli Araç Şarj İstasyonu (45 kW - 180 kW)",
+      "Metadata Açıklama": "AFT Grid Core DC hızlı şarj istasyonu: 45, 90, 135 ve 180 kW güç seçenekleri, 150-1000 VDC çıkış, CCS2, OCPP 1.6, IP54. Kurulum ve nakliye için sizinle iletişime geçilir.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Elektrikli Araç Şarj İstasyonu",
+      "Etiketler": "AFT Power, Şarj İstasyonu, DC Hızlı Şarj, CCS2",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "install",
+      "Açıklama": "<p><strong>AFT Grid Core</strong>, yüksek güçlü DC hızlı şarj uygulamaları için geliştirilmiş, modüler ve ölçeklenebilir bir elektrikli araç şarj istasyonudur. <strong>45 kW – 180 kW DC çıkış gücü</strong> ve <strong>150 – 1000 VDC çıkış gerilimi aralığı</strong> sayesinde farklı segmentteki elektrikli araçlarla uyumlu çalışır.</p><p>400 VAC ±%10, 3 faz, 50 Hz AC giriş yapısı endüstriyel ve ticari elektrik altyapılarına kolay entegrasyon sağlar. CCS2 konnektörlü tek DC çıkış ve güç paylaşımı desteği, şarj süreçlerinin dinamik olarak yönetilmesine olanak tanır.</p><p>Ethernet, CAN ve 4G haberleşme seçenekleri ile OCPP 1.6 protokolü sayesinde uzaktan izleme, yönetim ve faturalandırma sistemleriyle uyumlu çalışır. 7 inç dokunmatik ekran kullanımı kolaylaştırır; IP54 koruma sınıfı ve -30 °C ile +50 °C çalışma sıcaklığı aralığı zorlu dış ortam koşullarında güvenilir kullanım sağlar.</p><table><tr><td>DC Çıkış Gücü</td><td>45 – 180 kW</td></tr><tr><td>DC Çıkış Gerilimi</td><td>150 – 1000 VDC</td></tr><tr><td>AC Giriş</td><td>400 VAC ±%10, 3 Faz, 50 Hz</td></tr><tr><td>Konnektör</td><td>CCS2</td></tr><tr><td>Çıkış Sayısı</td><td>1 DC (güç paylaşımı destekli)</td></tr><tr><td>Haberleşme</td><td>Ethernet / CAN / 4G</td></tr><tr><td>Protokol</td><td>OCPP 1.6</td></tr><tr><td>Ekran</td><td>7\" Dokunmatik Ekran</td></tr><tr><td>Koruma Sınıfı</td><td>IP54</td></tr><tr><td>Çalışma Sıcaklığı</td><td>-30 °C / +50 °C</td></tr><tr><td>Boyutlar</td><td>690 × 400 × 1950 mm</td></tr><tr><td>Ağırlık</td><td>Konfigürasyona bağlı</td></tr></table><p><strong>Kurulum ve nakliye:</strong> Fiyata kurulum ve nakliye dahil değildir. Siparişinizden sonra saha, elektrik altyapısı, kurulum ve nakliye için sizinle iletişime geçeriz.</p>",
+      "variants": [
+        { "SKU": "AFT-GC-45", "SEO Uyumlu İsim": "AFT 45 kW", "Varyant Değer 1": "45 kW", "Satış Fiyatı USD (%20 kârlı)": "9712.50" },
+        { "SKU": "AFT-GC-90", "SEO Uyumlu İsim": "AFT 90 kW", "Varyant Değer 1": "90 kW", "Satış Fiyatı USD (%20 kârlı)": "11224.50" },
+        { "SKU": "AFT-GC-135", "SEO Uyumlu İsim": "AFT 135 kW", "Varyant Değer 1": "135 kW", "Satış Fiyatı USD (%20 kârlı)": "14437.50" },
+        { "SKU": "AFT-GC-180", "SEO Uyumlu İsim": "AFT 180 kW", "Varyant Değer 1": "180 kW", "Satış Fiyatı USD (%20 kârlı)": "15697.50" }
+      ]
+    },
+    {
+      "Slug": "aft-pro-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw",
+      "Ürün Grup ID": "AFT-PRO",
+      "İsim": "AFT PRO DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW)",
+      "Metadata Başlık": "AFT PRO DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW)",
+      "Metadata Açıklama": "AFT PRO DC hızlı şarj istasyonu: 90, 180 ve 270 kW güç seçenekleri. Kurulum ve nakliye için sizinle iletişime geçilir.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Elektrikli Araç Şarj İstasyonu",
+      "Etiketler": "AFT Power, Şarj İstasyonu, DC Hızlı Şarj",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "install",
+      "_noImageFallback": true,
+      "Açıklama": "<p><strong>AFT PRO</strong>, ticari ve kamusal şarj noktaları için geliştirilmiş yüksek güçlü bir DC hızlı şarj istasyonudur. 90 kW, 180 kW ve 270 kW güç seçenekleriyle sunulur.</p><p>Ayrıntılı teknik özellikler ve saha uygunluğu için bizimle iletişime geçebilirsiniz.</p><p><strong>Kurulum ve nakliye:</strong> Fiyata kurulum ve nakliye dahil değildir. Siparişinizden sonra saha, elektrik altyapısı, kurulum ve nakliye için sizinle iletişime geçeriz.</p>",
+      "variants": [
+        { "SKU": "AFT-PRO-90", "SEO Uyumlu İsim": "AFT PRO 90 kW", "Varyant Değer 1": "90 kW", "Satış Fiyatı USD (%20 kârlı)": "17325.00" },
+        { "SKU": "AFT-PRO-180", "SEO Uyumlu İsim": "AFT PRO 180 kW", "Varyant Değer 1": "180 kW", "Satış Fiyatı USD (%20 kârlı)": "23625.00" },
+        { "SKU": "AFT-PRO-270", "SEO Uyumlu İsim": "AFT PRO 270 kW", "Varyant Değer 1": "270 kW", "Satış Fiyatı USD (%20 kârlı)": "27825.00" }
+      ]
+    },
+    {
+      "Slug": "aft-pro-v2-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw",
+      "Ürün Grup ID": "AFT-PRO-V2",
+      "İsim": "AFT PRO V2 DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW)",
+      "Metadata Başlık": "AFT PRO V2 DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW)",
+      "Metadata Açıklama": "AFT PRO V2 (Grid Pulse Gen2) DC hızlı şarj istasyonu: 90, 180 ve 270 kW, 2 DC çıkış, 150-1000 VDC, OCPP 1.6, 15\" dokunmatik ekran, RFID / QR / NFC ödeme. Kurulum ve nakliye için sizinle iletişime geçilir.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Elektrikli Araç Şarj İstasyonu",
+      "Etiketler": "AFT Power, Şarj İstasyonu, DC Hızlı Şarj, CCS2, Çift Çıkış",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "install",
+      "Açıklama": "<p><strong>AFT PRO V2 (Grid Pulse Gen2)</strong>, yüksek güçlü DC hızlı şarj uygulamaları için geliştirilmiş, ikinci nesil, ölçeklenebilir ve profesyonel bir elektrikli araç şarj istasyonudur. <strong>90 kW – 270 kW DC çıkış gücü</strong> ve <strong>150 – 1000 VDC çıkış gerilimi aralığı</strong> sayesinde farklı segmentteki elektrikli araçlara hızlı, güvenli ve verimli şarj imkânı sunar.</p><p>400 VAC, 3 faz, 50/60 Hz AC giriş altyapısı ile ticari ve endüstriyel elektrik şebekeleriyle uyumlu çalışır; 2 adet DC çıkış sayesinde aynı anda birden fazla araca hizmet verebilir. Yüksek güç seviyelerinde kararlı performans sunmak üzere tasarlanmış, yoğun kullanım senaryoları için optimize edilmiştir.</p><p>OCPP 1.6 protokolü ve 3G / 4G / LTE haberleşme seçenekleri uzaktan izleme, yönetim ve şarj ağı entegrasyonunu destekler; 15 inç dokunmatik ekranlı kullanıcı arayüzü kolay ve sezgisel bir kullanım sunar. RFID, QR ve NFC ile ödeme desteklenir.</p><table><tr><td>DC Çıkış Gücü</td><td>90 – 270 kW</td></tr><tr><td>DC Çıkış Gerilimi</td><td>150 – 1000 VDC</td></tr><tr><td>DC Konektörü</td><td>CCS1 / CCS2</td></tr><tr><td>Çıkış Sayısı</td><td>2 adet DC</td></tr><tr><td>AC Giriş</td><td>400 VAC, 3 Faz, 50/60 Hz</td></tr><tr><td>Protokol</td><td>OCPP 1.6</td></tr><tr><td>Ağ Bağlantısı</td><td>3G / 4G / LTE</td></tr><tr><td>Kullanıcı Arayüzü</td><td>15\" Dokunmatik Ekran</td></tr><tr><td>Ödeme Desteği</td><td>RFID / QR / NFC</td></tr><tr><td>Koruma Sınıfı</td><td>IP54</td></tr><tr><td>Çalışma Sıcaklığı</td><td>-30 °C / +50 °C</td></tr><tr><td>Boyutlar</td><td>580 × 970 × 1950 mm</td></tr><tr><td>Ağırlık</td><td>≈ 450 kg</td></tr></table><p><strong>Kurulum ve nakliye:</strong> Fiyata kurulum ve nakliye dahil değildir. Siparişinizden sonra saha, elektrik altyapısı, kurulum ve nakliye için sizinle iletişime geçeriz.</p>",
+      "variants": [
+        { "SKU": "AFT-PROV2-90", "SEO Uyumlu İsim": "AFT PRO V2 90 kW", "Varyant Değer 1": "90 kW", "Satış Fiyatı USD (%20 kârlı)": "18375.00" },
+        { "SKU": "AFT-PROV2-180", "SEO Uyumlu İsim": "AFT PRO V2 180 kW", "Varyant Değer 1": "180 kW", "Satış Fiyatı USD (%20 kârlı)": "24675.00" },
+        { "SKU": "AFT-PROV2-270", "SEO Uyumlu İsim": "AFT PRO V2 270 kW", "Varyant Değer 1": "270 kW", "Satış Fiyatı USD (%20 kârlı)": "28875.00" }
+      ]
+    },
+    {
+      "Slug": "aft-guc-katmani-moduler-lifepo4-enerji-depolama-unitesi",
+      "SKU": "AFT-GUC-KATMANI",
+      "İsim": "AFT Güç Katmanı Modüler LiFePO4 Enerji Depolama Ünitesi (5,4 - 172 kWh)",
+      "Metadata Açıklama": "AFT Güç Katmanı: 51,2 V nominal, 105-420 Ah artırılabilir kapasite, 5,4-172 kWh modüler LiFePO4 enerji depolama, 6000 çevrim. Fiyat için teklif alın.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Lityum Akü",
+      "Etiketler": "AFT Power, Enerji Depolama, LiFePO4, Modüler",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "quote",
+      "Açıklama": "<p><strong>AFT Güç Katmanı</strong>, ölçeklenebilir yapısı sayesinde orta ve yüksek kapasiteli enerji depolama ihtiyaçları için tasarlanmış modüler bir çözümdür. 51,2 V nominal çalışma voltajı ve <strong>105 Ah'ten 420 Ah'e kadar artırılabilir kapasite</strong> seçenekleri, sistemin <strong>5,4 kWh'ten 172 kWh'e kadar</strong> geniş bir enerji aralığında yapılandırılmasına olanak tanır. Modüler mimarisi, farklı saha ve tesis ihtiyaçlarına göre esnek kurulum ve kapasite artışı sağlar.</p><p>6000 çevrimlik batarya ömrü uzun süreli ve düşük bakım gerektiren kullanım sunar; sistem enerji depolama altyapıları, mikro şebekeler, endüstriyel tesisler ve yenilenebilir enerji entegrasyonları için uygundur.</p><table><tr><td>Nominal Voltaj</td><td>51,2 V</td></tr><tr><td>Artırılabilir Kapasite</td><td>105 / 210 / 315 / 420 Ah</td></tr><tr><td>Enerji</td><td>5,4 – 172 kWh</td></tr><tr><td>Batarya Ömrü</td><td>6000 Çevrim</td></tr><tr><td>Uzunluk</td><td>400 / 860 mm</td></tr><tr><td>Genişlik</td><td>391 / 800 mm</td></tr><tr><td>Yükseklik</td><td>365 / 2180 mm</td></tr><tr><td>Ağırlık</td><td>66 / 950 kg</td></tr></table><p>Fiyat ve kapasite yapılandırması için teklif alın.</p>"
+    },
+    {
+      "Slug": "aft-5-4-kwh-lifepo4-lfp-batarya",
+      "SKU": "AFT-LFP-5-4",
+      "İsim": "AFT 5,4 kWh LiFePO4 (LFP) Batarya (24V / 48V)",
+      "Metadata Açıklama": "AFT 5,4 kWh LFP batarya: 24 / 48 VDC, 105 / 206 Ah, 6000 çevrim, Bluetooth, 45 kg. Fiyat için teklif alın.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Lityum Akü",
+      "Etiketler": "AFT Power, Lityum Akü, LiFePO4",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "quote",
+      "Açıklama": "<p><strong>AFT 5,4 kWh LFP Batarya</strong>, uzun ömürlü yapısı ve güvenli hücre teknolojisi sayesinde kesintisiz enerji ihtiyacı duyulan uygulamalar için tasarlanmış bir depolama çözümüdür. <strong>24 VDC ve 48 VDC</strong> nominal voltaj seçenekleri sistemi farklı inverter ve enerji altyapılarıyla uyumlu hale getirir. 5,4 kWh toplam enerji kapasitesi ve 105 Ah / 206 Ah kapasite değerleri orta ölçekli yüklerin stabil ve verimli şekilde beslenmesini sağlar.</p><p>LiFePO4 (LFP) hücreler yüksek termal dayanım ve güvenlik seviyesi sunar; 6000 çevrim ömrüyle yenilenebilir enerji sistemleri, yedek güç altyapıları ve ticari kullanım için uygundur.</p><table><tr><td>Nominal Voltaj</td><td>24 / 48 VDC</td></tr><tr><td>Kapasite</td><td>105 / 206 Ah</td></tr><tr><td>Enerji</td><td>5,4 kWh</td></tr><tr><td>Batarya Ömrü</td><td>6000 Çevrim</td></tr><tr><td>Boyutlar</td><td>400 × 391 × 244 mm</td></tr><tr><td>Ağırlık</td><td>45 kg</td></tr><tr><td>Bluetooth</td><td>Mevcut</td></tr></table><p>Fiyat için teklif alın.</p>"
+    },
+    {
+      "Slug": "aft-2-7-kwh-lifepo4-lfp-batarya",
+      "SKU": "AFT-LFP-2-7",
+      "İsim": "AFT 2,7 kWh LiFePO4 (LFP) Batarya (12V / 24V)",
+      "Metadata Açıklama": "AFT 2,7 kWh LFP batarya: 12 / 24 VDC, 105 / 206 Ah, 6000 çevrim, Bluetooth, 25 kg. Fiyat için teklif alın.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Lityum Akü",
+      "Etiketler": "AFT Power, Lityum Akü, LiFePO4",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "quote",
+      "Açıklama": "<p><strong>AFT 2,7 kWh LFP Batarya</strong>, kompakt yapısı ve uzun çevrim ömrüyle yedek enerji uygulamaları için tasarlanmış güvenilir bir enerji depolama çözümüdür. <strong>12 VDC ve 24 VDC</strong> nominal voltaj seçenekleri farklı sistem mimarilerine uyum sağlar. 105 Ah / 206 Ah kapasite seçenekleri ve 2,7 kWh enerji kapasitesi düşük ve orta seviyeli güç ihtiyaçlarını karşılar.</p><p>LiFePO4 (LFP) hücre teknolojisi yüksek güvenlik ve termal kararlılık sunar; 6000 çevrim ömrüyle güneş enerjisi sistemleri, mobil güç çözümleri ve yedek enerji senaryoları için uygundur.</p><table><tr><td>Nominal Voltaj</td><td>12 / 24 VDC</td></tr><tr><td>Kapasite</td><td>105 / 206 Ah</td></tr><tr><td>Enerji</td><td>2,7 kWh</td></tr><tr><td>Batarya Ömrü</td><td>6000 Çevrim</td></tr><tr><td>Boyutlar</td><td>400 × 320 × 244 mm</td></tr><tr><td>Ağırlık</td><td>25 kg</td></tr><tr><td>Bluetooth</td><td>Mevcut</td></tr></table><p>Fiyat için teklif alın.</p>"
+    },
+    {
+      "Slug": "aft-5-4-kwh-tekerlekli-tasinabilir-guc-istasyonu",
+      "SKU": "AFT-GP-5-4",
+      "İsim": "AFT 5,4 kWh Tekerlekli Taşınabilir Güç İstasyonu (3000 W)",
+      "Metadata Açıklama": "AFT 5,4 kWh depolanabilir güç paketi: 220 VAC saf sinüs, 3000 W, 1000 W MPPT güneş girişi, 6000 çevrim, tekerlekli. Fiyat için teklif alın.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Taşınabilir Güç İstasyonu",
+      "Etiketler": "AFT Power, Taşınabilir Güç İstasyonu, Güç Paketi",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "quote",
+      "Açıklama": "<p><strong>AFT 5,4 kWh Depolanabilir Güç Paketi</strong>, yüksek enerji kapasitesi ve tekerlekli yapısıyla saha operasyonları, ağır hizmet uygulamaları ve uzun süreli enerji ihtiyacı için tasarlanmıştır. 220 VAC saf sinüs çıkışı ve 3000 W sürekli güç kapasitesi sayesinde teorik olarak 500 W gücündeki bir elektrikli matkabı yaklaşık 10,8 saat, 1000 W seviyesindeki bir kırıcıyı yaklaşık 5,4 saat ve 100 W gücündeki LED saha aydınlatmasını yaklaşık 54 saat çalıştırabilir.</p><p>Cihaz üzerindeki bilgi ekranı batarya doluluk oranını (SOC), anlık çıkış gücünü, gerilimi, akımı ve sıcaklığı gerçek zamanlı gösterir. 1000 W MPPT destekli güneş enerjisi girişi şebekeden bağımsız kullanımda hızlı yeniden şarj sağlar; 6000 çevrimlik batarya ömrü uzun vadeli kullanım sunar.</p><table><tr><td>Enerji</td><td>5,4 kWh</td></tr><tr><td>Çıkış Voltajı</td><td>220 VAC</td></tr><tr><td>Çıkış Gücü</td><td>3000 W</td></tr><tr><td>Maks. PV Gücü</td><td>1000 W MPPT</td></tr><tr><td>Çevrim</td><td>6000 Çevrim</td></tr><tr><td>Dalga Tipi</td><td>Saf Sinüs</td></tr><tr><td>Boyutlar</td><td>777 × 458 × 1340 mm</td></tr><tr><td>Ağırlık</td><td>60 kg</td></tr></table><p>Fiyat için teklif alın.</p>"
+    },
+    {
+      "Slug": "aft-2-7-kwh-canta-tip-tasinabilir-guc-istasyonu",
+      "SKU": "AFT-GP-CANTA-2-7",
+      "İsim": "AFT 2,7 kWh Çanta Tip Taşınabilir Güç İstasyonu (2000 W)",
+      "Metadata Açıklama": "AFT 2,7 kWh çanta tip depolanabilir güç paketi: 220 VAC saf sinüs, 2000 W, 1000 W MPPT güneş girişi, 6000 çevrim. Fiyat için teklif alın.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Taşınabilir Güç İstasyonu",
+      "Etiketler": "AFT Power, Taşınabilir Güç İstasyonu, Güç Paketi",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "quote",
+      "Açıklama": "<p><strong>AFT 2,7 kWh Çanta Tip Depolanabilir Güç Paketi</strong>, saha kullanımı için tasarlanmış dayanıklı gövdesi ve taşınabilir yapısıyla elektrikli el aletleri ve aydınlatma sistemleri için güvenilir bir enerji çözümüdür. 220 VAC saf sinüs çıkışı ve 2000 W sürekli güç kapasitesi sayesinde 500 W gücündeki bir elektrikli matkabı yaklaşık 5,4 saat, 1000 W seviyesindeki bir kırıcıyı yaklaşık 2,7 saat ve 100 W gücündeki LED saha aydınlatmasını yaklaşık 27 saat çalıştırabilir.</p><p>Bilgi ekranı SOC, anlık çıkış gücü, gerilim, akım ve sıcaklığı gerçek zamanlı gösterir. 1000 W MPPT destekli güneş girişi ve 6000 çevrimlik batarya ömrü uzun süreli ve şebekeden bağımsız kullanım sağlar.</p><table><tr><td>Enerji</td><td>2,7 kWh</td></tr><tr><td>Çıkış Voltajı</td><td>220 VAC</td></tr><tr><td>Çıkış Gücü</td><td>2000 W</td></tr><tr><td>Maks. PV Gücü</td><td>1000 W MPPT</td></tr><tr><td>Çevrim</td><td>6000 Çevrim</td></tr><tr><td>Dalga Tipi</td><td>Saf Sinüs</td></tr><tr><td>Boyutlar</td><td>548 × 391 × 335 mm</td></tr><tr><td>Ağırlık</td><td>35 kg</td></tr></table><p>Fiyat için teklif alın.</p>"
+    },
+    {
+      "Slug": "aft-2-7-kwh-tasinabilir-guc-istasyonu",
+      "SKU": "AFT-GP-2-7",
+      "İsim": "AFT 2,7 kWh Taşınabilir Güç İstasyonu (2000 W)",
+      "Metadata Açıklama": "AFT 2,7 kWh depolanabilir güç paketi: 220 VAC saf sinüs, 2000 W, 1000 W MPPT güneş girişi, 6000 çevrim, 35 kg. Fiyat için teklif alın.",
+      "Marka": "AFT Power",
+      "Kategoriler": "Taşınabilir Güç İstasyonu",
+      "Etiketler": "AFT Power, Taşınabilir Güç İstasyonu, Güç Paketi",
+      "Stok:Ana Depo": "10",
+      "_saleMode": "quote",
+      "Açıklama": "<p><strong>AFT 2,7 kWh Depolanabilir Güç Paketi</strong>, elektrikli el aletleri ve aydınlatma sistemleri için güvenilir ve taşınabilir bir enerji çözümüdür. 220 VAC saf sinüs çıkışı ve 2000 W sürekli güç kapasitesi sayesinde 500 W gücündeki bir elektrikli matkabı yaklaşık 5,4 saat, 1000 W seviyesindeki bir kırıcıyı yaklaşık 2,7 saat ve 100 W gücündeki LED aydınlatmayı yaklaşık 27 saat çalıştırabilir.</p><p>Bilgi ekranı SOC, anlık çıkış gücü, gerilim, akım ve sıcaklığı gerçek zamanlı gösterir. 1000 W MPPT destekli güneş girişi ve 6000 çevrimlik batarya ömrü uzun süreli ve şebekeden bağımsız kullanım sağlar.</p><table><tr><td>Enerji</td><td>2,7 kWh</td></tr><tr><td>Çıkış Voltajı</td><td>220 VAC</td></tr><tr><td>Çıkış Gücü</td><td>2000 W</td></tr><tr><td>Maks. PV Gücü</td><td>1000 W MPPT</td></tr><tr><td>Çevrim</td><td>6000 Çevrim</td></tr><tr><td>Dalga Tipi</td><td>Saf Sinüs</td></tr><tr><td>Boyutlar</td><td>500 × 335 × 285 mm</td></tr><tr><td>Ağırlık</td><td>35 kg</td></tr></table><p>Fiyat için teklif alın.</p>"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import { StockAlertForm } from '@/components/StockAlertForm'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { isInstallShipping, isQuoteOnly, INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
 import { CompareButton } from '@/components/CompareButton'
 import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds, type MockProduct } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
@@ -239,6 +240,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const outOfStock = stock === 0
   // Akü / batarya: kargo kısıtları kontrol edilene kadar çevrim içi satılmaz, iletişim kutusu gösterilir
   const contactOnly = isContactOnlyProduct(product)
+  // Teklifle satılan ürün (fiyat yok) ve kurulumu/nakliyesi ayrıca konuşulan ürün (şarj istasyonu): lib/sale-mode.ts
+  const quoteOnly = isQuoteOnly(product)
+  const installShipping = isInstallShipping(product)
   const isLowStock = stock > 0 && stock <= 5
 
   /** Seçili seçeneği 1 adet sepete ekler (stok sınırı aşılırsa eklemez); eklendiyse true */
@@ -458,6 +462,11 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 const old = sp.campaign && sp.oldPrice
                   ? (effectiveVariant && sp.discount ? effectiveVariant.price / (1 - sp.discount / 100) : sp.oldPrice)
                   : null
+                if (quoteOnly) {
+                  return (
+                    <p className="mt-5 text-[22px] sm:text-[24px] font-bold text-[#0b2540]">{L('Fiyat için teklif alın', 'Request a quote')}</p>
+                  )
+                }
                 return (
                   <div className="mt-5">
                     {old && (
@@ -502,7 +511,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 <dd className={`font-semibold ${outOfStock ? 'text-[#d6262c]' : isLowStock ? 'text-amber-700' : 'text-emerald-700'}`}>
                   {outOfStock ? tProduct('soldOut') : isLowStock ? tProduct('lowStock', { stock }) : tProduct('inStock')}
                 </dd>
-                {!outOfStock && (
+                {!outOfStock && !quoteOnly && (
                   <>
                     <dt className="text-[#5d6e80]">{L('Havale/EFT', 'Bank transfer')}</dt>
                     <dd className="text-[#121926]">
@@ -511,17 +520,31 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       </span>
                       <span className="text-[#5d6e80]"> {L(`KDV dahil · %${BANK_TRANSFER_DISCOUNT_RATE} indirimli`, `incl. VAT · ${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</span>
                     </dd>
-                    <dt className="text-[#5d6e80]">{contactOnly ? L('Kargo', 'Shipping') : L('Teslimat', 'Delivery')}</dt>
-                    <dd>{contactOnly ? <span className="font-medium text-[#0b2540]">{L('Kargo ve nakliye için iletişime geçin', 'Contact us for shipping')}</span> : <DeliveryEstimate compact />}</dd>
+                    <dt className="text-[#5d6e80]">{contactOnly || installShipping ? L('Kargo', 'Shipping') : L('Teslimat', 'Delivery')}</dt>
+                    <dd>
+                      {contactOnly ? (
+                        <span className="font-medium text-[#0b2540]">{L('Kargo ve nakliye için iletişime geçin', 'Contact us for shipping')}</span>
+                      ) : installShipping ? (
+                        <span className="font-medium text-[#0b2540]">{L('Kurulum ve nakliye için sizinle iletişime geçeceğiz', 'We will contact you about installation and delivery')}</span>
+                      ) : (
+                        <DeliveryEstimate compact />
+                      )}
+                    </dd>
                   </>
                 )}
               </dl>
 
-              {outOfStock && <div className="mt-5"><StockAlertForm productId={product.id} /></div>}
+              {outOfStock && !quoteOnly && <div className="mt-5"><StockAlertForm productId={product.id} /></div>}
 
-              {/* Sepet butonları (akü / bataryada yerine iletişim kutusu) */}
+              {installShipping && (
+                <p className="mt-5 rounded-lg border border-[#d6e2ef] bg-[#f5f8fc] px-3.5 py-2.5 text-[13px] leading-relaxed text-[#20384e]" role="note">
+                  {L(INSTALL_NOTE_TR, INSTALL_NOTE_EN)}
+                </p>
+              )}
+
+              {/* Sepet butonları (akü / bataryada ve teklifle satılan üründe yerine iletişim kutusu) */}
               {contactOnly ? (
-                <BatteryContactBox className="mt-5" productName={product.name} sku={effectiveVariant?.sku || product.sku} />
+                <BatteryContactBox className="mt-5" productName={product.name} sku={effectiveVariant?.sku || product.sku} mode={quoteOnly ? 'quote' : 'battery'} />
               ) : (
               <div className="mt-5 grid grid-cols-2 gap-2.5">
                 {cartQty === 0 ? (
@@ -604,7 +627,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                               )}
                             </span>
                             <span className="min-w-0 flex-1 text-[13px] font-medium text-[#20384e] line-clamp-2 leading-snug group-hover:text-[#0b2540]">{p.name}</span>
-                            <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{formatPrice(p.price)}</span>
+                            <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{isQuoteOnly(p) ? L('Teklif alın', 'Quote') : formatPrice(p.price)}</span>
                           </Link>
                         </li>
                       ))}

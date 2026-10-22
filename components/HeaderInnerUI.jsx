@@ -141,7 +141,7 @@ export function HeaderInnerUI(props) {
                         {product.oldPrice != null && product.oldPrice > product.price && (
                           <span className="block text-[11px] text-slate-400 line-through">{fmtPrice(product.oldPrice, currency, exchangeRates)}</span>
                         )}
-                        <span className="text-sm font-semibold text-brand">{fmtPrice(product.price, currency, exchangeRates)}</span>
+                        <span className="text-sm font-semibold text-brand">{product.price > 0 ? fmtPrice(product.price, currency, exchangeRates) : L('Teklif alın', 'Request a quote')}</span>
                       </span>
                     )}
                   </Link>

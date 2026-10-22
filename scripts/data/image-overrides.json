@@ -2095,5 +2095,61 @@
     ],
     "source": "Excel (voltekno_ikas_nihai.xlsx) TOMMAT-TT04536TN10-00076 satırının görseli",
     "note": "Seri görseli: 40Wp için resmî fotoğraf yok (Excel görseli Drive'da silinmiş, TommaTech sitelerinde 36TN10 ürün sayfası yok). Aynı 36TN10 TOPCon serisinin 45Wp panel fotoğrafı. [20.10.2026]"
+  },
+  "AFT-GC-45": {
+    "images": [
+      "aft-sarj-istasyonu.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-PROV2-90": {
+    "images": [
+      "aft-pro-v2-sarj-istasyonu.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-GUC-KATMANI": {
+    "images": [
+      "aft-guc-katmani.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-LFP-5-4": {
+    "images": [
+      "aft-lfp-batarya-5-4kwh.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-LFP-2-7": {
+    "images": [
+      "aft-lfp-batarya-2-7kwh.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-GP-5-4": {
+    "images": [
+      "aft-guc-paketi-5-4kwh.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-GP-CANTA-2-7": {
+    "images": [
+      "aft-canta-guc-paketi-2-7kwh.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
+  },
+  "AFT-GP-2-7": {
+    "images": [
+      "aft-guc-paketi-2-7kwh.webp"
+    ],
+    "source": "AFT Power ürün föyü (22.10.2026, kullanıcıdan); ürün fotoğrafı kırpılıp zemini beyaza çekildi",
+    "note": "Birebir ürün"
   }
 }
