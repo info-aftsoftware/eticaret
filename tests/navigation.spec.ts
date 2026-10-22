@@ -36,6 +36,33 @@ test.describe('gezinme kuralları', () => {
     expect(await page.locator('main a[href^="/products/"]').first().getAttribute('href')).toBe(first)
   })
 
+  test('masaüstü açılır kategori menüleri hiçbir genişlikte ekrandan taşmaz', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'Açılır menüler masaüstü başlığında')
+    test.setTimeout(150_000)
+    await page.goto('/')
+    for (const width of [1025, 1100, 1145, 1200, 1280, 1366, 1440, 1536, 1920]) {
+      await page.setViewportSize({ width, height: 900 })
+      const nav = page.locator('nav[aria-label="Ana menü"], nav[aria-label="Main menu"]').first()
+      const triggers = nav.locator(':scope > div > a')
+      const count = await triggers.count()
+      for (let i = 0; i < count; i++) {
+        const trigger = triggers.nth(i)
+        if (!(await trigger.isVisible())) continue
+        await trigger.hover()
+        const panel = trigger.locator('xpath=following-sibling::div[1]')
+        await expect(panel).toBeVisible()
+        await page.waitForTimeout(50)
+        const box = await panel.locator(':scope > div').boundingBox()
+        const label = `${width}px, ${(await trigger.textContent())?.trim()}`
+        expect(box, label).not.toBeNull()
+        expect(box!.x, label).toBeGreaterThanOrEqual(0)
+        expect(box!.x + box!.width, label).toBeLessThanOrEqual(width)
+        await page.mouse.move(width / 2, 850)
+        await page.waitForTimeout(250)
+      }
+    }
+  })
+
   test('alt sayfadan ürüne geçince ürün sayfası en üstten açılır', async ({ page }) => {
     await page.goto('/products')
     const card = page.locator('main a[href^="/products/"]').nth(8)
