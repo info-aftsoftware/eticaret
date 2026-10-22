@@ -41,9 +41,7 @@ export function shippingQuoteView(order: OrderQuoteFields): ShippingQuoteView {
   const carrierId = order.shippingQuoteCarrier ?? null
   const carrierName = carrierId ? getCarrier(carrierId)?.name ?? carrierId : raw?.carrierName ?? null
   const providerLabel = SHIPPING_PROVIDER_LABELS[provider]
-  const summary = legacy
-    ? `${providerLabel} (önceki fiyat listesi)`
-    : [providerLabel, carrierName].filter(Boolean).join(' · ')
+  const summary = [providerLabel, carrierName].filter(Boolean).join(' · ')
   return {
     provider,
     providerLabel,
