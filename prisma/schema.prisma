@@ -492,6 +492,10 @@ model Order {
   geliverStatusCode  String?   // trackingStatusCode (TRANSIT, DELIVERED …) ya da gönderi durumu
   geliverStatusLabel String?   // Türkçe son durum ("Kargo dağıtımda")
   geliverSyncedAt    DateTime?
+  // Siteden açılan Geliver gönderisi: teklifler (etiket alınana kadar), etiket ve test ortamı işareti
+  geliverOffers      Json?
+  geliverLabelUrl    String?
+  geliverTestMode    Boolean?
   // Ödeme sayfasının deneme anahtarı: aynı anahtarla gelen ikinci istek yeni sipariş açmaz (çift tıklama, ağ tekrarı).
   // @unique değil: derlemedeki "prisma db push" yeni benzersiz kısıtta onay ister; tekillik uygulamada sağlanır
   idempotencyKey     String?

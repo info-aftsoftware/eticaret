@@ -1,11 +1,17 @@
 /**
- * Geliver API (https://docs.geliver.io): gönderi takibi.
- * Gönderiler şimdilik Geliver panelinde açılır; site gönderiyi siparişe bağlar ve durumunu çeker.
+ * Geliver API (https://docs.geliver.io): gönderi oluşturma, etiket satın alma ve takip.
  * Yetki: Authorization: Bearer <GELIVER_API_TOKEN> (app.geliver.io/apitokens). Token yoksa özellik kapalıdır.
+ * GELIVER_TEST_MODE: "0" / "false" yazılmadıkça gönderiler test gönderisi olarak açılır (ücretsiz, gerçek kargo çıkmaz).
+ * GELIVER_SENDER_ADDRESS_ID: isteğe bağlı; yoksa hesabın varsayılan gönderici adresi kullanılır.
  *
- * Kullanılan uçlar (yalnızca okuma):
- *   GET /shipments/{id}                 tek gönderi: trackingNumber, trackingUrl, trackingStatus
- *   GET /shipments?orderNumber=…&filter=…  listeleme (sipariş no / takip no ile arama)
+ * Kullanılan uçlar:
+ *   POST   /shipments                    gönderi oluştur, teklifleri al (iki aşamalı akış)
+ *   POST   /transactions {offerID}       teklifi kabul et: etiket satın alınır, barkod ve etiket bağlantısı gelir
+ *   DELETE /shipments/{id}               gönderiyi iptal et (etiket alınmadan)
+ *   GET    /shipments/{id}               tek gönderi: teklifler, trackingNumber, trackingUrl, trackingStatus
+ *   GET    /shipments?orderNumber=…&filter=…  listeleme (sipariş no / takip no ile arama)
+ * Test gönderisinde tek teklif gelir (GELIVER_STANDART, 0 TL), tamamlanma yüzdesi 99'da kalır ve "en ucuz" alanı boştur;
+ * bu yüzden teklifler her zaman listeden okunur. Test gönderisinin durumu her sorguda bir adım ilerler.
  * Takip sayfası: gönderide trackingUrl yoksa https://app.geliver.io/tracking/{shipmentID}
  */
 import { getCarrier } from '@/lib/shipping/carriers'
@@ -13,11 +19,13 @@ import { getCarrier } from '@/lib/shipping/carriers'
 const BASE_URL = 'https://api.geliver.io/api/v1'
 export const GELIVER_TRACKING_PAGE = (id: string) => `https://app.geliver.io/tracking/${encodeURIComponent(id)}`
 
-export type GeliverConfig = { token: string }
+export type GeliverConfig = { token: string; testMode: boolean; senderAddressId: string | null }
 
 export function geliverConfigFromEnv(env: Partial<Record<string, string>> = process.env): GeliverConfig | null {
   const token = env.GELIVER_API_TOKEN?.trim()
-  return token ? { token } : null
+  if (!token) return null
+  const test = env.GELIVER_TEST_MODE?.trim().toLowerCase()
+  return { token, testMode: !(test === '0' || test === 'false'), senderAddressId: env.GELIVER_SENDER_ADDRESS_ID?.trim() || null }
 }
 
 export const isGeliverEnabled = () => geliverConfigFromEnv() !== null
@@ -51,6 +59,25 @@ export type GeliverShipment = {
   carrierId: string | null
   isTest: boolean
   isReturn: boolean
+  /** Etiket alındıysa PDF bağlantısı ve barkod */
+  labelUrl: string | null
+  barcode: string | null
+  /** Teklifler (etiket alınana kadar) */
+  offers: GeliverOffer[]
+}
+
+/** Gönderiye gelen kargo teklifi */
+export type GeliverOffer = {
+  id: string
+  /** KDV ve vergiler dahil toplam */
+  totalAmount: number
+  currency: string
+  providerCode: string | null
+  providerServiceCode: string | null
+  /** carriers.ts kimliği; bilinmiyorsa null */
+  carrierId: string | null
+  /** "01 gün 00 saat" */
+  estimate: string | null
 }
 
 /** Alt durum kodlarının Türkçesi (docs: Kargo Durum Değerleri) */
@@ -93,6 +120,27 @@ export function carrierFromProviderCode(code: string | null | undefined): string
 
 const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null)
 
+const num = (v: unknown) => {
+  const n = typeof v === 'number' ? v : Number.parseFloat(String(v ?? ''))
+  return Number.isFinite(n) ? n : 0
+}
+
+export function parseGeliverOffer(raw: unknown): GeliverOffer | null {
+  const o = (raw ?? {}) as Record<string, any>
+  const id = str(o.id)
+  if (!id) return null
+  const service = str(o.providerServiceCode)
+  return {
+    id,
+    totalAmount: num(o.totalAmount),
+    currency: str(o.currency) ?? 'TL',
+    providerCode: str(o.providerCode),
+    providerServiceCode: service,
+    carrierId: carrierFromProviderCode(service ?? str(o.providerCode)),
+    estimate: str(o.averageEstimatedTimeHumanReadible) ?? str(o.averageEstimatedTimeHumanReadable),
+  }
+}
+
 /** API yanıtındaki gönderi nesnesini sade biçime çevirir */
 export function parseGeliverShipment(raw: unknown): GeliverShipment {
   const s = (raw ?? {}) as Record<string, any>
@@ -116,6 +164,12 @@ export function parseGeliverShipment(raw: unknown): GeliverShipment {
     carrierId: carrierFromProviderCode(provider),
     isTest: s.test === true,
     isReturn: s.isReturn === true,
+    labelUrl: str(s.labelURL),
+    barcode: str(s.barcode),
+    offers: (Array.isArray(s.offers?.list) ? s.offers.list : [])
+      .map(parseGeliverOffer)
+      .filter((o: GeliverOffer | null): o is GeliverOffer => o !== null)
+      .sort((a: GeliverOffer, b: GeliverOffer) => a.totalAmount - b.totalAmount),
   }
 }
 
@@ -158,23 +212,28 @@ export type GeliverPlan = {
 }
 
 const SHIPPED_STATES = new Set(['SHIPPED', 'DELIVERED'])
+/** Gönderi açıldı, teklif seçilmedi (etiket yok) */
+export const PRE_LABEL_STATES = new Set(['CREATED', 'GOT_OFFERS'])
 
 /**
  * Geliver'den gelen durumu siparişe uygulama planı (saf fonksiyon, testli).
  * - Takip numarası / linki / firma gelince yazılır.
  * - Kargo firması teslim aldığında (TRANSIT veya sonrası) ödemesi alınmış sipariş "Kargoda" olur, müşteriye e-posta gider.
  * - Teslimde "Teslim Edildi". İade, kayıp, iptal otomatik uygulanmaz: not ve uyarı.
- * - Test gönderisi siparişin durumunu değiştirmez.
+ * - Test gönderisi siparişin durumunu değiştirmez, takip numarası ve linki siparişe yazılmaz.
  */
 export function planGeliverUpdate(order: OrderLike, s: GeliverShipment, now = new Date()): GeliverPlan {
   const label = geliverStatusLabel(s)
   const data: Record<string, unknown> = { geliverStatusLabel: label, geliverStatusCode: s.trackingCode ?? s.statusCode, geliverSyncedAt: now }
   const events: GeliverPlan['events'] = []
-  if (s.trackingNumber && s.trackingNumber !== order.trackingNumber) data.trackingNumber = s.trackingNumber
-  if (s.trackingUrl !== order.trackingUrl) data.trackingUrl = s.trackingUrl
-  if (s.carrierId && s.carrierId !== order.shippingCarrier) data.shippingCarrier = s.carrierId
+  // Test gönderisinin takip numarası ve linki rastgeledir (example.com); etiketi alınmamış gönderinin takibi yoktur
+  const hasTracking = !s.isTest && !PRE_LABEL_STATES.has(s.statusCode ?? '')
+  if (hasTracking && s.trackingNumber && s.trackingNumber !== order.trackingNumber) data.trackingNumber = s.trackingNumber
+  if (hasTracking && s.trackingUrl !== order.trackingUrl) data.trackingUrl = s.trackingUrl
+  if (hasTracking && s.carrierId && s.carrierId !== order.shippingCarrier) data.shippingCarrier = s.carrierId
   if (label !== order.geliverStatusLabel && order.geliverStatusLabel !== null) {
-    events.push({ message: `Kargo durumu (Geliver): ${label}`, visibleToCustomer: true })
+    // Test gönderisinin ilerleyişi müşteriye gösterilmez
+    events.push({ message: `Kargo durumu (Geliver): ${label}`, visibleToCustomer: !s.isTest })
   }
 
   let alert: string | null = null
@@ -192,9 +251,28 @@ export function planGeliverUpdate(order: OrderLike, s: GeliverShipment, now = ne
   return { data, events, ship, deliver, alert }
 }
 
-type FetchLike = (url: string, init?: { headers?: Record<string, string> }) => Promise<{ status: number; json(): Promise<any> }>
+type FetchLike = (
+  url: string,
+  init?: { method?: string; headers?: Record<string, string>; body?: string }
+) => Promise<{ status: number; json(): Promise<any> }>
+
+/** Gönderi oluşturma girdisi (ölçüler cm, ağırlık kg) */
+export type GeliverCreateInput = {
+  orderNumber: string
+  /** Ürünlerin toplam tutarı (TL) */
+  orderTotal: number
+  recipient: { name: string; email: string; phone: string; address: string; cityCode: string; districtID: number; zip?: string | null }
+  parcel: { lengthCm: number; widthCm: number; heightCm: number; weightKg: number }
+  items: { title: string; quantity: number }[]
+}
 
 export type GeliverClient = {
+  readonly config: GeliverConfig
+  /** Gönderi açar ve teklifleri bekler (en fazla birkaç saniye) */
+  createShipment(input: GeliverCreateInput): Promise<GeliverShipment>
+  /** Teklifi kabul eder: etiket satın alınır. Dönen gönderide etiket ve barkod vardır */
+  acceptOffer(offerId: string): Promise<GeliverShipment>
+  cancelShipment(id: string): Promise<void>
   getShipment(id: string): Promise<GeliverShipment>
   /** Sipariş numarasıyla açılmış gönderiler (yeniden eskiye) */
   findByOrderNumber(orderNo: string): Promise<GeliverShipment[]>
@@ -202,11 +280,29 @@ export type GeliverClient = {
   search(text: string): Promise<GeliverShipment[]>
 }
 
-export function createGeliverClient(config: GeliverConfig, fetchImpl: FetchLike = fetch as unknown as FetchLike): GeliverClient {
-  async function get(path: string): Promise<any> {
+/** "0532 123 45 67" / "5321234567" → "+905321234567" */
+export function geliverPhone(phone: string): string {
+  const digits = phone.replace(/\D/g, '')
+  return `+90${digits.slice(-10)}`
+}
+
+export function createGeliverClient(
+  config: GeliverConfig,
+  fetchImpl: FetchLike = fetch as unknown as FetchLike,
+  opts: { offerWaitMs?: number; pollMs?: number } = {}
+): GeliverClient {
+  async function call(method: 'GET' | 'POST' | 'DELETE', path: string, payload?: unknown): Promise<any> {
     let res: { status: number; json(): Promise<any> }
     try {
-      res = await fetchImpl(`${BASE_URL}${path}`, { headers: { Authorization: `Bearer ${config.token}`, Accept: 'application/json' } })
+      res = await fetchImpl(`${BASE_URL}${path}`, {
+        method,
+        headers: {
+          Authorization: `Bearer ${config.token}`,
+          Accept: 'application/json',
+          ...(payload !== undefined ? { 'Content-Type': 'application/json' } : {}),
+        },
+        ...(payload !== undefined ? { body: JSON.stringify(payload) } : {}),
+      })
     } catch (e) {
       throw new GeliverError('network', `Geliver'e ulaşılamadı (${e instanceof Error ? e.message : 'ağ hatası'})`)
     }
@@ -214,15 +310,71 @@ export function createGeliverClient(config: GeliverConfig, fetchImpl: FetchLike 
     if (res.status === 401 || res.status === 403) throw new GeliverError('auth', 'Geliver API anahtarı geçersiz veya yetkisiz')
     if (res.status === 404) throw new GeliverError('not_found', 'Geliver gönderisi bulunamadı')
     if (res.status >= 400 || body?.result === false) {
-      throw new GeliverError('http', String(body?.additionalMessage ?? body?.message ?? `HTTP ${res.status}`))
+      // Hata kodlu yanıtta açıklama "message"da, "additionalMessage" teknik ayrıntıdır
+      const msg = body?.code ? `${body.message ?? body.additionalMessage} (${body.code})` : body?.additionalMessage ?? body?.message
+      throw new GeliverError('http', String(msg ?? `HTTP ${res.status}`))
     }
     return body
   }
+  const get = (path: string) => call('GET', path)
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+  const offerWaitMs = opts.offerWaitMs ?? 8000
+  const pollMs = opts.pollMs ?? 1000
   const list = async (q: string) => {
     const body = await get(`/shipments?limit=20&page=1&sortBy=${encodeURIComponent('updated_at desc')}&${q}`)
     return (Array.isArray(body?.data) ? body.data : []).map(parseGeliverShipment)
   }
   return {
+    config,
+    async createShipment(input) {
+      const body = await call('POST', '/shipments', {
+        test: config.testMode,
+        ...(config.senderAddressId ? { senderAddressID: config.senderAddressId } : {}),
+        length: String(input.parcel.lengthCm),
+        width: String(input.parcel.widthCm),
+        height: String(input.parcel.heightCm),
+        distanceUnit: 'cm',
+        weight: String(input.parcel.weightKg),
+        massUnit: 'kg',
+        items: input.items.map((i) => ({ title: i.title.slice(0, 120), quantity: i.quantity })),
+        recipientAddress: {
+          name: input.recipient.name,
+          email: input.recipient.email,
+          phone: geliverPhone(input.recipient.phone),
+          address1: input.recipient.address.slice(0, 250),
+          countryCode: 'TR',
+          cityCode: input.recipient.cityCode,
+          districtID: input.recipient.districtID,
+          ...(input.recipient.zip ? { zip: input.recipient.zip } : {}),
+        },
+        productPaymentOnDelivery: false,
+        order: {
+          sourceCode: 'API',
+          sourceIdentifier: process.env.NEXT_PUBLIC_SITE_URL || 'https://voltekno.com',
+          orderNumber: input.orderNumber,
+          totalAmount: Math.round(input.orderTotal),
+          totalAmountCurrency: 'TL',
+        },
+      })
+      let shipment = parseGeliverShipment(body?.data ?? body)
+      // Teklifler anlık toplanır: tamamlanana (ya da süre dolana) kadar gönderi yeniden okunur
+      const started = Date.now()
+      let pct = Number(body?.data?.offers?.percentageCompleted ?? 100)
+      while (pct < 100 && Date.now() - started < offerWaitMs) {
+        await sleep(pollMs)
+        const again = await get(`/shipments/${encodeURIComponent(shipment.id)}`)
+        shipment = parseGeliverShipment(again?.data ?? again)
+        pct = Number(again?.data?.offers?.percentageCompleted ?? 100)
+      }
+      return shipment
+    },
+    async acceptOffer(offerId) {
+      const body = await call('POST', '/transactions', { offerID: offerId })
+      return parseGeliverShipment(body?.data?.shipment)
+    },
+    async cancelShipment(id) {
+      await call('DELETE', `/shipments/${encodeURIComponent(id)}`)
+    },
     async getShipment(id) {
       const body = await get(`/shipments/${encodeURIComponent(id)}`)
       return parseGeliverShipment(body?.data ?? body)

@@ -12,7 +12,7 @@ import type { Order, OrderLine } from '@prisma/client'
 import { reportError } from '@/lib/alerts'
 import { prisma } from '@/lib/prisma'
 import { matchCarrier } from '@/lib/bulk-shipping'
-import { cartLogistics } from '@/lib/shipping/fee'
+import { orderParcel } from '@/lib/shipping/order-parcel'
 import {
   NavlungoError,
   getNavlungoClient,
@@ -33,19 +33,7 @@ const carrierIdFor = (name: string | null | undefined) => (name ? matchCarrier(n
 
 /** Gönderi desisi: sipariş anındaki kargo teklifi, yoksa ürünlerin desi/kg bilgisi. Ağırlık desiden büyükse ağırlık. */
 export function navlungoDefaultDesi(order: OrderWithLines): number {
-  const q = (order.shippingQuote && typeof order.shippingQuote === 'object' ? order.shippingQuote : null) as { desi?: number; kg?: number } | null
-  let desi = typeof q?.desi === 'number' ? q.desi : null
-  let kg = typeof q?.kg === 'number' ? q.kg : null
-  if (desi === null) {
-    const l = cartLogistics(
-      order.lines.map((line) => {
-        const productId = (line.variantMatrix as { productId?: string } | null)?.productId ?? line.id
-        return { id: productId, productId, quantity: line.quantity }
-      })
-    )
-    desi = l.desiExact ?? l.desi
-    kg = l.kg
-  }
+  const { desi, kg } = orderParcel(order)
   return Math.max(1, Math.ceil(Math.max(desi, kg ?? 0)))
 }
 

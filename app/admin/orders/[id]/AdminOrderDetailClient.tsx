@@ -68,11 +68,18 @@ type OrderDetail = {
   /** Geliver gönderi takibi (lib/shipping/geliver-shipments.ts → geliverShipmentView) */
   geliver?: {
     enabled: boolean
+    testMode: boolean | null
+    createdInTestMode: boolean | null
     shipmentId: string | null
     statusCode: string | null
     statusLabel: string | null
     syncedAt: string | null
     trackingUrl: string | null
+    labelUrl: string | null
+    offers: { id: string; totalAmount: number; currency: string; carrierName: string; estimate: string | null }[]
+    recommendedOfferId: string | null
+    defaultDesi: number
+    defaultKg: number | null
   }
   /** Navlungo gönderisi (lib/shipping/navlungo-shipments.ts → navlungoShipmentView) */
   navlungo?: {
@@ -511,6 +518,15 @@ export default function AdminOrderDetailPage() {
                       }}
                       onSync={() => patch('glvsync', { action: 'geliver_sync' }, "Kargo durumu Geliver'den güncellendi.")}
                       onUnlink={() => patch('glvunlink', { action: 'geliver_unlink' }, 'Geliver bağlantısı kaldırıldı.', 'Geliver gönderi bağlantısı kaldırılsın mı? Sipariş durumu ve takip numarası değişmez.')}
+                      onOffers={(desi, kg, refresh) =>
+                        patch('glvoffers', { action: 'geliver_offers', desi, kg, refresh }, refresh ? 'Yeni ölçüyle teklifler alındı.' : 'Geliver teklifleri alındı.')
+                      }
+                      onBuy={(offerId, label) =>
+                        patch('glvbuy', { action: 'geliver_buy', offerId }, 'Geliver etiketi alındı.', `${label} teklifiyle etiket satın alınsın mı? Ücret Geliver bakiyesinden düşülür.`)
+                      }
+                      onCancel={() =>
+                        patch('glvcancel', { action: 'geliver_cancel' }, 'Geliver gönderisi iptal edildi.', 'Geliver gönderisi iptal edilsin mi? Etiket alındıysa ücret Geliver bakiyesine iade edilir.')
+                      }
                     />
                   )}
                   {nav?.postNumber && (
@@ -754,7 +770,10 @@ function ShippingQuoteBox({ quote }: { quote: ShippingQuoteView }) {
   )
 }
 
-/** Geliver gönderi takibi: bağlıysa durum ve işlemler, değilse bağlama alanı */
+/**
+ * Geliver: siteden gönderi oluşturma (teklif → etiket) ya da panelde açılan gönderiyi bağlama; sonrasında durum takibi.
+ * lib/shipping/geliver-shipments.ts
+ */
 function GeliverBox({
   orderNo,
   geliver,
@@ -764,6 +783,9 @@ function GeliverBox({
   onLink,
   onSync,
   onUnlink,
+  onOffers,
+  onBuy,
+  onCancel,
 }: {
   orderNo: string
   geliver: NonNullable<OrderDetail['geliver']>
@@ -773,47 +795,148 @@ function GeliverBox({
   onLink: () => void
   onSync: () => void
   onUnlink: () => void
+  onOffers: (desi: number, kg: number | null, refresh: boolean) => void
+  onBuy: (offerId: string, label: string) => void
+  onCancel: () => void
 }) {
-  if (geliver.shipmentId) {
+  const [desi, setDesi] = useState(String(geliver.defaultDesi))
+  const [kg, setKg] = useState(geliver.defaultKg != null ? String(geliver.defaultKg) : '')
+  const [offerId, setOfferId] = useState<string | null>(geliver.recommendedOfferId)
+  // Yeni teklifler gelince önerilen teklif seçili olsun
+  useEffect(() => setOfferId(geliver.recommendedOfferId), [geliver.recommendedOfferId])
+  const btn = 'inline-flex h-8 items-center gap-1.5 rounded-md border border-[#d3d9e1] bg-white px-3 text-[13px] font-medium text-[#0b2540] hover:bg-[#f5f7fa] disabled:opacity-50'
+  const primary = 'inline-flex h-9 items-center gap-1.5 rounded-md bg-[#0b2540] px-3 text-[13px] font-semibold text-white hover:bg-[#12335a] disabled:opacity-50'
+  const testBadge = (geliver.createdInTestMode ?? geliver.testMode) ? <span className="ml-1 text-xs font-normal text-amber-700">(test gönderisi)</span> : null
+  const num = (v: string) => Number(v.replace(',', '.'))
+  const measures = (
+    <div className="grid grid-cols-2 gap-2">
+      <label className="text-xs text-slate-600">
+        Desi
+        <Input inputMode="decimal" value={desi} onChange={(e) => setDesi(e.target.value)} className="mt-0.5 h-9" />
+      </label>
+      <label className="text-xs text-slate-600">
+        Ağırlık (kg)
+        <Input inputMode="decimal" value={kg} onChange={(e) => setKg(e.target.value)} className="mt-0.5 h-9" />
+      </label>
+    </div>
+  )
+
+  // 3) Etiket alındı ya da panelde açılan gönderi bağlandı: durum ve işlemler
+  if (geliver.shipmentId && (geliver.labelUrl || geliver.offers.length === 0)) {
     return (
       <div className="rounded-lg border border-[#e6ebf1] bg-[#f8fafc] px-3 py-2.5 space-y-1.5">
-        <p className="font-medium text-slate-900">Geliver gönderisi</p>
+        <p className="font-medium text-slate-900">Geliver gönderisi{testBadge}</p>
         <p className="text-slate-600">
           Durum: {geliver.statusLabel ?? 'henüz sorgulanmadı'}
           {geliver.syncedAt && <span className="block text-xs text-slate-500">Son sorgu: {new Date(geliver.syncedAt).toLocaleString('tr-TR')}</span>}
         </p>
         <div className="flex flex-wrap gap-2 pt-1">
+          {geliver.labelUrl && (
+            <a href={geliver.labelUrl} target="_blank" rel="noopener noreferrer" className={btn}>
+              <FileText className="w-3.5 h-3.5" /> Etiketi indir (PDF)
+            </a>
+          )}
           {geliver.trackingUrl && (
-            <a href={geliver.trackingUrl} target="_blank" rel="noopener noreferrer" className="inline-flex h-8 items-center gap-1 rounded-md border border-[#d3d9e1] bg-white px-3 text-[13px] font-medium text-[#0b2540] hover:bg-[#f5f7fa]">
+            <a href={geliver.trackingUrl} target="_blank" rel="noopener noreferrer" className={btn}>
               Takip sayfası <ExternalLink className="w-3 h-3" />
             </a>
           )}
-          <button type="button" disabled={busy !== null} onClick={onSync} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#d3d9e1] bg-white px-3 text-[13px] font-medium text-[#0b2540] hover:bg-[#f5f7fa] disabled:opacity-50">
+          <button type="button" disabled={busy !== null} onClick={onSync} className={btn}>
             {busy === 'glvsync' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
             Durumu güncelle
           </button>
-          <button type="button" disabled={busy !== null} onClick={onUnlink} className="inline-flex h-8 items-center rounded-md px-2 text-[13px] text-slate-500 hover:text-red-700 disabled:opacity-50">
-            Bağlantıyı kaldır
-          </button>
+          {geliver.labelUrl ? (
+            <button type="button" disabled={busy !== null} onClick={onCancel} className="inline-flex h-8 items-center rounded-md px-2 text-[13px] text-slate-500 hover:text-red-700 disabled:opacity-50">
+              {busy === 'glvcancel' && <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" />}
+              Gönderiyi iptal et
+            </button>
+          ) : (
+            <button type="button" disabled={busy !== null} onClick={onUnlink} className="inline-flex h-8 items-center rounded-md px-2 text-[13px] text-slate-500 hover:text-red-700 disabled:opacity-50">
+              Bağlantıyı kaldır
+            </button>
+          )}
         </div>
         <p className="text-xs text-slate-500">Durum saatte bir kendiliğinden güncellenir. Kargo firması teslim alınca sipariş "Kargoda" olur ve müşteriye takip linki gider; teslimde "Teslim Edildi".</p>
       </div>
     )
   }
+
+  // 2) Teklifler alındı: firma seç, etiketi satın al
+  if (geliver.shipmentId) {
+    const chosen = geliver.offers.find((o) => o.id === offerId) ?? null
+    const fmt = (n: number) => n.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    return (
+      <div className="rounded-lg border border-[#e6ebf1] px-3 py-2.5 space-y-2">
+        <p className="font-medium text-slate-900">Geliver teklifleri{testBadge}</p>
+        <ul className="space-y-1" role="radiogroup" aria-label="Geliver teklifleri">
+          {geliver.offers.map((o) => (
+            <li key={o.id}>
+              <label className={`flex cursor-pointer items-center justify-between gap-3 rounded-md border px-3 py-2 text-[13px] ${offerId === o.id ? 'border-[#0b2540] bg-[#f5f8fc]' : 'border-[#e6ebf1] bg-white'}`}>
+                <span className="flex items-center gap-2">
+                  <input type="radio" name="geliver-offer" checked={offerId === o.id} onChange={() => setOfferId(o.id)} />
+                  <span>
+                    <span className="font-medium text-slate-900">{o.carrierName}</span>
+                    {o.id === geliver.recommendedOfferId && <span className="ml-1 text-xs text-emerald-700">önerilen</span>}
+                    {o.estimate && <span className="block text-xs text-slate-500">Tahmini süre: {o.estimate}</span>}
+                  </span>
+                </span>
+                <span className="font-semibold tabular-nums text-slate-900">{fmt(o.totalAmount)} {o.currency === 'TL' ? '₺' : o.currency}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+        <button
+          type="button"
+          disabled={busy !== null || !chosen}
+          onClick={() => chosen && onBuy(chosen.id, `${chosen.carrierName} (${fmt(chosen.totalAmount)} TL)`)}
+          className={primary}
+        >
+          {busy === 'glvbuy' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+          Etiketi satın al{chosen ? ` · ${fmt(chosen.totalAmount)} ₺` : ''}
+        </button>
+        <details className="text-xs text-slate-600">
+          <summary className="cursor-pointer select-none">Ölçüyü değiştir veya gönderiyi iptal et</summary>
+          <div className="mt-2 space-y-2">
+            {measures}
+            <div className="flex flex-wrap gap-2">
+              <button type="button" disabled={busy !== null || !(num(desi) > 0)} onClick={() => onOffers(num(desi), num(kg) > 0 ? num(kg) : null, true)} className={btn}>
+                {busy === 'glvoffers' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                Yeniden teklif al
+              </button>
+              <button type="button" disabled={busy !== null} onClick={onCancel} className="inline-flex h-8 items-center rounded-md px-2 text-[13px] text-slate-500 hover:text-red-700 disabled:opacity-50">
+                Gönderiyi iptal et
+              </button>
+            </div>
+          </div>
+        </details>
+      </div>
+    )
+  }
+
+  // 1) Gönderi yok: siteden oluştur ya da panelde açılanı bağla
   return (
     <div className="rounded-lg border border-[#e6ebf1] px-3 py-2.5 space-y-2">
-      <p className="font-medium text-slate-900">Geliver ile takip</p>
-      <p className="text-xs text-slate-600">
-        Gönderiyi Geliver panelinde açın. Sipariş numarası alanına <span className="font-mono font-semibold text-slate-800">{orderNo}</span> yazarsanız
-        saatte bir kendiliğinden bağlanır. Hemen bağlamak için Geliver gönderi linkini veya takip numarasını yapıştırın.
-      </p>
-      <div className="flex gap-2">
-        <Input aria-label="Geliver gönderi linki veya takip numarası" placeholder="Geliver gönderi linki veya takip no" value={value} onChange={(e) => onChange(e.target.value)} />
-        <button type="button" disabled={busy !== null || !value.trim()} onClick={onLink} className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-md bg-[#0b2540] px-3 text-[13px] font-semibold text-white hover:bg-[#12335a] disabled:opacity-50">
-          {busy === 'glvlink' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-          Bağla
-        </button>
-      </div>
+      <p className="font-medium text-slate-900">Geliver ile kargoya ver{geliver.testMode && <span className="ml-1 text-xs font-normal text-amber-700">(test modu)</span>}</p>
+      <p className="text-xs text-slate-600">Sipariş adresi ve ölçüyle Geliver'de gönderi açılır, kargo firmalarının teklifleri listelenir.</p>
+      {measures}
+      <button type="button" disabled={busy !== null || !(num(desi) > 0)} onClick={() => onOffers(num(desi), num(kg) > 0 ? num(kg) : null, false)} className={primary}>
+        {busy === 'glvoffers' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+        Teklifleri al
+      </button>
+      <details className="text-xs text-slate-600">
+        <summary className="cursor-pointer select-none">Geliver panelinde açtığınız gönderiyi bağlayın</summary>
+        <p className="mt-2">
+          Sipariş numarası alanına <span className="font-mono font-semibold text-slate-800">{orderNo}</span> yazarsanız saatte bir kendiliğinden bağlanır.
+          Hemen bağlamak için gönderi linkini veya takip numarasını yapıştırın.
+        </p>
+        <div className="mt-2 flex gap-2">
+          <Input aria-label="Geliver gönderi linki veya takip numarası" placeholder="Geliver gönderi linki veya takip no" value={value} onChange={(e) => onChange(e.target.value)} />
+          <button type="button" disabled={busy !== null || !value.trim()} onClick={onLink} className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-md bg-[#0b2540] px-3 text-[13px] font-semibold text-white hover:bg-[#12335a] disabled:opacity-50">
+            {busy === 'glvlink' && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+            Bağla
+          </button>
+        </div>
+      </details>
     </div>
   )
 }

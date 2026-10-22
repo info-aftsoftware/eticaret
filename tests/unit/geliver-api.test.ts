@@ -100,7 +100,7 @@ test('Geliver istemcisi: Bearer token, 401 → auth hatası, arama ve link çöz
     if (url.includes('orderNumber=')) return { status: 200, json: async () => ({ result: true, data: [raw()] }) }
     return { status: 401, json: async () => ({ result: false, additionalMessage: 'Unauthorized' }) }
   }
-  const c = createGeliverClient({ token: 'tkn' }, fake)
+  const c = createGeliverClient({ token: 'tkn', testMode: true, senderAddressId: null }, fake)
   assert.equal((await c.getShipment(ID)).id, ID)
   assert.equal(calls[0].auth, 'Bearer tkn')
   assert.equal((await c.findByOrderNumber('ORD-2026-02356')).length, 1)
