@@ -12,7 +12,15 @@ import { shippingQuoteView } from '@/lib/shipping/quote-view'
 import { NavlungoError } from '@/lib/shipping/navlungo-api'
 import { createNavlungoShipment, navlungoShipmentView, syncNavlungoShipment } from '@/lib/shipping/navlungo-shipments'
 import { GeliverError } from '@/lib/shipping/geliver-api'
-import { geliverShipmentView, linkGeliverShipment, syncGeliverShipment, unlinkGeliverShipment } from '@/lib/shipping/geliver-shipments'
+import {
+  buyGeliverLabel,
+  cancelGeliverShipment,
+  geliverShipmentView,
+  getGeliverOffers,
+  linkGeliverShipment,
+  syncGeliverShipment,
+  unlinkGeliverShipment,
+} from '@/lib/shipping/geliver-shipments'
 import {
   allowedNextStatuses,
   approveCancellationRequest,
@@ -179,6 +187,8 @@ export async function getAdminOrderDetail(id: string) {
  *  { action: 'navlungo_sync' }  (durumu Navlungo'dan hemen çek)
  *  { action: 'geliver_link', ref }  (Geliver gönderi linki / kimliği / takip no ile bağla, durumu uygula)
  *  { action: 'geliver_sync' } · { action: 'geliver_unlink' }
+ *  { action: 'geliver_offers', desi?, kg?, refresh? }  (Geliver'de gönderi aç, teklifleri kaydet)
+ *  { action: 'geliver_buy', offerId }  (teklifi kabul et: etiket) · { action: 'geliver_cancel' }
  *  { action: 'note', adminNote }
  *  { action: 'cancel_request', op: 'approve' | 'reject', reason? (ret için zorunlu), note? }
  *  { action: 'return', returnId, op: 'approve' | 'reject' | 'receive' | 'refund', carrier?, code?, reason?, amount? }
@@ -241,6 +251,24 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
       }
       case 'geliver_unlink': {
         await unlinkGeliverShipment(id)
+        break
+      }
+      case 'geliver_offers': {
+        const desi = Number(String(body.desi ?? '').replace(',', '.'))
+        const kg = Number(String(body.kg ?? '').replace(',', '.'))
+        await getGeliverOffers(id, {
+          desi: Number.isFinite(desi) && desi > 0 && desi <= 1000 ? desi : undefined,
+          kg: Number.isFinite(kg) && kg > 0 && kg <= 2000 ? kg : undefined,
+          refresh: body.refresh === true,
+        })
+        break
+      }
+      case 'geliver_buy': {
+        await buyGeliverLabel(id, String(body.offerId ?? '').slice(0, 80))
+        break
+      }
+      case 'geliver_cancel': {
+        await cancelGeliverShipment(id)
         break
       }
       case 'navlungo_sync': {
