@@ -22,12 +22,6 @@ export function BatteryContactBox({ productName, sku, className = '' }: { produc
   return (
     <div className={`rounded-xl border border-[#d6e2ef] bg-[#f5f8fc] p-4 ${className}`} role="note">
       <p className="text-[15px] font-bold text-[#0b2540]">{L('Kargo ve nakliye için iletişime geçin', 'Contact us for shipping and delivery')}</p>
-      <p className="mt-1 text-[13px] leading-relaxed text-[#3b4a5a]">
-        {L(
-          'Akü ve bataryaların kargoyla gönderimine ilişkin kısıtlamaları kontrol ediyoruz. Bu ürün şimdilik çevrim içi sipariş edilemiyor; bize yazın, size uygun gönderim seçeneğini ve fiyatını iletelim.',
-          'We are checking carrier restrictions on shipping batteries. This product cannot be ordered online for now; contact us and we will send you a suitable delivery option and price.'
-        )}
-      </p>
       <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
         <a href={whatsappHref(text)} target="_blank" rel="noopener noreferrer" className={`${btn} bg-[#0b2540] text-white hover:bg-[#12335a]`}>
           <WhatsAppIcon className="h-[18px] w-[18px]" />
