@@ -27,6 +27,6 @@ export function isContactOnlyLine(lineId: string, productId?: string): boolean {
 }
 
 export const BATTERY_CONTACT_MESSAGE_TR =
-  'Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin. Bu ürünler şimdilik çevrim içi sipariş edilemiyor.'
+  'Akü ve bataryalarda kargo ve nakliye için bizimle iletişime geçin.'
 export const BATTERY_CONTACT_MESSAGE_EN =
-  'For batteries, please contact us about shipping and delivery. These products cannot be ordered online for now.'
+  'For batteries, please contact us about shipping and delivery.'
