@@ -61,4 +61,4 @@ export async function reviewSummary(productId: string): Promise<{ average: numbe
   return { average: Math.round((agg._avg.rating ?? 0) * 10) / 10, count: agg._count._all }
 }
 
-export const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+export { EMAIL_RE } from '@/lib/checkout-validation'

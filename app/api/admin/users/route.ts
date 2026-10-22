@@ -6,7 +6,7 @@ import { ADMIN_ROLES, hashPassword, isAdminRole, temporaryPassword } from '@/lib
 import { adminUserView } from '@/lib/admin-user-view'
 import { prisma } from '@/lib/prisma'
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+import { EMAIL_RE } from '@/lib/checkout-validation'
 
 /** Yönetim kullanıcıları (yalnızca Sahip) */
 export async function GET(request: NextRequest) {

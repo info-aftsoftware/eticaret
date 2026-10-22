@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { Turnstile } from '@/components/Turnstile'
 import { useL } from '@/lib/i18n-inline'
+import { isValidEmail, EMAIL_ERROR_TR, EMAIL_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 
 /** Stoğu biten ürün için "Stok gelince haber ver" formu. */
@@ -30,6 +31,10 @@ export function StockAlertForm({ productId }: { productId: string }) {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!isValidEmail(email)) {
+      setError(L(EMAIL_ERROR_TR, EMAIL_ERROR_EN))
+      return
+    }
     setState('sending')
     setError('')
     try {

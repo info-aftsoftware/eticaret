@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
+import { isValidEmail, isValidTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -126,10 +127,10 @@ export default function GesTeklifDogrulamaPage() {
       next.inverterBrandModel = L('İnverter marka/model bilgisi zorunludur.', 'Inverter brand/model is required.')
     if (!form.contactName.trim() || form.contactName.trim().length < 2)
       next.contactName = L('Ad soyad zorunludur.', 'Full name is required.')
-    if (!form.contactEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.contactEmail.trim()))
-      next.contactEmail = L('Geçerli bir e-posta adresi zorunludur.', 'A valid email address is required.')
-    if (!form.contactPhone.trim() || form.contactPhone.replace(/[\s\-().+]/g, '').length < 10)
-      next.contactPhone = L('Geçerli bir telefon numarası giriniz.', 'Please enter a valid phone number.')
+    if (!isValidEmail(form.contactEmail))
+      next.contactEmail = L(EMAIL_ERROR_TR, EMAIL_ERROR_EN)
+    if (!isValidTrPhone(form.contactPhone))
+      next.contactPhone = L(PHONE_ERROR_TR, PHONE_ERROR_EN)
     setErrors(next)
     if (Object.keys(next).length > 0) scrollToFirstError(next)
     return Object.keys(next).length === 0

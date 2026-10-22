@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import { sendEmailSMTP } from '@/lib/email-smtp'
 import { prisma } from '@/lib/prisma'
 import { reportError } from '@/lib/alerts'
@@ -142,13 +143,12 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { success: false, error: 'Geçerli bir e-posta adresi girin' },
-        { status: 400 }
-      )
+    // E-posta ve (yazıldıysa) telefon: sitedeki formlarla aynı kural (lib/checkout-validation)
+    if (!isValidEmail(email)) {
+      return NextResponse.json({ success: false, error: 'Geçerli bir e-posta adresi girin (örn. ad@ornek.com).' }, { status: 400 })
+    }
+    if (phone && !isValidTrPhone(phone)) {
+      return NextResponse.json({ success: false, error: 'Geçerli bir telefon numarası girin (11 hane, örn. 0532 123 45 67).' }, { status: 400 })
     }
 
     // Get admin email from environment or use default

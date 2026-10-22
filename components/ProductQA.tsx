@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { useL } from '@/lib/i18n-inline'
+import { isValidEmail, EMAIL_ERROR_TR, EMAIL_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 
 type QAItem = {
@@ -76,6 +77,10 @@ export function ProductQA({
     }
     if (!isAuthenticated && (!guestName.trim() || !guestEmail.trim())) {
       setError(L('Ad ve e-posta zorunludur.', 'Name and email are required.'))
+      return
+    }
+    if (!isAuthenticated && !isValidEmail(guestEmail)) {
+      setError(L(EMAIL_ERROR_TR, EMAIL_ERROR_EN))
       return
     }
     setSubmitting(true)
