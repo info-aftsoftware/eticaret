@@ -5,7 +5,7 @@ _Son güncelleme: 22.10.2026 · Bu dosya çalışma boyunca sürekli güncelleni
 ## Şu an yapılan
 **Canlıda (nextfirststep.com, son yayın `f1025fa`, 21.10.2026, SEO hariç):** profesyonel seviye (yönetici rolleri, 2FA, işlem kaydı, izleme, yedek, CSV aktarımları, toplu kargo), açık tema ve varsayılan Türkçe, Geliver + Navlungo kargo fiyatı kıyası, Navlungo gönderi entegrasyonu (kimlik bilgisi girilene kadar kapalı), Geliver kargo takibi (`GELIVER_API_TOKEN` Hostinger'a eklenince çalışır), akü/batarya için iletişimle satış, tamamlanan desiler ve görseller, teslimat tahmini, sipariş tekrar koruması ve fiyat değişimi onayı, kısmi iadelerde kargo iadesi.
 
-**Kodda hazır, canlıda değil:** 22.10 turu (aşağıda "İstek turu 6"): mobil hero ve paket kartları, yorumu yalnızca alıcıya açma, sayfalama/gezinme kuralları, açılır menünün taşmaması, yönetim girişi düzeltmesi, Victron 120 V ürünlerin kaldırılması, akü metninin kısalması, resmî kaynaklı desiler. SEO (`9ad9119`, `6a30301`, `5122e7a`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+**Kodda hazır, canlıda değil:** 22.10 turları (aşağıda "İstek turu 6" ve "İstek turu 7"): mobil düzen, yalnız alıcıya yorum, sayfalama kuralları, açılır menü, yönetim girişi, Victron'un kaldırılması, akü metni, resmî desiler, kargo kaynağı etiketi, iptallerin cirodan düşmesi, **Geliver'den gönderi oluşturma**, hesaba özel favoriler, telefon/e-posta doğrulaması. İngilizce site `ingilizce-tam` dalında hazır (3 commit), ana dala birleştirilmedi. SEO (`9ad9119`, `6a30301`, `5122e7a`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
 
 ## Kalanlar (21.10.2026 kontrolü)
 _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
@@ -13,7 +13,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 **1. Yayın ve kod (sizin kararınız)**
 | # | Kalan | Not |
 |---|---|---|
-| K1 | Navlungo + Geliver kodunun yayını | ✅ 21.10.2026 `f1025fa` ile canlıda. Geliver takibi için `GELIVER_API_TOKEN` Hostinger'a eklenmeli (anahtar sohbette paylaşıldığı için önce Geliver panelinden yenisi üretilmeli). Navlungo, bilgileri girilene kadar kapalı |
+| K1 | Navlungo + Geliver kodunun yayını | ✅ 21.10.2026 `f1025fa` ile canlıda (takip). Geliver'den gönderi oluşturma 22.10'da eklendi, canlıda değil. Canlıda çalışması için Hostinger'a `GELIVER_API_TOKEN` (anahtar sohbette paylaşıldığı için önce Geliver panelinden yenisi) ve gerçek etiket için `GELIVER_TEST_MODE=0` eklenmeli; ikincisi yokken gönderiler test gönderisidir. Navlungo, bilgileri girilene kadar kapalı |
 | K1b | Akü kısıtı, desi, görseller, teslimat tahmini, sipariş iyileştirmeleri | ✅ 21.10.2026 `f1025fa` ile canlıda |
 | K2 | SEO yayını | Tür ve marka sayfaları, eski voltekno.com yönlendirmeleri (`9ad9119`, `6a30301`; İngilizce tür listesi düzeltmesi `5122e7a`) bekliyor |
 | K3 | `main` dalı ve GitHub adresi | `urun-katalogu-ikas`, `origin/main`'den 81 commit ileride; yerel `main` 19 commit ileride ama gönderilmemiş. `origin` hâlâ eski adres (`aysenur-23/eticaret`, yeni adrese yönlendiriyor). İkisi de izin sisteminde reddedildi, sizin yapmanız gerekiyor (aşağıda "Yayın") |
@@ -63,6 +63,27 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 - `npm audit`: 7 yüksek açığın hepsi `braces`, yalnızca derleme araçlarında; çözüm Tailwind 4 geçişi. SQLite → PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek var.
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
+
+## İstek turu 7 (22.10.2026, `1273400`..`9079788`, canlıda değil)
+| İstek | Yapılan |
+|---|---|
+| Kargo kaynağında "önceki fiyat listesi" yazmasın | Yönetim panelinde yalnızca "Geliver" ya da "Navlungo" |
+| İptal edilen sipariş cirodan düşsün, yalnızca iptalde kalsın | İstatistikler sayfasında iptal ve iade edilen siparişler ciroya, sipariş sayısına, ortalamaya ve en çok satanlara girmez; durum dağılımında ayrı satırda görünür (o da artık seçilen döneme göre). Ana pano ve müşteri toplamları zaten böyleydi. Yerel kopyada doğrulandı: 90 günde 20 iptal (78.436 TL) ve 2 iade cirodan düştü |
+| Geliver entegrasyonu neden bitmedi | Takip 21.10'dan beri canlıda ama anahtar girilmediği için çalışmıyor; gönderi oluşturma yoktu. Eklendi (aşağıda) |
+| Favoriler her hesaba özel olsun | Eski sürümde misafir favorileri tarayıcıda (`guest-favorites`) kalıyordu ve o tarayıcıda giriş yapan ilk hesaba taşınıyordu; taşıma kaldırıldı, eski liste silinir. Yalnızca girişten hemen önce o sekmede favoriye dokunulan ürün eklenir. Yeni hesabınıza önceden taşınmış ürünleri favorilerden bir kez elle kaldırmanız gerekir |
+| Telefon ve e-posta kontrol edilsin | Tek kural, bütün formlarda ve sunucuda: telefon başında 0 ile 11 hane, 0'sız 10 hane ya da +90 ile; cep (5xx) veya sabit hat. E-posta `ad@alan.uzantı`, boşluk ve art arda nokta yok, uzantı en az 2 harf. Uygulanan yerler: ödeme (zaten vardı), iletişim, GES teklifi ve teklif doğrulama, kayıt, profil ve adres, stok uyarısı, ürün sorusu, şifre sıfırlama, yönetici kullanıcıları |
+
+**Geliver'den gönderi oluşturma** (yönetim paneli → sipariş → Kargo → "Geliver ile kargoya ver"):
+1. Desi ve ağırlık sipariş anındaki kargo teklifinden dolu gelir, değiştirilebilir. "Teklifleri al": siparişin adresiyle Geliver'de gönderi açılır, kargo firmalarının teklifleri (KDV dahil fiyat, tahmini süre) listelenir; sipariş anında fiyatı verilen firma "önerilen" olarak seçili gelir.
+2. "Etiketi satın al": seçilen teklif kabul edilir, ücret Geliver bakiyesinden düşer, etiket PDF'i ve barkod gelir ("Etiketi indir").
+3. Kargo firması paketi teslim alınca takip siparişi "Kargoda" yapar ve müşteriye takip linki gider; teslimde "Teslim Edildi".
+4. Etiket alınmadan "Yeniden teklif al" (yeni ölçüyle) ya da "Gönderiyi iptal et"; kargoya verilmeden önce etiket alınmış gönderi de iptal edilebilir.
+- Adres: sitenin 81 il ve 973 ilçesinin hepsi Geliver'in il plaka kodu ve ilçe kimliğiyle eşlendi (`lib/shipping/geliver-districts.json`, `scripts/build-geliver-districts.mjs`). Eşleme sırasında ödeme sayfasındaki ilçe listesinde 3 yazım hatası bulundu ve düzeltildi: İhsaniye, Bozdoğan, Eceabat.
+- Güvenlik: ödenmemiş ya da kargoya uygun olmayan siparişte açılmaz, Navlungo gönderisi olan siparişte açılmaz, yalnızca kayıtlı teklif kabul edilir, aynı siparişte eşzamanlı ikinci tıklama reddedilir.
+- `GELIVER_TEST_MODE` 0/false yapılmadıkça gönderiler **test gönderisi**dir: ücretsiz, gerçek kargo çıkmaz, sipariş durumunu, takip numarasını ve müşteri zaman çizelgesini değiştirmez. İsteğe bağlı `GELIVER_SENDER_ADDRESS_ID` (yoksa hesabın varsayılan gönderici adresi, şu an Elazığ / Merkez).
+- **Gerçek Geliver API'sinde test gönderileriyle doğrulandı:** gönderi açıldı, teklif geldi (test modunda tek teklif, 0 TL), etiket alındı (PDF 16 KB, barkod), durum her sorguda ilerledi (şubede → alıcı şubede → dağıtımda) ve sipariş durumu değişmedi; yeniden teklif eski gönderiyi Geliver'de iptal etti, iptal gönderiyi siparişten kaldırdı. Gerçek (ücretli) etiket denenmedi: Geliver hesabının onayı ve bakiye gerekir.
+
+**Doğrulama:** tip kontrolü ve lint temiz, birim testleri 130/130 (yeni: Geliver gönderi oluşturma, adres eşleme, koli ölçüsü, telefon/e-posta kuralları), derleme temiz, Playwright (akış testleri dahil) 98 geçti / 0 kaldı.
 
 ## İstek turu 6 (22.10.2026, `fe166ff`..`eb657ae`, canlıda değil)
 | İstek | Yapılan |
