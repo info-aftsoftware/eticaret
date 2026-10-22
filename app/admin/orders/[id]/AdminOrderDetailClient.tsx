@@ -724,7 +724,6 @@ function ShippingQuoteBox({ quote }: { quote: ShippingQuoteView }) {
       <p className="text-[13px] text-slate-700">
         Kargo ücreti teklifi: <b className="text-[#0b2540]">{quote.providerLabel}</b>
         {quote.carrierName && <> · {quote.carrierName}</>}
-        {quote.legacy && <span className="text-slate-500"> (kaynak kaydı eklenmeden önceki sipariş; ücret Geliver listesiyle hesaplanmıştı)</span>}
       </p>
       {(quote.desi != null || quote.battery) && (
         <p className="mt-0.5 text-xs text-slate-500">
