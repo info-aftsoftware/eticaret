@@ -16,29 +16,26 @@ const SLIDES = [
   {
     image: '/images/hero/voltekno-hero-1.webp',
     title: ['Yenilenebilir Enerji', 'Çözümleri'],
-    mobileTitle: ['Yenilenebilir Enerji Çözümleri'],
     cta: 'TÜM ÜRÜNLER',
-    en: { title: ['Renewable Energy', 'Solutions'], mobileTitle: ['Renewable Energy Solutions'], cta: 'ALL PRODUCTS', alt: 'Wall-mounted inverter, gel battery and solar panel' },
+    en: { title: ['Renewable Energy', 'Solutions'], cta: 'ALL PRODUCTS', alt: 'Wall-mounted inverter, gel battery and solar panel' },
     href: '/products',
     alt: 'Duvara monte inverter, jel akü ve güneş paneli',
   },
   {
     image: '/images/hero/voltekno-hero-2.webp',
     title: ['Lityum Enerji', 'Depolama Sistemleri'],
-    mobileTitle: ['Lityum Enerji', 'Depolama'],
     cta: 'KEŞFET',
-    en: { title: ['Lithium Energy', 'Storage Systems'], mobileTitle: ['Lithium Energy', 'Storage'], cta: 'EXPLORE', alt: 'Stacked lithium battery modules' },
+    en: { title: ['Lithium Energy', 'Storage Systems'], cta: 'EXPLORE', alt: 'Stacked lithium battery modules' },
     href: `/products?category=${encodeURIComponent('Lityum Akü')}`,
     alt: 'Üst üste yığınlanmış lityum batarya modülleri',
   },
   {
     image: '/images/hero/voltekno-hero-3.webp',
-    // 2,4:1 geniş görsel: mobilde 16:9 kırpılınca sağdaki ürünler görünsün
-    mobileFocus: 'object-[72%_50%]',
+    // 2,4:1 geniş görsel: mobilde 16:9 kırpılınca sağdaki ürünlerin tamamı görünsün
+    mobileFocus: 'object-[100%_50%]',
     title: ['Solar Tarımsal', 'Sulama Çözümleri'],
-    mobileTitle: ['Solar Tarımsal', 'Sulama', 'Çözümleri'],
     cta: 'İNCELE',
-    en: { title: ['Solar Agricultural', 'Irrigation'], mobileTitle: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW', alt: 'TommaTech solar pump drives and solar panel' },
+    en: { title: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW', alt: 'TommaTech solar pump drives and solar panel' },
     href: `/products?category=${encodeURIComponent('Solar Pompa Sürücüsü')}`,
     alt: 'TommaTech solar pompa sürücüleri ve güneş paneli',
   },
@@ -113,21 +110,16 @@ export function HeroSlider() {
                       className={`object-cover ${'mobileFocus' in slide ? slide.mobileFocus : 'object-center'} min-[641px]:object-[50%_45%]`}
                     />
                   </div>
-                  {/* Mobilde başlık ve buton görselin hemen altında (noktalara yer bırakarak); geniş ekranda görselin üzerinde ortada */}
-                  <div className="flex-1 px-5 pt-5 pb-14 min-[641px]:absolute min-[641px]:inset-0 min-[641px]:flex min-[641px]:items-center min-[641px]:p-6">
+                  {/* Mobilde başlık ve buton görselin hemen altında (noktalar butonun sağında); geniş ekranda görselin üzerinde ortada */}
+                  <div className="px-5 pt-4 pb-5 min-[641px]:absolute min-[641px]:inset-0 min-[641px]:flex min-[641px]:items-center min-[641px]:p-6">
                     <div>
-                      <p className="mb-4 text-[22px] min-[400px]:text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[48px] font-semibold leading-tight text-[#121926]">
-                        <span className="min-[769px]:hidden">
-                          {copy.mobileTitle.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
-                        </span>
-                        <span className="hidden min-[769px]:inline">
-                          {copy.title.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
-                        </span>
+                      <p className="mb-3.5 min-[641px]:mb-4 text-[22px] min-[400px]:text-[24px] min-[769px]:text-[32px] min-[1025px]:text-[48px] font-semibold leading-[1.2] text-[#121926]">
+                        {copy.title.map((line, k) => (<React.Fragment key={k}>{k > 0 && <br />}{line}</React.Fragment>))}
                       </p>
                       <Link
                         href={slide.href}
                         tabIndex={active ? 0 : -1}
-                        className="inline-flex items-center justify-center h-11 min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-base font-semibold transition-colors"
+                        className="inline-flex items-center justify-center h-10 min-w-[150px] min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-base font-semibold transition-colors"
                       >
                         {copy.cta}
                       </Link>
@@ -138,7 +130,7 @@ export function HeroSlider() {
             })}
           </div>
 
-          <div className="absolute bottom-5 min-[641px]:bottom-6 left-1/2 -translate-x-1/2 z-[2] flex items-center gap-3">
+          <div className="absolute bottom-[34px] right-5 min-[641px]:right-auto min-[641px]:bottom-6 min-[641px]:left-1/2 min-[641px]:-translate-x-1/2 z-[2] flex items-center gap-3">
             {SLIDES.map((slide, i) => (
               <button
                 key={slide.image}

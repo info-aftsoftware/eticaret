@@ -179,29 +179,30 @@ export default function HomePage() {
               {L('Tüm Paketler', 'All Packages')} <ArrowUpRight className="w-4 h-4" />
             </Link>
           </header>
-          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             {PACKAGE_CATEGORIES.map((item, index) => {
-              const isWide = index === 3 // Villa — 4. kart, col-span-2
+              const isWide = index === 3 // Villa — 4. kart, geniş ekranda col-span-2
+              const isMobileWide = index === PACKAGE_CATEGORIES.length - 1 // mobilde 2 sütun: tek kalan son kart tam genişlik
               return (
                 <Link
                   key={item.slug}
                   href={`/paketler/${item.slug}`}
-                  className={`group relative block rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 touch-manipulation${isWide ? ' col-span-2' : ''}`}
+                  className={`group relative block rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 touch-manipulation${isWide ? ' sm:col-span-2' : ''}${isMobileWide ? ' col-span-2 sm:col-span-1' : ''}`}
                 >
-                  <div className={`relative overflow-hidden bg-slate-100 ${isWide ? 'aspect-[8/3]' : 'aspect-[4/3]'}`}>
+                  <div className={`relative overflow-hidden bg-slate-100 ${isMobileWide ? 'aspect-[16/9]' : 'aspect-square'} ${isWide ? 'sm:aspect-[8/3]' : 'sm:aspect-[4/3]'}`}>
                     <Image
                       src={item.image}
                       alt={L(item.imageAlt, `${item.en.shortTitle} solar energy package`)}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes={isWide ? '(max-width: 640px) 66vw, 66vw' : '(max-width: 640px) 33vw, 33vw'}
+                      sizes={isMobileWide ? '(max-width: 640px) 100vw, 33vw' : isWide ? '(max-width: 640px) 50vw, 66vw' : '(max-width: 640px) 50vw, 33vw'}
                       style={{ objectPosition: item.objectPosition ?? 'center center' }}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                      <p className="text-white font-bold text-sm leading-tight">{L(`${item.shortTitle} Paketleri`, `${item.en.shortTitle} Packages`)}</p>
-                      <p className="text-white/70 text-xs mt-0.5 line-clamp-2">{L(item.description, item.en.description)}</p>
-                      <span className="inline-flex items-center gap-1 text-white/80 text-xs mt-2 font-semibold">
+                      <p className="text-white font-bold text-[15px] sm:text-sm leading-tight">{L(`${item.shortTitle} Paketleri`, `${item.en.shortTitle} Packages`)}</p>
+                      <p className="hidden sm:block text-white/70 text-xs mt-0.5 line-clamp-2">{L(item.description, item.en.description)}</p>
+                      <span className="inline-flex items-center gap-1 text-white/80 text-xs mt-1.5 sm:mt-2 font-semibold">
                         {L('İncele', 'View')} <ArrowRight className="w-3 h-3" />
                       </span>
                     </div>
