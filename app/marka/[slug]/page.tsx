@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
+import { getCategoryKey } from '@/lib/categories'
 import { BRANDS, brandBySlug } from '@/lib/seo/brands'
-import { typeByCategory, typeHref } from '@/lib/seo/taxonomy'
+import { typeByCategory, typeHref, typeName } from '@/lib/seo/taxonomy'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import { getStorefrontProducts, type StorefrontProduct } from '@/lib/discounts'
 import { mockProducts } from '@/lib/products-mock'
 import { grossPrice } from '@/lib/store-config'
@@ -41,26 +43,31 @@ function typesOf(products: StorefrontProduct[]) {
   return [...counts.entries()].sort((a, b) => b[1] - a[1])
 }
 
-function typeLabel(category: string) {
-  return typeByCategory(category)?.h1 ?? category
-}
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { slug } = await props.params
   const brand = brandBySlug(slug)
   if (!brand) return {}
   const products = await loadProducts(brand.name)
-  const types = typesOf(products).slice(0, 3).map(([c]) => typeLabel(c).toLocaleLowerCase('tr'))
+  const top = typesOf(products).slice(0, 3).map(([c]) => c)
+  const types = top.map((c) => typeName(c, 'tr').toLocaleLowerCase('tr'))
   const title = `${brand.name} Ürünleri ve Fiyatları`
   const description = `${brand.name} ${types.join(', ')} modelleri: ${products.length} ürün, teknik özellikler ve KDV dahil fiyatlar voltekno'da.`.slice(0, 160)
   const path = `/marka/${brand.slug}`
-  return {
-    title,
-    description,
-    alternates: { canonical: path },
-    openGraph: { type: 'website', title: `${title} | voltekno`, description, url: path, siteName: 'voltekno' },
-    twitter: { card: 'summary', title: `${title} | voltekno`, description },
-  }
+  const enTypes = top.map((c) => typeName(c, 'en')).join(', ')
+  return localizedMetadata(
+    {
+      title,
+      description,
+      alternates: { canonical: path },
+      openGraph: { type: 'website', title: `${title} | voltekno`, description, url: path, siteName: 'voltekno' },
+      twitter: { card: 'summary', title: `${title} | voltekno`, description },
+    },
+    {
+      title: `${brand.name} Products and Prices`,
+      description: `${brand.name} ${enTypes}: ${products.length} products with technical specifications and VAT-inclusive prices at voltekno.`.slice(0, 160),
+    },
+  )
 }
 
 export default async function BrandPage(props: Props) {
@@ -70,17 +77,28 @@ export default async function BrandPage(props: Props) {
 
   const products = await loadProducts(brand.name)
   const types = typesOf(products)
-  const en = (await getLocale().catch(() => 'tr')) === 'en'
+  const locale = await getLocale().catch(() => 'tr')
+  const en = locale === 'en'
   const L = (tr: string, enText: string) => (en ? enText : tr)
+  const tHeader = en ? await getTranslations('header').catch(() => null) : null
+  // Tür sayfası olmayan kategoriler (ör. ısı pompası) menüdeki çevirisiyle
+  const typeLabel = (category: string) => {
+    const key = getCategoryKey(category)
+    return !typeByCategory(category) && tHeader && key && tHeader.has(key) ? tHeader(key) : typeName(category, locale)
+  }
   const path = `/marka/${brand.slug}`
-  const h1 = `${brand.name} Ürünleri`
+  const h1 = L(`${brand.name} Ürünleri`, `${brand.name} Products`)
+  const about = en ? brand.aboutEn : brand.about
   const crumbs: Crumb[] = [
     { name: 'Ana Sayfa', href: '/' },
     { name: brand.name, href: path },
   ]
   const minPrice = products.length ? Math.min(...products.map((p) => p.price)) : 0
-  const typeText = types.map(([c, n]) => `${typeLabel(c).toLocaleLowerCase('tr')} (${n})`).join(', ')
-  const description = `voltekno'da ${brand.name} markasının ${products.length} ürünü: ${typeText}.`
+  const typeText = types.map(([c, n]) => `${en ? typeLabel(c) : typeLabel(c).toLocaleLowerCase('tr')} (${n})`).join(', ')
+  const description = L(
+    `voltekno'da ${brand.name} markasının ${products.length} ürünü: ${typeText}.`,
+    `${products.length} ${brand.name} products at voltekno: ${typeText}.`,
+  )
 
   return (
     <CollectionPage
@@ -89,16 +107,16 @@ export default async function BrandPage(props: Props) {
       h1={h1}
       intro={
         <>
-          {brand.about && <p>{brand.about}</p>}
-          <p className={brand.about ? 'mt-2' : ''}>{description}</p>
+          {about && <p>{about}</p>}
+          <p className={about ? 'mt-2' : ''}>{description}</p>
         </>
       }
-      facts={minPrice > 0 ? <>{L(`Fiyatlar ${fmtTL(grossPrice(minPrice))} başlıyor (KDV dahil)`, `From ${fmtTL(grossPrice(minPrice))} (incl. VAT)`)}</> : null}
+      facts={minPrice > 0 ? <>{L(`Fiyatlar ${fmtTL(grossPrice(minPrice))} başlıyor (KDV dahil)`, `From ${fmtTL(grossPrice(minPrice), true)} (VAT incl.)`)}</> : null}
       products={products}
       linkGroups={[
         {
           title: L(`${brand.name} ürün türleri`, `${brand.name} product types`),
-          items: types.map(([c, n]) => ({ label: typeLabel(c), href: typeHref(c), note: L(`${n} ürün`, `${n} products`) })),
+          items: types.map(([c, n]) => ({ label: typeLabel(c), href: typeHref(c), note: L(`${n} ürün`, `${n} ${n === 1 ? 'product' : 'products'}`) })),
         },
         {
           title: L('Diğer markalar', 'Other brands'),

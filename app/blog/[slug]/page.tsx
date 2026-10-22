@@ -8,7 +8,7 @@ import { BLOG_POSTS, blogDateIso, type BlogPost } from '@/lib/blog-posts'
 import { BLOG_POSTS_EN } from '@/lib/blog-posts-en'
 import { localizedMetadata } from '@/lib/locale-metadata'
 import { PRODUCT_TYPES } from '@/lib/seo/product-types'
-import { typeHref } from '@/lib/seo/taxonomy'
+import { localizeType, typeHref } from '@/lib/seo/taxonomy'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
@@ -154,7 +154,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
     .map(([slug, p]) => [slug, localizedPost(slug, p, locale)] as const)
 
   // Yazının konusuyla ilgili ürün türü sayfaları (lib/seo/product-types.ts → blog alanı)
-  const relatedTypes = PRODUCT_TYPES.filter((t) => t.blog.includes(params.slug))
+  const relatedTypes = PRODUCT_TYPES.filter((t) => t.blog.includes(params.slug)).map((t) => localizeType(t, locale))
   const published = blogDateIso(source.date)
   const jsonLd = [
     {
