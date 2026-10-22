@@ -77,9 +77,14 @@ export async function POST(request: NextRequest) {
     let actor: AdminActor
     let sessionPayload: { sub: string; admin: true; uid?: string }
 
-    if (email) {
+    // Kişisel hesabı olmayan bir e-postayla ana yönetici şifresi girilirse ana şifre girişi sayılır
+    // (e-posta alanını boş bırakmak gerektiğini bilmeyen yönetici "E-posta veya şifre hatalı" görmesin)
+    const emailUser = email ? await prisma.adminUser.findUnique({ where: { email } }) : null
+    const masterLogin = !email || (!emailUser && Boolean(ADMIN_TOKEN) && safeEqual(password, ADMIN_TOKEN as string))
+
+    if (!masterLogin) {
       // Kişisel hesapla giriş: e-posta + şifre (+ hesapta açıksa doğrulama kodu)
-      const user = await prisma.adminUser.findUnique({ where: { email } })
+      const user = emailUser
       // Kullanıcı yoksa da şifre özeti hesaplanır: yanıt süresinden hesabın varlığı anlaşılmasın
       const passwordOk = user ? verifyPassword(password, user.passwordHash) : (verifyPassword(password, DUMMY_HASH), false)
       if (!user || !user.active || !passwordOk) {
