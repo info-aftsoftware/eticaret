@@ -1,0 +1,35 @@
+{
+ "ELECTR-00519": {
+  "dimsCm": [
+   19.4,
+   13.2,
+   6.1
+  ],
+  "weightKg": 1.4,
+  "basis": "product",
+  "source": "https://electrozirve.com/wp-content/uploads/2025/11/DC-DC-CHARGER-GUNCEL-KILAVUZ-v1.3-2.pdf",
+  "note": "Electrozirve'nin kendi 'DC DC CHARGER ve BIDIRECTION' kılavuzu (model BC-1224BBC, 30A, takviye 3A): dış ölçü 194x132x61 mm, ağırlık 1,4 kg (cihaz, net; koli yok). Cihaz Havensis OEM'i: Havensis 30A veri sayfası da 194x132x61 mm / 1,4 kg veriyor. Havensis'in yeni Rev4.1 kılavuzu ise 210x159x70 mm diyor."
+ },
+ "ELECTR-00520": {
+  "dimsCm": [
+   19.4,
+   13.2,
+   6.1
+  ],
+  "weightKg": 1.4,
+  "basis": "product",
+  "source": "https://electrozirve.com/wp-content/uploads/2025/11/DC-DC-CHARGER-GUNCEL-KILAVUZ-v1.3-2.pdf",
+  "note": "Aynı Electrozirve kılavuzu hem tek yönlü hem 'Bidirection' 30A modeli kapsıyor (BC-1224BBC): 194x132x61 mm, 1,4 kg (cihaz, net). Havensis 30A çift yönlü sayfası 197x132x61 mm / 1,4 kg veriyor (havensis.com.tr/urunler/cift-yonlu-dc-dc-aku-sarj-cihazi)."
+ },
+ "ELECTR-00521": {
+  "dimsCm": [
+   20,
+   14,
+   8.5
+  ],
+  "weightKg": 1.4,
+  "basis": "product",
+  "source": "https://havensis.com.tr/urunler/40a-dc-dc-aku-sarj-cihazi-69426e0c57782",
+  "note": "Değer OEM üreticiden (Havensis BATCHG-1224 40A tek yönlü): boyut 140x200x85 mm, ağırlık 1,4 kg (cihaz, net). Havensis 40A kılavuzu (Rev4.1) 210x159x70 mm / 1,4 kg diyor; hacim ve desi neredeyse aynı. Dikkat: electrozirve.com 40A'yı yalnız 'Bidirection' olarak listeliyor, tek yönlü 40A yok; ürün adını teyit et. Çift yönlü 40A için de Havensis sayfası aynı 140x200x85 mm / 1,4 kg."
+ }
+}
