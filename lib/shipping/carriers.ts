@@ -13,6 +13,8 @@ export interface Carrier {
   trackingUrl: (trackingNumber: string) => string
   /** Takip sayfası numarayı otomatik sorgulamıyorsa müşteriye gösterilecek kısa açıklama */
   trackingHint?: string
+  /** trackingHint'in İngilizcesi (İngilizce sitede ve İngilizce e-postalarda) */
+  trackingHintEn?: string
   calculateCost?: (weight: number, volume: number, from: string, to: string) => Promise<number>
   createShipment?: (data: any) => Promise<{ trackingNumber: string; labelUrl?: string }>
 }
@@ -36,6 +38,7 @@ export const carriers: Record<string, Carrier> = {
     name: 'MNG Kargo (DHL eCommerce)',
     trackingUrl: (n) => `https://kargotakip.dhlecommerce.com.tr/?takipNo=${enc(n)}`,
     trackingHint: 'Takip numaranız sayfada hazır gelir; güvenlik kodunu girerek sorgulayın.',
+    trackingHintEn: 'Your tracking number is pre-filled on the page; enter the security code to look it up.',
   },
   surat: {
     id: 'surat',
@@ -48,12 +51,14 @@ export const carriers: Record<string, Carrier> = {
     name: 'hepsiJET',
     trackingUrl: () => 'https://www.hepsijet.com/',
     trackingHint: 'Açılan sayfadaki "Gönderi Takip" alanına takip numaranızı yapıştırın.',
+    trackingHintEn: 'Paste your tracking number into the "Gönderi Takip" (shipment tracking) field on the page that opens.',
   },
   'hepsijet-xl': {
     id: 'hepsijet-xl',
     name: 'hepsiJET XL',
     trackingUrl: () => 'https://www.hepsijet.com/',
     trackingHint: 'Açılan sayfadaki "Gönderi Takip" alanına takip numaranızı yapıştırın.',
+    trackingHintEn: 'Paste your tracking number into the "Gönderi Takip" (shipment tracking) field on the page that opens.',
   },
   kolaygelsin: {
     // Kolay Gelsin takip sayfası numarayı URL'den almıyor (20.10.2026)
@@ -61,6 +66,7 @@ export const carriers: Record<string, Carrier> = {
     name: 'Kolay Gelsin',
     trackingUrl: () => 'https://www.kolaygelsin.com/tracking',
     trackingHint: 'Açılan sayfadaki "Takip No" alanına takip numaranızı yapıştırın.',
+    trackingHintEn: 'Paste your tracking number into the "Takip No" (tracking number) field on the page that opens.',
   },
   ptt: {
     // PTT'nin yeni sitesi URL'den takip numarası almıyor
@@ -68,6 +74,7 @@ export const carriers: Record<string, Carrier> = {
     name: 'PTT Kargo',
     trackingUrl: () => 'https://www.ptt.gov.tr/',
     trackingHint: 'Açılan sayfadaki "Gönderi Takip" alanına takip numaranızı yapıştırın.',
+    trackingHintEn: 'Paste your tracking number into the "Gönderi Takip" (shipment tracking) field on the page that opens.',
   },
   ups: {
     id: 'ups',

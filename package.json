@@ -36,6 +36,7 @@
     "generate:sitemap": "tsx scripts/generate-sitemap.ts",
     "reindex:search": "tsx scripts/reindex-search.ts",
     "import:products": "python scripts/import-ikas-excel.py",
+    "catalog:en": "tsx scripts/catalog-en.ts",
     "images:optimize": "node scripts/optimize-product-images.mjs",
     "catalog:cleanup-db": "tsx scripts/clear-legacy-catalog.ts"
   },

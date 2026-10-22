@@ -12,7 +12,7 @@ import { FieldValue } from 'firebase-admin/firestore'
 import { getAdminAuth, getAdminFirestore } from '@/lib/firebaseAdminServer'
 import { isRateLimited } from '@/lib/rate-limit'
 import { sendWelcomeEmail } from '@/lib/notifications'
-import { siteOrigin, verifyBearer } from '../_shared'
+import { siteOrigin, verifyBearer, requestLocale } from '../_shared'
 
 const NEW_ACCOUNT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000
 
@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
       name: (profile.name as string) || record.displayName || '',
       siteUrl: siteOrigin(request),
       emailVerified: record.emailVerified,
+      locale: requestLocale(request),
     })
     if (!sent) {
       // Gönderilemediyse işareti geri al; sonraki istekte yeniden denenebilsin

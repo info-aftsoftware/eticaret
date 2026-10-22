@@ -1,12 +1,21 @@
 import { Metadata } from 'next'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Hakkımızda',
   description: 'Voltekno hakkında: misyonumuz, değerlerimiz ve temiz enerji çözümlerindeki uzmanlığımız.',
   alternates: { canonical: '/hakkimizda' },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'About Us',
+    description: 'About Voltekno: our mission, our values and our expertise in clean energy solutions.',
+  })
 }
 
 const stats = [

@@ -2,13 +2,21 @@
  * Sipariş e-postaları için ortak düzen ve bloklar (voltekno marka dili: lacivert #0b2540, sarı #f5b400).
  * Veri, lib/order-service.ts içindeki toOrderEmailData() ile Prisma siparişinden üretilir.
  * E-posta istemcileri için: tablo tabanlı satırlar (float yok), satır içi stiller, 600 px genişlik.
+ * Dil: müşteri e-postaları siparişin dilinde (Order.locale → OrderEmailData.locale); admin e-postaları Türkçe.
  */
 import React from 'react'
 import { Html, Head, Preview, Body, Container, Section, Text, Button, Link, Img, Row, Column } from '@react-email/components'
 import { BANK_ACCOUNTS, BANK_ACCOUNT_HOLDER, BANK_TRANSFER_DISCOUNT_RATE, STORE_CONTACT, VAT_RATE } from '../../lib/store-config'
 import { SELLER } from '../../lib/legal/company'
 
+export type EmailLocale = 'tr' | 'en'
+
+/** İki dilli kısa metin seçici: const L = tx(order.locale); L('Türkçe', 'English') */
+export const tx = (locale?: EmailLocale | null) => (tr: string, en: string): string => (locale === 'en' ? en : tr)
+
 export type OrderEmailData = {
+  /** Müşteri e-postasının dili (varsayılan tr) */
+  locale?: EmailLocale
   orderNo: string
   createdAt: string
   customerName: string
@@ -57,15 +65,25 @@ export const BRAND = {
   surface: '#f5f7fa',
 }
 
-export const fmtTRY = (n: number) =>
-  (Number(n) || 0).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })
+export const fmtTRY = (n: number, locale?: EmailLocale | null) =>
+  locale === 'en'
+    ? (Number(n) || 0).toLocaleString('en-US', { style: 'currency', currency: 'TRY', currencyDisplay: 'narrowSymbol' })
+    : (Number(n) || 0).toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })
 
-export const paymentMethodLabel = (m: string) =>
-  m === 'bank_transfer' ? 'Havale / EFT' : m === 'card' || m === 'stripe' ? 'Kredi / Banka Kartı' : m
+export const paymentMethodLabel = (m: string, locale?: EmailLocale | null) => {
+  const L = tx(locale)
+  return m === 'bank_transfer'
+    ? L('Havale / EFT', 'Bank transfer (EFT)')
+    : m === 'card' || m === 'stripe'
+      ? L('Kredi / Banka Kartı', 'Credit / debit card')
+      : m
+}
 
 const site = () => STORE_CONTACT.siteUrl.replace(/\/$/, '')
 
-export function EmailLayout({ preview, title, subtitle, children, tone = 'navy' }: {
+export function EmailLayout({ preview, title, subtitle, children, tone = 'navy', locale }: {
+  /** Varsayılan Türkçe (admin ve sipariş dışı e-postalar) */
+  locale?: EmailLocale | null
   preview: string
   title: string
   subtitle?: React.ReactNode
@@ -74,8 +92,9 @@ export function EmailLayout({ preview, title, subtitle, children, tone = 'navy' 
   tone?: 'navy' | 'green' | 'red' | 'amber'
 }) {
   const accent = { navy: BRAND.yellow, green: '#16a34a', red: '#dc2626', amber: BRAND.yellow }[tone]
+  const L = tx(locale)
   return (
-    <Html lang="tr">
+    <Html lang={locale === 'en' ? 'en' : 'tr'}>
       <Head>
         <meta name="color-scheme" content="light" />
         <meta name="supported-color-schemes" content="light" />
@@ -96,16 +115,23 @@ export function EmailLayout({ preview, title, subtitle, children, tone = 'navy' 
             <Section style={s.content}>{children}</Section>
           </Container>
           <Section style={s.footer}>
-            <Text style={s.footerText}>
-              Sorularınız için bu e-postayı yanıtlayabilir veya{' '}
-              <Link href={`mailto:${STORE_CONTACT.email}`} style={s.footerLink}>{STORE_CONTACT.email}</Link> · {SELLER.phone} üzerinden bize ulaşabilirsiniz.
-            </Text>
+            {locale === 'en' ? (
+              <Text style={s.footerText}>
+                If you have any questions, simply reply to this email or contact us at{' '}
+                <Link href={`mailto:${STORE_CONTACT.email}`} style={s.footerLink}>{STORE_CONTACT.email}</Link> · {SELLER.phone}.
+              </Text>
+            ) : (
+              <Text style={s.footerText}>
+                Sorularınız için bu e-postayı yanıtlayabilir veya{' '}
+                <Link href={`mailto:${STORE_CONTACT.email}`} style={s.footerLink}>{STORE_CONTACT.email}</Link> · {SELLER.phone} üzerinden bize ulaşabilirsiniz.
+              </Text>
+            )}
             <Text style={s.footerText}>
               <Link href={site()} style={s.footerLink}>{site().replace(/^https?:\/\//, '')}</Link>
               {' · '}
-              <Link href={`${site()}/siparis-takip`} style={s.footerLink}>Sipariş takibi</Link>
+              <Link href={`${site()}/siparis-takip`} style={s.footerLink}>{L('Sipariş takibi', 'Order tracking')}</Link>
               {' · '}
-              <Link href={`${site()}/returns`} style={s.footerLink}>İade ve cayma</Link>
+              <Link href={`${site()}/returns`} style={s.footerLink}>{L('İade ve cayma', 'Returns & withdrawal')}</Link>
             </Text>
             <Text style={s.footerSmall}>{SELLER.legalName} · {SELLER.address} · MERSİS {SELLER.mersisNo}</Text>
           </Section>
@@ -136,51 +162,65 @@ export function InfoRow({ label, children }: { label: string; children: React.Re
 }
 
 export function OrderSummary({ order, compact }: { order: OrderEmailData; compact?: boolean }) {
+  const L = tx(order.locale)
+  const fmt = (n: number) => fmtTRY(n, order.locale)
   return (
     <>
       <Section style={s.card}>
-        <Text style={s.boxTitle}>Sipariş özeti</Text>
+        <Text style={s.boxTitle}>{L('Sipariş özeti', 'Order summary')}</Text>
         {order.lines.map((l, i) => (
           <Row key={i} style={{ borderBottom: `1px solid ${BRAND.border}` }}>
             <Column style={{ ...s.rowText, padding: '8px 12px 8px 0' }}>
               {l.name}
               <span style={{ color: BRAND.muted }}> × {l.quantity}</span>
             </Column>
-            <Column align="right" style={{ ...s.rowText, padding: '8px 0', whiteSpace: 'nowrap' as const, verticalAlign: 'top' }}>{fmtTRY(l.lineTotal)}</Column>
+            <Column align="right" style={{ ...s.rowText, padding: '8px 0', whiteSpace: 'nowrap' as const, verticalAlign: 'top' }}>{fmt(l.lineTotal)}</Column>
           </Row>
         ))}
         <Section style={{ paddingTop: '8px' }}>
-          <AmountRow label="Ara toplam (KDV hariç)" value={fmtTRY(order.subtotal)} />
+          <AmountRow label={L('Ara toplam (KDV hariç)', 'Subtotal (excl. VAT)')} value={fmt(order.subtotal)} />
           {order.couponDiscount > 0 && (
-            <AmountRow label={`Kupon${order.couponCode ? ` (${order.couponCode})` : ''}`} value={`−${fmtTRY(order.couponDiscount)}`} color="#15803d" />
+            <AmountRow label={`${L('Kupon', 'Coupon')}${order.couponCode ? ` (${order.couponCode})` : ''}`} value={`−${fmt(order.couponDiscount)}`} color="#15803d" />
           )}
           {order.paymentDiscount > 0 && (
-            <AmountRow label={`Havale/EFT indirimi (%${BANK_TRANSFER_DISCOUNT_RATE})`} value={`−${fmtTRY(order.paymentDiscount)}`} color="#15803d" />
+            <AmountRow
+              label={L(`Havale/EFT indirimi (%${BANK_TRANSFER_DISCOUNT_RATE})`, `Bank transfer discount (${BANK_TRANSFER_DISCOUNT_RATE}%)`)}
+              value={`−${fmt(order.paymentDiscount)}`}
+              color="#15803d"
+            />
           )}
-          <AmountRow label={`KDV (%${VAT_RATE})`} value={fmtTRY(order.tax)} />
-          <AmountRow label="Kargo" value={order.shipping > 0 ? fmtTRY(order.shipping) : 'Ücretsiz'} />
+          <AmountRow label={L(`KDV (%${VAT_RATE})`, `VAT (${VAT_RATE}%)`)} value={fmt(order.tax)} />
+          <AmountRow label={L('Kargo', 'Shipping')} value={order.shipping > 0 ? fmt(order.shipping) : L('Ücretsiz', 'Free')} />
           <Section style={{ borderTop: `1px solid ${BRAND.border}`, marginTop: '6px', paddingTop: '6px' }}>
-            <AmountRow label="Toplam" value={fmtTRY(order.total)} strong />
+            <AmountRow label={L('Toplam', 'Total')} value={fmt(order.total)} strong />
           </Section>
-          <Text style={s.note}>Ödeme yöntemi: {paymentMethodLabel(order.paymentMethod)} · Satır tutarları KDV dahil, indirimler öncesidir.</Text>
+          <Text style={s.note}>
+            {L('Ödeme yöntemi', 'Payment method')}: {paymentMethodLabel(order.paymentMethod, order.locale)} ·{' '}
+            {L('Satır tutarları KDV dahil, indirimler öncesidir.', 'Line amounts include VAT, before discounts.')}
+          </Text>
         </Section>
       </Section>
       {!compact && (
         <Section style={s.cardPlain}>
           <Row>
             <Column style={{ verticalAlign: 'top', paddingRight: '8px' }}>
-              <Text style={s.boxTitle}>Teslimat adresi</Text>
+              <Text style={s.boxTitle}>{L('Teslimat adresi', 'Shipping address')}</Text>
               <Text style={s.small}>{order.customerName}</Text>
               <Text style={s.small}>{order.shippingAddress}</Text>
               <Text style={s.small}>{order.customerPhone}</Text>
             </Column>
             <Column style={{ verticalAlign: 'top', paddingLeft: '8px' }}>
-              <Text style={s.boxTitle}>Fatura</Text>
+              <Text style={s.boxTitle}>{L('Fatura', 'Billing')}</Text>
               <Text style={s.small}>{order.billingName}</Text>
               {order.billingType === 'company' ? (
-                <Text style={s.small}>VKN {order.billingTaxId ?? '—'} · {order.billingTaxOffice ?? '—'} V.D.</Text>
+                <Text style={s.small}>
+                  {L(
+                    `VKN ${order.billingTaxId ?? '—'} · ${order.billingTaxOffice ?? '—'} V.D.`,
+                    `Tax ID ${order.billingTaxId ?? '—'} · ${order.billingTaxOffice ?? '—'} Tax Office`,
+                  )}
+                </Text>
               ) : null}
-              <Text style={s.small}>{order.billingAddress || 'Teslimat adresiyle aynı'}</Text>
+              <Text style={s.small}>{order.billingAddress || L('Teslimat adresiyle aynı', 'Same as shipping address')}</Text>
             </Column>
           </Row>
         </Section>
@@ -190,13 +230,14 @@ export function OrderSummary({ order, compact }: { order: OrderEmailData; compac
 }
 
 export function BankTransferBox({ order }: { order: OrderEmailData }) {
+  const L = tx(order.locale)
   return (
     <Section style={s.boxAmber}>
-      <Text style={s.boxTitle}>Havale / EFT ödeme bilgileri</Text>
-      <AmountRow label="Ödenecek tutar" value={fmtTRY(order.total)} strong />
-      <AmountRow label="Açıklama" value={<span style={s.mono}>{order.orderNo}</span>} />
-      {order.paymentDueDate && <AmountRow label="Son ödeme tarihi" value={order.paymentDueDate} />}
-      <Text style={{ ...s.small, marginTop: '10px' }}><span style={{ color: BRAND.muted }}>Alıcı:</span> {BANK_ACCOUNT_HOLDER}</Text>
+      <Text style={s.boxTitle}>{L('Havale / EFT ödeme bilgileri', 'Bank transfer (EFT) payment details')}</Text>
+      <AmountRow label={L('Ödenecek tutar', 'Amount to pay')} value={fmtTRY(order.total, order.locale)} strong />
+      <AmountRow label={L('Açıklama', 'Payment reference')} value={<span style={s.mono}>{order.orderNo}</span>} />
+      {order.paymentDueDate && <AmountRow label={L('Son ödeme tarihi', 'Payment due date')} value={order.paymentDueDate} />}
+      <Text style={{ ...s.small, marginTop: '10px' }}><span style={{ color: BRAND.muted }}>{L('Alıcı', 'Beneficiary')}:</span> {BANK_ACCOUNT_HOLDER}</Text>
       {BANK_ACCOUNTS.map((a) => (
         <Section key={a.iban} style={s.ibanBox}>
           <Text style={{ ...s.small, fontWeight: 600, color: BRAND.heading }}>{a.bank}</Text>
@@ -204,16 +245,21 @@ export function BankTransferBox({ order }: { order: OrderEmailData }) {
         </Section>
       ))}
       <Text style={s.note}>
-        Açıklama alanına yalnızca sipariş numaranızı ({order.orderNo}) yazın. Ödemeniz hesabımıza ulaştığında siparişiniz onaylanır
-        ve size e-posta ile bilgi verilir.
+        {L(
+          `Açıklama alanına yalnızca sipariş numaranızı (${order.orderNo}) yazın. Ödemeniz hesabımıza ulaştığında siparişiniz onaylanır ve size e-posta ile bilgi verilir.`,
+          `Enter only your order number (${order.orderNo}) as the payment reference. Your order is confirmed as soon as the payment reaches our account, and we will let you know by email.`,
+        )}
       </Text>
     </Section>
   )
 }
 
 /** Sipariş ilerleme şeridi: Alındı → Ödeme → Hazırlanıyor → Kargoda → Teslim */
-export function OrderProgress({ step }: { step: 0 | 1 | 2 | 3 | 4 }) {
-  const labels = ['Alındı', 'Ödeme', 'Hazırlanıyor', 'Kargoda', 'Teslim']
+export function OrderProgress({ step, locale }: { step: 0 | 1 | 2 | 3 | 4; locale?: EmailLocale | null }) {
+  const labels =
+    locale === 'en'
+      ? ['Received', 'Payment', 'Preparing', 'Shipped', 'Delivered']
+      : ['Alındı', 'Ödeme', 'Hazırlanıyor', 'Kargoda', 'Teslim']
   return (
     <Section style={{ margin: '4px 0 18px' }}>
       <Row>

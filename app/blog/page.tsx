@@ -2,10 +2,11 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import { ArrowRight, Clock } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Blog – Enerji Rehberi',
   description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, karşılaştırmalar ve kurulum rehberleri.',
   alternates: { canonical: '/blog' },
@@ -13,6 +14,16 @@ export const metadata: Metadata = {
     title: 'Blog – Enerji Rehberi | Voltekno',
     description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında rehber yazılar.',
   },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Blog – Energy Guide',
+    description: 'Informative articles, comparisons and installation guides on solar panels, batteries, EV charging and energy systems.',
+    shareTitle: 'Blog – Energy Guide | Voltekno',
+    shareDescription: 'Guides on solar panels, batteries, EV charging and energy systems.',
+  })
 }
 
 const BLOG_CATEGORIES = [

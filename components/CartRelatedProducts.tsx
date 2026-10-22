@@ -13,6 +13,8 @@ import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { useLocale } from 'next-intl'
+import { localizeProduct, toCatalogLocale } from '@/lib/catalog-en'
 
 interface CartRelatedProductsProps {
   cartItemIds: string[]
@@ -21,6 +23,7 @@ interface CartRelatedProductsProps {
 
 export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelatedProductsProps) {
   const L = useL()
+  const catalogLocale = toCatalogLocale(useLocale())
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
@@ -90,7 +93,7 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
 
       {/* Ürün grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
-        {relatedProducts.map((product) => (
+        {relatedProducts.map((rawProduct) => localizeProduct(rawProduct, catalogLocale)).map((product) => (
           <div
             key={product.id}
             className="group flex gap-3 bg-white rounded-xl border border-slate-200 p-3 hover:border-brand/40 hover:shadow-sm transition-all"

@@ -356,6 +356,11 @@ test.describe('İngilizce akış', () => {
     await page.locator('main button[type=submit]').last().click()
     await page.waitForURL(/\/checkout\/success/, { timeout: 30_000 })
     await expect(page.locator('body')).toContainText('Your order has been received')
+    // Sipariş müşterinin dilini saklar: sipariş/kargo/iptal e-postaları İngilizce gönderilir
+    const orderNo = new URL(page.url()).searchParams.get('order_id') || ''
+    expect(orderNo).toBeTruthy()
+    const o = await (await page.request.post(`/api/orders/by-no/${orderNo}`, { data: { email: c.email, phone: c.phone } })).json()
+    expect(o.order?.locale).toBe('en')
   })
 
   test('EN: sunucunun Türkçe stok hatası İngilizce gösterilir', async ({ page }) => {
@@ -401,9 +406,13 @@ test.describe('İngilizce akış', () => {
   })
 })
 
-/** Ürün adı, açıklama, adres/unvan ve yasal metinler bilerek Türkçe; arayüz metinleri taranır. */
+/**
+ * Arayüz ve katalog metinleri (ürün adı, açıklama, teknik özellikler, filtreler) taranır.
+ * Bilerek Türkçe kalanlar: blog yazıları (.prose / article / blog bağlantıları), adres/unvan, yasal metinler.
+ */
 const TR_RE = /[çğıöşüÇĞİÖŞÜ]|\b(ve|ile|için|Sepet|Ürün|Sipariş|Ödeme|Giriş|Hesab|Şifre|Tümü|Kargo|İade|Teklif|İndirim|Adet|Kapat|Devam|Gönder|Kaydet|Seçin|Yükleniyor|Stokta|Tükendi|Favori|Karşılaştır)\b/
-const EN_PAGES = ['/', '/products', '/category/gunes-paneli', `/products/tommatech-450wp-dark-series-16bb-topcon-gunes-paneli`, '/paketler', '/categories', '/cart', '/checkout',
+const EN_PAGES = ['/', '/products', '/category/gunes-paneli', `/products/tommatech-450wp-dark-series-16bb-topcon-gunes-paneli`,
+  `/products/tommatech-16bb-topcon-gunes-paneli-450wp-600wp`, `/products?category=${encodeURIComponent('TopCon Güneş Paneli')}`, '/paketler', '/categories', '/cart', '/checkout',
   '/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/profile', '/favorites', '/orders', '/siparis-takip', '/contact', '/faq', '/shipping',
   '/hakkimizda', '/ges', '/ges/teklif-dogrulama', '/karsilastir', '/blog', '/checkout/cancel?reason=declined&order_id=ORD-2026-00009', '/bu-sayfa-yok']
 
@@ -415,14 +424,15 @@ test.describe('İngilizce sayfalarda Türkçe arayüz metni', () => {
       await page.waitForTimeout(2500)
       const hits = await page.evaluate((src) => {
         const re = new RegExp(src)
-        const skip = (el: Element) => !!el.closest('script,style,noscript,h1,.prose,article,[itemprop=name],[itemprop=description],a[href*="/products/"],footer address,option,[lang="tr"],a[href*="/blog/"],[data-tr-ok]')
+        const skip = (el: Element) => !!el.closest('script,style,noscript,.prose,article,footer address,option,a[href*="/blog/"],[data-tr-ok]')
         const out = new Set<string>()
         const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
         let n: Node | null
         while ((n = w.nextNode())) {
           const t = (n.textContent || '').trim()
           const el = n.parentElement
-          if (t.length < 2 || !el || !re.test(t) || skip(el)) continue
+          // Özel adlar (ülke, marka) İngilizcede de Türkçe karakterle yazılır; uzun metinlerde kesilmeden önce çıkarılır
+          if (t.length < 2 || !el || !re.test(t.replace(/Türkiye|İstabreeze/g, '')) || skip(el)) continue
           const cs = getComputedStyle(el)
           if (cs.display === 'none' || cs.visibility === 'hidden') continue
           out.add(t.slice(0, 100))

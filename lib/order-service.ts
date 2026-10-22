@@ -30,10 +30,11 @@ import { SELLER } from '@/lib/legal/company'
 import { STORE_CONTACT, STORE_TIME_ZONE, bankTransferDeadline } from '@/lib/store-config'
 import { buildInvoiceDataFromPrisma } from '@/lib/invoice-data'
 import { generateAndSendInvoice } from '@/lib/invoice-send'
-import OrderReceivedEmail from '@/emails/order/OrderReceivedEmail'
+import OrderReceivedEmail, { orderReceivedSubject } from '@/emails/order/OrderReceivedEmail'
 import OrderStatusEmail, { ORDER_EMAIL_SUBJECTS, type OrderEmailKind } from '@/emails/order/OrderStatusEmail'
 import AdminOrderEmail, { ADMIN_ORDER_EMAIL_SUBJECTS, type AdminOrderEvent } from '@/emails/order/AdminOrderEmail'
 import type { OrderEmailData } from '@/emails/order/shared'
+import { lineItemName, toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
 
 export type OrderWithLines = Order & { lines: OrderLine[] }
 export type Actor = 'system' | 'admin' | 'customer'
@@ -82,18 +83,25 @@ function parseCustomerNote(order: Order): string | null {
   }
 }
 
-export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
+/**
+ * E-posta verisi. Müşteri e-postaları siparişin dilinde (Order.locale): tarih biçimi, kalem adları (katalog çevirisi),
+ * kargo açıklaması. Admin e-postaları için locale 'tr' verilir.
+ */
+export function toOrderEmailData(order: OrderWithLines, localeOverride?: CatalogLocale): OrderEmailData {
+  const locale = localeOverride ?? toCatalogLocale(order.locale)
+  const dateLocale = locale === 'en' ? 'en-US' : 'tr-TR'
   const carrier = order.shippingCarrier ? getCarrier(order.shippingCarrier) : undefined
   const due = bankTransferDeadline(order.createdAt)
   // Ödeme onay anındaki teslimat tahmini: 15:00 kuralıyla aynı gün / ertesi iş günü çıkış + 1–3 iş günü taşıma
   let estimatedDelivery: string | null = null
   try {
     const { from, to } = estimateDelivery(order.paidAt ?? order.createdAt)
-    estimatedDelivery = formatDeliveryRange(from, to)
+    estimatedDelivery = formatDeliveryRange(from, to, locale)
   } catch { estimatedDelivery = null }
   return {
+    locale,
     orderNo: order.orderNo,
-    createdAt: order.createdAt.toLocaleString('tr-TR', { timeZone: STORE_TIME_ZONE }),
+    createdAt: order.createdAt.toLocaleString(dateLocale, { timeZone: STORE_TIME_ZONE }),
     customerName: order.shippingName,
     customerEmail: order.shippingEmail ?? '',
     customerPhone: order.shippingPhone,
@@ -107,7 +115,10 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     paymentMethod: order.paymentMethod === 'stripe' ? 'card' : order.paymentMethod ?? 'bank_transfer',
     paymentStatus: order.paymentStatus,
     status: order.status,
-    lines: order.lines.map((l) => ({ name: l.productName, quantity: l.quantity, lineTotal: l.lineTotal })),
+    lines: order.lines.map((l) => {
+      const vm = (l.variantMatrix ?? {}) as { productId?: string; variantKey?: string }
+      return { name: lineItemName({ name: l.productName, productId: vm.productId, variantKey: vm.variantKey }, locale), quantity: l.quantity, lineTotal: l.lineTotal }
+    }),
     subtotal: order.subtotal,
     couponCode: order.couponCode,
     couponDiscount: order.couponDiscount,
@@ -119,12 +130,14 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     trackingNumber: order.trackingNumber,
     trackingUrl: orderTrackingUrl(order),
     // Navlungo linki numarayı kendisi açar; firma sayfasına yönelik ipucu gerekmez
-    trackingHint: order.trackingUrl ? null : carrier?.trackingHint ?? null,
+    trackingHint: order.trackingUrl
+      ? null
+      : (locale === 'en' ? carrier?.trackingHintEn ?? carrier?.trackingHint : carrier?.trackingHint) ?? null,
     customerNote: parseCustomerNote(order),
     orderUrl: `${siteUrl()}/orders/${order.orderNo}`,
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,
     siteUrl: siteUrl(),
-    paymentDueDate: due.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE }),
+    paymentDueDate: due.toLocaleDateString(dateLocale, { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE }),
     estimatedDelivery,
     billingAddress: order.billingAddress
       ? [order.billingAddress, [order.billingDistrict, order.billingCity].filter(Boolean).join(' / '), order.billingPostalCode]
@@ -188,11 +201,13 @@ export async function sendCustomerStatusEmail(
 ) {
   const data = toOrderEmailData(order)
   if (extra?.refundAmount != null) data.refundAmount = extra.refundAmount
+  const subject = ORDER_EMAIL_SUBJECTS[kind](order.orderNo, data.locale)
   return send(
     order.id,
     order.shippingEmail,
-    ORDER_EMAIL_SUBJECTS[kind](order.orderNo),
+    subject,
     React.createElement(OrderStatusEmail, { order: data, kind, reason }),
+    // Zaman çizelgesi (admin) Türkçe
     ORDER_EMAIL_SUBJECTS[kind](order.orderNo)
   )
 }
@@ -200,9 +215,7 @@ export async function sendCustomerStatusEmail(
 async function sendOrderReceived(order: OrderWithLines) {
   const data = toOrderEmailData(order)
   const awaiting = data.paymentMethod === 'bank_transfer' && order.paymentStatus !== 'PAID'
-  const subject = awaiting
-    ? `Siparişiniz alındı, ödemeniz bekleniyor - ${order.orderNo}`
-    : `Siparişiniz alındı - ${order.orderNo}`
+  const subject = orderReceivedSubject(order.orderNo, awaiting, data.locale)
   // Ön Bilgilendirme Formu + Mesafeli Satış Sözleşmesi (siparişe özel PDF) e-postaya eklenir
   let attachments: EmailAttachment[] | undefined
   try {
@@ -212,11 +225,11 @@ async function sendOrderReceived(order: OrderWithLines) {
     await reportError('sozlesme-pdf', e, { orderNo: order.orderNo })
     await logOrderEvent(order.id, { type: 'email', message: "Sözleşme PDF'i oluşturulamadı; e-posta eksiz gönderildi.", visibleToCustomer: false })
   }
-  await send(order.id, order.shippingEmail, subject, React.createElement(OrderReceivedEmail, { order: data }), subject, attachments)
+  await send(order.id, order.shippingEmail, subject, React.createElement(OrderReceivedEmail, { order: data }), orderReceivedSubject(order.orderNo, awaiting), attachments)
 }
 
 async function sendAdmin(order: OrderWithLines, event: AdminOrderEvent, reason?: string | null) {
-  const data = toOrderEmailData(order)
+  const data = toOrderEmailData(order, 'tr')
   const subject = ADMIN_ORDER_EMAIL_SUBJECTS[event](order.orderNo)
   await send(order.id, adminEmail(), subject, React.createElement(AdminOrderEmail, { order: data, event, reason }), `Admin: ${subject}`)
 }

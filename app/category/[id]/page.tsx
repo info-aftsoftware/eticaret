@@ -7,6 +7,8 @@ import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
 import { categoryHref } from '@/lib/seo/type-paths'
 import { typeByCategory } from '@/lib/seo/taxonomy'
+import { getTranslations } from 'next-intl/server'
+import { localizedMetadata } from '@/lib/locale-metadata'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
@@ -34,7 +36,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   // "Fiyatları" zaten title içindeyse tekrar ekleme
   const pageTitle = title.includes('Fiyat') ? title : `${title} Fiyatları ve Modelleri`
 
-  return {
+  const trMetadata: Metadata = {
     title: pageTitle,
     description,
     keywords,
@@ -54,6 +56,16 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
       ...(imageUrl && { images: [imageUrl] }),
     },
   }
+  // İngilizce ziyaretçi: kategori adı menüdeki çevirisiyle (kanonik ve Türkçe SEO metni değişmez)
+  const labelKey = CATEGORY_GROUPS.find((group) => group.id === params.id)?.labelKey
+  if (!labelKey) return trMetadata
+  const tHeader = await getTranslations('header').catch(() => null)
+  const enTitle = tHeader ? tHeader(labelKey) : title
+  return localizedMetadata(trMetadata, {
+    title: `${enTitle} — Prices and Models`,
+    description: `Filter ${enTitle} products by price, brand and features. Reliable products and technical support at voltekno.`,
+    shareTitle: `${enTitle} | voltekno`,
+  })
 }
 
 export default async function CategoryPage(props: { params: Promise<{ id: string }> }) {

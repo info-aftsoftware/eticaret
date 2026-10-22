@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAdminAuth, adminProjectMatchesClient } from '@/lib/firebaseAdminServer'
 import { isRateLimited } from '@/lib/rate-limit'
 import { sendPasswordResetMessage } from '@/lib/notifications'
-import { siteOrigin, oobCodeFromLink, inCooldown, clearCooldown } from '../_shared'
+import { siteOrigin, oobCodeFromLink, inCooldown, clearCooldown, requestLocale } from '../_shared'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const resetUrl = oobCode
       ? `${siteOrigin(request)}/reset-password?mode=resetPassword&oobCode=${encodeURIComponent(oobCode)}`
       : link
-    const sent = await sendPasswordResetMessage({ email, name: user.displayName || '', resetUrl })
+    const sent = await sendPasswordResetMessage({ email, name: user.displayName || '', resetUrl, locale: requestLocale(request) })
     if (!sent) {
       clearCooldown(key)
       return NextResponse.json({ success: false, error: 'E-posta gönderilemedi.' }, { status: 503 })

@@ -22,7 +22,8 @@ import { CompareButton } from '@/components/CompareButton'
 import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds, type MockProduct } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { localizeProduct, localizeSpecs, productName, textLang, toCatalogLocale } from '@/lib/catalog-en'
 import Image from 'next/image'
 import { ProductPageShell } from '@/components/ProductPageShell'
 import {
@@ -76,7 +77,10 @@ type Props = { initialProduct?: MockProduct | null; productId?: string }
 export default function ProductDetailClient({ initialProduct, productId: productIdProp }: Props = {}) {
   const params = useParams()
   const productId = (productIdProp ?? params?.id) as string
-  const [product, setProduct] = useState<MockProduct | null>(initialProduct ?? null)
+  const [rawProduct, setProduct] = useState<MockProduct | null>(initialProduct ?? null)
+  const locale = toCatalogLocale(useLocale())
+  // Sunucu/API İngilizce gönderir; yedek (koddaki katalog) Türkçe ürün de burada çevrilir
+  const product = React.useMemo(() => (rawProduct ? localizeProduct(rawProduct, locale) : null), [rawProduct, locale])
   const [loading, setLoading] = useState(!initialProduct)
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
@@ -138,7 +142,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
   }, [productId, initialProduct])
 
   /** Varyant seçiliyse ve üründe imagesByVariant varsa o varyantın görselleri; yoksa product.images */
-  const effectiveVariant = selectedVariant ?? product?.variants?.[0] ?? null
+  const effectiveVariant =
+    (selectedVariant && product?.variants?.find((v) => v.key === selectedVariant.key)) ?? selectedVariant ?? product?.variants?.[0] ?? null
   /** Sepet adedi doğrudan sepetten okunur (varyant değişince / başka sayfada eklenince doğru kalır) */
   const cartLineId = product ? (effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id) : ''
   const cartQty = useCartStore((s) => (cartMounted ? s.items.find((i) => i.id === cartLineId)?.quantity ?? 0 : 0))
@@ -603,7 +608,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                                 <Package className="w-5 h-5 text-slate-300 m-auto" aria-hidden />
                               )}
                             </span>
-                            <span className="min-w-0 flex-1 text-[13px] font-medium text-[#20384e] line-clamp-2 leading-snug group-hover:text-[#0b2540]">{p.name}</span>
+                            <span className="min-w-0 flex-1 text-[13px] font-medium text-[#20384e] line-clamp-2 leading-snug group-hover:text-[#0b2540]">{productName(p, locale)}</span>
                             <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{formatPrice(p.price)}</span>
                           </Link>
                         </li>
@@ -617,7 +622,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
 
           {/* Ürün Açıklamaları: sol = teknik tablo, sağ = akordiyon. Varyant seçiliyse o varyantın özellikleri gösterilir. */}
           {(() => {
-            const displaySpecs = effectiveVariant?.specifications ?? product.specifications
+            const displaySpecs = localizeSpecs(effectiveVariant?.specifications ?? product.specifications, locale)
             // HTML açıklama teknik tabloları zaten içerir; aynı bilgi iki kez gösterilmesin (özellikler karşılaştırma ve filtrede kullanılır)
             const hasSpecs = !product.descriptionHtml && !!displaySpecs && Object.keys(displaySpecs).length > 0
             return (hasSpecs ||
@@ -636,7 +641,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     <div className="min-w-0 max-w-2xl">
                       <h3 className="text-sm font-bold text-slate-900 mb-3">{tProduct('specifications')}</h3>
                       <div className="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-                        <dl lang="tr" className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                        <dl className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                           {Object.entries(displaySpecs).map(([key, value], i) => (
                             <React.Fragment key={key}>
                               <dt
@@ -665,7 +670,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         {/* Excel'den (ikas) gelen HTML; import sırasında temizlenir (scripts/import-ikas-excel.py) */}
                         <div
                           className="product-description-html"
-                          lang="tr"
                           dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
                         />
                       </div>
@@ -679,6 +683,11 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         ? rawDescription
                         : parseDescriptionSections(rawDescription).intro
                       const showAsAccordion = sections.length > 0
+                      // Panelde yazılan uzun açıklama / bölümler yalnızca Türkçe; katalog kısa açıklaması çevrilmiş olabilir
+                      const descLang =
+                        locale === 'en' && (product.fullDescription || hasExplicitSections)
+                          ? 'tr'
+                          : textLang(rawProduct?.description, product.description, locale)
 
                       return (
                         <>
@@ -686,9 +695,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
                             <div>
                               <h3 className="text-sm font-bold text-slate-900 mb-3">{tProduct('descriptions')}</h3>
                               {showAsAccordion && intro ? (
-                                <p lang="tr" className="text-slate-600 text-sm leading-relaxed whitespace-pre-line mb-4">{intro}</p>
+                                <p lang={descLang} className="text-slate-600 text-sm leading-relaxed whitespace-pre-line mb-4">{intro}</p>
                               ) : !showAsAccordion && rawDescription ? (
-                                <div lang="tr" className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
+                                <div lang={descLang} className="text-slate-600 text-sm leading-relaxed whitespace-pre-line">
                                   {(product.fullDescription || product.description)
                                     ?.split(/\n/)
                                     .map((line, i) => {
@@ -709,7 +718,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                             </div>
                           )}
                           {showAsAccordion && (
-                            <Accordion type="multiple" className="w-full" lang="tr">
+                            <Accordion type="multiple" className="w-full" lang={descLang}>
                               {sections.map((section, i) => (
                                 <AccordionItem key={i} value={`section-${i}`}>
                                   <AccordionTrigger>{section.title}</AccordionTrigger>
@@ -729,7 +738,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     {product.features && product.features.length > 0 && (
                       <div>
                         <h3 className="text-sm font-bold text-slate-900 mb-2">{tProduct('contents')}</h3>
-                        <ul lang="tr" className="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
+                        <ul lang={locale === 'en' ? 'tr' : undefined} className="list-disc list-inside text-slate-600 text-sm leading-relaxed space-y-1">
                           {product.features.map((f, i) => (
                             <li key={i}>{f}</li>
                           ))}

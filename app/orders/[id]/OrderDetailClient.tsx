@@ -20,6 +20,8 @@ import { BankTransferDetails } from '@/components/order/BankTransferDetails'
 import { BANK_TRANSFER_DISCOUNT_RATE, STORE_TIME_ZONE, VAT_RATE, bankTransferDeadline } from '@/lib/store-config'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useL } from '@/lib/i18n-inline'
+import { useLocale } from 'next-intl'
+import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { useServerError } from '@/lib/server-error-i18n'
 
 type Creds = { email: string; phone: string }
@@ -179,6 +181,7 @@ export default function OrderDetailPage() {
   const [actionNotice, setActionNotice] = useState('')
   const [downloading, setDownloading] = useState<string | null>(null)
   const L = useL()
+  const catalogLocale = toCatalogLocale(useLocale())
   const tErr = useServerError()
   const loc = L('tr-TR', 'en-GB')
 
@@ -579,7 +582,11 @@ export default function OrderDetailPage() {
                     </a>
                   )}
                 </div>
-                {trackingHint && <p className="mt-3 text-[13px] text-[#5d6e80]">{trackingHint}</p>}
+                {trackingHint && (
+                  <p className="mt-3 text-[13px] text-[#5d6e80]">
+                    {L(trackingHint, trackingHint === carrier?.trackingHint ? carrier?.trackingHintEn ?? trackingHint : trackingHint)}
+                  </p>
+                )}
               </Card>
             )}
 
@@ -589,7 +596,7 @@ export default function OrderDetailPage() {
                 {(order.items || []).map((item: any, i: number) => (
                   <li key={item.id ?? i} className="flex items-start justify-between gap-4 py-3 text-sm first:pt-0 last:pb-0">
                     <span className="min-w-0 text-[#121926]">
-                      {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{item.name}</Link> : <span className="font-medium">{item.name}</span>}
+                      {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{lineItemName(item, catalogLocale)}</Link> : <span className="font-medium">{item.name}</span>}
                       <span className="block text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `Qty: ${item.quantity}`)}</span>
                     </span>
                     <span className="shrink-0 font-semibold tabular-nums text-[#121926]">{formatPrice((item.price || 0) * (item.quantity || 1))}</span>

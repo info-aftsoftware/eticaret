@@ -10,6 +10,7 @@ Kullanım:
   lib/catalog/product-details.json – özellikler, döviz fiyatı, ölçü/desi, SEO başlığı (yalnızca sunucu)
   lib/catalog/descriptions.json  – ürün id -> HTML açıklama (yalnızca sunucuda yüklenir)
   lib/catalog/fx-snapshot.json   – TCMB kur anlık görüntüsü (API'siz/statik ortam yedeği)
+  (lib/catalog/en/*.json İngilizce katmandır; bu betik dokunmaz, scripts/catalog-en.ts ile bakılır)
 
 Görseller: public/images/products/voltekno/<driveId>.<ext> altında aranır;
 eksik olanlar Google Drive'dan indirilir. Excel'deki görseli yanlış olan SKU'lar için
@@ -693,6 +694,8 @@ def main():
         json.dump(missing_logistics, f, ensure_ascii=False, indent=1)
     print(f'Ölçü/ağırlık eksik {len(missing_logistics)} SKU → scripts/data/missing-logistics.json '
           f'(scripts/data/product-logistics.json ile tamamlanır)')
+    # İngilizce katman (lib/catalog/en) içe aktarmada korunur; değişen/yeni metinler ayrıca çevrilir
+    print('İngilizce katalog: npm run catalog:en -- check  (eksikler: extract <klasör> → çeviri → merge <klasör>)')
 
 
 if __name__ == '__main__':

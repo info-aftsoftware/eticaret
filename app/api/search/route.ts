@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getStorefrontProducts } from '@/lib/discounts'
 import { searchProducts } from '@/lib/search-product'
+import { productName, toCatalogLocale } from '@/lib/catalog-en'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
 
     // lite=1: başlıktaki canlı öneri kutusu için hafif yanıt (+ eşleşen kategoriler)
     if (sp.get('lite') === '1') {
+      const locale = toCatalogLocale(sp.get('locale') ?? request.cookies.get('NEXT_LOCALE')?.value)
       const categories = [...new Set(products.map((p) => p.category).filter(Boolean))].slice(0, 3)
       return NextResponse.json({
         total,
@@ -41,7 +43,7 @@ export async function GET(request: NextRequest) {
         products: products.slice(0, pageSize).map((p) => ({
           id: p.id,
           slug: p.slug,
-          name: p.name,
+          name: productName(p, locale),
           brand: p.brand,
           image: p.image,
           price: p.price,

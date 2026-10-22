@@ -15,6 +15,9 @@ import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 import { withDetails } from '@/lib/catalog-details'
 import legacyProductRedirects from '@/lib/legacy-product-redirects.json'
+import { getLocale } from 'next-intl/server'
+import { localizeProduct, toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
+import { localizeDescriptionHtml } from '@/lib/catalog-en/descriptions.server'
 
 const LEGACY_PRODUCT_REDIRECTS = legacyProductRedirects as Record<string, string>
 
@@ -44,7 +47,7 @@ const DUPLICATE_DESCRIPTIONS: Set<string> = (() => {
 })()
 
 /** Katalog (kod + admin düzenlemeleri); veritabanına ulaşılamazsa koddaki ürün */
-async function loadProduct(id: string): Promise<StorefrontProduct | null> {
+async function loadCatalogProduct(id: string): Promise<StorefrontProduct | null> {
   try {
     const merged = await getStorefrontProductById(id)
     if (merged) return merged
@@ -53,6 +56,21 @@ async function loadProduct(id: string): Promise<StorefrontProduct | null> {
   }
   const mock = mockProducts.find((p) => p.id === id)
   return mock ? { ...withDetails(mock), id: mock.id, descriptionHtml: getProductDescriptionHtml(mock.id) } : null
+}
+
+/**
+ * Ürün, ziyaretçinin dilinde: İngilizcede ad / kısa açıklama / varyant adları ve HTML açıklama çevrilir
+ * (URL ve kanonik adres değişmez; teknik özellik çevirisi istemcide gösterim sırasında yapılır).
+ */
+async function loadProduct(id: string): Promise<{ product: StorefrontProduct; locale: CatalogLocale } | null> {
+  const product = await loadCatalogProduct(id)
+  if (!product) return null
+  const locale = toCatalogLocale(await getLocale().catch(() => 'tr'))
+  if (locale !== 'en') return { product, locale }
+  return {
+    product: { ...localizeProduct(product, locale), descriptionHtml: localizeDescriptionHtml(product.descriptionHtml, locale) },
+    locale,
+  }
 }
 
 const SITE_NAME = 'voltekno'
@@ -75,11 +93,14 @@ function truncate(str: string, max: number) {
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const params = await props.params;
-  const product = await loadProduct(params.id)
-  if (!product) return { title: 'Ürün Bulunamadı' }
+  const loaded = await loadProduct(params.id)
+  if (!loaded) return { title: 'Ürün Bulunamadı' }
+  const { product, locale } = loaded
 
-  // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir
-  const title = product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
+  // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir.
+  // Excel'in SEO başlığı Türkçe; İngilizcede başlık çevrilmiş addan üretilir.
+  const title =
+    locale === 'tr' && product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
   const baseDesc = product.description || `${product.name} — ${product.category}.`
   // Aynı açıklamayı paylaşan varyant ürünlerde (ör. 55-75 kW / 90-110 kW) ürün adı başa alınır: her sayfa benzersiz
   const description = truncate(DUPLICATE_DESCRIPTIONS.has(truncate(baseDesc, 160)) ? `${product.name}: ${baseDesc}` : baseDesc, 160)
@@ -90,8 +111,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
     product.category,
     product.brand,
     'voltekno',
-    'satın al',
-    'fiyat',
+    ...(locale === 'en' ? ['buy', 'price'] : ['satın al', 'fiyat']),
   ].filter(Boolean) as string[]
 
   return {
@@ -216,14 +236,15 @@ function buildProductJsonLd(product: StorefrontProduct, rating: { average: numbe
 
 export default async function ProductPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const product = await loadProduct(params.id)
-  if (!product) {
+  const loaded = await loadProduct(params.id)
+  if (!loaded) {
     // Eski katalogdaki ürün: yeni ürüne/kategoriye kalıcı yönlendirme (next.config.js redirects ile aynı liste;
     // boşluk içeren eski kablo id'leri gibi config'te eşleşmeyen adresler burada yakalanır)
     const legacyTarget = LEGACY_PRODUCT_REDIRECTS[params.id] ?? LEGACY_PRODUCT_REDIRECTS[safeDecode(params.id)]
     if (legacyTarget) permanentRedirect(legacyTarget)
     notFound()
   }
+  const { product } = loaded
 
   const rating = await reviewSummary(product.id).catch(() => ({ average: 0, count: 0 }))
 

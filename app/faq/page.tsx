@@ -1,10 +1,11 @@
 import { Metadata } from 'next'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { FAQContent } from './FAQContent'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Sık Sorulan Sorular — Sipariş, Kargo, Ürün ve Teknik Destek',
   description: 'voltekno ürünleri, sipariş süreci, ödeme yöntemleri, kargo ve teknik konularda sık sorulan sorular. Güneş paneli, akü, inverter ve EV şarj hakkında merak ettikleriniz.',
   keywords: ['sık sorulan sorular', 'faq', 'güneş paneli soru', 'akü soru', 'ges soru', 'voltekno destek'],
@@ -15,6 +16,17 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'voltekno',
   },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Frequently Asked Questions — Orders, Shipping, Products and Technical Support',
+    description:
+      'Frequently asked questions about voltekno products, ordering, payment methods, shipping and technical topics, including solar panels, batteries, inverters and EV charging.',
+    shareTitle: 'Frequently Asked Questions | voltekno',
+    shareDescription: 'Frequently asked questions about orders, shipping, products and technical topics.',
+  })
 }
 
 export default async function FAQPage() {

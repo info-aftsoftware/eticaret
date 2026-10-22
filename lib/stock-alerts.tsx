@@ -1,29 +1,16 @@
 /**
  * "Stok gelince haber ver": stoğu biten ürün için e-posta kaydı; ürün stoğa girince bir kez e-posta.
+ * E-posta, talebin verildiği site dilinde (StockAlert.locale) gönderilir.
  * processStockAlerts() admin stok güncellemelerinden sonra ve zamanlanmış görevde (cron) çağrılır.
  */
 
 import React from 'react'
-import { Text } from '@react-email/components'
 import { prisma } from '@/lib/prisma'
 import { sendEmail } from '@/lib/email'
 import { getMergedProductById } from '@/lib/catalog-merge'
 import { STORE_CONTACT } from '@/lib/store-config'
-import { EmailLayout, CtaButton, s } from '@/emails/order/shared'
-
-function BackInStockEmail({ productName, productUrl }: { productName: string; productUrl: string }) {
-  return (
-    <EmailLayout preview={`${productName} yeniden stokta`} title="Beklediğiniz ürün stokta" subtitle={productName}>
-      <Text style={s.p}>Merhaba,</Text>
-      <Text style={s.p}>
-        Haber vermemizi istediğiniz <strong>{productName}</strong> yeniden stoklarımızda. Stoklar sınırlı olabileceği için
-        siparişinizi gecikmeden verebilirsiniz.
-      </Text>
-      <CtaButton href={productUrl}>Ürüne Git</CtaButton>
-      <Text style={s.note}>Bu e-postayı, ürün sayfasında “Stok gelince haber ver” talebiniz üzerine yalnızca bir kez gönderiyoruz.</Text>
-    </EmailLayout>
-  )
-}
+import { productName, toCatalogLocale } from '@/lib/catalog-en'
+import BackInStockEmail, { backInStockSubject } from '@/emails/BackInStockEmail'
 
 /** Bekleyen talepleri tarar; stokta olan ürünler için e-posta gönderir. productIds verilirse yalnızca onlar. */
 export async function processStockAlerts(productIds?: string[]): Promise<{ notified: number; products: string[] }> {
@@ -50,10 +37,13 @@ export async function processStockAlerts(productIds?: string[]): Promise<{ notif
       if (claim.count === 0) continue
       let sent = false
       try {
+        // Talebin verildiği site dili (StockAlert.locale)
+        const locale = toCatalogLocale(a.locale)
+        const name = productName(product, locale)
         const res = await sendEmail(
           a.email,
-          `${product.name} yeniden stokta`,
-          React.createElement(BackInStockEmail, { productName: product.name, productUrl: `${site}/products/${product.slug ?? product.id}` })
+          backInStockSubject(name, locale),
+          React.createElement(BackInStockEmail, { productName: name, productUrl: `${site}/products/${product.slug ?? product.id}`, locale })
         )
         sent = res.success
       } catch (e) {

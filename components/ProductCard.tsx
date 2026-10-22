@@ -14,7 +14,8 @@ import { useRouter } from 'next/navigation'
 import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { productDescription, productName, toCatalogLocale, variantLabel } from '@/lib/catalog-en'
 
 export interface ProductCardProduct {
   id: string
@@ -47,8 +48,8 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({
-  product,
-  selectedVariant,
+  product: rawProduct,
+  selectedVariant: rawSelectedVariant,
   variant = 'full',
   priority = false,
   className = '',
@@ -57,6 +58,10 @@ export function ProductCard({
   oldPrice,
   discount,
 }: ProductCardProps) {
+  const locale = toCatalogLocale(useLocale())
+  // Katalog metni ziyaretçinin dilinde (lib/catalog/en); fiyat/stok/id değişmez
+  const product = { ...rawProduct, name: productName(rawProduct, locale), description: productDescription(rawProduct, locale) }
+  const selectedVariant = rawSelectedVariant && { ...rawSelectedVariant, label: variantLabel(rawProduct.id, rawSelectedVariant, locale) }
   const currency = useCurrencyStore((s) => s.currency)
   const { rates } = useExchangeRates()
   const addItem = useCartStore((s) => s.addItem)

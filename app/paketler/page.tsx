@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
@@ -8,7 +9,7 @@ import { PAGE_CONTAINER } from '@/lib/page-container'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Enerji Paketleri: Bağ Evi, Villa, Karavan, Sulama, Marin',
   description:
     'Bağ evi, villa, karavan, tarımsal sulama ve marin uygulamaları için hazır güneş enerjisi paketleri. Panel, inverter ve akü ihtiyaca göre birlikte seçilir.',
@@ -33,6 +34,17 @@ export const metadata: Metadata = {
     siteName: 'voltekno',
     url: `${SITE_URL}/paketler`,
   },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Energy Packages: Cabin, Villa, Caravan, Irrigation, Marine',
+    description:
+      'Ready-made solar energy packages for cabins, villas, caravans, agricultural irrigation and marine use. Panels, inverters and batteries are matched to your needs.',
+    shareTitle: 'Energy Packages | voltekno',
+    shareDescription: 'Ready-made solar energy packages for cabins, villas, caravans, irrigation and marine use.',
+  })
 }
 
 function buildPackageListSchema() {
