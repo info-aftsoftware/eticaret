@@ -19,6 +19,7 @@ import {
   VAT_RATE,
 } from '@/lib/store-config'
 import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
 import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
 import {
   formatTrPhone,
@@ -402,7 +403,8 @@ export default function CheckoutPage() {
 
   // Sunucuyla aynı hesaplayıcı (lib/store-config): indirimler KDV matrahından düşülür
   // Form alanlarına her tuşta yeniden hesaplanmasın
-  const shippingFee = useMemo(() => shippingFeeFor(cartLogistics(cartItems)), [cartItems])
+  const logistics = useMemo(() => cartLogistics(cartItems), [cartItems])
+  const shippingFee = useMemo(() => shippingFeeFor(logistics), [logistics])
   const totals = useMemo(
     () => computeOrderTotals({ subtotal: cartTotal, couponDiscount, paymentMethod: paymentMethod === 'havale' ? 'bank_transfer' : 'card', shippingFee }),
     [cartTotal, couponDiscount, paymentMethod, shippingFee]
@@ -728,10 +730,15 @@ export default function CheckoutPage() {
       </div>
       <div className="flex justify-between gap-3">
         <dt className="text-[#5d6e80]">{L('Kargo', 'Shipping')}</dt>
-        <dd className="font-medium tabular-nums">
-          <span className="text-[#121926]">{formatPrice(shipping)}</span>
+        <dd className="font-medium tabular-nums text-right">
+          <span className="text-[#121926]">{logistics.installOnly ? L('Ayrıca planlanır', 'Arranged separately') : formatPrice(shipping)}</span>
         </dd>
       </div>
+      {logistics.hasInstall && (
+        <p className="rounded-lg bg-[#f5f8fc] px-3 py-2 text-xs leading-relaxed text-[#20384e]" role="note">
+          {L(`Şarj istasyonu: ${INSTALL_NOTE_TR}`, `Charging station: ${INSTALL_NOTE_EN}`)}
+        </p>
+      )}
       <div className="flex items-baseline justify-between gap-3 border-t border-[#e6ebf1] pt-3">
         <dt className="text-base font-semibold text-[#121926]">{L('Toplam', 'Total')} <span className="text-xs font-normal text-[#5d6e80]">{L('(KDV dahil)', '(VAT incl.)')}</span></dt>
         <dd className="text-xl font-bold text-[#0b2540] tabular-nums">{formatPrice(total)}</dd>

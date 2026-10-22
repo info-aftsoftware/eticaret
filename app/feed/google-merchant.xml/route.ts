@@ -8,6 +8,7 @@ import { getStorefrontProducts } from '@/lib/discounts'
 import { VAT_RATE } from '@/lib/store-config'
 import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { isInstallShipping } from '@/lib/sale-mode'
 import { SELLER } from '@/lib/legal/company'
 import { PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { getGroupIdForCategory } from '@/lib/categories'
@@ -38,7 +39,7 @@ export async function GET() {
   // Merchant Center görselsiz ürünü reddeder: placeholder görselli ürünler akışa girmez
   // "Görsel hazırlanıyor" kartları (override/pending-*) gerçek ürün görseli değildir; Merchant Center bunları reddeder
   // Akü / batarya şimdilik çevrim içi satılmıyor (lib/shipping/battery.ts): satın alınamayan ürün akışa girmez
-  const products = (await getStorefrontProducts()).filter((p) => p.price > 0 && p.name && p.image && p.image !== PLACEHOLDER_PRODUCT_IMAGE && !p.image.includes('/pending-') && !isContactOnlyProduct(p))
+  const products = (await getStorefrontProducts()).filter((p) => p.price > 0 && p.name && p.image && p.image !== PLACEHOLDER_PRODUCT_IMAGE && !p.image.includes('/pending-') && !isContactOnlyProduct(p) && !isInstallShipping(p))
   const items = products.map((p) => {
     const image = abs((p.images && p.images[0]) || p.image)
     const extra = (p.images ?? []).slice(1, 10).map(abs)

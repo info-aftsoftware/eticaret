@@ -41,6 +41,10 @@ export type Logistics = {
   heavyKgPieces?: number
   /** Sepette akü / batarya var mı (yalnızca Navlungo fiyatı verilir) */
   battery?: boolean
+  /** Sepette yalnızca kurulumlu ürün var (lib/sale-mode.ts 'install'): kargo ücreti yok, nakliye ayrıca konuşulur */
+  installOnly?: boolean
+  /** Kurulumlu ürün var mı */
+  hasInstall?: boolean
 }
 
 export type ShippingCandidate = {
@@ -65,8 +69,8 @@ export type ShippingQuote = {
   version: string
 }
 
-/** desi.json: satır id -> [desi, kg, akü mü (1)] */
-const MAP = desiMap as unknown as Record<string, [number, number, number?]>
+/** desi.json: satır id -> [desi, kg, akü mü (1), kurulumlu mu (1)] */
+const MAP = desiMap as unknown as Record<string, [number, number, number?, number?]>
 
 /** Sepet satırının tek adet lojistik bilgisi (varyant satırı yoksa ürünün varsayılanı) */
 export function lineLogistics(lineId: string, productId?: string): Logistics {
@@ -80,6 +84,7 @@ export function lineLogistics(lineId: string, productId?: string): Logistics {
     heavyPieces: desi > HEAVY_PIECE_DESI ? 1 : 0,
     heavyKgPieces: kg > HEAVY_PIECE_KG ? 1 : 0,
     battery: hit?.[2] === 1,
+    hasInstall: hit?.[3] === 1,
   }
 }
 
@@ -90,15 +95,26 @@ export function cartLogistics(items: { id: string; productId?: string; quantity:
   let heavyPieces = 0
   let heavyKgPieces = 0
   let battery = false
+  let installLines = 0
   for (const it of items) {
     const l = lineLogistics(it.id, it.productId)
+    if (l.hasInstall) installLines++
     desi += l.desi * it.quantity
     kg += l.kg * it.quantity
     heavyPieces += (l.heavyPieces ?? 0) * it.quantity
     heavyKgPieces += (l.heavyKgPieces ?? 0) * it.quantity
     battery ||= Boolean(l.battery)
   }
-  return { desi: Math.ceil(desi), kg: round2(kg), desiExact: round2(desi), heavyPieces, heavyKgPieces, battery }
+  return {
+    desi: Math.ceil(desi),
+    kg: round2(kg),
+    desiExact: round2(desi),
+    heavyPieces,
+    heavyKgPieces,
+    battery,
+    hasInstall: installLines > 0,
+    installOnly: installLines > 0 && installLines === items.length,
+  }
 }
 
 const carrierName = (id: string | null) => (id ? getCarrier(id)?.name ?? id : 'En uygun firma')
@@ -155,6 +171,10 @@ export function navlungoQuotes(l: Logistics): ShippingCandidate[] {
 /** Sepet için tüm teklifler ve en ucuzu. Akülü sepette Geliver teklif dışı bırakılır. */
 export function quoteShipping(l: Logistics): ShippingQuote {
   const battery = Boolean(l.battery)
+  // Yalnızca kurulumlu ürün (şarj istasyonu): kargo ücreti alınmaz, nakliye siparişten sonra konuşulur
+  if (l.installOnly) {
+    return { fee: 0, provider: 'navlungo', carrierId: null, carrierName: 'Kurulum ve nakliye ayrıca planlanır', candidates: [], desi: 0, kg: 0, battery, version: SHIPPING_RATES_VERSION }
+  }
   const geliver = geliverQuote(l)
   const candidates: ShippingCandidate[] = [
     battery ? { ...geliver, fee: null, reason: 'Akü / batarya: yalnızca Navlungo fiyatı verilir' } : geliver,

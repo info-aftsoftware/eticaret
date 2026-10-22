@@ -8,6 +8,7 @@ import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discount
 import { VAT_RATE } from '@/lib/store-config'
 import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { isInstallShipping, isQuoteOnly } from '@/lib/sale-mode'
 import { SELLER } from '@/lib/legal/company'
 import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 import { withDetails } from '@/lib/catalog-details'
@@ -105,6 +106,14 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
 }
 
 function buildProductJsonLd(product: StorefrontProduct, rating: { average: number; count: number }) {
+  const jsonLd = buildProductJsonLdWithOffer(product, rating)
+  if (!isQuoteOnly(product)) return jsonLd
+  // Teklifle satılan ürünün sayfada fiyatı yok: şemada da fiyat (Offer) verilmez
+  const { offers: _offers, ...rest } = jsonLd
+  return rest
+}
+
+function buildProductJsonLdWithOffer(product: StorefrontProduct, rating: { average: number; count: number }) {
   // Google: yapılandırılmış veri fiyatı sayfadaki satış fiyatıyla (KDV dahil) aynı olmalı
   const priceWithVat = Math.round(product.price * (1 + VAT_RATE / 100) * 100) / 100
   const shippingFee = shippingFeeFor(lineLogistics(product.id))
@@ -155,8 +164,8 @@ function buildProductJsonLd(product: StorefrontProduct, rating: { average: numbe
         returnMethod: 'https://schema.org/ReturnByMail',
         returnFees: 'https://schema.org/FreeReturn',
       },
-      // Akü / batarya: kargo ücreti verilmiyor (iletişimle satılıyor), kargo bilgisi şemaya girmez
-      ...(isContactOnlyProduct(product) ? {} : { shippingDetails: {
+      // Akü / batarya ve kurulumlu ürün: kargo ücreti verilmiyor, kargo bilgisi şemaya girmez
+      ...(isContactOnlyProduct(product) || isInstallShipping(product) ? {} : { shippingDetails: {
         '@type': 'OfferShippingDetails',
         shippingRate: {
           '@type': 'MonetaryAmount',

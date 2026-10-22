@@ -9,6 +9,7 @@
  * sunucu tarafında (lib/catalog-merge.ts) TCMB güncel kuruyla yeniden hesaplanır.
  */
 
+import type { SaleMode } from '@/lib/sale-mode'
 import catalog from './catalog/products.json'
 import { CATEGORY_GROUPS } from './categories'
 
@@ -87,6 +88,8 @@ export interface MockProduct {
   weightKg?: number
   desi?: number
   desiSource?: string
+  /** Satış biçimi: 'quote' teklifle satılır (fiyat yok), 'install' kurulum ve nakliye ayrıca (lib/sale-mode.ts) */
+  saleMode?: SaleMode
 }
 
 /** Eksik ürün görselleri için placeholder */

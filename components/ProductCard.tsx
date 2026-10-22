@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation'
 import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { isQuoteOnly } from '@/lib/sale-mode'
 import { useTranslations } from 'next-intl'
 
 export interface ProductCardProduct {
@@ -28,6 +29,8 @@ export interface ProductCardProduct {
   stock?: number
   isVariantProduct?: boolean
   variants?: unknown[]
+  /** 'quote': fiyat yok, teklif alınır · 'install': kurulum ve nakliye ayrıca (lib/sale-mode.ts) */
+  saleMode?: string
 }
 
 export interface ProductCardProps {
@@ -86,6 +89,8 @@ export function ProductCard({
   const outOfStock = typeof stock === 'number' && stock <= 0
   // Akü / batarya: sepete eklenmez, ürün sayfasındaki iletişim kutusuna gider (lib/shipping/battery.ts)
   const contactOnly = isContactOnlyProduct(product)
+  // Teklifle satılan ürün: fiyat yerine "Fiyat için teklif alın"
+  const quoteOnly = isQuoteOnly(product)
   const lowStock = typeof stock === 'number' && stock > 0 && stock <= 5
 
   const cartId = selectedVariant ? `${product.id}-${selectedVariant.key}` : product.id
@@ -212,13 +217,19 @@ export function ProductCard({
             {product.name}
           </h3>
           <div className="mt-auto flex items-end justify-between gap-2 pt-2">
-            <p className={`font-bold leading-tight text-[#121926] ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
-              {showOldPrice && (
-                <span className="block text-[11px] font-normal text-[#5d6e80] line-through">{formatPrice(oldPrice!)}</span>
-              )}
-              <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(displayPrice)}</span>
-            </p>
-            {hasVariants && variantCount > 1 ? (
+            {quoteOnly ? (
+              <p className={`font-semibold leading-tight text-[#0b2540] ${isCompact ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                {L('Fiyat için teklif alın', 'Request a quote')}
+              </p>
+            ) : (
+              <p className={`font-bold leading-tight text-[#121926] ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
+                {showOldPrice && (
+                  <span className="block text-[11px] font-normal text-[#5d6e80] line-through">{formatPrice(oldPrice!)}</span>
+                )}
+                <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(displayPrice)}</span>
+              </p>
+            )}
+            {quoteOnly ? null : hasVariants && variantCount > 1 ? (
               <span className="shrink-0 rounded bg-[#f1f4f8] px-1.5 py-0.5 text-[10px] font-semibold text-[#20384e]">{L(`${variantCount} seçenek`, `${variantCount} options`)}</span>
             ) : lowStock ? (
               <span className="shrink-0 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700">{L(`Son ${stock} adet`, `Only ${stock} left`)}</span>
@@ -248,9 +259,13 @@ export function ProductCard({
           <Link
             href={href}
             className={`${btnBase} border border-[#d3d9e1] bg-white text-[#0b2540] hover:border-[#0b2540] hover:bg-[#0b2540] hover:text-white [@media(hover:hover)]:group-hover:border-[#0b2540]`}
-            aria-label={L(`${product.name}: kargo ve nakliye için iletişime geçin`, `${product.name}: contact us for shipping`)}
+            aria-label={
+              quoteOnly
+                ? L(`${product.name}: fiyat için teklif alın`, `${product.name}: request a quote`)
+                : L(`${product.name}: kargo ve nakliye için iletişime geçin`, `${product.name}: contact us for shipping`)
+            }
           >
-            <span>{L('İletişime geç', 'Contact us')}</span>
+            <span>{quoteOnly ? L('Teklif Al', 'Request a Quote') : L('İletişime geç', 'Contact us')}</span>
             <ChevronRight className={`${icon} shrink-0`} />
           </Link>
         ) : outOfStock ? (

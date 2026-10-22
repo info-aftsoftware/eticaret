@@ -559,3 +559,19 @@ VICTRO-BAT512060705-02121;Victron Lithium SuperPack 12,8V 60Ah Lityum Akü (M6);
 VICTRO-BAT512110712-02122;Victron Lithium SuperPack 12,8V 100Ah Lityum Akü (M8);;Victron;Lityum Akü;30.6 x 21.5 x 16.9;11;11;package
 VICTRO-BAT512120705-02123;Victron Lithium SuperPack Lityum Akü;12,8V 200Ah Lityum Akü (M8);Victron;Lityum Akü;52 x 26.9 x 20.8;21;21;product
 VICTRO-BAT524050705-02124;Victron Lithium SuperPack Lityum Akü;25,6V 50Ah Lityum Akü (M8);Victron;Lityum Akü;33 x 22 x 17.2;14;14;product
+AFT-GC-45;AFT DC Hızlı Elektrikli Araç Şarj İstasyonu (45 kW - 180 kW);45 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;69 x 40 x 195;;180;description
+AFT-GC-90;AFT DC Hızlı Elektrikli Araç Şarj İstasyonu (45 kW - 180 kW);90 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;69 x 40 x 195;;180;description
+AFT-GC-135;AFT DC Hızlı Elektrikli Araç Şarj İstasyonu (45 kW - 180 kW);135 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;69 x 40 x 195;;180;description
+AFT-GC-180;AFT DC Hızlı Elektrikli Araç Şarj İstasyonu (45 kW - 180 kW);180 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;69 x 40 x 195;;180;description
+AFT-PRO-90;AFT PRO DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW);90 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;;;;eksik
+AFT-PRO-180;AFT PRO DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW);180 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;;;;eksik
+AFT-PRO-270;AFT PRO DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW);270 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;;;;eksik
+AFT-PROV2-90;AFT PRO V2 DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW);90 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;58 x 97 x 195;450;450;description
+AFT-PROV2-180;AFT PRO V2 DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW);180 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;58 x 97 x 195;450;450;description
+AFT-PROV2-270;AFT PRO V2 DC Hızlı Elektrikli Araç Şarj İstasyonu (90 kW - 270 kW);270 kW;AFT Power;Elektrikli Araç Şarj İstasyonu;58 x 97 x 195;450;450;description
+AFT-GUC-KATMANI;AFT Güç Katmanı Modüler LiFePO4 Enerji Depolama Ünitesi (5,4 - 172 kWh);;AFT Power;Lityum Akü;;950;;eksik
+AFT-LFP-5-4;AFT 5,4 kWh LiFePO4 (LFP) Batarya (24V / 48V);;AFT Power;Lityum Akü;40 x 39.1 x 24.4;45;45;description
+AFT-LFP-2-7;AFT 2,7 kWh LiFePO4 (LFP) Batarya (12V / 24V);;AFT Power;Lityum Akü;40 x 32 x 24.4;25;25;description
+AFT-GP-5-4;AFT 5,4 kWh Tekerlekli Taşınabilir Güç İstasyonu (3000 W);;AFT Power;Taşınabilir Güç İstasyonu;77.7 x 45.8 x 134;60;159;description
+AFT-GP-CANTA-2-7;AFT 2,7 kWh Çanta Tip Taşınabilir Güç İstasyonu (2000 W);;AFT Power;Taşınabilir Güç İstasyonu;54.8 x 39.1 x 33.5;35;35;description
+AFT-GP-2-7;AFT 2,7 kWh Taşınabilir Güç İstasyonu (2000 W);;AFT Power;Taşınabilir Güç İstasyonu;50 x 33.5 x 28.5;35;35;description

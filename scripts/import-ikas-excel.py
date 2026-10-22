@@ -196,6 +196,9 @@ def sanitize_html(s):
 
 
 def price_of(row):
+    # Teklifle satılan ürün (scripts/data/extra-products.json "_saleMode": "quote"): fiyat gösterilmez
+    if row.get('_saleMode') == 'quote':
+        return 'USD', 0.0
     if row[COL_USD]:
         return 'USD', round(float(row[COL_USD].replace(',', '.')), 2)
     if row[COL_EUR]:
@@ -419,6 +422,28 @@ def desi_of(dims_cm, weight_kg, parcels=None):
     return max(1, math.ceil(max(vol, weight_kg or 0) - 1e-9))
 
 
+def load_extra_rows():
+    """Excel'de olmayan ürünler (scripts/data/extra-products.json): Excel satırıyla aynı sütun adları.
+    Ek alan "_saleMode": "quote" (fiyat yok, teklif alınır) | "install" (satın alınır; nakliye ve kurulum
+    ücrete dahil değil, siparişten sonra iletişime geçilir; kargo hesabına girmez)."""
+    path = os.path.join(ROOT, 'scripts', 'data', 'extra-products.json')
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding='utf-8') as f:
+        data = json.load(f)
+    out = []
+    for prod in data['products']:
+        common = {k: v for k, v in prod.items() if k != 'variants'}
+        for v in prod.get('variants') or [{}]:
+            row = {COL_DELETED: '', COL_CHANNEL: '', COL_VARIANT_ACTIVE: '', COL_TAGS: '', COL_IMG: '', COL_GROUP: '',
+                   COL_VARIANT_VALUE: '', COL_SEO_NAME: '', COL_USD: '', COL_EUR: '', COL_META_TITLE: '', COL_STOCK: '0'}
+            row.update(common)
+            row.update(v)
+            out.append({k: (str(val) if not isinstance(val, str) and not k.startswith('_') else val) for k, val in row.items()})
+    print(f'Ek ürün dosyasından {len(out)} satır (scripts/data/extra-products.json)')
+    return out
+
+
 def load_logistics_overrides():
     """SKU → {dimsCm, weightKg, source}: üretici kaynaklarından araştırılan ölçüler.
     scripts/data/logistics-research/*.result.json (araştırma) + scripts/data/product-logistics.json (elle düzeltme, öncelikli)."""
@@ -479,7 +504,7 @@ def main():
         sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     if len(sys.argv) < 2:
         sys.exit('Kullanım: python scripts/import-ikas-excel.py <excel.xlsx>')
-    rows = read_xlsx(sys.argv[1])
+    rows = read_xlsx(sys.argv[1]) + load_extra_rows()
     rows = [
         r for r in rows
         if r[COL_SKU]
@@ -557,6 +582,7 @@ def main():
             'stock': int(float(head[COL_STOCK] or 0)),
             'featured': False,
             'isVariantProduct': is_variant,
+            'saleMode': head.get('_saleMode') or None,
         }
         if is_variant:
             variants, by_variant = [], []
@@ -622,8 +648,10 @@ def main():
     # Görseli hiç olmayan ürünler: aynı marka ve kategorideki en benzer adlı ürünün görseli (aynı seri/parça ailesi)
     def name_tokens(s):
         return {t for t in re.split(r'[^0-9a-zçğıöşü]+', s.lower()) if len(t) > 1}
+    # Ek ürün dosyasında "_noImageFallback" işaretli ürüne başka modelin fotoğrafı konmaz (yer tutucu kalır)
+    no_fallback = {(r[COL_SLUG] or variant_key(r[COL_SKU])) for r in rows if r.get('_noImageFallback')}
     for p in products:
-        if p['image'] != PLACEHOLDER:
+        if p['image'] != PLACEHOLDER or p['id'] in no_fallback:
             continue
         candidates = [q for q in products if q is not p and q['image'] != PLACEHOLDER and q.get('brand') == p.get('brand') and q['category'] == p['category']]
         if candidates:
@@ -661,7 +689,13 @@ def main():
     # Akü / batarya içeren ürünlerde kargo fiyatı yalnızca Navlungo'dan verilir (lib/shipping/fee.ts)
     BATTERY_CATEGORIES = {'Lityum Akü', 'Jel Akü', 'Taşınabilir Güç İstasyonu'}
     desi_map = {}
+    # Kurulumlu ürün (saleMode "install"): [0, 0, 0, 1] — kargo ücretine girmez, nakliye ayrıca konuşulur
     for p in products:
+        if p.get('saleMode') == 'install':
+            for v in p.get('variants') or []:
+                desi_map[f"{p['id']}-{v['key']}"] = [0, 0, 0, 1]
+            desi_map[p['id']] = [0, 0, 0, 1]
+            continue
         flag = [1] if p.get('category') in BATTERY_CATEGORIES else []
         for v in p.get('variants') or []:
             desi_map[f"{p['id']}-{v['key']}"] = [v.get('desi', 0), v.get('weightKg', 0)] + flag

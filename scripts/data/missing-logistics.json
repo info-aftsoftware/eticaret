@@ -1,1 +1,98 @@
-[]
+[
+ {
+  "sku": "AFT-GC-45",
+  "name": "AFT 45 kW",
+  "brand": "AFT Power",
+  "productId": "aft-dc-hizli-elektrikli-arac-sarj-istasyonu-45-180kw",
+  "has": {
+   "dimensionsCm": [
+    69.0,
+    40.0,
+    195.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-GC-90",
+  "name": "AFT 90 kW",
+  "brand": "AFT Power",
+  "productId": "aft-dc-hizli-elektrikli-arac-sarj-istasyonu-45-180kw",
+  "has": {
+   "dimensionsCm": [
+    69.0,
+    40.0,
+    195.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-GC-135",
+  "name": "AFT 135 kW",
+  "brand": "AFT Power",
+  "productId": "aft-dc-hizli-elektrikli-arac-sarj-istasyonu-45-180kw",
+  "has": {
+   "dimensionsCm": [
+    69.0,
+    40.0,
+    195.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-GC-180",
+  "name": "AFT 180 kW",
+  "brand": "AFT Power",
+  "productId": "aft-dc-hizli-elektrikli-arac-sarj-istasyonu-45-180kw",
+  "has": {
+   "dimensionsCm": [
+    69.0,
+    40.0,
+    195.0
+   ],
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-PRO-90",
+  "name": "AFT PRO 90 kW",
+  "brand": "AFT Power",
+  "productId": "aft-pro-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-PRO-180",
+  "name": "AFT PRO 180 kW",
+  "brand": "AFT Power",
+  "productId": "aft-pro-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-PRO-270",
+  "name": "AFT PRO 270 kW",
+  "brand": "AFT Power",
+  "productId": "aft-pro-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": null
+  }
+ },
+ {
+  "sku": "AFT-GUC-KATMANI",
+  "name": "AFT Güç Katmanı Modüler LiFePO4 Enerji Depolama Ünitesi (5,4 - 172 kWh)",
+  "brand": "AFT Power",
+  "productId": "aft-guc-katmani-moduler-lifepo4-enerji-depolama-unitesi",
+  "has": {
+   "dimensionsCm": null,
+   "weightKg": 950.0
+  }
+ }
+]

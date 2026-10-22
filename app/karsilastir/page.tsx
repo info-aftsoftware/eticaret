@@ -113,7 +113,9 @@ export default function ComparePage() {
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
                       {p.oldPrice && <span className="block text-xs text-slate-400 line-through">{price(p.oldPrice * (1 + VAT_RATE / 100))}</span>}
-                      <span className="font-bold text-ink">{p.isVariantProduct ? L('Başlangıç ', 'From ') : ''}{price(p.price * (1 + VAT_RATE / 100))}</span>
+                      <span className="font-bold text-ink">
+                        {p.price > 0 ? `${p.isVariantProduct ? L('Başlangıç ', 'From ') : ''}${price(p.price * (1 + VAT_RATE / 100))}` : L('Teklif alın', 'Request a quote')}
+                      </span>
                     </td>
                   ))}
                 </tr>

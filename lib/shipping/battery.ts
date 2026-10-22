@@ -7,6 +7,7 @@
  * desi.json'daki 3. alan = 1). Kısıt kalkınca BATTERY_CONTACT_ONLY = false yapın.
  */
 import { lineLogistics } from '@/lib/shipping/fee'
+import { isQuoteOnly } from '@/lib/sale-mode'
 
 export const BATTERY_CONTACT_ONLY = true
 
@@ -16,9 +17,9 @@ export function isBatteryCategory(category: string | null | undefined): boolean 
   return Boolean(category) && BATTERY_CATEGORIES.includes(category as string)
 }
 
-/** Ürün (kategori bilgisiyle) iletişimle satılıyor mu */
-export function isContactOnlyProduct(p: { category?: string | null } | null | undefined): boolean {
-  return BATTERY_CONTACT_ONLY && isBatteryCategory(p?.category)
+/** Ürün çevrim içi satılmıyor mu: teklifle satılan ürün (lib/sale-mode.ts) ya da akü / batarya kısıtı */
+export function isContactOnlyProduct(p: { category?: string | null; saleMode?: string | null } | null | undefined): boolean {
+  return isQuoteOnly(p) || (BATTERY_CONTACT_ONLY && isBatteryCategory(p?.category))
 }
 
 /** Sepet satırı (id = ürün id veya ürün-varyant) iletişimle satılıyor mu (desi.json akü işareti) */

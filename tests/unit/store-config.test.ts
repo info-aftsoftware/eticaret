@@ -37,7 +37,7 @@ test('kupon + havale birlikte, toplam indirim ara toplamı aşamaz', () => {
 test('kargo: iki kaynağın en ucuzu (ayrıntılı testler shipping-quote.test.ts)', () => {
   assert.equal(shippingFeeFor({ desi: 0, kg: 0 }), 99) // Navlungo PTT 1–2 desi
   const l = cartLogistics([{ id: 'yok', quantity: 3 }])
-  assert.deepEqual(l, { desi: 0, kg: 0, desiExact: 0, heavyPieces: 0, heavyKgPieces: 0, battery: false })
+  assert.deepEqual(l, { desi: 0, kg: 0, desiExact: 0, heavyPieces: 0, heavyKgPieces: 0, battery: false, hasInstall: false, installOnly: false })
 })
 
 test('negatif / sıfır girişler güvenli', () => {
@@ -63,4 +63,16 @@ test('havale son ödeme anı: 3 gün sonrasının sonu, İstanbul saatiyle', () 
   assert.equal(bankTransferDeadline('2026-10-01T12:00:00Z').toISOString(), '2026-10-04T20:59:59.999Z')
   // 02.10 01:30 İstanbul (UTC hâlâ 01.10) → 05.10 sonu
   assert.equal(bankTransferDeadline('2026-10-01T22:30:00Z').toISOString(), '2026-10-05T20:59:59.999Z')
+})
+
+test('kurulumlu ürün (şarj istasyonu) kargo ücretine girmez; yalnızca o varsa kargo 0', () => {
+  const station = 'aft-pro-v2-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw-aftprov290'
+  const only = cartLogistics([{ id: station, quantity: 2 }])
+  assert.equal(only.installOnly, true)
+  assert.equal(shippingFeeFor(only), 0)
+  const mixed = cartLogistics([{ id: station, quantity: 1 }, { id: 'tommatech-450wp-dark-series-16bb-topcon-gunes-paneli', quantity: 1 }])
+  assert.equal(mixed.installOnly, false)
+  assert.equal(mixed.hasInstall, true)
+  assert.equal(mixed.desi, cartLogistics([{ id: 'tommatech-450wp-dark-series-16bb-topcon-gunes-paneli', quantity: 1 }]).desi)
+  assert.ok(shippingFeeFor(mixed) > 0)
 })
