@@ -142,8 +142,10 @@ export function buildProductsSnapshot(all: StorefrontProduct[], query: ProductsQ
     specs: {},
     sort: query.sort ?? 'newest',
   })
+  const lastPage = Math.max(1, Math.ceil(filtered.length / PRODUCTS_PER_PAGE))
+  const start = (Math.min(query.page ?? 1, lastPage) - 1) * PRODUCTS_PER_PAGE
   return {
-    products: filtered.slice(0, PRODUCTS_PER_PAGE).map(toCardItem),
+    products: filtered.slice(start, start + PRODUCTS_PER_PAGE).map(toCardItem),
     total: filtered.length,
     brands: getBrands(all),
     subCategories: Array.from(new Set(all.map((p) => p.category))),

@@ -285,6 +285,11 @@ export function Pagination({
 }) {
   const pages = Math.max(1, Math.ceil(total / pageSize))
   if (total === 0) return null
+  // Yeni sayfa listenin başından başlar
+  const go = (p: number) => {
+    onPage(p)
+    window.scrollTo({ top: 0, behavior: 'auto' })
+  }
   const from = (page - 1) * pageSize + 1
   const to = Math.min(total, page * pageSize)
   const nums: (number | '…')[] = []
@@ -298,7 +303,7 @@ export function Pagination({
         <span className="font-medium text-[#20384e] tabular-nums">{from}–{to}</span> / {total}
       </span>
       <div className="flex items-center gap-1">
-        <Btn size="xs" variant="ghost" disabled={page <= 1} onClick={() => onPage(page - 1)} aria-label="Önceki sayfa">
+        <Btn size="xs" variant="ghost" disabled={page <= 1} onClick={() => go(page - 1)} aria-label="Önceki sayfa">
           <ChevronLeft />
         </Btn>
         {nums.map((n, i) =>
@@ -308,7 +313,7 @@ export function Pagination({
             <button
               key={n}
               type="button"
-              onClick={() => onPage(n)}
+              onClick={() => go(n)}
               className={cn(
                 'min-w-[28px] h-7 px-1.5 rounded-md text-xs font-medium tabular-nums',
                 n === page ? 'bg-[#0b2540] text-white' : 'text-[#20384e] hover:bg-[#f1f4f8]'
@@ -319,7 +324,7 @@ export function Pagination({
             </button>
           )
         )}
-        <Btn size="xs" variant="ghost" disabled={page >= pages} onClick={() => onPage(page + 1)} aria-label="Sonraki sayfa">
+        <Btn size="xs" variant="ghost" disabled={page >= pages} onClick={() => go(page + 1)} aria-label="Sonraki sayfa">
           <ChevronRight />
         </Btn>
       </div>
