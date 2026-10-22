@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
@@ -63,6 +63,7 @@ export function HeaderInnerBody() {
   const cartTotal = useCartStore((state) => state.getTotalPrice())
   const cartItemsCount = React.useMemo(() => cartItems.reduce((t, i) => t + i.quantity, 0), [cartItems])
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
   const { user, isAuthenticated, logout } = useAuthStore()
   const [searchQuery, setSearchQuery] = useState('')
@@ -74,7 +75,7 @@ export function HeaderInnerBody() {
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const searchAbortRef = useRef<AbortController | null>(null)
-  const cartTotalFormatted = fmtPrice(cartTotal, currency, rates?.rates ?? null)
+  const cartTotalFormatted = fmtPrice(cartTotal, currency, rates?.rates ?? null, numberLocale)
 
   const navGroups = useMemo(() => buildNavGroups(categoriesWithProducts), [categoriesWithProducts])
   const navLinks = [
@@ -158,7 +159,7 @@ export function HeaderInnerBody() {
     mobileMenuOpen,
     setMobileMenuOpen,
     cartItemsCount: mounted ? cartItemsCount : 0,
-    cartTotalFormatted: mounted ? cartTotalFormatted : fmtPrice(0, currency, null),
+    cartTotalFormatted: mounted ? cartTotalFormatted : fmtPrice(0, currency, null, numberLocale),
     currency,
     exchangeRates: rates?.rates ?? null,
     user: mounted ? user : null,

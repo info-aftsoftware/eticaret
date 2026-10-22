@@ -106,7 +106,7 @@ function CartLine({
                 {itemName || L('Ürün', 'Product')}
               </Link>
               <p className="mt-1 text-xs text-[#5d6e80]">
-                {formatPrice(grossPrice(item.price))} {L('/ adet', '/ unit')} <span className="text-[#9aa8b6]">· {L('KDV dahil', 'incl. VAT')}</span>
+                {formatPrice(grossPrice(item.price))} {L('/ adet', '/ unit')} <span className="text-[#9aa8b6]">· {L('KDV dahil', 'VAT incl.')}</span>
               </p>
               {status?.campaign && <p className="mt-0.5 text-xs font-medium text-[#b42318]">{status.campaign}</p>}
               {item.isCustom && (
@@ -162,7 +162,7 @@ function CartLine({
             </div>
             <div className="text-right">
               <p className="text-base font-bold tabular-nums text-[#121926]">{formatPrice(grossPrice(item.price * item.quantity))}</p>
-              <p className="text-[11px] text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</p>
+              <p className="text-[11px] text-[#5d6e80]">{L('KDV dahil', 'VAT incl.')}</p>
               {max != null && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">{L(`Son ${max} adet`, `Only ${max} left`)}</p>}
             </div>
           </div>
@@ -211,8 +211,9 @@ export default function CartPage() {
   const L = useL()
   const tErr = useServerError()
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const { items, clearCart, getTotalPrice, getTotalItems, _hasHydrated } = useCartStore()
   const { isAuthenticated } = useAuthStore()
   const { status, priceChanges, blocking } = useCartValidation()
@@ -379,7 +380,7 @@ export default function CartPage() {
     `mt-0.5 h-5 w-5 shrink-0 rounded border-[#d3d9e1] text-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/30 ${err ? 'border-red-400' : ''}`
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={`${getTotalItems()} ${t('itemsCount')}`}>
+    <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={t('itemsCount', { count: getTotalItems() })}>
       <div className="grid min-w-0 max-w-full grid-cols-1 gap-5 pb-safe lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
         <div className="min-w-0 space-y-5">
           {batteryItems.length > 0 && (

@@ -36,8 +36,10 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   const [searchQuery, setSearchQuery] = useState('')
 
   const currency = useCurrencyStore((s) => s.currency)
+
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
 
   // Güncel katalog (admin fiyat/stok düzenlemeleri + aktif kampanyalar); ilk çizim için koddaki liste
   const [catalog, setCatalog] = useState<MockProduct[]>(mockProducts)
@@ -176,7 +178,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
             <div className="absolute inset-0 flex items-center justify-center p-0">
               <Image
                 src={meta.image}
-                alt={meta.title}
+                alt={title}
                 fill
                 className="object-contain"
                 style={{ objectPosition: meta.imagePosition ?? 'center center' }}

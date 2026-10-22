@@ -264,8 +264,9 @@ export default function CheckoutPage() {
   const tErr = useServerError()
   const router = useRouter()
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const cartItems = useCartStore((state) => state.items)
   const catalogLocale = toCatalogLocale(useLocale())
   const cartTotal = useCartStore((state) => state.getTotalPrice())
@@ -757,7 +758,7 @@ export default function CheckoutPage() {
           <div className="min-w-0 flex-1">
             <p className="line-clamp-2 text-sm font-medium leading-snug text-[#121926]">{lineItemName(item, catalogLocale)}</p>
             {item.selectedVariant?.label && <p className="mt-0.5 text-xs text-[#5d6e80]">{item.selectedVariant.label}</p>}
-            <p className="mt-0.5 text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `${item.quantity} pcs`)} × {formatPrice(item.price)}</p>
+            <p className="mt-0.5 text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `Qty ${item.quantity}`)} × {formatPrice(item.price)}</p>
           </div>
           <span className="shrink-0 text-sm font-semibold text-[#121926] tabular-nums">{formatPrice(item.price * item.quantity)}</span>
         </li>

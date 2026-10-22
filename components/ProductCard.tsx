@@ -63,6 +63,7 @@ export function ProductCard({
   const product = { ...rawProduct, name: productName(rawProduct, locale), description: productDescription(rawProduct, locale) }
   const selectedVariant = rawSelectedVariant && { ...rawSelectedVariant, label: variantLabel(rawProduct.id, rawSelectedVariant, locale) }
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
   const addItem = useCartStore((s) => s.addItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
@@ -165,7 +166,7 @@ export function ProductCard({
 
   const hasRealImage = Boolean(product.image && !imageError && !product.image.includes('placeholder'))
   const displayPrice = selectedVariant ? selectedVariant.price : product.price
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const showOldPrice = !selectedVariant && !!oldPrice && oldPrice > displayPrice
 
   const btnBase = `inline-flex w-full items-center justify-center gap-1.5 rounded-lg font-semibold transition-colors touch-manipulation ${

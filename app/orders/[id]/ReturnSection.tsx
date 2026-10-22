@@ -100,7 +100,7 @@ export function ReturnSection({
             {r.status === 'REJECTED' && r.rejectReason && <p className="text-red-700">{L('Gerekçe:', 'Reason:')} {r.rejectReason}</p>}
             {r.status === 'REFUNDED' && r.refundAmount != null && (
               <p className="text-green-700">
-                {L(`${r.refundAmount.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })} ödeme yaptığınız yönteme iade edildi.`, `${r.refundAmount.toLocaleString('en-GB', { style: 'currency', currency: 'TRY' })} has been refunded to your original payment method.`)}
+                {L(`${r.refundAmount.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })} ödeme yaptığınız yönteme iade edildi.`, `${r.refundAmount.toLocaleString('en-US', { style: 'currency', currency: 'TRY', currencyDisplay: 'narrowSymbol' })} has been refunded to your original payment method.`)}
               </p>
             )}
           </div>
@@ -110,7 +110,7 @@ export function ReturnSection({
           <div className="space-y-2">
             {returns?.canWithdraw && returns.withdrawalUntil && (
               <p className="text-gray-600">
-                {L('Cayma hakkınızı', 'You can exercise your right of withdrawal without giving a reason until')} <strong>{returns.withdrawalUntil.toLocaleDateString(L('tr-TR', 'en-GB'), { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
+                {L('Cayma hakkınızı', 'You can exercise your right of withdrawal without giving a reason until')} <strong>{returns.withdrawalUntil.toLocaleDateString(L('tr-TR', 'en-US'), { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
                 {L(' tarihine kadar gerekçe göstermeden kullanabilirsiniz.', '.')}
               </p>
             )}

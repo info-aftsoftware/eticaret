@@ -27,4 +27,6 @@ test('hafta sonu verilen sipariş pazartesi kargoda', () => {
 test('tarih aralığı biçimi', () => {
   assert.equal(formatDeliveryRange(new Date('2026-10-16T00:00:00Z'), new Date('2026-10-20T00:00:00Z')), '16–20 Ekim')
   assert.equal(formatDeliveryRange(new Date('2026-10-30T00:00:00Z'), new Date('2026-11-03T00:00:00Z')), '30 Ekim – 3 Kasım')
+  assert.equal(formatDeliveryRange(new Date('2026-10-16T00:00:00Z'), new Date('2026-10-20T00:00:00Z'), 'en'), 'October 16–20')
+  assert.equal(formatDeliveryRange(new Date('2026-10-30T00:00:00Z'), new Date('2026-11-03T00:00:00Z'), 'en'), 'October 30 – November 3')
 })

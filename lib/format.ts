@@ -87,25 +87,29 @@ export type RatesMap = { TRY: number; USD: number; EUR: number }
 /**
  * TRY cinsinden tutarı seçilen para birimine çevirir ve formatlar.
  * rates: 1 TRY = rates.USD USD, 1 TRY = rates.EUR EUR
+ * locale 'en': İngilizce sayı biçimi (₺76,381.00); verilmezse Türkçe (₺76.381,00)
  */
 export function fmtPrice(
   amountTRY: number | undefined | null,
   currency: CurrencyCode,
-  rates: RatesMap | null
+  rates: RatesMap | null,
+  locale?: string
 ): string {
   if (amountTRY === undefined || amountTRY === null) return '-'
   const num = Number(amountTRY)
   if (isNaN(num) || !isFinite(num)) return '-'
+  const en = locale === 'en'
   if (currency === 'TRY' || !rates) {
-    return new Intl.NumberFormat('tr-TR', {
+    return new Intl.NumberFormat(en ? 'en-US' : 'tr-TR', {
       style: 'currency',
       currency: 'TRY',
+      currencyDisplay: 'narrowSymbol',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }).format(num)
   }
   const converted = num * (rates[currency] || 0)
-  return new Intl.NumberFormat(currency === 'EUR' ? 'de-DE' : 'en-US', {
+  return new Intl.NumberFormat(en ? 'en-US' : currency === 'EUR' ? 'de-DE' : 'en-US', {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,

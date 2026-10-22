@@ -719,7 +719,7 @@
     "browseAndContact": "Ürünlerimizi inceleyin. B2B siparişler için",
     "goToProducts": "Ürünlere Git",
     "cartTitle": "Alışveriş Sepeti",
-    "itemsCount": "ürün",
+    "itemsCount": "{count} ürün",
     "myCart": "Sepetim",
     "clearCart": "Sepeti Temizle",
     "subtotal": "Ara Toplam",

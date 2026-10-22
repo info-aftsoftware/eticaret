@@ -83,8 +83,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
   const product = React.useMemo(() => (rawProduct ? localizeProduct(rawProduct, locale) : null), [rawProduct, locale])
   const [loading, setLoading] = useState(!initialProduct)
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const tHeader = useTranslations('header')
   const tProduct = useTranslations('productDetail')
   const tCart = useTranslations('addToCart')
@@ -471,14 +472,14 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         {!!sp.discount && <span className="rounded bg-[#d6262c] px-1.5 py-0.5 text-[11.5px] font-bold text-white">%{sp.discount}</span>}
                         <span className="text-[12.5px] text-[#5d6e80]">
                           {sp.campaign!.name}
-                          {sp.campaign!.endsAt && ` · ${new Date(sp.campaign!.endsAt).toLocaleDateString(L('tr-TR', 'en-GB'), { day: '2-digit', month: 'long' })}${L(' tarihine kadar', '')}`}
+                          {sp.campaign!.endsAt && ` · ${new Date(sp.campaign!.endsAt).toLocaleDateString(L('tr-TR', 'en-US'), { day: '2-digit', month: 'long' })}${L(' tarihine kadar', '')}`}
                         </span>
                       </div>
                     )}
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                       <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(price)}</span>
                       <span className="text-[13px] text-[#5d6e80]">
-                        {L('KDV dahil', 'incl. VAT')} <span className="tabular-nums">{formatPrice(grossPrice(price))}</span>
+                        {L('KDV dahil', 'VAT incl.')} <span className="tabular-nums">{formatPrice(grossPrice(price))}</span>
                       </span>
                     </div>
                   </div>
@@ -514,7 +515,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       <span className="font-semibold tabular-nums">
                         {formatPrice(bankTransferGrossPrice(effectiveVariant ? effectiveVariant.price : product.price))}
                       </span>
-                      <span className="text-[#5d6e80]"> {L(`KDV dahil · %${BANK_TRANSFER_DISCOUNT_RATE} indirimli`, `incl. VAT · ${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</span>
+                      <span className="text-[#5d6e80]"> {L(`KDV dahil · %${BANK_TRANSFER_DISCOUNT_RATE} indirimli`, `VAT incl. · ${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</span>
                     </dd>
                     <dt className="text-[#5d6e80]">{contactOnly ? L('Kargo', 'Shipping') : L('Teslimat', 'Delivery')}</dt>
                     <dd>{contactOnly ? <span className="font-medium text-[#0b2540]">{L('Kargo ve nakliye için iletişime geçin', 'Contact us for shipping')}</span> : <DeliveryEstimate compact />}</dd>

@@ -133,7 +133,7 @@ function ProgressTimeline({ order }: { order: any }) {
             </span>
             <span className="min-w-0 pt-1.5 sm:pt-0">
               <span className={`block text-sm leading-tight ${done ? 'font-semibold text-[#121926]' : 'text-[#5d6e80]'}`}>{s.label}</span>
-              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date), L('tr-TR', 'en-GB')) : active ? L('Şu an', 'Now') : ''}</span>
+              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date), L('tr-TR', 'en-US')) : active ? L('Şu an', 'Now') : ''}</span>
             </span>
           </li>
         )
@@ -164,8 +164,9 @@ export default function OrderDetailPage() {
   const id = decodeURIComponent(params.id as string)
   const { user, isAuthenticated, authReady } = useAuthStore()
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const [order, setOrder] = useState<any>(null)
   const [isPrismaOrder, setIsPrismaOrder] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -183,7 +184,7 @@ export default function OrderDetailPage() {
   const L = useL()
   const catalogLocale = toCatalogLocale(useLocale())
   const tErr = useServerError()
-  const loc = L('tr-TR', 'en-GB')
+  const loc = L('tr-TR', 'en-US')
 
   /** Misafir sipariş takibi: sipariş no + e-posta + telefon birlikte doğrulanır. */
   const lookupGuestOrder = async (e: React.FormEvent) => {

@@ -70,6 +70,7 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
   const [key, setKey] = useState(initial?.key ?? '')
   const selected = product.variants.find((v) => v.key === key) ?? initial
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
   const L = useL()
   return (
@@ -85,7 +86,7 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
       >
         {product.variants.map((v) => (
           <option key={v.key} value={v.key}>
-            {v.label} — {fmtPrice(v.price, currency, rates?.rates ?? null)}
+            {v.label} — {fmtPrice(v.price, currency, rates?.rates ?? null, numberLocale)}
           </option>
         ))}
       </select>
@@ -103,8 +104,9 @@ function FavoriteCard({ id, product: rawProduct, onRemove }: { id: string; produ
   const locale = toCatalogLocale(useLocale())
   const product = rawProduct && localizeProduct(rawProduct, locale)
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (n: number) => fmtPrice(n, currency, rates?.rates ?? null)
+  const formatPrice = (n: number) => fmtPrice(n, currency, rates?.rates ?? null, numberLocale)
   const L = useL()
 
   if (!product) {

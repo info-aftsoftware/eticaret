@@ -4,6 +4,21 @@
  * İngilizcede gösterilmez (undefined döner) ve çağıran taraf kendi genel İngilizce mesajına düşer.
  */
 import { useLocale } from 'next-intl'
+import { lineItemName } from '@/lib/catalog-en'
+
+/** Mesajdaki Türkçe ürün adı ("Ürün", "Ürün (Varyant)" ya da fiyatlamadaki "Ürün - Varyant") İngilizce karşılığıyla */
+function pn(name: string): string {
+  const en = lineItemName({ name }, 'en')
+  if (en !== name) return en
+  // Ürün adında da " - " geçebilir: ayırıcı her konumda denenir
+  for (let i = name.indexOf(' - '); i >= 0; i = name.indexOf(' - ', i + 1)) {
+    const variantName = `${name.slice(0, i)} (${name.slice(i + 3)})`
+    const both = lineItemName({ name: variantName }, 'en')
+    const m = both !== variantName ? both.match(/^(.*) \((.*)\)$/) : null
+    if (m) return `${m[1]} - ${m[2]}`
+  }
+  return name
+}
 
 const EXACT: Record<string, string> = {
   'Belge oluşturulamadı': 'The document could not be generated',
@@ -70,6 +85,33 @@ const EXACT: Record<string, string> = {
   'İade talebi bulunamadı': 'Return request not found',
   'İşlem yapılamadı.': 'The action could not be completed.',
   'Şu anda işlem yapılamıyor.': 'This action is not available right now.',
+  'Geçersiz istek.': 'Invalid request.',
+  'Bir hata oluştu': 'Something went wrong',
+  'Sunucu yapılandırılmamış.': 'The server is not configured for this action.',
+  'Sunucu yapılandırma hatası.': 'Server configuration error.',
+  'Geçersiz veya süresi dolmuş token': 'Your session is invalid or has expired',
+  'Oturum bulunamadı. Lütfen giriş yapın.': 'No active session. Please sign in.',
+  'Firebase yapılandırılmamış.': 'Sign-in is not available right now.',
+  'Hesabınız oluşturuldu.': 'Your account has been created.',
+  'Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.': 'Your message has been sent. We will get back to you as soon as possible.',
+  'Teklif isteğiniz alındı. En kısa sürede size dönüş yapacağız.': 'Your quote request has been received. We will get back to you as soon as possible.',
+  'Doğrulama kaydınız alındı.': 'Your verification request has been received.',
+  'Ad, telefon ve şehir zorunludur.': 'Name, phone and city are required.',
+  'Ad soyad en az 2 karakter olmalıdır.': 'Full name must be at least 2 characters.',
+  'Geçerli bir telefon numarası girin.': 'Enter a valid phone number.',
+  'Şehir girin.': 'Enter your city.',
+  'KVKK aydınlatma metnini kabul etmeniz gerekiyor.': 'You need to accept the Personal Data Protection Notice (KVKK).',
+  'Teknik keşif için aranmayı kabul etmeniz gerekiyor.': 'You need to agree to be called for the technical site survey.',
+  'Çok fazla soru gönderdiniz. Lütfen daha sonra tekrar deneyin.': 'You have sent too many questions. Please try again later.',
+  'Çok fazla yorum gönderdiniz. Lütfen daha sonra tekrar deneyin.': 'You have sent too many reviews. Please try again later.',
+  'Başlık en fazla 200 karakter olabilir.': 'The title can be at most 200 characters.',
+  'Yıldız 1-5 arası olmalıdır': 'The rating must be between 1 and 5 stars',
+  'Soru gereklidir': 'A question is required',
+  'Soru en fazla 1000 karakter olabilir.': 'The question can be at most 1,000 characters.',
+  'Ad ve e-posta gereklidir': 'Name and email are required',
+  'Kart ödeme sayfası hazırlanamadı': 'The card payment page could not be prepared',
+  'Kart ödemesi tamamlanmadı': 'The card payment was not completed',
+  'Kart ödemesi tamamlanamadı.': 'The card payment could not be completed.',
   // Firebase giriş/kayıt hataları (lib/auth-errors.ts)
   'E-posta adresi veya şifre hatalı.': 'Incorrect email address or password.',
   'E-posta adresinizi girin.': 'Enter your email address.',
@@ -102,13 +144,13 @@ const EXACT: Record<string, string> = {
 /** Değişken içeren mesajlar: ürün adları ve sayılar olduğu gibi aktarılır */
 const PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
   [/^Sepet tutarınız güncellendi: yeni toplam (.+) TL \(önceki (.+) TL\)\. Lütfen kontrol edip siparişi yeniden onaylayın\.$/, (m) => `Your cart total has changed: new total ${m[1]} TL (previously ${m[2]} TL). Please review and confirm your order again.`],
-  [/^"(.+)" için bir seçenek \(model\) seçmelisiniz\. Lütfen ürünü sepetten çıkarıp seçenekle yeniden ekleyin\.$/, (m) => `You must choose an option (model) for "${m[1]}". Please remove the product from your cart and add it again with an option.`],
-  [/^"(.+)" için en fazla (\d+) adet iade edilebilir\.$/, (m) => `At most ${m[2]} of "${m[1]}" can be returned.`],
-  [/^"(.+)" için stokta yalnızca (\d+) adet var\.$/, (m) => `Only ${m[2]} of "${m[1]}" are in stock.`],
-  [/^"(.+)" için stokta yalnızca (\d+) adet var\. Lütfen adedi azaltın\.$/, (m) => `Only ${m[2]} of "${m[1]}" are in stock. Please reduce the quantity.`],
-  [/^"(.+)" şu anda stokta yok\. Lütfen sepetinizden çıkarın\.$/, (m) => `"${m[1]}" is currently out of stock. Please remove it from your cart.`],
-  [/^"(.+)" çevrim içi sipariş edilemiyor\. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin\.$/, (m) => `"${m[1]}" cannot be ordered online. For batteries, please contact us about shipping and delivery.`],
-  [/^(.+) için fiyat bilgisi bulunamadı\.$/, (m) => `No price is available for ${m[1]}.`],
+  [/^"(.+)" için bir seçenek \(model\) seçmelisiniz\. Lütfen ürünü sepetten çıkarıp seçenekle yeniden ekleyin\.$/, (m) => `You must choose an option (model) for "${pn(m[1])}". Please remove the product from your cart and add it again with an option.`],
+  [/^"(.+)" için en fazla (\d+) adet iade edilebilir\.$/, (m) => `At most ${m[2]} of "${pn(m[1])}" can be returned.`],
+  [/^"(.+)" için stokta yalnızca (\d+) adet var\.$/, (m) => `Only ${m[2]} of "${pn(m[1])}" are in stock.`],
+  [/^"(.+)" için stokta yalnızca (\d+) adet var\. Lütfen adedi azaltın\.$/, (m) => `Only ${m[2]} of "${pn(m[1])}" are in stock. Please reduce the quantity.`],
+  [/^"(.+)" şu anda stokta yok\. Lütfen sepetinizden çıkarın\.$/, (m) => `"${pn(m[1])}" is currently out of stock. Please remove it from your cart.`],
+  [/^"(.+)" çevrim içi sipariş edilemiyor\. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin\.$/, (m) => `"${pn(m[1])}" cannot be ordered online. For batteries, please contact us about shipping and delivery.`],
+  [/^(.+) için fiyat bilgisi bulunamadı\.$/, (m) => `No price is available for ${pn(m[1])}.`],
   [/^Bu kupon en az (.+) TL \(KDV hariç\) alışverişlerde geçerlidir\.$/, (m) => `This coupon is valid for orders of at least ${m[1]} TL (excluding VAT).`],
   [/^Ödemesi bekleyen (\d+) siparişiniz var\./, (m) => `You have ${m[1]} orders awaiting payment. Please complete or cancel their payment before placing a new order.`],
   [/^(.+) ile giriş yapılamadı\. Lütfen tekrar deneyin\.$/, (m) => `Sign-in with ${m[1]} failed. Please try again.`],

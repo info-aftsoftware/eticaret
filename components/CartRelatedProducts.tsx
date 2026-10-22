@@ -25,8 +25,9 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
   const L = useL()
   const catalogLocale = toCatalogLocale(useLocale())
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const addItem = useCartStore((s) => s.addItem)
 
   // Sepetteki kategorilere göre tamamlayıcı ürün ID'lerini topla

@@ -39,11 +39,11 @@ const trMetadata: Metadata = {
 /** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
 export function generateMetadata(): Promise<Metadata> {
   return localizedMetadata(trMetadata, {
-    title: 'Energy Packages: Cabin, Villa, Caravan, Irrigation, Marine',
+    title: 'Energy Packages: Cabin, Villa, RV, Irrigation, Marine',
     description:
-      'Ready-made solar energy packages for cabins, villas, caravans, agricultural irrigation and marine use. Panels, inverters and batteries are matched to your needs.',
+      'Ready-made solar energy packages for cabins, villas, RVs, agricultural irrigation and marine use. Panels, inverters and batteries are matched to your needs.',
     shareTitle: 'Energy Packages | voltekno',
-    shareDescription: 'Ready-made solar energy packages for cabins, villas, caravans, irrigation and marine use.',
+    shareDescription: 'Ready-made solar energy packages for cabins, villas, RVs, irrigation and marine use.',
   })
 }
 

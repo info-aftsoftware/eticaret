@@ -52,7 +52,7 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 | Konu | Not |
 |---|---|
 | Ortak klasörde başkasına ait commit'lenmemiş değişiklikler | ✅ 21.10.2026: Codex'in değişiklikleri gözden geçirilip `9b73f14` olarak commit'lendi; klasörde bekleyen değişiklik kalmadı |
-| İngilizce katalog | İki eski çalışma kopyasında yarım iş var: `.claude/worktrees/admiring-mahavira-309b7b` (68 dosya) ve `awesome-greider-503600` (34 dosya), ikisi de 19.10'dan beri commit'lenmemiş. Devam mı, silme mi kararı sizde |
+| İngilizce katalog | ✅ 22.10.2026: `admiring-mahavira-309b7b` kopyasındaki çalışma (`awesome-greider-503600`'ün üst kümesi) `ingilizce-tam` dalına taşındı ve tamamlandı (aşağıda "İngilizce site"). İki eski kopya klasörü duruyor; artık gerekmiyor, silme kararı sizde |
 | Eski dallar | `claude/crazy-feynman` (Nisan), `seo-alan-adi` (ana dala birleşti; klasörü `../voltekno-seo`), eski bir stash. Temizlenebilir |
 | Repo temizliği | Kökteki büyük zip'ler ve geçici dosyalar (`YAPILACAKLAR.md` 295) |
 
@@ -63,6 +63,17 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 - `npm audit`: 7 yüksek açığın hepsi `braces`, yalnızca derleme araçlarında; çözüm Tailwind 4 geçişi. SQLite → PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek var.
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
+
+## İngilizce site (22.10.2026, dal `ingilizce-tam`; canlıda değil)
+Dil seçicide "English" seçilince sitenin tamamı İngilizce; Türkçe varsayılan kalır. Dil, her istekte `NEXT_LOCALE` çerezinden sunucuda seçilir (statik üretilen ürün, kategori, blog, yasal ve paket sayfaları dahil; aynı adreste Türkçe/İngilizce önbellek karışması yok, denendi).
+| Alan | Kaynak | Not |
+|---|---|---|
+| Ürün adı, kısa açıklama, varyant, teknik özellik, HTML açıklama (340 ürün) | `lib/catalog/en/*.json`, `lib/catalog-en/` | Excel içe aktarımı bu dosyalara dokunmaz. Türkçe metin değişince ilgili kayıt "eskimiş" sayılır: `npm run catalog:en -- check` → `extract <klasör>` → çeviri → `merge <klasör>`. Panelde elle değiştirilmiş ürün metni çevrilmez, Türkçe görünür |
+| Yasal metinler (8 belge) | `lib/legal/documents.en.json` | Sitede ve sepet/ödeme pencerelerinde İngilizce, üstünde "bağlayıcı olan Türkçe metindir" notu. Sözleşme PDF'i, onay kayıtları ve fatura Türkçe kalır. `documents.json` değişirse İngilizcesi de güncellenmeli |
+| Blog (6 yazı), ürün türü sayfaları (29), marka tanıtımları | `lib/blog-posts-en.ts`, `lib/seo/product-types-en.ts`, `lib/seo/brands.ts` (`aboutEn`) | Tür ve marka sayfaları SEO commit'lerine bağlı; SEO'suz yayın dalına alınırken bu kısımlar ayıklanmalı |
+| Arayüz, hata mesajları | `messages/en.json`, `useL`, `lib/server-error-i18n.ts` | Sunucunun Türkçe hata mesajları ürün adlarıyla birlikte İngilizceye çevrilir |
+| E-postalar | Sipariş/ödeme/kargo/iade, hesap, stok, terk edilen sepet, soru yanıtı | Siparişin / talebin verildiği dilde (`Order.locale`, `StockAlert.locale`, `CartSnapshot.locale`, `StoreQuestion.locale`). Yönetici e-postaları Türkçe |
+Fiyat ifadesi İngilizcede yalnızca "VAT incl.". Yazım ABD İngilizcesi. Doğrulama: `tests/flows.spec.ts` "İngilizce sayfalarda Türkçe metin" (vitrin, 11 ürün, kategori/tür/marka, sepet, ödeme, yasal, blog sayfaları + ödeme penceresi ve sepete ekleme).
 
 ## Sipariş iyileştirmeleri (21.10.2026, `d53730b`, `c1b9c28`; canlıda `f1025fa`)
 | Konu | Nasıl çalışıyor |

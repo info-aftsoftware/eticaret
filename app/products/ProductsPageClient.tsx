@@ -46,8 +46,10 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
   const catalogLocale = toCatalogLocale(useLocale())
 
   const currency = useCurrencyStore((s) => s.currency)
+
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
 
   const [filterOpen, setFilterOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState(query.q)

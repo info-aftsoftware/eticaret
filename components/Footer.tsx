@@ -151,11 +151,11 @@ export function Footer() {
             <ul className="space-y-0">
               {[
                 { href: legalHref('mesafeli-satis-sozlesmesi'), label: L('Mesafeli Satış Sözleşmesi', 'Distance Sales Agreement') },
-                { href: legalHref('on-bilgilendirme-formu'), label: L('Ön Bilgilendirme Formu', 'Pre-Information Form') },
+                { href: legalHref('on-bilgilendirme-formu'), label: L('Ön Bilgilendirme Formu', 'Preliminary Information Form') },
                 { href: legalHref('gizlilik-ve-cerez-politikasi'), label: L('Gizlilik ve Çerez Politikası', 'Privacy & Cookie Policy') },
-                { href: legalHref('kvkk'), label: L('KVKK Aydınlatma Metni', 'Personal Data (KVKK) Notice') },
+                { href: legalHref('kvkk'), label: L('KVKK Aydınlatma Metni', 'Personal Data Protection Notice (KVKK)') },
                 { href: legalHref('acik-riza-metni'), label: L('Açık Rıza Metni', 'Explicit Consent') },
-                { href: legalHref('ticari-elektronik-ileti-onayi'), label: L('Ticari Elektronik İleti Onayı', 'Commercial Message Consent') },
+                { href: legalHref('ticari-elektronik-ileti-onayi'), label: L('Ticari Elektronik İleti Onayı', 'Commercial Electronic Messages') },
                 { href: legalHref('uyelik-ve-kullanim-kosullari'), label: L('Üyelik ve Kullanım Koşulları', 'Membership & Terms of Use') },
                 { href: '/hakkimizda', label: t('about') },
               ].map((item) => (

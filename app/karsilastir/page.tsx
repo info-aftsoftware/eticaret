@@ -41,8 +41,9 @@ export default function ComparePage() {
   const remove = useCompareStore((s) => s.remove)
   const addItem = useCartStore((s) => s.addItem)
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const price = (n: number) => fmtPrice(n, currency, rates?.rates ?? null)
+  const price = (n: number) => fmtPrice(n, currency, rates?.rates ?? null, numberLocale)
   const [products, setProducts] = useState<P[] | null>(null)
   const [onlyDiff, setOnlyDiff] = useState(false)
 
@@ -112,7 +113,7 @@ export default function ComparePage() {
               </thead>
               <tbody className="divide-y divide-palette">
                 <tr>
-                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Fiyat (KDV dahil)', 'Price (incl. VAT)')}</th>
+                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Fiyat (KDV dahil)', 'Price (VAT incl.)')}</th>
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
                       {p.oldPrice && <span className="block text-xs text-slate-400 line-through">{price(p.oldPrice * (1 + VAT_RATE / 100))}</span>}

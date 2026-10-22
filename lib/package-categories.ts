@@ -34,7 +34,7 @@
 export const PACKAGE_CATEGORIES: PackageCategory[] = [
   {
     slug: 'bag-evi-paketleri',
-    en: { shortTitle: 'Country House', description: 'Off-grid solar packages for country and holiday homes.', faq: [{ question: 'What power range is the country house package suitable for?', answer: 'Starter options between 1 kWp and 3 kWp are recommended depending on consumption. Our team analyses your needs and determines the right capacity.' }, { question: 'How does it perform in winter?', answer: 'Although sunshine hours are shorter in winter, the right panel and battery combination easily covers basic needs such as lighting and charging.' }, { question: 'How long does installation take?', answer: 'Small country house systems can usually be installed in one working day. Delivery time to remote locations is planned separately.' }] },
+    en: { shortTitle: 'Country House', description: 'Off-grid solar packages for country and vacation homes.', faq: [{ question: 'What power range is the country house package suitable for?', answer: 'Starter options between 1 kWp and 3 kWp are recommended depending on consumption. Our team analyzes your needs and determines the right capacity.' }, { question: 'How does it perform in winter?', answer: 'Although sunshine hours are shorter in winter, the right panel and battery combination easily covers basic needs such as lighting and charging.' }, { question: 'How long does installation take?', answer: 'Small country house systems can usually be installed in one working day. Delivery time to remote locations is planned separately.' }] },
     title: 'Bağ Evi Paketleri',
     shortTitle: 'Bağ Evi',
     image: '/images/packages/custom/bahce.jpg',
@@ -92,7 +92,7 @@ export const PACKAGE_CATEGORIES: PackageCategory[] = [
   },
   {
     slug: 'karavan-paketleri',
-    en: { shortTitle: 'Caravan', description: 'Portable energy packages for caravans and mobile living.', faq: [{ question: 'Is a fixed roof installation required on the caravan?', answer: 'Fixed or portable panels can be used depending on your needs. Portable panels can be positioned in different locations towards the sun.' }, { question: 'Does the package work independently of the grid?', answer: 'Yes. A power station and solar panel combination easily provides several days of independent use.' }, { question: 'Are there weight and size limits?', answer: 'Caravan packages are chosen with low weight as a priority. A 100 W foldable panel weighs about 2–3 kg and a power station between 5 and 15 kg.' }] },
+    en: { shortTitle: 'RV', description: 'Portable energy packages for RVs and mobile living.', faq: [{ question: 'Is a fixed roof installation required on the RV?', answer: 'Fixed or portable panels can be used depending on your needs. Portable panels can be positioned in different locations towards the sun.' }, { question: 'Does the package work independently of the grid?', answer: 'Yes. A power station and solar panel combination easily provides several days of independent use.' }, { question: 'Are there weight and size limits?', answer: 'RV packages are chosen with low weight as a priority. A 100 W foldable panel weighs about 2–3 kg and a power station between 5 and 15 kg.' }] },
     title: 'Karavan Paketleri',
     shortTitle: 'Karavan',
     image: '/images/packages/custom/karavan.webp',
