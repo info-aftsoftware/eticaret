@@ -64,6 +64,22 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
 
+## AFT Power ürünleri (22.10.2026, `f50a456`, canlıda değil)
+Kaynak: AFT Power ürün föyleri ve fiyat listesi (kullanıcıdan). Ürünler `scripts/data/extra-products.json`'dan içe aktarıcıyla gelir (Excel'de değiller); mevcut 338 ürünün hiçbiri değişmedi, katalog 347 ürün.
+
+| Ürün | Seçenekler | Satış |
+|---|---|---|
+| AFT DC Hızlı Şarj İstasyonu (Grid Core) | 45 / 90 / 135 / 180 kW: 9.712,50 / 11.224,50 / 14.437,50 / 15.697,50 $ | Satın alınır |
+| AFT PRO DC Hızlı Şarj İstasyonu | 90 / 180 / 270 kW: 17.325 / 23.625 / 27.825 $ | Satın alınır; **föyü ve fotoğrafı yok** (yer tutucu görsel, kısa açıklama) |
+| AFT PRO V2 DC Hızlı Şarj İstasyonu (Grid Pulse Gen2) | 90 / 180 / 270 kW: 18.375 / 24.675 / 28.875 $ | Satın alınır |
+| AFT Güç Katmanı modüler enerji depolama, 5,4 kWh LFP batarya, 2,7 kWh LFP batarya, 5,4 kWh tekerlekli, 2,7 kWh çanta tip ve 2,7 kWh güç paketi | — | Teklifle |
+
+- **Fiyat:** USD fiyatlar katalogdaki diğer ürünler gibi KDV hariç kabul edildi ve günlük kurla TL'ye çevriliyor (45 kW ≈ 480 bin TL + KDV). KDV dahil fiyatlar verildiyse `extra-products.json`'da düzeltilmeli.
+- **Şarj istasyonu (satın alınır):** ürün sayfası, sepet, ödeme ve sipariş zaman çizelgesinde "Kurulum ve nakliye fiyata dahil değildir; siparişinizden sonra sizinle iletişime geçeriz". Kargo ücretine girmez; sepette yalnızca istasyon varsa kargo "Ayrıca planlanır" (0 TL). Ürün şemasında fiyat var, kargo bilgisi yok; Merchant akışına girmez.
+- **Teklifli ürün:** fiyat yerine "Fiyat için teklif alın", ürün sayfasında WhatsApp (hazır mesaj), telefon, e-posta ve iletişim formu; sepete eklenemez, sunucu siparişi reddeder, şemada fiyat yok, fiyata göre sıralamada sona düşer, fiyat filtresi onu elemez.
+- **Görseller:** föylerdeki ürün fotoğrafları kırpılıp zemini beyaza çekildi (`public/images/products/override/aft-*.webp`).
+- **Doğrulama:** birim testleri 131/131 (yeni: kurulumlu ürün kargoya girmiyor), Playwright 100 geçti / 0 kaldı (yeni `tests/sale-mode.spec.ts`), yerelde istasyon siparişi kargo 0 ile açıldı ve teklifli ürün siparişi reddedildi.
+
 ## İstek turu 7 (22.10.2026, `1273400`..`9079788`; canlıda `953b9ba`)
 | İstek | Yapılan |
 |---|---|
