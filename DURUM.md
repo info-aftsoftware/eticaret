@@ -1,11 +1,11 @@
 # Proje Durumu — Voltekno e-ticaret
 
-_Son güncelleme: 21.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
+_Son güncelleme: 22.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
 **Canlıda (nextfirststep.com, son yayın `f1025fa`, 21.10.2026, SEO hariç):** profesyonel seviye (yönetici rolleri, 2FA, işlem kaydı, izleme, yedek, CSV aktarımları, toplu kargo), açık tema ve varsayılan Türkçe, Geliver + Navlungo kargo fiyatı kıyası, Navlungo gönderi entegrasyonu (kimlik bilgisi girilene kadar kapalı), Geliver kargo takibi (`GELIVER_API_TOKEN` Hostinger'a eklenince çalışır), akü/batarya için iletişimle satış, tamamlanan desiler ve görseller, teslimat tahmini, sipariş tekrar koruması ve fiyat değişimi onayı, kısmi iadelerde kargo iadesi.
 
-**Kodda hazır, canlıda değil:** yalnızca SEO (`9ad9119`, `6a30301`, `5122e7a`), "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+**Kodda hazır, canlıda değil:** 22.10 turu (aşağıda "İstek turu 6"): mobil hero ve paket kartları, yorumu yalnızca alıcıya açma, sayfalama/gezinme kuralları, açılır menünün taşmaması, yönetim girişi düzeltmesi, Victron 120 V ürünlerin kaldırılması, akü metninin kısalması, resmî kaynaklı desiler. SEO (`9ad9119`, `6a30301`, `5122e7a`) "SEO yayınlamıyoruz" kararıyla bekliyor. **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
 
 ## Kalanlar (21.10.2026 kontrolü)
 _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
@@ -41,9 +41,9 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 | Diğer | Banka sanal POS, e-Arşiv entegratörü, SMS, pazaryeri (Trendyol/Hepsiburada), ERP/muhasebe, Sentry, Meta Pixel kararı, kapıda ödeme kararı |
 
 **5. Katalog ve veri (tedarikçi)**
-- Barkod/GTIN boş (Merchant Center görünürlüğünü sınırlar). Excel'deki silinmiş görseller 20.10'da tamamlandı; hâlâ eksik: Apex APX2440 gerçek fotoğrafı, Frecon 450 kW dolap fotoğrafı.
-- Teyitler (E11): Deye model kuşağı, Electrozirve = SRNE, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, Havensis "Solar-80AMPS 45A", İstabreeze kanat seti ağırlığı. Desiler 20.10'da tamamlandı (eksik kalmadı), 46 üründe hâlâ tahmin; ilk sevkiyatlarda koli ölçüsü ve brüt ağırlık alınmalı.
-- **Victron MultiPlus-II 48/3000 ve Blue Smart IP67 24/8** katalogda 120 V sürüm (21.10'da üretici belgesiyle doğrulandı: VICTRO-PMP482305102-01465 AC girişi 90–140 V / 60 Hz, VICTRO-BPC240815106-01536 NEMA 5-15 fiş). Türkiye şebekesine (230 V / 50 Hz) uygun değil; 230 V sürümüyle değiştirilmeli ya da satıştan kaldırılmalı, karar sizde.
+- Barkod/GTIN boş: ikas Excel'inde `Barkod Listesi` sütunu var ama 562 satırın hiçbiri dolu değil (ayrıntı "İstek turu 6"). Fotoğrafı hâlâ olmayanlar: Apex APX2440 (internetteki tüm görseller APX2420'nin fotoğrafı ya da etiketi rötuşlanmış kopyası) ve Frecon PV500 450 kW (940×1684 mm kabin; resmî kaynaklarda fotoğrafı yok, şu an 315 kW duvar tipi gövde görseli kullanılıyor, bu yanlış gövde). İkisi için gerçek fotoğraf tedarikçiden istenmeli.
+- Teyitler (E11), 22.10'da resmî kaynaklarla bakıldı: HAVENS-00620'nin gerçek akımı 45A (adındaki "80AMPS" yanlış); Electrozirve'de 40A DC-DC yalnızca çift yönlü, EC12-12 ailesinde yalnızca 20A var (ELECTR-00517 40A, ELECTR-00518 60A ve tek yönlü 40A ELECTR-00521 teyit edilmeli); Havensis 1300W UPS'in trafolu olup olmadığı ve ağırlığı yayımlanmamış; Electrozirve şarj kontrol cihazları SRNE OEM'i, DC-DC şarj cihazları Havensis OEM'i. Deye model kuşağı, Apex/NP ölçüleri, Exelon ELH-24/PMAX-12P, İstabreeze kanat seti ağırlığı açık. Desi: 114 tahmini SKU'dan 6'sı resmî kaynakla güncellendi, gerisi için üretici ağırlık yayımlamıyor; ilk sevkiyatlarda koli ölçüsü ve brüt ağırlık alınmalı.
+- ✅ 22.10: Victron MultiPlus-II 48/3000 (120 V, UL 1741) ve Blue Smart IP67 24/8 (NEMA 5-15) satıştan kaldırıldı (`scripts/data/delisted.json`; katalog 338 ürün).
 - Büyük ve tehlikeli gönderiler: 490 kg ısı pompası, büyük sürücüler, türbinler (ambar/palet). **Akü/batarya gönderim kısıtları** (lityum UN3480, jel akü) Navlungo/Geliver ve kargo firmalarıyla konuşulmalı; o zamana kadar aküler sitede iletişimle satılıyor (21.10'dan beri canlıda).
 
 **6. voltekno.com geçişi:** aşağıda "voltekno.com geçişi" (SEO kararı, DNS, ortam değişkenleri, Firebase, e-posta, Search Console).
@@ -63,6 +63,22 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 - `npm audit`: 7 yüksek açığın hepsi `braces`, yalnızca derleme araçlarında; çözüm Tailwind 4 geçişi. SQLite → PostgreSQL paylaşımlı barındırmada yok; WAL + sunucu dışı yedek var.
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
+
+## İstek turu 6 (22.10.2026, `fe166ff`..`eb657ae`, canlıda değil)
+| İstek | Yapılan |
+|---|---|
+| Akü kutusunda bu kadar detay olmasın | Kutuda yalnızca "Kargo ve nakliye için iletişime geçin" başlığı ve iletişim düğmeleri; kargo sayfası ve sunucu mesajı da tek cümle |
+| Mobilde hero ve "Hangi İhtiyaç İçin?" kartları | Hero: başlık iki satır, sarı düğme 150 px, noktalar düğmenin sağında, boşluk yok; sulama görselinde ürünlerin tamamı görünür. Paket kartları mobilde iki sütun, kare, başlık taşmıyor, son kart tam genişlik. 25 sayfa 320 px'te tarandı, yatay taşma yok |
+| Satın almayan değerlendirme yapamasın, formu bile görmesin | Form yalnızca giriş yapmış ve ürünü teslim almış üyeye görünür, ürün başına bir değerlendirme. Misafire "Değerlendirmeleri yalnızca bu ürünü satın alan müşterilerimiz yazabilir. Giriş yapın", alıcı olmayan üyeye "satın alıp teslim aldıktan sonra" notu. Sunucu misafiri 401, alıcı olmayanı 403, ikinci yorumu 409 ile reddeder (`/api/products/[id]/reviews/eligibility`) |
+| Victron 120 V ürünler | Satıştan kaldırıldı (`scripts/data/delisted.json`, içe aktarıcı bu SKU'ları atlar) |
+| Yeni sayfa en baştan başlasın, klasik kurallar | Ürün listesinde sayfa değişince en üste dönülür; sayfa numarası adreste (`?page=3`): geri tuşu önceki sayfaya, yenileme ve paylaşılan bağlantı aynı sayfaya gider; sunucu istenen sayfayı çizer. Filtre/arama/sıralama değişince 1. sayfa. Uzun listede `1 … 6 7 8 … 15`. Yönetim panelinde de sayfa değişince başa dönülür. Sayfa geçişlerini ortadan başlatan genel yumuşak kaydırma kaldırıldı |
+| Açılır menü hiçbir boyutta kesilmesin | Kategori menüsü açılınca ölçülüp ekranın içine kaydırılır, dar ekranda daralır; 1025–1920 px arası 9 genişlikte her menü testte açılıp ölçülüyor |
+| Yönetim girişi (e-posta + ana şifre "hatalı") | Canlıda henüz kişisel yönetici hesabı yok; e-posta yazılınca sistem o hesabı arıyordu. Artık kişisel hesabı olmayan e-postayla ana şifre girilirse ana şifre girişi sayılır; yanlış şifre yine reddedilir. Yayına kadar canlıda e-posta alanı boş bırakılarak girilir |
+| Eksik fotoğraflar, tahmini desiler, teyitler | Üç resmî kaynak araştırması: Victron kablo/aksesuarlarında ağırlık yayımlanmıyor (fiyat listesinde bile boş); TommaTech, Apex, Havensis, NP Power ürünlerinin çoğunda resmî ağırlık yok. Electrozirve DC-DC 30A/40A (3 SKU) ve TommaTech 48V 200A duvar tipi şarj ünitesi resmî değerle güncellendi. Daha düşük güçlü kardeş modelden gelen ve tahmini düşürecek değerler kullanılmadı. Fotoğraflar ve teyit cevapları yukarıda "Kalanlar 5" |
+
+**GTIN (barkod) gerekli mi:** Site çalışması ve yasal açıdan zorunlu değil. Google Merchant Center'da üreticinin barkodu olan ürünlerde GTIN beklenir; yoksa ücretsiz listeleme ve alışveriş reklamlarında görünürlük sınırlanır (şu an akış "tanımlayıcı yok" bildiriyor). Trendyol/Hepsiburada gibi pazaryerlerinde barkod zorunlu. Eklemek için ikas Excel'indeki `Barkod Listesi` sütunu (kutu etiketindeki 13 haneli EAN) doldurulur; içe aktarıcı ve akış o sütunu okuyacak şekilde ayarlanır (henüz okumuyor). Victron'un resmî ürün sayfalarında GTIN-13 yayımlanıyor, Victron ürünleri oradan otomatik doldurulabilir.
+
+**Doğrulama:** tip kontrolü ve lint temiz, birim testleri 122/122, derleme temiz, Playwright (akış testleri dahil) 98 geçti / 0 kaldı; yeni testler: `tests/reviews.spec.ts`, `tests/navigation.spec.ts`, `tests/unit/pagination.test.ts`.
 
 ## Sipariş iyileştirmeleri (21.10.2026, `d53730b`, `c1b9c28`; canlıda `f1025fa`)
 | Konu | Nasıl çalışıyor |
