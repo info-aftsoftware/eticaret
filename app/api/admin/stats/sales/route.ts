@@ -43,19 +43,23 @@ export async function GET(request: NextRequest) {
       days = 30
     }
 
+    // İptal ve iade edilen siparişler ciroya, sipariş sayısına ve en çok satanlara girmez; yalnızca durum dağılımında görünür
+    const counted = { createdAt: { gte: startDate }, status: { notIn: ['CANCELLED' as const, 'RETURNED' as const] } }
+
     // Paralel sorgular
     const [orders, orderLines, statusCounts] = await Promise.all([
       prisma.order.findMany({
-        where: { createdAt: { gte: startDate } },
+        where: counted,
         select: { id: true, total: true, createdAt: true, status: true },
         orderBy: { createdAt: 'asc' },
       }),
       prisma.orderLine.findMany({
-        where: { order: { createdAt: { gte: startDate } } },
+        where: { order: counted },
         select: { productName: true, quantity: true, lineTotal: true, unitPrice: true },
       }),
       prisma.order.groupBy({
         by: ['status'],
+        where: { createdAt: { gte: startDate } },
         _count: { _all: true },
         _sum: { total: true },
       }),
