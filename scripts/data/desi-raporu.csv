@@ -91,7 +91,7 @@ TOMMAT-SRJTTACMBL72V40A-00218;TommaTech Mobil Tip Batarya Şarj Ünitesi (24V / 
 TOMMAT-SRJTTACDVR24V100A-00219;TommaTech Duvar Tipi Batarya Şarj Ünitesi;24V 100A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;41.5 x 33.7 x 11.2;12.4;13;product
 TOMMAT-SRJTTACDVR48V100A-00220;TommaTech Duvar Tipi Batarya Şarj Ünitesi;48V 100A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;41.5 x 33.7 x 11.2;14.5;15;description
 TOMMAT-SRJTTACDVR48V150A-00221;TommaTech Duvar Tipi Batarya Şarj Ünitesi;48V 150A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;51 x 39.9 x 13.2;18;18;product
-TOMMAT-SRJTTACDVR48V200A-00222;TommaTech Duvar Tipi Batarya Şarj Ünitesi;48V 200A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;55 x 42 x 20;28;28;estimate
+TOMMAT-SRJTTACDVR48V200A-00222;TommaTech Duvar Tipi Batarya Şarj Ünitesi;48V 200A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;70 x 56.2 x 12.9;32;32;series
 TOMMAT-SRJTTACDVR72V40A-00223;TommaTech Duvar Tipi Batarya Şarj Ünitesi;72V 40A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;41.5 x 33.7 x 11.2;12;12;series
 TOMMAT-SRJTTACDVR80V80A-00224;TommaTech Duvar Tipi Batarya Şarj Ünitesi;80V 80A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;50 x 40 x 18;22;22;series
 TOMMAT-SRJTTACDVR80V100A-00225;TommaTech Duvar Tipi Batarya Şarj Ünitesi;80V 100A Duvar Tipi Batarya Şarj Ünitesi;TommaTech;Akü Şarj Cihazı;70 x 56.2 x 12.9;24;24;product
@@ -340,9 +340,9 @@ NPPOWE-00515;NP Power Akü Şarj Cihazı (12V / 24V, 10A - 30A);NP1230 12V 30A A
 ELECTR-00516;Electrozirve EC12-12 12V DC-DC Akü Şarj Cihazı;20A DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;22 x 16 x 9;1;2;estimate
 ELECTR-00517;Electrozirve EC12-12 12V DC-DC Akü Şarj Cihazı;40A DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;26 x 19 x 10;1.7;2;estimate
 ELECTR-00518;Electrozirve EC12-12 12V DC-DC Akü Şarj Cihazı;60A DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;30 x 21 x 11;2.4;3;estimate
-ELECTR-00519;Electrozirve Tek Yönlü DC-DC Akü Şarj Cihazı (30A / 40A);30A Tek Yönlü DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;24 x 18 x 11;1.8;2;estimate
-ELECTR-00521;Electrozirve Tek Yönlü DC-DC Akü Şarj Cihazı (30A / 40A);40A Tek Yönlü DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;26 x 19 x 11;2.2;3;estimate
-ELECTR-00520;Electrozirve 30A Çift Yönlü DC-DC Akü Şarj Cihazı;;Electrozirve;Akü Şarj Cihazı;24 x 18 x 11;2;2;estimate
+ELECTR-00519;Electrozirve Tek Yönlü DC-DC Akü Şarj Cihazı (30A / 40A);30A Tek Yönlü DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;19.4 x 13.2 x 6.1;1.4;2;product
+ELECTR-00521;Electrozirve Tek Yönlü DC-DC Akü Şarj Cihazı (30A / 40A);40A Tek Yönlü DC-DC Akü Şarj Cihazı;Electrozirve;Akü Şarj Cihazı;20 x 14 x 8.5;1.4;2;product
+ELECTR-00520;Electrozirve 30A Çift Yönlü DC-DC Akü Şarj Cihazı;;Electrozirve;Akü Şarj Cihazı;19.4 x 13.2 x 6.1;1.4;2;product
 APEX-00528;Apex 80A Otomatik Transfer Switch;;Apex;Solar Transfer Switch;25 x 20 x 12;1.5;2;estimate
 EXELON-EXS320024-00529;Exelon EXS Serisi 24V Akıllı İnverter (3,2 kW / 4,2 kW);EXS-3200/24 3,2 kW 24V Akıllı İnverter;Exelon;Tam Sinüs MPPT Akıllı İnverter;43.5 x 33.5 x 16.5;5.8;9;package
 EXELON-EXS420024-00530;Exelon EXS Serisi 24V Akıllı İnverter (3,2 kW / 4,2 kW);EXS-4200/24 4,2 kW 24V Akıllı İnverter;Exelon;Tam Sinüs MPPT Akıllı İnverter;40 x 41.5 x 11;9;9;package

@@ -1,0 +1,13 @@
+{
+ "TOMMAT-SRJTTACDVR48V200A-00222": {
+  "dimsCm": [
+   70,
+   56.2,
+   12.9
+  ],
+  "weightKg": 32,
+  "basis": "series",
+  "source": "https://cw-enerji.com/images/down_file/tommatech-batarya-sarj-unitesi-duvar-tipi-80v-200a-1550-tr.pdf",
+  "note": "48V 200A için ayrı resmî föy yok. Aynı duvar tipi seride aynı akım sınıfındaki SRJ-TT-AC-DVR-80V-200A (çıkış 30-100 VDC, 200 A, 20 kW, 3 faz giriş) föy s.2 Teknik Veriler/Sistem: Boyutlar 700x562x129 mm, Ağırlık 32 kg (ürün, kutusuz)."
+ }
+}
