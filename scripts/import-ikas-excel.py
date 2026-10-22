@@ -487,6 +487,13 @@ def main():
         and r[COL_CHANNEL] in ('', 'VISIBLE')
         and r[COL_VARIANT_ACTIVE] not in ('0', 'false')
     ]
+    # Satıştan kaldırılan SKU'lar (scripts/data/delisted.json)
+    with open(os.path.join(ROOT, 'scripts', 'data', 'delisted.json'), encoding='utf-8') as f:
+        delisted = {k for k in json.load(f) if not k.startswith('_')}
+    dropped = [r[COL_SKU] for r in rows if r[COL_SKU] in delisted]
+    rows = [r for r in rows if r[COL_SKU] not in delisted]
+    if dropped:
+        print(f'Satıştan kaldırılan {len(dropped)} SKU atlandı: {", ".join(dropped)}')
     print(f'{len(rows)} satır okundu')
 
     try:

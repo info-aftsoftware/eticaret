@@ -1,0 +1,5 @@
+{
+  "_aciklama": "Satıştan kaldırılan SKU'lar: içe aktarıcı (scripts/import-ikas-excel.py) bu satırları Excel'de olsalar da almaz. Tüm varyantları kalkan ürün katalogdan çıkar. Değer: neden ve karar tarihi.",
+  "VICTRO-PMP482305102-01465": "120 V / 60 Hz sürüm (AC giriş 90-140 V, UL 1741); Türkiye şebekesine (230 V / 50 Hz) uygun değil. 22.10.2026 kararıyla satıştan kaldırıldı",
+  "VICTRO-BPC240815106-01536": "120 V sürüm (NEMA 5-15 fiş); Türkiye şebekesine uygun değil. 22.10.2026 kararıyla satıştan kaldırıldı"
+}
