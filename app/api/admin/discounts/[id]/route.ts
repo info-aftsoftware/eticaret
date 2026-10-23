@@ -54,6 +54,8 @@ export async function PATCH(
       scope,
       categoryName,
       productIds,
+      brandName,
+      groupId,
       type,
       value,
       startDate,
@@ -64,13 +66,15 @@ export async function PATCH(
     const data: Record<string, unknown> = {}
     if (name !== undefined) data.name = String(name)
     if (scope !== undefined) {
-      if (!['ALL', 'CATEGORY', 'PRODUCT'].includes(scope)) {
+      if (!['ALL', 'CATEGORY', 'PRODUCT', 'BRAND', 'GROUP'].includes(scope)) {
         return NextResponse.json({ error: 'Geçersiz scope' }, { status: 400 })
       }
       data.scope = scope
     }
     if (categoryName !== undefined) data.categoryName = categoryName
     if (productIds !== undefined) data.productIds = Array.isArray(productIds) ? productIds : Prisma.JsonNull
+    if (brandName !== undefined) data.brandName = brandName ? String(brandName).trim() : null
+    if (groupId !== undefined) data.groupId = groupId ? String(groupId) : null
     if (type !== undefined) {
       if (!['PERCENT', 'FIXED'].includes(type)) {
         return NextResponse.json({ error: 'Geçersiz type' }, { status: 400 })
@@ -92,6 +96,12 @@ export async function PATCH(
       (data.endDate !== undefined ? data.endDate : current.endDate) as Date | null
     )
     if (rangeError) return NextResponse.json({ error: rangeError }, { status: 400 })
+    const nextScope = (data.scope ?? current.scope) as string
+    if (nextScope === 'BRAND' && !((data.brandName !== undefined ? data.brandName : current.brandName) as string | null)) return NextResponse.json({ error: 'Marka seçin.' }, { status: 400 })
+    if (nextScope === 'GROUP') {
+      const gid = (data.groupId !== undefined ? data.groupId : current.groupId) as string | null
+      if (!gid || !(await prisma.productGroup.findUnique({ where: { id: gid } }))) return NextResponse.json({ error: 'Ürün grubu bulunamadı.' }, { status: 400 })
+    }
 
     const discount = await prisma.discount.update({
       where: { id },

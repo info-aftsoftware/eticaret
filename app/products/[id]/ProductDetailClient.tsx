@@ -518,7 +518,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 )}
                 <dt className="text-[#5d6e80]">{L('Stok', 'Stock')}</dt>
                 <dd className={`font-semibold ${outOfStock ? 'text-[#d6262c]' : isLowStock ? 'text-amber-700' : 'text-emerald-700'}`}>
-                  {outOfStock ? tProduct('soldOut') : isLowStock ? tProduct('lowStock', { stock }) : tProduct('inStock')}
+                  {product.salesClosed ? L('Satışa kapalı', 'Not for sale') : outOfStock ? tProduct('soldOut') : isLowStock ? tProduct('lowStock', { stock }) : tProduct('inStock')}
                 </dd>
                 {!outOfStock && !quoteOnly && (
                   <>
@@ -543,7 +543,12 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 )}
               </dl>
 
-              {outOfStock && !quoteOnly && <div className="mt-5"><StockAlertForm productId={product.id} /></div>}
+              {product.salesClosed && (
+                <p className="mt-5 rounded-lg border border-[#e6ebf1] bg-[#f5f7fa] px-3 py-2.5 text-[13px] text-[#20384e]">
+                  {L('Bu ürün şu anda satışa kapalı. Bilgi için bizimle iletişime geçebilirsiniz.', 'This product is currently not for sale. Please contact us for details.')}
+                </p>
+              )}
+              {outOfStock && !quoteOnly && !product.salesClosed && <div className="mt-5"><StockAlertForm productId={product.id} /></div>}
 
               {installShipping && (
                 <p className="mt-5 rounded-lg border border-[#d6e2ef] bg-[#f5f8fc] px-3.5 py-2.5 text-[13px] leading-relaxed text-[#20384e]" role="note">

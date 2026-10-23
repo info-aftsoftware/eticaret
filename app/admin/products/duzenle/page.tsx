@@ -71,6 +71,7 @@ type Product = {
   specifications?: Record<string, string>
   priceMode?: PriceMode
   variantStock?: boolean
+  salesClosed?: string
   dimensionsCm?: number[]
   weightKg?: number
   packageCount?: number
@@ -124,13 +125,15 @@ type Form = {
   weightKg: string
   packageCount: string
   saleMode: 'normal' | 'install' | 'quote'
+  /** Satışa kapalı: sitede görünür, satın alınamaz */
+  salesClosed: boolean
 }
 
 /** price: TL (sabit TL modunda girilir); base: döviz fiyatı (dövize bağlı modda girilir); stock: ayrı varyant stoğu */
 type VariantRow = { key: string; label: string; sku: string; price: string; base: string; stock: string; extra: Record<string, unknown> }
 type SpecRow = { id: number; k: string; v: string }
 
-const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal' }
+const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal', salesClosed: false }
 
 const SALE_MODE_OPTIONS = [
   ['normal', 'Kargo ile gönderilir'],
@@ -173,6 +176,7 @@ function toForm(p: Product): Form {
     weightKg: p.weightKg != null ? String(p.weightKg) : '',
     packageCount: String(p.packageCount ?? 1),
     saleMode: p.saleMode === 'install' || p.saleMode === 'quote' ? p.saleMode : 'normal',
+    salesClosed: !!p.salesClosed,
   }
 }
 
@@ -319,6 +323,7 @@ function Editor() {
     if (str('slogan') !== o.form.slogan.trim()) body.slogan = str('slogan')
     if (str('warranty') !== o.form.warranty.trim()) body.warranty = str('warranty')
     if (form.featured !== o.form.featured) body.featured = form.featured
+    if (form.salesClosed !== o.form.salesClosed) body.salesClosed = form.salesClosed
     // Fiyat: modu açıkça gönderilir; dövize bağlıda döviz fiyatı, sabit TL'de TL fiyatı (A05)
     if (form.priceMode !== o.form.priceMode) body.priceMode = form.priceMode
     if (form.priceMode === 'fx') {
@@ -753,6 +758,12 @@ function Editor() {
                   </div>
                 )}
               </Field>
+              {!isNew && (
+                <div className="md:col-span-2">
+                  <Checkbox checked={form.salesClosed} onChange={(v) => set('salesClosed', v)} label="Satışa kapalı" />
+                  <p className="text-xs text-[#5d6e80] mt-1 ml-6">Ürün sitede görünür ama satın alınamaz. Ürün grubu sayfasından kapatılan gruplar ayrıca orada açılır.</p>
+                </div>
+              )}
               <Checkbox className="md:col-span-2" checked={form.featured} onChange={(v) => set('featured', v)} label={<span className="inline-flex items-center gap-1.5"><Star className="w-4 h-4 text-[#e0a500]" />Ana sayfada öne çıkar</span>} />
             </div>
           </Panel>

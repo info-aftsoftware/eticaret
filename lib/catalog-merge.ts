@@ -82,6 +82,7 @@ function applyOverride(base: MergedProduct, override: OverrideRow, rates?: TryRa
     base.desiSource = 'panel'
   }
   if (override.status === 'draft') base.status = 'draft'
+  if (override.salesClosed) base.salesClosed = 'Satışa kapalı'
   // Varyant görselleri (A17): panelde varyant anahtarıyla atanır; boş dizi o varyantta genel galeri demektir
   if (override.variantImages && typeof override.variantImages === 'object' && !Array.isArray(override.variantImages) && base.variants?.length) {
     const map = override.variantImages as Record<string, unknown>

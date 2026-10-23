@@ -102,6 +102,8 @@ export interface MockProduct {
   packageCount?: number
   /** Yayın durumu: 'draft' panelde hazırlanıyor, vitrinde görünmez (A08) */
   status?: 'draft'
+  /** Satışa kapalı (ürün grubu kapatıldı veya grup silinirken kapatıldı): nedeni; vitrinde stoksuz görünür, sipariş reddedilir */
+  salesClosed?: string
 }
 
 /** Eksik ürün görselleri için placeholder */

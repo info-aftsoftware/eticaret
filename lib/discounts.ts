@@ -1,6 +1,7 @@
 /**
  * Kampanya motoru — admin "İndirimler" (Prisma Discount) kayıtlarını mağaza fiyatlarına uygular.
- * Kapsam: ALL (tüm ürünler) | CATEGORY (kategori adı) | PRODUCT (ürün id listesi)
+ * Kapsam: ALL (tüm ürünler) | CATEGORY (kategori adı) | PRODUCT (ürün id listesi) | BRAND (marka) | GROUP (ürün grubu:
+ * tek tek ürünler + marka + kategori, üyelik dinamik; lib/product-groups)
  * Tür: PERCENT (yüzde) | FIXED (KDV hariç birim fiyattan TL)
  * Bir ürüne birden fazla kampanya uyuyorsa müşteri için en avantajlısı uygulanır (kampanyalar toplanmaz).
  * Admin kataloğu indirimsiz taban fiyatla çalışır; mağaza, sipariş fiyatlandırması ve ürün akışı getStorefront* kullanır.
@@ -8,6 +9,8 @@
 
 import { prisma } from '@/lib/prisma'
 import { getMergedProducts, getMergedProductById, type MergedProduct } from '@/lib/catalog-merge'
+import { closedByGroups, closingGroupName } from '@/lib/product-groups-db'
+import { groupRules, isGroupMember, type GroupRules } from '@/lib/product-groups'
 
 export type ActiveCampaign = {
   id: string
@@ -15,6 +18,9 @@ export type ActiveCampaign = {
   scope: string
   categoryName: string | null
   productIds: string[]
+  brandName: string | null
+  /** GROUP kapsamında grubun kuralları */
+  group: GroupRules | null
   type: 'PERCENT' | 'FIXED'
   value: number
   endDate: Date | null
@@ -45,14 +51,21 @@ export async function getActiveCampaigns(): Promise<ActiveCampaign[]> {
       ],
     },
   })
+  // GROUP kampanyalarının grupları (silinmiş grup kampanyası uygulanmaz)
+  const groupIds = [...new Set(rows.map((d) => d.groupId).filter(Boolean) as string[])]
+  const groups = groupIds.length ? await prisma.productGroup.findMany({ where: { id: { in: groupIds } } }) : []
+  const groupMap = new Map(groups.map((g) => [g.id, groupRules(g)]))
   const list: ActiveCampaign[] = rows
     .filter((d) => (d.type === 'PERCENT' || d.type === 'FIXED') && d.value > 0)
+    .filter((d) => d.scope !== 'GROUP' || (d.groupId && groupMap.has(d.groupId)))
     .map((d) => ({
       id: d.id,
       name: d.name,
       scope: d.scope,
       categoryName: d.categoryName,
       productIds: Array.isArray(d.productIds) ? (d.productIds as unknown[]).map(String) : [],
+      brandName: d.brandName,
+      group: d.groupId ? groupMap.get(d.groupId) ?? null : null,
       type: d.type as 'PERCENT' | 'FIXED',
       value: d.value,
       endDate: d.endDate,
@@ -70,6 +83,8 @@ function applies(c: ActiveCampaign, p: MergedProduct): boolean {
   if (c.scope === 'ALL') return true
   if (c.scope === 'CATEGORY') return !!c.categoryName && p.category === c.categoryName
   if (c.scope === 'PRODUCT') return c.productIds.includes(p.id)
+  if (c.scope === 'BRAND') return !!c.brandName && p.brand === c.brandName
+  if (c.scope === 'GROUP') return !!c.group && isGroupMember(c.group, p)
   return false
 }
 
@@ -103,12 +118,25 @@ export function applyCampaigns(p: MergedProduct, campaigns: ActiveCampaign[]): S
 export async function getStorefrontProducts(): Promise<StorefrontProduct[]> {
   const [all, campaigns] = await Promise.all([getMergedProducts(), getActiveCampaigns()])
   const products = all.filter((p) => p.status !== 'draft')
-  return campaigns.length ? products.map((p) => applyCampaigns(p, campaigns)) : products
+  const closed = await closedByGroups(products)
+  const open = products.map((p) => closeSales(p, closed.get(p.id)))
+  return campaigns.length ? open.map((p) => applyCampaigns(p, campaigns)) : open
+}
+
+/**
+ * Satışa kapalı ürün (grup kapatıldı veya ürün kapatıldı): vitrinde stoksuz görünür (kart, sepet ve sipariş korumaları
+ * mevcut stok kuralıyla çalışır), ürün sayfası ve sipariş "satışa kapalı" der. Panel verisi (getMergedProducts) etkilenmez.
+ */
+function closeSales<T extends MergedProduct>(p: T, groupName?: string): T {
+  const reason = p.salesClosed ?? (groupName ? `Satışa kapalı (${groupName})` : undefined)
+  if (!reason) return p
+  return { ...p, salesClosed: reason, stock: 0, variants: p.variants?.map((v) => (typeof v.stock === 'number' ? { ...v, stock: 0 } : v)) }
 }
 
 /** Vitrin ürünü; taslak ürün yalnız `includeDraft` ile (yönetici önizlemesi) döner */
 export async function getStorefrontProductById(id: string, opts: { includeDraft?: boolean } = {}): Promise<StorefrontProduct | null> {
   const [product, campaigns] = await Promise.all([getMergedProductById(id), getActiveCampaigns()])
   if (!product || (product.status === 'draft' && !opts.includeDraft)) return null
-  return campaigns.length ? applyCampaigns(product, campaigns) : product
+  const open = closeSales(product, (await closingGroupName(product)) ?? undefined)
+  return campaigns.length ? applyCampaigns(open, campaigns) : open
 }

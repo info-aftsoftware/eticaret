@@ -88,6 +88,7 @@ const PRODUCT_AUDIT_LABELS: Record<string, string> = {
   desi: 'Desi',
   saleMode: 'Satış biçimi',
   status: 'Yayın durumu',
+  salesClosed: 'Satışa kapalı',
 }
 
 type VariantRecord = Record<string, unknown> & { key: string; label: string; basePrice?: number }
@@ -385,6 +386,8 @@ export async function PATCH(
     if (tags !== undefined) data.tags = Array.isArray(tags) ? tags : Prisma.JsonNull
     if (slogan !== undefined) data.slogan = slogan
     if (warranty !== undefined) data.warranty = warranty
+    // Satışa kapalı (ürün grubu silinirken kapatılan katalog ürünü tek tek yeniden açılabilir)
+    if (body.salesClosed !== undefined) data.salesClosed = body.salesClosed === true ? true : null
 
     // ── Fiyatlandırma modu (A05) ───────────────────────────────────────────
     const pricing = resolvePricing({ before, source, body: { price, priceMode, basePrice }, data })

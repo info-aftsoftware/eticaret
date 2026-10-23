@@ -144,6 +144,10 @@ export async function priceOrder(
     if (!resolved) throw new PricingError('Sepetteki bir ürün artık satışta değil. Lütfen sepetinizi güncelleyin.')
     const { product, variantKey } = resolved
     // Akü / batarya: kargo kısıtları kontrol edilene kadar çevrim içi satılmaz (lib/shipping/battery.ts)
+    // Satışa kapalı ürün (ürün grubu kapatıldı): sipariş verilemez
+    if (product.salesClosed) {
+      throw new PricingError(`"${product.name}" şu anda satışa kapalı. Lütfen sepetinizden çıkarın.`)
+    }
     if (isQuoteOnly(product)) {
       throw new PricingError(`"${product.name}" çevrim içi sipariş edilemiyor. Fiyat için lütfen teklif alın.`)
     }
