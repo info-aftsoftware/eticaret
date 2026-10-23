@@ -64,6 +64,22 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
 
+## Ürün grupları (23.10.2026)
+İstek: belirli ürün gruplarına hem tek tek ürün hem marka/kategori seçimiyle indirim; grup toplu satışa kapatılıp açılabilsin, silinebilsin, toplu zam yapılabilsin. Kararlar (sizden): "deaktif" = satışı durdursun (ürün sitede kalır, satın alınamaz); silme = grup + gruptaki panel ürünleri silinir, katalog ürünleri satışa kapatılır.
+
+| Özellik | Yapılan |
+|---|---|
+| Ürün grubu | Yönetim > Katalog > **Ürün Grupları**. Grup = tek tek seçilen ürünler (arama: ad, SKU, marka, varyant) + markalar + kategoriler. Üyelik dinamik: seçilen marka/kategoriye sonradan eklenen ürün de gruba girer. Formda anlık kapsanan ürün sayısı |
+| İndirim | Grup satırında "İndirim tanımla" (yüzde en fazla %99 / sabit TL, hemen başlar). İndirimler sayfasında kampanya kapsamına **Marka bazlı** ve **Ürün grubu** eklendi. Birden fazla kampanya uyarsa müşteri için en avantajlısı (değişmedi). Silinmiş grubun kampanyası uygulanmaz |
+| Satışa kapat / aç | Gruptaki ürünler sitede görünür, "Satışa kapalı" yazar, sepete eklenemez, sunucu siparişi reddeder, Merchant akışına girmez. Panelde gerçek stok korunur. Ürün düzenleyicisinde tek ürün için "Satışa kapalı" kutusu da var |
+| Toplu zam | Yüzde (−90 … +500). Önce önizleme: ürün bazında şu an → yeni; dövize bağlı üründe döviz fiyatı (kuruş), sabit TL üründe TL fiyatı (tam TL) değişir, varyantlar birlikte, teklifli ürünler atlanır. Uygulama tek işlemde; işlem kaydına ürün bazında eski → yeni |
+| Sil | Önce etki: kalıcı silinecek panel ürünleri (adlarıyla), satışa kapatılacak katalog ürünü sayısı, silinecek grup indirimleri; "Kalıcı olarak sil" onayı (sunucu da onaysız silmeyi 409 ile reddeder). Geçmiş siparişler etkilenmez. Satışa kapatılan katalog ürünü ürün düzenleyicisinden tek tek açılır |
+
+- **Yetki:** okuma tüm roller, değişiklik Sahip/Yönetici/Editör (katalogla aynı).
+- **Veritabanı:** yeni `ProductGroup` tablosu; Discount'a `brandName`, `groupId`; ProductOverride'a `salesClosed` (hepsi boş bırakılabilir, onaysız eklenir).
+- **Doğrulama:** `tsc` temiz, birim testleri 170/170 (yeni `tests/unit/product-groups.test.ts`). Yerel uçtan uca 19/19: grup (1 ürün + Victron 64 + Jel Akü 5 = 70 ürün), boş grup 400, grup indirimi yalnız üyelere (6440 → 5796), marka indirimi, olmayan gruba indirim 400, satışa kapatınca vitrin "Satışa kapalı" ve sepet reddi (panel stoğu korunuyor), yeniden açma, zam önizlemesi fiyatı değiştirmiyor, uygulama 677,16 → 744,88 USD ve mod korunuyor, %900 400, onaysız silme 409 + etki, silmede panel ürünü 404 / katalog ürünü satışa kapalı / grup indirimi silindi, ürün düzenleyiciden tek tek açma.
+- **Sınırlar:** Satışa kapatma ürünü siteden gizlemez (bilinçli). Katalog ürünleri kalıcı silinemez (tedarikçi dosyasından gelir). Toplu zam geri alınamaz; geri almak için ters yüzde uygulanır (yuvarlama nedeniyle birebir dönmeyebilir).
+
 ## Yönetim paneli denetimi A01–A18 (23.10.2026)
 Kaynak: "Voltekno yönetim paneli detaylı denetim raporu" (23.10.2026, 18 bulgu). Raporun önerdiği sırayla ilk beş madde. Ayrı 34 maddelik müşteri tarafı listesi bu turda ele alınmadı.
 
