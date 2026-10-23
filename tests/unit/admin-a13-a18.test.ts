@@ -55,7 +55,7 @@ test('A14: bitiş başlangıçtan önce olamaz', () => {
 })
 
 test('A14: ürün fiyatını aşan sabit kampanya ürünü 0 TL yapmaz', () => {
-  const c: ActiveCampaign = { id: 'c', name: 'Dev', scope: 'ALL', categoryName: null, productIds: [], type: 'FIXED', value: 5000, endDate: null }
+  const c: ActiveCampaign = { id: 'c', name: 'Dev', scope: 'ALL', categoryName: null, productIds: [], brandName: null, group: null, type: 'FIXED', value: 5000, endDate: null }
   const p = applyCampaigns({ id: 'p', sku: 'p', name: 'Kablo', description: '', price: 515, category: 'Kablo', stock: 5, featured: false, isVariantProduct: false }, [c])
   assert.ok(p.price > 0)
 })

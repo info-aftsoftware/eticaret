@@ -55,6 +55,7 @@ export function toCardItem(p: StorefrontProduct) {
     isVariantProduct: p.isVariantProduct,
     variants: p.variants?.map((v) => ({ key: v.key, label: v.label, price: v.price, sku: v.sku })),
     saleMode: p.saleMode,
+    salesClosed: p.salesClosed,
   }
 }
 

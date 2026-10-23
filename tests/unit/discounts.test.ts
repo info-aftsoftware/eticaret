@@ -20,7 +20,7 @@ const product = {
 } as unknown as Parameters<typeof applyCampaigns>[0]
 
 const c = (over: Partial<ActiveCampaign>): ActiveCampaign => ({
-  id: 'c', name: 'Kampanya', scope: 'ALL', categoryName: null, productIds: [], type: 'PERCENT', value: 10, endDate: null, ...over,
+  id: 'c', name: 'Kampanya', scope: 'ALL', categoryName: null, productIds: [], brandName: null, group: null, type: 'PERCENT', value: 10, endDate: null, ...over,
 })
 
 test('kampanya yoksa ürün değişmez', () => {

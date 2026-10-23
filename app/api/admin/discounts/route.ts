@@ -45,6 +45,8 @@ export async function POST(request: NextRequest) {
       scope,
       categoryName,
       productIds,
+      brandName,
+      groupId,
       type,
       value,
       startDate,
@@ -58,8 +60,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    if (!['ALL', 'CATEGORY', 'PRODUCT'].includes(scope)) {
-      return NextResponse.json({ error: 'scope ALL, CATEGORY veya PRODUCT olmalı' }, { status: 400 })
+    if (!['ALL', 'CATEGORY', 'PRODUCT', 'BRAND', 'GROUP'].includes(scope)) {
+      return NextResponse.json({ error: 'scope ALL, CATEGORY, PRODUCT, BRAND veya GROUP olmalı' }, { status: 400 })
+    }
+    if (scope === 'BRAND' && !String(brandName ?? '').trim()) return NextResponse.json({ error: 'Marka seçin.' }, { status: 400 })
+    if (scope === 'GROUP' && !(groupId && (await prisma.productGroup.findUnique({ where: { id: String(groupId) } })))) {
+      return NextResponse.json({ error: 'Ürün grubu bulunamadı.' }, { status: 400 })
     }
     if (!['PERCENT', 'FIXED'].includes(type)) {
       return NextResponse.json({ error: 'type PERCENT veya FIXED olmalı' }, { status: 400 })
@@ -76,6 +82,8 @@ export async function POST(request: NextRequest) {
         scope: String(scope),
         categoryName: scope === 'CATEGORY' ? (categoryName ?? null) : null,
         productIds: scope === 'PRODUCT' && Array.isArray(productIds) ? productIds : Prisma.JsonNull,
+        brandName: scope === 'BRAND' ? String(brandName).trim() : null,
+        groupId: scope === 'GROUP' ? String(groupId) : null,
         type: String(type),
         value: Number(value),
         startDate: startDate ? new Date(startDate) : null,

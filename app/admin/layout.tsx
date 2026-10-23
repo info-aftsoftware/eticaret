@@ -6,6 +6,7 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   Package,
+  Layers,
   ShoppingCart,
   ArrowLeft,
   LayoutDashboard,
@@ -58,7 +59,10 @@ const navSections: NavSection[] = [
   },
   {
     title: 'Katalog',
-    items: [{ href: '/admin/products', label: 'Ürünler & Stok', icon: Package }],
+    items: [
+      { href: '/admin/products', label: 'Ürünler & Stok', icon: Package },
+      { href: '/admin/urun-gruplari', label: 'Ürün Grupları', icon: Layers },
+    ],
   },
   {
     title: 'Müşteri İletişimi',

@@ -44,6 +44,8 @@ type Discount = {
   scope: string
   categoryName: string | null
   productIds: string[] | null
+  brandName?: string | null
+  groupId?: string | null
   type: string
   value: number
   startDate: string | null
@@ -57,7 +59,11 @@ const SCOPE_LABELS: Record<string, string> = {
   ALL: 'Tüm ürünler',
   CATEGORY: 'Kategori bazlı',
   PRODUCT: 'Ürün bazlı',
+  BRAND: 'Marka bazlı',
+  GROUP: 'Ürün grubu',
 }
+
+type Scope = 'ALL' | 'CATEGORY' | 'PRODUCT' | 'BRAND' | 'GROUP'
 
 const TYPE_LABELS: Record<string, string> = {
   PERCENT: 'Yüzde',
@@ -77,15 +83,31 @@ export default function AdminIndirimlerPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [form, setForm] = useState({
     name: '',
-    scope: 'ALL' as 'ALL' | 'CATEGORY' | 'PRODUCT',
+    scope: 'ALL' as Scope,
     categoryName: '',
     productIds: [] as string[],
+    brandName: '',
+    groupId: '',
     type: 'PERCENT' as 'PERCENT' | 'FIXED',
     value: 10,
     startDate: '',
     endDate: '',
     active: true,
   })
+
+  // Kampanya kapsamı için ürün grupları ve markalar (Ürün Grupları API'si)
+  const [groups, setGroups] = useState<{ id: string; name: string; memberCount: number }[]>([])
+  const [brands, setBrands] = useState<string[]>([])
+  useEffect(() => {
+    fetch('/api/admin/product-groups', { credentials: 'include' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!d) return
+        setGroups(d.groups ?? [])
+        setBrands(d.brands ?? [])
+      })
+      .catch(() => {})
+  }, [])
 
   const loadDiscounts = async () => {
     try {
@@ -111,6 +133,8 @@ export default function AdminIndirimlerPage() {
       scope: 'ALL',
       categoryName: '',
       productIds: [],
+      brandName: '',
+      groupId: '',
       type: 'PERCENT',
       value: 10,
       startDate: '',
@@ -125,9 +149,11 @@ export default function AdminIndirimlerPage() {
     setEditingId(d.id)
     setForm({
       name: d.name,
-      scope: d.scope as 'ALL' | 'CATEGORY' | 'PRODUCT',
+      scope: d.scope as Scope,
       categoryName: d.categoryName ?? '',
       productIds: Array.isArray(d.productIds) ? d.productIds : [],
+      brandName: d.brandName ?? '',
+      groupId: d.groupId ?? '',
       type: d.type as 'PERCENT' | 'FIXED',
       value: d.value,
       // Kutular İstanbul saatini gösterir (önce UTC saati yerel gibi gösteriliyordu)
@@ -157,6 +183,8 @@ export default function AdminIndirimlerPage() {
         scope: form.scope,
         categoryName: form.scope === 'CATEGORY' ? form.categoryName || null : null,
         productIds: form.scope === 'PRODUCT' ? form.productIds : null,
+        brandName: form.scope === 'BRAND' ? form.brandName || null : null,
+        groupId: form.scope === 'GROUP' ? form.groupId || null : null,
         type: form.type,
         value: Number(form.value),
         startDate: start ? start.toISOString() : null,
@@ -278,6 +306,10 @@ export default function AdminIndirimlerPage() {
                             {d.categoryName}
                           </span>
                         )}
+                        {d.scope === 'BRAND' && d.brandName && <span className="block text-xs text-slate-500">{d.brandName}</span>}
+                        {d.scope === 'GROUP' && (
+                          <span className="block text-xs text-slate-500">{groups.find((g) => g.id === d.groupId)?.name ?? 'Grup silinmiş'}</span>
+                        )}
                         {d.scope === 'PRODUCT' && Array.isArray(d.productIds) && (
                           <span className="block text-xs text-slate-500">{d.productIds.length} ürün</span>
                         )}
@@ -359,7 +391,7 @@ export default function AdminIndirimlerPage() {
               <Label>Kapsam</Label>
               <Select
                 value={form.scope ?? ''}
-                onValueChange={(v) => setForm((p) => ({ ...p, scope: v as 'ALL' | 'CATEGORY' | 'PRODUCT' }))}
+                onValueChange={(v) => setForm((p) => ({ ...p, scope: v as Scope }))}
               >
                 <SelectTrigger className="mt-1">
                   <SelectValue />
@@ -368,6 +400,8 @@ export default function AdminIndirimlerPage() {
                   <SelectItem value="ALL">{SCOPE_LABELS.ALL}</SelectItem>
                   <SelectItem value="CATEGORY">{SCOPE_LABELS.CATEGORY}</SelectItem>
                   <SelectItem value="PRODUCT">{SCOPE_LABELS.PRODUCT}</SelectItem>
+                  <SelectItem value="BRAND">{SCOPE_LABELS.BRAND}</SelectItem>
+                  <SelectItem value="GROUP">{SCOPE_LABELS.GROUP}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -386,6 +420,37 @@ export default function AdminIndirimlerPage() {
                       <SelectItem key={c} value={c}>
                         {c}
                       </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {form.scope === 'BRAND' && (
+              <div>
+                <Label>Marka</Label>
+                <Select value={form.brandName ?? ''} onValueChange={(v) => setForm((p) => ({ ...p, brandName: v }))}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Marka seçin" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {brands.map((b) => (
+                      <SelectItem key={b} value={b}>{b}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {form.scope === 'GROUP' && (
+              <div>
+                <Label>Ürün grubu</Label>
+                <p className="text-xs text-slate-500">Grup; tek tek seçilen ürünler, markalar ve kategorilerden oluşur. Gruba sonradan giren ürünler de indirimi alır. Grupları “Ürün Grupları” sayfasından yönetin.</p>
+                <Select value={form.groupId ?? ''} onValueChange={(v) => setForm((p) => ({ ...p, groupId: v }))}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder={groups.length ? 'Grup seçin' : 'Henüz grup yok'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {groups.map((g) => (
+                      <SelectItem key={g.id} value={g.id}>{g.name} ({g.memberCount} ürün)</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

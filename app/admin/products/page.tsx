@@ -49,6 +49,7 @@ type CatalogRow = {
   variantStock?: boolean
   /** Panelde eklenen ürün taslakta (A08): sitede görünmez */
   status?: 'draft'
+  salesClosed?: string
 }
 
 const LOW = 5
@@ -428,6 +429,7 @@ function ProductsContent() {
                               {[p.brand, p.sku].filter(Boolean).join(' · ')}
                               {p.variants?.length ? ` · ${p.variants.length} varyant` : ''}
                               {p.status === 'draft' && ' · Taslak (sitede görünmüyor)'}
+                              {p.salesClosed && ' · Satışa kapalı'}
                             </p>
                             {matchedVariant.has(p.id) && (
                               <p className="text-xs text-[#7a5a00] truncate">

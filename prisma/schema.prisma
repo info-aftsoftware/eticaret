@@ -808,8 +808,10 @@ model StockOverride {
 model Discount {
   id           String    @id @default(cuid())
   name         String
-  scope        String    // ALL | CATEGORY | PRODUCT
+  scope        String    // ALL | CATEGORY | PRODUCT | BRAND | GROUP
   categoryName String?
+  brandName    String?   // scope BRAND
+  groupId      String?   // scope GROUP: ProductGroup.id (üyelik grubun kurallarından, dinamik)
   productIds   Json?     // ["hims-hcdkb-22", ...]
   type         String    // PERCENT | FIXED
   value        Float
@@ -882,6 +884,8 @@ model ProductOverride {
   saleMode        String?  // "install" kurulum ve nakliye ayrıca (kargoya girmez), "quote" teklifle; null normal kargo
   // Yayın durumu (A08, panelde eklenen ürünler): "draft" taslak (vitrinde, aramada, akışlarda görünmez); null yayında
   status          String?
+  // Satışa kapalı (ürün grubu silinirken katalog ürünleri için): sitede görünür, sepete eklenemez, sipariş reddedilir
+  salesClosed     Boolean?
   brand           String?
   sku             String?
   tags            Json?    // string[]
@@ -1067,4 +1071,17 @@ model MarketingConsentLog {
 
   @@index([email])
   @@index([createdAt])
+}
+
+// Ürün grubu: tek tek seçilen ürünler + marka + kategori (üyelik dinamik: seçilen marka/kategoriye sonradan eklenen ürün de girer).
+// Kampanya kapsamı olabilir (Discount.scope GROUP); satışa kapatılabilir; toplu fiyat değişikliği uygulanabilir.
+model ProductGroup {
+  id          String   @id @default(cuid())
+  name        String
+  productIds  Json?    // string[]
+  brands      Json?    // string[]
+  categories  Json?    // string[]
+  salesActive Boolean  @default(true) // false: gruptaki ürünler satışa kapalı
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
