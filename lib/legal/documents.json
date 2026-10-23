@@ -1,7 +1,7 @@
 {
   "gizlilik-ve-cerez-politikasi": {
     "title": "Gizlilik ve Çerez Politikası",
-    "updated": "02.10.2026",
+    "updated": "24.10.2026",
     "blocks": [
       {
         "t": "p",
@@ -29,7 +29,7 @@
       },
       {
         "t": "p",
-        "x": "Site'deki ödemeler, BDDK lisanslı ödeme kuruluşları ve bankaların altyapısı üzerinden 256-bit SSL şifreleme ve 3D Secure ile gerçekleştirilir. Kredi kartı bilgileriniz Şirketimiz tarafından görülmez ve saklanmaz."
+        "x": "Site'deki ödeme sayfası 256-bit SSL şifrelemeyle korunur. Havale/EFT ödemeleri doğrudan Şirketimizin banka hesabına yapılır. Kartla ödeme sunulduğunda ödemeler BDDK lisanslı ödeme kuruluşları ve bankaların altyapısı üzerinden, bankanın 3D Secure ortamında alınır; kart bilgileriniz Şirketimiz tarafından görülmez ve saklanmaz."
       },
       {
         "t": "h",
@@ -135,7 +135,7 @@
   },
   "mesafeli-satis-sozlesmesi": {
     "title": "Mesafeli Satış Sözleşmesi",
-    "updated": "18.10.2026",
+    "updated": "24.10.2026",
     "blocks": [
       {
         "t": "h",
@@ -215,7 +215,7 @@
       },
       {
         "t": "p",
-        "x": "3.5. Kredi kartı/banka kartı ile ödemeler bankanın 3D Secure ortamında alınır. Taksitli ödemeler ilgili banka ve ödeme kuruluşunun koşullarına tabidir; taksit tutarları ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
+        "x": "3.5. Ödeme yöntemleri ödeme adımında Alıcı'ya gösterilenlerdir. Kredi kartı/banka kartı ile ödeme sunulduğunda ödemeler bankanın 3D Secure ortamında alınır; taksitli ödemeler ilgili banka ve ödeme kuruluşunun koşullarına tabidir, taksit tutarları ve varsa vade farkı ödeme adımında Alıcı'ya gösterilir."
       },
       {
         "t": "h",
@@ -531,7 +531,7 @@
   },
   "on-bilgilendirme-formu": {
     "title": "Ön Bilgilendirme Formu",
-    "updated": "18.10.2026",
+    "updated": "24.10.2026",
     "blocks": [
       {
         "t": "p",
@@ -615,7 +615,7 @@
       },
       {
         "t": "p",
-        "x": "4.3. Ödeme yöntemleri: (a) Havale/EFT ile ödeme: Sipariş sonrasında Satıcı'nın banka hesap bilgileri (IBAN) ekranda ve e-posta ile iletilir; ödeme açıklamasına sipariş numarasının yazılması gerekir. Havale/EFT ile ödemelerde ara toplam üzerinden %3 indirim uygulanır. Sipariş tarihinden itibaren 3 gün içinde ödemesi alınmayan siparişler iptal edilebilir. (b) Kredi kartı / banka kartı ile ödeme: Ödeme, bankanın 3D Secure ortamında tamamlanır; kart bilgileri Satıcı tarafından saklanmaz."
+        "x": "4.3. Ödeme yöntemleri: (a) Havale/EFT ile ödeme: Sipariş sonrasında Satıcı'nın banka hesap bilgileri (IBAN) ekranda ve e-posta ile iletilir; ödeme açıklamasına sipariş numarasının yazılması gerekir. Havale/EFT ile ödemelerde ara toplam üzerinden %3 indirim uygulanır. Sipariş tarihinden itibaren 3 gün içinde ödemesi alınmayan siparişler iptal edilebilir. (b) Kredi kartı / banka kartı ile ödeme (ödeme adımında sunulduğunda): Ödeme, bankanın 3D Secure ortamında tamamlanır; kart bilgileri Satıcı tarafından saklanmaz. Kullanılabilir ödeme yöntemleri ödeme adımında gösterilir."
       },
       {
         "t": "p",

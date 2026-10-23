@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { CATEGORY_GROUPS, LEGACY_CATEGORY_REDIRECTS } from '@/lib/categories'
 import { CategoryPageClient } from './CategoryPageClient'
+import { categoryInitialProducts } from '@/lib/category-initial'
+
+/** Fiyatlar kurla değiştiği için sayfa 10 dakikada bir yeniden üretilir (ilk çizim güncel fiyatla, madde 3) */
+export const revalidate = 600
 import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
 
@@ -109,7 +113,7 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
           dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
         />
       )}
-      <CategoryPageClient id={params.id} />
+      <CategoryPageClient id={params.id} initialProducts={await categoryInitialProducts(params.id)} />
     </>
   )
 }

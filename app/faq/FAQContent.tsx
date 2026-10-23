@@ -3,6 +3,7 @@
 import React from 'react'
 import { ChevronDown } from 'lucide-react'
 import { useL } from '@/lib/i18n-inline'
+import { usePaymentMethods } from '@/lib/usePaymentMethods'
 
 const faqItems = [
   {
@@ -18,8 +19,9 @@ const faqItems = [
       {
         q: { tr: 'Hangi ödeme yöntemlerini kabul ediyorsunuz?', en: 'Which payment methods do you accept?' },
         a: {
-          tr: 'Kredi kartı, banka kartı ve havale/EFT ile ödeme alıyoruz. Fatura her müşteri için kesilir; kurumsal siparişlerde vade seçenekleri sunulabilir.',
-          en: 'We accept credit cards, debit cards and bank transfer (wire/EFT). An invoice is issued for every customer; deferred payment options may be offered for corporate orders.',
+          // {ODEME}: açık ödeme yöntemleriyle doldurulur (madde 2: kart kapalıyken kart anlatılmaz)
+          tr: '{ODEME} Fatura her müşteri için kesilir; kurumsal siparişlerde vade seçenekleri sunulabilir.',
+          en: '{ODEME} An invoice is issued for every customer; deferred payment options may be offered for corporate orders.',
         },
       },
       {
@@ -106,6 +108,10 @@ const faqItems = [
 
 export function FAQContent() {
   const L = useL()
+  const { card } = usePaymentMethods()
+  const payment = card
+    ? L('Kredi kartı ve banka kartı (bankanın 3D Secure ortamında) ile havale/EFT ile ödeme alıyoruz.', 'We accept credit and debit cards (bank 3D Secure) and bank transfer (wire/EFT).')
+    : L('Şu anda havale/EFT ile ödeme alıyoruz (havalede %3 indirim); kredi ve banka kartıyla ödeme kullanıma açıldığında ödeme sayfasında görünecek.', 'We currently accept bank transfer (wire/EFT, 3% off); card payment will appear on the checkout page once available.')
   return (
     <div className="space-y-8">
       {faqItems.map((section) => (
@@ -124,7 +130,7 @@ export function FAQContent() {
                   <ChevronDown className="w-5 h-5 text-ink-muted flex-shrink-0 transition-transform group-open:rotate-180" />
                 </summary>
                 <div className="px-5 pb-4 pt-0 text-ink-muted text-sm leading-relaxed border-t border-palette">
-                  {L(item.a.tr, item.a.en)}
+                  {L(item.a.tr, item.a.en).replace('{ODEME}', payment)}
                 </div>
               </details>
             ))}

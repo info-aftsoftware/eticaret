@@ -13,6 +13,7 @@ import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { grossPrice } from '@/lib/store-config'
 
 interface CartRelatedProductsProps {
   cartItemIds: string[]
@@ -145,9 +146,9 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
 
               <div className="flex items-center justify-between mt-2 gap-2">
                 <div>
-                  <div className="font-bold text-slate-900 text-sm">{formatPrice(product.price)}</div>
+                  <div className="font-bold text-slate-900 text-sm">{formatPrice(grossPrice(product.price))} <span className="text-[10px] font-normal text-slate-500">KDV dahil</span></div>
                   {product.oldPrice && (
-                    <div className="text-[11px] text-slate-400 line-through">{formatPrice(product.oldPrice)}</div>
+                    <div className="text-[11px] text-slate-400 line-through">{formatPrice(grossPrice(product.oldPrice))}</div>
                   )}
                 </div>
                 {(() => {

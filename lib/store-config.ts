@@ -59,6 +59,10 @@ export const round2 = (n: number) => Math.round(n * 100) / 100
 /** KDV dahil fiyat (mağaza fiyatları KDV hariç tutulur) */
 export const grossPrice = (net: number) => round2(net * (1 + VAT_RATE / 100))
 
+/** Fiyat süzgeci kutuları KDV dahil gösterir: net → tam TL KDV dahil metin, KDV dahil → net */
+export const grossInput = (net: number) => String(Math.round(grossPrice(net)))
+export const netFromGross = (gross: number) => round2(gross / (1 + VAT_RATE / 100))
+
 /** Havale/EFT ile ödemede KDV dahil fiyat (indirim KDV matrahından düşülür; computeOrderTotals ile aynı kural) */
 export const bankTransferGrossPrice = (net: number) => round2(net * (1 - BANK_TRANSFER_DISCOUNT_RATE / 100) * (1 + VAT_RATE / 100))
 

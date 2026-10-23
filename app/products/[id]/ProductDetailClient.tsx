@@ -199,6 +199,28 @@ export default function ProductDetailClient({ initialProduct, productId: product
       .filter(Boolean) as MockProduct[]
   }, [product?.id, product?.category, product?.brand])
 
+  // Öneri ve uyumlu ürünler güncel vitrin verisiyle (kur, kampanya, satış durumu; madde 3): katalog dosyasındaki
+  // içe aktarma anındaki fiyat gösterilmez, liste güncel veri gelince çizilir
+  const compatIds = React.useMemo(() => (product ? getComplementaryIds(product).filter((id) => mockProductsMap[id]).slice(0, 4) : []), [product])
+  const relatedKey = [...new Set([...recommendedProducts.map((p) => p.id), ...compatIds])].join(',')
+  const [fresh, setFresh] = useState<Record<string, MockProduct> | null>(null)
+  useEffect(() => {
+    if (!relatedKey) return
+    let cancelled = false
+    setFresh(null)
+    fetch(`/api/products?ids=${encodeURIComponent(relatedKey)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((list) => {
+        if (!cancelled) setFresh(Array.isArray(list) ? Object.fromEntries(list.map((p: MockProduct) => [p.id, p])) : {})
+      })
+      .catch(() => !cancelled && setFresh({}))
+    return () => {
+      cancelled = true
+    }
+  }, [relatedKey])
+  /** Güncel veride olmayan (satıştan kalkmış/taslak) ürün listeden düşer */
+  const live = (ids: string[]) => (fresh ? (ids.map((id) => fresh[id]).filter(Boolean) as MockProduct[]) : [])
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -452,7 +474,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         >
                           <span className="block text-[13.5px] font-medium text-[#121926] leading-snug">{v.label}</span>
                           <span className="block text-[12.5px] text-[#5d6e80] mt-0.5 tabular-nums">
-                            {formatPrice(v.price)}
+                            {formatPrice(grossPrice(v.price))}
                             {product.variantStock && (v.stock ?? 0) <= 0 && <span className="text-red-700"> · {tProduct('soldOut')}</span>}
                           </span>
                         </button>
@@ -478,7 +500,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   <div className="mt-5">
                     {old && (
                       <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <span className="text-[15px] text-[#8a99a8] line-through tabular-nums">{formatPrice(old)}</span>
+                        <span className="text-[15px] text-[#8a99a8] line-through tabular-nums">{formatPrice(grossPrice(old))}</span>
                         {!!sp.discount && <span className="rounded bg-[#d6262c] px-1.5 py-0.5 text-[11.5px] font-bold text-white">%{sp.discount}</span>}
                         <span className="text-[12.5px] text-[#5d6e80]">
                           {sp.campaign!.name}
@@ -487,10 +509,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       </div>
                     )}
                     <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(price)}</span>
-                      <span className="text-[13px] text-[#5d6e80]">
-                        {L('KDV dahil', 'incl. VAT')} <span className="tabular-nums">{formatPrice(grossPrice(price))}</span>
-                      </span>
+                      <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(grossPrice(price))}</span>
+                      <span className="text-[13px] text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</span>
                     </div>
                   </div>
                 )
@@ -617,11 +637,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
               {(() => {
                 const complementary = product.category ? COMPLEMENTARY_BY_CATEGORY[product.category] : undefined
                 if (!complementary) return null
-                const compatProducts = getComplementaryIds(product)
-                  .filter((id) => mockProductsMap[id])
-                  .slice(0, 4)
-                  .map((id) => mockProductsMap[id])
-                  .filter(Boolean) as MockProduct[]
+                const compatProducts = live(compatIds)
                 if (compatProducts.length === 0) return null
                 return (
                   <section className="mt-7" aria-labelledby="compat-heading">
@@ -639,7 +655,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                               )}
                             </span>
                             <span className="min-w-0 flex-1 text-[13px] font-medium text-[#20384e] line-clamp-2 leading-snug group-hover:text-[#0b2540]">{p.name}</span>
-                            <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{isQuoteOnly(p) ? L('Teklif alın', 'Quote') : formatPrice(p.price)}</span>
+                            <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{isQuoteOnly(p) || !(p.price > 0) ? L('Teklif alın', 'Quote') : formatPrice(grossPrice(p.price))}</span>
                           </Link>
                         </li>
                       ))}
@@ -807,9 +823,10 @@ export default function ProductDetailClient({ initialProduct, productId: product
             <div className="relative group/recommended-scroll">
               <div
                 id="recommended-scroll-container"
-                className="flex gap-4 overflow-x-auto scroll-smooth scrollbar-thin-h pb-6 snap-x snap-mandatory -mx-4 px-4 scroll-px-4 sm:-mx-6 sm:px-6 sm:scroll-px-6 md:mx-0 md:px-0 md:scroll-px-0"
+                // Güncel veri gelene kadar yer ayrılır (sayfa kaymasın)
+                className="min-h-[300px] flex gap-4 overflow-x-auto scroll-smooth scrollbar-thin-h pb-6 snap-x snap-mandatory -mx-4 px-4 scroll-px-4 sm:-mx-6 sm:px-6 sm:scroll-px-6 md:mx-0 md:px-0 md:scroll-px-0"
               >
-                {recommendedProducts.map((rec) => (
+                {live(recommendedProducts.map((r) => r.id)).map((rec) => (
                   <div key={rec.id} className="flex-none w-[200px] sm:w-[220px] md:w-[240px] snap-start">
                     <ProductCard
                       product={{
@@ -820,6 +837,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         image: rec.images?.[0] ?? rec.image,
                         category: rec.category,
                         brand: rec.brand,
+                        saleMode: rec.saleMode,
                       }}
                       oldPrice={rec.oldPrice}
                       discount={rec.discount}

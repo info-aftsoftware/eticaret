@@ -44,7 +44,8 @@ const SLIDES = [
 const FEATURES = [
   { tr: ['Orijinal ve Faturalı Ürün', 'Tüm ürünler faturalı ve garantili olarak satılır'], en: ['Genuine, Invoiced Products', 'Every product is sold with invoice and warranty'] },
   { tr: ['Özenli Paketleme, Hızlı Kargo', 'Stoktaki ürünlerde hızlı sevkiyat ve takip'], en: ['Careful Packing, Fast Shipping', 'Quick dispatch and tracking for in-stock items'] },
-  { tr: ['Güvenli Ödeme', 'Kredi ve banka kartıyla güvenli alışveriş'], en: ['Secure Payment', 'Safe shopping by credit and debit card'] },
+  // Ödeme yönteminden bağımsız doğru metin (kart ödemesi açılana kadar kart vaat edilmez, madde 2)
+  { tr: ['Güvenli Ödeme', 'SSL korumalı ödeme, havalede %3 indirim'], en: ['Secure Payment', 'SSL-protected checkout, 3% off by bank transfer'] },
   { tr: ['Uzman Teknik Destek', 'Ürün seçimi ve sistem tasarımında mühendis desteği'], en: ['Expert Technical Support', 'Engineering help with product choice and system design'] },
 ] as const
 

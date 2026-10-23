@@ -51,6 +51,7 @@ export async function GET(request: NextRequest) {
         stock: typeof p.stock === 'number' ? p.stock : null,
         variants: (p.variants ?? []).map((v) => ({ key: v.key, label: v.label, price: v.price })),
         defaultVariantKey: p.defaultVariantKey ?? null,
+        saleMode: p.saleMode ?? null,
       })
     }
     return NextResponse.json({ products, missing })

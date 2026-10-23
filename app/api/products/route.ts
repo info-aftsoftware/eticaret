@@ -17,8 +17,15 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category')
     const q = searchParams.get('q')?.trim()
     const brand = searchParams.get('brand')
+    // ids: ürün sayfasındaki öneri/uyumlu ürünler güncel fiyatla (en fazla 40)
+    const ids = searchParams.get('ids')?.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 40)
 
     let result = products
+
+    if (ids?.length) {
+      const wanted = new Set(ids)
+      result = result.filter((p) => wanted.has(p.id))
+    }
 
     if (category) {
       const decoded = decodeURIComponent(category)

@@ -15,6 +15,7 @@ import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isQuoteOnly } from '@/lib/sale-mode'
+import { grossPrice } from '@/lib/store-config'
 import { useTranslations } from 'next-intl'
 
 export interface ProductCardProduct {
@@ -89,8 +90,8 @@ export function ProductCard({
   const outOfStock = typeof stock === 'number' && stock <= 0
   // Akü / batarya: sepete eklenmez, ürün sayfasındaki iletişim kutusuna gider (lib/shipping/battery.ts)
   const contactOnly = isContactOnlyProduct(product)
-  // Teklifle satılan ürün: fiyat yerine "Fiyat için teklif alın"
-  const quoteOnly = isQuoteOnly(product)
+  // Teklifle satılan ürün ve fiyatı olmayan ürün: fiyat yerine "Fiyat için teklif alın" (hiçbir listede ₺0 görünmesin)
+  const quoteOnly = isQuoteOnly(product) || !(product.price > 0)
   const lowStock = typeof stock === 'number' && stock > 0 && stock <= 5
 
   const cartId = selectedVariant ? `${product.id}-${selectedVariant.key}` : product.id
@@ -224,9 +225,11 @@ export function ProductCard({
             ) : (
               <p className={`font-bold leading-tight text-[#121926] ${isCompact ? 'text-sm' : 'text-sm sm:text-base'}`}>
                 {showOldPrice && (
-                  <span className="block text-[11px] font-normal text-[#5d6e80] line-through">{formatPrice(oldPrice!)}</span>
+                  <span className="block text-[11px] font-normal text-[#5d6e80] line-through">{formatPrice(grossPrice(oldPrice!))}</span>
                 )}
-                <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(displayPrice)}</span>
+                {/* Ana fiyat KDV dahil: ürün sayfası ve sepetle aynı tutar */}
+                <span className={showOldPrice ? 'text-[#b42318]' : ''}>{formatPrice(grossPrice(displayPrice))}</span>
+                <span className="block text-[10px] font-normal text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</span>
               </p>
             )}
             {quoteOnly ? null : hasVariants && variantCount > 1 ? (
