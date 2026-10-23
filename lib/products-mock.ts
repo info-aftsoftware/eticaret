@@ -12,6 +12,7 @@
 import type { SaleMode } from '@/lib/sale-mode'
 import catalog from './catalog/products.json'
 import { CATEGORY_GROUPS } from './categories'
+import { isTechnicallyCompatible } from './compat'
 
 export type PriceCurrency = 'TRY' | 'USD' | 'EUR'
 
@@ -193,11 +194,12 @@ function pickComplementaryIds(categories: string[]): string[] {
  * Ürüne özel tamamlayıcı ürünler: kategorinin tamamlayıcı kategorilerinden, önce aynı markanın ürünleri
  * (ör. Victron inverter → Victron batarya), sonra diğer markalar; her kategoriden sırayla, en fazla 8.
  */
-export function getComplementaryIds(product: Pick<MockProduct, 'id' | 'category' | 'brand'>): string[] {
+export function getComplementaryIds(product: Pick<MockProduct, 'id' | 'category' | 'brand' | 'name'> & Partial<Pick<MockProduct, 'specifications' | 'variants'>>): string[] {
   const config = COMPLEMENTARY_CATEGORIES[product.category]
   if (!config) return []
   const pools = config.categories.map((c) => {
-    const inCategory = mockProducts.filter((p) => p.category === c && p.id !== product.id && p.image !== PLACEHOLDER_PRODUCT_IMAGE)
+    // Teknik uyum (madde 6): DC sistem ürünlerinde voltaj sınıfı kesişmeli (lib/compat)
+    const inCategory = mockProducts.filter((p) => p.category === c && p.id !== product.id && p.image !== PLACEHOLDER_PRODUCT_IMAGE && isTechnicallyCompatible(product, p))
     return [...inCategory.filter((p) => p.brand === product.brand), ...inCategory.filter((p) => p.brand !== product.brand)]
   })
   const ids: string[] = []

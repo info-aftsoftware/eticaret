@@ -112,6 +112,7 @@ export default function HomePageClient() {
                         image: product.image,
                         category: product.category,
                         brand: product.brand,
+                        saleMode: product.saleMode,
                       }}
                       oldPrice={product.oldPrice}
                       discount={product.discount}
@@ -153,6 +154,7 @@ export default function HomePageClient() {
                   image: product.image,
                   category: product.category,
                   brand: product.brand,
+                  saleMode: product.saleMode,
                 }}
                 oldPrice={product.oldPrice}
                 discount={product.discount}

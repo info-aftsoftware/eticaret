@@ -21,10 +21,12 @@ import { useTranslations } from 'next-intl'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
+import { grossInput, grossPrice, netFromGross } from '@/lib/store-config'
+import type { ProductListItem } from '@/lib/products-listing'
 
 type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'name-asc'
 
-export function CategoryPageClient({ id: groupId }: { id: string }) {
+export function CategoryPageClient({ id: groupId, initialProducts }: { id: string; initialProducts?: ProductListItem[] }) {
   const tCommon = useTranslations('common')
   const tProducts = useTranslations('products')
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null)
@@ -38,8 +40,9 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   const { rates } = useExchangeRates()
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
 
-  // Güncel katalog (admin fiyat/stok düzenlemeleri + aktif kampanyalar); ilk çizim için koddaki liste
-  const [catalog, setCatalog] = useState<MockProduct[]>(mockProducts)
+  // Güncel katalog (admin fiyat/stok düzenlemeleri + aktif kampanyalar). İlk çizim sunucunun verdiği güncel fiyatlarla;
+  // yalnız sunucu verisi yoksa katalog dosyası (içe aktarma anındaki kur) kullanılır
+  const [catalog, setCatalog] = useState<MockProduct[]>((initialProducts as MockProduct[] | undefined) ?? mockProducts)
   React.useEffect(() => {
     fetch('/api/products')
       .then((res) => (res.ok ? res.json() : null))
@@ -93,13 +96,13 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
   }, [productsInRange])
 
   const [priceRange, setPriceRange] = useState<[number, number]>([dynamicMinPrice, dynamicMaxPrice])
-  const [minInput, setMinInput] = useState<string>(String(dynamicMinPrice))
-  const [maxInput, setMaxInput] = useState<string>(String(dynamicMaxPrice))
+  const [minInput, setMinInput] = useState<string>(grossInput(dynamicMinPrice))
+  const [maxInput, setMaxInput] = useState<string>(grossInput(dynamicMaxPrice))
 
   React.useEffect(() => {
     setPriceRange([dynamicMinPrice, dynamicMaxPrice])
-    setMinInput(String(dynamicMinPrice))
-    setMaxInput(String(dynamicMaxPrice))
+    setMinInput(grossInput(dynamicMinPrice))
+    setMaxInput(grossInput(dynamicMaxPrice))
   }, [dynamicMinPrice, dynamicMaxPrice])
 
   const specFacets = useMemo(() => buildSpecFacets(productsInRange), [productsInRange])
@@ -145,8 +148,8 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
     setSelectedSpecs({})
     setSearchQuery('')
     setPriceRange([dynamicMinPrice, dynamicMaxPrice])
-    setMinInput(String(dynamicMinPrice))
-    setMaxInput(String(dynamicMaxPrice))
+    setMinInput(grossInput(dynamicMinPrice))
+    setMaxInput(grossInput(dynamicMaxPrice))
   }
 
   if (!meta) {
@@ -331,10 +334,11 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                       value={minInput}
                       onChange={(e) => setMinInput(e.target.value.replace(/[^0-9]/g, ''))}
                       onBlur={() => {
-                        const parsed = Number(minInput || dynamicMinPrice)
+                        // Kutu KDV dahil tam TL alır; süzgeç net fiyatla çalışır (yuvarlama payı ±0,5 TL, sınırdaki ürün dışarıda kalmasın)
+                        const parsed = minInput ? netFromGross(Number(minInput) - 0.5) : dynamicMinPrice
                         const nextMin = Math.max(dynamicMinPrice, Math.min(parsed, priceRange[1]))
                         setPriceRange([nextMin, priceRange[1]])
-                        setMinInput(String(nextMin))
+                        setMinInput(grossInput(nextMin))
                       }}
                       className="h-10 rounded-lg border-slate-200"
                       inputMode="numeric"
@@ -343,10 +347,10 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                       value={maxInput}
                       onChange={(e) => setMaxInput(e.target.value.replace(/[^0-9]/g, ''))}
                       onBlur={() => {
-                        const parsed = Number(maxInput || dynamicMaxPrice)
+                        const parsed = maxInput ? netFromGross(Number(maxInput) + 0.5) : dynamicMaxPrice
                         const nextMax = Math.min(dynamicMaxPrice, Math.max(parsed, priceRange[0]))
                         setPriceRange([priceRange[0], nextMax])
-                        setMaxInput(String(nextMax))
+                        setMaxInput(grossInput(nextMax))
                       }}
                       className="h-10 rounded-lg border-slate-200"
                       inputMode="numeric"
@@ -490,10 +494,11 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                       value={minInput}
                       onChange={(e) => setMinInput(e.target.value.replace(/[^0-9]/g, ''))}
                       onBlur={() => {
-                        const parsed = Number(minInput || dynamicMinPrice)
+                        // Kutu KDV dahil tam TL alır; süzgeç net fiyatla çalışır (yuvarlama payı ±0,5 TL, sınırdaki ürün dışarıda kalmasın)
+                        const parsed = minInput ? netFromGross(Number(minInput) - 0.5) : dynamicMinPrice
                         const nextMin = Math.max(dynamicMinPrice, Math.min(parsed, priceRange[1]))
                         setPriceRange([nextMin, priceRange[1]])
-                        setMinInput(String(nextMin))
+                        setMinInput(grossInput(nextMin))
                       }}
                       className="h-10 rounded-lg border-slate-200 text-sm"
                       inputMode="numeric"
@@ -502,10 +507,10 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                       value={maxInput}
                       onChange={(e) => setMaxInput(e.target.value.replace(/[^0-9]/g, ''))}
                       onBlur={() => {
-                        const parsed = Number(maxInput || dynamicMaxPrice)
+                        const parsed = maxInput ? netFromGross(Number(maxInput) + 0.5) : dynamicMaxPrice
                         const nextMax = Math.min(dynamicMaxPrice, Math.max(parsed, priceRange[0]))
                         setPriceRange([priceRange[0], nextMax])
-                        setMaxInput(String(nextMax))
+                        setMaxInput(grossInput(nextMax))
                       }}
                       className="h-10 rounded-lg border-slate-200 text-sm"
                       inputMode="numeric"
@@ -625,7 +630,7 @@ export function CategoryPageClient({ id: groupId }: { id: string }) {
                   <ProductCard
                     key={product.id}
                     priority={i < 4}
-                    product={{ id: product.id, name: product.name, description: product.description, price: product.price, image: product.image, category: product.category, brand: product.brand }}
+                    product={{ id: product.id, name: product.name, description: product.description, price: product.price, image: product.image, category: product.category, brand: product.brand, saleMode: product.saleMode }}
                     sku={product.sku}
                     badges={product.tags}
                     stock={product.stock}

@@ -31,6 +31,7 @@ import {
   type SpecFilters,
 } from '@/lib/products-listing'
 import { ProductPageShell } from '@/components/ProductPageShell'
+import { grossInput, grossPrice, netFromGross } from '@/lib/store-config'
 
 /**
  * İlk durum sunucunun çözdüğü URL parametrelerinden ve sunucuda hazırlanan ilk sayfadan (initial) gelir; sunucu HTML'i ile
@@ -114,13 +115,13 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
     : initial.priceBounds
 
   const [priceRange, setPriceRange] = useState<[number, number]>([dynamicMinPrice, dynamicMaxPrice])
-  const [minInput, setMinInput] = useState<string>(String(dynamicMinPrice))
-  const [maxInput, setMaxInput] = useState<string>(String(dynamicMaxPrice))
+  const [minInput, setMinInput] = useState<string>(grossInput(dynamicMinPrice))
+  const [maxInput, setMaxInput] = useState<string>(grossInput(dynamicMaxPrice))
 
   useEffect(() => {
     setPriceRange([dynamicMinPrice, dynamicMaxPrice])
-    setMinInput(String(dynamicMinPrice))
-    setMaxInput(String(dynamicMaxPrice))
+    setMinInput(grossInput(dynamicMinPrice))
+    setMaxInput(grossInput(dynamicMaxPrice))
   }, [dynamicMinPrice, dynamicMaxPrice])
 
   const specFacets = useMemo(
@@ -202,8 +203,8 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
     setSelectedBrand(null)
     setSelectedSpecs({})
     setPriceRange([dynamicMinPrice, dynamicMaxPrice])
-    setMinInput(String(dynamicMinPrice))
-    setMaxInput(String(dynamicMaxPrice))
+    setMinInput(grossInput(dynamicMinPrice))
+    setMaxInput(grossInput(dynamicMaxPrice))
     router.push('/products')
   }
 
@@ -331,7 +332,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-semibold text-slate-800">{tProducts('priceRange')}</h3>
           <span className="text-xs text-slate-500">
-            {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+            {formatPrice(grossPrice(priceRange[0]))} - {formatPrice(grossPrice(priceRange[1]))} {L('KDV dahil', 'incl. VAT')}
           </span>
         </div>
         <Slider
@@ -347,10 +348,11 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             value={minInput}
             onChange={(e) => setMinInput(e.target.value.replace(/[^0-9]/g, ''))}
             onBlur={() => {
-              const parsed = Number(minInput || dynamicMinPrice)
+              // Kutu KDV dahil tam TL alır; süzgeç net fiyatla çalışır (yuvarlama payı ±0,5 TL, sınırdaki ürün dışarıda kalmasın)
+              const parsed = minInput ? netFromGross(Number(minInput) - 0.5) : dynamicMinPrice
               const nextMin = Math.max(dynamicMinPrice, Math.min(parsed, priceRange[1]))
               changePriceRange([nextMin, priceRange[1]])
-              setMinInput(String(nextMin))
+              setMinInput(grossInput(nextMin))
             }}
             className="h-10 rounded-lg border-slate-200"
             inputMode="numeric"
@@ -359,10 +361,10 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             value={maxInput}
             onChange={(e) => setMaxInput(e.target.value.replace(/[^0-9]/g, ''))}
             onBlur={() => {
-              const parsed = Number(maxInput || dynamicMaxPrice)
+              const parsed = maxInput ? netFromGross(Number(maxInput) + 0.5) : dynamicMaxPrice
               const nextMax = Math.min(dynamicMaxPrice, Math.max(parsed, priceRange[0]))
               changePriceRange([priceRange[0], nextMax])
-              setMaxInput(String(nextMax))
+              setMaxInput(grossInput(nextMax))
             }}
             className="h-10 rounded-lg border-slate-200"
             inputMode="numeric"

@@ -11,6 +11,7 @@ import { useFavorites } from '@/lib/useFavorites'
 import { useToast } from '@/components/ui/toast'
 import { AddToCartButton } from '@/components/AddToCartButton'
 import { useL } from '@/lib/i18n-inline'
+import { grossPrice } from '@/lib/store-config'
 
 export type FavoriteProductSummary = {
   id: string
@@ -27,6 +28,8 @@ export type FavoriteProductSummary = {
   stock: number | null
   variants: { key: string; label: string; price: number }[]
   defaultVariantKey: string | null
+  /** "quote": teklifle satılır, fiyat gösterilmez */
+  saleMode?: string | null
 }
 
 /** Favori listesindeki ürünlerin güncel katalog bilgisi (fiyat, kampanya, stok); yalnızca eksik id'ler istenir. */
@@ -83,7 +86,7 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
       >
         {product.variants.map((v) => (
           <option key={v.key} value={v.key}>
-            {v.label} — {fmtPrice(v.price, currency, rates?.rates ?? null)}
+            {v.label} — {fmtPrice(grossPrice(v.price), currency, rates?.rates ?? null)}
           </option>
         ))}
       </select>
@@ -160,10 +163,10 @@ function FavoriteCard({ id, product, onRemove }: { id: string; product: Favorite
         <div className="mt-2 flex flex-wrap items-end justify-between gap-2">
           <div>
             {product.oldPrice && product.oldPrice > product.price && (
-              <span className="block text-xs text-[#5d6e80] line-through">{formatPrice(product.oldPrice)}</span>
+              <span className="block text-xs text-[#5d6e80] line-through">{formatPrice(grossPrice(product.oldPrice))}</span>
             )}
             <span className={`text-base font-bold ${product.oldPrice ? 'text-[#b42318]' : 'text-[#121926]'}`}>
-              {product.price > 0 ? formatPrice(product.price) : L('Fiyat için teklif alın', 'Request a quote')}
+              {product.price > 0 && product.saleMode !== 'quote' ? `${formatPrice(grossPrice(product.price))} ${L('KDV dahil', 'incl. VAT')}` : L('Fiyat için teklif alın', 'Request a quote')}
             </span>
             {product.variants.length > 1 && <span className="ml-1.5 text-[11px] text-[#5d6e80]">{L(`${product.variants.length} seçenek`, `${product.variants.length} options`)}</span>}
           </div>

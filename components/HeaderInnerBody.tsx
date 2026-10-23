@@ -11,6 +11,7 @@ import { fmtPrice } from '@/lib/format'
 import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { useCategoriesWithProducts } from '@/components/CategoriesWithProductsProvider'
 import { HeaderInnerUI } from './HeaderInnerUI'
+import { grossPrice } from '@/lib/store-config'
 
 const SEARCH_DEBOUNCE_MS = 280
 const LIVE_SEARCH_MIN_LENGTH = 1
@@ -74,7 +75,8 @@ export function HeaderInnerBody() {
   const [searchLoading, setSearchLoading] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const searchAbortRef = useRef<AbortController | null>(null)
-  const cartTotalFormatted = fmtPrice(cartTotal, currency, rates?.rates ?? null)
+  // Sepet toplamı sepet sayfasındaki satırlarla aynı: KDV dahil (kargo hariç)
+  const cartTotalFormatted = fmtPrice(grossPrice(cartTotal), currency, rates?.rates ?? null)
 
   const navGroups = useMemo(() => buildNavGroups(categoriesWithProducts), [categoriesWithProducts])
   const navLinks = [
