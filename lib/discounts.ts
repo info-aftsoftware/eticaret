@@ -99,13 +99,16 @@ export function applyCampaigns(p: MergedProduct, campaigns: ActiveCampaign[]): S
   }
 }
 
+/** Vitrin ürünleri: taslaklar (A08) liste, arama, akış ve sepette görünmez */
 export async function getStorefrontProducts(): Promise<StorefrontProduct[]> {
-  const [products, campaigns] = await Promise.all([getMergedProducts(), getActiveCampaigns()])
+  const [all, campaigns] = await Promise.all([getMergedProducts(), getActiveCampaigns()])
+  const products = all.filter((p) => p.status !== 'draft')
   return campaigns.length ? products.map((p) => applyCampaigns(p, campaigns)) : products
 }
 
-export async function getStorefrontProductById(id: string): Promise<StorefrontProduct | null> {
+/** Vitrin ürünü; taslak ürün yalnız `includeDraft` ile (yönetici önizlemesi) döner */
+export async function getStorefrontProductById(id: string, opts: { includeDraft?: boolean } = {}): Promise<StorefrontProduct | null> {
   const [product, campaigns] = await Promise.all([getMergedProductById(id), getActiveCampaigns()])
-  if (!product) return null
+  if (!product || (product.status === 'draft' && !opts.includeDraft)) return null
   return campaigns.length ? applyCampaigns(product, campaigns) : product
 }

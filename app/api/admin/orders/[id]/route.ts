@@ -8,8 +8,40 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdminFirestore, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
-import { checkAdmin } from '@/lib/adminAuth'
+import { checkAdmin, logAdminAction } from '@/lib/adminAuth'
 import { getAdminOrderDetail, patchAdminOrder } from '@/lib/admin-orders'
+import { prisma } from '@/lib/prisma'
+import { getClientIp } from '@/lib/rate-limit'
+import { ORDER_STATUS_LABELS_TR } from '@/lib/order-service'
+import { diffFields, summarizeChanges } from '@/lib/audit-diff'
+
+const PAYMENT_TR: Record<string, string> = { PENDING: 'Bekliyor', PAID: 'Ödendi', FAILED: 'Başarısız', REFUNDED: 'İade edildi', PARTIALLY_REFUNDED: 'Kısmi iade' }
+
+/** İşlem kaydında izlenen sipariş alanları (A09) */
+const ORDER_AUDIT_LABELS: Record<string, string> = {
+  status: 'Sipariş durumu',
+  paymentStatus: 'Ödeme durumu',
+  shippingCarrier: 'Kargo firması',
+  trackingNumber: 'Takip no',
+  adminNote: 'Yönetici notu',
+  geliverShipmentId: 'Geliver gönderisi',
+  navlungoPostNumber: 'Navlungo gönderisi',
+  returns: 'İade talepleri',
+}
+
+async function orderAuditSnapshot(id: string): Promise<Record<string, unknown> | null> {
+  const o = await prisma.order.findUnique({
+    where: { id },
+    select: { orderNo: true, status: true, paymentStatus: true, shippingCarrier: true, trackingNumber: true, adminNote: true, geliverShipmentId: true, navlungoPostNumber: true, returnRequests: { select: { requestNo: true, status: true } } },
+  })
+  if (!o) return null
+  return {
+    ...o,
+    status: ORDER_STATUS_LABELS_TR[o.status] ?? o.status,
+    paymentStatus: PAYMENT_TR[o.paymentStatus] ?? o.paymentStatus,
+    returns: o.returnRequests.map((r) => `${r.requestNo}:${r.status}`).join(', ') || null,
+  }
+}
 
 type LegacyItem = { id?: string; name?: string; productName?: string; price?: number; unitPrice?: number; quantity?: number; lineTotal?: number }
 
@@ -102,7 +134,24 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   }
 
   try {
-    return await patchAdminOrder(id, body)
+    // İşlem kaydı (A09): siparişin izlenen alanları işlemden önce ve sonra karşılaştırılır
+    const before = await orderAuditSnapshot(id)
+    const res = await patchAdminOrder(id, body)
+    if (res.ok && before) {
+      const after = await orderAuditSnapshot(id)
+      const changes = after ? diffFields(before, after, ORDER_AUDIT_LABELS) : []
+      const op = typeof body.action === 'string' ? body.action : body.status ? 'status' : body.paymentStatus ? 'mark_paid' : body.adminNote !== undefined ? 'note' : 'güncelleme'
+      void logAdminAction(auth.actor, 'Sipariş güncellendi', {
+        method: 'PATCH',
+        path: `/api/admin/orders/${id}`,
+        ip: getClientIp(request),
+        objectType: 'order',
+        objectId: String(before.orderNo),
+        changes,
+        details: `${before.orderNo} (${op})${changes.length ? `: ${summarizeChanges(changes)}` : ''}`,
+      })
+    }
+    return res
   } catch (error) {
     console.error('Admin order PATCH error:', error)
     return NextResponse.json({ error: 'Sipariş güncellenirken bir hata oluştu' }, { status: 500 })

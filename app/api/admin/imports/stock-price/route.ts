@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   const products = await getMergedProducts()
   const plan = planStockPriceImport(
     csv,
-    products.map((p) => ({ id: p.id, sku: p.sku, name: p.name, price: p.price, stock: p.stock ?? null, isVariantProduct: p.isVariantProduct }))
+    products.map((p) => ({ id: p.id, sku: p.sku, name: p.name, price: p.price, stock: p.stock ?? null, isVariantProduct: p.isVariantProduct, variantStock: p.variantStock }))
   )
   if ('error' in plan) return NextResponse.json({ error: plan.error }, { status: 400 })
   if (body?.apply !== true) return NextResponse.json({ success: true, applied: false, ...plan })
@@ -37,7 +37,8 @@ export async function POST(request: NextRequest) {
       prisma.stockOverride.upsert({ where: { productId: r.id! }, update: { stock: r.newStock! }, create: { productId: r.id!, stock: r.newStock! } })
     ),
     ...priceChanges.map((r) =>
-      prisma.productOverride.upsert({ where: { productId: r.id! }, update: { price: r.newPrice! }, create: { productId: r.id!, price: r.newPrice! } })
+      // İçe aktarılan TL fiyat açıkça sabit TL fiyattır (lib/catalog-merge effectivePriceMode)
+      prisma.productOverride.upsert({ where: { productId: r.id! }, update: { price: r.newPrice!, priceMode: 'fixed' }, create: { productId: r.id!, price: r.newPrice!, priceMode: 'fixed' } })
     ),
   ])
 

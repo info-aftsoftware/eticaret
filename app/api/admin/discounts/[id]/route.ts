@@ -8,6 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { invalidateCampaignCache } from '@/lib/discounts'
 import { Prisma } from '@prisma/client'
+import { dateRangeError, discountValueError } from '@/lib/campaign-rules'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
@@ -80,6 +81,17 @@ export async function PATCH(
     if (startDate !== undefined) data.startDate = startDate ? new Date(startDate) : null
     if (endDate !== undefined) data.endDate = endDate ? new Date(endDate) : null
     if (active !== undefined) data.active = Boolean(active)
+
+    // Ortak kural (A14): kayıttaki değerlerle birleştirilip sunucuda doğrulanır (tarayıcı doğrulaması tek başına yetmez)
+    const current = await prisma.discount.findUnique({ where: { id } })
+    if (!current) return NextResponse.json({ error: 'Kampanya bulunamadı' }, { status: 404 })
+    const valueError = discountValueError(data.type ?? current.type, data.value ?? current.value)
+    if (valueError) return NextResponse.json({ error: valueError }, { status: 400 })
+    const rangeError = dateRangeError(
+      (data.startDate !== undefined ? data.startDate : current.startDate) as Date | null,
+      (data.endDate !== undefined ? data.endDate : current.endDate) as Date | null
+    )
+    if (rangeError) return NextResponse.json({ error: rangeError }, { status: 400 })
 
     const discount = await prisma.discount.update({
       where: { id },

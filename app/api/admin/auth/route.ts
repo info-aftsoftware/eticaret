@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { isRateLimited } from '@/lib/rate-limit'
-import { verifyTotp } from '@/lib/totp'
+import { totpStep } from '@/lib/totp'
+import { masterLoginPolicy } from '@/lib/admin-2fa-policy'
 import { getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 import { prisma } from '@/lib/prisma'
 import { verifyPassword } from '@/lib/admin-users'
@@ -96,9 +97,13 @@ export async function POST(request: NextRequest) {
         if (!otp) {
           return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama uygulamasındaki 6 haneli kodu girin.' }, { status: 401 })
         }
-        if (!verifyTotp(user.totpSecret, otp)) {
+        // Yanlış veya daha önce kullanılmış kod reddedilir (A12); adım koşullu yazılır, aynı kodla eşzamanlı iki giriş tek kabul
+        const step = totpStep(user.totpSecret, otp, now, 1, user.totpLastStep)
+        const claimed = step === null ? 0 : (await prisma.adminUser.updateMany({ where: { id: user.id, OR: [{ totpLastStep: null }, { totpLastStep: { lt: step } }] }, data: { totpLastStep: step } })).count
+        if (!claimed) {
           recordFailure(now)
-          return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı veya süresi dolmuş.' }, { status: 401 })
+          void logAdminAction(null, 'Başarısız giriş', { ip, details: `${email}: doğrulama kodu hatalı veya tekrar kullanıldı` })
+          return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı, süresi dolmuş veya daha önce kullanılmış.' }, { status: 401 })
         }
       }
       await prisma.adminUser.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } })
@@ -113,13 +118,33 @@ export async function POST(request: NextRequest) {
         recordFailure(now)
         return NextResponse.json({ success: false, error: 'Şifre hatalı.' }, { status: 401 })
       }
+      // Ana şifre, kişisel hesaplardaki iki adımlı doğrulamayı aşan bir yol olmasın (A12, lib/admin-2fa-policy.ts)
+      const policy = masterLoginPolicy({
+        mode: process.env.ADMIN_MASTER_LOGIN,
+        hasMasterTotp: Boolean(ADMIN_TOTP_SECRET),
+        ownersWith2fa: await prisma.adminUser.count({ where: { active: true, role: 'owner', totpEnabled: true } }),
+      })
+      if (!policy.allowed) {
+        void logAdminAction(null, 'Başarısız giriş', { ip, details: 'Ana yönetici şifresi: giriş kuralı engelledi' })
+        return NextResponse.json({ success: false, error: policy.reason }, { status: 403 })
+      }
       if (ADMIN_TOTP_SECRET) {
         if (!otp) {
           return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama uygulamasındaki 6 haneli kodu girin.' }, { status: 401 })
         }
-        if (!verifyTotp(ADMIN_TOTP_SECRET, otp)) {
+        // Kullanılan adım veritabanında tutulur (Sequence "adminMasterTotpStep"): aynı kod ikinci kez kabul edilmez
+        const last = await prisma.sequence.findUnique({ where: { name: 'adminMasterTotpStep' } })
+        const step = totpStep(ADMIN_TOTP_SECRET, otp, now, 1, last?.value ?? null)
+        let claimed = 0
+        if (step !== null) {
+          claimed = last
+            ? (await prisma.sequence.updateMany({ where: { name: 'adminMasterTotpStep', value: { lt: step } }, data: { value: step } })).count
+            : await prisma.sequence.create({ data: { name: 'adminMasterTotpStep', value: step } }).then(() => 1, () => 0)
+        }
+        if (!claimed) {
           recordFailure(now)
-          return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı veya süresi dolmuş.' }, { status: 401 })
+          void logAdminAction(null, 'Başarısız giriş', { ip, details: 'Ana yönetici şifresi: doğrulama kodu hatalı veya tekrar kullanıldı' })
+          return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı, süresi dolmuş veya daha önce kullanılmış.' }, { status: 401 })
         }
       }
       actor = { userId: null, role: 'owner', name: 'Ana yönetici şifresi', email: null, mustChangePassword: false }

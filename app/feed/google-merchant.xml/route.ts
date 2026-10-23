@@ -6,7 +6,7 @@
 
 import { getStorefrontProducts } from '@/lib/discounts'
 import { VAT_RATE } from '@/lib/store-config'
-import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { lineLogistics, panelLineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isInstallShipping } from '@/lib/sale-mode'
 import { SELLER } from '@/lib/legal/company'
@@ -46,7 +46,7 @@ export async function GET() {
     // Kampanyada: g:price = normal fiyat, g:sale_price = kampanyalı fiyat (KDV dahil)
     const regular = (p.oldPrice ?? p.price) * (1 + VAT_RATE / 100)
     const sale = p.oldPrice ? p.price * (1 + VAT_RATE / 100) : null
-    const shipping = shippingFeeFor(lineLogistics(p.id))
+    const shipping = shippingFeeFor(lineLogistics(p.id, undefined, panelLineLogistics(p)))
     return `    <item>
       <g:id>${xml(p.id)}</g:id>
       <title>${xml(p.name.slice(0, 150))}</title>

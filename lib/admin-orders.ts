@@ -28,6 +28,7 @@ import {
   getCancellationRequest,
   rejectCancellationRequest,
   logOrderEvent,
+  resendOrderEmail,
   markOrderPaid,
   updateShipment,
   OrderTransitionError,
@@ -190,6 +191,7 @@ export async function getAdminOrderDetail(id: string) {
  *  { action: 'geliver_offers', desi?, kg?, refresh? }  (Geliver'de gönderi aç, teklifleri kaydet)
  *  { action: 'geliver_buy', offerId }  (teklifi kabul et: etiket) · { action: 'geliver_cancel' }
  *  { action: 'note', adminNote }
+ *  { action: 'resend_email', eventId } gönderilemeyen e-postayı yeniden gönder (A10)
  *  { action: 'cancel_request', op: 'approve' | 'reject', reason? (ret için zorunlu), note? }
  *  { action: 'return', returnId, op: 'approve' | 'reject' | 'receive' | 'refund', carrier?, code?, reason?, amount? }
  * Geriye dönük: { status?, paymentStatus?: 'PAID', trackingNumber?, carrier? }
@@ -301,6 +303,13 @@ export async function patchAdminOrder(id: string, body: Record<string, any>) {
         } else {
           return NextResponse.json({ error: 'Geçersiz iptal talebi işlemi.' }, { status: 400 })
         }
+        break
+      }
+      case 'resend_email': {
+        // A10: gönderilemeyen e-postayı yeniden gönder (mükerrer gönderim korumalı)
+        const r = await resendOrderEmail(id, String(body.eventId ?? ''))
+        if (!r.ok) return NextResponse.json({ error: r.error }, { status: 409 })
+        if (!r.sent) return NextResponse.json({ error: 'Yeniden denendi ama e-posta yine gönderilemedi; nedeni zaman çizelgesinde.' }, { status: 502 })
         break
       }
       case 'note': {

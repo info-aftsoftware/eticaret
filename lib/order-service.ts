@@ -24,6 +24,7 @@ import { estimateDelivery, formatDeliveryRange } from '@/lib/delivery-estimate'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { prisma } from '@/lib/prisma'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
+import { classifyEmailFailure } from '@/lib/email-diagnose'
 import { generateContractPdf } from '@/lib/legal/contract-pdf'
 import { getCarrier, orderTrackingUrl } from '@/lib/shipping/carriers'
 import { SELLER } from '@/lib/legal/company'
@@ -168,9 +169,14 @@ async function send(
   if (!to) return false
   try {
     const result = await sendEmail(to, subject, element, attachments)
+    // Gönderilemeyen iletide neden ve yeniden denenip denenemeyeceği kayda yazılır (A10); "gönderildi" SMTP'nin kabul ettiğidir
+    const failure = result.success ? null : classifyEmailFailure((result as { error?: string }).error, to)
     await logOrderEvent(orderId, {
       type: 'email',
-      message: result.success ? `E-posta gönderildi: ${label}` : `E-posta gönderilemedi: ${label}`,
+      message: result.success
+        ? `E-posta gönderildi: ${label}`
+        : `E-posta gönderilemedi: ${label} — ${failure!.reason}${failure!.retryable ? ' (yeniden gönderilebilir)' : ''}`,
+      status: result.success ? 'EMAIL_SENT' : failure!.retryable ? 'EMAIL_FAILED' : 'EMAIL_FAILED_FINAL',
       visibleToCustomer: false,
     })
     return result.success
@@ -219,6 +225,41 @@ async function sendAdmin(order: OrderWithLines, event: AdminOrderEvent, reason?:
   const data = toOrderEmailData(order)
   const subject = ADMIN_ORDER_EMAIL_SUBJECTS[event](order.orderNo)
   await send(order.id, adminEmail(), subject, React.createElement(AdminOrderEmail, { order: data, event, reason }), `Admin: ${subject}`)
+}
+
+/**
+ * Gönderilemeyen sipariş e-postasını yeniden gönderir (A10). Yalnız "yeniden gönderilebilir" hatalı kayıt için;
+ * aynı ileti sonradan gönderildiyse (ör. çift tıklama, ikinci deneme) yeniden gönderilmez, mükerrer müşteri iletisi oluşmaz.
+ */
+export async function resendOrderEmail(orderId: string, eventId: string): Promise<{ ok: true; sent: boolean } | { ok: false; error: string }> {
+  const event = await prisma.orderEvent.findFirst({ where: { id: eventId, orderId, type: 'email' } })
+  if (!event || event.status !== 'EMAIL_FAILED') return { ok: false, error: 'Bu kayıt yeniden gönderilebilir bir e-posta hatası değil.' }
+  const label = event.message.replace(/^E-posta gönderilemedi: /, '').split(' — ')[0]
+  const later = await prisma.orderEvent.findFirst({
+    where: { orderId, type: 'email', createdAt: { gt: event.createdAt }, message: { startsWith: `E-posta gönderildi: ${label}` } },
+  })
+  if (later) return { ok: false, error: 'Bu e-posta sonradan gönderilmiş; tekrar gönderilmedi.' }
+  // Aynı hata için ikinci deneme kaydı başlamadan işaretlenir (eşzamanlı iki tıklama tek gönderim)
+  const claimed = await prisma.orderEvent.updateMany({ where: { id: event.id, status: 'EMAIL_FAILED' }, data: { status: 'EMAIL_RETRIED' } })
+  if (claimed.count === 0) return { ok: false, error: 'Bu e-posta zaten yeniden gönderiliyor.' }
+
+  const order = await load(orderId)
+  const kinds = Object.keys(ORDER_EMAIL_SUBJECTS) as OrderEmailKind[]
+  const statusKind = kinds.find((k) => ORDER_EMAIL_SUBJECTS[k](order.orderNo) === label)
+  const adminEvent = (Object.keys(ADMIN_ORDER_EMAIL_SUBJECTS) as AdminOrderEvent[]).find((k) => `Admin: ${ADMIN_ORDER_EMAIL_SUBJECTS[k](order.orderNo)}` === label)
+  let sent: boolean
+  if (statusKind) sent = await sendCustomerStatusEmail(order, statusKind)
+  else if (adminEvent) {
+    await sendAdmin(order, adminEvent)
+    sent = !!(await prisma.orderEvent.findFirst({ where: { orderId, type: 'email', status: 'EMAIL_SENT', createdAt: { gt: event.createdAt }, message: { startsWith: `E-posta gönderildi: ${label}` } } }))
+  } else if (label.startsWith('Siparişiniz alındı')) {
+    await sendOrderReceived(order)
+    sent = !!(await prisma.orderEvent.findFirst({ where: { orderId, type: 'email', status: 'EMAIL_SENT', createdAt: { gt: event.createdAt } } }))
+  } else {
+    await prisma.orderEvent.update({ where: { id: event.id }, data: { status: 'EMAIL_FAILED' } })
+    return { ok: false, error: 'Bu e-postanın türü bulunamadı; yeniden gönderilemedi.' }
+  }
+  return { ok: true, sent }
 }
 
 async function load(orderId: string): Promise<OrderWithLines> {
@@ -325,7 +366,7 @@ async function restoreStock(order: OrderWithLines) {
     }
   }
   for (const line of order.lines) {
-    const vm = line.variantMatrix as { productId?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
+    const vm = line.variantMatrix as { productId?: string; stockKey?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
     const productId = vm?.productId
     if (!productId) continue
     const quantity = Math.max(0, line.quantity - (alreadyRestored.get(line.id) ?? 0))
@@ -333,7 +374,8 @@ async function restoreStock(order: OrderWithLines) {
     // Yeni siparişlerde yalnızca gerçekten düşülen stok geri eklenir; bayraksız eski siparişlerde eski davranış
     const hasFlags = typeof vm?.stockDecremented === 'boolean'
     if (!hasFlags || vm?.stockDecremented) {
-      await prisma.stockOverride.updateMany({ where: { productId }, data: { stock: { increment: quantity } } })
+      // Ayrı stoklanan varyant kendi satırına döner (lib/variant-stock)
+      await prisma.stockOverride.updateMany({ where: { productId: vm?.stockKey ?? productId }, data: { stock: { increment: quantity } } })
     }
     if (!hasFlags || vm?.productStockDecremented) {
       await prisma.productOverride.updateMany({

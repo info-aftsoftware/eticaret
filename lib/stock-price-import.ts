@@ -6,7 +6,7 @@
  */
 import { headerKey, parseCsv, parseNumber } from '@/lib/csv'
 
-export type ImportProduct = { id: string; sku?: string | null; name: string; price: number; stock: number | null; isVariantProduct?: boolean }
+export type ImportProduct = { id: string; sku?: string | null; name: string; price: number; stock: number | null; isVariantProduct?: boolean; variantStock?: boolean }
 export type ImportRow = {
   line: number
   id: string | null
@@ -59,6 +59,9 @@ export function planStockPriceImport(csv: string, products: ImportProduct[]): Im
     if (stockCol >= 0 && cells[stockCol]?.trim()) {
       const n = parseNumber(cells[stockCol])
       if (n === null || n < 0 || !Number.isInteger(n)) problems.push('Stok 0 veya pozitif tam sayı olmalı')
+      else if (p.variantStock) {
+        if (n !== p.stock) problems.push('Varyantları ayrı stoklanan ürünün stoğu ürün düzenleyiciden değiştirilir')
+      }
       else newStock = n
     }
     if (priceCol >= 0 && cells[priceCol]?.trim()) {

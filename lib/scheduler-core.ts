@@ -10,7 +10,31 @@ import { promises as fs } from 'fs'
 /** Kilidi bırakmadan çöken süreç: bu süreden eski kilit sahipsiz sayılır */
 export const LOCK_STALE_MS = 30 * 60_000
 
-export type JobState = { lastRunAt?: string; lastOk?: boolean; lastError?: string; lastSummary?: string }
+/**
+ * Görevin son çalışma sonucu (A11): ok iş yapıldı · idle çalıştı, yeni kayıt yok · disabled entegrasyon yapılandırılmamış
+ * (çalışmadı) · skipped koşul yok (ör. yedeklenecek SQLite yok) · error hata.
+ */
+export type JobOutcome = 'ok' | 'idle' | 'disabled' | 'skipped' | 'error'
+
+export type JobState = {
+  lastRunAt?: string
+  lastOk?: boolean
+  lastError?: string
+  lastSummary?: string
+  outcome?: JobOutcome
+  /** Son gerçek başarılı çalışma (ok veya idle); kapalı/atlanan/hatalı denemeler bunu değiştirmez */
+  lastSuccessAt?: string
+}
+
+/** Kayıttaki sonuç; eski kayıtlarda (outcome yok) özetten çıkarılır */
+export function jobOutcome(s: JobState | undefined): JobOutcome | null {
+  if (!s?.lastRunAt) return null
+  if (s.outcome) return s.outcome
+  if (!s.lastOk) return 'error'
+  if (/^kapalı/i.test(s.lastSummary ?? '')) return 'disabled'
+  if (/^atlandı/i.test(s.lastSummary ?? '')) return 'skipped'
+  return 'ok'
+}
 export type SchedulerState = Record<string, JobState>
 
 /**

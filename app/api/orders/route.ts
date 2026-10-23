@@ -304,7 +304,8 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
             variantId: null,
             productName: l.name.slice(0, 500),
             // stok iadesi ve raporlama için katalog ürün id'si
-            variantMatrix: { productId: l.productId, ...(l.variantKey ? { variantKey: l.variantKey } : {}) },
+            // stockKey: ayrı stoklanan varyantta "productId::variantKey" (iptal/iadede aynı satıra geri eklenir)
+            variantMatrix: { productId: l.productId, ...(l.variantKey ? { variantKey: l.variantKey } : {}), ...(l.stockKey !== l.productId ? { stockKey: l.stockKey } : {}), ...(l.logistics ? { logistics: l.logistics } : {}) },
             quantity: l.quantity,
             unitPrice: l.unitPrice,
             vatRate: VAT_RATE,
@@ -323,7 +324,7 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
     // Stok yetmezse (eşzamanlı sipariş) hiçbir stok değişmez, sipariş geri alınır ve 409 döner.
     let decremented: Set<string>
     try {
-      decremented = await reserveStock(pricing.lines.map((l) => ({ productId: l.productId, productName: l.productName, quantity: l.quantity })))
+      decremented = await reserveStock(pricing.lines.map((l) => ({ productId: l.stockKey, productName: l.stockName, quantity: l.quantity })))
     } catch (stockErr) {
       await prisma.order.delete({ where: { id: order.id } }).catch((e) => console.error('Sipariş geri alma hatası:', e))
       await releaseCouponUse(pricing.couponCode)
@@ -335,8 +336,9 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
     // Hangi satırın stoğu gerçekten düşüldü: iptal/iadede yalnızca bunlar geri eklenir (hayali stok oluşmaz)
     try {
       for (const line of order.lines) {
-        const vm = (line.variantMatrix ?? {}) as { productId?: string; variantKey?: string }
-        const done = !!vm.productId && decremented.has(vm.productId)
+        const vm = (line.variantMatrix ?? {}) as { productId?: string; variantKey?: string; stockKey?: string }
+        const key = vm.stockKey ?? vm.productId
+        const done = !!key && decremented.has(key)
         await prisma.orderLine.update({
           where: { id: line.id },
           data: { variantMatrix: { ...vm, stockDecremented: done, productStockDecremented: false } },
@@ -347,7 +349,7 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
     }
     // Eşik altına düşen ürünler için yöneticiye uyarı (yanıtı bekletmez)
     void notifyLowStockAfterOrder(
-      pricing.lines.filter((l) => decremented.has(l.productId)).map((l) => ({ productId: l.productId, quantity: l.quantity }))
+      pricing.lines.filter((l) => decremented.has(l.stockKey)).map((l) => ({ productId: l.productId, quantity: l.quantity }))
     ).catch((e) => console.error('Düşük stok uyarısı:', e))
     // Stok değişti: ürün sayfaları ve listeler yeni stokla üretilsin (admin paneliyle aynı kaynak)
     if (decremented.size > 0) revalidateStorefront()
@@ -359,7 +361,7 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
     // Zaman çizelgesi + e-postalar (havalede hemen; kartlı siparişte ödeme onaylanınca)
     await onOrderCreated(order).catch((e) => reportError('siparis-bildirimi', e, { orderNo: order.orderNo }))
     // Kurulumlu ürün (şarj istasyonu): nakliye ve kurulum fiyata dahil değil, müşteriyle iletişime geçilecek
-    if (cartLogistics(pricing.lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity }))).hasInstall) {
+    if (cartLogistics(pricing.lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity, logistics: l.logistics }))).hasInstall) {
       await logOrderEvent(order.id, {
         type: 'note',
         message: 'Şarj istasyonu: kurulum ve nakliye fiyata dahil değildir; saha, kurulum ve nakliye planı için sizinle iletişime geçeceğiz.',

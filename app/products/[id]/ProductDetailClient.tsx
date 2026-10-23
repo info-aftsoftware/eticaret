@@ -35,6 +35,8 @@ import {
 import { ProductReviews } from '@/components/ProductReviews'
 import { ProductQA } from '@/components/ProductQA'
 import { useL } from '@/lib/i18n-inline'
+import { lineStock, stockKeyFor } from '@/lib/variant-stock'
+import { panelLineLogistics } from '@/lib/shipping/fee'
 
 const mockProductsMap: Record<string, MockProduct> = {}
 mockProducts.forEach((p) => { mockProductsMap[p.id] = p })
@@ -116,7 +118,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
     fetch(`/api/products/${productId}`)
       .then((res) => res.ok ? res.json() : null)
       .then((fetched) => {
-        const data = fetched ?? mockProductsMap[productId] ?? null
+        // Ürün API'si yanıt vermezse (ör. yönetici önizlemesindeki taslak) sunucunun gönderdiği ürün korunur
+        const data = fetched ?? initialProduct ?? mockProductsMap[productId] ?? null
         setProduct(data)
         const initialVariant =
           data?.defaultVariantKey && data.variants?.length
@@ -141,10 +144,11 @@ export default function ProductDetailClient({ initialProduct, productId: product
   /** Sepet adedi doğrudan sepetten okunur (varyant değişince / başka sayfada eklenince doğru kalır) */
   const cartLineId = product ? (effectiveVariant ? `${product.id}-${effectiveVariant.key}` : product.id) : ''
   const cartQty = useCartStore((s) => (cartMounted ? s.items.find((i) => i.id === cartLineId)?.quantity ?? 0 : 0))
-  // Varyantlar ürün stoğunu paylaşır
+  // Ortak stokta varyantlar ürün stoğunu paylaşır; ayrı stokta her varyantın kendi stoğu var (lib/variant-stock)
+  const stockKey = product ? stockKeyFor(product, effectiveVariant?.key) : ''
   const productCartQty = useCartStore((s) =>
     cartMounted && product
-      ? s.items.filter((i) => (i.productId ?? i.id) === product.id || i.id === cartLineId).reduce((n, i) => n + i.quantity, 0)
+      ? s.items.filter((i) => (i.stockKey ?? i.productId ?? i.id) === stockKey || i.id === cartLineId).reduce((n, i) => n + i.quantity, 0)
       : 0
   )
   const images = React.useMemo(() => {
@@ -233,8 +237,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
     ? tHeader(breadcrumbGroup.labelKey)
     : ''
   const mainImage = images[selectedIndex] ?? images[0]
-  /** Stok: varyant yoksa ürün stoku, varyantlı ürünlerde şimdilik ürün stoku kullanılıyor */
-  const stock = typeof product.stock === 'number' ? product.stock : 0
+  /** Stok: ayrı stoklanan varyantta seçili varyantın stoğu, değilse ürün stoğu */
+  const stock = lineStock(product, effectiveVariant?.key) ?? 0
   const outOfStock = stock === 0
   // Akü / batarya: kargo kısıtları kontrol edilene kadar çevrim içi satılmaz, iletişim kutusu gösterilir
   const contactOnly = isContactOnlyProduct(product)
@@ -250,6 +254,8 @@ export default function ProductDetailClient({ initialProduct, productId: product
     const added = addItem({
       id: cartLineId,
       productId: product.id,
+      ...(stockKey !== product.id ? { stockKey } : {}),
+      ...(panelLineLogistics(product) ? { logistics: panelLineLogistics(product) } : {}),
       maxQuantity: stock,
       name: displayName,
       description: product.description,
@@ -445,7 +451,10 @@ export default function ProductDetailClient({ initialProduct, productId: product
                             }`}
                         >
                           <span className="block text-[13.5px] font-medium text-[#121926] leading-snug">{v.label}</span>
-                          <span className="block text-[12.5px] text-[#5d6e80] mt-0.5 tabular-nums">{formatPrice(v.price)}</span>
+                          <span className="block text-[12.5px] text-[#5d6e80] mt-0.5 tabular-nums">
+                            {formatPrice(v.price)}
+                            {product.variantStock && (v.stock ?? 0) <= 0 && <span className="text-red-700"> · {tProduct('soldOut')}</span>}
+                          </span>
                         </button>
                       )
                     })}

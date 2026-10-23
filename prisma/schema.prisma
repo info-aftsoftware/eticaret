@@ -854,12 +854,34 @@ model ProductOverride {
   price           Float?
   image           String?
   images          Json?    // string[]
+  // Varyant görselleri (A17): { [variantKey]: string[] }; boş dizi o varyantta genel galeri. Sıra değişse de anahtarla eşleşir
+  variantImages   Json?
   category        String?
   stock           Int?
   featured        Boolean?
   specifications  Json?
   features        Json?    // string[]
-  variants        Json?    // { key, label, price, sku }[]
+  variants        Json?    // { key, label, price, basePrice?, sku }[]
+  // Varyantlar ayrı stoklanır (A03): her varyantın stoğu StockOverride'da "productId::variantKey" satırında,
+  // ürün stoğu varyant toplamıdır. null/false: varyantlar ürün stoğunu paylaşır.
+  variantStock    Boolean?
+  // Fiyatlandırma modu (A05): "fx" dövize bağlı (basePrice × güncel kur), "fixed" sabit TL (price).
+  // null: eski kayıt; price doluysa sabit TL, boşsa katalog fiyatı.
+  priceMode       String?
+  basePrice       Float?   // fx modunda panelden girilen döviz fiyatı (yoksa katalog fiyatı)
+  priceCurrency   String?  // Panelde eklenen ürünün fiyat para birimi (A06): USD | EUR | TRY; katalog ürününde katalogdaki geçerli
+  // Alış maliyeti ve kâr hedefi (A06): yalnız Sahip/Yönetici görür; vitrine ve ürün listesine hiç gitmez
+  costPrice       Float?   // KDV hariç alış maliyeti (costCurrency cinsinden)
+  costCurrency    String?  // TRY | USD | EUR
+  targetMargin    Float?   // hedef kâr marjı (%), satış fiyatı üzerinden
+  // Lojistik (A07): koli ölçüsü (cm, U×G×Y), koli ağırlığı (kg), koli sayısı; desi = koli sayısı × max(hacim/3000, kg)
+  dimensionsCm    Json?
+  weightKg        Float?
+  packageCount    Int?
+  desi            Float?
+  saleMode        String?  // "install" kurulum ve nakliye ayrıca (kargoya girmez), "quote" teklifle; null normal kargo
+  // Yayın durumu (A08, panelde eklenen ürünler): "draft" taslak (vitrinde, aramada, akışlarda görünmez); null yayında
+  status          String?
   brand           String?
   sku             String?
   tags            Json?    // string[]
@@ -904,6 +926,8 @@ model AdminUser {
   /** Doğrulama uygulaması gizli anahtarı (base32); totpEnabled false iken kurulum aşamasında */
   totpSecret   String?
   totpEnabled  Boolean   @default(false)
+  /** Son kabul edilen doğrulama kodunun 30 sn'lik adımı (A12): aynı kod ikinci kez kullanılamaz */
+  totpLastStep Int?
   active       Boolean   @default(true)
   /** İlk girişte / sıfırlamadan sonra şifre değiştirme zorunlu */
   mustChangePassword Boolean @default(true)
@@ -926,9 +950,15 @@ model AdminAuditLog {
   path        String?
   ip          String?
   details     String?
+  // Alan bazında değişiklik (A09): hangi nesne (product | order | stock) ve [{ field, label, from, to }]
+  // Gizli anahtar ve parola alanları yazılmaz (lib/audit-diff.ts)
+  objectType  String?
+  objectId    String?
+  changes     Json?
 
   @@index([createdAt])
   @@index([adminUserId])
+  @@index([objectId])
 }
 
 // Hata kaydı (sunucu + tarayıcı). Aynı kaynak/bağlam/mesaj tek satırda toplanır (fingerprint), sayaç artar.

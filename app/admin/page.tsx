@@ -102,7 +102,7 @@ export default function AdminDashboardPage() {
     { show: (stats?.outOfStockProducts ?? 0) > 0, n: stats?.outOfStockProducts ?? 0, label: 'ürünün stoğu tükendi', href: '/admin/products?stock=out', icon: AlertTriangle, tone: 'slate' as const },
   ].filter((t) => t.show)
 
-  const today = new Date().toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+  const today = new Date().toLocaleDateString('tr-TR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul' })
 
   return (
     <div className="space-y-6">
@@ -130,7 +130,7 @@ export default function AdminDashboardPage() {
       )}
 
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
-        <Kpi label="Bu ay ciro" value={stats ? fmtTRY(stats.monthRevenue) : '—'} sub={stats ? `Bugün ${fmtTRY(stats.todayRevenue)}` : ' '} icon={TrendingUp} />
+        <Kpi label="Bu ay tahsilat" value={stats ? fmtTRY(stats.monthRevenue) : '—'} sub={stats ? `Bugün ${fmtTRY(stats.todayRevenue)} · ödenmiş siparişler` : ' '} icon={TrendingUp} />
         <Kpi label="Bugünkü siparişler" value={stats?.todayOrders ?? '—'} sub={stats ? `Toplam ${stats.totalOrders} sipariş` : ' '} icon={ShoppingCart} />
         <Kpi
           label="Hazırlanacak / kargolanacak"
@@ -166,7 +166,7 @@ export default function AdminDashboardPage() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="font-mono text-[13px] font-semibold text-[#0b2540] group-hover:underline">{o.orderNo}</span>
                       <Pill tone={ORDER_STATUS_TONE[o.status] ?? 'slate'} dot>{statusLabel(o.status)}</Pill>
-                      <Pill tone={PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus)}</Pill>
+                      <Pill tone={o.status?.toUpperCase() === 'CANCELLED' ? 'slate' : PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus, o.status)}</Pill>
                       {o.paymentNotified && o.paymentStatus !== 'PAID' && <Pill tone="yellow">Ödeme bildirildi</Pill>}
                       {o.cancelRequested && <Pill tone="red">İptal talebi</Pill>}
                       {o.openReturns > 0 && <Pill tone="orange">İade talebi</Pill>}
@@ -221,7 +221,7 @@ export default function AdminDashboardPage() {
 
       <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         <Panel className="overflow-hidden">
-          <PanelHeader title="En çok satanlar" description="Son 30 gün · ödenmiş siparişler" icon={Trophy} />
+          <PanelHeader title="En çok satanlar" description="Son 30 gün · ödenmiş siparişler · ürün bedeli KDV dahil, indirim öncesi" icon={Trophy} />
           {!stats ? (
             <Spinner />
           ) : (stats.topProducts ?? []).length === 0 ? (

@@ -5,6 +5,7 @@ import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProducts } from '@/lib/catalog-merge'
 import { grossPrice } from '@/lib/store-config'
 import { csvResponseHeaders, toCsv } from '@/lib/csv'
+import { businessDateKey } from '@/lib/business-time'
 
 /**
  * Katalog dökümü (Excel uyumlu CSV): stok ve fiyat bu dosyada düzenlenip Ürünler & Stok > İçe aktar ile geri yüklenebilir.
@@ -33,6 +34,6 @@ export async function GET(request: NextRequest) {
     ['Ürün kodu', 'SKU', 'Ürün adı', 'Marka', 'Kategori', 'Fiyat (KDV hariç)', 'Fiyat (KDV dahil)', 'Stok', 'Desi', 'Varyantlı'],
     rows
   )
-  const date = new Date().toISOString().slice(0, 10)
+  const date = businessDateKey()
   return new NextResponse(csv, { headers: csvResponseHeaders(`voltekno-katalog-${date}.csv`) })
 }

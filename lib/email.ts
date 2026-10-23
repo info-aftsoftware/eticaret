@@ -1,6 +1,7 @@
 import { Resend } from 'resend'
 import { sendEmailSMTP } from './email-smtp'
 import { captureEmail, emailCaptureEnabled } from './email-capture'
+import { isTestRecipient, TEST_RECIPIENT_ERROR } from './email-diagnose'
 
 const resend = new Resend(process.env.RESEND_API_KEY || 're_demo')
 
@@ -29,6 +30,9 @@ export async function sendEmail(
   }
 
   if (emailCaptureEnabled()) return captureEmail(to, subject, content, attachments?.map((a) => a.filename))
+
+  // Test / ayrılmış alan adına (example.com …) gönderilmez: SMTP hatası ve geri dönen ileti üretmesin (A10)
+  if (isTestRecipient(to)) return { success: false, error: TEST_RECIPIENT_ERROR }
 
   // Priority: SMTP > Resend
   if (process.env.SMTP_USER && process.env.SMTP_PASSWORD) {

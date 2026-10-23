@@ -8,7 +8,9 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
-import { checkAdmin } from '@/lib/adminAuth'
+import { checkAdmin, logAdminAction } from '@/lib/adminAuth'
+import { getClientIp } from '@/lib/rate-limit'
+import { variantStockedIds } from '@/lib/catalog-merge'
 import { notifyLowStockTransitions, readStocks } from '@/lib/low-stock'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
@@ -39,6 +41,9 @@ export async function PATCH(request: NextRequest) {
     }
     const value = typeof stock === 'number' ? Math.max(0, Math.floor(stock)) : 0
 
+    if ((await variantStockedIds([productId.trim()])).size) {
+      return NextResponse.json({ error: 'Bu ürünün varyantları ayrı stoklanıyor; stoğu ürün düzenleyicisindeki varyant satırlarından girin.' }, { status: 409 })
+    }
     const before = (await readStocks([productId.trim()])).get(productId.trim())
     const row = await prisma.stockOverride.upsert({
       where: { productId: productId.trim() },
@@ -48,6 +53,16 @@ export async function PATCH(request: NextRequest) {
     // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
     if (value > 0) processStockAlerts([row.productId]).catch((e) => console.error('Stock alert error:', e))
     void notifyLowStockTransitions([{ productId: row.productId, before: before?.stock, after: value, name: before?.name }])
+    // İşlem kaydı (A09): eski → yeni stok
+    void logAdminAction(auth.actor, 'Stok güncellendi', {
+      method: 'PATCH',
+      path: '/api/admin/stock-overrides',
+      ip: getClientIp(request),
+      objectType: 'product',
+      objectId: row.productId,
+      changes: [{ field: 'stock', label: 'Stok', from: before?.stock != null ? String(before.stock) : null, to: String(value) }],
+      details: `${before?.name ?? row.productId}: Stok ${before?.stock ?? '—'} → ${value}`,
+    })
     revalidateStorefront()
     return NextResponse.json(row)
   } catch (error) {

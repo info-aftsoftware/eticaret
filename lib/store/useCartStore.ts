@@ -9,6 +9,7 @@ import { create } from 'zustand'
 import { isContactOnlyLine, isContactOnlyProduct } from '@/lib/shipping/battery'
 import { persist, PersistStorage } from 'zustand/middleware'
 import { cartItemToGa, trackAddToCart, trackRemoveFromCart } from '@/lib/analytics'
+import type { LineLogisticsOverride } from '@/lib/shipping/fee'
 
 export interface CartItem {
   id: string
@@ -20,7 +21,11 @@ export interface CartItem {
   category?: string
   /** Katalog ürün id'si (varyantlar aynı ürünün stoğunu paylaşır) */
   productId?: string
-  /** Ürünün bilinen stoğu: aynı ürünün tüm kalemlerinin toplam adedi bunu aşamaz */
+  /** Stok anahtarı: ayrı stoklanan varyantta "productId::variantKey"; yoksa productId kullanılır (lib/variant-stock) */
+  stockKey?: string
+  /** Panelde tanımlı lojistik (A07); sunucu teklifinden gelir, kargo tahmininde desi.json yerine kullanılır */
+  logistics?: LineLogisticsOverride
+  /** Bilinen stok: aynı stok anahtarındaki kalemlerin toplam adedi bunu aşamaz */
   maxQuantity?: number
   /** Özel konfigürasyon / teklif kalemi işareti */
   isCustom?: boolean
@@ -49,11 +54,11 @@ interface CartState {
   /** Sunucudan gelen güncel birim fiyatları uygular (kampanya / fiyat değişikliği) */
   syncPrices: (prices: Record<string, number>) => void
   /** Sunucudan gelen güncel stok bilgisini kalemlere yazar */
-  syncStock: (stock: Record<string, { productId: string; stock?: number }>) => void
+  syncStock: (stock: Record<string, { productId: string; stockKey?: string; stock?: number; logistics?: LineLogisticsOverride }>) => void
   getTotalPrice: () => number
   getTotalItems: () => number
   getItemQuantity: (id: string) => number
-  /** Aynı ürünün (tüm varyantları) sepetteki toplam adedi */
+  /** Aynı stok anahtarının (ortak stokta ürünün tüm varyantları) sepetteki toplam adedi */
   getProductQuantity: (productId: string) => number
   // API stub'ları — static hosting'de no-op
   loadCartFromServer: (token: string) => Promise<void>
@@ -102,10 +107,10 @@ function readMemberCart(uid: string): PersistedCart | null {
   }
 }
 
-const productKey = (i: Pick<CartItem, 'id' | 'productId'>) => i.productId ?? i.id
+const productKey = (i: Pick<CartItem, 'id' | 'productId' | 'stockKey'>) => i.stockKey ?? i.productId ?? i.id
 
 /** Ürünün stok sınırına göre kalemin alabileceği en fazla adet (sınır yoksa Infinity). */
-function capFor(items: CartItem[], target: Pick<CartItem, 'id' | 'productId' | 'maxQuantity'>): number {
+function capFor(items: CartItem[], target: Pick<CartItem, 'id' | 'productId' | 'stockKey' | 'maxQuantity'>): number {
   const key = productKey(target)
   const max = target.maxQuantity ?? items.find((i) => productKey(i) === key && i.maxQuantity != null)?.maxQuantity
   if (max == null) return Infinity
@@ -181,9 +186,9 @@ export const useCartStore = create<CartState>()(
           const items = state.items.map((i) => {
             const s = stock[i.id]
             if (!s) return i
-            if (i.productId === s.productId && i.maxQuantity === s.stock) return i
+            if (i.productId === s.productId && i.stockKey === s.stockKey && i.maxQuantity === s.stock && JSON.stringify(i.logistics) === JSON.stringify(s.logistics)) return i
             changed = true
-            return { ...i, productId: s.productId, maxQuantity: s.stock }
+            return { ...i, productId: s.productId, stockKey: s.stockKey, maxQuantity: s.stock, logistics: s.logistics }
           })
           return changed ? { items } : state
         }),
@@ -294,6 +299,8 @@ export function handleCartAuthChange(prevUid: string | null, nextUid: string | n
       existing.price = g.price
       existing.maxQuantity = g.maxQuantity ?? existing.maxQuantity
       existing.productId = g.productId ?? existing.productId
+      existing.stockKey = g.stockKey ?? existing.stockKey
+      existing.logistics = g.logistics ?? existing.logistics
     } else {
       merged.push({ ...g })
     }

@@ -50,7 +50,13 @@ export const PAYMENT_METHOD_LABEL: Record<string, string> = {
 }
 
 export const statusLabel = (s?: string | null) => (s ? ORDER_STATUS_LABEL[s.toUpperCase()] ?? s : '—')
-export const paymentLabel = (s?: string | null) => (s ? PAYMENT_STATUS_LABEL[s.toUpperCase()] ?? s : '—')
+/** Ödeme etiketi; sipariş durumu verilirse ödenmeden iptal edilen sipariş "Ödenmedi · iptal" görünür (A15) */
+export const paymentLabel = (s?: string | null, orderStatus?: string | null) => {
+  if (!s) return '—'
+  const p = s.toUpperCase()
+  if (orderStatus?.toUpperCase() === 'CANCELLED' && (p === 'PENDING' || p === 'FAILED')) return 'Ödenmedi · iptal'
+  return PAYMENT_STATUS_LABEL[p] ?? s
+}
 export const methodLabel = (s?: string | null) => (s ? PAYMENT_METHOD_LABEL[s] ?? s : '—')
 
 /** GET /api/admin/orders satırı */

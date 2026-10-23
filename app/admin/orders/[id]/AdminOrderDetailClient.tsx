@@ -126,6 +126,16 @@ const PAYMENT_STATUS_LABELS: Record<string, string> = {
   FAILED: 'Başarısız', REFUNDED: 'İade edildi', PARTIALLY_REFUNDED: 'Kısmi iade',
 }
 
+/**
+ * Ödeme etiketi sipariş durumuyla birlikte okunur (A15): ödenmeden iptal edilen sipariş "ödeme bekleniyor" görünmez.
+ */
+function paymentLabel(o: { status: string; paymentStatus: string }): string {
+  const cancelled = o.status === 'CANCELLED'
+  if (cancelled && (o.paymentStatus === 'PENDING' || o.paymentStatus === 'pending' || o.paymentStatus === 'FAILED')) return 'Ödenmedi · sipariş iptal'
+  if (cancelled && o.paymentStatus === 'PAID') return 'Ödendi · iptal, ücret iadesi bekleniyor'
+  return PAYMENT_STATUS_LABELS[o.paymentStatus] ?? o.paymentStatus
+}
+
 const PAYMENT_METHOD_LABELS: Record<string, string> = {
   bank_transfer: 'Havale / EFT',
   card: 'Kredi / Banka Kartı (Sanal POS, 3D Secure)',
@@ -213,6 +223,8 @@ export default function AdminOrderDetailPage() {
 
   const handleSendInvoice = async () => {
     if (!order) return
+    // Belge türü ve alıcı gönderimden önce gösterilir (A15)
+    if (!window.confirm(`Sipariş özeti (proforma, mali fatura değildir) ${order.customer?.email ?? ''} adresine gönderilsin mi?`)) return
     setBusy('invoice')
     setMessage(null)
     try {
@@ -281,7 +293,7 @@ export default function AdminOrderDetailPage() {
             <h1 className="text-xl sm:text-2xl font-bold text-[#121926] tracking-tight flex flex-wrap items-center gap-2">
               <span className="font-mono">{order.orderId}</span>
               <Pill tone={ORDER_STATUS_TONE[order.status] ?? 'slate'} dot>{order.statusLabel ?? STATUS_LABELS[order.status] ?? order.status}</Pill>
-              <Pill tone={PAYMENT_STATUS_TONE[order.paymentStatus] ?? 'slate'}>{PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}</Pill>
+              <Pill tone={order.status === 'CANCELLED' ? 'slate' : PAYMENT_STATUS_TONE[order.paymentStatus] ?? 'slate'}>{paymentLabel(order)}</Pill>
             </h1>
             <p className="text-sm text-[#5d6e80] mt-1">
               {fmtDate(order.createdAt)} · {c.name}
@@ -402,6 +414,16 @@ export default function AdminOrderDetailPage() {
                       <li key={e.id} className="ml-4">
                         <span className={`absolute -left-1.5 mt-1.5 h-3 w-3 rounded-full ${e.type === 'email' ? 'bg-slate-300' : e.type === 'payment' ? 'bg-green-500' : e.type === 'shipment' ? 'bg-purple-500' : 'bg-brand'}`} />
                         <p className="text-sm text-slate-800">{e.message}</p>
+                        {e.type === 'email' && e.status === 'EMAIL_FAILED' && (
+                          <button
+                            type="button"
+                            className="mt-1 text-xs font-medium text-brand hover:underline disabled:opacity-50"
+                            disabled={busy !== null}
+                            onClick={() => patch(`resend-${e.id}`, { action: 'resend_email', eventId: e.id }, 'E-posta yeniden gönderildi.')}
+                          >
+                            Yeniden gönder
+                          </button>
+                        )}
                         <p className="text-xs text-slate-500">
                           {fmtDate(e.createdAt)} · {e.actor === 'admin' ? 'Admin' : e.actor === 'customer' ? 'Müşteri' : 'Sistem'}
                           {!e.visibleToCustomer && ' · yalnızca panelde görünür'}
@@ -443,8 +465,8 @@ export default function AdminOrderDetailPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <p>{PAYMENT_METHOD_LABELS[order.paymentMethod ?? ''] ?? order.paymentMethod ?? '—'}</p>
-              <p className={isPaid ? 'text-green-700 font-medium' : 'text-amber-700 font-medium'}>
-                {PAYMENT_STATUS_LABELS[order.paymentStatus] ?? order.paymentStatus}
+              <p className={order.status === 'CANCELLED' ? 'text-slate-600 font-medium' : isPaid ? 'text-green-700 font-medium' : 'text-amber-700 font-medium'}>
+                {paymentLabel(order)}
                 {order.paidAt ? ` · ${fmtDate(order.paidAt)}` : ''}
               </p>
               {order.paymentProviderRef && <p className="text-xs text-slate-500 break-all">Ref: {order.paymentProviderRef}</p>}
@@ -463,7 +485,10 @@ export default function AdminOrderDetailPage() {
                   Ödeme Alındı
                 </Button>
               )}
-              {isPrisma && (
+              {isPrisma && order.status === 'CANCELLED' && (
+                <p className="text-xs text-slate-500">Sipariş iptal edildi: paketleme formu, kargo etiketi ve sipariş özeti gönderimi kapalı.</p>
+              )}
+              {isPrisma && order.status !== 'CANCELLED' && (
                 <Button asChild variant="outline" className="w-full">
                   <a href={`/api/admin/orders/${order.id}/packing-slip`} target="_blank" rel="noopener noreferrer">
                     <Package className="w-4 h-4 mr-2" />
@@ -471,7 +496,7 @@ export default function AdminOrderDetailPage() {
                   </a>
                 </Button>
               )}
-              {isPrisma && (
+              {isPrisma && order.status !== 'CANCELLED' && (
                 <Button asChild variant="outline" className="w-full">
                   <a href={`/api/admin/shipping/labels?ids=${encodeURIComponent(order.id)}`} target="_blank" rel="noopener noreferrer">
                     <Package className="w-4 h-4 mr-2" />
@@ -479,11 +504,14 @@ export default function AdminOrderDetailPage() {
                   </a>
                 </Button>
               )}
-              {isPrisma && (
-                <Button variant="outline" className="w-full" onClick={handleSendInvoice} disabled={busy !== null}>
-                  {busy === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
-                  Faturayı E-postayla Gönder
-                </Button>
+              {isPrisma && order.status !== 'CANCELLED' && (
+                <>
+                  <Button variant="outline" className="w-full" onClick={handleSendInvoice} disabled={busy !== null || !c.email}>
+                    {busy === 'invoice' ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <FileText className="w-4 h-4 mr-2" />}
+                    Sipariş Özetini (Proforma) Gönder
+                  </Button>
+                  <p className="text-[11px] text-slate-500">Mali fatura değildir; resmî e-Arşiv fatura ayrıca düzenlenir.{c.email ? ` Alıcı: ${c.email}` : ' Siparişte e-posta yok.'}</p>
+                </>
               )}
             </CardContent>
           </Card>

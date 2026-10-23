@@ -145,7 +145,7 @@ function CustomerDetail() {
                     </div>
                     <div className="flex flex-wrap items-center gap-1.5">
                       <Pill tone={ORDER_STATUS_TONE[o.status] ?? 'slate'} dot>{statusLabel(o.status)}</Pill>
-                      <Pill tone={PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus)}</Pill>
+                      <Pill tone={o.status?.toUpperCase() === 'CANCELLED' ? 'slate' : PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus, o.status)}</Pill>
                     </div>
                     <span className="text-sm font-semibold tabular-nums text-[#121926] sm:w-28 sm:text-right">{fmtTRY(o.total)}</span>
                   </Link>
