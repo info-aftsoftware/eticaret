@@ -10,6 +10,7 @@ export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { invalidateCampaignCache } from '@/lib/discounts'
 import { Prisma } from '@prisma/client'
+import { dateRangeError, discountValueError } from '@/lib/campaign-rules'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
@@ -63,6 +64,11 @@ export async function POST(request: NextRequest) {
     if (!['PERCENT', 'FIXED'].includes(type)) {
       return NextResponse.json({ error: 'type PERCENT veya FIXED olmalı' }, { status: 400 })
     }
+    // Kuponla ortak kural (A14): yüzde en fazla %99, sabit > 0, bitiş başlangıçtan önce olamaz
+    const valueError = discountValueError(type, value)
+    if (valueError) return NextResponse.json({ error: valueError }, { status: 400 })
+    const rangeError = dateRangeError(startDate ? new Date(startDate) : null, endDate ? new Date(endDate) : null)
+    if (rangeError) return NextResponse.json({ error: rangeError }, { status: 400 })
 
     const discount = await prisma.discount.create({
       data: {

@@ -7,7 +7,7 @@ import ProductDetailClient from './ProductDetailClient'
 import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discounts'
 import { VAT_RATE } from '@/lib/store-config'
-import { lineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
+import { lineLogistics, panelLineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isInstallShipping, isQuoteOnly } from '@/lib/sale-mode'
 import { SELLER } from '@/lib/legal/company'
@@ -151,7 +151,7 @@ function buildProductJsonLd(product: StorefrontProduct, rating: { average: numbe
 function buildProductJsonLdWithOffer(product: StorefrontProduct, rating: { average: number; count: number }) {
   // Google: yapılandırılmış veri fiyatı sayfadaki satış fiyatıyla (KDV dahil) aynı olmalı
   const priceWithVat = Math.round(product.price * (1 + VAT_RATE / 100) * 100) / 100
-  const shippingFee = shippingFeeFor(lineLogistics(product.id))
+  const shippingFee = shippingFeeFor(lineLogistics(product.id, undefined, panelLineLogistics(product)))
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
 

@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Geçerli bir e-posta adresi girin.' }, { status: 400 })
   }
   const product = await getMergedProductById(productId)
-  if (!product) return NextResponse.json({ success: false, error: 'Ürün bulunamadı.' }, { status: 404 })
+  if (!product || product.status === 'draft') return NextResponse.json({ success: false, error: 'Ürün bulunamadı.' }, { status: 404 })
   if ((product.stock ?? 0) > 0) {
     return NextResponse.json({ success: false, error: 'Bu ürün şu anda stokta.' }, { status: 409 })
   }

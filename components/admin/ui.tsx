@@ -422,10 +422,10 @@ export function Modal({
   )
 }
 
-export function Checkbox({ checked, onChange, label, className }: { checked: boolean; onChange: (v: boolean) => void; label?: React.ReactNode; className?: string }) {
+export function Checkbox({ checked, onChange, label, className, disabled }: { checked: boolean; onChange: (v: boolean) => void; label?: React.ReactNode; className?: string; disabled?: boolean }) {
   return (
-    <label className={cn('inline-flex items-center gap-2 text-[13px] text-[#20384e] cursor-pointer select-none', className)}>
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="w-4 h-4 rounded border-[#b9c3cf] accent-[#0b2540]" />
+    <label className={cn('inline-flex items-center gap-2 text-[13px] text-[#20384e] select-none', disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer', className)}>
+      <input type="checkbox" checked={checked} disabled={disabled} onChange={(e) => onChange(e.target.checked)} className="w-4 h-4 rounded border-[#b9c3cf] accent-[#0b2540]" />
       {label}
     </label>
   )

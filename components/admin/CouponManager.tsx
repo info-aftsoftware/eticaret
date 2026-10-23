@@ -254,7 +254,7 @@ export function CouponManager() {
               </div>
               <div>
                 <Label htmlFor="cp-value">{form.type === 'PERCENT' ? 'Yüzde' : 'Tutar (TL)'}</Label>
-                <Input id="cp-value" type="number" min="0.01" step="0.01" max={form.type === 'PERCENT' ? 100 : undefined} value={form.value} onChange={set('value')} required />
+                <Input id="cp-value" type="number" min="0.01" step="0.01" max={form.type === 'PERCENT' ? 99 : undefined} value={form.value} onChange={set('value')} required />
               </div>
               <div>
                 <Label htmlFor="cp-min">En az sepet (TL, KDV hariç)</Label>

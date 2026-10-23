@@ -14,6 +14,8 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
 
   const order = await prisma.order.findUnique({ where: { id: params.id }, include: { lines: true } })
   if (!order) return NextResponse.json({ error: 'Sipariş bulunamadı' }, { status: 404 })
+  // İptal edilmiş sipariş paketlenmez (A15)
+  if (order.status === 'CANCELLED') return NextResponse.json({ error: 'İptal edilmiş sipariş için paketleme formu basılmaz.' }, { status: 409 })
   try {
     const pdf = await generatePackingSlipPdf(order)
     return new NextResponse(new Uint8Array(pdf), {

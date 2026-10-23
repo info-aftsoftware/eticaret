@@ -7,12 +7,12 @@
 import crypto from 'crypto'
 import { prisma } from '@/lib/prisma'
 import { getAdminFirestore, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
+import { isCollectedOrder, refundedByOrder } from '@/lib/revenue'
 
 export type CustomerSort = 'last_order' | 'spend' | 'orders' | 'newest' | 'name'
 export type CustomerFilter = 'all' | 'registered' | 'guest' | 'with_orders'
 
 const PLACEHOLDER = '@placeholder.local'
-const COUNTED_STATUSES_EXCLUDED = new Set(['CANCELLED', 'RETURNED'])
 
 export const userKey = (id: string) => `u_${id}`
 export const guestKey = (identity: string) => `g_${crypto.createHash('sha256').update(identity.trim().toLowerCase()).digest('hex').slice(0, 20)}`
@@ -78,6 +78,7 @@ async function buildGroups(): Promise<Map<string, Group>> {
       },
     }),
   ])
+  const refunds = await refundedByOrder(orders.filter(isCollectedOrder).map((o) => o.id))
 
   const groups = new Map<string, Group>()
   const userByEmail = new Map<string, string>()
@@ -136,9 +137,10 @@ async function buildGroups(): Promise<Map<string, Group>> {
     }
     g.orders.push(o)
     g.orderCount++
-    if (o.paymentStatus === 'PAID' && !COUNTED_STATUSES_EXCLUDED.has(o.status)) {
+    // Ödenen toplam: İstatistikler'deki tahsilatla aynı kural (lib/revenue), ücret iadeleri düşülür
+    if (isCollectedOrder(o)) {
       g.paidOrderCount++
-      g.paidTotal += o.total
+      g.paidTotal += Math.max(0, o.total - (refunds.get(o.id) ?? 0))
     }
     const at = o.createdAt.toISOString()
     if (!g.lastOrderAt) {

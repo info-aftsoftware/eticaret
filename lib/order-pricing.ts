@@ -8,9 +8,10 @@ import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById } from '@/lib/discounts'
 import { prisma } from '@/lib/prisma'
 import { computeOrderTotals, VAT_RATE, type CheckoutPaymentMethod, type OrderTotals } from '@/lib/store-config'
-import { cartLogistics, quoteShipping, type ShippingQuote } from '@/lib/shipping/fee'
+import { cartLogistics, panelLineLogistics, quoteShipping, type LineLogisticsOverride, type ShippingQuote } from '@/lib/shipping/fee'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isQuoteOnly } from '@/lib/sale-mode'
+import { lineStock, stockKeyFor } from '@/lib/variant-stock'
 
 export { VAT_RATE }
 const MAX_QTY_PER_LINE = 999
@@ -26,7 +27,13 @@ export type PricedLine = {
   name: string
   /** Varyant eki olmadan ürün adı */
   productName: string
-  /** Ürünün güncel stoğu (varyantlar paylaşır); takip yoksa undefined */
+  /** Stoğun düşüleceği anahtar: ürün id'si veya ayrı stoklanan varyantta "productId::variantKey" (lib/variant-stock) */
+  stockKey: string
+  /** Stok mesajlarında kullanılacak ad (ayrı stoklu varyantta varyant adıyla) */
+  stockName: string
+  /** Panelde tanımlı tek adet lojistik (A07); yoksa desi.json kullanılır */
+  logistics?: LineLogisticsOverride
+  /** Kalemin güncel stoğu (ürün veya ayrı stoklanan varyant); takip yoksa undefined */
   stock?: number
   unitPrice: number
   quantity: number
@@ -143,17 +150,20 @@ export async function priceOrder(
     if (isContactOnlyProduct(product)) {
       throw new PricingError(`"${product.name}" çevrim içi sipariş edilemiyor. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin.`)
     }
-    // Stok kontrolü (aynı ürünün farklı varyantları ürün stoğunu paylaşır)
-    if (typeof product.stock === 'number') {
-      const alreadyInCart = lines.filter((l) => l.productId === product.id).reduce((n, l) => n + l.quantity, 0)
-      if (product.stock <= 0) {
-        throw new StockError(`"${product.name}" şu anda stokta yok. Lütfen sepetinizden çıkarın.`)
+    const variant = variantKey ? product.variants?.find((v) => v.key === variantKey) : undefined
+    // Stok kontrolü: varyantlar ayrı stoklanıyorsa varyantın, değilse ürünün stoğu (varyantlar paylaşır)
+    const stockKey = stockKeyFor(product, variantKey)
+    const stock = lineStock(product, variantKey)
+    const stockName = product.variantStock && variant ? `${product.name} - ${variant.label}` : product.name
+    if (typeof stock === 'number') {
+      const alreadyInCart = lines.filter((l) => l.stockKey === stockKey).reduce((n, l) => n + l.quantity, 0)
+      if (stock <= 0) {
+        throw new StockError(`"${stockName}" şu anda stokta yok. Lütfen sepetinizden çıkarın.`)
       }
-      if (alreadyInCart + quantity > product.stock) {
-        throw new StockError(`"${product.name}" için stokta yalnızca ${product.stock} adet var.`)
+      if (alreadyInCart + quantity > stock) {
+        throw new StockError(`"${stockName}" için stokta yalnızca ${stock} adet var.`)
       }
     }
-    const variant = variantKey ? product.variants?.find((v) => v.key === variantKey) : undefined
     const unitPrice = Number(variant ? variant.price : product.price)
     if (!Number.isFinite(unitPrice) || unitPrice <= 0) {
       throw new PricingError(`${product.name} için fiyat bilgisi bulunamadı.`)
@@ -165,7 +175,10 @@ export async function priceOrder(
       variantKey,
       name: variant ? `${product.name} - ${variant.label}` : product.name,
       productName: product.name,
-      stock: typeof product.stock === 'number' ? product.stock : undefined,
+      stockKey,
+      stockName,
+      logistics: panelLineLogistics(product),
+      stock,
       unitPrice,
       quantity,
       lineSubtotal: round2(unitPrice * quantity),
@@ -175,7 +188,7 @@ export async function priceOrder(
   const subtotal = round2(lines.reduce((s, l) => s + l.lineSubtotal, 0))
   const code = couponCode?.trim() ? normalizeCouponCode(couponCode) : null
   const couponDiscount = code ? await computeCouponDiscount(code, subtotal) : 0
-  const shippingQuote = quoteShipping(cartLogistics(lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity }))))
+  const shippingQuote = quoteShipping(cartLogistics(lines.map((l) => ({ id: l.cartId, productId: l.productId, quantity: l.quantity, logistics: l.logistics }))))
   const totals = computeOrderTotals({ subtotal, couponDiscount, paymentMethod, shippingFee: shippingQuote.fee })
 
   return { lines, ...totals, couponCode: code, shippingQuote }

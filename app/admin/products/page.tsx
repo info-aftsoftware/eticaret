@@ -30,6 +30,8 @@ import {
 } from '@/components/admin/ui'
 import { useToast } from '@/components/admin/toast'
 import { cn } from '@/lib/utils'
+import { matchProduct } from '@/lib/admin-product-search'
+import { BULK_STOCK_MODE_TR, planBulkStock, type BulkStockMode } from '@/lib/bulk-stock'
 
 type CatalogRow = {
   id: string
@@ -42,7 +44,11 @@ type CatalogRow = {
   featured: boolean
   image?: string | null
   images?: string[]
-  variants?: { key: string; label: string; price: number }[]
+  variants?: { key: string; label: string; price: number; sku?: string; stock?: number }[]
+  /** Varyantlar ayrı stoklanıyor: satırdaki stok varyant toplamıdır, düzenleyiciden değişir */
+  variantStock?: boolean
+  /** Panelde eklenen ürün taslakta (A08): sitede görünmez */
+  status?: 'draft'
 }
 
 const LOW = 5
@@ -91,6 +97,18 @@ function StockCell({ row, onSaved }: { row: CatalogRow; onSaved: (id: string, st
     }
   }
 
+  if (row.variantStock) {
+    return (
+      <Link
+        href={`/admin/products/duzenle?id=${encodeURIComponent(row.id)}#varyantlar`}
+        title="Varyantlar ayrı stoklanıyor; stok varyant bazında düzenlenir"
+        className={cn('inline-flex items-center h-8 px-2 rounded-md border border-dashed border-[#d3d9e1] text-sm tabular-nums hover:bg-[#f5f7fa]', row.stock === 0 ? 'text-red-700' : row.stock <= LOW ? 'text-amber-700' : 'text-[#121926]')}
+      >
+        {row.stock} <span className="ml-1 text-[11px] text-[#5d6e80]">toplam</span>
+      </Link>
+    )
+  }
+
   return (
     <div className="flex items-center gap-1.5">
       <input
@@ -137,6 +155,8 @@ function ProductsContent() {
   const [bulk, setBulk] = useState<null | 'stock' | 'discount'>(null)
   const [bulkValue, setBulkValue] = useState('')
   const [bulkBusy, setBulkBusy] = useState(false)
+  // Toplu stok (A16): eşitle / ekle / çıkar; kaydetmeden önce ürün bazında önizleme
+  const [stockMode, setStockMode] = useState<BulkStockMode>('add')
 
   const setParams = useCallback(
     (patch: Record<string, string | number | null>) => {
@@ -180,20 +200,18 @@ function ProductsContent() {
   const brands = useMemo(() => [...new Set(all.map((p) => p.brand).filter(Boolean) as string[])].sort((a, b) => a.localeCompare(b, 'tr')), [all])
   const categories = useMemo(() => [...new Set(all.map((p) => p.category).filter(Boolean) as string[])].sort((a, b) => a.localeCompare(b, 'tr')), [all])
 
-  const base = useMemo(() => {
-    const needle = q.toLocaleLowerCase('tr-TR')
-    return all.filter((p) => {
+  // Arama: ad, SKU, marka, varyant adı ve varyant SKU'su (lib/admin-product-search); eşleşen varyant satırda gösterilir
+  const { base, matchedVariant } = useMemo(() => {
+    const matchedVariant = new Map<string, { label: string; sku?: string }>()
+    const base = all.filter((p) => {
       if (brand && p.brand !== brand) return false
       if (category && p.category !== category) return false
-      if (!needle) return true
-      return (
-        p.name.toLocaleLowerCase('tr-TR').includes(needle) ||
-        (p.sku ?? '').toLowerCase().includes(needle) ||
-        p.id.toLowerCase().includes(needle) ||
-        (p.brand ?? '').toLocaleLowerCase('tr-TR').includes(needle) ||
-        (p.variants ?? []).some((v) => v.label.toLocaleLowerCase('tr-TR').includes(needle))
-      )
+      if (!q.trim()) return true
+      const m = matchProduct(p, q)
+      if (m?.variant) matchedVariant.set(p.id, m.variant)
+      return !!m
     })
+    return { base, matchedVariant }
   }, [all, q, brand, category])
 
   const counts = {
@@ -235,7 +253,12 @@ function ProductsContent() {
     }
   }
 
-  const runBulk = async (action: 'feature' | 'unfeature' | 'set_stock' | 'apply_discount', value?: number) => {
+  const stockPlan = useMemo(
+    () => planBulkStock(all.filter((p) => selected.has(p.id)), stockMode, Number(bulkValue) || 0),
+    [all, selected, stockMode, bulkValue]
+  )
+
+  const runBulk = async (action: 'feature' | 'unfeature' | 'set_stock' | 'adjust_stock' | 'apply_discount', value?: number) => {
     setBulkBusy(true)
     try {
       const res = await fetch('/api/admin/catalog/bulk', {
@@ -248,7 +271,9 @@ function ProductsContent() {
       if (!res.ok) throw new Error(json?.error || 'Toplu işlem başarısız')
       toast.success(
         action === 'apply_discount' ? 'İndirim kampanyası oluşturuldu' : 'Toplu işlem tamamlandı',
-        action === 'apply_discount' ? `${json.affected} ürün · İndirimler sayfasından yönetebilirsiniz` : `${json.affected} ürün güncellendi`
+        action === 'apply_discount'
+          ? `${json.affected} ürün · İndirimler sayfasından yönetebilirsiniz`
+          : `${json.affected} ürün güncellendi${json.skippedVariantStock?.length ? ` · ayrı varyant stoklu ${json.skippedVariantStock.length} ürün atlandı` : ''}`
       )
       setBulk(null)
       setBulkValue('')
@@ -323,7 +348,7 @@ function ProductsContent() {
             </Btn>
             <Btn size="xs" variant="outline" onClick={() => setBulk('stock')} disabled={bulkBusy}>
               <Layers />
-              Stok ayarla
+              Stok işlemi
             </Btn>
             <Btn size="xs" variant="outline" onClick={() => setBulk('discount')} disabled={bulkBusy}>
               <Percent />
@@ -402,7 +427,14 @@ function ProductsContent() {
                             <p className="text-xs text-[#5d6e80] truncate">
                               {[p.brand, p.sku].filter(Boolean).join(' · ')}
                               {p.variants?.length ? ` · ${p.variants.length} varyant` : ''}
+                              {p.status === 'draft' && ' · Taslak (sitede görünmüyor)'}
                             </p>
+                            {matchedVariant.has(p.id) && (
+                              <p className="text-xs text-[#7a5a00] truncate">
+                                Eşleşen varyant: {matchedVariant.get(p.id)!.label}
+                                {matchedVariant.get(p.id)!.sku ? ` · ${matchedVariant.get(p.id)!.sku}` : ''}
+                              </p>
+                            )}
                           </div>
                         </div>
                       </td>
@@ -449,21 +481,75 @@ function ProductsContent() {
       <Modal
         open={bulk === 'stock'}
         onClose={() => setBulk(null)}
-        title="Stok ayarla"
-        description={`${selected.size} ürünün stoğu aynı değere ayarlanır`}
-        size="sm"
+        title="Toplu stok işlemi"
+        description={`${selected.size} seçili ürün · kaydetmeden önce sonucu aşağıda görün`}
         footer={
           <>
             <Btn variant="outline" onClick={() => setBulk(null)}>Vazgeç</Btn>
-            <Btn variant="primary" loading={bulkBusy} disabled={bulkValue === '' || Number(bulkValue) < 0} onClick={() => runBulk('set_stock', Math.floor(Number(bulkValue)))}>
-              Kaydet
+            <Btn
+              variant="primary"
+              loading={bulkBusy}
+              disabled={bulkValue === '' || !(Number(bulkValue) >= 0) || stockPlan.changed === 0}
+              onClick={() => {
+                const n = Math.floor(Number(bulkValue))
+                if (stockMode === 'set') runBulk('set_stock', n)
+                else runBulk('adjust_stock', stockMode === 'add' ? n : -n)
+              }}
+            >
+              {BULK_STOCK_MODE_TR[stockMode]} ({stockPlan.changed} ürün)
             </Btn>
           </>
         }
       >
-        <Field label="Stok adedi" htmlFor="bulk-stock">
-          <TextInput id="bulk-stock" type="number" min={0} value={bulkValue} onChange={(e) => setBulkValue(e.target.value)} autoFocus />
-        </Field>
+        <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="İşlem">
+            {(['add', 'subtract', 'set'] as const).map((m) => (
+              <button
+                key={m}
+                type="button"
+                role="radio"
+                aria-checked={stockMode === m}
+                onClick={() => setStockMode(m)}
+                className={cn('rounded-lg border px-3 py-2 text-[13px] font-medium', stockMode === m ? 'border-[#0b2540] bg-[#f5f7fa] ring-1 ring-[#0b2540] text-[#121926]' : 'border-[#d3d9e1] text-[#20384e] hover:border-[#8a99a8]')}
+              >
+                {BULK_STOCK_MODE_TR[m]}
+              </button>
+            ))}
+          </div>
+          <Field
+            label={stockMode === 'set' ? 'Yeni stok (her ürün bu adede eşitlenir)' : stockMode === 'add' ? 'Eklenecek adet (mevcut stoğun üstüne)' : 'Çıkarılacak adet (0\'ın altına inmez)'}
+            htmlFor="bulk-stock"
+          >
+            <TextInput id="bulk-stock" type="number" min={0} value={bulkValue} onChange={(e) => setBulkValue(e.target.value)} autoFocus />
+          </Field>
+          {bulkValue !== '' && (
+            <div className="max-h-64 overflow-auto rounded-lg border border-[#e6ebf1]">
+              <table className="w-full text-[12px]">
+                <thead className="bg-[#f5f7fa] text-left text-[#5d6e80] sticky top-0">
+                  <tr>
+                    <th className="px-3 py-1.5 font-semibold">Ürün</th>
+                    <th className="px-3 py-1.5 font-semibold text-right">Mevcut</th>
+                    <th className="px-3 py-1.5 font-semibold text-right">Yeni</th>
+                    <th className="px-3 py-1.5 font-semibold text-right">Fark</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#eef1f5]">
+                  {stockPlan.rows.map((r) => (
+                    <tr key={r.id} className={r.skipped ? 'text-[#9aa8b6]' : undefined}>
+                      <td className="px-3 py-1.5 max-w-[220px] truncate" title={r.name}>{r.name}</td>
+                      <td className="px-3 py-1.5 text-right tabular-nums">{r.current}</td>
+                      <td className="px-3 py-1.5 text-right tabular-nums">{r.skipped ? 'atlanır' : r.next}</td>
+                      <td className={cn('px-3 py-1.5 text-right tabular-nums', r.diff > 0 ? 'text-green-700' : r.diff < 0 ? 'text-red-700' : '')}>
+                        {r.skipped ? 'varyant stoklu' : r.diff > 0 ? `+${r.diff}` : r.diff}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {stockPlan.skipped > 0 && <p className="text-xs text-[#5d6e80]">{stockPlan.skipped} ürünün varyantları ayrı stoklanıyor; stokları ürün düzenleyicisinden girilir.</p>}
+        </div>
       </Modal>
 
       <Modal

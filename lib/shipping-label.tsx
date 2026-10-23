@@ -10,7 +10,7 @@ import type { Order, OrderLine } from '@prisma/client'
 import './invoice' // Roboto (Türkçe karakter) font kaydı
 import { SELLER } from './legal/company'
 import { getCarrier } from './shipping/carriers'
-import { cartLogistics } from './shipping/fee'
+import { cartLogistics, type LineLogisticsOverride } from './shipping/fee'
 
 const MM = 72 / 25.4
 const s = StyleSheet.create({
@@ -27,9 +27,9 @@ type LabelOrder = Order & { lines: OrderLine[] }
 
 function Label({ order, qr }: { order: LabelOrder; qr: string }) {
   const items = order.lines.map((l) => {
-    const vm = l.variantMatrix as { productId?: string; variantKey?: string } | null
+    const vm = l.variantMatrix as { productId?: string; variantKey?: string; logistics?: LineLogisticsOverride } | null
     const productId = vm?.productId
-    return { id: vm?.variantKey ? `${productId}-${vm.variantKey}` : productId ?? '', productId, quantity: l.quantity }
+    return { id: vm?.variantKey ? `${productId}-${vm.variantKey}` : productId ?? '', productId, quantity: l.quantity, logistics: vm?.logistics }
   })
   const { desi, kg } = cartLogistics(items)
   const pieces = order.lines.reduce((n, l) => n + l.quantity, 0)

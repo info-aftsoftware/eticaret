@@ -40,20 +40,29 @@ export function totpCode(secret: Buffer, counter: number, digits = 6): string {
  * Sabit zamanlı karşılaştırma kullanılır.
  */
 export function verifyTotp(secretBase32: string, code: string, now = Date.now(), window = 1): boolean {
+  return totpStep(secretBase32, code, now, window) !== null
+}
+
+/**
+ * Kod geçerliyse eşleşen 30 sn'lik adımı döner (yoksa null). Girişte yeniden kullanım engeli için (A12):
+ * aynı adımdaki veya daha eski bir kod ikinci kez kabul edilmez (lastStep).
+ */
+export function totpStep(secretBase32: string, code: string, now = Date.now(), window = 1, lastStep?: number | null): number | null {
   const token = String(code ?? '').replace(/\s/g, '')
-  if (!/^\d{6}$/.test(token)) return false
+  if (!/^\d{6}$/.test(token)) return null
   let secret: Buffer
   try {
     secret = base32Decode(secretBase32)
   } catch {
-    return false
+    return null
   }
-  if (secret.length < 10) return false
+  if (secret.length < 10) return null
   const counter = Math.floor(now / 1000 / 30)
-  let ok = false
+  let matched: number | null = null
   for (let w = -window; w <= window; w++) {
     const expected = totpCode(secret, counter + w)
-    if (crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(token))) ok = true
+    if (crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(token))) matched = counter + w
   }
-  return ok
+  if (matched !== null && lastStep != null && matched <= lastStep) return null
+  return matched
 }

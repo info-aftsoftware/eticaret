@@ -5,6 +5,7 @@ import { checkAdmin, logAdminAction } from '@/lib/adminAuth'
 import { prisma } from '@/lib/prisma'
 import { CONSENT_SOURCES, type ConsentSource } from '@/lib/marketing-consent'
 import { csvResponseHeaders, toCsv } from '@/lib/csv'
+import { businessDateKey } from '@/lib/business-time'
 
 /**
  * Ticari ileti izni olan kişiler (Excel uyumlu CSV) — e-posta pazarlama aracına veya İYS'ye aktarım için.
@@ -31,5 +32,5 @@ export async function GET(request: NextRequest) {
     ])
   )
   void logAdminAction(auth.actor, 'İzinli kişi listesi alındı', { details: `${rows.length} kayıt${all ? ' (ret dahil)' : ''}` })
-  return new NextResponse(csv, { headers: csvResponseHeaders(`voltekno-ticari-ileti-izinleri-${new Date().toISOString().slice(0, 10)}.csv`) })
+  return new NextResponse(csv, { headers: csvResponseHeaders(`voltekno-ticari-ileti-izinleri-${businessDateKey()}.csv`) })
 }

@@ -6,20 +6,24 @@
  * - backup: günde bir (lib/cron-jobs.ts → runBackup)
  * - geliver-tracking: saatte bir (lib/cron-jobs.ts → runGeliverTracking; GELIVER_API_TOKEN yoksa boş geçer)
  * - navlungo-tracking: 2 saatte bir (lib/cron-jobs.ts → runNavlungoTracking; Navlungo yapılandırılmamışsa boş geçer)
+ * - audit-retention: günde bir (lib/audit-retention.ts; saklama süresini aşan işlem kayıtlarını siler)
  *
  * Son çalışma zamanı kalıcı klasörde tutulur (lib/scheduler-core.ts); süreç yeniden başlasa da görev erken tekrarlanmaz.
  * Sunucu cron'u da kuruluysa sorun olmaz: HTTP uçları aynı işi yapar, iptal koşullu güncelleme ile tek seferliktir.
  * Kapatmak için INTERNAL_CRON=0. Paylaşımlı barındırmada uygulama ziyaretsiz kalınca uyutulabilir; o durumda görev,
  * uygulama yeniden açıldıktan sonraki ilk turda (≈1 dk) çalışır.
  */
-import { acquireLock, isDue, readState, resolveStateDir, writeJobState } from './scheduler-core'
+import { acquireLock, isDue, readState, resolveStateDir, writeJobState, type JobOutcome } from './scheduler-core'
 import { runBackup, runExpireOrders, runGeliverTracking, runNavlungoTracking } from './cron-jobs'
+import { AUDIT_RETENTION_DAYS, pruneAuditLog } from './audit-retention'
 
 const HOUR = 3_600_000
 const TICK_MS = 10 * 60_000
 const FIRST_TICK_MS = 60_000
 
-type Job = { name: string; everyMs: number; run: () => Promise<string> }
+/** Görev özeti ve sonucu (A11): kapalı entegrasyon "Başarılı" görünmesin */
+type JobResult = { summary: string; outcome: Exclude<JobOutcome, 'error'> }
+type Job = { name: string; everyMs: number; run: () => Promise<JobResult> }
 
 const JOBS: Job[] = [
   {
@@ -28,7 +32,8 @@ const JOBS: Job[] = [
     run: async () => {
       const r = await runExpireOrders()
       if (r.errors.length) throw new Error(`${r.errors.length} sipariş işlenemedi: ${r.errors.slice(0, 3).join('; ')}`)
-      return `iptal ${r.expired.length}, hatırlatma ${r.reminded.length}, bildirimli bekleyen ${r.held.length}, sonuçsuz kart ${r.cardUnresolved.length}`
+      const n = r.expired.length + r.reminded.length
+      return { outcome: n ? 'ok' : 'idle', summary: `iptal ${r.expired.length}, hatırlatma ${r.reminded.length}, bildirimli bekleyen ${r.held.length}, sonuçsuz kart ${r.cardUnresolved.length}` }
     },
   },
   {
@@ -37,9 +42,9 @@ const JOBS: Job[] = [
     run: async () => {
       const { status, body } = await runBackup()
       // SQLite dışı veritabanı veya yanlış BACKUP_DIR: tekrar denemenin anlamı yok, durum kaydedilir
-      if (status === 400) return `atlandı: ${String(body.error)}`
+      if (status === 400) return { outcome: 'skipped', summary: `atlandı: ${String(body.error)}` }
       if (status !== 200) throw new Error(String(body.error ?? `durum ${status}`))
-      return `${String(body.file)} (${Math.round(Number(body.sizeBytes) / 1024)} KB, saklanan ${String(body.kept)}, sunucu dışı: ${String(body.offsite)})`
+      return { outcome: 'ok', summary: `${String(body.file)} (${Math.round(Number(body.sizeBytes) / 1024)} KB, saklanan ${String(body.kept)}, sunucu dışı: ${String(body.offsite)})` }
     },
   },
   {
@@ -48,9 +53,12 @@ const JOBS: Job[] = [
     run: async () => {
       const r = await runGeliverTracking()
       if (!r.ok) throw new Error(r.error)
-      if (!r.enabled) return 'kapalı (Geliver yapılandırılmamış)'
+      if (!r.enabled) return { outcome: 'disabled', summary: 'Geliver yapılandırılmamış (GELIVER_API_TOKEN yok); görev çalışmadı' }
       if (r.errors.length && r.checked === 0 && r.linked.length === 0) throw new Error(`${r.errors.length} hata: ${r.errors.slice(0, 3).join('; ')}`)
-      return `bağlanan ${r.linked.length}, sorgulanan ${r.checked}, kargoya verilen ${r.shipped.length}, teslim ${r.delivered.length}, uyarı ${r.alerts.length}, hata ${r.errors.length}`
+      return {
+        outcome: r.checked || r.linked.length ? 'ok' : 'idle',
+        summary: `bağlanan ${r.linked.length}, sorgulanan ${r.checked}, kargoya verilen ${r.shipped.length}, teslim ${r.delivered.length}, uyarı ${r.alerts.length}, hata ${r.errors.length}`,
+      }
     },
   },
   {
@@ -59,9 +67,17 @@ const JOBS: Job[] = [
     run: async () => {
       const r = await runNavlungoTracking()
       if (!r.ok) throw new Error(r.error)
-      if (!r.enabled) return 'kapalı (Navlungo yapılandırılmamış)'
+      if (!r.enabled) return { outcome: 'disabled', summary: 'Navlungo yapılandırılmamış (API kullanıcısı yok); görev çalışmadı' }
       if (r.errors.length && r.checked === 0) throw new Error(`${r.errors.length} gönderi sorgulanamadı: ${r.errors.slice(0, 3).join('; ')}`)
-      return `sorgulanan ${r.checked}, teslim ${r.delivered.length}, uyarı ${r.alerts.length}, hata ${r.errors.length}`
+      return { outcome: r.checked ? 'ok' : 'idle', summary: `sorgulanan ${r.checked}, teslim ${r.delivered.length}, uyarı ${r.alerts.length}, hata ${r.errors.length}` }
+    },
+  },
+  {
+    name: 'audit-retention',
+    everyMs: 24 * HOUR,
+    run: async () => {
+      const n = await pruneAuditLog()
+      return { outcome: n ? 'ok' : 'idle', summary: `${AUDIT_RETENTION_DAYS} günden eski ${n} işlem kaydı silindi` }
     },
   },
 ]
@@ -84,13 +100,15 @@ export async function runDueJobs(now = Date.now()): Promise<void> {
         if (!isDue(fresh[job.name], job.everyMs, Date.now())) continue
         const startedAt = new Date().toISOString()
         try {
-          const summary = await job.run()
-          await writeJobState(dir, job.name, { lastRunAt: startedAt, lastOk: true, lastSummary: summary })
-          console.log(`[scheduler] ${job.name}: ${summary}`)
+          const { summary, outcome } = await job.run()
+          // Son başarılı çalışma yalnız gerçekten çalışan görevde ilerler (kapalı/atlanan deneme değiştirmez)
+          const lastSuccessAt = outcome === 'ok' || outcome === 'idle' ? startedAt : fresh[job.name]?.lastSuccessAt
+          await writeJobState(dir, job.name, { lastRunAt: startedAt, lastOk: outcome === 'ok' || outcome === 'idle', outcome, lastSummary: summary, lastSuccessAt })
+          console.log(`[scheduler] ${job.name} (${outcome}): ${summary}`)
         } catch (e) {
           const message = e instanceof Error ? e.message : String(e)
           // Hata da çalışma sayılır: bir sonraki deneme bir periyot sonra (her turda e-posta/uyarı yağmasın)
-          await writeJobState(dir, job.name, { lastRunAt: startedAt, lastOk: false, lastError: message })
+          await writeJobState(dir, job.name, { lastRunAt: startedAt, lastOk: false, outcome: 'error', lastError: message, lastSuccessAt: fresh[job.name]?.lastSuccessAt })
           console.error(`[scheduler] ${job.name} başarısız: ${message}`)
         }
       } finally {

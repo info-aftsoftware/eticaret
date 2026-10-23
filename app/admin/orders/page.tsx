@@ -274,7 +274,7 @@ function OrdersContent() {
                       </td>
                       <td className="px-3 py-3">
                         <div className="flex flex-wrap items-center gap-1">
-                          <Pill tone={PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus)}</Pill>
+                          <Pill tone={o.status?.toUpperCase() === 'CANCELLED' ? 'slate' : PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus, o.status)}</Pill>
                           {o.paymentNotified && o.paymentStatus !== 'PAID' && <Pill tone="yellow">Bildirildi</Pill>}
                         </div>
                         <p className="text-xs text-[#5d6e80] mt-0.5">{methodLabel(o.paymentMethod)}</p>
@@ -306,7 +306,7 @@ function OrdersContent() {
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex flex-wrap gap-1">
                       <Pill tone={ORDER_STATUS_TONE[o.status] ?? 'slate'} dot>{statusLabel(o.status)}</Pill>
-                      <Pill tone={PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus)}</Pill>
+                      <Pill tone={o.status?.toUpperCase() === 'CANCELLED' ? 'slate' : PAYMENT_STATUS_TONE[o.paymentStatus] ?? 'slate'}>{paymentLabel(o.paymentStatus, o.status)}</Pill>
                       {o.paymentNotified && o.paymentStatus !== 'PAID' && <Pill tone="yellow">Bildirildi</Pill>}
                       {o.cancelRequested && <Pill tone="red">İptal talebi</Pill>}
                           {o.openReturns > 0 && <Pill tone="orange">İade talebi</Pill>}

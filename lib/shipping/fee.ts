@@ -72,11 +72,32 @@ export type ShippingQuote = {
 /** desi.json: satır id -> [desi, kg, akü mü (1), kurulumlu mu (1)] */
 const MAP = desiMap as unknown as Record<string, [number, number, number?, number?]>
 
-/** Sepet satırının tek adet lojistik bilgisi (varyant satırı yoksa ürünün varsayılanı) */
-export function lineLogistics(lineId: string, productId?: string): Logistics {
+/**
+ * Panelden tanımlanan tek adet lojistik (A07): desi.json'daki değerin yerine geçer.
+ * desi/kg bir adedin toplamıdır (koli sayısı dahil); install: kurulum ve nakliye ayrıca (kargoya girmez).
+ */
+export type LineLogisticsOverride = { desi: number; kg: number; install?: boolean }
+
+/** Koli ölçüsü ve ağırlığından bir adedin desisi: koli sayısı × max(U×G×Y/3000, kg), koli başına yukarı yuvarlanır */
+export function packageDesi(dimensionsCm: number[] | null | undefined, weightKg: number | null | undefined, packageCount = 1): number {
+  const [l = 0, w = 0, h = 0] = dimensionsCm ?? []
+  const perPackage = Math.ceil(Math.max((l * w * h) / 3000, weightKg ?? 0) - 1e-9)
+  return Math.max(0, perPackage) * Math.max(1, Math.floor(packageCount))
+}
+
+/** Ürünün panel lojistiği (yoksa undefined: desi.json kullanılır). İstemci ve sunucu aynı kuralı kullanır. */
+export function panelLineLogistics(p: { logisticsSource?: string; desi?: number; weightKg?: number; packageCount?: number; saleMode?: string } | null | undefined): LineLogisticsOverride | undefined {
+  // Kurulumlu ürün kargoya girmez (panelde seçilmiş olabilir; desi.json'da yoksa da geçerli)
+  if (p?.saleMode === 'install') return { desi: 0, kg: 0, install: true }
+  if (!p || p.logisticsSource !== 'panel') return undefined
+  return { desi: p.desi ?? 0, kg: round2((p.weightKg ?? 0) * Math.max(1, p.packageCount ?? 1)) }
+}
+
+/** Sepet satırının tek adet lojistik bilgisi (varyant satırı yoksa ürünün varsayılanı; panel lojistiği varsa o) */
+export function lineLogistics(lineId: string, productId?: string, override?: LineLogisticsOverride): Logistics {
   const hit = MAP[lineId] ?? (productId ? MAP[productId] : undefined)
-  const desi = hit?.[0] ?? 0
-  const kg = hit?.[1] ?? 0
+  const desi = override ? override.desi : hit?.[0] ?? 0
+  const kg = override ? override.kg : hit?.[1] ?? 0
   return {
     desi,
     kg,
@@ -84,12 +105,12 @@ export function lineLogistics(lineId: string, productId?: string): Logistics {
     heavyPieces: desi > HEAVY_PIECE_DESI ? 1 : 0,
     heavyKgPieces: kg > HEAVY_PIECE_KG ? 1 : 0,
     battery: hit?.[2] === 1,
-    hasInstall: hit?.[3] === 1,
+    hasInstall: override ? !!override.install : hit?.[3] === 1,
   }
 }
 
 /** Sepetin toplam desisi, ağırlığı, ağır parça sayısı ve akü bilgisi */
-export function cartLogistics(items: { id: string; productId?: string; quantity: number }[]): Logistics {
+export function cartLogistics(items: { id: string; productId?: string; quantity: number; logistics?: LineLogisticsOverride }[]): Logistics {
   let desi = 0
   let kg = 0
   let heavyPieces = 0
@@ -97,7 +118,7 @@ export function cartLogistics(items: { id: string; productId?: string; quantity:
   let battery = false
   let installLines = 0
   for (const it of items) {
-    const l = lineLogistics(it.id, it.productId)
+    const l = lineLogistics(it.id, it.productId, it.logistics)
     if (l.hasInstall) installLines++
     desi += l.desi * it.quantity
     kg += l.kg * it.quantity

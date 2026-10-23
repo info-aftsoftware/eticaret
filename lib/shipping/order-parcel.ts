@@ -1,9 +1,9 @@
 /**
  * Siparişin kargo ölçüsü (Navlungo ve Geliver gönderisi için ortak): sipariş anındaki kargo teklifindeki desi/kg,
- * yoksa ürünlerin desi/kg bilgisi (lib/catalog/desi.json).
+ * yoksa ürünlerin desi/kg bilgisi (sipariş satırındaki panel lojistiği, yoksa lib/catalog/desi.json).
  */
 import type { Order, OrderLine } from '@prisma/client'
-import { cartLogistics } from '@/lib/shipping/fee'
+import { cartLogistics, type LineLogisticsOverride } from '@/lib/shipping/fee'
 
 type OrderWithLines = Pick<Order, 'shippingQuote'> & { lines: Pick<OrderLine, 'id' | 'quantity' | 'variantMatrix'>[] }
 
@@ -12,8 +12,10 @@ export function orderParcel(order: OrderWithLines): { desi: number; kg: number |
   if (typeof q?.desi === 'number') return { desi: q.desi, kg: typeof q.kg === 'number' ? q.kg : null }
   const l = cartLogistics(
     order.lines.map((line) => {
-      const productId = (line.variantMatrix as { productId?: string } | null)?.productId ?? line.id
-      return { id: productId, productId, quantity: line.quantity }
+      // Panel lojistiği (A07) sipariş satırına yazılır
+      const vm = line.variantMatrix as { productId?: string; logistics?: LineLogisticsOverride } | null
+      const productId = vm?.productId ?? line.id
+      return { id: productId, productId, quantity: line.quantity, logistics: vm?.logistics }
     })
   )
   return { desi: l.desiExact ?? l.desi, kg: l.kg }

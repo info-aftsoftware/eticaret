@@ -2,12 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useCartStore } from '@/lib/store/useCartStore'
+import type { LineLogisticsOverride } from '@/lib/shipping/fee'
 
 export type CartLineStatus = {
   available: boolean
   error?: string
   unitPrice?: number
   productId?: string
+  stockKey?: string
+  logistics?: LineLogisticsOverride
   stock?: number
   campaign?: string | null
   /** Doğrulamanın yapıldığı adet */
@@ -47,7 +50,7 @@ export function useCartValidation() {
           if (cancelled || !data?.lines) return
           const next: Record<string, CartLineStatus> = {}
           const prices: Record<string, number> = {}
-          const stock: Record<string, { productId: string; stock?: number }> = {}
+          const stock: Record<string, { productId: string; stockKey?: string; stock?: number; logistics?: LineLogisticsOverride }> = {}
           const changes: Record<string, { from: number; to: number }> = {}
           for (const l of data.lines) {
             const item = current.find((i) => i.id === l.id)
@@ -56,7 +59,7 @@ export function useCartValidation() {
               prices[l.id] = l.unitPrice
               if (item && Math.abs(item.price - l.unitPrice) > 0.009) changes[l.id] = { from: item.price, to: l.unitPrice }
             }
-            if (l.productId) stock[l.id] = { productId: l.productId, stock: l.stock }
+            if (l.productId) stock[l.id] = { productId: l.productId, stockKey: l.stockKey, stock: l.stock, logistics: l.logistics }
           }
           const store = useCartStore.getState()
           if (Object.keys(changes).length) {

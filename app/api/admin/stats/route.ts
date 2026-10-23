@@ -10,6 +10,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { checkAdmin } from '@/lib/adminAuth'
 import { getMergedProducts } from '@/lib/catalog-merge'
+import { businessDayRange, businessDayStart, businessMonthStart } from '@/lib/business-time'
+import { collectedOrderWhere, collectedOrders } from '@/lib/revenue'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -18,9 +20,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Bugünün başlangıcı
-    const todayStart = new Date()
-    todayStart.setHours(0, 0, 0, 0)
+    // Bugünün ve ayın başlangıcı Türkiye saatine göre (sunucu UTC çalışsa da gece 00.00–03.00 önceki güne kaymaz)
+    const todayStart = businessDayStart()
+    const monthStart = businessMonthStart()
 
     // Paralel sorgular
     const [products, activeCoupons, todayOrders, pendingOrders, totalOrders] = await Promise.all([
@@ -34,21 +36,11 @@ export async function GET(request: NextRequest) {
     const totalProducts = products.length
     const outOfStockProducts = products.filter((p) => (p.stock ?? 0) === 0).length
 
-    // Ciro: yalnızca ödemesi alınmış, iptal/iade edilmemiş siparişler (ödeme tarihine göre)
-    const revenueWhere = { paymentStatus: 'PAID' as const, status: { notIn: ['CANCELLED' as const, 'RETURNED' as const] } }
-    const todayRevenue = await prisma.order.aggregate({
-      _sum: { total: true },
-      where: { ...revenueWhere, paidAt: { gte: todayStart } },
-    })
-
-    // Bu ayki ciro
-    const monthStart = new Date()
-    monthStart.setDate(1)
-    monthStart.setHours(0, 0, 0, 0)
-    const monthRevenue = await prisma.order.aggregate({
-      _sum: { total: true },
-      where: { ...revenueWhere, paidAt: { gte: monthStart } },
-    })
+    // Tahsilat: ödemesi alınmış, iptal/iade edilmemiş siparişler, ödeme tarihine göre, ücret iadeleri düşülmüş (lib/revenue)
+    const [todayCollected, monthCollected] = await Promise.all([
+      collectedOrders({ gte: todayStart }),
+      collectedOrders({ gte: monthStart }),
+    ])
 
     const [awaitingPayment, toShip] = await Promise.all([
       prisma.order.count({ where: { status: 'PENDING', paymentStatus: { not: 'PAID' } } }),
@@ -56,9 +48,9 @@ export async function GET(request: NextRequest) {
     ])
 
     // En çok satanlar (son 30 gün, ödenmiş ve iade/iptal edilmemiş siparişler)
-    const since = new Date(Date.now() - 30 * 86_400_000)
+    const since = businessDayRange(30).start
     const soldLines = await prisma.orderLine.findMany({
-      where: { order: { ...revenueWhere, paidAt: { gte: since } } },
+      where: { order: collectedOrderWhere({ gte: since }) },
       select: { productName: true, quantity: true, lineTotal: true, variantMatrix: true },
     })
     const byProduct = new Map<string, { productId: string | null; name: string; quantity: number; revenue: number }>()
@@ -90,8 +82,9 @@ export async function GET(request: NextRequest) {
       todayOrders,
       pendingOrders,
       totalOrders,
-      todayRevenue: todayRevenue._sum.total ?? 0,
-      monthRevenue: monthRevenue._sum.total ?? 0,
+      todayRevenue: todayCollected.net,
+      monthRevenue: monthCollected.net,
+      monthRefunded: monthCollected.refunded,
       awaitingPayment,
       toShip,
     })

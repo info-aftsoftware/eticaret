@@ -18,6 +18,9 @@ const OPS: AdminRole[] = ['owner', 'manager', 'operator']
 const CATALOG: AdminRole[] = ['owner', 'manager', 'editor']
 const MGMT: AdminRole[] = ['owner', 'manager']
 
+/** Alış maliyeti ve kâr hedefini görebilen/değiştirebilen roller (A06); diğer rollere API maliyet alanı göndermez */
+export const canSeeCost = (role: AdminRole) => MGMT.includes(role)
+
 /**
  * Yol öneki → okuma (GET/HEAD) ve yazma (diğer yöntemler) izinleri. En uzun eşleşen önek kazanır;
  * eşleşme yoksa yalnızca sahip ve yönetici. Panel sayfaları da aynı tabloyu kullanır (ADMIN_PAGE_API).

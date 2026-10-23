@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
   const status = sp.get('status')
   if (!ids.length && status !== 'PICKING') return NextResponse.json({ error: 'ids veya status=PICKING gereklidir' }, { status: 400 })
   const orders = await prisma.order.findMany({
-    where: ids.length ? { id: { in: ids } } : { status: 'PICKING' },
+    // İptal edilmiş siparişe kargo etiketi basılmaz (A15)
+    where: ids.length ? { id: { in: ids }, status: { not: 'CANCELLED' } } : { status: 'PICKING' },
     include: { lines: true },
     orderBy: { createdAt: 'asc' },
     take: 100,

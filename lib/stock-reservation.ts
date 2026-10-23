@@ -1,7 +1,8 @@
 /**
  * Sipariş stoğu: tüm kalemler tek transaction içinde, koşullu olarak düşülür (ya hepsi ya hiçbiri).
  * Stok kaynağı StockOverride satırıdır; katalog ürünü için satır yoksa ProductOverride / katalog stoğundan tohumlanır.
- * Aynı ürünün varyantları ürün stoğunu paylaşır (adetler ürün bazında toplanır).
+ * Anahtar stok anahtarıdır (lib/variant-stock): varyantlar ayrı stoklanmıyorsa ürün id'si (adetler ürün bazında toplanır),
+ * ayrı stoklanıyorsa "productId::variantKey" (her varyant kendi stoğundan düşer).
  */
 
 import { Prisma } from '@prisma/client'
@@ -23,6 +24,7 @@ export class InsufficientStockError extends Error {
   }
 }
 
+/** productId alanı stok anahtarıdır: ürün id'si veya "productId::variantKey" */
 export type StockLine = { productId: string; productName: string; quantity: number }
 
 function isUniqueViolation(e: unknown): boolean {

@@ -23,6 +23,8 @@ export interface ProductVariant {
   /** Döviz cinsinden fiyat (priceCurrency) */
   basePrice?: number
   sku?: string
+  /** Varyantın stoğu: yalnızca ürün "varyantlar ayrı stoklanır" ise dolu (lib/variant-stock.ts) */
+  stock?: number
   specifications?: Record<string, string>
   /** Kargo: ölçüler (cm, U×G×Y), ağırlık (kg) ve desi = max(hacim/3000, kg) yukarı yuvarlanmış */
   dimensionsCm?: number[]
@@ -52,6 +54,10 @@ export interface MockProduct {
   stock: number
   featured: boolean
   isVariantProduct: boolean
+  /** Varyantlar ayrı stoklanıyor (stock = varyant toplamı); panelden açılır (lib/variant-stock.ts) */
+  variantStock?: boolean
+  /** Etkin fiyatlandırma modu: fx dövize bağlı (basePrice × kur), fixed sabit TL (lib/catalog-merge.ts) */
+  priceMode?: 'fx' | 'fixed'
   tags?: string[]
   /** SEO başlığı (<title>) */
   metaTitle?: string
@@ -90,6 +96,12 @@ export interface MockProduct {
   desiSource?: string
   /** Satış biçimi: 'quote' teklifle satılır (fiyat yok), 'install' kurulum ve nakliye ayrıca (lib/sale-mode.ts) */
   saleMode?: SaleMode
+  /** Lojistik panelden tanımlandı (A07): desi/kg ürün düzeyindeki değerlerden, desi.json yerine (lib/shipping/fee panelLineLogistics) */
+  logisticsSource?: 'panel'
+  /** Koli sayısı (panel lojistiği; desi ve ağırlık koli başına girilir) */
+  packageCount?: number
+  /** Yayın durumu: 'draft' panelde hazırlanıyor, vitrinde görünmez (A08) */
+  status?: 'draft'
 }
 
 /** Eksik ürün görselleri için placeholder */

@@ -7,6 +7,7 @@ import { ORDER_STATUS_LABELS_TR } from '@/lib/order-service'
 import { shippingQuoteView } from '@/lib/shipping/quote-view'
 import { getCarrier } from '@/lib/shipping/carriers'
 import { csvResponseHeaders, toCsv } from '@/lib/csv'
+import { addDaysToKey, businessDateKey, businessDayStartOf, isDateKey } from '@/lib/business-time'
 
 const PAYMENT_STATUS_TR: Record<string, string> = {
   PENDING: 'Bekliyor',
@@ -18,7 +19,7 @@ const PAYMENT_STATUS_TR: Record<string, string> = {
 const PAYMENT_METHOD_TR: Record<string, string> = { bank_transfer: 'Havale/EFT', card: 'Kredi kartı' }
 
 /**
- * Muhasebe dökümü (Excel uyumlu CSV): ?from=YYYY-MM-DD&to=YYYY-MM-DD (sipariş tarihi, İstanbul günü; varsayılan son 31 gün)
+ * Muhasebe dökümü (Excel uyumlu CSV): ?from=YYYY-MM-DD&to=YYYY-MM-DD (sipariş tarihi, İstanbul günü; varsayılan bugün dahil son 31 gün)
  * &detail=lines ile sipariş satırları (ürün, adet, birim fiyat, KDV oranı, satır toplamı).
  * Tutarlar TL; ara toplam KDV hariçtir, indirimler KDV matrahından düşülmüştür (lib/store-config computeOrderTotals).
  */
@@ -26,20 +27,22 @@ export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
   if ('error' in auth) return NextResponse.json({ error: auth.error }, { status: auth.status })
   const sp = request.nextUrl.searchParams
-  const day = /^\d{4}-\d{2}-\d{2}$/
-  const to = day.test(sp.get('to') ?? '') ? new Date(`${sp.get('to')}T23:59:59.999+03:00`) : new Date()
-  const from = day.test(sp.get('from') ?? '') ? new Date(`${sp.get('from')}T00:00:00+03:00`) : new Date(to.getTime() - 31 * 86_400_000)
-  if (!(from <= to)) return NextResponse.json({ error: 'Başlangıç tarihi bitişten sonra olamaz.' }, { status: 400 })
+  // Gün sınırları Türkiye saatine göre (lib/business-time); bitiş günü dahil
+  const toKey = isDateKey(sp.get('to')) ? sp.get('to')! : businessDateKey()
+  const fromKey = isDateKey(sp.get('from')) ? sp.get('from')! : addDaysToKey(toKey, -30)
+  if (fromKey > toKey) return NextResponse.json({ error: 'Başlangıç tarihi bitişten sonra olamaz.' }, { status: 400 })
+  const from = businessDayStartOf(fromKey)
+  const toExclusive = businessDayStartOf(addDaysToKey(toKey, 1))
   const lines = sp.get('detail') === 'lines'
 
   const orders = await prisma.order.findMany({
-    where: { createdAt: { gte: from, lte: to } },
+    where: { createdAt: { gte: from, lt: toExclusive } },
     include: { lines: lines },
     orderBy: { createdAt: 'asc' },
     take: 10_000,
   })
   const tr = (d: Date | null) => (d ? new Date(d).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' }) : '')
-  const range = `${from.toISOString().slice(0, 10)}_${to.toISOString().slice(0, 10)}`
+  const range = `${fromKey}_${toKey}`
 
   let csv: string
   if (lines) {

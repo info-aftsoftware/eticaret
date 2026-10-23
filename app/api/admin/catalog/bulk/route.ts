@@ -14,8 +14,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { invalidateCampaignCache } from '@/lib/discounts'
 import { processStockAlerts } from '@/lib/stock-alerts'
 import { prisma } from '@/lib/prisma'
-import { checkAdmin } from '@/lib/adminAuth'
-import { getMergedProducts } from '@/lib/catalog-merge'
+import { checkAdmin, logAdminAction } from '@/lib/adminAuth'
+import { getMergedProducts, variantStockedIds } from '@/lib/catalog-merge'
 import { notifyLowStockTransitions, readStocks } from '@/lib/low-stock'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
 
@@ -29,7 +29,8 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json()
     const { ids, action, value } = body as {
       ids: string[]
-      action: 'feature' | 'unfeature' | 'apply_discount' | 'reset_stock' | 'set_stock'
+      action: 'feature' | 'unfeature' | 'apply_discount' | 'reset_stock' | 'set_stock' | 'adjust_stock'
+      /** adjust_stock: eklenecek (+) veya çıkarılacak (−) adet (A16); stok 0'ın altına inmez */
       value?: number
     }
 
@@ -42,7 +43,11 @@ export async function PATCH(request: NextRequest) {
 
     let affected = 0
     // Düşük stok uyarısı için değişiklik öncesi stoklar
-    const before = action === 'reset_stock' || action === 'set_stock' ? await readStocks(ids.map(String)) : null
+    const isStock = action === 'reset_stock' || action === 'set_stock' || action === 'adjust_stock'
+    // Varyantları ayrı stoklanan ürünlerde stok varyant bazında düzenlenir; ürün bazında toplu stok atlanır
+    const skipped = isStock ? await variantStockedIds(ids.map(String)) : new Set<string>()
+    const stockIds = ids.map(String).filter((id) => !skipped.has(id))
+    const before = isStock ? await readStocks(stockIds) : null
 
     if (action === 'feature' || action === 'unfeature') {
       const featured = action === 'feature'
@@ -86,7 +91,7 @@ export async function PATCH(request: NextRequest) {
 
     else if (action === 'reset_stock') {
       await prisma.$transaction(
-        ids.map((productId) =>
+        stockIds.map((productId) =>
           prisma.stockOverride.upsert({
             where: { productId },
             update: { stock: 0 },
@@ -94,13 +99,25 @@ export async function PATCH(request: NextRequest) {
           })
         )
       )
-      affected = ids.length
+      affected = stockIds.length
+    }
+
+    else if (action === 'adjust_stock') {
+      const delta = typeof value === 'number' && Number.isFinite(value) ? Math.trunc(value) : 0
+      if (!delta) return NextResponse.json({ error: 'value: eklenecek veya çıkarılacak adet gerekli.' }, { status: 400 })
+      await prisma.$transaction(
+        stockIds.map((productId) => {
+          const next = Math.max(0, (before?.get(productId)?.stock ?? 0) + delta)
+          return prisma.stockOverride.upsert({ where: { productId }, update: { stock: next }, create: { productId, stock: next } })
+        })
+      )
+      affected = stockIds.length
     }
 
     else if (action === 'set_stock') {
       const stockVal = typeof value === 'number' && value >= 0 ? Math.floor(value) : 0
       await prisma.$transaction(
-        ids.map((productId) =>
+        stockIds.map((productId) =>
           prisma.stockOverride.upsert({
             where: { productId },
             update: { stock: stockVal },
@@ -108,21 +125,40 @@ export async function PATCH(request: NextRequest) {
           })
         )
       )
-      affected = ids.length
+      affected = stockIds.length
     }
 
     else {
       return NextResponse.json({ error: 'Bilinmeyen action.' }, { status: 400 })
     }
 
+    const newStockOf = (id: string) =>
+      action === 'reset_stock' ? 0
+        : action === 'adjust_stock' ? Math.max(0, (before?.get(id)?.stock ?? 0) + Math.trunc(Number(value) || 0))
+          : typeof value === 'number' && value >= 0 ? Math.floor(value) : 0
+
     // Stoğa giren ürünler için "stok gelince haber ver" e-postaları (yanıtı bekletmeden)
     processStockAlerts(ids.map(String)).catch((e) => console.error('Stock alert error:', e))
     if (before) {
-      const after = action === 'reset_stock' ? 0 : typeof value === 'number' && value >= 0 ? Math.floor(value) : 0
-      void notifyLowStockTransitions(ids.map((id) => ({ productId: id, before: before.get(id)?.stock, after, name: before.get(id)?.name })))
+      void notifyLowStockTransitions(stockIds.map((id) => ({ productId: id, before: before.get(id)?.stock, after: newStockOf(id), name: before.get(id)?.name })))
     }
+    // İşlem kaydı (A09): toplu işlemde etkilenen her ürün (stokta eski → yeni) aranabilir olsun
+    const ACTION_TR: Record<string, string> = { feature: 'Öne çıkarıldı', unfeature: 'Öne çıkarma kaldırıldı', apply_discount: `%${value} indirim kampanyası`, reset_stock: 'Stok sıfırlandı', set_stock: `Stok ${value} adede eşitlendi`, adjust_stock: `Stok ${Number(value) > 0 ? '+' : ''}${value} adet` }
+    const targetIds = before ? stockIds : ids.map(String)
+    void logAdminAction(auth.actor, `Toplu ürün işlemi: ${ACTION_TR[action] ?? action}`, {
+      method: 'PATCH',
+      path: '/api/admin/catalog/bulk',
+      objectType: 'product',
+      objectId: targetIds.length === 1 ? targetIds[0] : undefined,
+      changes: targetIds.map((pid) =>
+        before
+          ? { field: `stock.${pid}`, label: `${before.get(pid)?.name ?? pid} stok`, from: before.get(pid)?.stock != null ? String(before.get(pid)!.stock) : null, to: String(newStockOf(pid)) }
+          : { field: `${action}.${pid}`, label: ACTION_TR[action] ?? action, from: null, to: pid }
+      ),
+      details: `${affected} ürün: ${targetIds.slice(0, 20).join(', ')}${targetIds.length > 20 ? ` +${targetIds.length - 20}` : ''}${skipped.size ? ` · ayrı varyant stoklu ${skipped.size} ürün atlandı` : ''}`,
+    })
     revalidateStorefront()
-    return NextResponse.json({ success: true, affected })
+    return NextResponse.json({ success: true, affected, skippedVariantStock: [...skipped] })
   } catch (error) {
     console.error('Admin bulk PATCH error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

@@ -32,7 +32,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Ürün grupları ve türleri (boş "diger" grubu hariç)
   let products: { id: string; category?: string; brand?: string }[] = mockProducts
   try {
-    products = await getMergedProducts()
+    // Taslak ürünler (A08) site haritasına girmez
+    products = (await getMergedProducts()).filter((p) => p.status !== 'draft')
   } catch (e) {
     console.error('Sitemap catalog error:', e)
   }

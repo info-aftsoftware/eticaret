@@ -239,13 +239,13 @@ export async function updateReturnRequest(
       // (order-service restoreStock) — tekrar eklenmez.
       for (const i of order.status === 'RETURNED' ? [] : itemsOf(r)) {
         const line = order.lines.find((l) => l.id === i.lineId)
-        const vm = line?.variantMatrix as { productId?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
+        const vm = line?.variantMatrix as { productId?: string; stockKey?: string; stockDecremented?: boolean; productStockDecremented?: boolean } | null
         const productId = vm?.productId
         if (!productId) continue
         // order-service restoreStock ile aynı kural: yeni siparişlerde yalnızca gerçekten düşülen stok kaynağına geri eklenir
         const hasFlags = typeof vm?.stockDecremented === 'boolean'
         if (!hasFlags || vm?.stockDecremented) {
-          await prisma.stockOverride.updateMany({ where: { productId }, data: { stock: { increment: i.quantity } } })
+          await prisma.stockOverride.updateMany({ where: { productId: vm?.stockKey ?? productId }, data: { stock: { increment: i.quantity } } })
         }
         if (!hasFlags || vm?.productStockDecremented) {
           await prisma.productOverride.updateMany({ where: { productId, stock: { not: null } }, data: { stock: { increment: i.quantity } } })

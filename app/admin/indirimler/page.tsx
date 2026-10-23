@@ -26,6 +26,17 @@ import { Percent, Plus, Pencil, Trash2, Loader2, ToggleLeft, ToggleRight } from 
 import { CATEGORY_GROUPS } from '@/lib/categories'
 import { mockProducts } from '@/lib/products-mock'
 import { CouponManager } from '@/components/admin/CouponManager'
+import { campaignStatus, CAMPAIGN_STATUS_TR, discountValueError, dateRangeError, PERCENT_MAX, type CampaignStatus } from '@/lib/campaign-rules'
+import { fromBusinessDateTimeInput, toBusinessDateTimeInput } from '@/lib/business-time'
+
+const STATUS_CLASS: Record<CampaignStatus, string> = {
+  off: 'bg-slate-100 text-slate-600',
+  planned: 'bg-blue-50 text-blue-700',
+  running: 'bg-green-50 text-green-700',
+  expired: 'bg-amber-50 text-amber-800',
+}
+/** Kampanya tarihleri Türkiye saatiyle gösterilir */
+const fmtDateTimeTR = (s: string) => new Date(s).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul', dateStyle: 'short', timeStyle: 'short' })
 
 type Discount = {
   id: string
@@ -62,6 +73,7 @@ export default function AdminIndirimlerPage() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
+  const [formError, setFormError] = useState('')
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [form, setForm] = useState({
     name: '',
@@ -105,6 +117,7 @@ export default function AdminIndirimlerPage() {
       endDate: '',
       active: true,
     })
+    setFormError('')
     setDialogOpen(true)
   }
 
@@ -117,15 +130,26 @@ export default function AdminIndirimlerPage() {
       productIds: Array.isArray(d.productIds) ? d.productIds : [],
       type: d.type as 'PERCENT' | 'FIXED',
       value: d.value,
-      startDate: d.startDate ? d.startDate.slice(0, 16) : '',
-      endDate: d.endDate ? d.endDate.slice(0, 16) : '',
+      // Kutular İstanbul saatini gösterir (önce UTC saati yerel gibi gösteriliyordu)
+      startDate: toBusinessDateTimeInput(d.startDate),
+      endDate: toBusinessDateTimeInput(d.endDate),
       active: d.active,
     })
+    setFormError('')
     setDialogOpen(true)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormError('')
+    // Sunucuyla aynı kural (lib/campaign-rules): geçersiz değer kaydetmeden gösterilir
+    const start = fromBusinessDateTimeInput(form.startDate)
+    const end = fromBusinessDateTimeInput(form.endDate)
+    const clientError = discountValueError(form.type, form.value) ?? dateRangeError(start, end)
+    if (clientError) {
+      setFormError(clientError)
+      return
+    }
     setSaving(true)
     try {
       const body = {
@@ -135,8 +159,8 @@ export default function AdminIndirimlerPage() {
         productIds: form.scope === 'PRODUCT' ? form.productIds : null,
         type: form.type,
         value: Number(form.value),
-        startDate: form.startDate ? new Date(form.startDate).toISOString() : null,
-        endDate: form.endDate ? new Date(form.endDate).toISOString() : null,
+        startDate: start ? start.toISOString() : null,
+        endDate: end ? end.toISOString() : null,
         active: form.active,
       }
       if (editingId) {
@@ -146,7 +170,7 @@ export default function AdminIndirimlerPage() {
           body: JSON.stringify(body),
           credentials: 'include',
         })
-        if (!res.ok) throw new Error('Güncelleme hatası')
+        if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || 'Kampanya güncellenemedi.')
       } else {
         const res = await fetch('/api/admin/discounts', {
           method: 'POST',
@@ -154,10 +178,12 @@ export default function AdminIndirimlerPage() {
           body: JSON.stringify(body),
           credentials: 'include',
         })
-        if (!res.ok) throw new Error('Oluşturma hatası')
+        if (!res.ok) throw new Error((await res.json().catch(() => null))?.error || 'Kampanya oluşturulamadı.')
       }
       setDialogOpen(false)
       loadDiscounts()
+    } catch (err) {
+      setFormError(err instanceof Error ? err.message : 'Kaydedilemedi.')
     } finally {
       setSaving(false)
     }
@@ -261,8 +287,11 @@ export default function AdminIndirimlerPage() {
                       </td>
                       <td className="py-3 px-2 text-slate-600">
                         {d.startDate || d.endDate
-                          ? `${d.startDate ? new Date(d.startDate).toLocaleDateString('tr-TR') : '–'} / ${d.endDate ? new Date(d.endDate).toLocaleDateString('tr-TR') : '–'}`
-                          : '–'}
+                          ? `${d.startDate ? fmtDateTimeTR(d.startDate) : '–'} / ${d.endDate ? fmtDateTimeTR(d.endDate) : '–'}`
+                          : 'Süresiz'}
+                        <span className={`ml-0 mt-1 block w-fit rounded px-1.5 py-0.5 text-[11px] font-medium ${STATUS_CLASS[campaignStatus(d)]}`}>
+                          {CAMPAIGN_STATUS_TR[campaignStatus(d)]}
+                        </span>
                       </td>
                       <td className="py-3 px-2">
                         <button
@@ -279,7 +308,7 @@ export default function AdminIndirimlerPage() {
                             <ToggleLeft className="w-6 h-6 text-slate-300" />
                           )}
                           <span className={`text-xs font-medium ${d.active ? 'text-green-600' : 'text-slate-400'}`}>
-                            {d.active ? 'Aktif' : 'Pasif'}
+                            {d.active ? 'Açık' : 'Kapalı'}
                           </span>
                         </button>
                       </td>
@@ -406,11 +435,13 @@ export default function AdminIndirimlerPage() {
                     ? 'Ürün ve varyant fiyatlarına yüzde olarak uygulanır.'
                     : 'Birim fiyattan (KDV hariç) düşülür.'}{' '}
                   Bir ürüne birden fazla kampanya uyarsa müşteri için en avantajlısı uygulanır; kampanyalar toplanmaz.
+                  {form.type === 'PERCENT' && ` Yüzde en fazla %${PERCENT_MAX}.`}
                 </p>
                 <Input
                   id="value"
                   type="number"
-                  min={0}
+                  min={0.01}
+                  max={form.type === 'PERCENT' ? PERCENT_MAX : undefined}
                   step={form.type === 'PERCENT' ? 1 : 0.01}
                   value={form.value}
                   onChange={(e) => setForm((p) => ({ ...p, value: Number(e.target.value) || 0 }))}
@@ -420,7 +451,7 @@ export default function AdminIndirimlerPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="startDate">Başlangıç (opsiyonel)</Label>
+                <Label htmlFor="startDate">Başlangıç (opsiyonel, Türkiye saati)</Label>
                 <Input
                   id="startDate"
                   type="datetime-local"
@@ -430,7 +461,7 @@ export default function AdminIndirimlerPage() {
                 />
               </div>
               <div>
-                <Label htmlFor="endDate">Bitiş (opsiyonel)</Label>
+                <Label htmlFor="endDate">Bitiş (opsiyonel, Türkiye saati)</Label>
                 <Input
                   id="endDate"
                   type="datetime-local"
@@ -448,8 +479,9 @@ export default function AdminIndirimlerPage() {
                 onChange={(e) => setForm((p) => ({ ...p, active: e.target.checked }))}
                 className="rounded border-slate-300"
               />
-              <Label htmlFor="active">Aktif</Label>
+              <Label htmlFor="active">Açık (tarih aralığında uygulanır)</Label>
             </div>
+            {formError && <p role="alert" className="text-sm text-red-700">{formError}</p>}
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>
                 İptal

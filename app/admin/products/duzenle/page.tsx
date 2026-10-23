@@ -31,6 +31,8 @@ import { CATEGORY_GROUPS } from '@/lib/categories'
 import { fmtTRY } from '@/lib/format'
 import { Btn, BtnLink, Checkbox, EmptyState, Field, Modal, PageHeader, Panel, PanelHeader, Pill, SelectInput, Spinner, TextArea, TextInput } from '@/components/admin/ui'
 import { useToast } from '@/components/admin/toast'
+import { useAdminMe } from '@/components/admin/AdminMeContext'
+import { packageDesi } from '@/lib/shipping/fee'
 import { cn } from '@/lib/utils'
 
 type Variant = {
@@ -39,8 +41,11 @@ type Variant = {
   price: number
   basePrice?: number
   sku?: string
+  stock?: number
   [k: string]: unknown
 }
+
+type PriceMode = 'fx' | 'fixed'
 
 type Product = {
   id: string
@@ -64,7 +69,30 @@ type Product = {
   variants?: Variant[]
   features?: string[]
   specifications?: Record<string, string>
-  _meta?: { isCatalog: boolean; hasOverride: boolean; overrideUpdatedAt: string | null }
+  priceMode?: PriceMode
+  variantStock?: boolean
+  dimensionsCm?: number[]
+  weightKg?: number
+  packageCount?: number
+  desi?: number
+  saleMode?: string
+  logisticsSource?: string
+  _meta?: {
+    isCatalog: boolean
+    hasOverride: boolean
+    overrideUpdatedAt: string | null
+    /** Katalogdaki döviz fiyatları: varsa ürün dövize bağlı satılabilir */
+    catalogPricing: { currency: string; basePrice: number; variants: { key: string; label: string; basePrice: number | null }[]; origin: 'catalog' | 'panel' } | null
+    rate: { value: number; updatedAt: string; source: 'TCMB' | 'fallback' | 'snapshot' } | null
+    /** Yalnız Sahip/Yönetici rolüne gelir (A06) */
+    cost?: { costPrice: number | null; costCurrency: string | null; targetMargin: number | null }
+    rates?: { USD: number; EUR: number }
+    status: 'draft' | 'published'
+    publishProblems: string[]
+    variantImagesSource?: 'panel' | 'catalog' | null
+    catalogDescriptionHtml?: string | null
+    descriptionSource?: 'panel' | 'catalog' | 'none'
+  }
 }
 
 type Form = {
@@ -78,14 +106,43 @@ type Form = {
   warranty: string
   featured: boolean
   price: string
+  /** Dövize bağlı modda ürün fiyatı (katalog para birimi, KDV hariç) */
+  basePrice: string
+  priceMode: PriceMode
   stock: string
+  variantStock: boolean
   features: string
+  /** Yeni ürünün fiyat para birimi (A06); USD/EUR dövize bağlı oluşturulur */
+  currency: 'TRY' | 'USD' | 'EUR'
+  costPrice: string
+  costCurrency: 'TRY' | 'USD' | 'EUR'
+  targetMargin: string
+  /** Lojistik (A07): koli ölçüsü (cm), koli ağırlığı (kg), koli sayısı, satış biçimi */
+  dimL: string
+  dimW: string
+  dimH: string
+  weightKg: string
+  packageCount: string
+  saleMode: 'normal' | 'install' | 'quote'
 }
 
-type VariantRow = { key: string; label: string; sku: string; price: string; basePrice?: number; extra: Record<string, unknown> }
+/** price: TL (sabit TL modunda girilir); base: döviz fiyatı (dövize bağlı modda girilir); stock: ayrı varyant stoğu */
+type VariantRow = { key: string; label: string; sku: string; price: string; base: string; stock: string; extra: Record<string, unknown> }
 type SpecRow = { id: number; k: string; v: string }
 
-const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', stock: '0', features: '' }
+const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal' }
+
+const SALE_MODE_OPTIONS = [
+  ['normal', 'Kargo ile gönderilir'],
+  ['install', 'Kurulum ve nakliye ayrıca planlanır (kargo ücretine girmez)'],
+  ['quote', 'Teklifle satılır (sepete eklenemez)'],
+] as const
+
+const RATE_SOURCE_TR = { TCMB: 'TCMB', fallback: 'yedek kaynak', snapshot: 'katalog kuru (canlı kur alınamadı)' } as const
+
+const num = (s: string) => Number(s.trim().replace(',', '.'))
+/** Döviz → TL (sunucu ile aynı kural: tam TL'ye yukarı yuvarlama, lib/fx-rates toTry) */
+const fxToTry = (base: number, rate: number) => Math.ceil(base * rate - 1e-9)
 
 const ALL_CATEGORIES: string[] = CATEGORY_GROUPS.flatMap((g) => [...g.categoryValues])
 
@@ -101,18 +158,32 @@ function toForm(p: Product): Form {
     warranty: p.warranty ?? '',
     featured: !!p.featured,
     price: String(p.price ?? ''),
+    basePrice: typeof p.basePrice === 'number' ? String(p.basePrice) : '',
+    priceMode: p.priceMode === 'fx' && p._meta?.catalogPricing ? 'fx' : 'fixed',
     stock: String(p.stock ?? 0),
+    variantStock: !!p.variantStock,
     features: (p.features ?? []).join('\n'),
+    currency: 'TRY',
+    costPrice: p._meta?.cost?.costPrice != null ? String(p._meta.cost.costPrice) : '',
+    costCurrency: (p._meta?.cost?.costCurrency as Form['costCurrency']) ?? 'TRY',
+    targetMargin: p._meta?.cost?.targetMargin != null ? String(p._meta.cost.targetMargin) : '',
+    dimL: p.dimensionsCm?.[0] != null ? String(p.dimensionsCm[0]) : '',
+    dimW: p.dimensionsCm?.[1] != null ? String(p.dimensionsCm[1]) : '',
+    dimH: p.dimensionsCm?.[2] != null ? String(p.dimensionsCm[2]) : '',
+    weightKg: p.weightKg != null ? String(p.weightKg) : '',
+    packageCount: String(p.packageCount ?? 1),
+    saleMode: p.saleMode === 'install' || p.saleMode === 'quote' ? p.saleMode : 'normal',
   }
 }
 
 function toVariantRows(vs?: Variant[]): VariantRow[] {
-  return (vs ?? []).map(({ key, label, sku, price, basePrice, ...extra }) => ({
+  return (vs ?? []).map(({ key, label, sku, price, basePrice, stock, ...extra }) => ({
     key,
     label,
     sku: sku ?? '',
     price: String(price ?? ''),
-    basePrice,
+    base: typeof basePrice === 'number' ? String(basePrice) : '',
+    stock: String(stock ?? 0),
     extra,
   }))
 }
@@ -127,20 +198,24 @@ const newVariantKey = (label: string) =>
     .replace(/[^a-z0-9]+/g, '')
     .slice(0, 24) || 'secenek'}${Math.random().toString(36).slice(2, 7)}`
 
-function variantsPayload(rows: VariantRow[], original: VariantRow[]): Variant[] {
-  const origMap = new Map(original.map((r) => [r.key, r]))
+/**
+ * Kaydedilecek varyant listesi. Dövize bağlı modda döviz fiyatı (basePrice) gönderilir, TL fiyatı sunucu kurla hesaplar
+ * (burada gönderilen TL yalnızca bilgi amaçlı ön hesaptır). Sabit TL modunda döviz fiyatı gönderilmez.
+ */
+function variantsPayload(rows: VariantRow[], mode: PriceMode, rate: number | null): Variant[] {
   return rows.map((r) => {
-    const o = origMap.get(r.key)
-    const price = Math.round(Number(r.price.replace(',', '.')) * 100) / 100
-    // Fiyat elle değiştirildiyse döviz bazlı fiyat bırakılır (sabit TL fiyat geçerli olur)
-    const keepBase = o && o.price === r.price && r.basePrice !== undefined
+    const base = num(r.base)
+    const fx = mode === 'fx' && Number.isFinite(base) && base > 0
+    const tl = num(r.price)
+    // Kur bilinmiyorsa (yeni dövizli ürün) TL fiyatı sunucu hesaplar; burada 0 gönderilir
+    const price = fx && rate ? fxToTry(base, rate) : Number.isFinite(tl) ? Math.round(tl * 100) / 100 : 0
     return {
       ...r.extra,
       key: r.key,
       label: r.label.trim(),
       price,
       ...(r.sku.trim() ? { sku: r.sku.trim() } : {}),
-      ...(keepBase ? { basePrice: r.basePrice } : {}),
+      ...(fx ? { basePrice: base } : {}),
     }
   })
 }
@@ -161,6 +236,9 @@ function Editor() {
   const sp = useSearchParams()
   const router = useRouter()
   const toast = useToast()
+  const me = useAdminMe()
+  // Maliyet ve kâr alanları yalnız Sahip/Yönetici (sunucu da aynı kuralla süzer; lib/admin-users canSeeCost)
+  const canCost = !!me && (me.user.isMaster || me.user.role === 'owner' || me.user.role === 'manager')
   const id = sp.get('id') || ''
   const isNew = !id && sp.get('yeni') === '1'
 
@@ -170,14 +248,20 @@ function Editor() {
   const [variants, setVariants] = useState<VariantRow[]>([])
   const [images, setImages] = useState<string[]>([])
   const [specs, setSpecs] = useState<SpecRow[]>([])
+  // Varyant görselleri (A17): anahtar → görseller; boş dizi genel galeri
+  const [variantImages, setVariantImages] = useState<Record<string, string[]>>({})
+  const [showCatalogDesc, setShowCatalogDesc] = useState(false)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(0)
   const [dragIndex, setDragIndex] = useState<number | null>(null)
   const [dropActive, setDropActive] = useState(false)
   const [confirmReset, setConfirmReset] = useState(false)
+  // Fiyat modu değişikliği kaydedilmeden önce mevcut ve yeni davranış gösterilir, açık onay istenir (A05)
+  const [confirmMode, setConfirmMode] = useState(false)
+  const pendingStatus = useRef<'published' | 'draft' | undefined>(undefined)
   const fileInput = useRef<HTMLInputElement>(null)
 
-  const orig = useRef<{ form: Form; variants: VariantRow[]; images: string[]; specs: SpecRow[] }>({ form: EMPTY_FORM, variants: [], images: [], specs: [] })
+  const orig = useRef<{ form: Form; variants: VariantRow[]; images: string[]; specs: SpecRow[]; variantImages: Record<string, string[]> }>({ form: EMPTY_FORM, variants: [], images: [], specs: [], variantImages: {} })
   // Bu oturumda yüklenen ama kaydedilmeden kaldırılan dosyalar silinir
   const sessionUploads = useRef<Set<string>>(new Set())
 
@@ -186,12 +270,14 @@ function Editor() {
     const v = toVariantRows(p.variants)
     const imgs = p.images?.length ? [...p.images] : p.image ? [p.image] : []
     const s = toSpecRows(p.specifications)
+    const vi = Object.fromEntries((p.variants ?? []).map((v, i) => [v.key, [...(p.imagesByVariant?.[i] ?? [])]]))
     setProduct(p)
+    setVariantImages(vi)
     setForm(f)
     setVariants(v)
     setImages(imgs)
     setSpecs(s)
-    orig.current = { form: f, variants: v, images: imgs, specs: s }
+    orig.current = { form: f, variants: v, images: imgs, specs: s, variantImages: vi }
   }, [])
 
   const load = useCallback(async () => {
@@ -211,7 +297,7 @@ function Editor() {
     if (isNew) {
       setProduct(null)
       setForm(EMPTY_FORM)
-      orig.current = { form: EMPTY_FORM, variants: [], images: [], specs: [] }
+      orig.current = { form: EMPTY_FORM, variants: [], images: [], specs: [], variantImages: {} }
       return
     }
     load()
@@ -233,22 +319,57 @@ function Editor() {
     if (str('slogan') !== o.form.slogan.trim()) body.slogan = str('slogan')
     if (str('warranty') !== o.form.warranty.trim()) body.warranty = str('warranty')
     if (form.featured !== o.form.featured) body.featured = form.featured
-    if (str('price') !== o.form.price.trim()) body.price = Number(str('price').replace(',', '.'))
-    if (str('stock') !== o.form.stock.trim()) body.stock = Math.max(0, Math.floor(Number(str('stock')) || 0))
+    // Fiyat: modu açıkça gönderilir; dövize bağlıda döviz fiyatı, sabit TL'de TL fiyatı (A05)
+    if (form.priceMode !== o.form.priceMode) body.priceMode = form.priceMode
+    if (form.priceMode === 'fx') {
+      if (str('basePrice') !== o.form.basePrice.trim() || body.priceMode) body.basePrice = num(form.basePrice)
+    } else if (str('price') !== o.form.price.trim() || body.priceMode) body.price = num(form.price)
+    // Stok: varyantlar ayrı stoklanıyorsa varyant satırları, değilse ürün stoğu (A03)
+    // Maliyet (A06): yalnız yetkili role gösterilir ve gönderilir
+    if (canCost) {
+      if (str('costPrice') !== o.form.costPrice.trim()) body.costPrice = str('costPrice') ? num(form.costPrice) : null
+      if (form.costCurrency !== o.form.costCurrency) body.costCurrency = form.costCurrency
+      if (str('targetMargin') !== o.form.targetMargin.trim()) body.targetMargin = str('targetMargin') ? num(form.targetMargin) : null
+    }
+    // Lojistik (A07): koli ölçüsü üç alan birlikte gönderilir; sunucu desiyi hesaplar
+    const dimsNow = [form.dimL, form.dimW, form.dimH].map((d) => d.trim())
+    const dimsOrig = [o.form.dimL, o.form.dimW, o.form.dimH].map((d) => d.trim())
+    if (dimsNow.join('|') !== dimsOrig.join('|')) body.dimensionsCm = dimsNow.every((d) => !d) ? null : dimsNow.map(num)
+    if (str('weightKg') !== o.form.weightKg.trim()) body.weightKg = str('weightKg') ? num(form.weightKg) : null
+    if (str('packageCount') !== o.form.packageCount.trim()) body.packageCount = Math.floor(num(form.packageCount))
+    if (form.saleMode !== o.form.saleMode) body.saleMode = form.saleMode
+    if (form.variantStock !== o.form.variantStock) body.variantStock = form.variantStock
+    if (form.variantStock) {
+      const vsNow = variants.map((r) => [r.key, r.stock.trim()])
+      const vsOrig = o.variants.map((r) => [r.key, r.stock.trim()])
+      if (body.variantStock || JSON.stringify(vsNow) !== JSON.stringify(vsOrig)) {
+        body.variantStocks = Object.fromEntries(variants.map((r) => [r.key, Math.max(0, Math.floor(Number(r.stock) || 0))]))
+      }
+    } else if (str('stock') !== o.form.stock.trim() || body.variantStock === false) {
+      body.stock = Math.max(0, Math.floor(Number(str('stock')) || 0))
+    }
     const feats = form.features.split('\n').map((l) => l.trim()).filter(Boolean)
     if (feats.join('\n') !== o.form.features.split('\n').map((l) => l.trim()).filter(Boolean).join('\n')) body.features = feats
     if (JSON.stringify(images) !== JSON.stringify(o.images)) {
       body.images = images
       body.image = images[0] ?? null
     }
-    const vNow = variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), r.price.trim()])
-    const vOrig = o.variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), r.price.trim()])
-    if (JSON.stringify(vNow) !== JSON.stringify(vOrig)) body.variants = variantsPayload(variants, o.variants)
+    // Varyant fiyatı modda girilen alandan karşılaştırılır (dövize bağlıda döviz, sabit TL'de TL)
+    const priceCol = (r: VariantRow) => (form.priceMode === 'fx' ? r.base.trim() : r.price.trim())
+    const vNow = variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), priceCol(r)])
+    const vOrig = o.variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), priceCol(r)])
+    if (JSON.stringify(vNow) !== JSON.stringify(vOrig)) body.variants = variantsPayload(variants, form.priceMode, product?._meta?.rate?.value ?? null)
+    const viNow = JSON.stringify(variants.map((v) => [v.key, variantImages[v.key] ?? []]))
+    const viOrig = JSON.stringify(variants.map((v) => [v.key, o.variantImages[v.key] ?? []]))
+    const anyVariantImages = variants.some((v) => (variantImages[v.key] ?? []).length)
+    if (viNow !== viOrig || (body.images && anyVariantImages)) {
+      body.variantImages = Object.fromEntries(variants.map((v) => [v.key, variantImages[v.key] ?? []]))
+    }
     const sNow = specs.filter((s) => s.k.trim()).map((s) => [s.k.trim(), s.v.trim()])
     const sOrig = o.specs.map((s) => [s.k.trim(), s.v.trim()])
     if (JSON.stringify(sNow) !== JSON.stringify(sOrig)) body.specifications = Object.fromEntries(sNow)
     return body
-  }, [form, images, variants, specs])
+  }, [form, images, variants, specs, product, canCost, variantImages])
 
   const dirty = Object.keys(changes).length > 0
 
@@ -265,29 +386,54 @@ function Editor() {
   const validate = (): string | null => {
     if (!form.name.trim()) return 'Ürün adı gerekli.'
     if (!form.category.trim()) return 'Kategori seçin.'
-    const price = Number(form.price.replace(',', '.'))
-    if (!Number.isFinite(price) || price < 0) return 'Fiyat geçersiz.'
+    const fx = form.priceMode === 'fx'
+    const price = fx ? num(form.basePrice) : num(form.price)
+    if (!Number.isFinite(price) || price < 0 || (fx && price === 0)) return fx ? 'Döviz fiyatı geçersiz.' : 'Fiyat geçersiz.'
     for (const v of variants) {
       if (!v.label.trim()) return 'Her varyantın bir adı olmalı.'
-      const vp = Number(v.price.replace(',', '.'))
-      if (!Number.isFinite(vp) || vp < 0 || v.price.trim() === '') return `“${v.label}” varyantının fiyatı geçersiz.`
+      // Dövize bağlıda boş döviz fiyatı katalogdan doldurulur
+      const raw = fx ? v.base : v.price
+      const vp = num(raw)
+      if (fx ? raw.trim() !== '' && (!Number.isFinite(vp) || vp <= 0) : !Number.isFinite(vp) || vp < 0 || raw.trim() === '') {
+        return `“${v.label}” varyantının fiyatı geçersiz.`
+      }
+      if (form.variantStock && (!Number.isInteger(Number(v.stock)) || Number(v.stock) < 0)) return `“${v.label}” varyantının stoğu geçersiz.`
     }
     if (product?.variants?.length && variants.length === 0) return 'Varyantlı üründe en az bir varyant kalmalı.'
     return null
   }
 
-  const save = async () => {
+  /** statusTo: yayına al / taslağa al (A08); değişikliklerle birlikte tek istekte gönderilir */
+  const save = async (modeConfirmed = false, statusTo?: 'published' | 'draft') => {
     const err = validate()
     if (err) {
       toast.error('Kaydedilemedi', err)
       return
     }
+    if (!isNew && changes.priceMode && !modeConfirmed) {
+      pendingStatus.current = statusTo
+      setConfirmMode(true)
+      return
+    }
+    setConfirmMode(false)
     setSaving(true)
     try {
       if (isNew) {
+        const fxNew = form.currency !== 'TRY'
+        const dims = [form.dimL, form.dimW, form.dimH].map((d) => d.trim())
         const body = {
           name: form.name.trim(),
-          price: Number(form.price.replace(',', '.')),
+          // Para birimi (A06): USD/EUR ürünün TL fiyatı her gün kurla hesaplanır
+          priceCurrency: form.currency,
+          ...(fxNew ? { basePrice: num(form.basePrice) } : { price: num(form.price) }),
+          ...(canCost
+            ? { costPrice: form.costPrice.trim() ? num(form.costPrice) : null, costCurrency: form.costCurrency, targetMargin: form.targetMargin.trim() ? num(form.targetMargin) : null }
+            : {}),
+          // Lojistik (A07)
+          ...(dims.some(Boolean) ? { dimensionsCm: dims.map(num) } : {}),
+          ...(form.weightKg.trim() ? { weightKg: num(form.weightKg) } : {}),
+          packageCount: Math.max(1, Math.floor(num(form.packageCount) || 1)),
+          saleMode: form.saleMode,
           category: form.category.trim(),
           brand: form.brand.trim() || null,
           sku: form.sku.trim() || null,
@@ -299,7 +445,7 @@ function Editor() {
           featured: form.featured,
           features: form.features.split('\n').map((l) => l.trim()).filter(Boolean),
           specifications: Object.fromEntries(specs.filter((s) => s.k.trim()).map((s) => [s.k.trim(), s.v.trim()])),
-          ...(variants.length ? { variants: variantsPayload(variants, []) } : {}),
+          ...(variants.length ? { variants: variantsPayload(variants, fxNew ? 'fx' : 'fixed', null) } : {}),
         }
         const res = await fetch('/api/admin/catalog', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), credentials: 'include' })
         const json = await res.json().catch(() => null)
@@ -311,13 +457,13 @@ function Editor() {
           body: JSON.stringify({ productId: json.productId, stock: body.stock }),
           credentials: 'include',
         })
-        orig.current = { form, variants, images, specs }
-        toast.success('Ürün oluşturuldu', 'Şimdi görselleri ekleyebilirsiniz.')
+        orig.current = { form, variants, images, specs, variantImages }
+        toast.success('Taslak oluşturuldu', 'Görselleri ve eksikleri tamamlayıp "Yayına al" deyin; o zamana kadar sitede görünmez.')
         router.replace(`/admin/products/duzenle?id=${encodeURIComponent(json.productId)}`)
         return
       }
 
-      const body = changes
+      const body = statusTo ? { ...changes, status: statusTo } : changes
       const res = await fetch(`/api/admin/catalog/${encodeURIComponent(id)}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -334,7 +480,7 @@ function Editor() {
           sessionUploads.current.delete(u)
         }
       }
-      toast.success('Değişiklikler kaydedildi', form.name)
+      toast.success(statusTo === 'published' ? 'Yayına alındı' : statusTo === 'draft' ? 'Taslağa alındı' : 'Değişiklikler kaydedildi', statusTo === 'draft' ? 'Ürün sitede görünmüyor; sipariş geçmişi korunur.' : form.name)
       await load()
     } catch (e) {
       toast.error('Kaydedilemedi', e instanceof Error ? e.message : undefined)
@@ -424,13 +570,46 @@ function Editor() {
   if (!isNew && !product) return <Spinner />
 
   const isCatalog = !!product?._meta?.isCatalog
-  const currencyNote = product?.priceCurrency && product.priceCurrency !== 'TRY' && typeof product.basePrice === 'number'
-  const hasVariantImages = !!product?.imagesByVariant?.some((a) => a?.length)
+  const catalogPricing = product?._meta?.catalogPricing ?? null
+  const rate = product?._meta?.rate ?? null
+  // Yeni üründe para birimi formda seçilir (A06)
+  const currency = catalogPricing?.currency ?? (isNew && form.currency !== 'TRY' ? form.currency : '')
+  const fromCatalog = catalogPricing?.origin === 'catalog'
+  const fx = form.priceMode === 'fx'
+  const modeChanged = !isNew && form.priceMode !== orig.current.form.priceMode
+  const rateLine = rate
+    ? `1 ${currency} = ${rate.value.toLocaleString('tr-TR', { maximumFractionDigits: 4 })} TL · ${RATE_SOURCE_TR[rate.source]} · ${new Date(rate.updatedAt).toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul', dateStyle: 'short', timeStyle: 'short' })}`
+    : ''
+  const fxPreview = (base: string) => {
+    const n = num(base)
+    return rate && Number.isFinite(n) && n > 0 ? fmtTRY(fxToTry(n, rate.value)) : '—'
+  }
+  const variantStockSum = variants.reduce((n, v) => n + Math.max(0, Math.floor(Number(v.stock) || 0)), 0)
+  // Lojistik ön hesap (A07): sunucu kaydederken aynı kuralla hesaplar (lib/shipping/fee packageDesi)
+  const dimsNum = [form.dimL, form.dimW, form.dimH].map(num)
+  const dimsComplete = dimsNum.every((n) => Number.isFinite(n) && n > 0)
+  const weightNum = num(form.weightKg)
+  const pkgCount = Math.max(1, Math.floor(num(form.packageCount) || 1))
+  const desiPreview = dimsComplete || weightNum > 0 ? packageDesi(dimsComplete ? dimsNum : null, weightNum > 0 ? weightNum : null, pkgCount) : null
+  // Maliyet ve kâr (A06): TL karşılıkları güncel kurla
+  const rateOf = (c: string) => (c === 'USD' ? product?._meta?.rates?.USD : c === 'EUR' ? product?._meta?.rates?.EUR : 1) ?? null
+  const costNum = num(form.costPrice)
+  const costRate = rateOf(form.costCurrency)
+  const costTry = Number.isFinite(costNum) && costNum > 0 && costRate ? costNum * costRate : null
+  const salePrice = product?.price ?? null
+  const marginNow = costTry != null && salePrice ? ((salePrice - costTry) / salePrice) * 100 : null
+  const targetNum = num(form.targetMargin)
+  const targetPrice = costTry != null && Number.isFinite(targetNum) && targetNum >= 0 && targetNum < 100 ? costTry / (1 - targetNum / 100) : null
+  // Yayın (A08): panelde eklenen ürün taslak/yayında; katalog ürünü her zaman yayında
+  const isDraft = product?._meta?.status === 'draft'
+  const problems = product?._meta?.publishProblems ?? []
   const categories = [...new Set([...ALL_CATEGORIES, ...(form.category ? [form.category] : [])])]
 
   const sections = [
     { id: 'genel', label: 'Genel bilgiler' },
     { id: 'fiyat', label: 'Fiyat ve stok' },
+    ...(canCost ? [{ id: 'maliyet', label: 'Maliyet ve kâr' }] : []),
+    { id: 'kargo', label: 'Kargo ve teslimat' },
     { id: 'varyantlar', label: 'Varyantlar' },
     { id: 'gorseller', label: 'Görseller' },
     { id: 'ozellikler', label: 'Öne çıkan özellikler' },
@@ -444,11 +623,12 @@ function Editor() {
         title={isNew ? 'Yeni ürün' : form.name || 'Ürün'}
         description={
           isNew ? (
-            'Temel bilgileri girip oluşturun; görselleri oluşturduktan sonra ekleyebilirsiniz.'
+            'Ürün taslak olarak oluşturulur ve sitede görünmez. Görselleri oluşturduktan sonra ekleyin; eksikler tamamlanınca “Yayına al” deyin.'
           ) : (
             <span className="inline-flex flex-wrap items-center gap-1.5">
               <span className="font-mono text-xs">{id}</span>
               {isCatalog ? <Pill tone="navy">Katalog ürünü</Pill> : <Pill tone="violet">Panelde eklendi</Pill>}
+              {!isCatalog && (isDraft ? <Pill tone="amber">Taslak</Pill> : <Pill tone="green">Yayında</Pill>)}
               {product?._meta?.hasOverride && isCatalog && <Pill tone="yellow">Panelde düzenlendi</Pill>}
             </span>
           )
@@ -474,6 +654,38 @@ function Editor() {
       <div className="grid xl:grid-cols-[180px_1fr] gap-6 items-start">
         <SectionNav items={sections} />
         <div className="space-y-5 min-w-0">
+          {!isNew && !isCatalog && (
+            <Panel id="yayin" className={cn('scroll-mt-20', isDraft && 'border-[#f5dc85]')}>
+              <PanelHeader
+                title={isDraft ? 'Taslak: sitede görünmüyor' : 'Yayında'}
+                description={isDraft ? 'Taslak ürün arama, kategori, ürün akışları ve sepette yer almaz. Önizleme yalnız yöneticilere açıktır.' : 'Ürün sitede satışta. Taslağa almak ürünü gizler; sipariş geçmişi silinmez.'}
+                icon={Info}
+                actions={
+                  <div className="flex flex-wrap gap-2">
+                    <a href={`/onizleme/${encodeURIComponent(id)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 h-7 px-2.5 rounded-md border border-[#d3d9e1] bg-white text-xs font-medium text-[#20384e] hover:bg-[#f5f7fa]">
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      Önizle
+                    </a>
+                    {isDraft ? (
+                      <Btn size="xs" variant="accent" onClick={() => save(false, 'published')} disabled={saving || (problems.length > 0 && !dirty)}>
+                        Yayına al
+                      </Btn>
+                    ) : (
+                      <Btn size="xs" variant="outline" onClick={() => save(false, 'draft')} disabled={saving}>
+                        Taslağa al
+                      </Btn>
+                    )}
+                  </div>
+                }
+              />
+              {problems.length > 0 && (
+                <p className="px-4 sm:px-5 py-3 text-[13px] text-[#7a5a00]">
+                  Yayına almak için eksik: <strong>{problems.join(', ')}</strong>. Tamamlayıp kaydedin.
+                </p>
+              )}
+            </Panel>
+          )}
+
           <Panel id="genel" className="scroll-mt-20">
             <PanelHeader title="Genel bilgiler" icon={Package} />
             <div className="p-4 sm:p-5 grid gap-4 md:grid-cols-2">
@@ -507,9 +719,39 @@ function Editor() {
                 label="Detaylı açıklama"
                 htmlFor="p-full"
                 className="md:col-span-2"
-                hint={product?.descriptionHtml ? 'Bu ürünün katalogdan gelen biçimli açıklaması var; buraya metin yazarsanız sitede onun yerine bu metin gösterilir.' : undefined}
+                hint={
+                  product?._meta?.catalogDescriptionHtml
+                    ? form.fullDescription.trim()
+                      ? 'Sitede şu an bu kutudaki metin gösteriliyor (katalogdaki biçimli açıklamanın yerine). Kutuyu boşaltıp kaydederseniz katalog açıklaması geri gelir.'
+                      : 'Kutu boş: sitede katalogdaki biçimli açıklama (tablolar ve bağlantılarla) gösteriliyor. Buraya yazılan düz metin onun yerine geçer.'
+                    : undefined
+                }
               >
                 <TextArea id="p-full" rows={6} value={form.fullDescription} onChange={(e) => set('fullDescription', e.target.value)} />
+                {product?._meta?.catalogDescriptionHtml && (
+                  <div className="mt-2 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <Pill tone={form.fullDescription.trim() ? 'violet' : 'navy'}>
+                        {form.fullDescription.trim() ? 'Gösterilen: panel metni' : 'Gösterilen: katalog açıklaması'}
+                      </Pill>
+                      <button type="button" className="font-medium text-[#0b2540] hover:underline" onClick={() => setShowCatalogDesc((x) => !x)} aria-expanded={showCatalogDesc}>
+                        {showCatalogDesc ? 'Katalog açıklamasını gizle' : 'Katalog açıklamasını önizle'}
+                      </button>
+                      {form.fullDescription.trim() && (
+                        <button type="button" className="font-medium text-[#0b2540] hover:underline" onClick={() => set('fullDescription', '')}>
+                          Katalog açıklamasına dön
+                        </button>
+                      )}
+                    </div>
+                    {showCatalogDesc && (
+                      <div
+                        className="max-h-80 overflow-auto rounded-lg border border-[#e6ebf1] bg-[#fafbfd] p-3 text-[13px] text-[#20384e] [&_table]:w-full [&_td]:border [&_td]:border-[#e6ebf1] [&_td]:px-2 [&_td]:py-1 [&_a]:underline"
+                        // Katalog dosyasındaki (içe aktarıcının ürettiği) açıklama; vitrin aynı HTML'i gösterir
+                        dangerouslySetInnerHTML={{ __html: product._meta.catalogDescriptionHtml }}
+                      />
+                    )}
+                  </div>
+                )}
               </Field>
               <Checkbox className="md:col-span-2" checked={form.featured} onChange={(v) => set('featured', v)} label={<span className="inline-flex items-center gap-1.5"><Star className="w-4 h-4 text-[#e0a500]" />Ana sayfada öne çıkar</span>} />
             </div>
@@ -518,24 +760,202 @@ function Editor() {
           <Panel id="fiyat" className="scroll-mt-20">
             <PanelHeader title="Fiyat ve stok" icon={SlidersHorizontal} />
             <div className="p-4 sm:p-5 grid gap-4 sm:grid-cols-2">
-              <Field
-                label={variants.length ? 'Taban fiyat (TL, KDV hariç)' : 'Fiyat (TL, KDV hariç)'}
-                htmlFor="p-price"
-                hint={variants.length ? 'Varyantlı üründe sepette varyant fiyatı kullanılır.' : undefined}
-              >
-                <TextInput id="p-price" inputMode="decimal" value={form.price} onChange={(e) => set('price', e.target.value)} />
-              </Field>
-              <Field label="Stok (adet)" htmlFor="p-stock" hint="Stok ürün bazında tutulur (varyantlar ortak stoktan düşer).">
-                <TextInput id="p-stock" type="number" min={0} value={form.stock} onChange={(e) => set('stock', e.target.value)} />
-              </Field>
-              {currencyNote && (
+              {isNew && (
+                <Field label="Fiyat para birimi" htmlFor="p-currency" className="sm:col-span-2" hint="USD veya EUR seçilirse ürün dövize bağlı satılır: TL fiyatı güncel kurla hesaplanır. Sonradan Sabit TL'ye geçilebilir.">
+                  <SelectInput
+                    id="p-currency"
+                    value={form.currency}
+                    onChange={(e) => {
+                      const c = e.target.value as Form['currency']
+                      set('currency', c)
+                      set('priceMode', c === 'TRY' ? 'fixed' : 'fx')
+                    }}
+                  >
+                    <option value="TRY">TL (sabit)</option>
+                    <option value="USD">USD (dövize bağlı)</option>
+                    <option value="EUR">EUR (dövize bağlı)</option>
+                  </SelectInput>
+                </Field>
+              )}
+              {catalogPricing && (
+                <fieldset className="sm:col-span-2">
+                  <legend className="text-[13px] font-medium text-[#20384e] mb-2">Fiyatlandırma</legend>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {([
+                      ['fx', 'Dövize bağlı', `${currency} fiyat × güncel kur; kur değişince TL fiyat da değişir.`],
+                      ['fixed', 'Sabit TL', 'TL fiyat siz değiştirene kadar aynı kalır; kur değişiminden etkilenmez.'],
+                    ] as const).map(([mode, title, desc]) => (
+                      <label
+                        key={mode}
+                        className={cn('flex gap-2.5 rounded-lg border px-3 py-2.5 cursor-pointer', form.priceMode === mode ? 'border-[#0b2540] bg-[#f5f7fa] ring-1 ring-[#0b2540]' : 'border-[#d3d9e1] hover:border-[#8a99a8]')}
+                      >
+                        <input
+                          type="radio"
+                          name="price-mode"
+                          className="mt-0.5 accent-[#0b2540]"
+                          checked={form.priceMode === mode}
+                          onChange={() => {
+                            set('priceMode', mode)
+                            // Sabit TL'ye geçerken TL alanları o anki kurla hesaplanmış fiyatla başlar
+                            if (mode === 'fixed' && rate) {
+                              if (num(form.basePrice) > 0) set('price', String(fxToTry(num(form.basePrice), rate.value)))
+                              setVariants((prev) => prev.map((v) => (num(v.base) > 0 ? { ...v, price: String(fxToTry(num(v.base), rate.value)) } : v)))
+                            }
+                          }}
+                        />
+                        <span>
+                          <span className="block text-[13px] font-medium text-[#121926]">{title}</span>
+                          <span className="block text-xs text-[#5d6e80] mt-0.5">{desc}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  {modeChanged && (
+                    <p className="mt-2 text-xs text-[#7a5a00]">Fiyatlandırma modu değişecek; kaydederken onayınız istenecek.</p>
+                  )}
+                </fieldset>
+              )}
+              {fx ? (
+                <Field
+                  label={`${variants.length ? 'Taban fiyat' : 'Fiyat'} (${currency}, KDV hariç)`}
+                  htmlFor="p-base"
+                  hint={isNew ? 'TL fiyatı her gün güncel kurla hesaplanır.' : `Bugünkü kurla ${fxPreview(form.basePrice)}.${fromCatalog ? ` Katalog fiyatı ${catalogPricing!.basePrice} ${currency}.` : ''}`}
+                >
+                  <div className="flex gap-2">
+                    <TextInput id="p-base" inputMode="decimal" value={form.basePrice} onChange={(e) => set('basePrice', e.target.value)} />
+                    {fromCatalog && num(form.basePrice) !== catalogPricing!.basePrice && (
+                      <Btn variant="outline" onClick={() => set('basePrice', String(catalogPricing!.basePrice))}>
+                        <RotateCcw />
+                        Katalog fiyatı
+                      </Btn>
+                    )}
+                  </div>
+                </Field>
+              ) : (
+                <Field
+                  label={variants.length ? 'Taban fiyat (TL, KDV hariç)' : 'Fiyat (TL, KDV hariç)'}
+                  htmlFor="p-price"
+                  hint={variants.length ? 'Varyantlı üründe sepette varyant fiyatı kullanılır.' : undefined}
+                >
+                  <TextInput id="p-price" inputMode="decimal" value={form.price} onChange={(e) => set('price', e.target.value)} />
+                </Field>
+              )}
+              {form.variantStock ? (
+                <Field label="Stok (adet)" htmlFor="p-stock" hint="Varyant stoklarının toplamı; varyant satırlarından değişir.">
+                  <TextInput id="p-stock" value={String(variantStockSum)} disabled readOnly />
+                </Field>
+              ) : (
+                <Field label="Stok (adet)" htmlFor="p-stock" hint={variants.length ? 'Varyantlar bu ortak stoktan düşer.' : undefined}>
+                  <TextInput id="p-stock" type="number" min={0} value={form.stock} onChange={(e) => set('stock', e.target.value)} />
+                </Field>
+              )}
+              {variants.length > 0 && (
+                <div className="sm:col-span-2">
+                  <Checkbox
+                    checked={form.variantStock}
+                    disabled={isNew}
+                    onChange={(v) => {
+                      set('variantStock', v)
+                      // Kapatılırken ortak stok varyant toplamıyla başlar (stok kaybolmaz)
+                      if (!v) set('stock', String(variantStockSum))
+                    }}
+                    label="Varyantlar ayrı stoklanır"
+                  />
+                  <p className="text-xs text-[#5d6e80] mt-1 ml-6">
+                    {isNew
+                      ? 'Ürün oluşturulduktan sonra açılabilir.'
+                      : form.variantStock
+                        ? 'Her varyantın stoğu “Varyantlar” bölümünde girilir; bir varyantın satışı diğerinin stoğunu etkilemez. Stoğu 0 olan varyant satılamaz.'
+                        : 'Kapalıyken bütün varyantlar tek stoğu paylaşır (ör. 450 Wp satışı 600 Wp stoğunu da düşürür).'}
+                  </p>
+                </div>
+              )}
+              {catalogPricing && (
                 <p className="sm:col-span-2 flex gap-2 text-[13px] text-[#20384e] bg-[#f5f7fa] border border-[#e6ebf1] rounded-lg px-3 py-2.5">
                   <Info className="w-4 h-4 text-[#5d6e80] shrink-0 mt-0.5" />
                   <span>
-                    Katalog fiyatı <strong>{product!.basePrice} {product!.priceCurrency}</strong>; TL karşılığı her gün güncel kurla hesaplanır
-                    {' '}(şu an {fmtTRY(product!.price)}). TL fiyatı değiştirirseniz ürün sabit TL fiyatla satılır.
+                    {fx ? 'Dövize bağlı: TL fiyat her saat güncel kurla yeniden hesaplanır (tam TL\'ye yukarı yuvarlanır).' : 'Sabit TL: kur değişse de TL fiyat aynı kalır.'}
+                    {rateLine && <> Kullanılan kur: {rateLine}.</>}
+                    {' '}Şu anki satış fiyatı {fmtTRY(product!.price)}.
                   </span>
                 </p>
+              )}
+            </div>
+          </Panel>
+
+          {canCost && (
+            <Panel id="maliyet" className="scroll-mt-20">
+              <PanelHeader title="Maliyet ve kâr" description="Yalnız Sahip ve Yönetici görür; sitede ve ürün listesinde görünmez." icon={SlidersHorizontal} />
+              <div className="p-4 sm:p-5 grid gap-4 sm:grid-cols-3">
+                <Field label="Alış maliyeti (KDV hariç)" htmlFor="p-cost">
+                  <TextInput id="p-cost" inputMode="decimal" value={form.costPrice} onChange={(e) => set('costPrice', e.target.value)} />
+                </Field>
+                <Field label="Maliyet para birimi" htmlFor="p-cost-cur">
+                  <SelectInput id="p-cost-cur" value={form.costCurrency} onChange={(e) => set('costCurrency', e.target.value as Form['costCurrency'])}>
+                    <option value="TRY">TL</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                  </SelectInput>
+                </Field>
+                <Field label="Hedef kâr marjı (%)" htmlFor="p-margin" hint="Satış fiyatı üzerinden">
+                  <TextInput id="p-margin" inputMode="decimal" value={form.targetMargin} onChange={(e) => set('targetMargin', e.target.value)} />
+                </Field>
+                {costTry != null && (
+                  <p className="sm:col-span-3 text-[13px] text-[#20384e] bg-[#f5f7fa] border border-[#e6ebf1] rounded-lg px-3 py-2.5">
+                    Maliyet ≈ {fmtTRY(costTry)}{form.costCurrency !== 'TRY' && ' (güncel kurla)'}.
+                    {salePrice != null && marginNow != null && <> Şu anki satış fiyatı {fmtTRY(salePrice)}: kâr {fmtTRY(salePrice - costTry)} (%{marginNow.toFixed(1)}).</>}
+                    {targetPrice != null && <> Hedef %{targetNum} için en az {fmtTRY(targetPrice)} (KDV hariç).</>}
+                  </p>
+                )}
+                {isNew && <p className="sm:col-span-3 text-xs text-[#5d6e80]">Kâr hesabı ürün oluşturulup fiyatı belirlendikten sonra gösterilir.</p>}
+              </div>
+            </Panel>
+          )}
+
+          <Panel id="kargo" className="scroll-mt-20">
+            <PanelHeader title="Kargo ve teslimat" description="Sepetteki kargo ücreti buradaki koli bilgisinden hesaplanır." icon={Package} />
+            <div className="p-4 sm:p-5 grid gap-4 sm:grid-cols-2">
+              <Field label="Satış biçimi" htmlFor="p-sale" className="sm:col-span-2">
+                <SelectInput id="p-sale" value={form.saleMode} onChange={(e) => set('saleMode', e.target.value as Form['saleMode'])}>
+                  {SALE_MODE_OPTIONS.map(([v, l]) => (
+                    <option key={v} value={v}>{l}</option>
+                  ))}
+                </SelectInput>
+              </Field>
+              {form.saleMode === 'normal' && (
+                <>
+                  <Field label="Koli ölçüsü (cm, uzunluk × genişlik × yükseklik)" htmlFor="p-dim-l" className="sm:col-span-2" hint="Ürünün kendi ölçüsü değil, gönderilen kolinin ölçüsü.">
+                    <div className="grid grid-cols-3 gap-2">
+                      <TextInput id="p-dim-l" inputMode="decimal" placeholder="U" value={form.dimL} onChange={(e) => set('dimL', e.target.value)} aria-label="Koli uzunluğu (cm)" />
+                      <TextInput inputMode="decimal" placeholder="G" value={form.dimW} onChange={(e) => set('dimW', e.target.value)} aria-label="Koli genişliği (cm)" />
+                      <TextInput inputMode="decimal" placeholder="Y" value={form.dimH} onChange={(e) => set('dimH', e.target.value)} aria-label="Koli yüksekliği (cm)" />
+                    </div>
+                  </Field>
+                  <Field label="Koli ağırlığı (kg, brüt)" htmlFor="p-kg">
+                    <TextInput id="p-kg" inputMode="decimal" value={form.weightKg} onChange={(e) => set('weightKg', e.target.value)} />
+                  </Field>
+                  <Field label="Koli sayısı (1 adet ürün için)" htmlFor="p-pkg">
+                    <TextInput id="p-pkg" type="number" min={1} max={50} value={form.packageCount} onChange={(e) => set('packageCount', e.target.value)} />
+                  </Field>
+                  <p className="sm:col-span-2 text-[13px] text-[#20384e] bg-[#f5f7fa] border border-[#e6ebf1] rounded-lg px-3 py-2.5">
+                    {desiPreview != null ? (
+                      <>
+                        1 adet = <strong>{desiPreview} desi</strong>
+                        {weightNum > 0 && <>, {Math.round(weightNum * pkgCount * 100) / 100} kg</>} (koli başına hacim/3000 ile ağırlığın büyüğü × koli sayısı). 100 desi veya 100 kg üstü parça ağır taşıma sayılır.
+                      </>
+                    ) : (
+                      'Koli ölçüsü ve ağırlık girilmeden kargo ücreti hesaplanamaz; panelde eklenen ürün bu bilgi olmadan yayına alınamaz.'
+                    )}
+                    {isCatalog && product?.logisticsSource !== 'panel' && ' Siz değiştirene kadar katalogdaki kargo bilgisi kullanılır.'}
+                    {variants.length > 0 && ' Panelde girilen koli bilgisi bütün varyantlara uygulanır.'}
+                  </p>
+                </>
+              )}
+              {form.saleMode === 'install' && (
+                <p className="sm:col-span-2 text-[13px] text-[#20384e]">Kargo ücretine girmez. Sepet, ödeme ve siparişte kurulum ve nakliyenin fiyata dahil olmadığı, siparişten sonra müşteriyle iletişime geçileceği yazar.</p>
+              )}
+              {form.saleMode === 'quote' && (
+                <p className="sm:col-span-2 text-[13px] text-[#20384e]">Fiyat gösterilmez, sepete eklenemez; ürün sayfasında teklif ve iletişim seçenekleri görünür.</p>
               )}
             </div>
           </Panel>
@@ -549,7 +969,7 @@ function Editor() {
                 <Btn
                   size="xs"
                   variant="outline"
-                  onClick={() => setVariants((prev) => [...prev, { key: newVariantKey(`v${prev.length + 1}`), label: '', sku: '', price: form.price || '', extra: {} }])}
+                  onClick={() => setVariants((prev) => [...prev, { key: newVariantKey(`v${prev.length + 1}`), label: '', sku: '', price: form.price || '', base: fx ? form.basePrice : '', stock: '0', extra: {} }])}
                 >
                   <Plus />
                   Varyant ekle
@@ -566,14 +986,16 @@ function Editor() {
                       <th className="px-4 py-2 w-16">Sıra</th>
                       <th className="px-2 py-2">Varyant adı</th>
                       <th className="px-2 py-2 w-48">SKU</th>
-                      <th className="px-2 py-2 w-40">Fiyat (TL, KDV hariç)</th>
+                      <th className="px-2 py-2 w-40">{fx ? `Fiyat (${currency}, KDV hariç)` : 'Fiyat (TL, KDV hariç)'}</th>
+                      {form.variantStock && <th className="px-2 py-2 w-24">Stok</th>}
                       <th className="px-4 py-2 w-12" />
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#eef2f6]">
                     {variants.map((v, i) => {
                       const o = orig.current.variants.find((x) => x.key === v.key)
-                      const priceChanged = o && o.price !== v.price
+                      const priceChanged = o && (fx ? o.base !== v.base : o.price !== v.price)
+                      const stockChanged = o && o.stock !== v.stock
                       return (
                         <tr key={v.key} className="align-top">
                           <td className="px-4 py-2">
@@ -594,17 +1016,45 @@ function Editor() {
                             <TextInput value={v.sku} onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, sku: e.target.value } : x)))} aria-label="Varyant SKU" />
                           </td>
                           <td className="px-2 py-2">
-                            <TextInput
-                              inputMode="decimal"
-                              value={v.price}
-                              onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, price: e.target.value } : x)))}
-                              aria-label="Varyant fiyatı"
-                              className={priceChanged ? 'border-[#f5b400] bg-[#fffbeb]' : undefined}
-                            />
-                            {v.basePrice !== undefined && product?.priceCurrency && (
-                              <p className="text-[11px] text-[#5d6e80] mt-1">{priceChanged ? 'Sabit TL fiyata geçecek' : `${v.basePrice} ${product.priceCurrency} · kurla`}</p>
+                            {fx ? (
+                              <>
+                                <TextInput
+                                  inputMode="decimal"
+                                  value={v.base}
+                                  placeholder={String(catalogPricing?.variants.find((c) => c.key === v.key)?.basePrice ?? '')}
+                                  onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, base: e.target.value } : x)))}
+                                  aria-label={`Varyant fiyatı (${currency})`}
+                                  className={priceChanged ? 'border-[#f5b400] bg-[#fffbeb]' : undefined}
+                                />
+                                <p className="text-[11px] text-[#5d6e80] mt-1">
+                                  {v.base.trim() ? `≈ ${fxPreview(v.base)} · kurla` : 'Boş: katalog döviz fiyatı kullanılır'}
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <TextInput
+                                  inputMode="decimal"
+                                  value={v.price}
+                                  onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, price: e.target.value } : x)))}
+                                  aria-label="Varyant fiyatı"
+                                  className={priceChanged ? 'border-[#f5b400] bg-[#fffbeb]' : undefined}
+                                />
+                                {catalogPricing && <p className="text-[11px] text-[#5d6e80] mt-1">Sabit TL</p>}
+                              </>
                             )}
                           </td>
+                          {form.variantStock && (
+                            <td className="px-2 py-2">
+                              <TextInput
+                                type="number"
+                                min={0}
+                                value={v.stock}
+                                onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, stock: e.target.value } : x)))}
+                                aria-label={`${v.label || 'Varyant'} stok`}
+                                className={stockChanged ? 'border-[#f5b400] bg-[#fffbeb]' : undefined}
+                              />
+                            </td>
+                          )}
                           <td className="px-4 py-2">
                             <button
                               type="button"
@@ -637,11 +1087,54 @@ function Editor() {
               }
             />
             <div className="p-4 sm:p-5 space-y-3">
-              {hasVariantImages && (
-                <p className="flex gap-2 text-[13px] text-[#7a5a00] bg-[#fffbeb] border border-[#f5dc85] rounded-lg px-3 py-2.5">
-                  <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                  Bu katalog ürününde varyant bazlı görseller tanımlı; ürün sayfasında varyant seçiliyken o görseller gösterilir.
-                </p>
+              {variants.length > 0 && !isNew && (
+                <div className="rounded-lg border border-[#e6ebf1]">
+                  <div className="px-3 py-2.5 border-b border-[#eef2f6]">
+                    <p className="text-[13px] font-medium text-[#121926]">Varyant görselleri</p>
+                    <p className="text-xs text-[#5d6e80] mt-0.5">
+                      Varyantın kendi görseli varsa ürün sayfasında o varyant seçiliyken o gösterilir; yoksa genel galeri. Genel galeriyi değiştirmek kendi görseli olan varyantları etkilemez.
+                      {product?._meta?.variantImagesSource === 'catalog' && ' Şu anki varyant görselleri katalogdan geliyor.'}
+                      {' '}Görsel atamak için önce genel galeriye yükleyin, sonra aşağıdan seçin.
+                    </p>
+                  </div>
+                  <ul className="divide-y divide-[#eef2f6]">
+                    {variants.map((v) => {
+                      const own = variantImages[v.key] ?? []
+                      return (
+                        <li key={v.key} className="px-3 py-2.5 space-y-2">
+                          <div className="flex flex-wrap items-center justify-between gap-2">
+                            <span className="text-[13px] text-[#20384e]">
+                              {v.label || v.key} · <span className={own.length ? 'text-[#121926] font-medium' : 'text-[#5d6e80]'}>{own.length ? `kendi görselleri (${own.length})` : 'genel galeri'}</span>
+                            </span>
+                            {own.length > 0 && (
+                              <button type="button" className="text-xs font-medium text-[#0b2540] hover:underline" onClick={() => setVariantImages((p) => ({ ...p, [v.key]: [] }))}>
+                                Genel galeriyi kullan
+                              </button>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {[...new Set([...own, ...images])].map((url) => {
+                              const on = own.includes(url)
+                              return (
+                                <button
+                                  key={url}
+                                  type="button"
+                                  aria-pressed={on}
+                                  title={on ? 'Bu varyanttan kaldır' : 'Bu varyanta ata'}
+                                  onClick={() => setVariantImages((p) => ({ ...p, [v.key]: on ? own.filter((u) => u !== url) : [...own, url] }))}
+                                  className={cn('w-12 h-12 rounded border bg-white overflow-hidden', on ? 'border-[#0b2540] ring-2 ring-[#0b2540]' : 'border-[#e6ebf1] opacity-60 hover:opacity-100')}
+                                >
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={url} alt="" className="w-full h-full object-contain" loading="lazy" />
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
               )}
               <input
                 ref={fileInput}
@@ -786,13 +1279,44 @@ function Editor() {
                 Vazgeç
               </Btn>
             )}
-            <Btn variant="accent" size="md" onClick={save} loading={saving} disabled={!isNew && !dirty}>
+            <Btn variant="accent" size="md" onClick={() => save()} loading={saving} disabled={!isNew && !dirty}>
               {!saving && <Save />}
-              {isNew ? 'Ürünü oluştur' : 'Kaydet'}
+              {isNew ? 'Taslak olarak oluştur' : 'Kaydet'}
             </Btn>
           </div>
         </div>
       </div>
+
+      <Modal
+        open={confirmMode}
+        onClose={() => setConfirmMode(false)}
+        title="Fiyatlandırma modu değişsin mi?"
+        size="sm"
+        footer={
+          <>
+            <Btn variant="outline" onClick={() => setConfirmMode(false)}>Vazgeç</Btn>
+            <Btn variant="accent" onClick={() => save(true, pendingStatus.current)} loading={saving}>
+              {fx ? 'Dövize bağla ve kaydet' : 'Sabit TL yap ve kaydet'}
+            </Btn>
+          </>
+        }
+      >
+        <div className="space-y-3 text-sm text-[#20384e]">
+          <p>
+            <strong>Şu an:</strong>{' '}
+            {fx
+              ? `Sabit TL, ${fmtTRY(product?.price ?? 0)}. Kur değişimi fiyatı etkilemiyor.`
+              : `Dövize bağlı, ${product?.basePrice ?? catalogPricing?.basePrice} ${currency} × kur = ${fmtTRY(product?.price ?? 0)}.`}
+          </p>
+          <p>
+            <strong>Kaydedince:</strong>{' '}
+            {fx
+              ? `Dövize bağlı, ${form.basePrice} ${currency} × güncel kur ≈ ${fxPreview(form.basePrice)}. TL fiyat kurla birlikte değişir; boş bırakılan varyant fiyatları katalogdan alınır.`
+              : `Sabit TL, ${fmtTRY(num(form.price) || 0)}. Kur artsa da fiyat değişmez; ${variants.length ? 'varyant fiyatları da o anki TL değerlerinde sabitlenir.' : 'fiyatı siz güncellemelisiniz.'}`}
+          </p>
+          <p className="text-xs text-[#5d6e80]">İstediğiniz zaman bu ekrandan diğer moda geri dönebilirsiniz. Değişiklik işlem kaydına yazılır.</p>
+        </div>
+      </Modal>
 
       <Modal
         open={confirmReset}

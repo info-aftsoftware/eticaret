@@ -34,6 +34,10 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!order) {
       return NextResponse.json({ error: 'Sipariş bulunamadı' }, { status: 404 })
     }
+    // İptal edilmiş siparişe sipariş özeti (proforma) gönderilmez (A15)
+    if (order.status === 'CANCELLED') {
+      return NextResponse.json({ error: 'İptal edilmiş siparişe sipariş özeti gönderilmez.' }, { status: 409 })
+    }
     // Misafir siparişlerinde e-posta shippingEmail alanındadır
     const customerEmail = order.shippingEmail || order.user?.email || ''
     if (!customerEmail || customerEmail.endsWith('@placeholder.local')) {
@@ -48,7 +52,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       visibleToCustomer: false,
     })
     if (result.sent) {
-      return NextResponse.json({ success: true, message: 'Fatura e-posta ile gönderildi.' })
+      return NextResponse.json({ success: true, message: 'Sipariş özeti (proforma) e-posta ile gönderildi.' })
     }
     return NextResponse.json({ success: false, error: result.error || 'Gönderilemedi' }, { status: 500 })
   } catch (error) {

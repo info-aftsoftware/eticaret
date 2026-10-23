@@ -5,7 +5,17 @@ import { PageHeader, Panel, PanelHeader, Btn, Pill, Spinner, fmtDateTime, timeAg
 import { useToast } from '@/components/admin/toast'
 
 type Check = { key: string; label: string; ok: boolean; level: 'error' | 'warn' | 'info'; hint: string }
-type JobState = { lastRunAt?: string; lastOk?: boolean; lastError?: string; lastSummary?: string }
+type JobOutcome = 'ok' | 'idle' | 'disabled' | 'skipped' | 'error'
+type JobState = { lastRunAt?: string; lastOk?: boolean; lastError?: string; lastSummary?: string; outcome?: JobOutcome | null; lastSuccessAt?: string }
+
+/** Görev sonucu etiketleri (A11): kapalı entegrasyon ve atlanan görev başarılı sayılmaz */
+const OUTCOME: Record<JobOutcome, { label: string; tone: 'green' | 'blue' | 'slate' | 'amber' | 'red' }> = {
+  ok: { label: 'Başarılı', tone: 'green' },
+  idle: { label: 'Çalıştı, yeni kayıt yok', tone: 'blue' },
+  disabled: { label: 'Kapalı', tone: 'slate' },
+  skipped: { label: 'Atlandı', tone: 'amber' },
+  error: { label: 'Hatalı', tone: 'red' },
+}
 type SystemData = {
   db: { ok: boolean; ms: number; engine: string | null; sizeBytes: number | null; journalMode: string | null }
   scheduler: Record<string, JobState>
@@ -22,6 +32,7 @@ const JOBS: Record<string, { label: string; every: string }> = {
   backup: { label: 'Veritabanı yedeği', every: 'günde bir' },
   'geliver-tracking': { label: 'Geliver kargo takibi', every: 'saatte bir' },
   'navlungo-tracking': { label: 'Navlungo kargo takibi', every: '2 saatte bir' },
+  'audit-retention': { label: 'İşlem kaydı saklama süresi', every: 'günde bir' },
 }
 const kb = (n: number | null) => (n == null ? '—' : n > 1048576 ? `${(n / 1048576).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`)
 const uptime = (s: number) => (s > 86400 ? `${Math.floor(s / 86400)} gün` : s > 3600 ? `${Math.floor(s / 3600)} saat` : `${Math.floor(s / 60)} dk`)
@@ -121,10 +132,15 @@ export default function AdminSystemPage() {
             const s = data.scheduler[key]
             return (
               <li key={key} className="flex flex-col sm:flex-row sm:items-center gap-2 px-5 py-3">
-                <span className="w-28 shrink-0">{!s ? <Pill tone="slate">Henüz yok</Pill> : s.lastOk ? <Pill tone="green" dot>Başarılı</Pill> : <Pill tone="red" dot>Hata</Pill>}</span>
+                <span className="w-44 shrink-0">{!s?.outcome ? <Pill tone="slate">Henüz çalışmadı</Pill> : <Pill tone={OUTCOME[s.outcome].tone} dot>{OUTCOME[s.outcome].label}</Pill>}</span>
                 <span className="min-w-0 text-sm">
                   <span className="font-medium text-[#121926]">{job.label}</span> <span className="text-[#5d6e80]">· {job.every}</span>
-                  {s && <span className="block text-[13px] text-[#5d6e80]">{fmtDateTime(s.lastRunAt)} · {s.lastOk ? s.lastSummary : s.lastError}</span>}
+                  {s && (
+                    <span className="block text-[13px] text-[#5d6e80]">
+                      Son deneme {fmtDateTime(s.lastRunAt)} · {s.outcome === 'error' ? s.lastError : s.lastSummary}
+                      {s.outcome !== 'disabled' && <> · son başarılı çalışma {s.lastSuccessAt ? fmtDateTime(s.lastSuccessAt) : s.outcome === 'ok' || s.outcome === 'idle' ? fmtDateTime(s.lastRunAt) : 'yok'}</>}
+                    </span>
+                  )}
                 </span>
               </li>
             )

@@ -2,6 +2,7 @@
  * Yönetim paneli kupon formu doğrulaması (oluşturma ve güncelleme ortak).
  */
 import { normalizeCouponCode } from '@/lib/order-pricing'
+import { dateRangeError, discountValueError } from '@/lib/campaign-rules'
 
 export type CouponInput = {
   code: string
@@ -22,11 +23,11 @@ const optDate = (v: unknown) => (v ? new Date(String(v)) : null)
 export function parseCouponInput(body: Record<string, unknown>): { data: CouponInput } | { error: string } {
   const code = normalizeCouponCode(String(body.code ?? ''))
   if (!/^[A-Z0-9_-]{3,32}$/.test(code)) return { error: 'Kupon kodu 3–32 karakter olmalı; yalnızca harf, rakam, - ve _ kullanılabilir.' }
-  const type = body.type === 'FIXED' ? 'FIXED' : body.type === 'PERCENT' ? 'PERCENT' : null
-  if (!type) return { error: 'İndirim türü yüzde veya sabit tutar olmalı.' }
+  // Kampanyayla ortak değer kuralı (lib/campaign-rules: yüzde en fazla %99, sabit > 0)
+  const valueError = discountValueError(body.type, body.value)
+  if (valueError) return { error: valueError }
+  const type = body.type as 'PERCENT' | 'FIXED'
   const value = Number(body.value)
-  if (!Number.isFinite(value) || value <= 0) return { error: 'İndirim değeri sıfırdan büyük olmalı.' }
-  if (type === 'PERCENT' && value > 100) return { error: 'Yüzde indirim en fazla 100 olabilir.' }
   const minAmount = optNum(body.minAmount)
   const maxDiscount = optNum(body.maxDiscount)
   const usageLimit = optNum(body.usageLimit)
@@ -36,7 +37,9 @@ export function parseCouponInput(body: Record<string, unknown>): { data: CouponI
   const startDate = optDate(body.startDate)
   const endDate = optDate(body.endDate)
   if ((startDate && isNaN(startDate.getTime())) || (endDate && isNaN(endDate.getTime()))) return { error: 'Tarih geçersiz.' }
-  if (startDate && endDate && endDate < startDate) return { error: 'Bitiş tarihi başlangıçtan önce olamaz.' }
+  const rangeError = dateRangeError(startDate, endDate)
+  if (rangeError) return { error: rangeError }
+  if (usageLimit !== null && usageLimit < 1) return { error: 'Kullanım sınırı en az 1 olmalı (sınırsız için boş bırakın).' }
   return {
     data: {
       code,

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Download, Upload } from 'lucide-react'
 import { Btn, Field, Modal, Pill, TextInput, btnClass } from '@/components/admin/ui'
 import { useToast } from '@/components/admin/toast'
+import { businessDateKey } from '@/lib/business-time'
 
 /** İndirme bağlantısı (CSV uçları dosya adını kendisi verir) */
 export function DownloadLink({ href, children }: { href: string; children: React.ReactNode }) {
@@ -148,7 +149,8 @@ export function StockPriceTransfer({ onApplied }: { onApplied: () => void }) {
 /** Siparişler: tarih aralığıyla muhasebe dökümü (özet ve satır detayı) */
 export function OrdersExport() {
   const [open, setOpen] = useState(false)
-  const today = new Date().toISOString().slice(0, 10)
+  // Türkiye günü: gece 00.00–03.00 arasında UTC tarihi bir gün geride kalıyordu
+  const today = businessDateKey()
   const monthStart = today.slice(0, 8) + '01'
   const [from, setFrom] = useState(monthStart)
   const [to, setTo] = useState(today)
@@ -171,10 +173,15 @@ export function OrdersExport() {
             <Field label="Başlangıç" htmlFor="exp-from"><TextInput id="exp-from" type="date" value={from} max={to} onChange={(e) => setFrom(e.target.value)} /></Field>
             <Field label="Bitiş" htmlFor="exp-to"><TextInput id="exp-to" type="date" value={to} min={from} onChange={(e) => setTo(e.target.value)} /></Field>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <DownloadLink href={`/api/admin/exports/orders?${q}`}>Sipariş özeti</DownloadLink>
-            <DownloadLink href={`/api/admin/exports/orders?${q}&detail=lines`}>Satır detayı (ürün bazında)</DownloadLink>
-          </div>
+          <p className="text-xs text-[#5d6e80]">Tarihler sipariş tarihidir ve Türkiye saatine göre gün başından gün sonuna kadar alınır.</p>
+          {!from || !to || from > to ? (
+            <p role="alert" className="text-[13px] text-red-700">Başlangıç tarihi bitiş tarihinden sonra olamaz; iki tarihi de seçin.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              <DownloadLink href={`/api/admin/exports/orders?${q}`}>Sipariş özeti</DownloadLink>
+              <DownloadLink href={`/api/admin/exports/orders?${q}&detail=lines`}>Satır detayı (ürün bazında)</DownloadLink>
+            </div>
+          )}
         </div>
       </Modal>
     </>

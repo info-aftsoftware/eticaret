@@ -8,7 +8,7 @@ import { isGeliverEnabled } from '@/lib/shipping/geliver-api'
 import { checkAdmin } from '@/lib/adminAuth'
 import { prisma } from '@/lib/prisma'
 import { backupDir, runBackup } from '@/lib/cron-jobs'
-import { readState, resolveStateDir } from '@/lib/scheduler-core'
+import { jobOutcome, readState, resolveStateDir } from '@/lib/scheduler-core'
 
 function navlungoHint(): string {
   const c = navlungoConfigFromEnv()
@@ -26,19 +26,45 @@ async function configChecks(): Promise<Check[]> {
   const dbFile = db.startsWith('file:') ? db.slice(5).split('?')[0] : ''
   const backups = backupDir()
   const smtpFrom = process.env.SMTP_FROM || process.env.SMTP_USER || ''
-  const [admins, admins2fa] = await Promise.all([
+  const weekAgo = new Date(Date.now() - 7 * 86_400_000)
+  const [admins, admins2fa, mailSent, mailFailed, mailTest, lastFail] = await Promise.all([
     prisma.adminUser.count({ where: { active: true } }),
     prisma.adminUser.count({ where: { active: true, totpEnabled: true } }),
+    // E-posta gönderim özeti (A10): SMTP'nin kabul ettiği, altyapı hatası ve test adresi ayrı sayılır
+    prisma.orderEvent.count({ where: { type: 'email', status: 'EMAIL_SENT', createdAt: { gte: weekAgo } } }),
+    prisma.orderEvent.count({ where: { type: 'email', status: { in: ['EMAIL_FAILED', 'EMAIL_RETRIED'] }, createdAt: { gte: weekAgo } } }),
+    prisma.orderEvent.count({ where: { type: 'email', status: 'EMAIL_FAILED_FINAL', createdAt: { gte: weekAgo } } }),
+    prisma.orderEvent.findFirst({ where: { type: 'email', status: { in: ['EMAIL_FAILED', 'EMAIL_RETRIED'] } }, orderBy: { createdAt: 'desc' }, select: { message: true, createdAt: true } }),
   ])
+  const senderDomain = smtpFrom.match(/@([^>\s]+)/)?.[1] ?? null
+  const owners2fa = await prisma.adminUser.count({ where: { active: true, role: 'owner', totpEnabled: true } })
+  const masterMode = process.env.ADMIN_MASTER_LOGIN?.trim().toLowerCase()
   return [
     { key: 'db', label: 'Veritabanı kalıcı konumda', ok: !dbFile || path.isAbsolute(dbFile), level: 'error', hint: 'DATABASE_URL mutlak yol olmalı (derleme klasörü her yayında silinir).' },
     { key: 'backup-dir', label: 'Yedek klasörü derleme dışında', ok: has('BACKUP_DIR') && path.isAbsolute(backups), level: 'warn', hint: 'BACKUP_DIR mutlak bir yol olmalı; tanımsızsa yedekler derleme klasörüne yazılır ve yayında silinir.' },
     { key: 'smtp', label: 'E-posta gönderimi', ok: has('SMTP_HOST') && has('SMTP_USER') && has('SMTP_PASSWORD'), level: 'error', hint: 'Sipariş, kargo, şifre ve yedek e-postaları için SMTP_HOST, SMTP_USER, SMTP_PASSWORD.' },
-    { key: 'smtp-domain', label: 'Gönderen adresi alan adıyla uyumlu', ok: /@voltekno\.com$/i.test(smtpFrom), level: 'warn', hint: 'Spam klasörüne düşmemek için gönderen @voltekno.com olmalı (SMTP_FROM / SMTP_USER).' },
+    { key: 'smtp-domain', label: 'Gönderen adresi alan adıyla uyumlu', ok: /@voltekno\.com>?$/i.test(smtpFrom.trim()), level: 'warn', hint: `Spam klasörüne düşmemek için gönderen @voltekno.com olmalı (SMTP_FROM / SMTP_USER); şu an ${senderDomain ? `@${senderDomain}` : 'tanımsız'}. Alan adının SPF/DKIM kaydı da bu gönderici için yapılmalı.` },
+    {
+      key: 'email-delivery',
+      label: 'Son 7 günde sipariş e-postaları gönderildi',
+      ok: mailFailed === 0,
+      level: 'warn',
+      hint: `${mailSent} gönderildi (SMTP kabul etti; alıcıya teslim ayrıca doğrulanmaz), ${mailFailed} altyapı hatası, ${mailTest} test/geçersiz adres (gönderilmedi).${lastFail ? ` Son hata ${lastFail.createdAt.toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' })}: ${lastFail.message.replace(/^E-posta gönderilemedi: /, '')}. Sipariş sayfasındaki zaman çizelgesinden yeniden gönderilebilir.` : ''}`,
+    },
     { key: 'admin-email', label: 'Yönetici uyarı / yedek alıcısı', ok: has('ADMIN_EMAIL') || has('BACKUP_EMAIL'), level: 'warn', hint: 'Hata uyarıları ve günlük yedek ADMIN_EMAIL (veya BACKUP_EMAIL) adresine gider; tanımsızsa mağaza iletişim adresi kullanılır.' },
     { key: 'admins', label: 'Kişisel yönetici hesapları', ok: admins > 0, level: 'warn', hint: 'Kullanıcılar sayfasından herkese ayrı hesap açın; ortak ana şifre işlem kaydında kimin ne yaptığını gizler.' },
     { key: 'admins-2fa', label: 'Tüm yönetici hesaplarında iki adımlı doğrulama', ok: admins > 0 && admins2fa === admins, level: 'warn', hint: `${admins2fa}/${admins} hesapta açık. Her kullanıcı Hesabım sayfasından açabilir.` },
-    { key: 'master-2fa', label: 'Ana yönetici şifresinde iki adımlı doğrulama', ok: !has('ADMIN_TOKEN') || has('ADMIN_TOTP_SECRET'), level: 'warn', hint: 'ADMIN_TOKEN tanımlıysa ADMIN_TOTP_SECRET de tanımlanmalı (node scripts/admin-2fa-setup.mjs) ya da kişisel hesaplara geçince ADMIN_TOKEN kaldırılmalı.' },
+    { key: 'owner-2fa', label: 'İki adımlı doğrulamalı Sahip hesabı', ok: owners2fa > 0, level: 'warn', hint: 'Kullanıcılar sayfasından kendinize Sahip hesabı açın, Hesabım sayfasından iki adımlı doğrulamayı açın. Bu işlemi hesap sahibi kendisi yapmalı.' },
+    {
+      key: 'master-2fa',
+      label: 'Ana yönetici şifresi iki adımlı doğrulamayı aşmıyor',
+      ok: !has('ADMIN_TOKEN') || masterMode === 'off' || has('ADMIN_TOTP_SECRET') || (owners2fa > 0 && masterMode !== 'allow'),
+      level: 'warn',
+      hint:
+        masterMode === 'allow'
+          ? 'ADMIN_MASTER_LOGIN=allow: ana şifre doğrulama kodu olmadan giriş açıyor (acil durum ayarı). İş bitince kaldırın.'
+          : 'Ana şifre (ADMIN_TOKEN) ya ADMIN_TOTP_SECRET ile korunmalı (node scripts/admin-2fa-setup.mjs) ya da kişisel hesaplara geçince ADMIN_MASTER_LOGIN=off ile kapatılmalı. 2FA\'lı Sahip hesabı varken ana şifre tek başına giriş açmaz. Hesap kurtarma: telefon kaybolursa ikinci Sahip hesabı veya sunucu ortam değişkenleriyle geçici ADMIN_MASTER_LOGIN=allow; kullanılınca kaldırılır ve işlem kaydında görünür.',
+    },
     { key: 'pos', label: 'Kartla ödeme (sanal POS)', ok: has('POS_CLIENT_ID') && has('POS_STORE_KEY') && has('POS_GATEWAY_URL'), level: 'info', hint: 'Banka sanal POS bilgileri girilince ödeme sayfasında kart seçeneği açılır.' },
     { key: 'geliver', label: 'Geliver kargo takibi', ok: isGeliverEnabled(), level: 'info', hint: 'GELIVER_API_TOKEN (app.geliver.io/apitokens) girilince Geliver gönderileri siparişe bağlanır, takip numarası ve teslim durumu saatte bir çekilir.' },
     { key: 'navlungo', label: 'Navlungo gönderi entegrasyonu', ok: isNavlungoEnabled(), level: 'info', hint: navlungoHint() },
@@ -95,7 +121,8 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({
     success: true,
     db,
-    scheduler,
+    // Eski kayıtlarda sonuç özetten çıkarılır (A11: kapalı entegrasyon "Başarılı" görünmez)
+    scheduler: Object.fromEntries(Object.entries(scheduler).map(([k, v]) => [k, { ...v, outcome: jobOutcome(v) }])),
     internalCron: process.env.INTERNAL_CRON !== '0',
     backups,
     errors,
