@@ -612,7 +612,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
               {L('Bu konuda ürün arıyor musunuz?', 'Looking for products on this topic?')}
             </h3>
             <p className="text-slate-500 text-sm mb-5">
-              {L('Voltekno\'da 340+ ürün stokta. Hızlı teslimat, 2 yıl garanti.', '340+ products in stock at Voltekno. Fast delivery, 2-year warranty.')}
+              {L('Voltekno\'da 340+ ürün çeşidi; faturalı ve en az 2 yıl yasal garantili.', '340+ products at Voltekno; invoiced, with at least a 2-year statutory warranty.')}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
@@ -625,7 +625,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                 href="/ges"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold px-6 py-3 text-sm transition-colors"
               >
-                {L('Teklif Al', 'Get a Quote')}
+                {L('GES Teklifi Al', 'Get a Solar Quote')}
               </Link>
             </div>
           </div>

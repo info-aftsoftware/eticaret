@@ -14,6 +14,7 @@ import { fmtPrice } from '@/lib/format'
 import { VAT_RATE } from '@/lib/store-config'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { keysByCategory, missingKind, normalizeSpecs } from '@/lib/compare-specs'
 
 type P = {
   id: string
@@ -42,6 +43,8 @@ export default function ComparePage() {
   const price = (n: number) => fmtPrice(n, currency, rates?.rates ?? null)
   const [products, setProducts] = useState<P[] | null>(null)
   const [onlyDiff, setOnlyDiff] = useState(false)
+  // Katalogda kategori başına geçen özellik adları: eksik değer "Belirtilmemiş" mi "Bu kategoride verilmez" mi (lib/compare-specs)
+  const [categoryKeys, setCategoryKeys] = useState<Map<string, Set<string>>>(new Map())
 
   useEffect(() => {
     if (ids.length === 0) {
@@ -54,17 +57,27 @@ export default function ComparePage() {
         // Katalogdan kaldırılmış ürünler karşılaştırma listesinden de çıkarılır (yer kaplamasın)
         if (Array.isArray(all) && all.length > 0) ids.filter((id) => !all.some((p) => p.id === id)).forEach(remove)
         setProducts(ids.map((id) => all.find((p) => p.id === id)).filter(Boolean) as P[])
+        if (Array.isArray(all)) setCategoryKeys(keysByCategory(all))
       })
       .catch(() => setProducts([]))
   }, [ids])
 
+  // Ortak özellik adları (madde 13): "Nominal Voltaj" / "Nominal gerilim", ayrı ölçüler → "Boyutlar (U × G × Y)"
+  const specsById = useMemo(() => new Map((products ?? []).map((p) => [p.id, normalizeSpecs(p.specifications)])), [products])
   const specKeys = useMemo(() => {
     const keys: string[] = []
-    for (const p of products ?? []) for (const k of Object.keys(p.specifications ?? {})) if (!keys.includes(k)) keys.push(k)
+    for (const specs of specsById.values()) for (const k of Object.keys(specs)) if (!keys.includes(k)) keys.push(k)
     return keys
-  }, [products])
+  }, [specsById])
 
-  const isDiff = (k: string) => new Set((products ?? []).map((p) => (p.specifications?.[k] ?? '—').trim())).size > 1
+  const specOf = (p: P, k: string) => specsById.get(p.id)?.[k]
+  const isDiff = (k: string) => new Set((products ?? []).map((p) => (specOf(p, k) ?? '—').trim())).size > 1
+  const missing = (p: P, k: string) =>
+    missingKind(p.category, k, categoryKeys) === 'unspecified' ? (
+      <span className="text-ink-muted">{L('Belirtilmemiş', 'Not specified')}</span>
+    ) : (
+      <span className="text-slate-400">{L('Bu kategoride verilmez', 'Not listed for this category')}</span>
+    )
   const rows = onlyDiff ? specKeys.filter(isDiff) : specKeys
 
   return (
@@ -136,7 +149,7 @@ export default function ComparePage() {
                 {rows.map((k) => (
                   <tr key={k} className={isDiff(k) ? 'bg-amber-50/60' : ''}>
                     <th scope="row" className="p-3 text-left text-ink-muted font-medium">{k}</th>
-                    {products.map((p) => <td key={p.id} className="p-3">{p.specifications?.[k] ?? '—'}</td>)}
+                    {products.map((p) => <td key={p.id} className="p-3">{specOf(p, k) ?? missing(p, k)}</td>)}
                   </tr>
                 ))}
                 <tr>

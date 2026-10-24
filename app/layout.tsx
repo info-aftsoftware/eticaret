@@ -7,6 +7,7 @@ import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
 import { ClientErrorReporter } from '@/components/ClientErrorReporter'
 import { CartSync } from '@/components/CartSync'
+import { EnglishScopeNotice } from '@/components/EnglishScopeNotice'
 
 // latin-ext: Türkçe harfler (ş, ğ, ı, İ) aynı fonttan gelsin; yoksa yedek fonttan çizilip sonradan değişiyor (CLS)
 const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' })
@@ -209,6 +210,7 @@ export default async function RootLayout({
           <FirebaseAnalyticsInit />
           <ClientErrorReporter />
           <CartSync />
+          <EnglishScopeNotice />
           {children}
         </IntlProvider>
       </body>

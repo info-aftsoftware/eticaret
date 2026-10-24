@@ -7,8 +7,8 @@ import { SELLER } from '@/lib/legal/company'
 import { useTranslations } from 'next-intl'
 
 /** Üst ince şerit (açık zemin): solda kurumsal linkler, sağda telefon ve e-posta. */
-const TOP_LINKS: { href: string; key: 'footer.teklifAl' | 'footer.orderTracking' | 'footer.about' | 'headerTopBar.faq' | 'footer.contact'; highlight?: boolean }[] = [
-  { href: '/ges', key: 'footer.teklifAl', highlight: true },
+const TOP_LINKS: { href: string; key: 'footer.gesTeklif' | 'footer.orderTracking' | 'footer.about' | 'headerTopBar.faq' | 'footer.contact'; highlight?: boolean }[] = [
+  { href: '/ges', key: 'footer.gesTeklif', highlight: true },
   { href: '/siparis-takip', key: 'footer.orderTracking' },
   { href: '/hakkimizda', key: 'footer.about' },
   { href: '/faq', key: 'headerTopBar.faq' },

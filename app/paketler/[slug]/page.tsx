@@ -5,13 +5,18 @@ import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { PACKAGE_CATEGORIES, getPackageCategory } from '@/lib/package-categories'
-import { mockProducts } from '@/lib/products-mock'
+import { getStorefrontProducts } from '@/lib/discounts'
+import { packageProductList } from '@/lib/package-fit'
+import { contactHref } from '@/lib/contact-topics'
 import { ProductCard } from '@/components/ProductCard'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { getLocale } from 'next-intl/server'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const MAX_PRODUCTS = 16
+
+// Güncel vitrin verisi (fiyat, satış durumu, panelde girilen sistem voltajı) 10 dakikada bir yenilenir
+export const revalidate = 600
 
 export function generateStaticParams() {
   return PACKAGE_CATEGORIES.map((item) => ({ slug: item.slug }))
@@ -20,7 +25,7 @@ export function generateStaticParams() {
 export async function generateMetadata(props: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const params = await props.params;
   const item = getPackageCategory(params.slug)
-  if (!item) return { title: 'Paket Bulunamadı' }
+  if (!item) return { title: 'Sayfa bulunamadı' }
 
   const title = `${item.seoTitle} | voltekno`
   const description = item.seoDescription
@@ -54,7 +59,7 @@ function buildBreadcrumbSchema(item: NonNullable<ReturnType<typeof getPackageCat
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: `${SITE_URL}/` },
-      { '@type': 'ListItem', position: 2, name: 'Paketler', item: `${SITE_URL}/paketler` },
+      { '@type': 'ListItem', position: 2, name: 'Kullanım Alanları', item: `${SITE_URL}/paketler` },
       { '@type': 'ListItem', position: 3, name: item.title, item: `${SITE_URL}/paketler/${item.slug}` },
     ],
   }
@@ -79,12 +84,10 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
 
   const locale = await getLocale()
   const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
-  const title = L(item.title, `${item.en.shortTitle} Packages`)
+  const title = L(item.title, `${item.en.shortTitle} Solutions`)
 
-  const categorySet = new Set(item.productCategories)
-  const relatedProducts = mockProducts
-    .filter((p) => categorySet.has(p.category))
-    .slice(0, MAX_PRODUCTS)
+  // Kullanım alanının kategorilerinden, uygunluk sınırlarına (voltaj, depolama, ağırlık) uyan ürünler (lib/package-fit)
+  const relatedProducts = packageProductList(item, await getStorefrontProducts(), MAX_PRODUCTS)
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -103,7 +106,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
           <nav className="text-sm text-slate-500 mb-6 flex items-center gap-1.5 flex-wrap">
             <Link href="/" className="hover:text-slate-900 transition-colors">{L('Ana Sayfa', 'Home')}</Link>
             <span className="text-slate-300">/</span>
-            <Link href="/paketler" className="hover:text-slate-900 transition-colors">{L('Paketler', 'Packages')}</Link>
+            <Link href="/paketler" className="hover:text-slate-900 transition-colors">{L('Kullanım Alanları', 'Solutions by Use')}</Link>
             <span className="text-slate-300">/</span>
             <span className="text-slate-900 font-medium">{title}</span>
           </nav>
@@ -125,7 +128,7 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
             {/* Sağ: bilgi */}
             <div className="lg:col-span-3">
               <span className="inline-block text-xs font-semibold uppercase tracking-widest text-brand mb-3">
-                {L('Paket Kategorisi', 'Package Category')}
+                {L('Kullanım Alanı', 'Application')}
               </span>
               <h1 className="text-3xl md:text-4xl xl:text-5xl font-black tracking-tight text-slate-900 leading-tight">
                 {title}
@@ -135,10 +138,10 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
                   <a href="#urunler">{L('Ürünleri İncele', 'Browse Products')}</a>
                 </Button>
                 <Button asChild variant="outline" className="rounded-xl border-slate-300">
-                  <Link href="/ges">{L('GES Hesaplama', 'Solar Calculator')}</Link>
+                  <Link href="/ges">{L('GES Ön Tahmin ve Teklif', 'Solar Estimate and Quote')}</Link>
                 </Button>
                 <Button asChild variant="outline" className="rounded-xl border-slate-300">
-                  <Link href="/contact">{L('Teklif Al', 'Get a Quote')}</Link>
+                  <Link href={contactHref('urun', { subject: `${item.shortTitle} sistemi için ürün teklifi` })}>{L('Ürün Teklifi Al', 'Get a Product Quote')}</Link>
                 </Button>
               </div>
             </div>
@@ -153,10 +156,11 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6">
             <div>
               <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-                {L(`${item.shortTitle} Paketine Uygun Ürünler`, `Products for ${item.en.shortTitle} Packages`)}
+                {L(`${item.shortTitle} İçin Uygun Ürünler`, `Products for ${item.en.shortTitle} Use`)}
               </h2>
               <p className="text-slate-500 text-sm mt-1">
                 {L(`${relatedProducts.length} ürün listeleniyor`, `${relatedProducts.length} products listed`)}
+                {item.fit && L(` · ${item.fit.note}`, ` · ${item.fit.noteEn}`)}
               </p>
             </div>
             <Link
@@ -166,6 +170,26 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
               {L('Tümünü Gör', 'View All')}
               <ArrowRight className="w-4 h-4" />
             </Link>
+          </div>
+
+          {/* Madde 14–15: hazır paket değil; listede bulunmak uyumluluk iddiası değil */}
+          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600 leading-relaxed">
+            <p>
+              {L(
+                `Bu sayfa hazır bir paket değildir. ${item.shortTitle} kurulumlarında kullanılan ürün gruplarından seçilmiş ürünler listelenir; listede bulunmak sizin sisteminizle uyumlu olduğu anlamına gelmez. Adetli malzeme listesi, güç ve depolama kapasitesi, toplam bedel ve dahil/hariç kapsam ihtiyaç analizinden sonra teklifte hazırlanır.`,
+                `This page is not a ready-made package. It lists products from the product groups used in ${item.en.shortTitle.toLowerCase()} installations; being listed does not mean compatibility with your system. The bill of materials, power and storage capacity, total price and scope are prepared in a quote after a needs analysis.`
+              )}
+            </p>
+            {locale !== 'en' && item.includesItems.length > 0 && (
+              <div className="mt-3">
+                <p className="font-semibold text-slate-800">Tipik bir sistemde bulunanlar (örnek, kesin liste teklifte belirlenir)</p>
+                <ul className="mt-1.5 list-disc pl-5 space-y-0.5">
+                  {item.includesItems.map((x) => (
+                    <li key={x}>{x}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           {relatedProducts.length === 0 ? (

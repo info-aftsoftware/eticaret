@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Turnstile } from '@/components/Turnstile'
 import { whatsappHref, WhatsAppIcon } from '@/components/WhatsAppButton'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -14,6 +15,8 @@ import { useL } from '@/lib/i18n-inline'
 import { isValidEmail, isValidTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 import { Phone, Send, Loader2 } from 'lucide-react'
+import { CONTACT_TOPICS, composeSubject, isContactTopic, productPrefill, type ContactTopicId } from '@/lib/contact-topics'
+import { legalHref } from '@/lib/legal/documents'
 
 const CONTACT_IMAGE =
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80'
@@ -49,6 +52,31 @@ export default function ContactPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  // Talep türü (madde 17): ürün teklifi, proje (GES), teknik destek…; adres ?talep=urun&urun=<id>&konu=… ile hazır gelir
+  const [topic, setTopic] = useState<ContactTopicId | ''>('')
+
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search)
+    const talep = q.get('talep')
+    if (isContactTopic(talep)) setTopic(talep)
+    const konu = q.get('konu')?.trim().slice(0, 150)
+    if (konu) setFormData((prev) => ({ ...prev, subject: prev.subject || konu }))
+    const urun = q.get('urun')?.trim()
+    if (!urun) return
+    let cancelled = false
+    fetch(`/api/products/${encodeURIComponent(urun)}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p: { name?: string; sku?: string } | null) => {
+        if (cancelled || !p?.name) return
+        const pre = productPrefill({ name: p.name, sku: p.sku }, L('', 'en') === 'en')
+        setFormData((prev) => ({ ...prev, subject: prev.subject || pre.subject, message: prev.message || pre.message }))
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const draft = loadContactDraftForPage()
@@ -71,6 +99,7 @@ export default function ContactPage() {
     if (!formData.email?.trim()) next.email = L('E-posta zorunludur.', 'Email is required.')
     else if (!isValidEmail(formData.email)) next.email = L(EMAIL_ERROR_TR, EMAIL_ERROR_EN)
     if (formData.phone?.trim() && !isValidTrPhone(formData.phone)) next.phone = L(PHONE_ERROR_TR, PHONE_ERROR_EN)
+    if (!topic) next.topic = L('Talep türünü seçin.', 'Select a request type.')
     if (!formData.subject?.trim()) next.subject = L('Konu zorunludur.', 'Subject is required.')
     if (!formData.message?.trim()) next.message = L('Mesaj zorunludur.', 'Message is required.')
     else if (formData.message.trim().length < 10) next.message = L('Mesaj en az 10 karakter olmalıdır.', 'Message must be at least 10 characters.')
@@ -90,7 +119,7 @@ export default function ContactPage() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, turnstileToken }),
+        body: JSON.stringify({ ...formData, subject: composeSubject(topic, formData.subject), turnstileToken }),
       })
       const data = await res.json().catch(() => null)
       if (!res.ok || !data?.success) throw new Error(tErr(data?.error) || L('Mesaj gönderilemedi.', 'Message could not be sent.'))
@@ -98,6 +127,7 @@ export default function ContactPage() {
       setTurnstileReset((n) => n + 1)
       setIsSubmitted(true)
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+      setTopic('')
       setTimeout(() => setIsSubmitted(false), 5000)
     } catch (error) {
       console.error('Contact form error:', error)
@@ -140,6 +170,28 @@ export default function ContactPage() {
                       {errors.general}
                     </div>
                   )}
+                  <div className="space-y-2">
+                    <Label htmlFor="topic">{L('Talep türü *', 'Request type *')}</Label>
+                    <select
+                      id="topic"
+                      value={topic}
+                      onChange={(e) => { setTopic(e.target.value as ContactTopicId | ''); setErrors((prev) => ({ ...prev, topic: '' })) }}
+                      className={`flex h-10 w-full rounded-xl border bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400 ${errors.topic ? 'border-red-500' : 'border-slate-200'}`}
+                    >
+                      <option value="">{L('Seçin', 'Select')}</option>
+                      {CONTACT_TOPICS.map((t) => (
+                        <option key={t.id} value={t.id}>{L(t.tr, t.en)}</option>
+                      ))}
+                    </select>
+                    {errors.topic && <p className="text-sm text-destructive">{errors.topic}</p>}
+                    {topic === 'proje' && (
+                      <p className="text-[13px] text-slate-600">
+                        {L('Çatı veya arazi GES projesi için ', 'For a rooftop or ground solar project, the ')}
+                        <Link href="/ges" className="font-semibold text-brand hover:underline">{L('GES teklif formu', 'solar quote form')}</Link>
+                        {L(' tüketim, çatı ve konum bilgilerini birlikte alır; daha hızlı ve doğru teklif hazırlanır.', ' collects consumption, roof and location details together for a faster, more accurate quote.')}
+                      </p>
+                    )}
+                  </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">{L('Ad Soyad *', 'Full Name *')}</Label>
@@ -211,6 +263,11 @@ export default function ContactPage() {
                     {errors.message && <p className="text-sm text-destructive">{errors.message}</p>}
                   </div>
                   <Turnstile onToken={setTurnstileToken} resetKey={turnstileReset} />
+                  {/* Aydınlatma (madde 22): amaç ve geri dönüş kanalı; pazarlama izni istenmez */}
+                  <p className="text-[12.5px] leading-relaxed text-slate-500">
+                    {L('Bilgileriniz yalnızca bu talebi yanıtlamak için kullanılır; size e-postayla, telefon yazdıysanız telefonla dönüş yapılır. Pazarlama iletisi gönderilmez. Ayrıntılar: ', 'Your details are used only to answer this request; we reply by email, or by phone if you entered one. No marketing messages are sent. Details: ')}
+                    <Link href={legalHref('kvkk')} className="underline hover:text-slate-700">{L('KVKK Aydınlatma Metni', 'Personal Data (KVKK) Notice')}</Link>
+                  </p>
                   <Button
                     type="submit"
                     size="lg"

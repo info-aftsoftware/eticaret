@@ -549,7 +549,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
 
               {/* Sepet butonları (akü / bataryada ve teklifle satılan üründe yerine iletişim kutusu) */}
               {contactOnly ? (
-                <BatteryContactBox className="mt-5" productName={product.name} sku={effectiveVariant?.sku || product.sku} mode={quoteOnly ? 'quote' : 'battery'} />
+                <BatteryContactBox className="mt-5" productName={product.name} productId={product.id} sku={effectiveVariant?.sku || product.sku} mode={quoteOnly ? 'quote' : 'battery'} />
               ) : (
               <div className="mt-5 grid grid-cols-2 gap-2.5">
                 {cartQty === 0 ? (

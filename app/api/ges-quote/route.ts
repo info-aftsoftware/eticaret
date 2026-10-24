@@ -243,9 +243,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    if (body.callAccepted !== undefined && !callAccepted) {
+    // Aranma onayı isteğe bağlı (madde 22): aranmak istemeyen talepte dönüş e-postayla, e-posta zorunlu
+    if (body.callAccepted !== undefined && !callAccepted && !email) {
       return NextResponse.json(
-        { success: false, error: 'Teknik keşif için aranmayı kabul etmeniz gerekiyor.' },
+        { success: false, error: 'Aranmak istemiyorsanız size dönebilmemiz için e-posta adresinizi yazın.' },
         { status: 400 }
       )
     }

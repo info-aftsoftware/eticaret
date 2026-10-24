@@ -12,6 +12,7 @@ import { LocaleCurrencySwitcher } from './LocaleCurrencySwitcher'
 import { SELLER } from '@/lib/legal/company'
 import { whatsappHref, WhatsAppIcon } from '@/components/WhatsAppButton'
 import { legalHref } from '@/lib/legal/documents'
+import { contactHref } from '@/lib/contact-topics'
 import Image from 'next/image'
 
 /** ETBİS site doğrulama bağlantısı (ETBİS panelindeki doğrulama kodu / karekod adresi) */
@@ -89,7 +90,7 @@ export function Footer() {
                 { href: '/category/solar-aku', label: L('Solar Aküler', 'Solar Batteries') },
                 { href: '/category/solar-sarj-kontrol', label: L('Şarj Kontrol Cihazları', 'Charge Controllers') },
                 { href: '/category/solar-baglanti-ekipmani', label: L('Bağlantı Ekipmanı ve Aksesuar', 'Connection & Accessories') },
-                { href: '/paketler', label: L('Enerji Paketleri', 'Energy Packages') },
+                { href: '/paketler', label: L('Kullanım Alanları', 'Solutions by Use') },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={linkClass}>{item.label}</Link>
@@ -105,9 +106,9 @@ export function Footer() {
               {[
                 { href: '/ges', label: t('ges'), highlight: true },
                 { href: '/ges/teklif-dogrulama', label: t('gesQuoteVerify') },
-                { href: '/contact', label: t('teklifAl') },
-                { href: '/contact', label: L('Teknik Destek', 'Technical Support') },
-                { href: '/paketler', label: L('Hazır Paketler', 'Ready Packages') },
+                { href: contactHref('urun'), label: t('urunTeklifi') },
+                { href: contactHref('destek'), label: L('Teknik Destek', 'Technical Support') },
+                { href: '/paketler', label: L('Kullanım Alanına Göre Çözümler', 'Solutions by Use') },
                 { href: '/products?q=sulama', label: L('Sulama Çözümleri', 'Irrigation Solutions') },
               ].map((item) => (
                 <li key={item.href + item.label}>

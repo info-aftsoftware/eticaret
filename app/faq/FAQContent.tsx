@@ -72,8 +72,8 @@ const faqItems = [
       {
         q: { tr: 'Garanti süresi ne kadar?', en: 'How long is the warranty?' },
         a: {
-          tr: 'Garanti süresi ürün tipine göre değişir; genellikle 12-24 ay aralığındadır. Net süreler ürün sayfası ve faturada belirtilir.',
-          en: 'The warranty period varies by product type and is generally 12-24 months. Exact periods are stated on the product page and invoice.',
+          tr: 'Ürün garantisi: ürünler faturalı ve üretici/distribütör garantisiyle satılır; yasal garanti süresi teslim tarihinden itibaren en az 2 yıldır. Üretici daha uzun ürün garantisi veriyorsa süre ürün sayfasında ve garanti belgesinde yazar. Performans garantisi: güneş panellerinde üreticinin belirli bir süre sonunda taahhüt ettiği güç çıkışıdır (ör. 25 yıl sonunda %80) ve ürün garantisinden ayrıdır. Satış sonrası: arıza ve garanti taleplerinizi iletişim kanallarımızdan iletebilirsiniz; süreç üreticinin garanti koşullarına göre yürütülür.',
+          en: 'Product warranty: products are sold with an invoice and the manufacturer/distributor warranty; the statutory warranty is at least 2 years from delivery. Where the manufacturer gives a longer product warranty, the period is stated on the product page and the warranty certificate. Performance warranty: for solar panels, the manufacturer guarantees a minimum power output after a set period (e.g. 80% after 25 years); it is separate from the product warranty. After-sales: send fault and warranty requests through our contact channels; the process follows the manufacturer warranty terms.',
         },
       },
       {
