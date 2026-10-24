@@ -209,7 +209,7 @@ export default async function BlogPage() {
                 href="/ges"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-bold px-6 py-3 text-sm transition-colors"
               >
-                {L('Teklif Al', 'Get a Quote')}
+                {L('GES Teklifi Al', 'Get a Solar Quote')}
               </Link>
             </div>
           </div>

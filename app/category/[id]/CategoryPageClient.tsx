@@ -14,7 +14,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE, type MockProduct } from '@/lib/products-mock'
 import { getCategoryValuesByGroupId, getCategoryKey, CATEGORY_GROUPS } from '@/lib/categories'
 import { useL } from '@/lib/i18n-inline'
-import { buildSpecFacets } from '@/lib/spec-facets'
+import { buildSpecFacets, matchesSpecFilter } from '@/lib/spec-facets'
 import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 import { ProductPageShell } from '@/components/ProductPageShell'
 import { useTranslations } from 'next-intl'
@@ -114,10 +114,8 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
       const priceOk = p.price >= priceRange[0] && p.price <= priceRange[1]
       const searchOk = !searchQuery || p.name.toLowerCase().includes(searchQuery.toLowerCase())
 
-      const specsOk = Object.entries(selectedSpecs).every(([key, vals]) => {
-        if (!vals.length) return true
-        return p.specifications?.[key] && vals.includes(p.specifications[key])
-      })
+      // Türetilmiş (voltaj, Ah, kWh, güç…) ve ham teknik özellik filtreleri (lib/spec-facets)
+      const specsOk = Object.entries(selectedSpecs).every(([key, vals]) => matchesSpecFilter(p, key, vals))
 
       return catOk && brandOk && priceOk && searchOk && specsOk
     })

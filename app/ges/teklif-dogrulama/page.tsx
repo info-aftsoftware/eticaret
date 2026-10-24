@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
+import { legalHref } from '@/lib/legal/documents'
 import { isValidEmail, isValidTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -758,6 +759,11 @@ export default function GesTeklifDogrulamaPage() {
                     )}
                     {t('quoteVerify.submit')}
                   </Button>
+                  {/* Aydınlatma (madde 22): amaç ve geri dönüş kanalı; pazarlama izni istenmez */}
+                  <p className="text-[12.5px] leading-relaxed text-slate-500">
+                    {L('Yüklediğiniz teklif ve iletişim bilgileriniz yalnızca bu değerlendirme için kullanılır; sonucu size e-postayla veya telefonla iletiriz. Pazarlama iletisi gönderilmez. Ayrıntılar: ', 'The quote you upload and your contact details are used only for this evaluation; we send the result by email or phone. No marketing messages are sent. Details: ')}
+                    <Link href={legalHref('kvkk')} className="underline hover:text-slate-700">{L('KVKK Aydınlatma Metni', 'Personal Data (KVKK) Notice')}</Link>
+                  </p>
                 </div>
 
                 {/* Footer link */}

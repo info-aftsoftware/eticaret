@@ -5,6 +5,7 @@ import { Phone, Mail } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'
 import { useL } from '@/lib/i18n-inline'
 import { WhatsAppIcon, whatsappHref } from '@/components/WhatsAppButton'
+import { contactHref } from '@/lib/contact-topics'
 
 /**
  * Sepete ekleme yerine iletişim kutusu (lib/shipping/battery.ts → isContactOnlyProduct):
@@ -14,11 +15,14 @@ import { WhatsAppIcon, whatsappHref } from '@/components/WhatsAppButton'
  */
 export function BatteryContactBox({
   productName,
+  productId,
   sku,
   className = '',
   mode = 'battery',
 }: {
   productName: string
+  /** Verilirse iletişim formu ürünle açılır (madde 17) */
+  productId?: string
   sku?: string | null
   className?: string
   mode?: 'battery' | 'quote'
@@ -52,8 +56,8 @@ export function BatteryContactBox({
           <Mail className="h-3.5 w-3.5" aria-hidden />
           {SELLER.email}
         </a>
-        <Link href="/contact" className="font-medium text-[#0b2540] hover:underline">
-          {L('İletişim formu', 'Contact form')}
+        <Link href={contactHref(quote ? 'urun' : 'siparis', { productId })} className="font-medium text-[#0b2540] hover:underline">
+          {quote ? L('Teklif formu', 'Quote form') : L('İletişim formu', 'Contact form')}
         </Link>
       </p>
     </div>

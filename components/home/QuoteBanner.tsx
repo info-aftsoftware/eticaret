@@ -32,7 +32,7 @@ export function QuoteBanner() {
                 href="/ges"
                 className="inline-flex items-center justify-center h-11 min-[769px]:h-12 px-6 min-[769px]:px-8 rounded-md bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] text-sm min-[769px]:text-[15px] font-semibold transition-colors"
               >
-                {L('TEKLİF AL', 'GET A QUOTE')}
+                {L('GES TEKLİFİ AL', 'GET A SOLAR QUOTE')}
               </Link>
             </div>
           </div>

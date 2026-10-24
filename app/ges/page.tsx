@@ -216,8 +216,9 @@ export default function GesPage() {
       next.city = t('quoteForm.errorCity')
     if (!form.kvkkAccepted)
       next.kvkkAccepted = t('quoteForm.errorKvkk')
-    if (!form.callAccepted)
-      next.callAccepted = t('quoteForm.errorCall')
+    // Aranma onayı isteğe bağlı: seçilmezse dönüş e-postayla yapılır, bu durumda e-posta gerekir
+    if (!form.callAccepted && !form.email.trim())
+      next.email = L('Aranmak istemiyorsanız size e-postayla dönebilmemiz için e-posta adresinizi yazın.', 'If you prefer not to be called, enter your email so we can reply.')
     setFormErrors(next)
     if (Object.keys(next).length > 0) {
       scrollToFirstError(next)
@@ -427,7 +428,7 @@ export default function GesPage() {
               {L('Güneş Enerjisi Analizi & Ücretsiz Teklif', 'Solar Energy Analysis & Free Quote')}
             </h1>
             <p className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto leading-relaxed mb-8">
-              {L('Aylık elektrik tüketiminizi girerek sistem büyüklüğünüzü hesaplayın, kişiselleştirilmiş ücretsiz teklif alın.', 'Enter your monthly electricity consumption to size your system and get a free, personalized quote.')}
+              {L('Aylık tüketiminizle kişisel bilgi vermeden ön tahmin alın; ayrıntılı ücretsiz teklif için formu doldurun.', 'Enter your monthly electricity consumption to size your system and get a free, personalized quote.')}
             </p>
 
             {/* Stat chips */}
@@ -450,11 +451,82 @@ export default function GesPage() {
       {/* ── MAIN CARD ─────────────────────── */}
       <div className="container mx-auto px-4 pb-16 pt-12 relative z-10">
         <div className="max-w-3xl mx-auto">
+          {/* ── ÖN TAHMİN (madde 16): kişisel bilgi istemeden, tarayıcıda hesaplanır; hiçbir yere gönderilmez ── */}
+          <Card className="mb-8 shadow-xl shadow-slate-900/5 border-0 overflow-hidden rounded-2xl">
+            <CardContent className="p-6 md:p-8">
+              <form onSubmit={handleCalculate} className="space-y-4" noValidate>
+                <div>
+                  <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <Calculator className="w-5 h-5 text-slate-500" aria-hidden />
+                    {L('Ön tahmin', 'Quick estimate')}
+                  </h2>
+                  <p className="text-sm text-slate-500 mt-1">
+                    {L('İsim veya telefon gerekmez; tahmin bu sayfada hesaplanır, bilgileriniz gönderilmez.', 'No name or phone needed; the estimate is calculated on this page and nothing is sent.')}
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="estimateKwh" className="text-sm font-medium text-slate-700">{t('monthlyKwh')}</Label>
+                    <input
+                      id="estimateKwh"
+                      type="text"
+                      inputMode="decimal"
+                      value={calcMonthlyKwh}
+                      onChange={(e) => {
+                        setCalcMonthlyKwh(e.target.value)
+                        set({ monthlyKwh: e.target.value })
+                        if (calcErrors.monthlyKwh) setCalcErrors((p) => ({ ...p, monthlyKwh: undefined as any }))
+                      }}
+                      placeholder={t('monthlyKwhPlaceholder')}
+                      className={fieldCls(calcErrors.monthlyKwh)}
+                    />
+                    {calcErrors.monthlyKwh ? <p className="text-xs text-red-600">{calcErrors.monthlyKwh}</p> : <p className="text-xs text-slate-500">{t('monthlyKwhHint')}</p>}
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label htmlFor="estimateRegion" className="text-sm font-medium text-slate-700">{t('regionLabel')}</Label>
+                    <Select value={regionId} onValueChange={(v) => handleRegionChange(v || '')}>
+                      <SelectTrigger id="estimateRegion" className={selectCls()}>
+                        <SelectValue placeholder={t('regionPlaceholder')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {GES_REGIONS.map((r) => (
+                          <SelectItem key={r.id} value={r.id}>{t(`region.${r.id}`)}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">{t('regionHint')}</p>
+                  </div>
+                </div>
+                <Button type="submit" variant="outline" className="rounded-xl border-slate-300">{t('calculate')}</Button>
+                {calcResult && (
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3" aria-live="polite">
+                    <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                      <div>
+                        <dt className="text-slate-500">{t('suggestedKwp')}</dt>
+                        <dd className="font-bold text-slate-900">{calcResult.kwpMin.toLocaleString('tr-TR')} – {calcResult.kwpMax.toLocaleString('tr-TR')} kWp</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500">{t('estimatedAnnualProd')}</dt>
+                        <dd className="font-bold text-slate-900">{calcResult.annualKwhMin.toLocaleString('tr-TR')} – {calcResult.annualKwhMax.toLocaleString('tr-TR')} kWh</dd>
+                      </div>
+                      <div>
+                        <dt className="text-slate-500">{t('annualSavings')}</dt>
+                        <dd className="font-bold text-slate-900">{calcResult.savingsMin.toLocaleString('tr-TR')} – {calcResult.savingsMax.toLocaleString('tr-TR')} TL</dd>
+                      </div>
+                    </dl>
+                    <p className="text-xs text-slate-500">{t('formulaNote')} {L('Kurulum bedeli keşiften sonra teklifte belirlenir.', 'The installation price is set in the quote after a site survey.')}</p>
+                    <a href="#teklif-formu" className="inline-block text-sm font-semibold text-brand hover:underline">{L('Bu tahminle ücretsiz teklif isteyin', 'Request a free quote with this estimate')}</a>
+                  </div>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+
           <Card className="shadow-2xl shadow-slate-900/5 border-0 overflow-hidden rounded-2xl">
             <CardContent className="p-0">
 
               {/* ── QUOTE FORM ──────────────────────────────────────── */}
-              <form onSubmit={(e) => handleSubmit(e, false)} className="p-6 md:p-8 space-y-8" noValidate>
+              <form id="teklif-formu" onSubmit={(e) => handleSubmit(e, false)} className="p-6 md:p-8 space-y-8 scroll-mt-24" noValidate>
 
                 {/* Form header */}
                 <div className="flex items-center gap-3">
@@ -519,9 +591,10 @@ export default function GesPage() {
                         value={form.email}
                         onChange={(e) => set({ email: e.target.value })}
                         placeholder={t('quoteForm.emailPlaceholder')}
-                        className={fieldCls()}
+                        className={fieldCls(formErrors.email)}
                         autoComplete="email"
                       />
+                      {formErrors.email && <p className="text-xs text-red-600">{formErrors.email}</p>}
                     </div>
 
                     {/* city */}
@@ -890,7 +963,10 @@ export default function GesPage() {
                         onChange={(e) => set({ callAccepted: e.target.checked })}
                         className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand shrink-0"
                       />
-                      <span className="text-sm text-slate-700">{t('quoteForm.callLabel')}</span>
+                      <span className="text-sm text-slate-700">
+                        {t('quoteForm.callLabel')}
+                        <span className="block text-xs text-slate-500 mt-0.5">{L('İsteğe bağlı. Seçmezseniz teklifinizi e-postayla göndeririz.', 'Optional. If unchecked, we will send your quote by email.')}</span>
+                      </span>
                     </label>
                     {formErrors.callAccepted && (
                       <p className="text-xs text-red-600 ml-7">{formErrors.callAccepted}</p>

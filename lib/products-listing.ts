@@ -2,7 +2,7 @@ import { isQuoteOnly } from '@/lib/sale-mode'
 import type { StorefrontProduct } from '@/lib/discounts'
 import { getCategoryValuesByGroupId } from '@/lib/categories'
 import { productMatchesQuery, type ProductLike } from '@/lib/search-product'
-import { buildSpecFacets, type SpecFacet } from '@/lib/spec-facets'
+import { buildSpecFacets, matchesSpecFilter, type SpecFacet } from '@/lib/spec-facets'
 import { isCategoryGroupId, type ProductSortOption, type ProductsQuery } from '@/lib/products-query'
 
 /**
@@ -106,11 +106,7 @@ export function applyListingFilters<T extends ListingProduct>(
     if (brand && product.brand !== brand) return false
     // Teklifle satılan ürünün fiyatı yok: fiyat aralığı onu elemez
     if (priceRange && !isQuoteOnly(product) && (product.price < priceRange[0] || product.price > priceRange[1])) return false
-    return Object.entries(specs).every(([specKey, selectedValues]) => {
-      if (selectedValues.length === 0) return true
-      const specValue = product.specifications?.[specKey]
-      return !!specValue && selectedValues.includes(specValue)
-    })
+    return Object.entries(specs).every(([specKey, selectedValues]) => matchesSpecFilter(product, specKey, selectedValues))
   })
 
   return [...result].sort((a, b) => {

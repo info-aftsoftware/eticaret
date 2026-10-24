@@ -9,9 +9,9 @@ import { PAGE_CONTAINER } from '@/lib/page-container'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
 export const metadata: Metadata = {
-  title: 'Enerji Paketleri: Bağ Evi, Villa, Karavan, Sulama, Marin',
+  title: 'Kullanım Alanına Göre Güneş Enerjisi Çözümleri: Bağ Evi, Villa, Karavan, Sulama, Marin',
   description:
-    'Bağ evi, villa, karavan, tarımsal sulama ve marin uygulamaları için hazır güneş enerjisi paketleri. Panel, inverter ve akü ihtiyaca göre birlikte seçilir.',
+    'Bağ evi, villa, karavan, tarımsal sulama ve marin uygulamalarında kullanılan güneş enerjisi ürünleri. Panel, inverter ve akü ihtiyaca göre teklifte birlikte belirlenir.',
   keywords: [
     'bağ evi güneş enerji paketi',
     'dağ evi solar sistem',
@@ -21,14 +21,13 @@ export const metadata: Metadata = {
     'karavan güneş paneli',
     'sulama güneş enerjisi',
     'marin güneş enerji paketi',
-    'hazir solar paket',
     'güneş enerji sistemi fiyatları',
     'ges paketi',
   ],
   alternates: { canonical: '/paketler' },
   openGraph: {
-    title: 'Enerji Paketleri | voltekno',
-    description: 'Bağ evi, villa, karavan, sulama ve marin için hazır güneş enerjisi paketleri.',
+    title: 'Kullanım Alanına Göre Çözümler | voltekno',
+    description: 'Bağ evi, villa, karavan, sulama ve marin için güneş enerjisi çözümleri.',
     type: 'website',
     siteName: 'voltekno',
     url: `${SITE_URL}/paketler`,
@@ -39,8 +38,8 @@ function buildPackageListSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: 'Enerji Paketleri',
-    description: 'Farklı kullanım alanları için hazırlanmış güneş enerjisi paketleri.',
+    name: 'Kullanım Alanına Göre Çözümler',
+    description: 'Farklı kullanım alanları için güneş enerjisi ürünleri ve çözümleri.',
     url: `${SITE_URL}/paketler`,
     mainEntity: {
       '@type': 'ItemList',
@@ -65,8 +64,8 @@ export default async function PaketlerPage() {
       />
       <div className={`${PAGE_CONTAINER} py-10 md:py-14`}>
         <header className="mb-8 md:mb-10">
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">{L('Paket Kategorileri', 'Package Categories')}</h1>
-          <p className="mt-2 text-slate-600">{L('İhtiyaca göre hazırlanmış enerji paketlerini inceleyin.', 'Explore energy packages tailored to your needs.')}</p>
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">{L('Kullanım Alanına Göre Çözümler', 'Solutions by Use')}</h1>
+          <p className="mt-2 text-slate-600">{L('Kullanım alanına uygun ürünleri inceleyin. Bunlar hazır paket değildir; adetli malzeme listesi ve toplam bedel ihtiyaç analizinden sonra teklifte hazırlanır.', 'Browse products suited to each application. These are not ready-made packages; the bill of materials and total price are prepared in a quote after a needs analysis.')}</p>
         </header>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-7">
@@ -97,7 +96,7 @@ export default async function PaketlerPage() {
                           {L(item.shortTitle, item.en.shortTitle)}
                         </span>
                         <span className="mt-1 block text-white drop-shadow-[0_6px_20px_rgba(15,23,42,0.38)]">
-                          {L('Paketleri', 'Packages')}
+                          {L('Çözümleri', 'Solutions')}
                         </span>
                       </h2>
                     </div>

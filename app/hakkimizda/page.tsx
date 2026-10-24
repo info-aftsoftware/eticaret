@@ -11,17 +11,17 @@ export const metadata: Metadata = {
 
 const stats = [
   { label: { tr: '340+', en: '340+' }, desc: { tr: 'Ürün Çeşidi', en: 'Products' } },
-  { label: { tr: '2.000+', en: '2,000+' }, desc: { tr: 'Mutlu Müşteri', en: 'Happy Customers' } },
-  { label: { tr: '2 Yıl', en: '2 Years' }, desc: { tr: 'Garanti', en: 'Warranty' } },
-  { label: { tr: '7/24', en: '24/7' }, desc: { tr: 'Teknik Destek', en: 'Technical Support' } },
+  { label: { tr: 'Faturalı', en: 'Invoiced' }, desc: { tr: 'Üretici garantili satış', en: 'Manufacturer-warranted sales' } },
+  { label: { tr: 'En az 2 yıl', en: '2+ years' }, desc: { tr: 'Yasal ürün garantisi', en: 'Statutory product warranty' } },
+  { label: { tr: 'Pzt–Cuma', en: 'Mon–Fri' }, desc: { tr: '09:00–18:00 teknik destek', en: '09:00–18:00 technical support' } },
 ]
 
 const values = [
   {
-    title: { tr: 'Kalite Güvencesi', en: 'Quality Assurance' },
+    title: { tr: 'Garantili Ürünler', en: 'Warranted Products' },
     desc: {
-      tr: 'Sadece sertifikalı, test edilmiş ürünleri stokluyor; her kalem teslim öncesi kalite kontrolünden geçiyor.',
-      en: 'We stock only certified, tested products; every item passes quality control before delivery.',
+      tr: 'Ürünler faturalı ve üretici/distribütör garantisiyle satılır; garanti süresi ve koşulları ürün sayfasında ve garanti belgesinde belirtilir.',
+      en: 'Products are sold with an invoice and the manufacturer/distributor warranty; the warranty period and terms are stated on the product page and the warranty certificate.',
     },
   },
   {
@@ -39,10 +39,10 @@ const values = [
     },
   },
   {
-    title: { tr: '7/24 Teknik Destek', en: '24/7 Technical Support' },
+    title: { tr: 'Teknik Destek', en: 'Technical Support' },
     desc: {
-      tr: 'Satış öncesi danışmanlıktan kurulum sonrası teknik desteğe kadar yanınızdayız.',
-      en: 'We are with you from pre-sales consulting to post-installation technical support.',
+      tr: 'Satış öncesi danışmanlıktan kurulum sonrası teknik desteğe kadar hafta içi 09:00–18:00 arasında telefon, e-posta ve WhatsApp üzerinden yanınızdayız.',
+      en: 'From pre-sales advice to post-installation technical support, we are available on weekdays 09:00–18:00 by phone, email and WhatsApp.',
     },
   },
 ]

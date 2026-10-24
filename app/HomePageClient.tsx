@@ -175,10 +175,10 @@ export default function HomePageClient() {
           <header className="mb-8 md:mb-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
             <div>
               <h2 id="use-cases-heading" className={sectionTitleClass}>{L('Hangi İhtiyaç İçin?', 'Solutions by Use')}</h2>
-              <p className={sectionDescClass}>{L('Kullanım alanınıza özel hazırlanmış enerji çözümleri.', 'Energy solutions prepared for your application.')}</p>
+              <p className={sectionDescClass}>{L('Kullanım alanınıza göre seçilmiş ürünler ve çözümler.', 'Products and solutions selected by application.')}</p>
             </div>
             <Link href="/paketler" className="shrink-0 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
-              {L('Tüm Paketler', 'All Packages')} <ArrowUpRight className="w-4 h-4" />
+              {L('Tüm Kullanım Alanları', 'All Solutions')} <ArrowUpRight className="w-4 h-4" />
             </Link>
           </header>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -202,7 +202,7 @@ export default function HomePageClient() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
-                      <p className="text-white font-bold text-[15px] sm:text-sm leading-tight">{L(`${item.shortTitle} Paketleri`, `${item.en.shortTitle} Packages`)}</p>
+                      <p className="text-white font-bold text-[15px] sm:text-sm leading-tight">{L(`${item.shortTitle} Çözümleri`, `${item.en.shortTitle} Solutions`)}</p>
                       <p className="hidden sm:block text-white/70 text-xs mt-0.5 line-clamp-2">{L(item.description, item.en.description)}</p>
                       <span className="inline-flex items-center gap-1 text-white/80 text-xs mt-1.5 sm:mt-2 font-semibold">
                         {L('İncele', 'View')} <ArrowRight className="w-3 h-3" />
