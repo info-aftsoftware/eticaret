@@ -20,7 +20,7 @@ import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isInstallShipping, isQuoteOnly, INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
 import { CompareButton } from '@/components/CompareButton'
-import { mockProducts, COMPLEMENTARY_BY_CATEGORY, getComplementaryIds, type MockProduct } from '@/lib/products-mock'
+import { mockProducts, COMPLEMENTARY_BY_CATEGORY, type MockProduct } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
 import { useTranslations } from 'next-intl'
@@ -175,51 +175,24 @@ export default function ProductDetailClient({ initialProduct, productId: product
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id])
 
-  /** Önerilen ürünler: en az 4–5 adet; önce tamamlayıcı/kategori, eksikse genel listeden tamamlanır */
-  const MIN_RECOMMENDED = 5
-  const recommendedProducts = React.useMemo(() => {
-    if (!product) return []
-    const complementaryIds = getComplementaryIds(product).filter((id) => mockProductsMap[id])
-    let ids = complementaryIds.length > 0
-      ? complementaryIds
-      : mockProducts
-        .filter((p) => p.category === product.category && p.id !== product.id)
-        .slice(0, Math.max(MIN_RECOMMENDED, 8))
-        .map((p) => p.id)
-    ids = ids.slice(0, 8)
-    if (ids.length < MIN_RECOMMENDED) {
-      const extra = mockProducts
-        .filter((p) => p.id !== product.id && !ids.includes(p.id))
-        .slice(0, MIN_RECOMMENDED - ids.length)
-        .map((p) => p.id)
-      ids = [...ids, ...extra]
-    }
-    return ids
-      .map((id) => mockProductsMap[id])
-      .filter(Boolean) as MockProduct[]
-  }, [product?.id, product?.category, product?.brand])
-
-  // Öneri ve uyumlu ürünler güncel vitrin verisiyle (kur, kampanya, satış durumu; madde 3): katalog dosyasındaki
-  // içe aktarma anındaki fiyat gösterilmez, liste güncel veri gelince çizilir
-  const compatIds = React.useMemo(() => (product ? getComplementaryIds(product).filter((id) => mockProductsMap[id]).slice(0, 4) : []), [product])
-  const relatedKey = [...new Set([...recommendedProducts.map((p) => p.id), ...compatIds])].join(',')
-  const [fresh, setFresh] = useState<Record<string, MockProduct> | null>(null)
+  // Uyumlu ve önerilen ürünler sunucuda, güncel vitrin verisiyle hesaplanır (kur, kampanya, satış durumu, panelde girilen
+  // sistem voltajı; madde 3 ve 6). Katalog dosyasındaki içe aktarma anındaki veri gösterilmez, liste veri gelince çizilir.
+  const [related, setRelated] = useState<{ compatible: MockProduct[]; recommended: MockProduct[] } | null>(null)
+  const relatedFor = product?.id
   useEffect(() => {
-    if (!relatedKey) return
+    if (!relatedFor) return
     let cancelled = false
-    setFresh(null)
-    fetch(`/api/products?ids=${encodeURIComponent(relatedKey)}`)
+    setRelated(null)
+    fetch(`/api/products/${encodeURIComponent(relatedFor)}/related`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((list) => {
-        if (!cancelled) setFresh(Array.isArray(list) ? Object.fromEntries(list.map((p: MockProduct) => [p.id, p])) : {})
+      .then((data) => {
+        if (!cancelled) setRelated({ compatible: Array.isArray(data?.compatible) ? data.compatible : [], recommended: Array.isArray(data?.recommended) ? data.recommended : [] })
       })
-      .catch(() => !cancelled && setFresh({}))
+      .catch(() => !cancelled && setRelated({ compatible: [], recommended: [] }))
     return () => {
       cancelled = true
     }
-  }, [relatedKey])
-  /** Güncel veride olmayan (satıştan kalkmış/taslak) ürün listeden düşer */
-  const live = (ids: string[]) => (fresh ? (ids.map((id) => fresh[id]).filter(Boolean) as MockProduct[]) : [])
+  }, [relatedFor])
 
   if (loading) {
     return (
@@ -637,7 +610,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
               {(() => {
                 const complementary = product.category ? COMPLEMENTARY_BY_CATEGORY[product.category] : undefined
                 if (!complementary) return null
-                const compatProducts = live(compatIds)
+                const compatProducts = related?.compatible ?? []
                 if (compatProducts.length === 0) return null
                 return (
                   <section className="mt-7" aria-labelledby="compat-heading">
@@ -826,7 +799,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 // Güncel veri gelene kadar yer ayrılır (sayfa kaymasın)
                 className="min-h-[300px] flex gap-4 overflow-x-auto scroll-smooth scrollbar-thin-h pb-6 snap-x snap-mandatory -mx-4 px-4 scroll-px-4 sm:-mx-6 sm:px-6 sm:scroll-px-6 md:mx-0 md:px-0 md:scroll-px-0"
               >
-                {live(recommendedProducts.map((r) => r.id)).map((rec) => (
+                {(related?.recommended ?? []).map((rec) => (
                   <div key={rec.id} className="flex-none w-[200px] sm:w-[220px] md:w-[240px] snap-start">
                     <ProductCard
                       product={{

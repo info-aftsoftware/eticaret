@@ -30,6 +30,7 @@ import {
 } from '@/components/admin/ui'
 import { useToast } from '@/components/admin/toast'
 import { cn } from '@/lib/utils'
+import { DC_SYSTEM_CATEGORIES, hasKnownVoltage } from '@/lib/compat'
 import { matchProduct } from '@/lib/admin-product-search'
 import { BULK_STOCK_MODE_TR, planBulkStock, type BulkStockMode } from '@/lib/bulk-stock'
 
@@ -50,12 +51,17 @@ type CatalogRow = {
   /** Panelde eklenen ürün taslakta (A08): sitede görünmez */
   status?: 'draft'
   salesClosed?: string
+  specifications?: Record<string, string>
+  systemVoltage?: string[]
 }
 
 const LOW = 5
+
+/** DC sistem ürünü ve voltajı panelde, veri dosyasında ya da adında yok: uyumlu ürün önerilerine giremez (lib/compat) */
+const voltageUnknown = (p: CatalogRow) => DC_SYSTEM_CATEGORIES.has(p.category ?? '') && !hasKnownVoltage({ ...p, category: p.category ?? null })
 const PAGE_SIZE = 50
 
-type StockTab = 'all' | 'in' | 'low' | 'out' | 'featured'
+type StockTab = 'all' | 'in' | 'low' | 'out' | 'featured' | 'novoltage'
 
 function priceLabel(p: CatalogRow) {
   const prices = (p.variants?.length ? p.variants.map((v) => v.price) : [p.price]).filter((n) => Number.isFinite(n))
@@ -143,7 +149,7 @@ function ProductsContent() {
   const toast = useToast()
 
   const rawStock = sp.get('stock')
-  const tab: StockTab = rawStock === 'outofstock' ? 'out' : (['in', 'low', 'out', 'featured'].includes(rawStock ?? '') ? rawStock : 'all') as StockTab
+  const tab: StockTab = rawStock === 'outofstock' ? 'out' : (['in', 'low', 'out', 'featured', 'novoltage'].includes(rawStock ?? '') ? rawStock : 'all') as StockTab
   const q = sp.get('q') || ''
   const brand = sp.get('brand') || ''
   const category = sp.get('category') || ''
@@ -221,9 +227,10 @@ function ProductsContent() {
     low: base.filter((p) => p.stock > 0 && p.stock <= LOW).length,
     out: base.filter((p) => p.stock <= 0).length,
     featured: base.filter((p) => p.featured).length,
+    novoltage: base.filter(voltageUnknown).length,
   }
   const filtered = base.filter((p) =>
-    tab === 'in' ? p.stock > LOW : tab === 'low' ? p.stock > 0 && p.stock <= LOW : tab === 'out' ? p.stock <= 0 : tab === 'featured' ? p.featured : true
+    tab === 'in' ? p.stock > LOW : tab === 'low' ? p.stock > 0 && p.stock <= LOW : tab === 'out' ? p.stock <= 0 : tab === 'featured' ? p.featured : tab === 'novoltage' ? voltageUnknown(p) : true
   )
   const pageRows = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
   const allOnPageSelected = pageRows.length > 0 && pageRows.every((p) => selected.has(p.id))
@@ -316,6 +323,7 @@ function ProductsContent() {
               { value: 'low', label: `Düşük stok (≤${LOW})`, count: counts.low, tone: 'yellow' },
               { value: 'out', label: 'Tükendi', count: counts.out, tone: 'yellow' },
               { value: 'featured', label: 'Öne çıkan', count: counts.featured },
+              { value: 'novoltage', label: 'Voltajı tanımsız', count: counts.novoltage, tone: 'yellow' },
             ]}
             value={tab}
             onChange={(v) => setParams({ stock: v })}
@@ -430,6 +438,7 @@ function ProductsContent() {
                               {p.variants?.length ? ` · ${p.variants.length} varyant` : ''}
                               {p.status === 'draft' && ' · Taslak (sitede görünmüyor)'}
                               {p.salesClosed && ' · Satışa kapalı'}
+                              {voltageUnknown(p) && ' · Voltajı tanımsız'}
                             </p>
                             {matchedVariant.has(p.id) && (
                               <p className="text-xs text-[#7a5a00] truncate">

@@ -19,6 +19,7 @@ import { variantStockKey } from '@/lib/variant-stock'
 import { canSeeCost } from '@/lib/admin-users'
 import { sanitizeCost, sanitizeLogistics } from '@/lib/product-admin-fields'
 import { publishProblems } from '@/lib/product-publish'
+import { DC_SYSTEM_CATEGORIES, describeFallbackVoltage, sanitizeSystemVoltage } from '@/lib/compat'
 import { diffFields, diffVariants, summarizeChanges } from '@/lib/audit-diff'
 import { notifyLowStockTransitions } from '@/lib/low-stock'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
@@ -89,6 +90,7 @@ const PRODUCT_AUDIT_LABELS: Record<string, string> = {
   saleMode: 'Satış biçimi',
   status: 'Yayın durumu',
   salesClosed: 'Satışa kapalı',
+  systemVoltage: 'Sistem voltajı',
 }
 
 type VariantRecord = Record<string, unknown> & { key: string; label: string; basePrice?: number }
@@ -288,6 +290,10 @@ export async function GET(
         variantImagesSource: override?.variantImages ? 'panel' : raw && !override?.images && product.imagesByVariant?.some((a) => a?.length) ? 'catalog' : null,
         catalogDescriptionHtml: raw ? getProductDescriptionHtml(productId) ?? null : null,
         descriptionSource: override?.fullDescription?.trim() ? 'panel' : raw && getProductDescriptionHtml(productId) ? 'catalog' : 'none',
+        // Sistem voltajı: panel değeri ve panel değeri olmadan geçerli olan (veri dosyası / ürün adı)
+        voltage: DC_SYSTEM_CATEGORIES.has(product.category ?? '')
+          ? { panel: product.systemVoltage ?? null, fallback: describeFallbackVoltage({ ...product, systemVoltage: null }) }
+          : null,
         publishProblems: raw ? [] : publishProblems({ ...product, desi: product.logisticsSource === 'panel' ? product.desi : null }),
       },
     })
@@ -388,6 +394,12 @@ export async function PATCH(
     if (warranty !== undefined) data.warranty = warranty
     // Satışa kapalı (ürün grubu silinirken kapatılan katalog ürünü tek tek yeniden açılabilir)
     if (body.salesClosed !== undefined) data.salesClosed = body.salesClosed === true ? true : null
+    // Sistem voltajı (uyumlu ürün önerisi): boş dizi/null panel değerini siler, katalogdan okunan geçerli olur
+    if (body.systemVoltage !== undefined) {
+      const sv = sanitizeSystemVoltage(body.systemVoltage)
+      if ('error' in sv) return NextResponse.json({ error: sv.error }, { status: 400 })
+      data.systemVoltage = sv.value ?? Prisma.JsonNull
+    }
 
     // ── Fiyatlandırma modu (A05) ───────────────────────────────────────────
     const pricing = resolvePricing({ before, source, body: { price, priceMode, basePrice }, data })
