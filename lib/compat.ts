@@ -5,7 +5,15 @@
  * Saf modül (birim testli).
  */
 
+import voltageMap from '@/lib/catalog/system-voltage.json'
+
 export type VoltageClass = '12' | '24' | '48' | 'HV'
+
+/** Panelde girilebilen değerler: sınıflar veya "any" (voltajdan bağımsız aksesuar) */
+export const SYSTEM_VOLTAGE_OPTIONS = ['12', '24', '48', 'HV', 'any'] as const
+export type SystemVoltageValue = (typeof SYSTEM_VOLTAGE_OPTIONS)[number]
+
+const MAP = voltageMap as unknown as Record<string, { v: VoltageClass[] | 'any'; src: string } | string>
 
 /** Sistem voltajının belirleyici olduğu kategoriler */
 export const DC_SYSTEM_CATEGORIES = new Set([
@@ -36,14 +44,56 @@ function classOf(v: number): VoltageClass | null {
  * VA (güç), Vac/230V (şebeke) ve panel gerilimleri (Voc/Vmp) sayılmaz.
  */
 type CompatProduct = {
+  id?: string
   name: string
+  /** Panelde girilen sistem voltajı (ProductOverride.systemVoltage); doluysa her şeyin önüne geçer */
+  systemVoltage?: string[] | null
   category?: string | null
   specifications?: Record<string, string> | null
   /** Varyantlı üründe voltaj çoğu zaman varyant adında/özelliğinde ("12,8V 100Ah") */
   variants?: { label?: string; specifications?: Record<string, string> }[] | null
 }
 
+/** Kaynağa göre sistem voltajı: panel değeri → veri dosyası (lib/catalog/system-voltage.json) → ad/varyant/özellik */
+export function systemVoltageOf(p: CompatProduct): { any: true } | { any: false; classes: Set<VoltageClass>; source: 'panel' | 'veri' | 'ad' } {
+  const panel = (p.systemVoltage ?? []).filter((v): v is SystemVoltageValue => (SYSTEM_VOLTAGE_OPTIONS as readonly string[]).includes(v))
+  if (panel.length) return panel.includes('any') ? { any: true } : { any: false, classes: new Set(panel as VoltageClass[]), source: 'panel' }
+  const m = p.id ? MAP[p.id] : undefined
+  if (m && typeof m === 'object') return m.v === 'any' ? { any: true } : { any: false, classes: new Set(m.v), source: 'veri' }
+  return { any: false, classes: parseVoltageClasses(p), source: 'ad' }
+}
+
+/** Sistem voltajı sınıfları (panel/veri dosyası dahil; "any" boş küme döner, uyum kontrolünde ayrıca ele alınır) */
 export function voltageClasses(p: CompatProduct): Set<VoltageClass> {
+  const v = systemVoltageOf(p)
+  return v.any ? new Set() : v.classes
+}
+
+/** Voltaj biliniyor mu (sınıf veya voltajdan bağımsız) — panelde "Voltajı tanımsız" süzgeci */
+export function hasKnownVoltage(p: CompatProduct): boolean {
+  const v = systemVoltageOf(p)
+  return v.any || v.classes.size > 0
+}
+
+/** Panelden gelen sistem voltajı: boş/null siler; "any" tek başına; tekrarlar ve sıra düzeltilir */
+export function sanitizeSystemVoltage(input: unknown): { value: SystemVoltageValue[] | null } | { error: string } {
+  if (input == null) return { value: null }
+  if (!Array.isArray(input)) return { error: 'Sistem voltajı geçersiz' }
+  const bad = input.find((v) => !(SYSTEM_VOLTAGE_OPTIONS as readonly unknown[]).includes(v))
+  if (bad !== undefined) return { error: `Sistem voltajı geçersiz: ${String(bad)}` }
+  if (!input.length) return { value: null }
+  if (input.includes('any')) return input.length === 1 ? { value: ['any'] } : { error: '"Voltajdan bağımsız" diğer voltajlarla birlikte seçilemez' }
+  return { value: SYSTEM_VOLTAGE_OPTIONS.filter((o) => input.includes(o)) }
+}
+
+/** Panel değeri yokken geçerli olan voltaj (düzenleyicide gösterilir) */
+export function describeFallbackVoltage(p: CompatProduct): { any: boolean; classes: VoltageClass[]; source: 'veri' | 'ad' | null } {
+  const v = systemVoltageOf({ ...p, systemVoltage: null })
+  if (v.any) return { any: true, classes: [], source: 'veri' }
+  return { any: false, classes: [...v.classes], source: v.classes.size ? (v.source as 'veri' | 'ad') : null }
+}
+
+function parseVoltageClasses(p: CompatProduct): Set<VoltageClass> {
   const out = new Set<VoltageClass>()
   const specs = [p.specifications ?? {}, ...(p.variants ?? []).map((v) => v.specifications ?? {})]
   const specText = specs
@@ -73,9 +123,10 @@ export function voltageClasses(p: CompatProduct): Set<VoltageClass> {
 /** İki ürün teknik olarak uyumlu öneri olabilir mi (yalnız ikisi de DC sistem kategorisindeyse voltaj kontrol edilir) */
 export function isTechnicallyCompatible(a: CompatProduct, b: CompatProduct): boolean {
   if (!DC_SYSTEM_CATEGORIES.has(a.category ?? '') || !DC_SYSTEM_CATEGORIES.has(b.category ?? '')) return true
-  const va = voltageClasses(a)
-  const vb = voltageClasses(b)
-  if (!va.size || !vb.size) return false
-  for (const c of va) if (vb.has(c)) return true
+  const va = systemVoltageOf(a)
+  const vb = systemVoltageOf(b)
+  if (va.any || vb.any) return true
+  if (!va.classes.size || !vb.classes.size) return false
+  for (const c of va.classes) if (vb.classes.has(c)) return true
   return false
 }

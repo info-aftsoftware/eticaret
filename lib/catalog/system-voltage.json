@@ -1,0 +1,21 @@
+{
+  "_aciklama": "Ürün adında/özelliğinde voltaj yazmayan DC sistem ürünlerinin sistem voltajı sınıfları (lib/compat.ts). Yalnız kaynağı kesin olanlar: model kodu (SRNE adlandırması: ilk iki hane azami sistem voltajı) veya ürün açıklamasındaki açık beyan. \"any\": voltajdan bağımsız aksesuar. Kalanlar panelde ürün düzenleyicisinden girilir.",
+  "tommatech-rack-moduler-batarya-paralel-kablo-seti-15-cm": { "v": "any", "src": "Batarya bağlantı kablosu: voltajdan bağımsız aksesuar" },
+  "tommatech-rack-moduler-batarya-seri-guc-kablosu-seti-1-5-m": { "v": "any", "src": "Batarya bağlantı kablosu: voltajdan bağımsız aksesuar" },
+  "tommatech-tpe-50-mm2-kirmizi-batarya-guc-kablosu-1-5-m": { "v": "any", "src": "Batarya güç kablosu: voltajdan bağımsız aksesuar" },
+  "electrozirve-hp2410-10a-pwm-sarj-kontrol-cihazi": { "v": ["12", "24"], "src": "Model HP2410: 24 = azami 24 V sistem (12/24 V otomatik), SRNE OEM" },
+  "electrozirve-hp2420-20a-pwm-sarj-kontrol-cihazi": { "v": ["12", "24"], "src": "Model HP2420: 12/24 V otomatik, SRNE OEM" },
+  "electrozirve-hp2430-30a-pwm-sarj-kontrol-cihazi": { "v": ["12", "24"], "src": "Model HP2430: 12/24 V otomatik, SRNE OEM" },
+  "electrozirve-hp2440-40a-pwm-sarj-kontrol-cihazi": { "v": ["12", "24"], "src": "Model HP2440: 12/24 V otomatik, SRNE OEM" },
+  "electrozirve-hp2450-50a-pwm-sarj-kontrol-cihazi": { "v": ["12", "24"], "src": "Model HP2450: 12/24 V otomatik, SRNE OEM" },
+  "electrozirve-hp2460-60a-pwm-sarj-kontrol-cihazi": { "v": ["12", "24"], "src": "Model HP2460: 12/24 V otomatik, SRNE OEM" },
+  "np-power-mppt-sarj-kontrol-cihazi-30a-40a": { "v": ["12", "24"], "src": "Varyant modelleri NP2430 / NP2440: 12/24 V" },
+  "electrozirve-ml-serisi-ekranli-mppt-sarj-kontrol-cihazi-20a-60a": { "v": ["12", "24", "48"], "src": "Varyantlar ML-2420/2430/2440 (12/24 V) ve ML-4860 (12/24/36/48 V), SRNE OEM" },
+  "electrozirve-mc-serisi-ekransiz-mppt-sarj-kontrol-cihazi-20a-50a": { "v": ["12", "24"], "src": "Varyantlar MC-2420/2430/2440/2450: 12/24 V, SRNE OEM" },
+  "electrozirve-mc-4860n25-60a-ekranli-mppt-sarj-kontrol-cihazi": { "v": ["12", "24", "48"], "src": "Model MC-4860N25: 12/24/36/48 V otomatik, SRNE OEM" },
+  "electrozirve-mc-4885n15-85a-ekranli-mppt-sarj-kontrol-cihazi": { "v": ["12", "24", "48"], "src": "Model MC-4885N15: 12/24/36/48 V otomatik, SRNE OEM" },
+  "electrozirve-mc-48100n25-100a-ekranli-mppt-sarj-kontrol-cihazi": { "v": ["12", "24", "48"], "src": "Model MC-48100N25: 12/24/36/48 V otomatik, SRNE OEM" },
+  "electrozirve-mf-4860n15-60a-ekranli-mppt-sarj-kontrol-cihazi": { "v": ["12", "24", "48"], "src": "Model MF-4860N15: 12/24/36/48 V otomatik, SRNE OEM" },
+  "havensis-hvss-500-500a-smart-shunt-aku-monitoru": { "v": ["12", "24", "48"], "src": "Ürün açıklaması: çalışma gerilimi 9-70 V DC" },
+  "victron-battery-balancer-aku-dengeleyici": { "v": ["24", "48"], "src": "Ürün açıklaması: seri 12 V akü çiftleri, 24 V ve 48 V akü bankalarında" }
+}

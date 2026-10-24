@@ -105,6 +105,8 @@ export interface MockProduct {
   status?: 'draft'
   /** Satışa kapalı (ürün grubu kapatıldı veya grup silinirken kapatıldı): nedeni; vitrinde stoksuz görünür, sipariş reddedilir */
   salesClosed?: string
+  /** Panelde girilen sistem voltajı (lib/compat.ts SYSTEM_VOLTAGE_OPTIONS); yoksa veri dosyası ve ürün adı kullanılır */
+  systemVoltage?: string[]
 }
 
 /** Eksik ürün görselleri için placeholder */
@@ -193,13 +195,17 @@ function pickComplementaryIds(categories: string[]): string[] {
 /**
  * Ürüne özel tamamlayıcı ürünler: kategorinin tamamlayıcı kategorilerinden, önce aynı markanın ürünleri
  * (ör. Victron inverter → Victron batarya), sonra diğer markalar; her kategoriden sırayla, en fazla 8.
+ * pool: aday ürünler (sunucuda panel değerleri birleştirilmiş vitrin listesi; lib/related-products)
  */
-export function getComplementaryIds(product: Pick<MockProduct, 'id' | 'category' | 'brand' | 'name'> & Partial<Pick<MockProduct, 'specifications' | 'variants'>>): string[] {
+export function getComplementaryIds(
+  product: Pick<MockProduct, 'id' | 'category' | 'brand' | 'name'> & Partial<Pick<MockProduct, 'specifications' | 'variants' | 'systemVoltage'>>,
+  pool: MockProduct[] = mockProducts
+): string[] {
   const config = COMPLEMENTARY_CATEGORIES[product.category]
   if (!config) return []
   const pools = config.categories.map((c) => {
     // Teknik uyum (madde 6): DC sistem ürünlerinde voltaj sınıfı kesişmeli (lib/compat)
-    const inCategory = mockProducts.filter((p) => p.category === c && p.id !== product.id && p.image !== PLACEHOLDER_PRODUCT_IMAGE && isTechnicallyCompatible(product, p))
+    const inCategory = pool.filter((p) => p.category === c && p.id !== product.id && p.image !== PLACEHOLDER_PRODUCT_IMAGE && isTechnicallyCompatible(product, p))
     return [...inCategory.filter((p) => p.brand === product.brand), ...inCategory.filter((p) => p.brand !== product.brand)]
   })
   const ids: string[] = []

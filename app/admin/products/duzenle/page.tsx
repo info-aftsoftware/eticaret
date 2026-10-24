@@ -34,6 +34,7 @@ import { useToast } from '@/components/admin/toast'
 import { useAdminMe } from '@/components/admin/AdminMeContext'
 import { packageDesi } from '@/lib/shipping/fee'
 import { cn } from '@/lib/utils'
+import { DC_SYSTEM_CATEGORIES } from '@/lib/compat'
 
 type Variant = {
   key: string
@@ -72,6 +73,7 @@ type Product = {
   priceMode?: PriceMode
   variantStock?: boolean
   salesClosed?: string
+  systemVoltage?: string[]
   dimensionsCm?: number[]
   weightKg?: number
   packageCount?: number
@@ -93,6 +95,8 @@ type Product = {
     variantImagesSource?: 'panel' | 'catalog' | null
     catalogDescriptionHtml?: string | null
     descriptionSource?: 'panel' | 'catalog' | 'none'
+    /** DC sistem ürünü ise: panel değeri ve panel değeri yokken geçerli olan (veri dosyası / ürün adı) */
+    voltage?: { panel: string[] | null; fallback: { any: boolean; classes: string[]; source: 'veri' | 'ad' | null } } | null
   }
 }
 
@@ -127,13 +131,15 @@ type Form = {
   saleMode: 'normal' | 'install' | 'quote'
   /** Satışa kapalı: sitede görünür, satın alınamaz */
   salesClosed: boolean
+  /** Sistem voltajı (panel): 12/24/48/HV alt kümesi veya ["any"]; boş = katalogdan okunan */
+  systemVoltage: string[]
 }
 
 /** price: TL (sabit TL modunda girilir); base: döviz fiyatı (dövize bağlı modda girilir); stock: ayrı varyant stoğu */
 type VariantRow = { key: string; label: string; sku: string; price: string; base: string; stock: string; extra: Record<string, unknown> }
 type SpecRow = { id: number; k: string; v: string }
 
-const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal', salesClosed: false }
+const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal', salesClosed: false, systemVoltage: [] }
 
 const SALE_MODE_OPTIONS = [
   ['normal', 'Kargo ile gönderilir'],
@@ -177,6 +183,7 @@ function toForm(p: Product): Form {
     packageCount: String(p.packageCount ?? 1),
     saleMode: p.saleMode === 'install' || p.saleMode === 'quote' ? p.saleMode : 'normal',
     salesClosed: !!p.salesClosed,
+    systemVoltage: p.systemVoltage ?? [],
   }
 }
 
@@ -324,6 +331,7 @@ function Editor() {
     if (str('warranty') !== o.form.warranty.trim()) body.warranty = str('warranty')
     if (form.featured !== o.form.featured) body.featured = form.featured
     if (form.salesClosed !== o.form.salesClosed) body.salesClosed = form.salesClosed
+    if (form.systemVoltage.join(',') !== o.form.systemVoltage.join(',')) body.systemVoltage = form.systemVoltage.length ? form.systemVoltage : null
     // Fiyat: modu açıkça gönderilir; dövize bağlıda döviz fiyatı, sabit TL'de TL fiyatı (A05)
     if (form.priceMode !== o.form.priceMode) body.priceMode = form.priceMode
     if (form.priceMode === 'fx') {
@@ -610,6 +618,18 @@ function Editor() {
   const problems = product?._meta?.publishProblems ?? []
   const categories = [...new Set([...ALL_CATEGORIES, ...(form.category ? [form.category] : [])])]
 
+  // Sistem voltajı (uyumlu ürün önerisi): yalnız akü, BMS, inverter, şarj cihazı gibi DC sistem ürünlerinde
+  const showVoltage = !isNew && DC_SYSTEM_CATEGORIES.has(form.category)
+  const voltageMeta = product?._meta?.voltage ?? null
+  const toggleVoltage = (v: string, on: boolean) => {
+    const order = ['12', '24', '48', 'HV']
+    if (v === 'any') return set('systemVoltage', on ? ['any'] : [])
+    const next = new Set(form.systemVoltage.filter((x) => x !== 'any'))
+    if (on) next.add(v)
+    else next.delete(v)
+    set('systemVoltage', order.filter((x) => next.has(x)))
+  }
+
   const sections = [
     { id: 'genel', label: 'Genel bilgiler' },
     { id: 'fiyat', label: 'Fiyat ve stok' },
@@ -619,6 +639,7 @@ function Editor() {
     { id: 'gorseller', label: 'Görseller' },
     { id: 'ozellikler', label: 'Öne çıkan özellikler' },
     { id: 'teknik', label: 'Teknik özellikler' },
+    ...(showVoltage ? [{ id: 'voltaj', label: 'Sistem voltajı' }] : []),
   ]
 
   return (
@@ -1275,6 +1296,29 @@ function Editor() {
               ))}
             </div>
           </Panel>
+
+          {showVoltage && (
+            <Panel id="voltaj" className={cn('scroll-mt-20', !form.systemVoltage.length && !voltageMeta?.fallback.any && !voltageMeta?.fallback.classes.length && 'border-[#f5dc85]')}>
+              <PanelHeader title="Sistem voltajı" description="Uyumlu ürün önerileri bu değere göre seçilir: akü, inverter ve şarj cihazı ancak voltajları örtüşüyorsa birlikte önerilir." icon={SlidersHorizontal} />
+              <div className="p-4 sm:p-5 space-y-3">
+                <div className="flex flex-wrap gap-x-5 gap-y-2">
+                  {(['12', '24', '48', 'HV'] as const).map((v) => (
+                    <Checkbox key={v} checked={form.systemVoltage.includes(v)} onChange={(on) => toggleVoltage(v, on)} label={v === 'HV' ? 'Yüksek gerilim (HV)' : `${v} V`} />
+                  ))}
+                  <Checkbox checked={form.systemVoltage.includes('any')} onChange={(on) => toggleVoltage('any', on)} label="Voltajdan bağımsız (kablo, aksesuar)" />
+                </div>
+                <p className="text-[13px] text-[#5d6e80]">
+                  {form.systemVoltage.length
+                    ? 'Panelde seçilen değer kullanılır.'
+                    : voltageMeta?.fallback.any
+                      ? 'Seçim yok: katalog kaydına göre voltajdan bağımsız.'
+                      : voltageMeta?.fallback.classes.length
+                        ? `Seçim yok: ${voltageMeta.fallback.source === 'veri' ? 'katalog kaydına' : 'ürün adına ve özelliklerine'} göre ${voltageMeta.fallback.classes.map((c) => (c === 'HV' ? 'HV' : `${c} V`)).join(', ')}.`
+                        : 'Voltaj tanımsız: ürün adında ve özelliklerinde voltaj yok. Seçim yapılana kadar akü, inverter ve şarj cihazlarıyla birlikte uyumlu ürün olarak önerilmez.'}
+                </p>
+              </div>
+            </Panel>
+          )}
         </div>
       </div>
 

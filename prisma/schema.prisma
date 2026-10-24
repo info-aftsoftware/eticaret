@@ -886,6 +886,8 @@ model ProductOverride {
   status          String?
   // Satışa kapalı (ürün grubu silinirken katalog ürünleri için): sitede görünür, sepete eklenemez, sipariş reddedilir
   salesClosed     Boolean?
+  // Sistem voltajı (uyumlu ürün önerisi, lib/compat.ts): ["12","24","48","HV"] alt kümesi veya ["any"] (voltajdan bağımsız); null katalogdan okunur
+  systemVoltage   Json?
   brand           String?
   sku             String?
   tags            Json?    // string[]
