@@ -8,6 +8,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import { prisma } from '@/lib/prisma'
 import { isRateLimited } from '@/lib/rate-limit'
+import { sendEmailSMTP } from '@/lib/email-smtp'
+import { adminNotifyEmail } from '@/lib/store-config'
+
+const esc = (v: unknown) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
 
 const PRODUCTION_KWH_PER_KWP_MIN = 1200
 const PRODUCTION_KWH_PER_KWP_MAX = 1800
@@ -137,6 +141,20 @@ export async function POST(request: NextRequest) {
         redFlags: redFlags.length ? redFlags : undefined,
       },
     })
+
+    // Yöneticiye bildirim (kontrol listesi 30): talep panelde, e-posta kısa özet; gönderilemezse talep yine kaydedilir
+    const rows: [string, unknown][] = [
+      ['Ad soyad', body.contactName], ['E-posta', body.contactEmail], ['Telefon', body.contactPhone], ['Firma', body.companyName],
+      ['Panel', body.panelBrandModel], ['Toplam kWp', body.totalKwp], ['İnverter', body.inverterBrandModel], ['Teklif tutarı (TL)', body.totalPriceTl],
+      ['Uyarılar', redFlags.join(' · ')],
+    ]
+    const html = `<p>Yeni GES teklif doğrulama talebi (kayıt no: ${esc(record.id)}). Ayrıntılar panelde: Teklif Doğrulama.</p><table>${rows
+      .filter(([, v]) => v != null && String(v).trim() !== '')
+      .map(([k, v]) => `<tr><td style="padding:2px 12px 2px 0;color:#5d6e80">${esc(k)}</td><td>${esc(v)}</td></tr>`)
+      .join('')}</table>`
+    await sendEmailSMTP(adminNotifyEmail(), `Yeni teklif doğrulama talebi: ${String(body.contactName || body.contactEmail).slice(0, 80)}`, html).catch((e) =>
+      console.error('Teklif doğrulama bildirimi gönderilemedi:', e)
+    )
 
     return NextResponse.json({
       success: true,

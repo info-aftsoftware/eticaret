@@ -27,6 +27,7 @@ import { sendEmail, type EmailAttachment } from '@/lib/email'
 import { classifyEmailFailure } from '@/lib/email-diagnose'
 import { generateContractPdf } from '@/lib/legal/contract-pdf'
 import { getCarrier, orderTrackingUrl } from '@/lib/shipping/carriers'
+import { orderHasInstall } from '@/lib/order-install'
 import { SELLER } from '@/lib/legal/company'
 import { STORE_CONTACT, STORE_TIME_ZONE, bankTransferDeadline } from '@/lib/store-config'
 import { buildInvoiceDataFromPrisma } from '@/lib/invoice-data'
@@ -122,6 +123,7 @@ export function toOrderEmailData(order: OrderWithLines): OrderEmailData {
     // Navlungo linki numarayı kendisi açar; firma sayfasına yönelik ipucu gerekmez
     trackingHint: order.trackingUrl ? null : carrier?.trackingHint ?? null,
     customerNote: parseCustomerNote(order),
+    installNote: orderHasInstall(order),
     orderUrl: `${siteUrl()}/orders/${order.orderNo}`,
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,
     siteUrl: siteUrl(),

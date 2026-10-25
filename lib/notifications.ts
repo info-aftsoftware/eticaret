@@ -1,4 +1,5 @@
 import { sendEmail } from './email'
+import { adminNotifyEmail } from '@/lib/store-config'
 import { updateOrderStatus } from './admin'
 import OrderConfirmation from '../emails/OrderConfirmation'
 import AdminNewOrder from '../emails/AdminNewOrder'
@@ -44,7 +45,7 @@ export async function sendOrderConfirmation(data: NotificationData): Promise<boo
 // Send new order notification to admin
 export async function sendAdminNewOrderNotification(data: NotificationData): Promise<boolean> {
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
     
     const result = await sendEmail(
       adminEmail,
@@ -211,7 +212,7 @@ export async function sendRefundNotification(data: NotificationData, refundAmoun
 // Send low stock notification to admin
 export async function sendLowStockNotification(productName: string, currentStock: number, minStock: number): Promise<boolean> {
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
     
     const result = await sendEmail(
       adminEmail,
@@ -239,7 +240,7 @@ export async function sendLowStockNotification(productName: string, currentStock
 // Send system error notification to admin
 export async function sendSystemErrorNotification(error: string, context: string): Promise<boolean> {
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
     
     const result = await sendEmail(
       adminEmail,
@@ -290,7 +291,7 @@ export interface RFQNotificationData {
 
 export async function sendRFQAdminNotification(data: RFQNotificationData): Promise<boolean> {
   try {
-    const adminEmail = process.env.ADMIN_EMAIL || process.env.SMTP_EMAIL || process.env.SMTP_USER || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
     const result = await sendEmail(
       adminEmail,
       `Yeni Teklif Talebi - ${data.companyName}`,

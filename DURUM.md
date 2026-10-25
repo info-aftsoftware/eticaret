@@ -1,11 +1,13 @@
 # Proje Durumu — Voltekno e-ticaret
 
-_Son güncelleme: 24.10.2026 · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
+_Son güncelleme: 25.10.2026 (yayın `d8a3483`) · Bu dosya çalışma boyunca sürekli güncellenir. Güncel yapılacaklar listesi aşağıda **"Kalanlar"** bölümündedir. `YAPILACAKLAR.md` 18.10'dan beri güncellenmedi; oradaki bazı açık maddeler yapıldı (aşağıda "YAPILACAKLAR.md'de geçersiz kalanlar"). Son denetim raporları: `SITE-DENETIMI.md` (uçtan uca), `URUN-DENETIMI.md` (katalog)._
 
 ## Şu an yapılan
-**Canlıda (nextfirststep.com, son yayın `c095ad4`, 23.10.2026 akşam, SEO hariç): ürün grupları ve yönetim paneli denetimi A01–A18 (aşağıda) ve öncesi —** 21.10'daki her şey (Navlungo entegrasyonu, Geliver takibi, akü için iletişim, desi ve görseller, teslimat tahmini, sipariş korumaları) ve 22.10 turları: mobil hero ve paket kartları, yorum yalnızca teslim almış üyeye, sayfalama ve gezinme kuralları, açılır menünün ekrana sığması, yönetim girişi düzeltmesi, Victron 120 V ürünlerin kaldırılması (338 ürün), kısa akü metni, resmî kaynaklı desiler, kargo kaynağı etiketi, iptal ve iadelerin cirodan düşmesi, Geliver'den gönderi oluşturma (anahtar girilene kadar kapalı), hesaba özel favoriler, telefon ve e-posta doğrulaması, AFT Power ürünleri (3 şarj istasyonu fiyatlı ve kurulumlu, 6 depolama ürünü teklifle; katalog 347 ürün).
+**Canlıda (nextfirststep.com, son yayın `d8a3483`, 25.10.2026, SEO hariç): müşteri kontrol listesi 1. öncelik kod maddeleri 2–6, voltajı tanımsız DC ürünleri ve 2. öncelik maddeleri 10–17, 19–22 (aşağıda); ürün grupları ve yönetim paneli denetimi A01–A18 (`c095ad4` ile 23.10) ve öncesi —** 21.10'daki her şey (Navlungo entegrasyonu, Geliver takibi, akü için iletişim, desi ve görseller, teslimat tahmini, sipariş korumaları) ve 22.10 turları: mobil hero ve paket kartları, yorum yalnızca teslim almış üyeye, sayfalama ve gezinme kuralları, açılır menünün ekrana sığması, yönetim girişi düzeltmesi, Victron 120 V ürünlerin kaldırılması (338 ürün), kısa akü metni, resmî kaynaklı desiler, kargo kaynağı etiketi, iptal ve iadelerin cirodan düşmesi, Geliver'den gönderi oluşturma (anahtar girilene kadar kapalı), hesaba özel favoriler, telefon ve e-posta doğrulaması, AFT Power ürünleri (3 şarj istasyonu fiyatlı ve kurulumlu, 6 depolama ürünü teklifle; katalog 347 ürün).
 
-**Kodda hazır, canlıda değil:** İngilizce site (`ingilizce-tam` dalı, 3 commit, ana dala birleştirilmedi) ve SEO (`9ad9119`, `6a30301`, `5122e7a`, "SEO yayınlamıyoruz" kararıyla bekliyor). **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır.
+**Yayın `d8a3483` (25.10.2026, sizin onayınızla):** yayın dalında `3fce868` (P1), `0f5a58c` (voltaj), `d8a3483` (P2). Hostinger derlemesi 3 dakikada tamamlandı (yapı ayarı Next.js / Node 22 doğru, ayarlar boşalmadı). Canlıda yalnız GET ile bakıldı: ana sayfa, Solar Akü, /paketler ve karavan/marin, /ges, /contact?talep=urun, Hakkımızda, karşılaştırma, SSS, AFT ve PWM ürün sayfaları, /admin, /api/health hepsi 200; eski "Paketleri", "Mutlu Müşteri", "7/24" ifadeleri yok; Solar Akü'de voltaj/kapasite/enerji/kimya süzgeçleri ve KDV dahil fiyat; yeni ilişkili ürün ucu çalışıyor (PWM şarj cihazına 12 V aküler, voltajı tanımsız Apex'e DC ürünü yok, 8 öneri); AFT 5,4 kWh kapasitesi model bazında. Sipariş ve form gönderilmedi.
+
+**Kodda hazır, kararınızı bekleyen:** İngilizce site (`ingilizce-tam` dalı, 3 commit, 106 dosya / ~13 bin satır, 22.10'dan beri ana daldan ayrı; son commit'i SEO) ve SEO (`9ad9119`, `6a30301`, `5122e7a`, "SEO yayınlamıyoruz" kararıyla bekliyor). **Yayın kuralı:** canlıya yalnızca siz söylediğinizde yayınlanır; yayın ortak klasörden değil SEO'suz yayın dalından (`yayin-pro-seo-haric`) yapılır. **Yayın dalı farkı:** orada ana sayfa tek dosya (`app/page.tsx`), ana dalda `app/page.tsx` + `app/HomePageClient.tsx`; kategori sayfasında SEO'ya ait `CategoryTypeLinks` yok. Bu dosyalara dokunan commit'ler aktarılırken değişiklik elle taşınır (24.10'da iki kez yapıldı).
 
 ## Kalanlar (21.10.2026 kontrolü)
 _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILACAKLAR.md` ve klasörün durumuyla karşılaştırıldı._
@@ -16,6 +18,9 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 | K1 | Navlungo + Geliver kodunun yayını | ✅ canlıda (takip 21.10, gönderi oluşturma 22.10 `953b9ba`). Çalışması için Hostinger'a `GELIVER_API_TOKEN` (anahtar sohbette paylaşıldığı için önce Geliver panelinden yenisi) ve gerçek etiket için `GELIVER_TEST_MODE=0` eklenmeli; ikincisi yokken gönderiler test gönderisidir. Navlungo, bilgileri girilene kadar kapalı |
 | K1b | Akü kısıtı, desi, görseller, teslimat tahmini, sipariş iyileştirmeleri | ✅ 21.10.2026 `f1025fa` ile canlıda |
 | K2 | SEO yayını | Tür ve marka sayfaları, eski voltekno.com yönlendirmeleri (`9ad9119`, `6a30301`; İngilizce tür listesi düzeltmesi `5122e7a`) bekliyor |
+| K4 | 24.10 değişikliklerinin yayını | ✅ 25.10.2026 `d8a3483` ile canlıda, doğrulandı |
+| K5 | 20 DC ürününün sistem voltajı | Panelde Ürünler → "Voltajı tanımsız" sekmesi; her ürünün düzenleyicisinde "Sistem voltajı" seçilmeli (NP Power/Apex/Exelon inverterler, Apex NFS/NPS, Electrozirve IC ve DC-DC şarj, Victron aksesuarları). Seçilene kadar bu ürünler akü/inverter/şarj cihazıyla uyumlu önerilmez |
+| K6 | İçerik teyitleri | AFT Güç Katmanı 210/315/420 Ah'in 105 Ah'lik modüllerle elde edildiği yorumu ve kabin değerleri tedarikçiyle; AFT bataryalarda model başına SKU; garanti metinlerinin uzman/hukuk kontrolü; kaldırılan kurumsal iddialar (2.000+ müşteri, 7/24 destek, kalite kontrol) belgelenirse geri eklenebilir |
 | K3 | `main` dalı ve GitHub adresi | `urun-katalogu-ikas`, `origin/main`'den 81 commit ileride; yerel `main` 19 commit ileride ama gönderilmemiş. `origin` hâlâ eski adres (`aysenur-23/eticaret`, yeni adrese yönlendiriyor). İkisi de izin sisteminde reddedildi, sizin yapmanız gerekiyor (aşağıda "Yayın") |
 
 **2. Hostinger ortam değişkenleri (nextfirststep.com)**
@@ -64,6 +69,70 @@ _DURUM.md; git, Hostinger (yayın geçmişi, ortam değişkeni adları), `YAPILA
 
 **YAPILACAKLAR.md'de geçersiz kalanlar** (orada hâlâ açık görünüyor ama yapıldı): canlı veritabanı kalıcı (52–53), `public_html_standalone` git'ten çıktı (54), `CRON_SECRET` ve `ADMIN_EMAIL` canlıda tanımlı (55; `ADMIN_TOTP_SECRET` ve `POS_*` hâlâ eksik), cron yerine uygulama içi zamanlayıcı (56), `MEDIA_DIR` gerekmiyor (94), desi bazlı kargo yapıldı (96, 105), Node yayını yapılıyor (106), WhatsApp düğmesi var (314).
 
+## Yerel staging ve uçtan uca testler — kontrol listesi 23–34 (25.10.2026)
+_Karar (25.10): yalnız yerel staging (Hostinger'da alt alan adı açılmadı). Bölüm her adımda güncellenir._
+
+**Ortam:** yayın dalının (`yayin-pro-seo-haric`, `d8a3483`, canlıdaki kodun aynısı) ayrı derlemesi (`.next-staging`), `http://localhost:3020`. Veritabanı yerel `prisma/dev.db`'nin kopyası (`scratchpad/staging/staging.db`, şema güncel). E-postalar dışarı çıkmaz: `scripts/staging/mail-sink.mjs` yerel posta sunucusu (127.0.0.1:2525) her iletiyi `.eml` dosyası olarak yazar. Zamanlayıcı kapalı (`INTERNAL_CRON=0`), yedek klasörü ayrı. Başlatma: `.claude/launch.json` → "Staging posta 2525" ve "Staging 3020". Testler: `tests/staging-checklist.spec.ts` (`STAGING_TESTS=1`, komut dosyanın başında).
+
+**Yerelde yapılamayanlar (baştan):** Firebase Auth gerçek projeye bağlı; test hesabı açmak dış serviste hesap oluşturmak demek, emülatör kurulu değil (29 kısmen; üye siparişleri sunucunun kendi JWT'siyle yerel test kullanıcısında denendi). Gerçek kargo tarifesi ve DNS/alan adı yerelde doğrulanamaz (25, 33 kısmen).
+
+**İlk koşu (25.10):** 23–31 için 22 test; bulgular 23, 26, 30 ve 32 (mutabakat). Düzeltmeler commit'lendi, yayın dalı derlemesiyle staging'de yeniden koşuluyor.
+
+| No | Konu | Durum |
+|---|---|---|
+| 23 | Çerez tercihi | ✅ Seçimden önce ve "Sadece Gerekli" sonrası analitik/piksel isteği yok, tercih saklanıyor, "Kabul Et" analitiği başlatıyor. 🔧 Bulgu düzeltildi (kodda, staging'de yeniden koşulacak): footer'a "Çerez tercihleri" eklendi, bandı yeniden açar; onay geri alınınca GA/Meta çerezleri silinir ve Firebase ölçümü durdurulur |
+| 24 | Stok | ✅ Varyant stokları bağımsız (20W 0 iken yalnız 10W satılıyor; iptal yalnız ilgili varyantı geri veriyor); son adette aynı anda iki siparişten yalnız biri geçiyor, stok eksiye düşmüyor. Kodda yok (iş kararı): depo / tedarikçi / sipariş üzerine üretim ayrımı, stok kaynağı ve son güncelleme zamanı |
+| 25 | Kargo hesabı | ✅ Raporun sepeti (2 kablo + 50 kW ısı pompası) dahil kargo bedeli sunucuda hesaplanıyor, adetle tutarlı artıyor; akü siparişi sunucuda da reddediliyor. Bedelin anlaşmalı tarifeyle doğruluğu yerelde doğrulanamaz (Navlungo/Geliver fiyat listesi gerekir) |
+| 26 | Nakliye/kurulum kapsamı | ✅ AFT DC istasyonu kargo bedeline girmiyor, sipariş zaman çizelgesinde kurulum notu var. 🔧 Bulgu düzeltildi: sipariş e-postalarında (müşteri ve yönetici) kargo satırı "Kurulum ve nakliye ayrıca" ve altında "kurulum ve nakliye bu tutara dahil değildir" notu (`lib/order-install.ts`) |
+| 27 | Sipariş ve ödeme durumları | ✅ Farklı fatura adresi ayrı saklanıyor; kurumsal faturada geçersiz VKN reddediliyor, geçerli VKN ve vergi dairesi saklanıyor; üye siparişi hesaba bağlanıyor, başka üye göremiyor, oturumsuz 401; aynı tekrar anahtarıyla eşzamanlı iki gönderim tek sipariş; havale bekleniyor → ödendi → hazırlanıyor → kargoda → teslim; ödeme bekleyen sipariş tahsilatı artırmıyor, ödeme artırıyor, iptal düşürüyor |
+| 28 | Fatura ve bildirimler | ✅ Sipariş onayı müşteriye IBAN, son ödeme tarihi ve ekli Ön Bilgilendirme Formu + Mesafeli Satış Sözleşmesi (PDF) ile gidiyor; yöneticiye "Yeni sipariş"; ödeme onayında müşteriye "Ödemeniz alındı" ve yöneticiye "Ödeme alındı"; kargoda takip numaralı "Siparişiniz kargoya verildi"; panelden "Sipariş Özeti" yeniden gönderiliyor. Not: e-Arşiv/e-fatura entegratörü yok; panelin "fatura gönder" düğmesi resmî fatura değil sipariş özeti gönderiyor. SSS'deki kurumsal e-fatura anlatımı muhasebe süreciyle sizin tarafınızda eşleştirilmeli |
+| 29 | Üyelik ve hesap | Sırada |
+| 30 | Takip ve formlar | ✅ İletişim, GES teklif ve teklif doğrulama kayıtları panele düşüyor; GES'te aranma onayı isteğe bağlı, e-postasız ve aranmak istemeyen talep 400; sipariş takibi doğru bilgiyle açılıyor, yanlış bilgiyle 404 ve hiçbir kişisel veri dönmüyor, dakikada 20 denemeden sonra 429. 🔧 Bulgular düzeltildi: (1) iletişim/GES bildirimleri gönderen kutusuna, sipariş bildirimleri `ADMIN_EMAIL`'e gidiyordu → hepsi tek alıcıda (`adminNotifyEmail()`: `ADMIN_EMAIL`, yoksa gönderen kutusu); (2) teklif doğrulama talebi yöneticiye hiç bildirilmiyordu → kısa özetli e-posta eklendi |
+| 31 | Sunucu kuralları ve erişim | ✅ İstemcinin gönderdiği fiyat, indirim, toplam ve kargo yok sayılıyor; sahte POS geri bildirimi siparişi ödendi yapmıyor; yönetici uçları oturumsuz 401; tarayıcı paketinde (239 dosya) ADMIN_TOKEN, JWT_SECRET, SMTP_PASSWORD, NEXTAUTH_SECRET ve Firebase özel anahtarı yok. Rol testi giriş deneme sınırına (15 dakikada 5) takıldı, yeniden koşulacak |
+| 32 | iKAS veri/adres geçişi | ✅ Mutabakat (`scripts/staging/reconcile-ikas.mjs`, `voltekno_ikas_nihai.xlsx`): Excel 562 satır / 340 ürün grubu / 562 SKU → 338 ürün aynı adla katalogda, 2'si bilerek satıştan kaldırıldı (Victron 120 V), 562 SKU'nun hepsi katalogda; katalogdaki 9 fazla ürün iKAS'ta olmayan AFT ürünleri; görselsiz 1 ürün (AFT PRO). 🔧 Bulgular düzeltildi: (1) eski iKAS ürün adreslerinin 340'ı da (kökte `/<slug>`) yeni sitede 404 veriyordu (SEO dalında bile yalnız 132'si yönlendiriliyordu) → her katalog ürününün kök adresi 308 ile `/products/<slug>`'a (`next.config.js`); (2) kaldırılan 2 ürün 404 → kategorisine 308. Yapılmadı: iKAS müşteri, adres ve sipariş aktarımı (iKAS'tan bu dışa aktarımlar yok; gerekirse sizden dosya) |
+| 33 | Alan adı ve indeksleme | Sırada |
+| 34 | Yedek ve geri dönüş | Sırada |
+
+## Müşteri tarafı kontrol listesi — 34 maddenin genel durumu (24.10.2026)
+Kaynak: "Voltekno yeni altyapı kontrol listesi" (23.10.2026, `Voltekno_Gecis_Kontrol_Listesi_23-10-2026.docx`). Listenin kuralı: "Test gerekli" maddeler erişim sağlanıp uçtan uca denenmeden "tamamlandı" sayılmaz; 1. öncelik maddeleri kapanıp test siparişleri doğrulanmadan ana alan adı taşınmaz. **Özet (25.10, `d8a3483` canlıda): 15 madde çözüldü ve canlıda, 1 madde kapsam daraltılarak çözüldü, 4 madde sizden/tedarikçiden bilgi bekliyor, 14 madde test ve geçiş adımı.**
+
+| No | Öncelik | Konu | Durum |
+|---|---|---|---|
+| 1 | 1 | Kartla ödeme | Bekliyor: banka sanal POS bilgileri (`POS_*`). Kart kapalıyken bütün metinler havale/EFT'ye göre (madde 2) |
+| 2 | 1 | Ödeme vaatleri | Canlıda (`6193901`) |
+| 3 | 1 | Fiyat tutarlılığı | Canlıda (`6193901`; kullanım alanı sayfaları da güncel vitrin verisiyle `6b460d3`) |
+| 4 | 1 | KDV dahil ana fiyat | Canlıda (`6193901`) |
+| 5 | 1 | Teklifli ürün ₺0 | Canlıda (`6193901`) |
+| 6 | 1 | Uyumlu ürün eşleştirme | Canlıda (`6193901` + `ccb0c64`). 20 ürünün voltajı panelden girilecek (K5) |
+| 7 | 1 | AFT PRO içerik | Bekliyor: tedarikçi teknik tablosu (giriş/çıkış, soket, koruma, haberleşme, ölçü, ağırlık, garanti, kurulum kapsamı) |
+| 8 | 2 | AFT PRO görseli | Bekliyor: gerçek ürün fotoğrafı (şu an yer tutucu) |
+| 9 | 2 | Üretici dokümanları | Bekliyor: 241 üründe datasheet bağlantısı yok; önce inverter, ısı pompası, şarj istasyonu, batarya |
+| 10 | 2 | AFT modül/sistem kapasitesi | Canlıda (`6b460d3`); teyit K6 |
+| 11 | 2 | Çok voltajlı AFT tabloları | Canlıda (`6b460d3`); model başına SKU yok |
+| 12 | 2 | Kategoriye göre teknik süzgeç | Canlıda (`6b460d3`) |
+| 13 | 2 | Karşılaştırma alan adları | Canlıda (`6b460d3`) |
+| 14 | 2 | Paket sayfaları | Canlıda (`6b460d3`, "uygun ürünler/çözümler" yolu). Gerçek paket (adetli liste, toplam bedel) istenirse içerik sizden |
+| 15 | 2 | Kullanım alanı önerileri | Canlıda (`6b460d3`) |
+| 16 | 2 | GES hesaplama beklentisi | Canlıda (`6b460d3`, kişisel bilgisiz ön tahmin) |
+| 17 | 2 | Teklif Al bağlantıları | Canlıda (`6b460d3`) |
+| 18 | 1 | KVKK metninde iKAS | Bekliyor: fiilen kullanılan sağlayıcıların listesi sizin onayınızla (barındırma Hostinger, e-posta SMTP sağlayıcısı, Firebase, analitik, kargo entegrasyonları, ödeme sağlayıcısı). Tahminle yazılmayacak |
+| 19 | 2 | Garanti anlatımı | Canlıda (`6b460d3`); uzman kontrolü önerilir |
+| 20 | 2 | Kurumsal iddialar | Teyitsiz iddialar kaldırıldı, canlıda (`6b460d3`) |
+| 21 | 2 | İngilizce görünüm | Kapsam daraltıldı: İngilizce görünümde kapsam notu (`6b460d3`). Tam çeviri `ingilizce-tam` dalında, birleştirme kararı sizde |
+| 22 | 2 | Form aydınlatmaları | Canlıda (`6b460d3`) |
+| 23 | 2 | Çerez tercihi yaşam döngüsü | Test gerekli. Çerez bandı ve "Sadece gerekli / Kabul et" seçimi var; analitik/pikselin seçim öncesi yüklenmediği canlıda ağ kaydıyla doğrulanmalı |
+| 24 | 1 | Stok ve tedarik gerçeği | Test gerekli. Panelde stok, varyant stoğu, düşük stok bildirimi ve son ürün yarışı koruması var (A03, Playwright); depo/tedarikçi/üretim ayrımı ve gerçek stok girişi sizde (K bölümü 3) |
+| 25 | 1 | Kargo tarifesi | Test gerekli. Desi hesabı ve kargo kuralları çalışıyor; bedelin anlaşmalı tarifeyle doğruluğu Navlungo/Geliver fiyat listesiyle teyit edilmeli |
+| 26 | 1 | Nakliye ve kurulum kapsamı | Kodda var (AFT DC cihazlarında sepet, ödeme ve sipariş zaman çizelgesinde "kurulum ve nakliye fiyata dahil değil" notu, `f50a456`); uçtan uca test siparişiyle doğrulanmalı |
+| 27 | 1 | Sipariş ve ödeme durumları | Test gerekli. Tekrar anahtarı (çift tıklama), fiyat değişince onay ve durum geçişleri kodda; misafir/üye, bireysel/kurumsal, farklı fatura adresli test siparişleri test ortamında veya sizin onayınızla canlıda açılmalı (canlıda sipariş açmıyorum) |
+| 28 | 1 | Fatura ve bildirimler | Test gerekli. Sipariş e-postaları SMTP ile gidiyor; gerçek test alıcısına teslim, sözleşme kopyası, IBAN ve kargo mesajı denenmeli. e-Arşiv entegratörü yok; SSS'deki e-fatura anlatımı muhasebe süreciyle eşleştirilmeli |
+| 29 | 1 | Üyelik ve hesap | Test gerekli: kayıt, doğrulama, şifre sıfırlama, sepet birleştirme, favoriler, adresler gerçek test hesabıyla (Firebase canlıda hâlâ eski proje, E4) |
+| 30 | 1 | Takip ve form sonuçları | Test gerekli. Sipariş takibinde deneme sınırı ve Turnstile var; iletişim/GES/teklif doğrulama panel kaydı ve bildirimleri canlıda denenmeli |
+| 31 | 1 | Sunucu kuralları ve erişim | Kodda var: fiyat/indirim/stok sunucuda yeniden hesaplanır (`lib/order-pricing.ts`), sipariş erişimi sahibine/belirteçle, yönetici rolleri ve işlem kaydı (A09–A12), 2FA politikası. Ödeme geri bildirimi doğrulaması POS gelince. Bağımsız güvenlik incelemesi önerilir |
+| 32 | 1 | iKAS veri ve adres geçişi | Kısmen: ürün/SKU/varyant içe aktarıcıyla (`scripts/import-ikas-excel.py`), eski ürün adresleri `lib/legacy-product-redirects.json`. Müşteri, adres ve sipariş aktarımı ile sayısal mutabakat yapılmadı |
+| 33 | 1 | Alan adı ve indeksleme | Test gerekli; aşağıda "voltekno.com geçişi" (SEO kararı, canonical, site haritası, nextfirststep.com bağlantılarının temizlenmesi) |
+| 34 | 1 | Yedek ve geri dönüş | Kısmen: günlük veritabanı yedeği (`BACKUP_DIR`, e-postayla). Yedekten geri yükleme provası, hata izleme (Sentry kararı) ve eski altyapıya dönüş koşulu belirlenmeli |
+
 ## Müşteri tarafı kontrol listesi — 1. öncelikli kod maddeleri (24.10.2026)
 Kaynak: "Voltekno yeni altyapı kontrol listesi" (23.10.2026, 34 madde). Bu turda kodla çözülebilen 1. öncelikli maddeler.
 
@@ -83,9 +152,9 @@ Akü/inverter grubundaki 152 üründen 38'inin adında ve özelliklerinde voltaj
 - **Ürün listesi:** "Voltajı tanımsız" sekmesi ve satırda etiket; şu an 20 ürün: NP Power MPPT Akıllı İnverter, Apex APX 4.2/6.2/8.5/11 Pro, Apex NFS 1500W ve NPS, Electrozirve IC serisi, Electrozirve tek ve çift yönlü DC-DC şarj, Exelon ELH, Victron Battery Alarm GX, Smart Battery Sense, SHS 200 MPPT ve akü kutusu, VE.Bus BMS V2/NG, smallBMS/NG, SolidSwitch 104 (Victron'ların çoğu satışa kapalı). Katalog verisi bunların voltajını söylemediği için tahmin edilmedi; panelden girilmeli.
 - **Uyumlu ürün hesabı sunucuda:** `/api/products/[id]/related` (`lib/related-products.ts`), panel değerleri birleştirilmiş vitrin listesinden; panelde girilen voltaj ürün sayfasına hemen yansır. Ürün sayfası eski istemci hesabı ve `?ids=` isteği yerine bunu kullanıyor.
 - **Veritabanı:** ProductOverride'a `systemVoltage` (boş bırakılabilir, onaysız eklenir).
-- **Doğrulama:** `tsc` temiz, birim testleri 181/181 (yeni `tests/unit/system-voltage.test.ts`). Yerel üretim derlemesinde: liste sekmesi 20 ürün; Apex APX 4.2'de panelden 48 V kaydedilince ürün sayfasında 51,2 V Apex akü uyumlu çıktı, silinince kalktı; geçersiz seçim ("bağımsız" + 48 V) reddedildi; PWM şarj cihazına 12 V aküler öneriliyor. Canlıda değil.
+- **Doğrulama:** `tsc` temiz, birim testleri 181/181 (yeni `tests/unit/system-voltage.test.ts`). Yerel üretim derlemesinde: liste sekmesi 20 ürün; Apex APX 4.2'de panelden 48 V kaydedilince ürün sayfasında 51,2 V Apex akü uyumlu çıktı, silinince kalktı; geçersiz seçim ("bağımsız" + 48 V) reddedildi; PWM şarj cihazına 12 V aküler öneriliyor. 25.10.2026 `d8a3483` ile canlıda.
 
-- **Doğrulama:** `tsc` temiz, birim testleri 174/174 (yeni `tests/unit/storefront-checklist.test.ts`). Yerel üretim derlemesinde ekranda: Solar Akü kategorisinde ₺0,00 yok, 6 AFT ürünü "Fiyat için teklif alın", kart fiyatları KDV dahil ve etiketli; 12,8 V Marine akü sayfasında ana fiyat KDV dahil (₺30.103,20) ve uyumlu ürünlerin hepsi 12 V (önceden HV BMS de vardı); footer "Havale / EFT · 256-bit SSL"; SSS ödeme cevabı havale/EFT. Canlıda değil.
+- **Doğrulama:** `tsc` temiz, birim testleri 174/174 (yeni `tests/unit/storefront-checklist.test.ts`). Yerel üretim derlemesinde ekranda: Solar Akü kategorisinde ₺0,00 yok, 6 AFT ürünü "Fiyat için teklif alın", kart fiyatları KDV dahil ve etiketli; 12,8 V Marine akü sayfasında ana fiyat KDV dahil (₺30.103,20) ve uyumlu ürünlerin hepsi 12 V (önceden HV BMS de vardı); footer "Havale / EFT · 256-bit SSL"; SSS ödeme cevabı havale/EFT. 25.10.2026 `d8a3483` ile canlıda.
 - **Açık kalanlar:** 1 kart ödemesi (POS bilgileri), 7–8 AFT PRO içerik ve görsel (tedarikçi), 9 datasheet'ler, 18 KVKK sağlayıcı listesi (sizin onayınız), 23–34 test ve geçiş adımları. 10–17 ve 19–22 aşağıda.
 
 ## Müşteri tarafı kontrol listesi — 2. öncelik, madde 10–17 ve 19–22 (24.10.2026)
@@ -105,7 +174,7 @@ Akü/inverter grubundaki 152 üründen 38'inin adında ve özelliklerinde voltaj
 | 21 İngilizce görünüm | Kapsam daraltıldı | İngilizce seçiliyken sayfa başında not: menü, düğme, sepet ve ödeme çevrili; ürün adları/açıklamaları, yasal metinler ve e-postalar Türkçe; İngilizce yardım için e-posta. Tam İngilizce katalog `ingilizce-tam` dalında (106 dosya, ana dala birleştirilmedi, son commit'i SEO) — birleştirme ayrı karar |
 | 22 Form aydınlatmaları | Düzeltildi | İletişim ve teklif doğrulama formlarına amaç, geri dönüş kanalı ve KVKK aydınlatma bağlantısı ("pazarlama iletisi gönderilmez"). GES formunda aranma onayı artık isteğe bağlı; seçilmezse dönüş e-postayla ve e-posta zorunlu (sunucu da aynı kuralla) |
 
-- **Doğrulama:** `tsc` ve lint temiz, birim testleri 187/187 (yeni `tests/unit/checklist-p2.test.ts`). Yerel üretim derlemesinde ekranda: Solar Akü süzgeçleri (voltaj/kapasite/enerji/kimya), 12 V seçince 20 ürün hepsi 12 V; Karavan sayfası 16 ürün ve kurallar; AFT 5,4 kWh tablosu model bazında; iletişim formu ürünle hazır; GES ön tahmini 400 kWh → 2,76–3,74 kWp ve sunucuya istek yok; karşılaştırma ortak alan adları; Hakkımızda yeni ifadeler; İngilizce not. Canlıda değil.
+- **Doğrulama:** `tsc` ve lint temiz, birim testleri 187/187 (yeni `tests/unit/checklist-p2.test.ts`). Yerel üretim derlemesinde ekranda: Solar Akü süzgeçleri (voltaj/kapasite/enerji/kimya), 12 V seçince 20 ürün hepsi 12 V; Karavan sayfası 16 ürün ve kurallar; AFT 5,4 kWh tablosu model bazında; iletişim formu ürünle hazır; GES ön tahmini 400 kWh → 2,76–3,74 kWp ve sunucuya istek yok; karşılaştırma ortak alan adları; Hakkımızda yeni ifadeler; İngilizce not. 25.10.2026 `d8a3483` ile canlıda.
 
 ## Ürün grupları (23.10.2026)
 İstek: belirli ürün gruplarına hem tek tek ürün hem marka/kategori seçimiyle indirim; grup toplu satışa kapatılıp açılabilsin, silinebilsin, toplu zam yapılabilsin. Kararlar (sizden): "deaktif" = satışı durdursun (ürün sitede kalır, satın alınamaz); silme = grup + gruptaki panel ürünleri silinir, katalog ürünleri satışa kapatılır.
@@ -137,7 +206,7 @@ Kaynak: "Voltekno yönetim paneli detaylı denetim raporu" (23.10.2026, 18 bulgu
 - **Doğrulama:** `tsc` temiz, birim testleri 143/143 (yeni `tests/unit/admin-a01-a05.test.ts`, 12 test), üretim derlemesi başarılı. Senaryolar yerel test sunucusunda (3013, veritabanı kopyası, SMTP kapalı, `.claude/launch.json` "A01-A05 Test 3013") API ile, İstatistikler, ürün araması ve düzenleyici ekranda denendi. Playwright çalıştırılmadı.
 - **Veritabanı:** `prisma/schema.prisma`'ya üç boş bırakılabilir sütun eklendi (`variantStock`, `priceMode`, `basePrice`); yayında `prisma db push` onaysız ekler. Mevcut kayıtlar değişmiyor: panelde TL fiyatı girilmiş eski ürünler "Sabit TL", diğerleri "Dövize bağlı" görünür.
 - **Sınırlar:** Yeni (panelde eklenen) ürünlerde dövizli fiyat yok, A06 kapsamında. Ayrı varyant stoğu ürün oluşturulduktan sonra açılabilir. Liste kartından sepete eklemede tarayıcı sınırı ürün toplamıdır; sunucu ve sepet doğrulaması varyant stoğuyla düzeltir. Sipariş verildikten sonra stok modu değiştirilirse iptal/iade, siparişin verildiği moddaki stok satırına döner. Daha düşük rollerin sunucu yetkisi bu turda denenmedi.
-- **Rapordan kalanlar:** A06–A12 aşağıda; A13–A18 açık.
+- **Rapordan kalanlar:** yok; A06–A18 aşağıda, hepsi `38d6d1b` ile canlıda. Kodla kapanamayan iki kalan sizde: A10 gönderen adresi `@voltekno.com` kutusu, A12 Sahip hesabında 2FA açılması ve `ADMIN_TOTP_SECRET`.
 
 ### A06–A08 (23.10.2026)
 | Kod | Durum | Yapılan değişiklik | Kapanış testi |

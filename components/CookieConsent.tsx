@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 
 export const COOKIE_CONSENT_KEY = 'voltekno_cookie_consent'
 export const COOKIE_CONSENT_EVENT = 'voltekno:cookie-consent'
+/** Bandı yeniden açar (footer "Çerez tercihleri"; kontrol listesi 23: tercih sonradan değiştirilebilmeli) */
+export const COOKIE_PREFERENCES_EVENT = 'voltekno:cookie-preferences'
 const STORAGE_KEY = COOKIE_CONSENT_KEY
 
 /** Analitik gibi zorunlu olmayan çerezler yalnızca açık onayla ('accepted') kullanılabilir. */
@@ -15,6 +17,21 @@ export function hasAnalyticsConsent(): boolean {
     return typeof window !== 'undefined' && localStorage.getItem(COOKIE_CONSENT_KEY) === 'accepted'
   } catch {
     return false
+  }
+}
+
+export function openCookiePreferences() {
+  window.dispatchEvent(new Event(COOKIE_PREFERENCES_EVENT))
+}
+
+/** Onay geri alınınca ölçüm çerezleri silinir (GA4 _ga/_ga_*, Meta _fbp); alan adı ve üst alan adı için */
+function clearAnalyticsCookies() {
+  const host = window.location.hostname
+  const domains = ['', host, '.' + host, '.' + host.split('.').slice(-2).join('.')]
+  for (const c of document.cookie.split(';')) {
+    const name = c.split('=')[0].trim()
+    if (!/^(_ga|_gid|_gat|_fbp|_fbc)/.test(name)) continue
+    for (const d of domains) document.cookie = `${name}=; Max-Age=0; path=/${d ? `; domain=${d}` : ''}`
   }
 }
 
@@ -31,6 +48,9 @@ export function CookieConsent() {
     } catch {
       setVisible(true)
     }
+    const open = () => setVisible(true)
+    window.addEventListener(COOKIE_PREFERENCES_EVENT, open)
+    return () => window.removeEventListener(COOKIE_PREFERENCES_EVENT, open)
   }, [])
 
   const accept = () => {
@@ -45,6 +65,9 @@ export function CookieConsent() {
     try {
       localStorage.setItem(STORAGE_KEY, 'dismissed')
     } catch {}
+    clearAnalyticsCookies()
+    // Ölçüm başlamışsa durdurulur (components/FirebaseAnalyticsInit)
+    window.dispatchEvent(new Event(COOKIE_CONSENT_EVENT))
     setVisible(false)
   }
 
