@@ -42,7 +42,9 @@ export async function POST(request: NextRequest) {
 
   const result = verifyPosCallback(params)
   if (!result.valid) {
-    await reportError('sanal-pos-donus', new Error(result.reason), { oid: params.oid ?? null })
+    // İmzasız/sahte istek veya POS kapalıyken gelen istek sistem hatası değildir: yöneticiye e-posta gitmez, yalnız günlüğe
+    // yazılır (dışarıdan herkes bu adrese istek atabilir; kontrol listesi 31)
+    console.warn('Sanal POS dönüşü reddedildi:', result.reason, params.oid ?? '')
     return failRedirect('verify')
   }
 

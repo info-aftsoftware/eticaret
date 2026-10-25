@@ -450,8 +450,12 @@ test.describe('31 sunucu kuralları ve erişim', () => {
   test('sahte POS geri bildirimi siparişi ödendi yapmaz', async ({ request }) => {
     const c = customer('pos')
     const orderNo = (await (await order(request, c, [{ id: VARIANT_ID, quantity: 1 }])).json()).orderId
+    const alerts = () => mailsTo('yonetim@staging-alici.dev').filter((m) => /Sistem hatası: sanal-pos/.test(m.subject)).length
+    const alertsBefore = alerts()
     const r = await request.post('/api/payments/pos/callback', { form: { oid: orderNo, Response: 'Approved', ProcReturnCode: '00', mdStatus: '1', HASH: 'sahte' }, maxRedirects: 0 })
     expect([303, 400, 403, 503]).toContain(r.status())
+    await new Promise((res) => setTimeout(res, 1500))
+    expect(alerts(), 'sahte istek yöneticiye hata e-postası göndermez').toBe(alertsBefore)
     const { detail } = await adminOrder(request, orderNo)
     expect(String(detail.paymentStatus).toUpperCase()).not.toBe('PAID')
   })
@@ -470,8 +474,14 @@ test.describe('31 sunucu kuralları ve erişim', () => {
       const login = await ctx.post('/api/admin/auth', { data: { email, password: pw } })
       expect(login.status(), await login.text()).toBe(200)
       const cookie = (login.headers()['set-cookie'] || '').split(';')[0]
+      // İlk girişte geçici şifre değiştirilmeden hiçbir işlem yapılamaz (sunucu 403 verir)
+      const blocked = await ctx.get('/api/admin/catalog', { headers: { cookie } })
+      expect(blocked.status(), 'şifre değiştirilmeden işlem').toBe(403)
+      const change = await ctx.post('/api/admin/account', { headers: { cookie }, data: { currentPassword: pw, newPassword: `St-${RUN}-Yeni-Sifre-91` } })
+      expect(change.status(), await change.text()).toBe(200)
+      const fresh = (change.headers()['set-cookie'] || '').split(';')[0] || cookie
       await ctx.dispose()
-      return cookie
+      return fresh
     }
     const operator = await mk('operator')
     const editor = await mk('editor')
@@ -587,14 +597,15 @@ test.describe('29 üyelik formları', () => {
     await page.goto('/register')
     const submit = page.getByRole('button', { name: 'Üye Ol', exact: true })
     await submit.click()
-    await expect(page.locator('form')).toContainText(/zorunlu|girin|gerekli/i)
+    const form = page.locator('main form').last()
+    await expect(form).toContainText(/zorunlu|girin|gerekli/i)
     await page.locator('[data-field="name"] input').fill('Staging Kullanıcı')
     await page.locator('[data-field="email"] input').fill('gecersiz-eposta')
     await page.locator('[data-field="password"] input').fill('123')
     await page.locator('[data-field="confirmPassword"] input').fill('456')
     await submit.click()
-    await expect(page.locator('form')).toContainText(/e-posta/i)
-    await expect(page.locator('form')).toContainText(/şifre/i)
+    await expect(form).toContainText(/e-posta/i)
+    await expect(form).toContainText(/şifre/i)
     expect(firebase, 'geçersiz formla Firebase isteği').toEqual([])
     await page.goto('/forgot-password')
     await expect(page.locator('input[type="email"]')).toBeVisible()
@@ -624,7 +635,7 @@ test.describe('34 yedek ve geri yükleme provası', () => {
     const file = (json.file ?? json.result?.file) as string
     expect(file, JSON.stringify(json)).toMatch(/^voltekno-.*\.db$/)
     // Sunucu dışı kopya: yöneticiye gzip ekli e-posta
-    const mail = await waitMail('yonetim@staging-alici.dev', /yedek/i)
+    const mail = await waitMail('yonetim@staging-alici.dev', /veritabanı yedeği/i)
     expect(mail.raw).toMatch(/\.db\.gz/)
     // Panelden indirme: gzip, açılınca dosyanın aynısı
     const dl = await request.get(`/api/admin/system/backup?file=${encodeURIComponent(file)}`, { headers: { cookie } })
