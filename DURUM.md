@@ -182,7 +182,7 @@ Kaynak: "Voltekno yönetim paneli detaylı denetim raporu" (23.10.2026, 18 bulgu
 - **Doğrulama:** `tsc` temiz, birim testleri 143/143 (yeni `tests/unit/admin-a01-a05.test.ts`, 12 test), üretim derlemesi başarılı. Senaryolar yerel test sunucusunda (3013, veritabanı kopyası, SMTP kapalı, `.claude/launch.json` "A01-A05 Test 3013") API ile, İstatistikler, ürün araması ve düzenleyici ekranda denendi. Playwright çalıştırılmadı.
 - **Veritabanı:** `prisma/schema.prisma`'ya üç boş bırakılabilir sütun eklendi (`variantStock`, `priceMode`, `basePrice`); yayında `prisma db push` onaysız ekler. Mevcut kayıtlar değişmiyor: panelde TL fiyatı girilmiş eski ürünler "Sabit TL", diğerleri "Dövize bağlı" görünür.
 - **Sınırlar:** Yeni (panelde eklenen) ürünlerde dövizli fiyat yok, A06 kapsamında. Ayrı varyant stoğu ürün oluşturulduktan sonra açılabilir. Liste kartından sepete eklemede tarayıcı sınırı ürün toplamıdır; sunucu ve sepet doğrulaması varyant stoğuyla düzeltir. Sipariş verildikten sonra stok modu değiştirilirse iptal/iade, siparişin verildiği moddaki stok satırına döner. Daha düşük rollerin sunucu yetkisi bu turda denenmedi.
-- **Rapordan kalanlar:** A06–A12 aşağıda; A13–A18 açık.
+- **Rapordan kalanlar:** yok; A06–A18 aşağıda, hepsi `38d6d1b` ile canlıda. Kodla kapanamayan iki kalan sizde: A10 gönderen adresi `@voltekno.com` kutusu, A12 Sahip hesabında 2FA açılması ve `ADMIN_TOTP_SECRET`.
 
 ### A06–A08 (23.10.2026)
 | Kod | Durum | Yapılan değişiklik | Kapanış testi |
