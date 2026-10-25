@@ -13,6 +13,7 @@ import { test, expect, type APIRequestContext, type Page } from '@playwright/tes
 import { E2E_PRODUCT_ID } from './e2e-catalog'
 
 test.skip(!process.env.STAGING_TESTS, 'STAGING_TESTS=1 ile yerel staging sunucusuna karşı çalıştırın')
+test.setTimeout(180_000)
 
 const RUN = Date.now().toString(36)
 const MAIL_DOMAIN = 'staging-alici.dev' // test adresi değil (A10 süzgecine takılmaz); posta yalnız yerel yakalayıcıya gider
@@ -57,7 +58,14 @@ async function adminCookie(request: APIRequestContext) {
 }
 
 async function order(request: APIRequestContext, c: ReturnType<typeof customer>, items: { id: string; quantity: number }[], extra: Record<string, unknown> = {}, headers: Record<string, string> = {}) {
-  return request.post('/api/orders', { headers, data: { customer: c, items, paymentMethod: 'bank_transfer', acceptedTerms: true, ...extra } })
+  const send = () => request.post('/api/orders', { headers, data: { customer: c, items, paymentMethod: 'bank_transfer', acceptedTerms: true, ...extra } })
+  const r = await send()
+  // IP başına dakikada 20 sipariş sınırı (koruma): tam koşuda aşılırsa bir dakika beklenip yeniden denenir
+  if (r.status() === 429 && !(await r.text()).includes('TOO_MANY_OPEN_ORDERS')) {
+    await new Promise((res) => setTimeout(res, 61_000))
+    return send()
+  }
+  return r
 }
 
 async function adminOrder(request: APIRequestContext, orderNo: string) {
@@ -235,6 +243,11 @@ test.describe('24 stok', () => {
 // ─── 25 Kargo ────────────────────────────────────────────────────────────
 test.describe('25 kargo hesabı', () => {
   test('raporun sepeti (2 kablo + 50 kW ısı pompası): sunucu kargo bedeli hesaplanır, adet arttıkça tutarlı', async ({ request }) => {
+    const cookie = await adminCookie(request)
+    for (const productId of [CABLE, HEAT_PUMP]) {
+      const s = await request.patch('/api/admin/stock-overrides', { headers: { cookie }, data: { productId, stock: 50 } })
+      expect(s.status(), await s.text()).toBe(200)
+    }
     const one = await order(request, customer('kargo1'), [{ id: CABLE, quantity: 1 }])
     expect(one.status(), await one.text()).toBe(200)
     const two = await order(request, customer('kargo2'), [{ id: CABLE, quantity: 2 }])
@@ -607,6 +620,8 @@ test.describe('29 üyelik formları', () => {
     await expect(form).toContainText(/e-posta/i)
     await expect(form).toContainText(/şifre/i)
     expect(firebase, 'geçersiz formla Firebase isteği').toEqual([])
+    // Giriş ve şifre sayfaları oturum durumunu Firebase'den okur; yalnız görüntülemek için engel kaldırılır (giriş yapılmaz)
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
     await page.goto('/forgot-password')
     await expect(page.locator('input[type="email"]')).toBeVisible()
     await page.goto('/login')
