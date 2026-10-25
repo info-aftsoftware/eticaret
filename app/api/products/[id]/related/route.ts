@@ -1,5 +1,5 @@
 /**
- * Ürün sayfası ilişkili ürünleri: { compatible, recommended } (liste biçiminde, güncel fiyatla).
+ * Ürün sayfası önerilen ürünleri: { recommended } (liste biçiminde, güncel fiyatla). "Uyumlu ürünler" bölümü kaldırıldı.
  * Panelde girilen sistem voltajı ve kategori değişiklikleri hemen yansısın diye sunucuda hesaplanır (lib/related-products).
  */
 
@@ -19,7 +19,7 @@ export async function GET(_request: NextRequest, { params }: { params: Promise<{
     const ids = relatedProductIds(product, products)
     const byId = new Map(products.map((p) => [p.id, p]))
     const pick = (list: string[]) => list.map((x) => byId.get(x)).filter((p) => !!p).map((p) => toListItem(p!))
-    return NextResponse.json({ compatible: pick(ids.compatible), recommended: pick(ids.recommended) })
+    return NextResponse.json({ recommended: pick(ids.recommended) })
   } catch (error) {
     console.error('Related products GET error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

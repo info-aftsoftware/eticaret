@@ -20,7 +20,7 @@ import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isInstallShipping, isQuoteOnly, INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
 import { CompareButton } from '@/components/CompareButton'
-import { mockProducts, COMPLEMENTARY_BY_CATEGORY, type MockProduct } from '@/lib/products-mock'
+import { mockProducts, type MockProduct } from '@/lib/products-mock'
 import { CATEGORY_GROUPS, getCategoryKey, getGroupIdForCategory } from '@/lib/categories'
 import { ProductCard } from '@/components/ProductCard'
 import { useTranslations } from 'next-intl'
@@ -175,9 +175,10 @@ export default function ProductDetailClient({ initialProduct, productId: product
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product?.id])
 
-  // Uyumlu ve önerilen ürünler sunucuda, güncel vitrin verisiyle hesaplanır (kur, kampanya, satış durumu, panelde girilen
-  // sistem voltajı; madde 3 ve 6). Katalog dosyasındaki içe aktarma anındaki veri gösterilmez, liste veri gelince çizilir.
-  const [related, setRelated] = useState<{ compatible: MockProduct[]; recommended: MockProduct[] } | null>(null)
+  // Önerilen ürünler sunucuda, güncel vitrin verisiyle hesaplanır (kur, kampanya, satış durumu, panelde girilen sistem
+  // voltajı; madde 3 ve 6). Katalog dosyasındaki içe aktarma anındaki veri gösterilmez, liste veri gelince çizilir.
+  // "Uyumlu ürünler" bölümü 25.10.2026'da kaldırıldı.
+  const [related, setRelated] = useState<{ recommended: MockProduct[] } | null>(null)
   const relatedFor = product?.id
   useEffect(() => {
     if (!relatedFor) return
@@ -186,9 +187,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
     fetch(`/api/products/${encodeURIComponent(relatedFor)}/related`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (!cancelled) setRelated({ compatible: Array.isArray(data?.compatible) ? data.compatible : [], recommended: Array.isArray(data?.recommended) ? data.recommended : [] })
+        if (!cancelled) setRelated({ recommended: Array.isArray(data?.recommended) ? data.recommended : [] })
       })
-      .catch(() => !cancelled && setRelated({ compatible: [], recommended: [] }))
+      .catch(() => !cancelled && setRelated({ recommended: [] }))
     return () => {
       cancelled = true
     }
@@ -606,36 +607,6 @@ export default function ProductDetailClient({ initialProduct, productId: product
               </div>
               )}
 
-              {/* Uyumlu ürünler (eski "Bu ürün size uygun mu?" alanının yerinde) */}
-              {(() => {
-                const complementary = product.category ? COMPLEMENTARY_BY_CATEGORY[product.category] : undefined
-                if (!complementary) return null
-                const compatProducts = related?.compatible ?? []
-                if (compatProducts.length === 0) return null
-                return (
-                  <section className="mt-7" aria-labelledby="compat-heading">
-                    <h2 id="compat-heading" className="text-[15px] font-bold text-[#121926] mb-1">{L('Uyumlu ürünler', 'Compatible products')}</h2>
-                    {complementary.banner && <p className="text-[12.5px] text-[#5d6e80] leading-relaxed mb-3">{complementary.banner}</p>}
-                    <ul className="mt-3 divide-y divide-[#eef1f5] border border-[#e6ebf1] rounded-lg">
-                      {compatProducts.map((p) => (
-                        <li key={p.id}>
-                          <Link href={`/products/${p.id}`} className="flex items-center gap-3 p-2.5 hover:bg-[#f7f8fa] transition-colors group">
-                            <span className="relative w-12 h-12 shrink-0 rounded-md bg-white border border-[#eef1f5] overflow-hidden">
-                              {(p.images?.[0] ?? p.image) ? (
-                                <Image src={(p.images?.[0] ?? p.image)!} alt="" fill sizes="48px" className="object-contain p-1" />
-                              ) : (
-                                <Package className="w-5 h-5 text-slate-300 m-auto" aria-hidden />
-                              )}
-                            </span>
-                            <span className="min-w-0 flex-1 text-[13px] font-medium text-[#20384e] line-clamp-2 leading-snug group-hover:text-[#0b2540]">{p.name}</span>
-                            <span className="shrink-0 text-[13px] font-semibold text-[#121926] tabular-nums">{isQuoteOnly(p) || !(p.price > 0) ? L('Teklif alın', 'Quote') : formatPrice(grossPrice(p.price))}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                )
-              })()}
             </div>
           </div>
 
