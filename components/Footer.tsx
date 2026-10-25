@@ -13,6 +13,7 @@ import { SELLER } from '@/lib/legal/company'
 import { whatsappHref, WhatsAppIcon } from '@/components/WhatsAppButton'
 import { legalHref } from '@/lib/legal/documents'
 import { contactHref } from '@/lib/contact-topics'
+import { openCookiePreferences } from '@/components/CookieConsent'
 import Image from 'next/image'
 
 /** ETBİS site doğrulama bağlantısı (ETBİS panelindeki doğrulama kodu / karekod adresi) */
@@ -164,6 +165,10 @@ export function Footer() {
                   <Link href={item.href} className={linkClass}>{item.label}</Link>
                 </li>
               ))}
+              <li>
+                {/* Kontrol listesi 23: çerez tercihi sonradan değiştirilebilir */}
+                <button type="button" onClick={openCookiePreferences} className={`${linkClass} text-left`}>{L('Çerez tercihleri', 'Cookie preferences')}</button>
+              </li>
             </ul>
           </div>
 

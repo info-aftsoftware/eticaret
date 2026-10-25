@@ -7,6 +7,22 @@ const isStaticExport = process.env.STATIC_EXPORT === 'true'
 // Argümansız: plugin ./i18n/request.ts ve ./src/i18n/request.ts'yi otomatik arar (path çözümleme sorunlarını önler)
 const withNextIntl = createNextIntlPlugin()
 
+/**
+ * Eski voltekno.com (ikas) ürün adresleri kökteydi (/<slug>); yeni sitede /products/<slug> (kontrol listesi 32–33).
+ * Katalogdaki her ürünün kök adresi ürün sayfasına, satıştan kalkmış/yeniden adlanmış ürünlerin kök adresi
+ * lib/legacy-product-redirects.json'daki hedefe kalıcı yönlendirilir. Uygulama sayfalarıyla çakışan slug yoktur (birim testli).
+ */
+function ikasRootRedirects(legacyMap) {
+  const raw = require('./lib/catalog/products.json')
+  const products = Array.isArray(raw) ? raw : raw.products
+  const safe = (id) => /^[a-z0-9-]+$/.test(id)
+  return products
+    .map((p) => p.id)
+    .filter(safe)
+    .map((id) => ({ source: `/${id}`, destination: `/products/${id}`, permanent: true }))
+    .concat(Object.entries(legacyMap).filter(([id]) => safe(id)).map(([id, destination]) => ({ source: `/${id}`, destination, permanent: true })))
+}
+
 const nextConfig = {
   images: {
     domains: ['firebasestorage.googleapis.com', 'images.unsplash.com', 'tommatech.de'],
@@ -29,13 +45,14 @@ const nextConfig = {
   ...(!isStaticExport && {
     async redirects() {
       const map = require('./lib/legacy-product-redirects.json')
+      const seo = Object.entries(require('./lib/seo/legacy-redirects.json')).map(([source, destination]) => ({ source, destination, permanent: true }))
+      const taken = new Set(seo.map((r) => r.source))
       return Object.entries(map)
         .filter(([id]) => /^[a-z0-9-]+$/.test(id))
         .map(([id, destination]) => ({ source: `/products/${id}`, destination, permanent: true }))
         // voltekno.com (ikas) adresleri: kökteki ürün/koleksiyon slug'ları → yeni ürün/kategori (alan adı geçişi, 1:1)
-        .concat(
-          Object.entries(require('./lib/seo/legacy-redirects.json')).map(([source, destination]) => ({ source, destination, permanent: true }))
-        )
+        .concat(seo)
+        .concat(ikasRootRedirects(map).filter((r) => !taken.has(r.source)))
     },
   }),
   // Production optimizasyonları

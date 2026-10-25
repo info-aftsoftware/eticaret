@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { adminNotifyEmail } from '@/lib/store-config'
 import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import React from 'react'
 import { prisma } from '@/lib/prisma'
@@ -287,7 +288,7 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    const adminEmail = process.env.SMTP_EMAIL || process.env.SMTP_USER || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
     const emailResult = await sendEmailSMTP(
       adminEmail,
       `Yeni GES Teklif İsteği: ${fullName} - ${city}`,

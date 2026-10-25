@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
+import { adminNotifyEmail } from '@/lib/store-config'
 import React from 'react'
 import { sendEmailSMTP } from '@/lib/email-smtp'
 import { isRateLimited } from '@/lib/rate-limit'
@@ -178,7 +179,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const adminEmail = process.env.SMTP_EMAIL || process.env.SMTP_USER || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
     const email = typeof body.email === 'string' ? body.email.trim().slice(0, 300) || undefined : undefined
     const district = typeof body.district === 'string' ? body.district.trim().slice(0, 300) || undefined : undefined
     const monthlyKwh = typeof body.monthlyKwh === 'number' && Number.isFinite(body.monthlyKwh) ? body.monthlyKwh : (typeof body.monthlyKwh === 'string' ? parseFloat(body.monthlyKwh) : undefined)

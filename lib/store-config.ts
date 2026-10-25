@@ -92,3 +92,11 @@ export function computeOrderTotals(input: {
   return { subtotal, couponDiscount, paymentDiscount, discount, taxableAmount, tax, shipping, total }
 }
 
+
+/**
+ * Yöneticiye giden bütün bildirimlerin (sipariş, ödeme, iletişim, GES, teklif doğrulama) alıcısı tek noktada
+ * (kontrol listesi 30): ADMIN_EMAIL, yoksa gönderen kutusu (SMTP_EMAIL / SMTP_USER), o da yoksa mağaza e-postası.
+ */
+export function adminNotifyEmail(): string {
+  return process.env.ADMIN_EMAIL || process.env.SMTP_EMAIL || process.env.SMTP_USER || STORE_CONTACT.email
+}

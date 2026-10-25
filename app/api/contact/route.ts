@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { adminNotifyEmail } from '@/lib/store-config'
 import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import { sendEmailSMTP } from '@/lib/email-smtp'
 import { prisma } from '@/lib/prisma'
@@ -152,7 +153,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get admin email from environment or use default
-    const adminEmail = process.env.SMTP_EMAIL || process.env.SMTP_USER || 'info@voltekno.com'
+    const adminEmail = adminNotifyEmail()
 
     // Send email to admin
     const emailResult = await sendEmailSMTP(

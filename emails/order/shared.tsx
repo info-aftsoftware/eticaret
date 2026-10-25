@@ -44,7 +44,11 @@ export type OrderEmailData = {
   estimatedDelivery?: string | null
   /** İptal / iade edilen (başlatılan) ücret iadesi tutarı */
   refundAmount?: number | null
+  /** Kurulumlu ürün var (şarj istasyonu): kurulum ve nakliye fiyata dahil değil (kontrol listesi 26) */
+  installNote?: boolean
 }
+
+export const INSTALL_NOTE = 'Şarj istasyonu: kurulum ve nakliye bu tutara dahil değildir; saha, kurulum ve nakliye planı için sizinle iletişime geçeceğiz.'
 
 export const BRAND = {
   navy: '#0b2540',
@@ -158,11 +162,12 @@ export function OrderSummary({ order, compact }: { order: OrderEmailData; compac
             <AmountRow label={`Havale/EFT indirimi (%${BANK_TRANSFER_DISCOUNT_RATE})`} value={`−${fmtTRY(order.paymentDiscount)}`} color="#15803d" />
           )}
           <AmountRow label={`KDV (%${VAT_RATE})`} value={fmtTRY(order.tax)} />
-          <AmountRow label="Kargo" value={order.shipping > 0 ? fmtTRY(order.shipping) : 'Ücretsiz'} />
+          <AmountRow label="Kargo" value={order.shipping > 0 ? fmtTRY(order.shipping) : order.installNote ? 'Kurulum ve nakliye ayrıca' : 'Ücretsiz'} />
           <Section style={{ borderTop: `1px solid ${BRAND.border}`, marginTop: '6px', paddingTop: '6px' }}>
             <AmountRow label="Toplam" value={fmtTRY(order.total)} strong />
           </Section>
           <Text style={s.note}>Ödeme yöntemi: {paymentMethodLabel(order.paymentMethod)} · Satır tutarları KDV dahil, indirimler öncesidir.</Text>
+          {order.installNote && <Text style={{ ...s.note, color: BRAND.body, fontWeight: 600 }}>{INSTALL_NOTE}</Text>}
         </Section>
       </Section>
       {!compact && (
