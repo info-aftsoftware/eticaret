@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { PRODUCT_TYPES } from '@/lib/seo/product-types'
@@ -48,8 +49,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     title: t.title,
     description: t.description,
     alternates: { canonical: path },
-    openGraph: { type: 'website', title: `${t.title} | voltekno`, description: t.description, url: path, siteName: 'voltekno' },
-    twitter: { card: 'summary', title: `${t.title} | voltekno`, description: t.description },
+    openGraph: { images: [DEFAULT_OG_IMAGE], type: 'website', title: `${t.title} | Voltekno`, description: t.description, url: path, siteName: 'Voltekno' },
+    twitter: { images: [DEFAULT_OG_IMAGE.url], card: 'summary', title: `${t.title} | Voltekno`, description: t.description },
   }
 }
 

@@ -21,6 +21,33 @@ export function StructuredData() {
         legalName: SELLER.legalName,
         url: `${SITE_URL}/`,
         logo: `${SITE_URL}/logo.png`,
+        description:
+          'Güneş paneli, lityum ve jel akü, solar inverter, şarj kontrol cihazı, rüzgar türbini, ısı pompası ve elektrikli araç şarj istasyonu satan Türk e-ticaret sitesi.',
+        // Arama motorları ve yapay zekâ asistanları için firmanın uzmanlık alanları (sayfada görünen ürün gruplarıyla aynı)
+        knowsAbout: [
+          'Güneş paneli',
+          'Lityum akü (LiFePO4)',
+          'Jel akü',
+          'Solar inverter',
+          'Hibrit inverter',
+          'MPPT şarj kontrol cihazı',
+          'Rüzgar türbini',
+          'Isı pompası',
+          'Elektrikli araç şarj istasyonu',
+          'Güneş enerjisi sistemi (GES)',
+        ],
+        areaServed: { '@type': 'Country', name: 'Türkiye' },
+        identifier: { '@type': 'PropertyValue', propertyID: 'MERSİS', value: SELLER.mersisNo },
+        // Firma düzeyinde iade politikası (Google 2025'ten beri kuruluş düzeyinde de okuyor); ürün tekliflerindekiyle aynı
+        hasMerchantReturnPolicy: {
+          '@type': 'MerchantReturnPolicy',
+          applicableCountry: 'TR',
+          returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+          merchantReturnDays: 14,
+          returnMethod: 'https://schema.org/ReturnByMail',
+          returnFees: 'https://schema.org/FreeReturn',
+          merchantReturnLink: `${SITE_URL}/pages/iade-ve-cayma-kosullari`,
+        },
         email: SELLER.email,
         telephone: SELLER.phone.replace(/\s/g, ''),
         vatID: SELLER.taxNo,

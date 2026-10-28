@@ -56,7 +56,7 @@ async function loadProduct(id: string): Promise<StorefrontProduct | null> {
   return mock ? { ...withDetails(mock), id: mock.id, descriptionHtml: getProductDescriptionHtml(mock.id) } : null
 }
 
-const SITE_NAME = 'voltekno'
+const SITE_NAME = 'Voltekno'
 
 /** Excel'deki SEO başlığı birden çok üründe aynıysa (ör. aynı serinin iki modeli) ürün adından başlık üretilir */
 const DUPLICATE_META_TITLES = (() => {
@@ -86,19 +86,10 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   const description = truncate(DUPLICATE_DESCRIPTIONS.has(truncate(baseDesc, 160)) ? `${product.name}: ${baseDesc}` : baseDesc, 160)
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
-  const keywords = [
-    product.name,
-    product.category,
-    product.brand,
-    'voltekno',
-    'satın al',
-    'fiyat',
-  ].filter(Boolean) as string[]
 
   return {
     title: { absolute: title },
     description,
-    keywords,
     alternates: {
       canonical: `${SITE_URL}/products/${product.id}`,
     },
@@ -152,16 +143,28 @@ function buildProductJsonLdWithOffer(product: StorefrontProduct, rating: { avera
   // Google: yapılandırılmış veri fiyatı sayfadaki satış fiyatıyla (KDV dahil) aynı olmalı
   const priceWithVat = Math.round(product.price * (1 + VAT_RATE / 100) * 100) / 100
   const shippingFee = shippingFeeFor(lineLogistics(product.id, undefined, panelLineLogistics(product)))
-  const image = (product.images && product.images[0]) || product.image
-  const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
+  const absolute = (src: string) => (src.startsWith('http') ? src : `${SITE_URL}${src}`)
+  const images = Array.from(new Set([...(product.images ?? []), ...(product.image ? [product.image] : [])].filter(Boolean))).slice(0, 8).map(absolute)
+  // Sayfadaki "Teknik özellikler" tablosuyla aynı değerler (görünür içerikle birebir); uzun serbest metinler alınmaz
+  const specs = Object.entries(product.specifications ?? {})
+    .map(([name, value]) => [name.trim(), String(value).trim()] as const)
+    .filter(([name, value]) => name && value && value.length <= 120)
+    .slice(0, 25)
+  const pageUrl = `${SITE_URL}/products/${product.id}`
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Product',
+    '@id': `${pageUrl}#product`,
+    url: pageUrl,
     name: product.name,
     description: truncate(product.description || product.name, 300),
     sku: product.sku,
-    ...(imageUrl && { image: imageUrl }),
+    ...(images.length > 0 && { image: images }),
+    ...(product.category && { category: product.category }),
+    ...(specs.length > 0 && {
+      additionalProperty: specs.map(([name, value]) => ({ '@type': 'PropertyValue', name, value })),
+    }),
     ...(product.brand && {
       brand: { '@type': 'Brand', name: product.brand },
     }),
@@ -181,6 +184,7 @@ function buildProductJsonLdWithOffer(product: StorefrontProduct, rating: { avera
       priceCurrency: 'TRY',
       price: priceWithVat,
       priceValidUntil: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      itemCondition: 'https://schema.org/NewCondition',
       availability:
         (product.stock ?? 0) > 0
           ? 'https://schema.org/InStock'

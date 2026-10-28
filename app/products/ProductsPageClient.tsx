@@ -235,6 +235,8 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         <ul className="space-y-1">
           <li>
             <Link
+              // Filtre bağlantısı: aynı listenin parametreli kopyası (canonical /products); taranmasın, tür sayfaları ayrıca bağlı
+              rel="nofollow"
               href={buildProductsUrl({ category: null, q: searchQuery, brand: selectedBrand })}
               onClick={() => {
                 setSelectedCategory(null)
@@ -261,6 +263,8 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             return (
               <li key={group.id} className="space-y-1">
                 <Link
+                  // Filtre bağlantısı: aynı listenin parametreli kopyası (canonical /products); taranmasın, tür sayfaları ayrıca bağlı
+                  rel="nofollow"
                   href={buildProductsUrl({ category: group.id, q: searchQuery, brand: selectedBrand })}
                   onClick={() => {
                     setSelectedCategory(group.id)
@@ -279,6 +283,8 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
                       return (
                         <li key={subVal}>
                           <Link
+                            // Filtre bağlantısı: aynı listenin parametreli kopyası (canonical /products); taranmasın, tür sayfaları ayrıca bağlı
+                            rel="nofollow"
                             href={buildProductsUrl({ category: subVal, q: searchQuery, brand: selectedBrand })}
                             onClick={() => {
                               setSelectedCategory(subVal)

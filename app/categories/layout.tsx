@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
   title: 'Tüm Kategoriler | Ürün Kategorileri',
@@ -11,5 +12,10 @@ export default function CategoriesLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'Tüm Kategoriler' }]} />
+      {children}
+    </>
+  )
 }

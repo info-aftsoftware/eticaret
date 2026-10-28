@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
@@ -9,27 +10,16 @@ import { PAGE_CONTAINER } from '@/lib/page-container'
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
 export const metadata: Metadata = {
-  title: 'Kullanım Alanına Göre Güneş Enerjisi Çözümleri: Bağ Evi, Villa, Karavan, Sulama, Marin',
+  title: 'Bağ Evi, Villa, Karavan ve Sulama için Güneş Enerjisi',
   description:
-    'Bağ evi, villa, karavan, tarımsal sulama ve marin uygulamalarında kullanılan güneş enerjisi ürünleri. Panel, inverter ve akü ihtiyaca göre teklifte birlikte belirlenir.',
-  keywords: [
-    'bağ evi güneş enerji paketi',
-    'dağ evi solar sistem',
-    'yayla evi güneş paneli',
-    'bungalov enerji paketi',
-    'villa güneş paneli paketi',
-    'karavan güneş paneli',
-    'sulama güneş enerjisi',
-    'marin güneş enerji paketi',
-    'güneş enerji sistemi fiyatları',
-    'ges paketi',
-  ],
+    'Bağ evi, villa, karavan, tarımsal sulama ve marin için güneş enerjisi ürünleri. Panel, inverter ve akü ihtiyaca göre teklifte birlikte belirlenir.',
   alternates: { canonical: '/paketler' },
   openGraph: {
-    title: 'Kullanım Alanına Göre Çözümler | voltekno',
+    images: [DEFAULT_OG_IMAGE],
+    title: 'Kullanım Alanına Göre Çözümler | Voltekno',
     description: 'Bağ evi, villa, karavan, sulama ve marin için güneş enerjisi çözümleri.',
     type: 'website',
-    siteName: 'voltekno',
+    siteName: 'Voltekno',
     url: `${SITE_URL}/paketler`,
   },
 }

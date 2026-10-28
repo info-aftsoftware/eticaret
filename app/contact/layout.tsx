@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import React from 'react'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
@@ -7,21 +8,13 @@ export const metadata: Metadata = {
   title: 'İletişim — Teknik Destek ve Ürün Teklifi',
   description:
     'voltekno ile iletişime geçin: güneş paneli, akü ve inverter için fiyat teklifi, teknik destek ve kurulum danışmanlığı. Elazığ merkezli, Türkiye geneli hizmet.',
-  keywords: [
-    'voltekno iletişim',
-    'güneş paneli teklif',
-    'ges teklif al',
-    'akü fiyat teklifi',
-    'enerji sistemi danışmanlık',
-    'teknik destek güneş',
-    'solar sistem kurulum',
-  ],
   alternates: { canonical: '/contact' },
   openGraph: {
-    title: 'İletişim | voltekno',
+    images: [DEFAULT_OG_IMAGE],
+    title: 'İletişim | Voltekno',
     description: 'Güneş paneli, akü ve EV şarj için fiyat teklifi ve teknik destek.',
     type: 'website',
-    siteName: 'voltekno',
+    siteName: 'Voltekno',
     url: `${SITE_URL}/contact`,
   },
 }
@@ -40,7 +33,7 @@ export default function ContactLayout({ children }: { children: React.ReactNode 
             description: 'Güneş paneli, akü, inverter ve EV şarj için iletişim sayfası.',
             mainEntity: {
               '@type': 'LocalBusiness',
-              name: 'voltekno',
+              name: 'Voltekno',
               url: SITE_URL,
               telephone: '+90-551-829-16-13',
               email: 'info@voltekno.com',

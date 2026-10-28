@@ -27,20 +27,19 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const item = getPackageCategory(params.slug)
   if (!item) return { title: 'Sayfa bulunamadı' }
 
-  const title = `${item.seoTitle} | voltekno`
+  const title = `${item.seoTitle} | Voltekno`
   const description = item.seoDescription
 
   return {
-    // Kök şablon "%s | voltekno" ekler; sayfa başlığına marka tekrar yazılmaz
+    // Kök şablon "%s | Voltekno" ekler; sayfa başlığına marka tekrar yazılmaz
     title: item.seoTitle,
     description,
-    keywords: item.keywords,
     alternates: { canonical: `/paketler/${item.slug}` },
     openGraph: {
       title,
       description,
       type: 'website',
-      siteName: 'voltekno',
+      siteName: 'Voltekno',
       url: `${SITE_URL}/paketler/${item.slug}`,
       images: [{ url: item.image, alt: item.imageAlt, width: 1600, height: 900 }],
     },

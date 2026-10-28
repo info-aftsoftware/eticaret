@@ -1,19 +1,20 @@
 import { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { FAQContent } from './FAQContent'
 
 export const metadata: Metadata = {
-  title: 'Sık Sorulan Sorular — Sipariş, Kargo, Ürün ve Teknik Destek',
-  description: 'voltekno ürünleri, sipariş süreci, ödeme yöntemleri, kargo ve teknik konularda sık sorulan sorular. Güneş paneli, akü, inverter ve EV şarj hakkında merak ettikleriniz.',
-  keywords: ['sık sorulan sorular', 'faq', 'güneş paneli soru', 'akü soru', 'ges soru', 'voltekno destek'],
+  title: 'Sık Sorulan Sorular: Sipariş, Kargo ve Ürünler',
+  description: "Voltekno'da sipariş, ödeme, kargo ve teknik konularda sık sorulan sorular: güneş paneli, akü, inverter ve EV şarj hakkında merak ettikleriniz.",
   alternates: { canonical: '/faq' },
   openGraph: {
-    title: 'Sık Sorulan Sorular | voltekno',
+    images: [DEFAULT_OG_IMAGE],
+    title: 'Sık Sorulan Sorular | Voltekno',
     description: 'Sipariş, kargo, ürün ve teknik konularda sık sorulan sorular.',
     type: 'website',
-    siteName: 'voltekno',
+    siteName: 'Voltekno',
   },
 }
 

@@ -8,11 +8,12 @@ import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
 import { ClientErrorReporter } from '@/components/ClientErrorReporter'
 import { CartSync } from '@/components/CartSync'
 import { EnglishScopeNotice } from '@/components/EnglishScopeNotice'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 
 // latin-ext: Türkçe harfler (ş, ğ, ı, İ) aynı fonttan gelsin; yoksa yedek fonttan çizilip sonradan değişiyor (CLS)
 const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' })
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
-const SITE_NAME = 'voltekno'
+const SITE_NAME = 'Voltekno'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -33,41 +34,14 @@ export const metadata: Metadata = {
     shortcut: ['/favicon.png'],
   },
   title: {
-    default: 'voltekno | Güneş Paneli, Akü, İnverter, EV Şarj ve Enerji Sistemleri',
-    template: '%s | voltekno',
+    default: 'Güneş Paneli, Akü, İnverter ve EV Şarj | Voltekno',
+    template: '%s | Voltekno',
   },
   description:
     'Güneş paneli, lityum akü, solar inverter, şarj kontrol cihazı ve anahtar teslim GES çözümleri. Hazır enerji paketleri, hızlı teslimat ve uzman teknik destek.',
-  keywords: [
-    'güneş paneli',
-    'güneş paneli fiyatları',
-    'monokristal güneş paneli',
-    'lityum akü',
-    'lifepo4 akü',
-    'akü fiyatları',
-    'hibrit inverter',
-    'off grid inverter',
-    'ges hesaplama',
-    'güneş enerji sistemi',
-    'enerji depolama',
-    'ev şarj istasyonu',
-    'ev şarj kablosu',
-    'araç şarj kablosu',
-    'tip2 şarj kablosu',
-    'solar panel',
-    'güneş enerjisi',
-    'bağ evi enerji paketi',
-    'villa güneş paneli',
-    'karavan güneş paneli',
-    'sulama güneş enerjisi',
-    'marin batarya',
-    'taşınabilir güç istasyonu',
-    'enerji yönetim sistemi',
-    'voltekno',
-  ],
-  authors: [{ name: 'voltekno', url: SITE_URL }],
-  creator: 'voltekno',
-  publisher: 'voltekno',
+  authors: [{ name: 'Voltekno', url: SITE_URL }],
+  creator: 'Voltekno',
+  publisher: 'Voltekno',
   // NEXT_PUBLIC_NOINDEX=true: test/geçici alan adı arama sonuçlarına girmesin
   robots: {
     index: process.env.NEXT_PUBLIC_NOINDEX !== 'true',
@@ -85,24 +59,17 @@ export const metadata: Metadata = {
     locale: 'tr_TR',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: 'voltekno | Güneş Paneli, Akü, İnverter ve Enerji Sistemleri',
+    title: 'Güneş Paneli, Akü, İnverter ve EV Şarj | Voltekno',
     description:
       'Güneş paneli, lityum akü, inverter, EV şarj ve enerji depolama ürünleri. GES hesaplama ve teknik destek. Türkiye\'ye hızlı teslimat.',
-    images: [
-      {
-        url: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&h=630&fit=crop&q=80',
-        width: 1200,
-        height: 630,
-        alt: 'voltekno enerji sistemleri',
-      },
-    ],
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'voltekno | Güneş Paneli, Akü, İnverter ve Enerji Sistemleri',
+    title: 'Güneş Paneli, Akü, İnverter ve EV Şarj | Voltekno',
     description:
       'Güneş paneli, lityum akü, inverter, EV şarj ve enerji depolama ürünleri. GES hesaplama ve teknik destek.',
-    images: ['https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&h=630&fit=crop&q=80'],
+    images: [DEFAULT_OG_IMAGE.url],
   },
   // canonical sayfa başına verilir (kök düzende verilirse kendi canonical'ı olmayan her sayfa ana sayfanın kopyası sayılır)
   // Search Console HTML etiketi doğrulaması (alan adı DNS ile doğrulanırsa gerekmez)

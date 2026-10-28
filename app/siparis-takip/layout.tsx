@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
 import { getLocale } from 'next-intl/server'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -11,5 +12,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function OrderTrackingLayout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'Sipariş Takibi' }]} />
+      {children}
+    </>
+  )
 }

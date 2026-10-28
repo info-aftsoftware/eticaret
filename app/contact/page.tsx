@@ -145,7 +145,7 @@ export default function ContactPage() {
   return (
     <ClassicPageShell
       breadcrumbs={[{ label: L('İletişim', 'Contact') }]}
-      title={L('İletişim | voltekno', 'Contact | voltekno')}
+      title={L('İletişim | Voltekno', 'Contact | Voltekno')}
       description={L('Sorularınız için formu doldurun veya aşağıdaki kanallardan yazın.', 'Fill out the form for your questions or reach us through the channels below.')}
     >
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 sm:gap-6 md:gap-8 min-w-0 max-w-full">

@@ -1,4 +1,6 @@
 import React from 'react'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
@@ -10,6 +12,7 @@ export const metadata: Metadata = {
   description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, karşılaştırmalar ve kurulum rehberleri.',
   alternates: { canonical: '/blog' },
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: 'Blog – Enerji Rehberi | Voltekno',
     description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında rehber yazılar.',
   },
@@ -105,6 +108,7 @@ export default async function BlogPage() {
   }
   return (
     <div className="min-h-full bg-white">
+      <BreadcrumbJsonLd items={[{ name: 'Blog' }]} />
       {/* Header */}
       <div className="bg-[#f5f7fa] border-b border-[#e6ebf1] pt-14 pb-16 px-4 mt-5 lg:mt-7">
         <div className="container mx-auto max-w-4xl text-center">

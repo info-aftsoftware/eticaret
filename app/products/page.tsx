@@ -1,4 +1,5 @@
 import { resolveProductsQuery } from '@/lib/products-query'
+import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
 import { getStorefrontProducts, type StorefrontProduct } from '@/lib/discounts'
 import { buildProductsSnapshot } from '@/lib/products-listing'
 import { mockProducts } from '@/lib/products-mock'
@@ -20,5 +21,10 @@ export default async function ProductsPage(props: { searchParams: Promise<Search
     console.error('Products page: storefront products unavailable, falling back to catalog', error)
     products = mockProducts
   }
-  return <ProductsPageClient query={query} initial={buildProductsSnapshot(products, query)} />
+  return (
+    <>
+      <BreadcrumbJsonLd items={[{ name: 'Ürünler' }]} />
+      <ProductsPageClient query={query} initial={buildProductsSnapshot(products, query)} />
+    </>
+  )
 }

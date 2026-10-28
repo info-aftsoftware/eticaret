@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { redirect } from 'next/navigation'
 import { CATEGORY_GROUPS, LEGACY_CATEGORY_REDIRECTS } from '@/lib/categories'
 import { CategoryPageClient } from './CategoryPageClient'
@@ -28,12 +29,11 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   const title = getCategoryTitle(params.id)
   const description =
     meta?.seoDescription ?? meta?.description ??
-    `${title} ürünlerini fiyat, marka ve özelliklere göre filtreleyin. voltekno'da güvenilir ürünler ve teknik destek.`
+    `${title} ürünlerini fiyat, marka ve özelliklere göre filtreleyin. Voltekno'da güvenilir ürünler ve teknik destek.`
   const rawImage = meta?.image
   const imageUrl = rawImage
     ? rawImage.startsWith('http') ? rawImage : `${SITE_URL}${rawImage}`
     : undefined
-  const keywords = meta?.keywords ?? []
 
   // "Fiyatları" zaten title içindeyse tekrar ekleme
   const pageTitle = title.includes('Fiyat') ? title : `${title} Fiyatları ve Modelleri`
@@ -41,21 +41,20 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   return {
     title: pageTitle,
     description,
-    keywords,
     alternates: { canonical: `/category/${params.id}` },
     openGraph: {
-      title: `${title} | voltekno`,
+      title: `${title} | Voltekno`,
       description,
       type: 'website',
       url: `${SITE_URL}/category/${params.id}`,
-      siteName: 'voltekno',
-      ...(imageUrl && { images: [{ url: imageUrl, alt: title, width: 1200, height: 630 }] }),
+      siteName: 'Voltekno',
+      images: [imageUrl ? { url: imageUrl, alt: title } : DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | voltekno`,
+      title: `${title} | Voltekno`,
       description,
-      ...(imageUrl && { images: [imageUrl] }),
+      images: [imageUrl ?? DEFAULT_OG_IMAGE.url],
     },
   }
 }

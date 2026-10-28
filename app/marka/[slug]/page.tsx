@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
 import { BRANDS, brandBySlug } from '@/lib/seo/brands'
@@ -58,8 +59,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: path },
-    openGraph: { type: 'website', title: `${title} | voltekno`, description, url: path, siteName: 'voltekno' },
-    twitter: { card: 'summary', title: `${title} | voltekno`, description },
+    openGraph: { images: [DEFAULT_OG_IMAGE], type: 'website', title: `${title} | Voltekno`, description, url: path, siteName: 'Voltekno' },
+    twitter: { images: [DEFAULT_OG_IMAGE.url], card: 'summary', title: `${title} | Voltekno`, description },
   }
 }
 
@@ -80,7 +81,7 @@ export default async function BrandPage(props: Props) {
   ]
   const minPrice = products.length ? Math.min(...products.map((p) => p.price)) : 0
   const typeText = types.map(([c, n]) => `${typeLabel(c).toLocaleLowerCase('tr')} (${n})`).join(', ')
-  const description = `voltekno'da ${brand.name} markasının ${products.length} ürünü: ${typeText}.`
+  const description = `Voltekno'da ${brand.name} markasının ${products.length} ürünü: ${typeText}.`
 
   return (
     <CollectionPage

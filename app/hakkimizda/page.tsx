@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
+
 export const metadata: Metadata = {
   title: 'Hakkımızda',
   description: 'Voltekno hakkında: misyonumuz, değerlerimiz ve temiz enerji çözümlerindeki uzmanlığımız.',
@@ -50,8 +52,21 @@ const values = [
 export default async function HakkimizdaPage() {
   const locale = await getLocale()
   const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
+  // Kurumun tam kaydı ana sayfada (#organization); burada yalnızca sayfa türü ve o kayda bağlantı
+  const aboutJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    '@id': `${SITE_URL}/hakkimizda`,
+    url: `${SITE_URL}/hakkimizda`,
+    name: 'Hakkımızda — Voltekno',
+    inLanguage: 'tr',
+    isPartOf: { '@id': `${SITE_URL}/#website` },
+    about: { '@id': `${SITE_URL}/#organization` },
+    mainEntity: { '@id': `${SITE_URL}/#organization` },
+  }
   return (
     <div className="min-h-screen bg-surface">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }} />
 
       {/* Breadcrumb + Başlık */}
       <div className="bg-surface-elevated border-b border-palette">

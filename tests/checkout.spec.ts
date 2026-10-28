@@ -231,7 +231,7 @@ test.describe('faz 4: iade, hesap, stok, SEO', () => {
     expect(ld.offers.price).toBe(540)
     expect(ld.offers.shippingDetails.shippingRate.value).toBe(E2E_SHIPPING)
     expect(ld.offers.hasMerchantReturnPolicy.merchantReturnDays).toBe(14)
-    await expect(page).toHaveTitle(/^E2E Test Ürünü \| voltekno$/)
+    await expect(page).toHaveTitle(/^E2E Test Ürünü \| Voltekno$/)
   })
 })
 

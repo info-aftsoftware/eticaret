@@ -1,4 +1,5 @@
 import React from 'react'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
@@ -147,7 +148,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
     title: `${post.title} | Voltekno Blog`,
     description: post.desc,
     alternates: { canonical: `/blog/${params.slug}` },
-    openGraph: { type: 'article', title: post.title, description: post.desc, url: `/blog/${params.slug}` },
+    openGraph: { images: [DEFAULT_OG_IMAGE], type: 'article', title: post.title, description: post.desc, url: `/blog/${params.slug}` },
   }
 }
 
@@ -176,6 +177,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
       headline: post.title,
       description: post.desc,
       ...(published && { datePublished: `${published}T09:00:00+03:00`, dateModified: `${published}T09:00:00+03:00` }),
+      image: [`${SITE_URL}${DEFAULT_OG_IMAGE.url}`],
       author: { '@type': 'Organization', name: 'Voltekno', url: `${SITE_URL}/hakkimizda` },
       publisher: { '@id': `${SITE_URL}/#organization` },
       inLanguage: 'tr',
