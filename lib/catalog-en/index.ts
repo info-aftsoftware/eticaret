@@ -75,15 +75,47 @@ export function textLang(original: string | undefined, shown: string | undefined
   return original === shown && /[çğıöşüÇĞİÖŞÜ]|\b(ve|ile|için)\b/.test(original) ? 'tr' : undefined
 }
 
+/**
+ * Türetilmiş filtrelerin (lib/spec-facets.ts) adları ve sabit değerleri: katalogda geçmedikleri için çeviri
+ * dosyasında (specs.json) yoklar. Aralık etiketleri ("50 Ah ve altı", "200 Ah üzeri") kuralla çevrilir.
+ */
+const FACET_KEYS_EN: Record<string, string> = {
+  'Sistem voltajı': 'System voltage',
+  'Kapasite (Ah)': 'Capacity (Ah)',
+  'Enerji (kWh)': 'Energy (kWh)',
+  Kimya: 'Chemistry',
+  Güç: 'Power',
+  Faz: 'Phase',
+  'Hücre tipi': 'Cell type',
+  Akım: 'Current',
+}
+const FACET_VALUES_EN: Record<string, string> = {
+  'Yüksek gerilim (HV)': 'High voltage (HV)',
+  Lityum: 'Lithium',
+  Jel: 'Gel',
+  'Tek faz': 'Single phase',
+  'Üç faz': 'Three phase',
+  Monokristal: 'Monocrystalline',
+  'Bifacial (çift yüzlü)': 'Bifacial (double-sided)',
+  'Esnek / katlanabilir': 'Flexible / foldable',
+}
+
 export function specKeyLabel(key: string, locale: CatalogLocale): string {
   if (locale !== 'en') return key
-  return enSpecs.keys[key.trim()] ?? key
+  const k = key.trim()
+  return enSpecs.keys[k] ?? FACET_KEYS_EN[k] ?? key
 }
 
 export function specValueLabel(value: string, locale: CatalogLocale): string {
   if (locale !== 'en') return value
   const v = String(value).trim()
-  return enSpecs.values[v] ?? enNumbers(v)
+  const known = enSpecs.values[v] ?? FACET_VALUES_EN[v]
+  if (known) return known
+  const upTo = /^(.+) ve altı$/.exec(v)
+  if (upTo) return `up to ${enNumbers(upTo[1])}`
+  const over = /^(.+) üzeri$/.exec(v)
+  if (over) return `over ${enNumbers(over[1])}`
+  return enNumbers(v)
 }
 
 /** Gösterim için özellik tablosu (filtre/karşılaştırma mantığı Türkçe anahtarlarla çalışmaya devam eder) */

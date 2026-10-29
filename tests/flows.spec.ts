@@ -73,6 +73,9 @@ async function placeOrderApi(request: APIRequestContext, c: ReturnType<typeof cu
   })
 }
 
+/** İngilizce sayfa adresi: dil adresten gelir (/en önekli), çerez yalnız API çağrıları için */
+const enPath = (p: string) => (p === '/' ? '/en' : p.startsWith('/?') ? `/en${p.slice(1)}` : `/en${p}`)
+
 async function seedCart(page: Page, quantity = 2, locale: 'tr' | 'en' = 'tr') {
   await page.context().addCookies([{ name: 'NEXT_LOCALE', value: locale, url: process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3009' }])
   await page.addInitScript((q) => {
@@ -348,7 +351,7 @@ test.describe('İngilizce akış', () => {
   test('EN: ödeme sayfası ve başarı sayfası İngilizce, sunucu hatası İngilizce', async ({ page }) => {
     const c = customer('en')
     await seedCart(page, 1, 'en')
-    await page.goto('/checkout')
+    await page.goto('/en/checkout')
     await expect(page.locator('html')).toHaveAttribute('lang', 'en')
     await expect(page.locator('body')).toContainText('Contact information', { timeout: 20_000 })
     await fillCheckout(page, c)
@@ -369,7 +372,7 @@ test.describe('İngilizce akış', () => {
       ? route.fulfill({ status: 400, json: { success: false, error: '"E2E Test Ürünü" için stokta yalnızca 1 adet var.' } })
       : route.continue())
     await seedCart(page, 2, 'en')
-    await page.goto('/checkout')
+    await page.goto('/en/checkout')
     await fillCheckout(page, c)
     await page.locator('#acceptTerms').check()
     await page.locator('main button[type=submit]').last().click()
@@ -386,14 +389,14 @@ test.describe('İngilizce akış', () => {
       }))
       localStorage.setItem('voltekno_cookie_consent', 'dismissed')
     })
-    await page.goto('/cart')
+    await page.goto('/en/cart')
     await expect(page.locator('body')).toContainText('A product in your cart is no longer for sale', { timeout: 15_000 })
     await expect(page.locator('body')).not.toContainText('artık satışta değil')
   })
 
   test('EN: şirket faturasında doğrulama mesajları İngilizce', async ({ page }) => {
     await seedCart(page, 1, 'en')
-    await page.goto('/checkout')
+    await page.goto('/en/checkout')
     await expect(page.locator('#name')).toBeVisible({ timeout: 20_000 })
     await page.getByRole('radio', { name: 'Corporate' }).click()
     await page.locator('#taxId').fill('123')
@@ -479,7 +482,7 @@ test.describe('İngilizce sayfalarda Türkçe metin', () => {
     test(`EN ${path}`, async ({ page }) => {
       test.setTimeout(60_000)
       await seedCart(page, 1, 'en')
-      await page.goto(path)
+      await page.goto(enPath(path))
       // Açık kalan bağlantılar (sohbet, analitik) yüzünden networkidle hiç gelmeyebilir: kısa sınırla beklenir
       await page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => {})
       await page.waitForTimeout(1500)
@@ -493,7 +496,7 @@ test.describe('İngilizce sayfalarda Türkçe metin', () => {
 
   test('EN: ürün sayfası sekmeleri ve sepete ekleme bildirimi', async ({ page }) => {
     await seedCart(page, 1, 'en')
-    await page.goto('/products/tommatech-16bb-topcon-gunes-paneli-450wp-600wp')
+    await page.goto('/en/products/tommatech-16bb-topcon-gunes-paneli-450wp-600wp')
     await expect(page.locator('h1')).toContainText('Solar Panel', { timeout: 20_000 })
     for (const tab of await page.getByRole('tab').all()) {
       await tab.click()
@@ -510,7 +513,7 @@ test.describe('İngilizce sayfalarda Türkçe metin', () => {
 
   test('EN: ödeme sayfasında zorunlu alan uyarıları ve sözleşme penceresi İngilizce', async ({ page }) => {
     await seedCart(page, 1, 'en')
-    await page.goto('/checkout')
+    await page.goto('/en/checkout')
     await expect(page.locator('#name')).toBeVisible({ timeout: 20_000 })
     // Boş form gönderimi: alan uyarıları
     await page.locator('main button[type=submit]').last().click()

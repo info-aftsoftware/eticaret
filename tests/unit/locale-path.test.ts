@@ -43,3 +43,13 @@ test('JSON-LD: İngilizcede site sayfa adresleri /en önekli, görsel ve medya a
   })
   assert.equal(localizeSiteUrls(data, 'tr'), data)
 })
+
+test('türetilmiş filtre adları ve aralık etiketleri İngilizce', async () => {
+  const { specKeyLabel, specValueLabel } = await import('../../lib/catalog-en')
+  assert.equal(specKeyLabel('Sistem voltajı', 'en'), 'System voltage')
+  assert.equal(specValueLabel('50 Ah ve altı', 'en'), 'up to 50 Ah')
+  assert.equal(specValueLabel('10 kWh üzeri', 'en'), 'over 10 kWh')
+  assert.equal(specValueLabel('2–5,5 kWh', 'en'), '2–5.5 kWh')
+  assert.equal(specValueLabel('Bifacial (çift yüzlü)', 'en'), 'Bifacial (double-sided)')
+  assert.equal(specValueLabel('50 Ah ve altı', 'tr'), '50 Ah ve altı')
+})
