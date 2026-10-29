@@ -578,7 +578,7 @@ export default function CheckoutPage() {
       success: true
       orderId: string
       pricing?: { total: number; tax?: number; shipping?: number }
-      payment?: { bank: string; form: { action: string; fields: Record<string, string> } }
+      payment?: { bank: string; form?: { action: string; fields: Record<string, string> }; redirectUrl?: string }
     }
   }
 
@@ -639,14 +639,18 @@ export default function CheckoutPage() {
       setIsSubmitting(true)
       if (paymentMethod === 'card') {
         const data = await createOrderWithApi('card')
-        if (!data.payment?.form) {
-          showGeneralError(L('Banka ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.', 'The bank payment page could not be opened. Please try again or choose Bank Transfer (EFT).'))
+        const redirectUrl: unknown = data.payment?.redirectUrl
+        // iyzico: yalnızca iyzico'nun ödeme sayfasına gidilir (başka adrese yönlendirme yapılmaz)
+        const iyzicoUrl = typeof redirectUrl === 'string' && /^https:\/\/([a-z0-9-]+\.)*iyzipay\.com\//.test(redirectUrl) ? redirectUrl : null
+        if (!data.payment?.form && !iyzicoUrl) {
+          showGeneralError(L('Kart ödeme sayfası açılamadı. Lütfen tekrar deneyin veya Havale/EFT seçin.', 'The card payment page could not be opened. Please try again or choose Bank Transfer (EFT).'))
           return
         }
         lastOrder(data.orderId, data.pricing)
         // Sepet burada temizlenmez: ödeme tamamlanmazsa müşteri sepetine döner. Başarı sayfası temizler.
         leavingRef.current = true
-        submitToBank(data.payment.form)
+        if (iyzicoUrl) window.location.assign(iyzicoUrl)
+        else if (data.payment?.form) submitToBank(data.payment.form)
         return
       }
 

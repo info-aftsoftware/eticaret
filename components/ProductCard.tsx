@@ -265,10 +265,10 @@ export function ProductCard({
             aria-label={
               quoteOnly
                 ? L(`${product.name}: fiyat için teklif alın`, `${product.name}: request a quote`)
-                : L(`${product.name}: kargo ve nakliye için iletişime geçin`, `${product.name}: contact us for shipping`)
+                : L(`${product.name}: kargo dahil fiyat için teklif alın`, `${product.name}: request a quote including shipping`)
             }
           >
-            <span>{quoteOnly ? L('Teklif Al', 'Request a Quote') : L('İletişime geç', 'Contact us')}</span>
+            <span>{L('Teklif Al', 'Request a Quote')}</span>
             <ChevronRight className={`${icon} shrink-0`} />
           </Link>
         ) : outOfStock ? (

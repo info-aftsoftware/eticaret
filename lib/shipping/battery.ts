@@ -1,6 +1,6 @@
 /**
  * Akü ve batarya gönderim kısıtı (20.10.2026): kargo firmalarının akü/batarya taşıma kısıtları kontrol edilene kadar
- * bu ürünler sitede çevrim içi satılmaz; ürün sayfasında "kargo ve nakliye için iletişime geçin" kutusu gösterilir,
+ * bu ürünler sitede çevrim içi satılmaz; kargo ücreti teklifle belirlenir (29.10.2026 kararı): ürün sayfasında "kargo için teklif alın" kutusu gösterilir,
  * sepete eklenemez, sipariş sunucuda reddedilir, Google Merchant akışına girmez.
  *
  * Kategoriler içe aktarıcıdaki listeyle aynı olmalı (scripts/import-ikas-excel.py → BATTERY_CATEGORIES;
@@ -28,6 +28,6 @@ export function isContactOnlyLine(lineId: string, productId?: string): boolean {
 }
 
 export const BATTERY_CONTACT_MESSAGE_TR =
-  'Akü ve bataryalarda kargo ve nakliye için bizimle iletişime geçin.'
+  'Akü ve bataryalarda kargo ücreti teklifle belirlenir; kargo dahil fiyat için teklif alın.'
 export const BATTERY_CONTACT_MESSAGE_EN =
-  'For batteries, please contact us about shipping and delivery.'
+  'For batteries, shipping is quoted separately; request a quote including shipping.'

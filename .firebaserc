@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "voltekno-eticaret"
+    "default": "eticaret-54bdc",
+    "yeni": "voltekno-eticaret"
   }
 }

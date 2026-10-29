@@ -159,7 +159,7 @@ export function CartRelatedProducts({ cartItemIds, cartCategories }: CartRelated
                   if (isContactOnlyProduct(product)) {
                     return (
                       <Link href={`/products/${product.id}`} className="h-8 px-3 inline-flex items-center rounded-md border border-[#d3d9e1] text-[#0b2540] text-xs font-semibold flex-shrink-0 hover:bg-[#f5f7fa]">
-                        {L('İletişime geç', 'Contact us')}
+                        {L('Teklif Al', 'Request a Quote')}
                       </Link>
                     )
                   }

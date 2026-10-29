@@ -157,7 +157,7 @@ export default function ComparePage() {
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
                       {isContactOnlyProduct(p) ? (
-                        <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>{L('İletişime geç', 'Contact us')}</Link></Button>
+                        <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>{L('Teklif Al', 'Request a Quote')}</Link></Button>
                       ) : p.isVariantProduct ? (
                         <Button asChild size="sm" variant="outline"><Link href={`/products/${p.slug ?? p.id}`}>{L('Seçenekleri Gör', 'View Options')}</Link></Button>
                       ) : (

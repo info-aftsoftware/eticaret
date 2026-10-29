@@ -45,7 +45,7 @@ function priceNote(p: StorefrontProduct): string {
   if (!(min > 0)) return 'fiyat için iletişime geçin'
   const price = prices.length > 1 && Math.max(...prices) !== min ? `${tl(min)}'den başlayan` : tl(min)
   const notes = [
-    BATTERY_CONTACT_ONLY && isBatteryCategory(p.category) ? 'kargo için iletişim, çevrim içi sipariş kapalı' : '',
+    BATTERY_CONTACT_ONLY && isBatteryCategory(p.category) ? 'kargo ücreti teklifle, çevrim içi sipariş kapalı' : '',
     isInstallShipping(p) ? 'kurulum ve nakliye ayrıca' : '',
     (p.stock ?? 0) > 0 ? '' : 'stokta yok',
   ].filter(Boolean)

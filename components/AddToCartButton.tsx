@@ -137,11 +137,11 @@ export function AddToCartButton({
     }
   }
 
-  // Akü / batarya: sepete eklenmez, ürün sayfasındaki iletişim kutusuna gider (lib/shipping/battery.ts)
+  // Akü / batarya: sepete eklenmez, ürün sayfasındaki teklif kutusuna gider (lib/shipping/battery.ts)
   if (isContactOnlyProduct(product)) {
     return (
       <Button asChild variant="outline" size={size} className={className}>
-        <Link href={`/products/${product.id}`}>{L('İletişime geç', 'Contact us')}</Link>
+        <Link href={`/products/${product.id}`}>{L('Teklif Al', 'Request a Quote')}</Link>
       </Button>
     )
   }

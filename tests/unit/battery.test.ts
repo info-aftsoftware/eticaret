@@ -31,7 +31,7 @@ test('sepet satırı: desi.json akü işaretiyle (varyant satırı dahil)', () =
 })
 
 test('sunucu hata mesajı İngilizceye çevrilir', () => {
-  const tr = '"Apex 51,2V 100Ah LiFePO4 Lityum Akü" çevrim içi sipariş edilemiyor. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin.'
+  const tr = '"Apex 51,2V 100Ah LiFePO4 Lityum Akü" çevrim içi sipariş edilemiyor. Akü ve bataryalarda kargo ücreti teklifle belirlenir; lütfen teklif alın.'
   assert.equal(localizeServerError(tr, 'tr'), tr)
   assert.match(localizeServerError(tr, 'en') ?? '', /cannot be ordered online/)
 })

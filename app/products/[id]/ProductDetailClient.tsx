@@ -248,7 +248,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
   /** Stok: ayrı stoklanan varyantta seçili varyantın stoğu, değilse ürün stoğu */
   const stock = lineStock(product, effectiveVariant?.key) ?? 0
   const outOfStock = stock === 0
-  // Akü / batarya: kargo kısıtları kontrol edilene kadar çevrim içi satılmaz, iletişim kutusu gösterilir
+  // Akü / batarya: çevrim içi satılmaz, kargo ücreti teklifle belirlenir (teklif kutusu)
   const contactOnly = isContactOnlyProduct(product)
   // Teklifle satılan ürün (fiyat yok) ve kurulumu/nakliyesi ayrıca konuşulan ürün (şarj istasyonu): lib/sale-mode.ts
   const quoteOnly = isQuoteOnly(product)
@@ -539,7 +539,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                     <dt className="text-[#5d6e80]">{contactOnly || installShipping ? L('Kargo', 'Shipping') : L('Teslimat', 'Delivery')}</dt>
                     <dd>
                       {contactOnly ? (
-                        <span className="font-medium text-[#0b2540]">{L('Kargo ve nakliye için iletişime geçin', 'Contact us for shipping')}</span>
+                        <span className="font-medium text-[#0b2540]">{L('Teklifle belirlenir', 'Quoted separately')}</span>
                       ) : installShipping ? (
                         <span className="font-medium text-[#0b2540]">{L('Kurulum ve nakliye için sizinle iletişime geçeceğiz', 'We will contact you about installation and delivery')}</span>
                       ) : (
