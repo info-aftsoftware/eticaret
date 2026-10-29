@@ -146,11 +146,17 @@ export async function createReturnRequest(
     throw new OrderTransitionError('Bu sipariş için incelenmekte olan bir iade talebiniz zaten var.')
   }
 
-  const items: ReturnItem[] = []
+  // Aynı satır talepte birden çok kez gelirse adetler toplanır; sınır toplam üzerinden denetlenir
+  const qtyByLine = new Map<string, number>()
   for (const it of input.items ?? []) {
     const line = order.lines.find((l) => l.id === it.lineId)
     const qty = Math.floor(Number(it.quantity))
     if (!line || !Number.isFinite(qty) || qty < 1) continue
+    qtyByLine.set(line.id, (qtyByLine.get(line.id) ?? 0) + qty)
+  }
+  const items: ReturnItem[] = []
+  for (const [lineId, qty] of qtyByLine) {
+    const line = order.lines.find((l) => l.id === lineId)!
     if (qty > (elig.returnable[line.id] ?? 0)) {
       throw new OrderTransitionError(`"${line.productName}" için en fazla ${elig.returnable[line.id] ?? 0} adet iade edilebilir.`)
     }

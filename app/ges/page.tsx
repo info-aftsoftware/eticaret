@@ -22,6 +22,7 @@ import { useAuthStore } from '@/lib/store/useAuthStore'
 import { getAddresses } from '@/lib/firebase/firestore'
 import { useL } from '@/lib/i18n-inline'
 import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const CONTACT_DRAFT_KEY = 'site_contact_draft'
 
@@ -401,7 +402,7 @@ export default function GesPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(howToSchema) }} />
 
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <div

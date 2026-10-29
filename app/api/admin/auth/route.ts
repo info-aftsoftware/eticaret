@@ -1,37 +1,44 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { isRateLimited } from '@/lib/rate-limit'
 import { totpStep } from '@/lib/totp'
 import { masterLoginPolicy } from '@/lib/admin-2fa-policy'
-import { getAdminAuth, isFirebaseAdminConfigured } from '@/lib/firebaseAdminServer'
 import { prisma } from '@/lib/prisma'
 import { verifyPassword } from '@/lib/admin-users'
-import { logAdminAction, MASTER_SESSION_SUB, type AdminActor } from '@/lib/adminAuth'
+import { logAdminAction, MASTER_SESSION_SUB, masterSessionVersion, setAdminSessionCookie, type AdminActor } from '@/lib/adminAuth'
 import { getClientIp } from '@/lib/rate-limit'
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN
 const JWT_SECRET = process.env.JWT_SECRET
-const SESSION_MAX_AGE = 60 * 60 * 24 * 7 // 7 gün
-const ADMIN_UID = 'admin-panel-user'
 /** Tanımlıysa şifreye ek olarak doğrulama uygulaması kodu istenir (iki adımlı doğrulama) */
 const ADMIN_TOTP_SECRET = process.env.ADMIN_TOTP_SECRET
 
 /**
- * IP'den bağımsız genel kilit: istek sınırı IP başlığına dayanır ve vekil sunucu bu başlığı ezmiyorsa taklit
- * edilebilir. Tüm istemcilerden 15 dakikada 20 hatalı şifre/kod gelirse giriş 15 dakika kapanır.
+ * IP'den bağımsız hesap kilidi: istek sınırı IP başlığına dayanır ve vekil sunucu bu başlığı ezmiyorsa taklit
+ * edilebilir. Bir hesaba (e-posta ya da ana şifre) 15 dakikada 20 hatalı şifre/kod gelirse yalnız o hesabın girişi
+ * 15 dakika kapanır; eskiden kilit site geneliydi ve herkes tüm yöneticileri dışarıda bırakabiliyordu.
  */
-const GLOBAL_FAIL_LIMIT = 20
-const GLOBAL_FAIL_WINDOW_MS = 15 * 60_000
-const globalFailures: number[] = []
-function globalLocked(now: number): boolean {
-  while (globalFailures.length && now - globalFailures[0] > GLOBAL_FAIL_WINDOW_MS) globalFailures.shift()
-  return globalFailures.length >= GLOBAL_FAIL_LIMIT
+const TARGET_FAIL_LIMIT = 20
+const TARGET_FAIL_WINDOW_MS = 15 * 60_000
+const failuresByTarget = new Map<string, number[]>()
+function targetLocked(target: string, now: number): boolean {
+  const list = (failuresByTarget.get(target) ?? []).filter((t) => now - t <= TARGET_FAIL_WINDOW_MS)
+  if (list.length) failuresByTarget.set(target, list)
+  else failuresByTarget.delete(target)
+  return list.length >= TARGET_FAIL_LIMIT
 }
-function recordFailure(now: number) {
-  globalFailures.push(now)
+function recordFailure(target: string, now: number) {
+  if (failuresByTarget.size > 5_000) {
+    // Süresi dolanlar, yetmezse en eskiler silinir (hepsini silmek toplu denemeyle kilitleri sıfırlatırdı)
+    for (const [k, list] of failuresByTarget) if (now - list[list.length - 1] > TARGET_FAIL_WINDOW_MS) failuresByTarget.delete(k)
+    for (const k of failuresByTarget.keys()) {
+      if (failuresByTarget.size <= 4_000) break
+      if (k !== 'master') failuresByTarget.delete(k)
+    }
+  }
+  failuresByTarget.set(target, [...(failuresByTarget.get(target) ?? []), now])
 }
 
 /** Var olmayan e-postada da aynı süre harcansın diye karşılaştırılan sahte özet */
@@ -55,15 +62,20 @@ export async function POST(request: NextRequest) {
     }
 
     const now = Date.now()
-    if (globalLocked(now)) {
+    const body = await request.json()
+    const email = typeof body?.email === 'string' ? body.email.trim().toLocaleLowerCase('tr').slice(0, 254) : ''
+    // Kişisel hesabı olmayan bir e-postayla ana yönetici şifresi girilirse ana şifre girişi sayılır
+    // (e-posta alanını boş bırakmak gerektiğini bilmeyen yönetici "E-posta veya şifre hatalı" görmesin)
+    const emailUser = email ? await prisma.adminUser.findUnique({ where: { email } }) : null
+    // Kilit hedefi: kayıtlı hesap ya da ana şifre. Var olmayan e-postayla yapılan her deneme ana şifreye sayılır;
+    // yoksa her istekte yeni e-posta uydurarak ana şifre kilitsiz denenebilirdi
+    const target = emailUser ? `user:${emailUser.id}` : 'master'
+    if (targetLocked(target, now)) {
       return NextResponse.json(
         { success: false, error: 'Çok fazla hatalı deneme. Lütfen 15 dakika sonra tekrar deneyin.' },
         { status: 429 }
       )
     }
-
-    const body = await request.json()
-    const email = typeof body?.email === 'string' ? body.email.trim().toLocaleLowerCase('tr') : ''
     const password = typeof body?.password === 'string' ? body.password.trim() : ''
     const otp = typeof body?.otp === 'string' ? body.otp.trim() : ''
     const ip = getClientIp(request)
@@ -76,11 +88,8 @@ export async function POST(request: NextRequest) {
     }
 
     let actor: AdminActor
-    let sessionPayload: { sub: string; admin: true; uid?: string }
+    let sessionPayload: { sub: string; uid?: string; sv?: number }
 
-    // Kişisel hesabı olmayan bir e-postayla ana yönetici şifresi girilirse ana şifre girişi sayılır
-    // (e-posta alanını boş bırakmak gerektiğini bilmeyen yönetici "E-posta veya şifre hatalı" görmesin)
-    const emailUser = email ? await prisma.adminUser.findUnique({ where: { email } }) : null
     const masterLogin = !email || (!emailUser && Boolean(ADMIN_TOKEN) && safeEqual(password, ADMIN_TOKEN as string))
 
     if (!masterLogin) {
@@ -89,7 +98,7 @@ export async function POST(request: NextRequest) {
       // Kullanıcı yoksa da şifre özeti hesaplanır: yanıt süresinden hesabın varlığı anlaşılmasın
       const passwordOk = user ? verifyPassword(password, user.passwordHash) : (verifyPassword(password, DUMMY_HASH), false)
       if (!user || !user.active || !passwordOk) {
-        recordFailure(now)
+        recordFailure(target, now)
         if (user) void logAdminAction(null, 'Başarısız giriş', { ip, details: email })
         return NextResponse.json({ success: false, error: 'E-posta veya şifre hatalı.' }, { status: 401 })
       }
@@ -101,21 +110,21 @@ export async function POST(request: NextRequest) {
         const step = totpStep(user.totpSecret, otp, now, 1, user.totpLastStep)
         const claimed = step === null ? 0 : (await prisma.adminUser.updateMany({ where: { id: user.id, OR: [{ totpLastStep: null }, { totpLastStep: { lt: step } }] }, data: { totpLastStep: step } })).count
         if (!claimed) {
-          recordFailure(now)
+          recordFailure(target, now)
           void logAdminAction(null, 'Başarısız giriş', { ip, details: `${email}: doğrulama kodu hatalı veya tekrar kullanıldı` })
           return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı, süresi dolmuş veya daha önce kullanılmış.' }, { status: 401 })
         }
       }
       await prisma.adminUser.update({ where: { id: user.id }, data: { lastLoginAt: new Date() } })
       actor = { userId: user.id, role: user.role as AdminActor['role'], name: user.name, email: user.email, mustChangePassword: user.mustChangePassword }
-      sessionPayload = { sub: user.id, uid: user.id, admin: true }
+      sessionPayload = { sub: user.id, uid: user.id, sv: user.sessionVersion }
     } else {
       // Ana yönetici şifresi (ADMIN_TOKEN): acil durum girişi, "Sahip" yetkisiyle; işlem kaydına yazılır
       if (!ADMIN_TOKEN) {
         return NextResponse.json({ success: false, error: 'E-posta adresinizi girin.' }, { status: 400 })
       }
       if (!safeEqual(password, ADMIN_TOKEN)) {
-        recordFailure(now)
+        recordFailure(target, now)
         return NextResponse.json({ success: false, error: 'Şifre hatalı.' }, { status: 401 })
       }
       // Ana şifre, kişisel hesaplardaki iki adımlı doğrulamayı aşan bir yol olmasın (A12, lib/admin-2fa-policy.ts)
@@ -142,37 +151,20 @@ export async function POST(request: NextRequest) {
             : await prisma.sequence.create({ data: { name: 'adminMasterTotpStep', value: step } }).then(() => 1, () => 0)
         }
         if (!claimed) {
-          recordFailure(now)
+          recordFailure(target, now)
           void logAdminAction(null, 'Başarısız giriş', { ip, details: 'Ana yönetici şifresi: doğrulama kodu hatalı veya tekrar kullanıldı' })
           return NextResponse.json({ success: false, requiresOtp: true, error: 'Doğrulama kodu hatalı, süresi dolmuş veya daha önce kullanılmış.' }, { status: 401 })
         }
       }
       actor = { userId: null, role: 'owner', name: 'Ana yönetici şifresi', email: null, mustChangePassword: false }
-      sessionPayload = { sub: MASTER_SESSION_SUB, admin: true }
+      sessionPayload = { sub: MASTER_SESSION_SUB, sv: await masterSessionVersion() }
     }
 
     void logAdminAction(actor, 'Giriş', { ip })
-    const sessionToken = jwt.sign(sessionPayload, JWT_SECRET, { expiresIn: SESSION_MAX_AGE })
-
-    // Firebase custom token oluştur (Firestore client okumalarında kullanılır)
-    let firebaseCustomToken: string | null = null
-    if (isFirebaseAdminConfigured()) {
-      const auth = getAdminAuth()
-      if (auth) {
-        try {
-          firebaseCustomToken = await auth.createCustomToken(ADMIN_UID, { admin: true })
-        } catch {}
-      }
-    }
-
-    const response = NextResponse.json({ success: true, firebaseCustomToken, mustChangePassword: actor.mustChangePassword })
-    response.cookies.set('admin_session', sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: SESSION_MAX_AGE,
-      path: '/',
-    })
+    // Panel Firestore'u istemciden okumuyor; eskiden verilen ortak Firebase kimliği (admin-panel-user) rol
+    // ayrımını aşıp tüm müşteri verisine erişim veriyordu, artık üretilmiyor (veri yalnız yetkili API uçlarından)
+    const response = NextResponse.json({ success: true, mustChangePassword: actor.mustChangePassword })
+    setAdminSessionCookie(response, sessionPayload)
     return response
   } catch (err: any) {
     console.error('Admin auth error:', err)

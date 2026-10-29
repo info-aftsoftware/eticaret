@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { checkAdmin, logAdminAction } from '@/lib/adminAuth'
+import { bumpAdminSessions, checkAdmin, logAdminAction, setAdminSessionCookie } from '@/lib/adminAuth'
 import { hashPassword, passwordProblem, verifyPassword } from '@/lib/admin-users'
 import { prisma } from '@/lib/prisma'
 import { getClientIp, isRateLimited } from '@/lib/rate-limit'
@@ -37,5 +37,9 @@ export async function POST(request: NextRequest) {
     data: { passwordHash: hashPassword(next), mustChangePassword: false },
   })
   void logAdminAction(actor, 'Şifre değiştirildi', { ip: getClientIp(request) })
-  return NextResponse.json({ success: true })
+  // Diğer cihazlardaki (ve çalınmış olabilecek) oturumlar düşer; bu cihaz yeni oturumla devam eder
+  const sv = await bumpAdminSessions(user.id)
+  const response = NextResponse.json({ success: true })
+  setAdminSessionCookie(response, { sub: user.id, uid: user.id, sv })
+  return response
 }

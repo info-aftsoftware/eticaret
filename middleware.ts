@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
 
     try {
       const secret = new TextEncoder().encode(JWT_SECRET)
-      const { payload } = await jose.jwtVerify(sessionCookie, secret)
+      const { payload } = await jose.jwtVerify(sessionCookie, secret, { algorithms: ['HS256'] })
       if (payload.admin === true && payload.sub) {
         return NextResponse.next({ request: { headers: requestHeaders } })
       }

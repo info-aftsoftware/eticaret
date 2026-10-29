@@ -9,6 +9,11 @@ export const VAT_RATE = 20
 export const BANK_TRANSFER_DISCOUNT_RATE = 3
 /** Havale/EFT siparişlerinde ödemenin beklendiği süre (gün) */
 export const BANK_TRANSFER_PAYMENT_DAYS = 3
+/**
+ * Bir üründen (aynı stoğu paylaşan seçenekler birlikte) çevrim içi verilebilecek en fazla adet; fazlası teklifle.
+ * Tek siparişle tüm stoğun ayrılıp ürünün "tükendi" gösterilmesine karşı (29.10.2026 kararı).
+ */
+export const MAX_ONLINE_QTY_PER_PRODUCT = 20
 
 /** Mağaza saat dilimi (Türkiye sabit UTC+3, yaz saati yok) */
 export const STORE_TIME_ZONE = 'Europe/Istanbul'

@@ -24,6 +24,8 @@ export interface ProductVariant {
   /** Döviz cinsinden fiyat (priceCurrency) */
   basePrice?: number
   sku?: string
+  /** Barkod (GTIN / EAN-13), doğrulanmış; yalnız sunucuda (product-details.json ya da panel), lib/gtin.ts */
+  gtin?: string
   /** Varyantın stoğu: yalnızca ürün "varyantlar ayrı stoklanır" ise dolu (lib/variant-stock.ts) */
   stock?: number
   specifications?: Record<string, string>
@@ -38,6 +40,8 @@ export interface ProductVariant {
 export interface MockProduct {
   id: string
   sku: string
+  /** Barkod (GTIN / EAN-13), doğrulanmış; varyantlı üründe varyantlarda. Yalnız sunucuda (lib/gtin.ts) */
+  gtin?: string
   name: string
   /** Kısa açıklama (liste kartları, meta description) */
   description: string

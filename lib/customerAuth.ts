@@ -34,7 +34,7 @@ export function getUserIdFromRequest(request: NextRequest): string | null {
   const token = bearer(request)
   if (!token || !JWT_SECRET) return null
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { userId?: string }
+    const decoded = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] }) as { userId?: string }
     return decoded.userId ?? null
   } catch {
     return null
@@ -48,7 +48,7 @@ export async function getCustomerFromRequest(request: NextRequest): Promise<Auth
 
   if (JWT_SECRET) {
     try {
-      const decoded = jwt.verify(token, JWT_SECRET) as { userId?: string; email?: string }
+      const decoded = jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'] }) as { userId?: string; email?: string }
       if (decoded.userId) {
         const user = await prisma.user.findUnique({
           where: { id: decoded.userId },

@@ -26,14 +26,14 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
     if (!isAdminRole(body.role)) return fail('Geçersiz rol.')
     if (self) return fail('Kendi rolünüzü değiştiremezsiniz.')
     if (body.role !== 'owner' && (await isLastOwner())) return fail('Son aktif Sahip\'in rolü değiştirilemez.')
-    const u = await prisma.adminUser.update({ where: { id }, data: { role: body.role } })
+    const u = await prisma.adminUser.update({ where: { id }, data: { role: body.role, sessionVersion: { increment: 1 } } })
     void logAdminAction(auth.actor, 'Rol değiştirildi', { details: `${u.email}: ${ADMIN_ROLES[body.role as keyof typeof ADMIN_ROLES].label}` })
     return NextResponse.json({ success: true, user: adminUserView(u) })
   }
   if (typeof body?.active === 'boolean') {
     if (self) return fail('Kendi hesabınızı pasifleştiremezsiniz.')
     if (!body.active && (await isLastOwner())) return fail('Son aktif Sahip pasifleştirilemez.')
-    const u = await prisma.adminUser.update({ where: { id }, data: { active: body.active } })
+    const u = await prisma.adminUser.update({ where: { id }, data: { active: body.active, sessionVersion: { increment: 1 } } })
     void logAdminAction(auth.actor, body.active ? 'Kullanıcı etkinleştirildi' : 'Kullanıcı pasifleştirildi', { details: u.email })
     return NextResponse.json({ success: true, user: adminUserView(u) })
   }
@@ -41,13 +41,13 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
     const password = temporaryPassword()
     const u = await prisma.adminUser.update({
       where: { id },
-      data: { passwordHash: hashPassword(password), mustChangePassword: true },
+      data: { passwordHash: hashPassword(password), mustChangePassword: true, sessionVersion: { increment: 1 } },
     })
     void logAdminAction(auth.actor, 'Şifre sıfırlandı', { details: u.email })
     return NextResponse.json({ success: true, user: adminUserView(u), temporaryPassword: password })
   }
   if (body?.resetTwoFactor === true) {
-    const u = await prisma.adminUser.update({ where: { id }, data: { totpEnabled: false, totpSecret: null } })
+    const u = await prisma.adminUser.update({ where: { id }, data: { totpEnabled: false, totpSecret: null, totpLastStep: null, sessionVersion: { increment: 1 } } })
     void logAdminAction(auth.actor, 'İki adımlı doğrulama sıfırlandı', { details: u.email })
     return NextResponse.json({ success: true, user: adminUserView(u) })
   }

@@ -7,9 +7,9 @@
 import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById } from '@/lib/discounts'
 import { prisma } from '@/lib/prisma'
-import { computeOrderTotals, VAT_RATE, type CheckoutPaymentMethod, type OrderTotals } from '@/lib/store-config'
+import { computeOrderTotals, MAX_ONLINE_QTY_PER_PRODUCT, VAT_RATE, type CheckoutPaymentMethod, type OrderTotals } from '@/lib/store-config'
 import { cartLogistics, panelLineLogistics, quoteShipping, type LineLogisticsOverride, type ShippingQuote } from '@/lib/shipping/fee'
-import { isContactOnlyProduct } from '@/lib/shipping/battery'
+import { isContactOnlyLine, isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isQuoteOnly } from '@/lib/sale-mode'
 import { lineStock, stockKeyFor } from '@/lib/variant-stock'
 
@@ -151,16 +151,23 @@ export async function priceOrder(
     if (isQuoteOnly(product)) {
       throw new PricingError(`"${product.name}" çevrim içi sipariş edilemiyor. Fiyat için lütfen teklif alın.`)
     }
-    if (isContactOnlyProduct(product)) {
-      throw new PricingError(`"${product.name}" çevrim içi sipariş edilemiyor. Akü ve bataryalarda kargo ve nakliye için lütfen bizimle iletişime geçin.`)
+    // Kategori panelde değiştirilse de desi kaydındaki akü işareti sipariş açtırmaz (sepetteki kuralla aynı)
+    if (isContactOnlyProduct(product) || isContactOnlyLine(cartId, product.id)) {
+      throw new PricingError(`"${product.name}" çevrim içi sipariş edilemiyor. Akü ve bataryalarda kargo ücreti teklifle belirlenir; lütfen teklif alın.`)
     }
     const variant = variantKey ? product.variants?.find((v) => v.key === variantKey) : undefined
     // Stok kontrolü: varyantlar ayrı stoklanıyorsa varyantın, değilse ürünün stoğu (varyantlar paylaşır)
     const stockKey = stockKeyFor(product, variantKey)
     const stock = lineStock(product, variantKey)
     const stockName = product.variantStock && variant ? `${product.name} - ${variant.label}` : product.name
+    const sameStockInCart = lines.filter((l) => l.stockKey === stockKey).reduce((n, l) => n + l.quantity, 0)
+    if (sameStockInCart + quantity > MAX_ONLINE_QTY_PER_PRODUCT) {
+      throw new PricingError(
+        `"${stockName}" için çevrim içi en fazla ${MAX_ONLINE_QTY_PER_PRODUCT} adet sipariş verilebilir. Daha fazlası için lütfen teklif alın.`
+      )
+    }
     if (typeof stock === 'number') {
-      const alreadyInCart = lines.filter((l) => l.stockKey === stockKey).reduce((n, l) => n + l.quantity, 0)
+      const alreadyInCart = sameStockInCart
       if (stock <= 0) {
         throw new StockError(`"${stockName}" şu anda stokta yok. Lütfen sepetinizden çıkarın.`)
       }

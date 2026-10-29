@@ -1,3 +1,4 @@
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 /**
  * Kırıntı yolu şeması (BreadcrumbList) — sayfada görünen kırıntıyla aynı yol: Ana Sayfa › … › sayfa.
  * Son öğenin adresi verilmez (Google: isteğe bağlı). Sunucu bileşeni; ham HTML'de yer alır.
@@ -18,5 +19,5 @@ export function BreadcrumbJsonLd({ items }: { items: Crumb[] }) {
       ...(c.path && i < all.length - 1 ? { item: `${SITE_URL}${c.path === '/' ? '/' : c.path}` } : {}),
     })),
   }
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(data) }} />
 }

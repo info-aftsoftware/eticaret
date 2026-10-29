@@ -15,7 +15,7 @@ function getUserIdFromToken(request: NextRequest): string | null {
   const token = authHeader?.replace('Bearer ', '')
   if (!token) return null
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET ?? '') as { userId?: string }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET ?? '', { algorithms: ['HS256'] }) as { userId?: string }
     return decoded.userId ?? null
   } catch {
     return null

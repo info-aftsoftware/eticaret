@@ -101,7 +101,9 @@ export function validateBilling(b: BillingInput): Record<string, string> {
 }
 
 /**
- * x-forwarded-for başlığından ilk (istemci) IP'yi güvenle çıkarır; geçersizse x-real-ip, o da yoksa null.
+ * Onay kaydına yazılan istemci IP'si; istek sınırıyla aynı kaynak (lib/rate-limit.ts getClientIp): önce vekil
+ * sunucunun yazdığı x-real-ip, yoksa X-Forwarded-For'un son değeri. XFF'nin ilk değerini istemci kendisi yazabilir.
+ * Hostinger'da x-real-ip vekil tarafından eziliyor (29.10.2026 ölçümü: sahte başlıkla istek sınırı aşılamadı).
  */
 export function clientIpFromHeaders(headers: { get(name: string): string | null }): string | null {
   const pick = (raw: string | null | undefined) => {
@@ -117,7 +119,8 @@ export function clientIpFromHeaders(headers: { get(name: string): string | null 
     const v6 = !v4 && /^[0-9a-fA-F:]+$/.test(ip) && ip.includes(':') && ip.length <= 45
     return v4 || v6 ? ip : null
   }
-  const xff = headers.get('x-forwarded-for')
-  const first = xff ? pick(xff.split(',')[0]) : null
-  return first ?? pick(headers.get('x-real-ip'))
+  const real = pick(headers.get('x-real-ip'))
+  if (real) return real
+  const xff = (headers.get('x-forwarded-for') ?? '').split(',').map((p) => p.trim()).filter(Boolean)
+  return xff.length ? pick(xff[xff.length - 1]) : null
 }

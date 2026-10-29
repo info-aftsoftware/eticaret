@@ -9,6 +9,7 @@ import { ChevronRight } from 'lucide-react'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ProductCard } from '@/components/ProductCard'
 import type { StorefrontProduct } from '@/lib/discounts'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 export type Crumb = { name: string; href: string }
 export type LinkItem = { label: string; href: string; note?: string }
@@ -44,7 +45,7 @@ export function CollectionPage({
   return (
     <div className="bg-white">
       {jsonLd.map((data, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(data) }} />
       ))}
       <div className={`${PAGE_CONTAINER} py-6 sm:py-8`}>
         <nav aria-label={en ? 'Breadcrumb' : 'Kırıntı yolu'} className="mb-4">

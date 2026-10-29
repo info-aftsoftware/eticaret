@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { SELLER } from '@/lib/legal/company'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
@@ -81,5 +82,5 @@ export function StructuredData() {
     ],
   }
 
-  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(data) }} />
 }

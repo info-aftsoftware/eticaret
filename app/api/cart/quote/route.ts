@@ -13,6 +13,7 @@ import { priceOrder, PricingError, type PricedLine } from '@/lib/order-pricing'
 import type { LineLogisticsOverride } from '@/lib/shipping/fee'
 import { getStorefrontProductById } from '@/lib/discounts'
 import { isRateLimited } from '@/lib/rate-limit'
+import { MAX_ONLINE_QTY_PER_PRODUCT } from '@/lib/store-config'
 
 type QuoteLine = {
   id: string
@@ -57,11 +58,16 @@ export async function POST(request: NextRequest) {
   const perProduct = new Map<string, number>()
   for (const p of priced) if (p.line) perProduct.set(p.line.stockKey, (perProduct.get(p.line.stockKey) ?? 0) + p.quantity)
   for (const p of priced) {
-    const stock = p.line?.stock
-    if (!p.line || typeof stock !== 'number') continue
-    if ((perProduct.get(p.line.stockKey) ?? 0) > stock) {
+    if (!p.line) continue
+    const stock = p.line.stock
+    const total = perProduct.get(p.line.stockKey) ?? 0
+    if (typeof stock === 'number' && total > stock) {
       p.result.available = false
       p.result.error = `"${p.line.stockName}" için stokta yalnızca ${stock} adet var. Lütfen adedi azaltın.`
+    } else if (total > MAX_ONLINE_QTY_PER_PRODUCT) {
+      // Sipariş de aynı sınırla reddedilir (lib/order-pricing)
+      p.result.available = false
+      p.result.error = `"${p.line.stockName}" için çevrim içi en fazla ${MAX_ONLINE_QTY_PER_PRODUCT} adet sipariş verilebilir. Daha fazlası için lütfen teklif alın.`
     }
   }
 

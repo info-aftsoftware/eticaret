@@ -27,6 +27,7 @@ export default function AdminAccountPage() {
   const [saving, setSaving] = useState(false)
   const [setup, setSetup] = useState<{ qr: string; secret: string } | null>(null)
   const [code, setCode] = useState('')
+  const [twoFaPassword, setTwoFaPassword] = useState('')
   const [twoFaBusy, setTwoFaBusy] = useState(false)
   const [totpOn, setTotpOn] = useState<boolean | null>(null)
   const totpEnabled = totpOn ?? me?.user.totpEnabled ?? false
@@ -74,10 +75,11 @@ export default function AdminAccountPage() {
   const confirm2fa = async (enable: boolean) => {
     setTwoFaBusy(true)
     try {
-      await call('/api/admin/account/2fa', enable ? 'PUT' : 'DELETE', { code })
+      await call('/api/admin/account/2fa', enable ? 'PUT' : 'DELETE', { code, currentPassword: twoFaPassword })
       setTotpOn(enable)
       setSetup(null)
       setCode('')
+      setTwoFaPassword('')
       toast.success(enable ? 'İki adımlı doğrulama açıldı.' : 'İki adımlı doğrulama kapatıldı.')
     } catch (err) {
       toast.error((err as Error).message)
@@ -137,7 +139,10 @@ export default function AdminAccountPage() {
                 <Field label="Doğrulama kodu" htmlFor="code">
                   <TextInput id="code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} />
                 </Field>
-                <Btn variant="primary" onClick={() => confirm2fa(true)} loading={twoFaBusy} disabled={code.length !== 6}>Onayla ve aç</Btn>
+                <Field label="Mevcut şifreniz" htmlFor="code-password">
+                  <TextInput id="code-password" type="password" autoComplete="current-password" value={twoFaPassword} onChange={(e) => setTwoFaPassword(e.target.value)} />
+                </Field>
+                <Btn variant="primary" onClick={() => confirm2fa(true)} loading={twoFaBusy} disabled={code.length !== 6 || !twoFaPassword}>Onayla ve aç</Btn>
               </div>
             </div>
           )}
@@ -146,7 +151,10 @@ export default function AdminAccountPage() {
               <Field label="Kapatmak için güncel kod" htmlFor="code-off">
                 <TextInput id="code-off" inputMode="numeric" autoComplete="one-time-code" maxLength={6} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} />
               </Field>
-              <Btn variant="danger" onClick={() => confirm2fa(false)} loading={twoFaBusy} disabled={code.length !== 6}>Kapat</Btn>
+              <Field label="Mevcut şifreniz" htmlFor="code-off-password">
+                <TextInput id="code-off-password" type="password" autoComplete="current-password" value={twoFaPassword} onChange={(e) => setTwoFaPassword(e.target.value)} />
+              </Field>
+              <Btn variant="danger" onClick={() => confirm2fa(false)} loading={twoFaBusy} disabled={code.length !== 6 || !twoFaPassword}>Kapat</Btn>
             </div>
           )}
         </div>

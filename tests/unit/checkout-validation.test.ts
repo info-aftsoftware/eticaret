@@ -58,7 +58,9 @@ test('fatura doğrulaması', () => {
 
 test('istemci IP ayrıştırma', () => {
   const h = (o: Record<string, string>) => ({ get: (k: string) => o[k] ?? null })
-  assert.equal(clientIpFromHeaders(h({ 'x-forwarded-for': '203.0.113.5, 10.0.0.1' })), '203.0.113.5')
+  // XFF'nin ilk değeri istemcinin yazdığı olabilir: vekilin eklediği son değer alınır, x-real-ip önceliklidir
+  assert.equal(clientIpFromHeaders(h({ 'x-forwarded-for': '1.2.3.4, 203.0.113.5' })), '203.0.113.5')
+  assert.equal(clientIpFromHeaders(h({ 'x-forwarded-for': '1.2.3.4', 'x-real-ip': '198.51.100.7' })), '198.51.100.7')
   assert.equal(clientIpFromHeaders(h({ 'x-forwarded-for': ' 203.0.113.5:4431 ' })), '203.0.113.5')
   assert.equal(clientIpFromHeaders(h({ 'x-forwarded-for': '[2001:db8::1]:443' })), '2001:db8::1')
   assert.equal(clientIpFromHeaders(h({ 'x-forwarded-for': '<script>', 'x-real-ip': '198.51.100.7' })), '198.51.100.7')

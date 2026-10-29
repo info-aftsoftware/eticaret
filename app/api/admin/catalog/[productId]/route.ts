@@ -23,8 +23,9 @@ import { DC_SYSTEM_CATEGORIES, describeFallbackVoltage, sanitizeSystemVoltage } 
 import { diffFields, diffVariants, summarizeChanges } from '@/lib/audit-diff'
 import { notifyLowStockTransitions } from '@/lib/low-stock'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
+import { gtinProblem, normalizeGtin } from '@/lib/gtin'
 
-const VARIANT_KEYS = ['key', 'label', 'price', 'basePrice', 'sku', 'specifications', 'dimensionsCm', 'weightKg', 'desi', 'desiSource'] as const
+const VARIANT_KEYS = ['key', 'label', 'price', 'basePrice', 'sku', 'gtin', 'specifications', 'dimensionsCm', 'weightKg', 'desi', 'desiSource'] as const
 
 /** Varyant listesini doğrular; geçersizse hata mesajı döner. Anahtar (key) sepet kimliğinin parçasıdır, değişmemelidir. */
 function sanitizeVariants(input: unknown): { value: Record<string, unknown>[] } | { error: string } {
@@ -49,6 +50,11 @@ function sanitizeVariants(input: unknown): { value: Record<string, unknown>[] } 
     clean.label = label
     clean.price = Math.round(price * 100) / 100
     if (typeof clean.sku === 'string') clean.sku = clean.sku.trim().slice(0, 100)
+    if (clean.gtin !== undefined) {
+      const problem = gtinProblem(clean.gtin)
+      if (problem) return { error: `${label}: ${problem}` }
+      clean.gtin = normalizeGtin(clean.gtin)
+    }
     out.push(clean)
   }
   return { value: out }
@@ -66,6 +72,7 @@ function sanitizeImages(input: unknown): string[] | null {
 const PRODUCT_AUDIT_LABELS: Record<string, string> = {
   name: 'Ad',
   sku: 'SKU',
+  gtin: 'Barkod (GTIN)',
   brand: 'Marka',
   category: 'Kategori',
   price: 'TL fiyat',
@@ -389,6 +396,12 @@ export async function PATCH(
     }
     if (brand !== undefined) data.brand = brand
     if (sku !== undefined) data.sku = sku
+    // Barkod: boş değer panel kaydını siler (katalogdaki geçerli olur); geçersiz barkod kaydedilmez
+    if (body.gtin !== undefined) {
+      const problem = gtinProblem(body.gtin)
+      if (problem) return NextResponse.json({ error: problem }, { status: 400 })
+      data.gtin = normalizeGtin(body.gtin)
+    }
     if (tags !== undefined) data.tags = Array.isArray(tags) ? tags : Prisma.JsonNull
     if (slogan !== undefined) data.slogan = slogan
     if (warranty !== undefined) data.warranty = warranty

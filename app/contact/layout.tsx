@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import React from 'react'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
@@ -25,7 +26,7 @@ export default function ContactLayout({ children }: { children: React.ReactNode 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: jsonLdHtml({
             '@context': 'https://schema.org',
             '@type': 'ContactPage',
             name: 'voltekno İletişim',

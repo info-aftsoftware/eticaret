@@ -8,6 +8,7 @@ import { getLocale } from 'next-intl/server'
 import { BLOG_POSTS, blogDateIso } from '@/lib/blog-posts'
 import { PRODUCT_TYPES } from '@/lib/seo/product-types'
 import { typeHref } from '@/lib/seo/taxonomy'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
@@ -197,7 +198,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
   return (
     <div className="min-h-full bg-white">
       {jsonLd.map((d, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(d) }} />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(d) }} />
       ))}
       {/* Hero */}
       <div className="bg-[#f5f7fa] border-b border-[#e6ebf1] pt-12 pb-14 px-4 mt-5 lg:mt-7">

@@ -863,7 +863,7 @@ model ProductOverride {
   featured        Boolean?
   specifications  Json?
   features        Json?    // string[]
-  variants        Json?    // { key, label, price, basePrice?, sku }[]
+  variants        Json?    // { key, label, price, basePrice?, sku, gtin? }[]
   // Varyantlar ayrı stoklanır (A03): her varyantın stoğu StockOverride'da "productId::variantKey" satırında,
   // ürün stoğu varyant toplamıdır. null/false: varyantlar ürün stoğunu paylaşır.
   variantStock    Boolean?
@@ -890,6 +890,8 @@ model ProductOverride {
   systemVoltage   Json?
   brand           String?
   sku             String?
+  // Barkod (GTIN / EAN-13), doğrulanmış (lib/gtin.ts); varyant barkodları variants JSON'unda "gtin". null katalogdaki geçerli
+  gtin            String?
   tags            Json?    // string[]
   slogan          String?
   warranty        String?
@@ -937,6 +939,8 @@ model AdminUser {
   active       Boolean   @default(true)
   /** İlk girişte / sıfırlamadan sonra şifre değiştirme zorunlu */
   mustChangePassword Boolean @default(true)
+  /** Oturum sürümü: şifre/2FA değişince, sıfırlanınca, pasifleştirilince ve çıkışta artar; eski oturum çerezleri geçersiz olur */
+  sessionVersion Int @default(0)
   lastLoginAt  DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt

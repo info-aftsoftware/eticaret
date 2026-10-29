@@ -15,6 +15,7 @@ import { canSeeCost } from '@/lib/admin-users'
 import { sanitizeCost, sanitizeLogistics, sanitizeNewProductCurrency } from '@/lib/product-admin-fields'
 import { getMergedProducts } from '@/lib/catalog-merge'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
+import { gtinProblem, normalizeGtin } from '@/lib/gtin'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -82,6 +83,8 @@ export async function POST(request: NextRequest) {
     if ('error' in cost) return NextResponse.json({ error: cost.error }, { status: 400 })
     const logistics = sanitizeLogistics(body, {})
     if ('error' in logistics) return NextResponse.json({ error: logistics.error }, { status: 400 })
+    const gtinError = gtinProblem(body.gtin)
+    if (gtinError) return NextResponse.json({ error: gtinError }, { status: 400 })
 
     const finalId = id || `custom-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
 
@@ -112,6 +115,7 @@ export async function POST(request: NextRequest) {
         variants: Array.isArray(variants) ? variants : Prisma.JsonNull,
         brand: brand != null ? String(brand) : null,
         sku: sku != null ? String(sku) : null,
+        gtin: normalizeGtin(body.gtin),
         tags: Array.isArray(tags) ? tags : Prisma.JsonNull,
         slogan: slogan != null ? String(slogan) : null,
         warranty: warranty != null ? String(warranty) : null,

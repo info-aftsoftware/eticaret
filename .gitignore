@@ -95,3 +95,6 @@ tmp-email-preview/
 
 # eski statik derleme çıktısı (artık Node yayını; git dışında)
 /public_html_standalone/
+
+# Python önbelleği
+__pycache__/

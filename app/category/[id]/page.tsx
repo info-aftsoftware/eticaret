@@ -12,6 +12,7 @@ import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
 import { categoryHref } from '@/lib/seo/type-paths'
 import { typeByCategory } from '@/lib/seo/taxonomy'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
@@ -114,12 +115,12 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(breadcrumbJsonLd) }}
       />
       {itemListJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(itemListJsonLd) }}
         />
       )}
       <CategoryPageClient id={params.id} initialProducts={await categoryInitialProducts(params.id)} />

@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
@@ -66,7 +67,7 @@ export default async function HakkimizdaPage() {
   }
   return (
     <div className="min-h-screen bg-surface">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(aboutJsonLd) }} />
 
       {/* Breadcrumb + Başlık */}
       <div className="bg-surface-elevated border-b border-palette">

@@ -21,8 +21,12 @@ import { syncGeliverShipments } from '@/lib/shipping/geliver-shipments'
 
 const DAY = 86_400_000
 
-/** Kartlı siparişte banka dönüşü bu kadar dakika gelmezse yönetici uyarılır */
-const CARD_CHECK_AFTER_MIN = 60
+/**
+ * Kartlı siparişte banka dönüşü bu kadar dakika gelmezse sipariş iptal edilir, stok ve kupon geri gelir
+ * (29.10.2026 kararı: yarım bırakılan kart ödemesi stoğu tutmasın). Geç gelen başarılı dönüş iptal edilmiş siparişe
+ * düşerse ödeme kaydedilmez ve yöneticiye uyarı gider (lib/payments: applyPaymentResult).
+ */
+const CARD_CANCEL_AFTER_MIN = 30
 
 /**
  * Havale/EFT ödeme süresi takibi.
@@ -54,21 +58,29 @@ export async function runExpireOrders({ dry = false }: { dry?: boolean } = {}) {
   const result = { expired: [] as string[], reminded: [] as string[], held: [] as string[], errors: [] as string[] }
   for (const order of awaiting) {
     try {
-      // Müşteri havale bildirimi yaptıysa (dekont/ödeme bildirimi) sipariş otomatik iptal edilmez ve hatırlatma gitmez:
-      // para gelmiş olabilir, admin bankayı kontrol edip onaylar (admin canlı paneli bu siparişleri ayrıca listeler).
-      if (order.events.some((e) => e.type === 'payment_notice')) {
-        result.held.push(order.orderNo)
-        continue
-      }
+      // Müşteri havale bildirimi yaptıysa hatırlatma gitmez; süre dolunca o da iptal edilir (29.10.2026 kararı: sahte
+      // bildirimle stok süresiz tutulmasın). Para gelmiş olabileceği için iptalde yöneticiye ayrıca uyarı gider.
+      const notified = order.events.some((e) => e.type === 'payment_notice')
       // Son ödeme günü (e-postada yazan tarih) İstanbul saatiyle bitmeden iptal edilmez
       if (order.createdAt < expireBefore && bankTransferDeadline(order.createdAt).getTime() < now) {
         if (!dry) {
           await changeOrderStatus(order.id, 'CANCELLED', {
             actor: 'system',
-            reason: `${BANK_TRANSFER_PAYMENT_DAYS} gün içinde ödeme alınamadı`,
+            reason: notified
+              ? `${BANK_TRANSFER_PAYMENT_DAYS} gün içinde ödeme onaylanmadı (müşteri ödeme bildirimi göndermişti)`
+              : `${BANK_TRANSFER_PAYMENT_DAYS} gün içinde ödeme alınamadı`,
           })
+          if (notified) {
+            await reportError('havale-bildirimli-siparis-iptal', new Error(`${order.orderNo}: ödeme bildirimi vardı, süre dolduğu için iptal edildi; banka hesabını kontrol edin`), {
+              orderNo: order.orderNo,
+              total: order.total,
+            })
+          }
         }
         result.expired.push(order.orderNo)
+        if (notified) result.held.push(order.orderNo)
+      } else if (notified) {
+        result.held.push(order.orderNo)
       } else if (!order.events.some((e) => e.type === 'reminder')) {
         if (!dry) {
           await sendCustomerStatusEmail(order, 'payment_reminder')
@@ -81,17 +93,16 @@ export async function runExpireOrders({ dry = false }: { dry?: boolean } = {}) {
       await reportError('cron-havale-takibi', e, { orderNo: order.orderNo })
     }
   }
-  // Sonuçlanmamış kart ödemeleri: müşteri banka sayfasını kapattıysa banka dönüşü hiç gelmez.
-  // Kart çekilmiş olabileceği için otomatik iptal EDİLMEZ; yöneticiye bir kez uyarı gider,
-  // banka panelinden kontrol edilip yönetim panelinden "ödendi" veya "iptal" yapılır (iptal stok + kuponu geri verir).
-  const cardBefore = new Date(now - CARD_CHECK_AFTER_MIN * 60_000)
+  // Sonuçlanmamış kart ödemeleri: müşteri banka sayfasını kapattıysa banka dönüşü hiç gelmez. 30 dakika sonra
+  // sipariş iptal edilir (stok + kupon geri). Nadiren kart çekilmiş olabilir: yöneticiye toplu uyarı gider, banka
+  // panelinden kontrol edilir; geç gelen başarılı dönüş de ayrıca uyarı üretir.
+  const cardBefore = new Date(now - CARD_CANCEL_AFTER_MIN * 60_000)
   const staleCard = await prisma.order.findMany({
     where: {
       status: 'PENDING',
       paymentMethod: 'card',
       paymentStatus: { not: 'PAID' },
       createdAt: { lt: cardBefore },
-      events: { none: { type: 'card-check' } },
     },
     select: { id: true, orderNo: true, total: true, createdAt: true },
     orderBy: { createdAt: 'asc' },
@@ -101,14 +112,18 @@ export async function runExpireOrders({ dry = false }: { dry?: boolean } = {}) {
   for (const o of staleCard) {
     cardUnresolved.push(o.orderNo)
     if (dry) continue
-    await logOrderEvent(o.id, {
-      type: 'card-check',
-      message: `Kart ödemesi ${CARD_CHECK_AFTER_MIN} dakikadır sonuçlanmadı (banka dönüşü gelmedi). Banka panelinden kontrol edip ödendi/iptal olarak işaretleyin.`,
-      visibleToCustomer: false,
-    })
+    try {
+      await changeOrderStatus(o.id, 'CANCELLED', {
+        actor: 'system',
+        reason: `Kart ödemesi ${CARD_CANCEL_AFTER_MIN} dakika içinde tamamlanmadı (banka dönüşü gelmedi)`,
+      })
+    } catch (e) {
+      result.errors.push(`${o.orderNo}: ${e instanceof Error ? e.message : 'hata'}`)
+      await reportError('cron-kart-iptal', e, { orderNo: o.orderNo })
+    }
   }
   if (!dry && cardUnresolved.length) {
-    await reportError('kart-odemesi-sonuclanmadi', new Error(`${cardUnresolved.length} kartlı sipariş banka dönüşü olmadan bekliyor`), {
+    await reportError('kart-odemesi-sonuclanmadi', new Error(`${cardUnresolved.length} kartlı sipariş banka dönüşü olmadan iptal edildi; banka panelinden çekim olmadığını kontrol edin`), {
       orders: cardUnresolved.join(', '),
     })
   }

@@ -147,6 +147,251 @@
         "INTERNAL_CRON": "1"
       },
       "port": 3010
+    },
+    {
+      "name": "Yayin Test 3011 (worktree, no SMTP)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt",
+        "-p",
+        "3011"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-db/yayin.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-db/backups",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3011
+    },
+    {
+      "name": "Ingilizce Test 3012 (worktree, no SMTP, DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/aslan/Desktop/depo/eticaret - Kopya/.claude/worktrees/ingilizce-tam/node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/Desktop/depo/eticaret - Kopya/.claude/worktrees/ingilizce-tam",
+        "-p",
+        "3012"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/57ed74ed-bc3d-4879-b0f6-ffb329bf49f4/scratchpad/en-db/en.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/57ed74ed-bc3d-4879-b0f6-ffb329bf49f4/scratchpad/en-db/backups",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3012
+    },
+    {
+      "name": "A01-A05 Test 3013 (build, no SMTP, DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        "3013"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-a05",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/a05db/a05.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/a05db/backups",
+        "ADMIN_TOKEN": "Y1dxCk3te5pVB53aLzSz-mEn",
+        "JWT_SECRET": "3d47d6dd0c6e8c871536d021d049fa6d5a8fb0105c717e70",
+        "ADMIN_TOTP_SECRET": "",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3013
+    },
+    {
+      "name": "Yayin A01-A18 Test 3014 (release build, no SMTP, DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt/node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt",
+        "-p",
+        "3014"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/a05db/a05.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/a05db/backups",
+        "ADMIN_TOKEN": "Y1dxCk3te5pVB53aLzSz-mEn",
+        "JWT_SECRET": "3d47d6dd0c6e8c871536d021d049fa6d5a8fb0105c717e70",
+        "ADMIN_TOTP_SECRET": "",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3014
+    },
+    {
+      "name": "Yayin E2E 3015 (release build, no SMTP, fresh DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt/node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt",
+        "-p",
+        "3015"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/e2e/e2e.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/e2e/backups",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3015
+    },
+    {
+      "name": "Staging posta 2525",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/staging/mail-sink.mjs",
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/staging/mail",
+        "2525"
+      ],
+      "port": 2525
+    },
+    {
+      "name": "Staging 3020 (yerel, posta yakalayıcı)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt/node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt",
+        "-p",
+        "3020"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-staging",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/staging/staging.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/staging/backups",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "2525",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "staging",
+        "SMTP_PASSWORD": "staging",
+        "SMTP_FROM": "Voltekno Staging <staging@voltekno.com>",
+        "ADMIN_EMAIL": "yonetim@staging-alici.dev",
+        "INTERNAL_CRON": "0",
+        "NEXT_PUBLIC_SITE_URL": "https://nextfirststep.com",
+        "NEXT_PUBLIC_NOINDEX": "true"
+      },
+      "port": 3020
+    },
+    {
+      "name": "Staging voltekno.com 3021 (alan adı geçişi)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt/node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/aeaf2c99-2ce4-404a-91bc-e52d2c2a2d6f/scratchpad/yayin-wt",
+        "-p",
+        "3021"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-voltekno",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/staging/voltekno.db",
+        "BACKUP_DIR": "C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/2a33781c-89eb-46f9-aab3-0e29b94cc569/scratchpad/staging/backups",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "2525",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "staging",
+        "SMTP_PASSWORD": "staging",
+        "SMTP_FROM": "Voltekno Staging <staging@voltekno.com>",
+        "ADMIN_EMAIL": "yonetim@staging-alici.dev",
+        "INTERNAL_CRON": "0",
+        "NEXT_PUBLIC_SITE_URL": "https://voltekno.com"
+      },
+      "port": 3021
+    },
+    {
+      "name": "SEO Audit 3030 (build, no SMTP, DB copy)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "start",
+        "-p",
+        "3030"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "DATABASE_URL": "file:C:/Users/aslan/AppData/Local/Temp/claude/C--Users-aslan-Desktop-depo-eticaret---Kopya/230c60fd-26fa-49ff-8732-b072b0e0f89e/scratchpad/seo.db",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3030
+    },
+    {
+      "name": "English Dev 3022 (ingilizce-en worktree, no SMTP)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "node_modules/next/dist/bin/next",
+        "dev",
+        "C:/Users/aslan/Desktop/depo/eticaret - Kopya/.claude/worktrees/ingilizce-en",
+        "-p",
+        "3022"
+      ],
+      "env": {
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3022
+    },
+    {
+      "name": "English Prod 3023 (ingilizce-en build, no SMTP)",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "C:/Users/aslan/Desktop/depo/eticaret - Kopya/.claude/worktrees/ingilizce-en/node_modules/next/dist/bin/next",
+        "start",
+        "C:/Users/aslan/Desktop/depo/eticaret - Kopya/.claude/worktrees/ingilizce-en",
+        "-p",
+        "3023"
+      ],
+      "env": {
+        "NEXT_DIST_DIR": ".next-build",
+        "SMTP_HOST": "127.0.0.1",
+        "SMTP_PORT": "9",
+        "SMTP_SECURE": "false",
+        "SMTP_USER": "",
+        "SMTP_PASSWORD": "",
+        "INTERNAL_CRON": "0"
+      },
+      "port": 3023
     }
   ]
 }

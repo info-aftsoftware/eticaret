@@ -1,0 +1,977 @@
+{
+ "_note": "SKU → barkod (GTIN). Üreticinin GS1 önekini taşıyan (Victron 8719076), kontrol basamağı tutan ve en az iki bağımsız satıcı sayfasında aynı parça numarasıyla görünen barkodlar; kaynak adresleriyle (29.10.2026). lib/catalog-details.ts okur; Excel'deki Barkod Listesi ve panel değeri önceliklidir. 'unresolved': kaynakları çelişen, bilerek boş bırakılanlar.",
+ "items": {
+  "VICTRO-ADA500140100-01877": {
+   "gtin": "8719076054504",
+   "brand": "Victron",
+   "part": "ADA500140100",
+   "sources": [
+    "https://www.westmarine.com/victron-victron-energy-din35-adapter-medium-2-pcs-21366489.html (fetched: 8719076054504)",
+    "https://www.upcitemdb.com/upc/8719076054504 (fetched: 'VIC-ADA500140100 DIN35 Adapter - Medium')",
+    "https://www.conrad.com/en/p/victron-energy-din35-medium-ada500140100-mounting-plate-2497309.html (search snippet; page 403 to fetch)",
+    "https://www.outbackmarine.com.au/victron-din35-adapter-medium (round 1)",
+    "https://www.solar4rvs.com.au/products/victron-din35-adapter-medium-2-pcs (round 1)"
+   ],
+   "checked": "2026-10-29",
+   "note": "Çelişki çözüldü: 7 independent domains give 8719076054504 for ADA500140100. The only dissenter, powerland.co.uk, shows GTIN 8719076048640, but its own spec block on that page reads 'Manufacturer Part Number ADA500100100 GTIN 8719076048640', so the specs were copied from the small adapter. 8719076048640 = ADA50010010"
+  },
+  "VICTRO-ADA500180100-01878": {
+   "gtin": "8719076054511",
+   "brand": "Victron",
+   "part": "ADA500180100",
+   "sources": [
+    "https://www.powerland.co.uk/products/victron-energy-din35-adapter-large-2-pcs-ada500180100",
+    "https://www.sunshinesolar.co.uk/Item/ADA500180100",
+    "https://nvnmarine.com/products/2012020-din35-adapter-large",
+    "https://toosolar.com/products/adapter-din35-large-victron-for-cerbo-gx-2pcs"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS000100000-01874": {
+   "gtin": "8719076019183",
+   "brand": "Victron",
+   "part": "ASS000100000",
+   "sources": [
+    "https://www.jbtools.com/victron-ass000100000-energy-temperature-sensor-for-bmv-702-712/",
+    "https://intelligentcontrols.io/products/temperature-sensor-for-bmv-712-smart-and-bmv-702"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030066018-01813": {
+   "gtin": "8719076019312",
+   "brand": "Victron",
+   "part": "ASS030066018",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-rj12-utp-cable-1-8-m",
+    "https://ecosolaris.com/products/victron-energy-ass030066018-rj12-utp-cable-1-8m",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=185652"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030200000-01852": {
+   "gtin": "8719076019442",
+   "brand": "Victron",
+   "part": "ASS030200000",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-rs232-to-usb-converter",
+    "https://www.solar4rvs.com.au/victron-rs232-to-usb-converter",
+    "https://www.chmarine.com/victron-energy-rs232-to-usb-converter/",
+    "https://globtechnic.pl/en/victron-energy/1771-rs232-to-usb-converter"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030532010-01849": {
+   "gtin": "8719076019725",
+   "brand": "Victron",
+   "part": "ASS030532010",
+   "sources": [
+    "https://globtechnic.pl/en/victron-energy/1282-canusb-interface",
+    "https://www.mare-sports.com/detail/69a8f5bd7a5b4613965fd87b42798024"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030536011-01879": {
+   "gtin": "8719076040019",
+   "brand": "Victron",
+   "part": "ASS030536011",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-ve.direct-bluetooth-smart-dongle~21407",
+    "https://powertec.com.au/victron-ve-direct-bluetooth-smart-dongle/",
+    "https://www.jacksonsleisure.com/victron/energy/bluetooth/smart/dongle/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030550120-01860": {
+   "gtin": "8719076036470",
+   "brand": "Victron",
+   "part": "ASS030550120",
+   "sources": [
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=194836",
+    "https://bluemarine.com/products/victron-inverting-remote-on-off-cable",
+    "https://intelligentcontrols.io/products/inverting-remote-on-off-cable"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030550220-01861": {
+   "gtin": "8719076036487",
+   "brand": "Victron",
+   "part": "ASS030550220",
+   "sources": [
+    "https://www.outbackmarine.com.au/non-inverting-remote-on-off-cable-victron-ass03055",
+    "https://www.solar4rvs.com.au/victron-non-inverting-remote-on-off-cable",
+    "https://guildmarine.com/products/victron-non-inverting-remote-on-off-cable-ass030550220",
+    "https://wateryachtsolutions.com/victron-non-inverting-remote-on-off-cable-ass030550220/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030560100-01840": {
+   "gtin": "8719076019862",
+   "brand": "Victron",
+   "part": "ASS030560100",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-m8-circular-connector-cable-3-pin-male-female-1-m-set-of-2.html",
+    "https://fvcomponentes.com/en/product/victron-cable-with-m8-male-female-3-pin-circular-connector-1-m-ass030560100/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030572018-01886": {
+   "gtin": "8719076040071",
+   "brand": "Victron",
+   "part": "ASS030572018",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-rs485-to-usb-interface-1.8m",
+    "https://www.rapidonline.com/victron-energy-ass030572018-rs485-to-usb-interface-cable-1-8m-connects-et112-340-10-8877"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS030572050-01887": {
+   "gtin": "8719076040088",
+   "brand": "Victron",
+   "part": "ASS030572050",
+   "sources": [
+    "https://voltaconsolar.com/victron-energy-rs485-to-usb-interface-5m.html",
+    "https://www.westmarine.com/victron-victron-energy-rs485-to-usb-interface-5m-21367644.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS070200100-02116": {
+   "gtin": "8719076051183",
+   "brand": "Victron",
+   "part": "ASS070200100",
+   "sources": [
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=195631",
+    "https://bluemarine.com/products/victron-cable-for-smart-bms-cl-12-100"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-ASS070400100-01875": {
+   "gtin": "8719076070764",
+   "brand": "Victron",
+   "part": "ASS070400100",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-pre-charge-cable",
+    "https://www.solar4rvs.com.au/products/victron-pre-charge-cable",
+    "https://www.exotronic.com.au/products/victron-pre-charge-cable",
+    "https://www.wiredcampers.co.uk/products/victron-energy-pre-charge-cable-inverters-mppt"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BAT512020705-02120": {
+   "gtin": "8719076047537",
+   "brand": "Victron",
+   "part": "BAT512020705",
+   "sources": [
+    "https://www.powerland.co.uk/products/victron-energy-lithium-superpack-12-8v-20ah-m5-bat512020705",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=190071"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BAT512060705-02121": {
+   "gtin": "8719076047544",
+   "brand": "Victron",
+   "part": "BAT512060705",
+   "sources": [
+    "https://skyenergi.com/products/victron-energy-lithium-superpack-12-8v-60ah-m6-bat512060705",
+    "https://www.offgridtec.com/en/victron-lithium-superpack-12.8v-60ah-m6.html",
+    "https://www.outbackmarine.com.au/victron-lithium-superpack-12-8v-60ah-m6"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BAT512110712-02122": {
+   "gtin": "8719076065500",
+   "brand": "Victron",
+   "part": "BAT512110712",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-lithium-superpack-12-8v-100ah-a-m8",
+    "https://www.offgridtec.com/en/victron-lithium-superpack-12.8v-100ah-a-m8.html",
+    "https://www.fraron.de/en/batteries/lithium/12v/victron-lithium-battery-superpack-12-8v-100ah-with-internal-battery-management-system/a-85920976/",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=206802"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BAT512120705-02123": {
+   "gtin": "8719076047568",
+   "brand": "Victron",
+   "part": "BAT512120705",
+   "sources": [
+    "https://vanjunkies.co.uk/products/victron-energy-lithium-superpack-12-8v-200ah-m8-bat512120705",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=190074",
+    "https://skyenergi.com/products/victron-energy-lithium-superpack-12-8v-200ah-m8-bat512120705"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BAT524050705-02124": {
+   "gtin": "8719076047575",
+   "brand": "Victron",
+   "part": "BAT524050705",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-lithium-superpack-25.6v-50ah-m8.html",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=190075",
+    "https://www.outbackmarine.com.au/victron-lithium-superpack-25-6v-50ah-m8"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BBA000100100-01928": {
+   "gtin": "8719076020950",
+   "brand": "Victron",
+   "part": "BBA000100100",
+   "sources": [
+    "https://www.outbackmarine.com.au/battery-balancer-victron-bba000100100",
+    "https://mygreenoutdoors.com/victron-battery-balancer-bba000100100/",
+    "https://elcapitan.com/collections/electrical/products/victron-battery-balancer-bba000100100",
+    "https://www.fish307.com/victron-battery-balancer/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BMS110022000-02115": {
+   "gtin": "8719076046851",
+   "brand": "Victron",
+   "part": "BMS110022000",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-smart-bms-cl-12-100",
+    "https://shop.autarking.ch/en/bms-victron/2140-smart-bms-cl-12-100-victron-smart-lithium-8719076046851.html",
+    "https://ecosolaris.com/products/victron-energy-bms110022000-smart-bms-cl-12-100",
+    "https://nvnmarine.com/products/103701-victron-smart-bms-cl-12-100-f-victron-lifepo4"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BMS210055000-02114": {
+   "gtin": "8719076052883",
+   "brand": "Victron",
+   "part": "BMS210055000",
+   "sources": [
+    "https://ecosolaris.com/products/victron-energy-bms210055000-smart-bms-cl-12-200",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=200370",
+    "https://wateryachtsolutions.com/victron-smart-bms-12-200-f-victron-lifepo4-batteries-12vdc-only-bms210055000/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BMS300200200-02099": {
+   "gtin": "8719076057277",
+   "brand": "Victron",
+   "part": "BMS300200200",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-ve.bus-bms-v2",
+    "https://invertersrus.com/product/victron-ve-bus-bms-v2/",
+    "https://ecosolaris.com/products/victron-energy-bms300200200-ve-bus-bms-v2",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=202101",
+    "https://mygreenoutdoors.com/victron-ve-bus-bms-v2-f-victron-lifepo4-batteries-12-48vdc-work-w-all-ve-bus-gx-devices-bms300200200/"
+   ],
+   "checked": "2026-10-29",
+   "note": "Çelişki çözüldü: 6 independent domains give 8719076057277. The dissenter, splitcharge.co.uk (re-fetched: 'Victron Part Number: BMS300200200 EAN: 8719076054245'), shows the code of a different product: 8719076054245 = Phoenix Inverter 48/1200 120V VE.Direct NEMA GFCI, PIN482122510 (bankoflamps.com 'EAN 8719076054245 "
+  },
+  "VICTRO-BMS300200300-02100": {
+   "gtin": "8719076063520",
+   "brand": "Victron",
+   "part": "BMS300200300",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-ve.bus-bms-ng (fetched)",
+    "https://b2b.100mega.com/en/323896-victron-ve-bus-bms-ng (fetched)",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=206794 (fetched)",
+    "https://ecosolaris.com/products/victron-energy-bms300200300-ve-bus-bms-ng (round 1)",
+    "https://nvnmarine.com/products/120338-victron-ve-bus-bms-ng (round 1)"
+   ],
+   "checked": "2026-10-29",
+   "note": "Çelişki çözüldü: 8 independent domains give 8719076063520. The dissenter, ak24parts.com (fetched: 'Partnumber: BMS300200300 ... EAN: 8719076018100'), shows the code of an unrelated product: 8719076018100 = Blue Smart IP65 Charger 24/8 (BPC240831064R), per aquanautique.com ('EAN13 8719076018100 Manufacturer code BPC2"
+  },
+  "VICTRO-BMS400100000-02101": {
+   "gtin": "8719076043485",
+   "brand": "Victron",
+   "part": "BMS400100000",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-minibms",
+    "https://www.offgridtec.com/en/victron-minibms.html",
+    "https://ecosolaris.com/products/victron-energy-bms400100000-smallbms-with-pre-alarm",
+    "https://www.ysebaert.be/en/shop/bms400100000-victron-smallbms-47822"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BMS400100300-02102": {
+   "gtin": "8719076063537",
+   "brand": "Victron",
+   "part": "BMS400100300",
+   "sources": [
+    "https://ecosolaris.com/products/victron-energy-bms400100300-smallbms-ng-for-ng-lithium-batteries",
+    "https://mygreenoutdoors.com/victron-smallbms-ng-bms400100300/",
+    "https://digital-skipper.se/en/stromforsorjning/batterier-tillbehor/batterivakter-bms/victron-energy-bms400100300",
+    "https://intelligentcontrols.io/products/smallbms-ng"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BMS800200104-02103": {
+   "gtin": "8719076055556",
+   "brand": "Victron",
+   "part": "BMS800200104",
+   "sources": [
+    "https://intelligentcontrols.io/products/solidswitch-104",
+    "https://mygreenoutdoors.com/victron-solidswitch-104-f-dc-loads-up-to-70v-4a-bms800200104/",
+    "https://alltackle.com/victron-solidswitch-104-f-dc-loads-up-to-70v-4a/",
+    "https://www.atlanticmarineinc.com/victron-solidswitch-104-f-dc-loads-up-to-70v-4a-bms800200104/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPA000100010R-01795": {
+   "gtin": "8719076021056",
+   "brand": "Victron",
+   "part": "BPA000100010R",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-battery-alarm-gx-retail",
+    "https://www.offgridtec.com/en/victron-battery-alarm-gx-panel-audible-battery-monitor.html",
+    "https://invertersrus.com/product/victron-energy-battery-alarm-gx/",
+    "https://www.opticsplanet.com/victron-energy-battery-alarm-gx.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900100200-01781": {
+   "gtin": "8719076021377",
+   "brand": "Victron",
+   "part": "BPP900100200",
+   "sources": [
+    "https://ecosolaris.com/products/victron-bpp900100200-ccgx-wifi-module-simple-nano-usb",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=185715"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900400100-01779": {
+   "gtin": "8719076037897",
+   "brand": "Victron",
+   "part": "BPP900400100",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-venus-gx",
+    "https://globtechnic.pl/en/victron-energy/1933-venus-gx"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900455050-01771": {
+   "gtin": "8719076048770",
+   "brand": "Victron",
+   "part": "BPP900455050",
+   "sources": [
+    "https://mygreenoutdoors.com/victron-gx-touch-50-bpp900455050/",
+    "https://wateryachtsolutions.com/victron-gx-touch-50-bpp900455050/",
+    "https://www.opticsplanet.com/victron-energy-gx-touch-50-display.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900465070-01777": {
+   "gtin": "8719076054368",
+   "brand": "Victron",
+   "part": "BPP900465070",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-gx-touch-70-wall-mount.html",
+    "https://www.fisheriessupply.com/victron-energy-gx-touch-wall-mount/bpp900465070",
+    "https://voltaconsolar.com/products/gx-touch-70-wall-mount"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900480100-01767": {
+   "gtin": "8719076058038",
+   "brand": "Victron",
+   "part": "BPP900480100",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-ekrano-gx",
+    "https://voltaconsolar.com/products/victron-ekrano-gx-bpp900480100",
+    "https://mygreenoutdoors.com/victron-ekrano-gx-bpp900480100/",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=203093"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900495100-01768": {
+   "gtin": "8719076070771",
+   "brand": "Victron",
+   "part": "BPP900495100",
+   "sources": [
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=207056",
+    "https://shop4akku.de/en/ekrano-gx-wall-mount/",
+    "https://www.backwaterwarehouse.com/products/victron-ekrano-gx-wall-mount-bpp900495100",
+    "https://toosolar.com/products/wall-mount-enclosure-victron-ekrano-gx"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP900800150-01778": {
+   "gtin": "8719076062882",
+   "brand": "Victron",
+   "part": "BPP900800150",
+   "sources": [
+    "https://ecosolaris.com/products/victron-energy-bpp900800150-gx-io-extender-150",
+    "https://mygreenoutdoors.com/victron-gx-io-extender-150-bpp900800150/",
+    "https://nvnmarine.com/products/120337-victron-gx-io-extender-150"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-BPP920140100-01786": {
+   "gtin": "8719076053781",
+   "brand": "Victron",
+   "part": "BPP920140100",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-gx-tank-140.html",
+    "https://www.firstchoicemarine.com/products/victron-gx-tank-140-tank-monitor-for-4-20ma-or-1-10v-bpp920140100"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-CEP122160000-01406": {
+   "gtin": "8719076063230",
+   "brand": "Victron",
+   "part": "CEP122160000",
+   "sources": [
+    "https://toosolar.com/products/inverter-charger-victron-easyplus-c-12-1600-70-16",
+    "https://www.wiredcampers.co.uk/products/victron-energy-easyplus-12-1600-70-16-230v-cep122160000",
+    "https://www.offgridtec.com/en/victron-easyplus-12-1600-70-16-230v-ve.bus-1600w-inverter-70a-charger-all-in-one.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-CIP100200100-01759": {
+   "gtin": "8719076018124",
+   "brand": "Victron",
+   "part": "CIP100200100",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-modular-fuse-holder-for-mega-fuse",
+    "https://www.fish307.com/victron-modular-fuse-holder-f-mega-fuse/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-CIP106100000-01765": {
+   "gtin": "8719076033868",
+   "brand": "Victron",
+   "part": "CIP106100000",
+   "sources": [
+    "https://www.rapidonline.com/victron-energy-cip106100000-solar-fuse-holder-safe-anl-fuse-installation-10-8905",
+    "https://voltaconsolar.com/products/victron-anl-fuse-holder-cip106100000",
+    "https://ecosolaris.com/products/victron-energy-cip106100000-fuse-holder-for-anl-fuse"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-CSE000100000-01865": {
+   "gtin": "8719076022107",
+   "brand": "Victron",
+   "part": "CSE000100000",
+   "sources": [
+    "https://www.outbackmarine.com.au/ac-current-sensor",
+    "https://invertersrus.com/product/victron-ac-current-sensor/",
+    "https://www.solar4rvs.com.au/victron-ac-current-sensor-single-phase-max-40a",
+    "https://seqengineering.com/products/victron-ac-current-sensor-single-phase-max-40a-cse000100000"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-CYR010120110R-01922": {
+   "gtin": "8719076022169",
+   "brand": "Victron",
+   "part": "CYR010120110R",
+   "sources": [
+    "https://bluemarine.com/products/victron-cyrix-ct-12-24v-120a-battery-combiner-kit",
+    "https://www.dbmarinesupplies.com/products/victron-cyrix-ct-12-24v-120a-battery-combiner-kit-cyr010120110r",
+    "https://toosolar.com/products/battery-combiner-kit-victron-cyrix-ct-12-24v-120a",
+    "https://www.firstchoicemarine.com/products/victron-cyrix-ct-12-24v-120a-battery-combiner-kit-cyr010120110r"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-DMC000200010R-01788": {
+   "gtin": "8719076017011",
+   "brand": "Victron",
+   "part": "DMC000200010R",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-digital-multi-control-200-200a-gx-90-rj45",
+    "https://invertersrus.com/product/victron-energy-dmc000200010r/",
+    "https://masteroverland.com/products/victron-digital-multi-control-200-200a-gx-dmc000200010r",
+    "https://www.fish307.com/victron-digital-multi-control-200-200a-gx/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-GSM900200100-01801": {
+   "gtin": "8719076045427",
+   "brand": "Victron",
+   "part": "GSM900200100",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-active-gps-antenna",
+    "https://mygreenoutdoors.com/victron-active-gps-antenna-f-gx-lte-modem-gsm900200100/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-LYN060102010-01716": {
+   "gtin": "8719076057628",
+   "brand": "Victron",
+   "part": "LYN060102010",
+   "sources": [
+    "https://navstore.com/products/victron-lynx-distributor-w-m10-terminals-lyn060102010",
+    "https://ecosolaris.com/products/victron-energy-lyn060102010-lynx-distributor-m10",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=203917"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-PIN241251200-01313": {
+   "gtin": "8719076055938",
+   "brand": "Victron",
+   "part": "PIN241251200",
+   "sources": [
+    "https://digital-skipper.se/en/products/victron-energy-pin241251200",
+    "https://toosolar.com/products/inverter-victron-phoenix-24-250-ve-direct-schuko",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=202863",
+    "https://innpo.eu/dc-ac-converters/victron-phoenix-inverter-24250-vedirect-230v-schuko.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-PIN482601000-01346": {
+   "gtin": "8719076048176",
+   "brand": "Victron",
+   "part": "PIN482601000",
+   "sources": [
+    "https://voltaconsolar.com/products/victron-inverter-rs-48-6000-230v-smart-solar",
+    "https://www.powerland.co.uk/products/victron-energy-inverter-rs-48-6000-230v-smart-solar-pin482601000",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=195629",
+    "https://skyenergi.com/products/victron-energy-inverter-rs-48-6000-230v-smart-solar-pin482601000"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-PPP012020000-02117": {
+   "gtin": "8719076017318",
+   "brand": "Victron",
+   "part": "PPP012020000",
+   "sources": [
+    "https://volts.ca/products/peak-power-pack-12-8v-20ah-256wh",
+    "https://www.offgridtec.com/en/victron-ppp-20-peak-power-pack-12.8v-20ah-256wh.html",
+    "https://vanjunkies.co.uk/products/victron-energy-peak-power-pack-12-8v-20ah-ppp012020000"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-PPP012030000-02118": {
+   "gtin": "8719076017325",
+   "brand": "Victron",
+   "part": "PPP012030000",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-ppp-30-peak-power-pack-12.8v-30ah-384wh.html",
+    "https://vanjunkies.co.uk/products/victron-energy-peak-power-pack-12-8v-30ah-ppp012030000",
+    "https://verkauf-bochum.de/en/products/victron-peak-power-pack-12-8v-30ah-384wh"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-PPP012040000-02119": {
+   "gtin": "8719076017332",
+   "brand": "Victron",
+   "part": "PPP012040000",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-ppp-40-peak-power-pack-12.8v-40ah-512wh.html",
+    "https://digital-skipper.se/en/stromforsorjning/batterier-tillbehor/batterier/victron-energy-ppp012040000",
+    "https://toosolar.com/products/battery-lifepo4-victron-peak-power-pack-12-8v-40ah-512wh"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REC000300010R-01792": {
+   "gtin": "8719076024316",
+   "brand": "Victron",
+   "part": "REC000300010R",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-skylla-i-control-gx-right-angle-rj45-retai",
+    "https://www.offgridtec.com/en/victron-skylla-i-control-gx-right-angle-rj45-retail-remote-panel.html",
+    "https://toosolar.com/products/control-panel-victron-skylla-i-control-gx-right-angle-rj45"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REC010001110-01790": {
+   "gtin": "8719076024330",
+   "brand": "Victron",
+   "part": "REC010001110",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-phoenix-charger-control",
+    "https://www.solar4rvs.com.au/victron-phoenix-charger-control",
+    "https://www.lvparts.lv/en/shop/rec010001110-phoenix-charger-control-5711",
+    "https://intelligentcontrols.io/products/phoenix-charger-control"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REC020005010-01787": {
+   "gtin": "8719076024354",
+   "brand": "Victron",
+   "part": "REC020005010",
+   "sources": [
+    "https://www.solar4rvs.com.au/victron-digital-multi-control-200-200a",
+    "https://www.outbackmarine.com.au/victron-digital-multi-control-200-200a",
+    "https://www.fisheriessupply.com/victron-energy-digital-multi-control-200-200a-gx/rec020005010",
+    "https://mygreenoutdoors.com/victron-digital-multi-control-200-200a-rec020005010/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REC030001210-01789": {
+   "gtin": "8719076024378",
+   "brand": "Victron",
+   "part": "REC030001210",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-phoenix-inverter-control",
+    "https://www.offgridtec.com/en/victron-phoenix-inverter-control-panel.html",
+    "https://www.breakwateronline.com/products/victron-phoenix-inverter-control-rec030001210.html",
+    "https://wateryachtsolutions.com/victron-phoenix-inverter-control-rec030001210/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REC040010210R-01791": {
+   "gtin": "8719076041344",
+   "brand": "Victron",
+   "part": "REC040010210R",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-phoenix-inverter-control-ve.direct",
+    "https://www.offgridtec.com/en/victron-phoenix-inverter-ve.direct-control-panel.html",
+    "https://mygreenoutdoors.com/victron-phoenix-inverter-control-ve-direct-rec040010210r/",
+    "https://masteroverland.com/products/victron-phoenix-inverter-control-ve-direct-rec040010210r-1"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REL100100000-01880": {
+   "gtin": "8719076024408",
+   "brand": "Victron",
+   "part": "REL100100000",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-anti-islanding-relay-ufr1001e",
+    "https://www.mygenerator.com.au/product/victron-anti-islanding-relay-ufr1001e",
+    "https://www.ledandsolar.co.uk/products/victron-ufr1001e-anti-islanding-relay",
+    "https://toosolar.com/products/ziehl-anti-islanding-relay-victron-ufr1001e"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-REL200300100-01885": {
+   "gtin": "8719076059462",
+   "brand": "Victron",
+   "part": "REL200300100",
+   "sources": [
+    "https://www.outbackmarine.com.au/victron-energy-meter-vm-3p75ct",
+    "https://ecosolaris.com/products/victron-energy-vm-3p75ct-energy-meter-rel200300100"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SBS050150200-02002": {
+   "gtin": "8719076047919",
+   "brand": "Victron",
+   "part": "SBS050150200",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-smart-battery-sense-long-range-voltage-and-temperature-sensor.html",
+    "https://mygreenoutdoors.com/victron-smart-battery-sense-long-range-up-to-10m-sbs050150200/",
+    "https://canbat.com/product/smart-battery-sense-long-range-up-to-10m/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SCC900300000-01955": {
+   "gtin": "8719076025627",
+   "brand": "Victron",
+   "part": "SCC900300000",
+   "sources": [
+    "https://innpo.eu/battery-monitors/remote-control-panel-for-victron-bluesolar-pwm-pro-controller.html",
+    "https://www.offgridtec.com/en/victron-remote-control-display-for-bluesolar-pwm-pro.html",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=185704",
+    "https://toosolar.com/products/remote-panel-victron-for-bluesolar-pwm-pro-charge-controller"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SCC900500000-02001": {
+   "gtin": "8719076025641",
+   "brand": "Victron",
+   "part": "SCC900500000",
+   "sources": [
+    "https://ecosolaris.com/products/victron-energy-scc900500000-mppt-control",
+    "https://boatgearusa.com/products/victron-mppt-control-for-mppt-solar-charge-controllers"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SCC900650010-02000": {
+   "gtin": "8719076043546",
+   "brand": "Victron",
+   "part": "SCC900650010",
+   "sources": [
+    "https://invertersrus.com/product/victron-mppt-pluggable-display-scc900650010/",
+    "https://www.shoptics.com/victron-energy-smartsolar-control-display.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SCC940100100-01956": {
+   "gtin": "8719076025658",
+   "brand": "Victron",
+   "part": "SCC940100100",
+   "sources": [
+    "https://invertersrus.com/product/victron-temperature-sensor-for-bluesolar-pwm-pro/",
+    "https://www.sunshinesolar.co.uk/Item/SCC940100100"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SCC940100200-01957": {
+   "gtin": "8719076025665",
+   "brand": "Victron",
+   "part": "SCC940100200",
+   "sources": [
+    "https://www.offgridtec.com/en/victron-pwm-pro-to-usb-interface-cable.html",
+    "https://toosolar.com/products/interface-cable-victron-bluesolar-pwm-pro-to-usb"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SCC950200000-02009": {
+   "gtin": "8719076042839",
+   "brand": "Victron",
+   "part": "SCC950200000",
+   "sources": [
+    "https://ecosolaris.com/products/victon-energy-scc950200000-mppt-wirebox-m-100-30-50-150-35-45",
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=185617",
+    "https://www.intellitecmv.com/collections/solar-charge-controllers-mppt/products/victron-energy-mppt-wirebox-m"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SHS121409230-02003": {
+   "gtin": "8719076054689",
+   "brand": "Victron",
+   "part": "SHS121409230",
+   "sources": [
+    "https://www.invertersupply.com/index.php?main_page=product_info&products_id=200391 (fetched: 'SHS 200 MPPT v3.0 MC4 Model: SHS121409230 GTIN: 08719076054689')",
+    "https://toosolar.com/products/solar-charge-controller-mppt-victron-shs-200-v3-0-mc4 (fetched: 'EAN-Code: 8719076054689 Supplier-Code: SHS121409230')",
+    "https://www.sunshinesolar.co.uk/Item/SHS121409230 (fetched: 8719076054689 in page data)",
+    "https://toprik.com/products/electric/solar-technology/charge-controllers/shs-200-mppt-v3-0-mc4/ (search snippet: 'EAN 8719076054689', SKU SHS121409230)"
+   ],
+   "checked": "2026-10-29",
+   "note": "Çelişki çözüldü: 4 independent domains tie 8719076054689 to SHS121409230 / 'SHS 200 MPPT v3.0 MC4'. Both dissenters are explained. (1) 8719076007517 on autopartsco.com.au is the Victron Shore Power Cord 15m 16A/250Vac (voltaconsolar.com 'GTIN: 8719076007517'; rvpartsgiant.com), so it is a wrong-product copy. (2) 871"
+  },
+  "VICTRO-SHS800300300-02005": {
+   "gtin": "8719076055389",
+   "brand": "Victron",
+   "part": "SHS800300300",
+   "sources": [
+    "https://www.powerland.co.uk/products/victron-energy-battery-box-for-shs-200-shs800300300",
+    "https://www.poweracu.com/photovoltaic/battery-box-for-shs-200.html"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-SHS900120050-02004": {
+   "gtin": "8719076051930",
+   "brand": "Victron",
+   "part": "SHS900120050",
+   "sources": [
+    "https://www.bblbatteries.co.uk/product/solar-cable-for-shs-200-5mtr/",
+    "https://www.sunshinesolar.co.uk/Item/SHS900120050",
+    "https://essandsolarsolutions.co.uk/solar-cable-for-shs-200-5mtr/"
+   ],
+   "checked": "2026-10-29"
+  },
+  "VICTRO-VPN000200000-01783": {
+   "gtin": "8719076028109",
+   "brand": "Victron",
+   "part": "VPN000200000",
+   "sources": [
+    "https://www.solaris-store.com/2900-venet-gmdss-panel-victron-vpn000200000.html",
+    "https://www.chmarine.com/victron-energy-ve-net-gmdss-panel/",
+    "https://www.mon-camping-car.com/panneau-ve.net-gmdss-victron.html"
+   ],
+   "checked": "2026-10-29"
+  }
+ },
+ "unresolved": {
+  "VICTRO-ASS300420100-01888": {
+   "part": "ASS300420100",
+   "note": "Large majority (12+ domains) use 8719076048268, and the sibling USB unit is 8719076048275, so 048268/048275 form a natural pair. But 8719076048282 is NOT a typo or a sibling's code: no Victron product was found with it, and it appears in a Victron-origin E-Order product list on the RS485 row. In that list the main EAN column comes right after the part number (USB row: 'ASS300420200 8719076048275')"
+  }
+ },
+ "pending": {
+  "_note": "Onay bekleyen: bu barkodlar kodda KULLANILMAZ. Alpex ve Havensis barkodları ABD önekli (0715936) bir blokta: bloğun Alpex'e mi bir satıcıya mı kayıtlı olduğu GS1 Verified'da (gs1.org/services/verified-by-gs1, örn. 00715936350876) bakılınca netleşir; Alpex'e kayıtlıysa items'a taşınır. İstabreeze 4262405 bloğu (GS1 Almanya) markanın AB mağazasında tutarlı; mağazayı Bulgaristan'daki bir şirket işletiyor.",
+  "ALPEX-00355": {
+   "gtin": "0715936350876",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/500-watt-12-volt-tam-sinus-inverter1-3946",
+    "https://www.toptansolarmarket.com/alpex-500-watt-12-volt-tam-sinus-inverter-403"
+   ],
+   "note": "500W 12V pure sine; upgraded from single-source"
+  },
+  "ALPEX-00357": {
+   "gtin": "0715936351194",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1000-watt-24-volt-tam-sinus-inverter1-4365",
+    "https://www.toptansolarmarket.com/alpex-1000-watt-24-volt-tam-sinus-inverter-398"
+   ],
+   "note": "1000W 24V pure sine"
+  },
+  "ALPEX-00358": {
+   "gtin": "0715936350982",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1500-watt-12-volt-tam-sinus-inverter2-608",
+    "https://www.toptansolarmarket.com/alpex-1500-watt-12-volt-tam-sinus-inverter-401"
+   ],
+   "note": "1500W 12V pure sine"
+  },
+  "ALPEX-00359": {
+   "gtin": "0715936351002",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1500-watt-24-volt-tam-sinus-inverter1-33",
+    "https://www.toptansolarmarket.com/alpex-1500-watt-24-volt-tam-sinus-inverter-402"
+   ],
+   "note": "1500W 24V pure sine"
+  },
+  "ALPEX-00361": {
+   "gtin": "0715936351231",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/2000-watt-24-volt-tam-sinus-inverter1-2307",
+    "https://www.toptansolarmarket.com/alpex-2000-watt-24-volt-tam-sinus-inverter-399"
+   ],
+   "note": "2000W 24V pure sine"
+  },
+  "ALPEX-00362": {
+   "gtin": "0715936350821",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/300-watt-12-volt-modifiye-sinus-inverter",
+    "https://www.toptansolarmarket.com/alpex-300-watt-12-volt-modifiye-sinus-inverter-199"
+   ],
+   "note": "foreign-prefix: 0715936 is a GS1 US (UPC) prefix, brand owner is Turkish (GS1 Turkey = 868/869); likely reseller-bought UPC block, verify in GS1 Verified/GEPIR before using in Google Merchant"
+  },
+  "ALPEX-00365": {
+   "gtin": "0715936350715",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/150-",
+    "https://www.toptansolarmarket.com/alpex-1000-watt-12-volt-modifiye-sinus-inverter-156"
+   ],
+   "note": "foreign-prefix: 0715936 is a GS1 US (UPC) prefix, brand owner is Turkish (GS1 Turkey = 868/869); likely reseller-bought UPC block, verify in GS1 Verified/GEPIR before using in Google Merchant"
+  },
+  "ALPEX-00366": {
+   "gtin": "0715936351187",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1000-watt-24-volt-modifiye-sinus-inverter",
+    "https://www.toptansolarmarket.com/alpex-1000-watt-24-volt-modifiye-sinus-inverter-254"
+   ],
+   "note": "foreign-prefix: 0715936 is a GS1 US (UPC) prefix, brand owner is Turkish (GS1 Turkey = 868/869); likely reseller-bought UPC block, verify in GS1 Verified/GEPIR before using in Google Merchant"
+  },
+  "ALPEX-00367": {
+   "gtin": "0715936350784",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1500-watt-12-volt-tam-sinus-inverter1",
+    "https://www.toptansolarmarket.com/alpex-1500-watt-12-volt-modifiye-sinus-inverter-198"
+   ],
+   "note": "foreign-prefix: 0715936 is a GS1 US (UPC) prefix, brand owner is Turkish (GS1 Turkey = 868/869); likely reseller-bought UPC block, verify in GS1 Verified/GEPIR before using in Google Merchant"
+  },
+  "ALPEX-00368": {
+   "gtin": "0715936350999",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1500-watt-24-volt-modifiye-sinus-inverter",
+    "https://www.toptansolarmarket.com/alpex-1500-watt-24-volt-modifiye-sinus-inverter-296"
+   ],
+   "note": "1500W 24V modified sine"
+  },
+  "ALPEX-00369": {
+   "gtin": "0715936350807",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/2000-watt-12-volt-modifiye-sinus-inverter",
+    "https://www.toptansolarmarket.com/alpex-2000-watt-12-volt-modifiye-sinus-inverter-230"
+   ],
+   "note": "foreign-prefix: 0715936 is a GS1 US (UPC) prefix, brand owner is Turkish (GS1 Turkey = 868/869); likely reseller-bought UPC block, verify in GS1 Verified/GEPIR before using in Google Merchant"
+  },
+  "ALPEX-00370": {
+   "gtin": "0715936351224",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/2000-watt-24-volt-modifiye-sinus-inverter",
+    "https://www.toptansolarmarket.com/alpex-2000-watt-24-volt-modifiye-sinus-inverter-255"
+   ],
+   "note": "foreign-prefix: 0715936 is a GS1 US (UPC) prefix, brand owner is Turkish (GS1 Turkey = 868/869); likely reseller-bought UPC block, verify in GS1 Verified/GEPIR before using in Google Merchant"
+  },
+  "ALPEX-00372": {
+   "gtin": "0715936350906",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/500-watt-4722",
+    "https://www.toptansolarmarket.com/alpex-500-watt-12-volt-ups-sebeke-sarjli-tam-sinus-inverter-390"
+   ],
+   "note": "500W 12V UPS (grid-charging) pure sine"
+  },
+  "ALPEX-00376": {
+   "gtin": "0715936352542",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/2000-watt-24-volt-ups-sebeke-sarjli-tam-sinus-invertor-3003",
+    "https://www.toptansolarmarket.com/alpex-2000-watt-24-volt-ups-sebeke-sarjli-tam-sinus-inverter-411"
+   ],
+   "note": "2000W 24V UPS pure sine"
+  },
+  "ALPEX-00378": {
+   "gtin": "0715936350852",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/500-watt-ups-aku-sarjli-modifiye-sinus-invertor-3930",
+    "https://www.toptansolarmarket.com/alpex-500-watt-12-volt-ups-sebeke-sarjli-modifiye-sinus-inverter-393"
+   ],
+   "note": "500W 12V UPS modified sine"
+  },
+  "ALPEX-00379": {
+   "gtin": "0715936350678",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/1000-watt-ups-aku-sarjli-modifiye-sinus-invertor-2674",
+    "https://www.toptansolarmarket.com/alpex-1000-watt-12-volt-ups-sebeke-sarjli-modifiye-sinus-inverter-392"
+   ],
+   "note": "1000W 12V UPS modified sine"
+  },
+  "ALPEX-00380": {
+   "gtin": "0715936353334",
+   "brand": "Alpex",
+   "status": "single-official",
+   "sources": [
+    "https://www.alpexpower.com/1500-watt-ups-sebeke-sarjli-modifiye-sinus-invertor"
+   ],
+   "note": "1500W 12V UPS modified sine. Only on the brand's own site (no toptansolarmarket page). Same consistent Alpex block."
+  },
+  "ALPEX-00381": {
+   "gtin": "0715936352924",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/on-grid/off-grid-hybrid-inverter-48-volt-6200-watt",
+    "https://www.toptansolarmarket.com/alpex-on-grid-off-grid-hybrid-inverter-48-volt-6200-watt-412"
+   ],
+   "note": "ALP.HYB0062.48 6200W 48V hybrid"
+  },
+  "ALPEX-00382": {
+   "gtin": "0715936352931",
+   "brand": "Alpex",
+   "status": "confirmed",
+   "sources": [
+    "https://www.alpexpower.com/wifi-plug",
+    "https://www.toptansolarmarket.com/alpex-wifi-modul-uzaktan-izleme-340"
+   ],
+   "note": "ALP.WMDL Wi-Fi monitoring module"
+  },
+  "İSTABR-00645": {
+   "gtin": "4262405810028",
+   "brand": "İstabreeze",
+   "status": "single-official",
+   "sources": [
+    "https://en.istabreeze.store/products/windsafe-1500-2000-inselanlage"
+   ],
+   "note": "WindSafe 1500W 24V (store SKU 1524WS, variant 'without charge controller'). GS1 Germany 4262405 brand block, consistent with the confirmed WindSafe 2000W 48V 4262405810004. Check digit valid."
+  },
+  "İSTABR-00646": {
+   "gtin": "4262405810004",
+   "brand": "İstabreeze",
+   "status": "confirmed",
+   "sources": [
+    "https://en.istabreeze.store/products/windsafe-1500-2000-inselanlage",
+    "https://www.nextpower24.de/i-2000w-48v-windsafe-windgenerator-ista-breeze-124524090018.html",
+    "https://www.grelly.de/itm/i-2000w-48v-windsafe-windgenerator-ista-breeze-124524090018"
+   ],
+   "note": "Bare turbine, 3 blades, no controller. nextpower24/grelly mirror the same eBay listing, so they are not fully independent"
+  }
+ }
+}

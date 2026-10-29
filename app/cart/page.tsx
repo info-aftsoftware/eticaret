@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { contactHref } from '@/lib/contact-topics'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useCartStore, type CartItem } from '@/lib/store/useCartStore'
@@ -32,7 +33,7 @@ import { CartRelatedProducts } from '@/components/CartRelatedProducts'
 import { LegalDocumentDialog } from '@/components/LegalDocumentDialog'
 import { trackViewCart, cartItemToGa } from '@/lib/analytics'
 import type { LegalSlug } from '@/lib/legal/documents'
-import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE } from '@/lib/store-config'
+import { computeOrderTotals, grossPrice, BANK_TRANSFER_DISCOUNT_RATE, MAX_ONLINE_QTY_PER_PRODUCT, VAT_RATE } from '@/lib/store-config'
 import { cartLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
 import { isContactOnlyLine } from '@/lib/shipping/battery'
@@ -65,10 +66,14 @@ function CartLine({
   const [imgError, setImgError] = useState(false)
   useEffect(() => setDraft(String(item.quantity)), [item.quantity])
 
-  const max = status?.stock ?? item.maxQuantity
+  const stockMax = status?.stock ?? item.maxQuantity
+  // Çevrim içi adet sınırı stoktan küçükse o geçerli; fazlası teklifle
+  const onlineCapped = stockMax == null || stockMax > MAX_ONLINE_QTY_PER_PRODUCT
+  const max = onlineCapped ? MAX_ONLINE_QTY_PER_PRODUCT : stockMax
   // Bu kalemin alabileceği en fazla adet (aynı ürünün diğer seçenekleri stoğu paylaşır)
-  const lineMax = max != null ? Math.max(0, max - (productQty - item.quantity)) : undefined
-  const atMax = lineMax != null && item.quantity >= lineMax
+  const lineMax = Math.max(0, max - (productQty - item.quantity))
+  const atMax = item.quantity >= lineMax
+  const atOnlineCap = atMax && onlineCapped
   const unavailable = status && !status.available
   const href = `/products/${productIdOf(item, status)}`
   const needsVariant = unavailable && /seçenek/i.test(status?.error ?? '')
@@ -154,7 +159,7 @@ function CartLine({
                 className="flex h-10 w-10 items-center justify-center text-[#20384e] transition-colors hover:bg-[#f5f7fa] disabled:opacity-40 touch-manipulation sm:h-9 sm:w-9"
                 aria-label={L('Miktarı artır', 'Increase quantity')}
                 disabled={atMax}
-                title={atMax ? L(`Stokta ${max} adet var`, `Only ${max} in stock`) : undefined}
+                title={atOnlineCap ? L(`Çevrim içi en fazla ${max} adet`, `Up to ${max} units online`) : atMax ? L(`Stokta ${max} adet var`, `Only ${max} in stock`) : undefined}
               >
                 <Plus className="h-4 w-4" />
               </button>
@@ -162,9 +167,18 @@ function CartLine({
             <div className="text-right">
               <p className="text-base font-bold tabular-nums text-[#121926]">{formatPrice(grossPrice(item.price * item.quantity))}</p>
               <p className="text-[11px] text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</p>
-              {max != null && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">{L(`Son ${max} adet`, `Only ${max} left`)}</p>}
+              {!onlineCapped && max > 0 && max <= 5 && !unavailable && <p className="text-[11px] font-semibold text-amber-700">{L(`Son ${max} adet`, `Only ${max} left`)}</p>}
             </div>
           </div>
+
+          {atOnlineCap && !unavailable && (
+            <p className="mt-2 text-xs text-[#5d6e80]">
+              {L(`Çevrim içi en fazla ${max} adet sipariş verilebilir.`, `Up to ${max} units can be ordered online.`)}{' '}
+              <Link href={contactHref('urun', { productId: productIdOf(item, status) })} className="font-semibold text-[#0b2540] underline">
+                {L('Daha fazlası için teklif alın', 'Request a quote for more')}
+              </Link>
+            </p>
+          )}
 
           {priceChange && !unavailable && (
             <p className="mt-2 flex items-start gap-1.5 rounded-md bg-[#eef4fb] px-2.5 py-1.5 text-xs text-[#20384e]">

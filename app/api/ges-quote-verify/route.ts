@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { isValidEmail, isValidTrPhone } from '@/lib/checkout-validation'
 import { prisma } from '@/lib/prisma'
 import { isRateLimited } from '@/lib/rate-limit'
+import { httpUrl, readJsonLimited, shortText } from '@/lib/request-body'
 import { sendEmailSMTP } from '@/lib/email-smtp'
 import { adminNotifyEmail } from '@/lib/store-config'
 
@@ -64,13 +65,17 @@ function computeRedFlags(body: Record<string, unknown>): string[] {
 
 export async function POST(request: NextRequest) {
   try {
-    if (isRateLimited(request as unknown as Request, 'ges-quote-verify', 15, 60_000)) {
+    // Her talep yöneticiye e-posta gönderir: IP başına 10 dakikada 5
+    if (isRateLimited(request as unknown as Request, 'ges-quote-verify', 5, 10 * 60_000)) {
       return NextResponse.json(
         { success: false, error: 'Çok fazla istek. Lütfen bir dakika sonra tekrar deneyin.' },
         { status: 429 }
       )
     }
-    const body = await request.json()
+    const body = (await readJsonLimited(request, 32_000)) as Record<string, any> | null
+    if (!body) {
+      return NextResponse.json({ success: false, error: 'Form verisi okunamadı veya çok büyük.' }, { status: 413 })
+    }
 
     // İletişim bilgileri sitedeki formlarla aynı kuralla (lib/checkout-validation)
     if (!isValidEmail(body.contactEmail)) {
@@ -80,7 +85,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Geçerli bir telefon numarası girin (11 hane, örn. 0532 123 45 67).' }, { status: 400 })
     }
 
-    const companyName = typeof body.companyName === 'string' ? body.companyName.trim() : ''
+    const companyName = shortText(body.companyName, 200) ?? ''
     // Firma adı isteğe bağlı
 
     const quoteDate = body.quoteDate
@@ -98,7 +103,7 @@ export async function POST(request: NextRequest) {
       const n = typeof v === 'number' ? v : typeof v === 'string' ? parseInt(v, 10) : undefined
       return n != null && Number.isFinite(n) ? n : undefined
     }
-    const str = (v: unknown) => (typeof v === 'string' ? v.trim() || undefined : undefined)
+    const str = (v: unknown) => shortText(v, 500)
 
     const redFlags = computeRedFlags(body)
 
@@ -133,8 +138,8 @@ export async function POST(request: NextRequest) {
         paybackYearsQuoted: num(body.paybackYearsQuoted),
         warrantyService: str(body.warrantyService),
         smartEMS: str(body.smartEMS),
-        attachmentBillUrl: str(body.attachmentBillUrl),
-        attachmentQuotePdfUrl: str(body.attachmentQuotePdfUrl),
+        attachmentBillUrl: httpUrl(body.attachmentBillUrl),
+        attachmentQuotePdfUrl: httpUrl(body.attachmentQuotePdfUrl),
         contactName: str(body.contactName),
         contactEmail: str(body.contactEmail),
         contactPhone: str(body.contactPhone),

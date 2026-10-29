@@ -48,6 +48,7 @@ COL_STOCK = 'Stok:Ana Depo'
 COL_VARIANT_VALUE = 'Varyant Değer 1'
 COL_CHANNEL = 'Satış Kanalı:voltekno'
 COL_VARIANT_ACTIVE = 'Varyant Aktiflik'
+COL_BARCODE = 'Barkod Listesi'
 
 
 def read_xlsx(path):
@@ -193,6 +194,18 @@ def sanitize_html(s):
     s = re.sub(r'<table\b', '<div class="pd-table"><table', s, flags=re.I)
     s = re.sub(r'</table\s*>', '</table></div>', s, flags=re.I)
     return s.strip()
+
+
+def first_valid_gtin(cell):
+    """'Barkod Listesi' hücresindeki ilk geçerli GTIN (8/12/13/14 hane, GS1 kontrol basamağı); lib/gtin.ts ile aynı kural."""
+    for part in re.split(r'[;,|\n]+', cell or ''):
+        digits = re.sub(r'[\s-]', '', part)
+        if not digits.isdigit() or len(digits) not in (8, 12, 13, 14) or set(digits) == {'0'}:
+            continue
+        total = sum(int(d) * (3 if i % 2 == 0 else 1) for i, d in enumerate(reversed(digits[:-1])))
+        if (10 - total % 10) % 10 == int(digits[-1]):
+            return digits
+    return None
 
 
 def price_of(row):
@@ -598,6 +611,9 @@ def main():
                     'basePrice': base,
                     'price': to_try(base),
                 }
+                gtin = first_valid_gtin(x.get(COL_BARCODE))
+                if gtin:
+                    v['gtin'] = gtin
                 vspecs = specs_by_variant.get(i)
                 if vspecs:
                     v['specifications'] = vspecs
@@ -629,6 +645,9 @@ def main():
                     p[k] = variants[0][k]
         else:
             _, base = price_of(head)
+            gtin = first_valid_gtin(head.get(COL_BARCODE))
+            if gtin:
+                p['gtin'] = gtin
             p['basePrice'] = base
             p['price'] = to_try(base)
             p['images'] = images_of(head, missing) or [PLACEHOLDER]
@@ -665,8 +684,9 @@ def main():
     # İstemciye giden hafif katalog / yalnızca sunucuda yüklenen ayrıntılar.
     # products.json her sayfanın JS paketine girdiğinden (başlık menüsü, öneriler) özellikler, döviz fiyatı,
     # ölçü/desi ve SEO başlığı product-details.json'a ayrılır; sunucu (lib/catalog-details.ts) ikisini birleştirir.
-    detail_keys = ('specifications', 'basePrice', 'metaTitle', 'dimensionsCm', 'weightKg', 'desi', 'desiSource')
-    variant_detail_keys = ('specifications', 'basePrice', 'dimensionsCm', 'weightKg', 'desi', 'desiSource')
+    # Barkod (gtin) yalnız şema ve Merchant akışında kullanılır: istemci paketine girmez
+    detail_keys = ('specifications', 'basePrice', 'metaTitle', 'dimensionsCm', 'weightKg', 'desi', 'desiSource', 'gtin')
+    variant_detail_keys = ('specifications', 'basePrice', 'dimensionsCm', 'weightKg', 'desi', 'desiSource', 'gtin')
     lite, details = [], {}
     for p in products:
         d = {k: p[k] for k in detail_keys if k in p}

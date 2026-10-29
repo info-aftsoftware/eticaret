@@ -11,6 +11,7 @@ import { contactHref } from '@/lib/contact-topics'
 import { ProductCard } from '@/components/ProductCard'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { getLocale } from 'next-intl/server'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const MAX_PRODUCTS = 16
@@ -92,11 +93,11 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
     <div className="min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbSchema(item)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildBreadcrumbSchema(item)) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(item)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildFaqSchema(item)) }}
       />
 
       {/* Hero */}

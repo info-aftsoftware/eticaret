@@ -2,8 +2,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Yönetim paneli Firestore'a istemciden erişmez; sunucu Admin SDK ile çalışır (kurallara tabi değil).
+    // Eskiden tüm panel rollerine verilen ortak 'admin-panel-user' kimliği rol ayrımını aştığı için kapatıldı.
     function isAdmin() {
-      return request.auth != null && request.auth.uid == 'admin-panel-user';
+      return false;
     }
 
     // Kullanıcı profili ve alt koleksiyonları (adresler, siparişler, favoriler) - sadece kendi verisi

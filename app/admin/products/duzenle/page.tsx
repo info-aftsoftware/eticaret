@@ -29,6 +29,7 @@ import {
 } from 'lucide-react'
 import { CATEGORY_GROUPS } from '@/lib/categories'
 import { fmtTRY } from '@/lib/format'
+import { gtinProblem } from '@/lib/gtin'
 import { Btn, BtnLink, Checkbox, EmptyState, Field, Modal, PageHeader, Panel, PanelHeader, Pill, SelectInput, Spinner, TextArea, TextInput } from '@/components/admin/ui'
 import { useToast } from '@/components/admin/toast'
 import { useAdminMe } from '@/components/admin/AdminMeContext'
@@ -52,6 +53,7 @@ type Product = {
   id: string
   name: string
   sku?: string
+  gtin?: string
   brand?: string
   category: string
   description?: string
@@ -104,6 +106,7 @@ type Form = {
   name: string
   brand: string
   sku: string
+  gtin: string
   category: string
   description: string
   fullDescription: string
@@ -136,10 +139,10 @@ type Form = {
 }
 
 /** price: TL (sabit TL modunda girilir); base: döviz fiyatı (dövize bağlı modda girilir); stock: ayrı varyant stoğu */
-type VariantRow = { key: string; label: string; sku: string; price: string; base: string; stock: string; extra: Record<string, unknown> }
+type VariantRow = { key: string; label: string; sku: string; gtin: string; price: string; base: string; stock: string; extra: Record<string, unknown> }
 type SpecRow = { id: number; k: string; v: string }
 
-const EMPTY_FORM: Form = { name: '', brand: '', sku: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal', salesClosed: false, systemVoltage: [] }
+const EMPTY_FORM: Form = { name: '', brand: '', sku: '', gtin: '', category: '', description: '', fullDescription: '', slogan: '', warranty: '', featured: false, price: '', basePrice: '', priceMode: 'fixed', stock: '0', variantStock: false, features: '', currency: 'TRY', costPrice: '', costCurrency: 'TRY', targetMargin: '', dimL: '', dimW: '', dimH: '', weightKg: '', packageCount: '1', saleMode: 'normal', salesClosed: false, systemVoltage: [] }
 
 const SALE_MODE_OPTIONS = [
   ['normal', 'Kargo ile gönderilir'],
@@ -160,6 +163,7 @@ function toForm(p: Product): Form {
     name: p.name ?? '',
     brand: p.brand ?? '',
     sku: p.sku ?? '',
+    gtin: p.gtin ?? '',
     category: p.category ?? '',
     description: p.description ?? '',
     fullDescription: p.fullDescription ?? '',
@@ -188,10 +192,11 @@ function toForm(p: Product): Form {
 }
 
 function toVariantRows(vs?: Variant[]): VariantRow[] {
-  return (vs ?? []).map(({ key, label, sku, price, basePrice, stock, ...extra }) => ({
+  return (vs ?? []).map(({ key, label, sku, gtin, price, basePrice, stock, ...extra }) => ({
     key,
     label,
     sku: sku ?? '',
+    gtin: typeof gtin === 'string' ? gtin : '',
     price: String(price ?? ''),
     base: typeof basePrice === 'number' ? String(basePrice) : '',
     stock: String(stock ?? 0),
@@ -226,6 +231,7 @@ function variantsPayload(rows: VariantRow[], mode: PriceMode, rate: number | nul
       label: r.label.trim(),
       price,
       ...(r.sku.trim() ? { sku: r.sku.trim() } : {}),
+      ...(r.gtin.trim() ? { gtin: r.gtin.trim() } : {}),
       ...(fx ? { basePrice: base } : {}),
     }
   })
@@ -324,6 +330,7 @@ function Editor() {
     if (str('name') !== o.form.name.trim()) body.name = str('name')
     if (str('brand') !== o.form.brand.trim()) body.brand = str('brand') || null
     if (str('sku') !== o.form.sku.trim()) body.sku = str('sku') || null
+    if (str('gtin') !== o.form.gtin.trim()) body.gtin = str('gtin') || null
     if (str('category') !== o.form.category.trim()) body.category = str('category')
     if (str('description') !== o.form.description.trim()) body.description = str('description')
     if (str('fullDescription') !== o.form.fullDescription.trim()) body.fullDescription = str('fullDescription')
@@ -369,8 +376,8 @@ function Editor() {
     }
     // Varyant fiyatı modda girilen alandan karşılaştırılır (dövize bağlıda döviz, sabit TL'de TL)
     const priceCol = (r: VariantRow) => (form.priceMode === 'fx' ? r.base.trim() : r.price.trim())
-    const vNow = variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), priceCol(r)])
-    const vOrig = o.variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), priceCol(r)])
+    const vNow = variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), r.gtin.trim(), priceCol(r)])
+    const vOrig = o.variants.map((r) => [r.key, r.label.trim(), r.sku.trim(), r.gtin.trim(), priceCol(r)])
     if (JSON.stringify(vNow) !== JSON.stringify(vOrig)) body.variants = variantsPayload(variants, form.priceMode, product?._meta?.rate?.value ?? null)
     const viNow = JSON.stringify(variants.map((v) => [v.key, variantImages[v.key] ?? []]))
     const viOrig = JSON.stringify(variants.map((v) => [v.key, o.variantImages[v.key] ?? []]))
@@ -450,6 +457,7 @@ function Editor() {
           category: form.category.trim(),
           brand: form.brand.trim() || null,
           sku: form.sku.trim() || null,
+          gtin: form.gtin.trim() || null,
           description: form.description.trim() || null,
           fullDescription: form.fullDescription.trim() || null,
           slogan: form.slogan.trim() || null,
@@ -724,6 +732,15 @@ function Editor() {
               <Field label="SKU / stok kodu" htmlFor="p-sku">
                 <TextInput id="p-sku" value={form.sku} onChange={(e) => set('sku', e.target.value)} />
               </Field>
+              {variants.length === 0 && (
+                <Field
+                  label="Barkod (GTIN / EAN-13)"
+                  htmlFor="p-gtin"
+                  hint={gtinProblem(form.gtin) ? <span className="text-[#b42318]">{gtinProblem(form.gtin)}</span> : "Ürünün üzerindeki barkod; Google'da ürün eşleşmesi için. Varyantlı üründe her varyantın kendi barkodu."}
+                >
+                  <TextInput id="p-gtin" inputMode="numeric" value={form.gtin} onChange={(e) => set('gtin', e.target.value)} placeholder="Örn. 8690000000000" />
+                </Field>
+              )}
               <Field label="Kategori" htmlFor="p-cat">
                 <SelectInput id="p-cat" value={form.category} onChange={(e) => set('category', e.target.value)}>
                   <option value="">Seçin…</option>
@@ -1001,7 +1018,7 @@ function Editor() {
                 <Btn
                   size="xs"
                   variant="outline"
-                  onClick={() => setVariants((prev) => [...prev, { key: newVariantKey(`v${prev.length + 1}`), label: '', sku: '', price: form.price || '', base: fx ? form.basePrice : '', stock: '0', extra: {} }])}
+                  onClick={() => setVariants((prev) => [...prev, { key: newVariantKey(`v${prev.length + 1}`), label: '', sku: '', gtin: '', price: form.price || '', base: fx ? form.basePrice : '', stock: '0', extra: {} }])}
                 >
                   <Plus />
                   Varyant ekle
@@ -1017,7 +1034,7 @@ function Editor() {
                     <tr className="text-[11px] uppercase tracking-wider text-[#5d6e80] border-b border-[#e6ebf1] text-left">
                       <th className="px-4 py-2 w-16">Sıra</th>
                       <th className="px-2 py-2">Varyant adı</th>
-                      <th className="px-2 py-2 w-48">SKU</th>
+                      <th className="px-2 py-2 w-48">SKU / barkod</th>
                       <th className="px-2 py-2 w-40">{fx ? `Fiyat (${currency}, KDV hariç)` : 'Fiyat (TL, KDV hariç)'}</th>
                       {form.variantStock && <th className="px-2 py-2 w-24">Stok</th>}
                       <th className="px-4 py-2 w-12" />
@@ -1046,6 +1063,15 @@ function Editor() {
                           </td>
                           <td className="px-2 py-2">
                             <TextInput value={v.sku} onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, sku: e.target.value } : x)))} aria-label="Varyant SKU" />
+                            <TextInput
+                              className={`mt-1 ${gtinProblem(v.gtin) ? 'border-[#b42318]' : ''}`}
+                              inputMode="numeric"
+                              value={v.gtin}
+                              onChange={(e) => setVariants((prev) => prev.map((x, j) => (j === i ? { ...x, gtin: e.target.value } : x)))}
+                              aria-label="Varyant barkodu (GTIN)"
+                              placeholder="Barkod (GTIN)"
+                              title={gtinProblem(v.gtin) ?? 'Barkod (GTIN / EAN-13)'}
+                            />
                           </td>
                           <td className="px-2 py-2">
                             {fx ? (

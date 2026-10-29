@@ -4,9 +4,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { reportError } from '@/lib/alerts'
 import { prisma } from '@/lib/prisma'
 import type { Prisma } from '@prisma/client'
-import { isRateLimited } from '@/lib/rate-limit'
+import { getClientIp, isRateLimited } from '@/lib/rate-limit'
 import crypto from 'node:crypto'
 import { getBankPosConfig, buildPosForm, type PosForm } from '@/lib/payments/bank-pos'
+import { getCardProvider } from '@/lib/payments/card'
+import { startIyzicoPayment } from '@/lib/payments/iyzico-order'
+
+/** Kartlı ödemede istemcinin gideceği yer: banka POS'u için imzalı form, iyzico için ödeme sayfası adresi */
+type CardPaymentResponse = { form: PosForm; bank: string } | { redirectUrl: string; bank: string }
 import { getNextOrderNo, getNextCustomerNo } from '@/lib/sequence'
 import { getCustomerFromRequest } from '@/lib/customerAuth'
 import { priceOrder, PricingError, StockError, VAT_RATE, reserveCouponUse, releaseCouponUse } from '@/lib/order-pricing'
@@ -45,15 +50,22 @@ function siteBase() {
 }
 
 /** Aynı anahtarla daha önce açılmış sipariş varsa ilk yanıtın aynısı döner (yeni sipariş açılmaz) */
-async function replayOrder(key: string) {
+async function replayOrder(key: string, ip: string | null) {
   const order = await prisma.order.findFirst({
     where: { idempotencyKey: key, createdAt: { gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS) } },
     orderBy: { createdAt: 'desc' },
+    include: { lines: true },
   })
   if (!order) return null
-  let payment: { form: PosForm; bank: string } | undefined
-  const posConfig = order.paymentMethod === 'card' && order.status === 'PENDING' && order.paymentStatus !== 'PAID' ? getBankPosConfig() : null
-  if (posConfig) {
+  let payment: CardPaymentResponse | undefined
+  const unpaidCard = order.paymentMethod === 'card' && order.status === 'PENDING' && order.paymentStatus !== 'PAID'
+  const provider = unpaidCard ? getCardProvider() : null
+  if (provider === 'iyzico') {
+    // iyzico ödeme formu tek kullanımlık: tekrar gelen istekte aynı sipariş için yenisi açılır
+    const { paymentPageUrl } = await startIyzicoPayment(order, { ip })
+    payment = { redirectUrl: paymentPageUrl, bank: 'iyzico' }
+  } else if (provider === 'bank') {
+    const posConfig = getBankPosConfig()!
     payment = {
       bank: posConfig.bankName,
       form: buildPosForm(
@@ -89,7 +101,7 @@ export async function POST(request: NextRequest) {
   if (!key) return createOrder(request, parsed)
   // Aynı anahtarla gelen istekler sırayla: önceki bitince sipariş açılmışsa onun yanıtı döner
   while (inflight.has(key)) await inflight.get(key)!.catch(() => {})
-  const run = (async () => (await replayOrder(key)) ?? createOrder(request, parsed, key))()
+  const run = (async () => (await replayOrder(key, clientIpFromHeaders(request.headers))) ?? createOrder(request, parsed, key))()
   inflight.set(key, run)
   try {
     return await run
@@ -113,9 +125,10 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
 
     const { customer, items, couponCode, acceptedTerms } = body
     const paymentMethod = body.paymentMethod === 'card' ? 'card' : 'bank_transfer'
-    // Banka sanal POS bilgileri girilmeden kartla sipariş alınmaz (sipariş oluşturulmadan reddedilir)
-    const posConfig = paymentMethod === 'card' ? getBankPosConfig() : null
-    if (paymentMethod === 'card' && !posConfig) {
+    // Kart sağlayıcısı (iyzico veya banka sanal POS) tanımlanmadan kartla sipariş alınmaz (sipariş oluşturulmadan reddedilir)
+    const cardProvider = paymentMethod === 'card' ? getCardProvider() : null
+    const posConfig = cardProvider === 'bank' ? getBankPosConfig() : null
+    if (paymentMethod === 'card' && !cardProvider) {
       return NextResponse.json(
         { success: false, code: 'CARD_UNAVAILABLE', error: 'Kartla ödeme şu anda kullanılamıyor. Lütfen Havale/EFT seçeneğiyle devam edin.' },
         { status: 503 }
@@ -150,6 +163,20 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
     // Ödenmemiş havale siparişleri stoğu ve kupon kullanımını ödeme süresi boyunca ayırır; uydurma siparişlerle
     // katalogun "tükendi" gösterilmesini önlemek için aynı e-posta/telefona açık sipariş sayısı sınırlanır.
     if (paymentMethod === 'bank_transfer') {
+      // Her seferinde yeni e-posta/telefon uyduran istemciye karşı IP başına saatte 3 havale siparişi
+      // (Hostinger vekili x-real-ip'yi kendisi yazıyor; 29.10.2026 ölçümü, lib/checkout-validation.ts).
+      // IP'si bilinmeyen istek (yerel geliştirme, vekilsiz test) bu sınırın dışında; e-posta/telefon sınırı yine geçerli
+      const requestIp = getClientIp(request)
+      if (requestIp !== 'unknown' && !/^(127\.|::1$|::ffff:127\.)/.test(requestIp) && isRateLimited(request, 'orders-bank-transfer', 3, 60 * 60_000)) {
+        return NextResponse.json(
+          {
+            success: false,
+            code: 'TOO_MANY_OPEN_ORDERS',
+            error: 'Kısa sürede çok fazla havale siparişi verildi. Lütfen mevcut siparişlerinizin ödemesini tamamlayın veya bir saat sonra tekrar deneyin.',
+          },
+          { status: 429 }
+        )
+      }
       const openUnpaid = await prisma.order.count({
         where: {
           status: 'PENDING',
@@ -370,20 +397,26 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
       }).catch((e) => reportError('siparis-kurulum-notu', e, { orderNo: order.orderNo }))
     }
 
-    // Kartlı ödeme: tarayıcı bu imzalı formla bankanın 3D Secure sayfasına gider.
-    // paymentProviderRef = ödeme dönüş sayfasının durumu sorgularken kullandığı tek kullanımlık anahtar.
-    let payment: { form: PosForm; bank: string } | undefined
-    if (paymentMethod === 'card' && posConfig) {
+    // Kartlı ödeme: banka POS'unda tarayıcı imzalı formla bankanın 3D Secure sayfasına, iyzico'da iyzico'nun
+    // barındırdığı ödeme sayfasına gider. paymentProviderRef = ödeme dönüş sayfasının durumu sorgularken
+    // kullandığı tek kullanımlık anahtar.
+    let payment: CardPaymentResponse | undefined
+    if (paymentMethod === 'card' && cardProvider) {
       try {
         const returnToken = crypto.randomBytes(18).toString('base64url')
         await prisma.order.update({ where: { id: order.id }, data: { paymentProviderRef: returnToken } })
-        const baseUrl = siteBase()
-        payment = {
-          bank: posConfig.bankName,
-          form: buildPosForm(
-            { orderNo: order.orderNo, amount: pricing.total, callbackUrl: `${baseUrl}/api/payments/pos/callback`, customer: { name, email, phone } },
-            posConfig
-          ),
+        if (cardProvider === 'iyzico') {
+          const locale = request.headers.get('x-locale') === 'en' ? 'en' : 'tr'
+          const { paymentPageUrl } = await startIyzicoPayment({ ...order, paymentProviderRef: returnToken }, { ip, locale })
+          payment = { redirectUrl: paymentPageUrl, bank: 'iyzico' }
+        } else if (posConfig) {
+          payment = {
+            bank: posConfig.bankName,
+            form: buildPosForm(
+              { orderNo: order.orderNo, amount: pricing.total, callbackUrl: `${siteBase()}/api/payments/pos/callback`, customer: { name, email, phone } },
+              posConfig
+            ),
+          }
         }
       } catch (e) {
         await reportError('kart-odeme-baslatma', e, { orderNo: order.orderNo })

@@ -47,6 +47,9 @@ export async function GET() {
     const regular = (p.oldPrice ?? p.price) * (1 + VAT_RATE / 100)
     const sale = p.oldPrice ? p.price * (1 + VAT_RATE / 100) : null
     const shipping = shippingFeeFor(lineLogistics(p.id, undefined, panelLineLogistics(p)))
+    // Barkod: ürünün ya da (varyantlı üründe fiyatı gönderilen) varsayılan varyantın doğrulanmış GTIN'i
+    const defaultVariant = p.variants?.find((v) => v.key === p.defaultVariantKey) ?? p.variants?.[0]
+    const gtin = p.gtin ?? defaultVariant?.gtin
     return `    <item>
       <g:id>${xml(p.id)}</g:id>
       <title>${xml(p.name.slice(0, 150))}</title>
@@ -59,7 +62,7 @@ export async function GET() {
       ${sale ? `<g:sale_price>${money(sale)}</g:sale_price>` : ''}${sale && p.campaign?.endsAt ? `<g:sale_price_effective_date>${new Date().toISOString()}/${p.campaign.endsAt}</g:sale_price_effective_date>` : ''}
       <g:condition>new</g:condition>
       ${p.brand ? `<g:brand>${xml(p.brand)}</g:brand>` : ''}
-      ${/* SKU mağazanın iç kodu (TOMMAT-…), üretici parça no / GTIN değil: Google'a tanımlayıcı yok bildirilir */ ''}<g:identifier_exists>no</g:identifier_exists>
+      ${/* SKU mağazanın iç kodu (TOMMAT-…), GTIN değil: barkod yoksa Google'a tanımlayıcı yok bildirilir */ ''}${gtin ? `<g:gtin>${gtin}</g:gtin>` : '<g:identifier_exists>no</g:identifier_exists>'}
       ${p.category ? `<g:product_type>${xml(productType(p.category))}</g:product_type>` : ''}
       ${p.weightKg ? `<g:shipping_weight>${p.weightKg} kg</g:shipping_weight>` : ''}
       <g:shipping><g:country>TR</g:country><g:price>${money(shipping)}</g:price></g:shipping>

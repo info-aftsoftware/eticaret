@@ -6,6 +6,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { PAGE_CONTAINER } from '@/lib/page-container'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
@@ -50,7 +51,7 @@ export default async function PaketlerPage() {
     <div className="min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPackageListSchema()) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildPackageListSchema()) }}
       />
       <div className={`${PAGE_CONTAINER} py-10 md:py-14`}>
         <header className="mb-8 md:mb-10">

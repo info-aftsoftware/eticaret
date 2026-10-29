@@ -119,6 +119,9 @@ export function verifyPosCallback(params: Record<string, string>, config: BankPo
   const received = params.HASH ?? params.hash
   if (!received) return { valid: false, reason: 'İmza yok' }
   if (params.clientid && params.clientid !== config.clientId) return { valid: false, reason: 'Mağaza numarası uyuşmuyor' }
+  // Bankanın dönüşünde her zaman bulunan alanlar: giden ödeme formu aynı anahtarla imzalandığı için, bu alanlar
+  // olmadan imzalı bir form geri gönderilip dönüş gibi işletilemesin
+  if (!params.mdStatus || !params.ProcReturnCode) return { valid: false, reason: 'Banka dönüş alanları eksik' }
 
   const expected = nestpayHashV3(params, config.storeKey)
   const a = Buffer.from(expected)

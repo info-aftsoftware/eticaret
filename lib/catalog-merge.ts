@@ -67,6 +67,7 @@ function applyOverride(base: MergedProduct, override: OverrideRow, rates?: TryRa
   }
   if (override.brand != null) base.brand = override.brand
   if (override.sku != null) base.sku = override.sku
+  if (override.gtin != null) base.gtin = override.gtin
   if (override.tags != null) base.tags = override.tags as string[] | undefined
   if (override.slogan != null) base.slogan = override.slogan
   if (override.warranty != null) base.warranty = override.warranty

@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server'
+import type { NextRequest, NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import type { Prisma } from '@prisma/client'
 import { summarizeChanges, type FieldChange } from '@/lib/audit-diff'
@@ -21,7 +21,48 @@ export type AdminActor = {
   mustChangePassword: boolean
 }
 
-type SessionPayload = { sub?: string; admin?: boolean; uid?: string }
+/** sv: kullanıcının oturum sürümü; şifre/2FA değişince, sıfırlanınca, pasifleştirilince veya çıkışta artar, eski çerezler düşer */
+type SessionPayload = { sub?: string; admin?: boolean; uid?: string; sv?: number }
+
+export const ADMIN_SESSION_MAX_AGE = 60 * 60 * 24 * 7 // 7 gün
+
+/** Yönetim oturum çerezini yazar (giriş ve kendi şifresini/2FA'sını değiştiren kullanıcının yeni oturumu) */
+export function setAdminSessionCookie(response: NextResponse, payload: { sub: string; uid?: string; sv?: number }) {
+  const token = jwt.sign({ ...payload, admin: true }, JWT_SECRET, { expiresIn: ADMIN_SESSION_MAX_AGE, algorithm: 'HS256' })
+  response.cookies.set('admin_session', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: ADMIN_SESSION_MAX_AGE,
+    path: '/',
+  })
+}
+
+/** Kullanıcının tüm açık oturumlarını geçersiz kılar; yeni sürümü döner */
+export async function bumpAdminSessions(userId: string): Promise<number> {
+  const u = await prisma.adminUser.update({ where: { id: userId }, data: { sessionVersion: { increment: 1 } }, select: { sessionVersion: true } })
+  return u.sessionVersion
+}
+
+const MASTER_SESSION_SEQ = 'adminMasterSessionVersion'
+
+/** Ana şifre oturumlarının sürümü (kullanıcı kaydı olmadığı için Sequence tablosunda) */
+export async function masterSessionVersion(): Promise<number> {
+  return (await prisma.sequence.findUnique({ where: { name: MASTER_SESSION_SEQ } }))?.value ?? 0
+}
+
+/** Tüm ana şifre oturumlarını geçersiz kılar (ana şifre oturumundan çıkışta) */
+export async function bumpMasterSessions(): Promise<void> {
+  await prisma.sequence.upsert({ where: { name: MASTER_SESSION_SEQ }, create: { name: MASTER_SESSION_SEQ, value: 1 }, update: { value: { increment: 1 } } })
+}
+
+/** Çıkış: oturumun sahibine göre ilgili oturum sürümü artar; kopyalanmış çerez de çalışmaz */
+export async function revokeAdminSession(request: NextRequest): Promise<void> {
+  const s = readSession(request)
+  if (!s) return
+  if (s.uid) await bumpAdminSessions(s.uid)
+  else if (s.sub === MASTER_SESSION_SUB) await bumpMasterSessions()
+}
 
 function readSession(request: NextRequest): SessionPayload | null {
   return readSessionCookie(request.cookies.get('admin_session')?.value)
@@ -34,15 +75,15 @@ function readSession(request: NextRequest): SessionPayload | null {
 export async function isAdminSessionCookie(value: string | undefined): Promise<boolean> {
   const s = readSessionCookie(value)
   if (!s) return false
-  if (!s.uid) return masterSessionAllowed()
-  const user = await prisma.adminUser.findUnique({ where: { id: s.uid }, select: { active: true, role: true } })
-  return !!user?.active && isAdminRole(user.role)
+  if (!s.uid) return (s.sv ?? 0) === (await masterSessionVersion()) && masterSessionAllowed()
+  const user = await prisma.adminUser.findUnique({ where: { id: s.uid }, select: { active: true, role: true, sessionVersion: true } })
+  return !!user?.active && isAdminRole(user.role) && (s.sv ?? 0) === user.sessionVersion
 }
 
 function readSessionCookie(cookie: string | undefined): SessionPayload | null {
   if (!cookie || !JWT_SECRET) return null
   try {
-    const decoded = jwt.verify(cookie, JWT_SECRET) as SessionPayload
+    const decoded = jwt.verify(cookie, JWT_SECRET, { algorithms: ['HS256'] }) as SessionPayload
     return decoded.admin === true && decoded.sub ? decoded : null
   } catch {
     return null
@@ -58,11 +99,11 @@ export async function getAdminActor(request: NextRequest): Promise<AdminActor | 
   if (!s) return null
   if (!s.uid) {
     // Ana şifre oturumu, giriş kuralı artık izin vermiyorsa (ör. 2FA'lı Sahip hesabı açıldı, ADMIN_MASTER_LOGIN=off) düşer (A12)
-    if (!(await masterSessionAllowed())) return null
+    if ((s.sv ?? 0) !== (await masterSessionVersion()) || !(await masterSessionAllowed())) return null
     return { userId: null, role: 'owner', name: 'Ana yönetici şifresi', email: null, mustChangePassword: false }
   }
   const user = await prisma.adminUser.findUnique({ where: { id: s.uid } })
-  if (!user || !user.active || !isAdminRole(user.role)) return null
+  if (!user || !user.active || !isAdminRole(user.role) || (s.sv ?? 0) !== user.sessionVersion) return null
   return { userId: user.id, role: user.role, name: user.name, email: user.email, mustChangePassword: user.mustChangePassword }
 }
 

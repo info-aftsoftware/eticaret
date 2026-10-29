@@ -17,7 +17,8 @@ export function siteOrigin(request: NextRequest): string {
     const o = new URL(origin)
     const c = new URL(configured)
     const bare = (h: string) => h.replace(/^www\./, '')
-    if (bare(o.hostname) === bare(c.hostname)) return o.origin
+    // Alan adı aynıysa yapılandırılmış adres (ör. http:// ile gelen Origin bağlantıyı http'ye düşürmesin)
+    if (bare(o.hostname) === bare(c.hostname)) return c.origin
     const isLocal = o.hostname === 'localhost' || o.hostname === '127.0.0.1'
     if (isLocal && process.env.NODE_ENV !== 'production') return o.origin
   } catch {

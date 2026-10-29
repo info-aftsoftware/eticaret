@@ -12,6 +12,7 @@ import React from 'react'
 import { prisma } from '@/lib/prisma'
 import { sendEmailSMTP } from '@/lib/email-smtp'
 import { isRateLimited } from '@/lib/rate-limit'
+import { readJsonLimited } from '@/lib/request-body'
 
 const optionalLine = (key: string, label: string, value: string | number | undefined) =>
   value != null && String(value).trim() !== ''
@@ -186,7 +187,10 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       )
     }
-    const body = await request.json()
+    const body = (await readJsonLimited(request, 64_000)) as Record<string, any> | null
+    if (!body) {
+      return NextResponse.json({ success: false, error: 'Form verisi okunamadı veya çok büyük.' }, { status: 413 })
+    }
     const fullName = typeof body.fullName === 'string' ? body.fullName.trim().slice(0, 120) : ''
     const phone = typeof body.phone === 'string' ? body.phone.trim().replace(/\s/g, '') : ''
     const city = typeof body.city === 'string' ? body.city.trim().slice(0, 100) : ''
@@ -218,7 +222,9 @@ export async function POST(request: NextRequest) {
     const attachmentPanelUrl = safeAttachmentUrl(body.attachmentPanelUrl)
     const attachmentBillUrl = safeAttachmentUrl(body.attachmentBillUrl)
     const attachmentRoofUrl = safeAttachmentUrl(body.attachmentRoofUrl)
-    const formData = body.formData != null && typeof body.formData === 'object' ? (body.formData as object) : undefined
+    // Formun ham kopyası (panelde ayrıntı): 20 KB üstü saklanmaz
+    const formData =
+      body.formData != null && typeof body.formData === 'object' && JSON.stringify(body.formData).length <= 20_000 ? (body.formData as object) : undefined
 
     if (!fullName || fullName.length < 2) {
       return NextResponse.json(

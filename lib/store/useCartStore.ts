@@ -7,6 +7,7 @@
  */
 import { create } from 'zustand'
 import { isContactOnlyLine, isContactOnlyProduct } from '@/lib/shipping/battery'
+import { MAX_ONLINE_QTY_PER_PRODUCT } from '@/lib/store-config'
 import { persist, PersistStorage } from 'zustand/middleware'
 import { cartItemToGa, trackAddToCart, trackRemoveFromCart } from '@/lib/analytics'
 import type { LineLogisticsOverride } from '@/lib/shipping/fee'
@@ -109,11 +110,11 @@ function readMemberCart(uid: string): PersistedCart | null {
 
 const productKey = (i: Pick<CartItem, 'id' | 'productId' | 'stockKey'>) => i.stockKey ?? i.productId ?? i.id
 
-/** Ürünün stok sınırına göre kalemin alabileceği en fazla adet (sınır yoksa Infinity). */
+/** Ürünün stok ve çevrim içi adet sınırına (MAX_ONLINE_QTY_PER_PRODUCT) göre kalemin alabileceği en fazla adet. */
 function capFor(items: CartItem[], target: Pick<CartItem, 'id' | 'productId' | 'stockKey' | 'maxQuantity'>): number {
   const key = productKey(target)
-  const max = target.maxQuantity ?? items.find((i) => productKey(i) === key && i.maxQuantity != null)?.maxQuantity
-  if (max == null) return Infinity
+  const stockMax = target.maxQuantity ?? items.find((i) => productKey(i) === key && i.maxQuantity != null)?.maxQuantity
+  const max = Math.min(stockMax ?? Infinity, MAX_ONLINE_QTY_PER_PRODUCT)
   const others = items.filter((i) => productKey(i) === key && i.id !== target.id).reduce((n, i) => n + i.quantity, 0)
   return Math.max(0, max - others)
 }

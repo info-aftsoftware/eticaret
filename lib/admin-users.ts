@@ -29,9 +29,10 @@ const RULES: { prefix: string; read: AdminRole[]; write: AdminRole[] }[] = [
   { prefix: '/api/admin/users', read: ['owner'], write: ['owner'] },
   { prefix: '/api/admin/audit', read: MGMT, write: [] },
   { prefix: '/api/admin/system', read: MGMT, write: MGMT },
+  // Yedek dosyası tüm veritabanıdır (yönetici şifre özetleri ve doğrulama anahtarları dahil): yalnız sahip indirir
+  { prefix: '/api/admin/system/backup', read: ['owner'], write: ['owner'] },
   { prefix: '/api/admin/me', read: ALL, write: ALL },
   { prefix: '/api/admin/account', read: ALL, write: ALL },
-  { prefix: '/api/admin/firebase-token', read: ALL, write: ALL },
   { prefix: '/api/admin/orders', read: OPS, write: OPS },
   { prefix: '/api/admin/customers', read: OPS, write: OPS },
   { prefix: '/api/admin/ges-quotes', read: OPS, write: OPS },

@@ -33,7 +33,7 @@ const JOBS: Job[] = [
       const r = await runExpireOrders()
       if (r.errors.length) throw new Error(`${r.errors.length} sipariş işlenemedi: ${r.errors.slice(0, 3).join('; ')}`)
       const n = r.expired.length + r.reminded.length
-      return { outcome: n ? 'ok' : 'idle', summary: `iptal ${r.expired.length}, hatırlatma ${r.reminded.length}, bildirimli bekleyen ${r.held.length}, sonuçsuz kart ${r.cardUnresolved.length}` }
+      return { outcome: n ? 'ok' : 'idle', summary: `iptal ${r.expired.length}, hatırlatma ${r.reminded.length}, bildirimli ${r.held.length}, iptal edilen kart ${r.cardUnresolved.length}` }
     },
   },
   {

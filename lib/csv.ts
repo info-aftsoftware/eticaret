@@ -10,7 +10,9 @@ function cellText(v: Cell): string {
   if (v instanceof Date) return v.toISOString().replace('T', ' ').slice(0, 19)
   if (typeof v === 'number') return Number.isFinite(v) ? String(Math.round(v * 100) / 100).replace('.', ',') : ''
   if (typeof v === 'boolean') return v ? 'Evet' : 'Hayır'
-  return v
+  // Müşterinin yazdığı metin (ad, adres) Excel'de formül olarak çalışmasın: =, +, -, @, sekme, CR ile başlayan
+  // hücreye kesme işareti eklenir (OWASP CSV injection); Excel değeri metin olarak gösterir
+  return /^[=+\-@\t\r]/.test(v) ? `'${v}` : v
 }
 
 export function toCsv(headers: string[], rows: Cell[][]): string {

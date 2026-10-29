@@ -62,8 +62,19 @@ async function setStock(request: APIRequestContext, cookie: string, stock: numbe
   expect(res.status()).toBe(200)
 }
 
+/**
+ * Müşteriye özgü istemci IP'si: havale siparişlerinde IP başına saatte 3 sınırı var; yerelde vekil sunucu olmadığı
+ * için x-real-ip testten gelir, her test müşterisi kendi "IP"sinden sipariş verir
+ */
+const ipFor = (c: { email: string }) => {
+  let h = 0
+  for (const ch of c.email) h = (h * 31 + ch.charCodeAt(0)) >>> 0
+  return `10.${(h >> 16) & 255}.${(h >> 8) & 255}.${h & 255}`
+}
+
 async function placeOrderApi(request: APIRequestContext, c: ReturnType<typeof customer>, quantity = 1) {
   return request.post('/api/orders', {
+    headers: { 'x-real-ip': ipFor(c) },
     data: {
       customer: c,
       items: [{ id: VARIANT_ID, quantity }],
@@ -210,6 +221,7 @@ test.describe('stok ve sınır senaryoları (API)', () => {
   test('fiyat istemciden alınmaz: gönderilen fiyat yok sayılır', async ({ request }) => {
     const c = customer('price')
     const res = await request.post('/api/orders', {
+      headers: { 'x-real-ip': ipFor(c) },
       data: { customer: c, items: [{ id: VARIANT_ID, quantity: 1, price: 1 }], paymentMethod: 'bank_transfer', acceptedTerms: true, total: 1 },
     })
     expect(res.status(), await res.text()).toBe(200)

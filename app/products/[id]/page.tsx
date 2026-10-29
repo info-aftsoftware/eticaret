@@ -17,6 +17,7 @@ import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 import { withDetails } from '@/lib/catalog-details'
 import { labelMeasurements, variantDistinctLabels } from '@/lib/seo/variant-attributes'
 import legacyProductRedirects from '@/lib/legacy-product-redirects.json'
+import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const LEGACY_PRODUCT_REDIRECTS = legacyProductRedirects as Record<string, string>
 
@@ -273,7 +274,7 @@ function buildProductJsonLd(product: StorefrontProduct, rating: Rating) {
 
   if (isQuoteOnly(product)) {
     if (rating.count === 0) return null
-    return { ...context, '@type': 'Product', '@id': id, ...productCore(product, rating, product.specifications), sku: product.sku }
+    return { ...context, '@type': 'Product', '@id': id, ...productCore(product, rating, product.specifications), sku: product.sku, ...(product.gtin && { gtin: product.gtin }) }
   }
 
   const variants = product.variants ?? []
@@ -284,6 +285,8 @@ function buildProductJsonLd(product: StorefrontProduct, rating: Rating) {
       '@id': id,
       ...productCore(product, rating, product.specifications),
       sku: product.sku,
+      // Barkod (GTIN): Google ürün eşleşmesi; yalnız doğrulanmış değer (lib/gtin.ts)
+      ...(product.gtin && { gtin: product.gtin }),
       offers: offerFor(product, { url: productUrl(product), netPrice: product.price, stock: product.stock ?? 0, lineId: product.id }),
     }
   }
@@ -310,6 +313,8 @@ function buildProductJsonLd(product: StorefrontProduct, rating: Rating) {
         url,
         name: `${baseName} – ${distinct[i]}`,
         ...(v.sku && { sku: v.sku }),
+        // Barkod (GTIN): Google ürün eşleşmesi; yalnız doğrulanmış değer (lib/gtin.ts)
+        ...(v.gtin && { gtin: v.gtin }),
         inProductGroupWithID: product.id,
         size: distinct[i],
         ...(images.length > 0 && { image: images }),
@@ -345,12 +350,12 @@ export default async function ProductPage(props: { params: Promise<{ id: string 
       {productJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(productJsonLd) }}
         />
       )}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbJsonLd(product)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildBreadcrumbJsonLd(product)) }}
       />
       <ProductDetailClient initialProduct={product} productId={params.id} />
     </>

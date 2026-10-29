@@ -42,15 +42,6 @@ export default function AdminAuthPage() {
         setError(data.error || 'Giriş başarısız.')
         return
       }
-      // Firebase custom token ile sessiz giriş (Firestore okuma izni için)
-      if (data.firebaseCustomToken) {
-        try {
-          const { getAuth } = await import('@/lib/firebase/config')
-          const { signInWithCustomToken } = await import('firebase/auth')
-          const auth = getAuth()
-          await signInWithCustomToken(auth, data.firebaseCustomToken)
-        } catch {}
-      }
       // İlk girişte veya şifre sıfırlandıktan sonra önce şifre değiştirilir
       router.push(data.mustChangePassword ? '/admin/hesabim' : '/admin')
       router.refresh()
