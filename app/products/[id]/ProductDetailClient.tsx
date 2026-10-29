@@ -57,6 +57,24 @@ const DESCRIPTION_SECTION_HEADINGS = [
   'Uyumlu Modeller',
 ]
 
+/**
+ * Sayfa açılırken seçili varyant: adresteki ?variant= (yapılandırılmış veride her varyantın kendi adresi var),
+ * yoksa ürünün varsayılan varyantı, o da yoksa ilki.
+ */
+function initialVariantOf(data: Pick<MockProduct, 'defaultVariantKey' | 'variants'> | null | undefined): NonNullable<MockProduct['variants']>[number] | null {
+  const variants = data?.variants
+  if (!variants?.length) return null
+  const fromUrl = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('variant') : null
+  return variants.find((v) => v.key === fromUrl) ?? variants.find((v) => v.key === data?.defaultVariantKey) ?? variants[0]
+}
+
+/** Seçilen varyant adrese yazılır (paylaşılan bağlantı aynı seçenekle açılır); sayfa yeniden yüklenmez */
+function writeVariantToUrl(key: string) {
+  const url = new URL(window.location.href)
+  url.searchParams.set('variant', key)
+  window.history.replaceState(null, '', url)
+}
+
 function parseDescriptionSections(text: string): { intro: string; sections: { title: string; content: string }[] } {
   const headingPattern = new RegExp(
     `\n\\s*(${DESCRIPTION_SECTION_HEADINGS.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})\\s*\n`,
@@ -123,20 +141,12 @@ export default function ProductDetailClient({ initialProduct, productId: product
         // Ürün API'si yanıt vermezse (ör. yönetici önizlemesindeki taslak) sunucunun gönderdiği ürün korunur
         const data = fetched ?? initialProduct ?? mockProductsMap[productId] ?? null
         setProduct(data)
-        const initialVariant =
-          data?.defaultVariantKey && data.variants?.length
-            ? data.variants.find((v: { key: string }) => v.key === data.defaultVariantKey) ?? data.variants[0]
-            : data?.variants?.[0] ?? null
-        setSelectedVariant(initialVariant)
+        setSelectedVariant(initialVariantOf(data))
       })
       .catch(() => {
         const data = mockProductsMap[productId] ?? null
         setProduct(data)
-        const initialVariant =
-          data?.defaultVariantKey && data.variants?.length
-            ? data.variants.find((v) => v.key === data.defaultVariantKey) ?? data.variants[0]
-            : data?.variants?.[0] ?? null
-        setSelectedVariant(initialVariant)
+        setSelectedVariant(initialVariantOf(data))
       })
       .finally(() => setLoading(false))
   }, [productId, initialProduct])
@@ -441,7 +451,10 @@ export default function ProductDetailClient({ initialProduct, productId: product
                         <button
                           key={v.key}
                           type="button"
-                          onClick={() => setSelectedVariant(v)}
+                          onClick={() => {
+                            setSelectedVariant(v)
+                            writeVariantToUrl(v.key)
+                          }}
                           aria-pressed={selected}
                           className={`rounded-lg border px-3.5 py-2.5 text-left transition-colors ${selected
                             ? 'border-[#0b2540] bg-[#f5f7fa] ring-1 ring-[#0b2540]'

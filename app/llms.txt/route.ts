@@ -65,6 +65,7 @@ export async function GET() {
     '',
     '## Ürün grupları',
     '',
+    link('Ürün dizini (llms-full.txt)', '/llms-full.txt', 'tüm ürünler türlerine göre: ad, marka, temel teknik özellikler, seçenekler, fiyat ve ürün sayfası'),
     ...groups.map((g) => link(CATEGORY_META[g.id].title, `/category/${g.id}`, `${CATEGORY_META[g.id].description} (${countIn(g.categoryValues)} ürün)`)),
     '',
     '## Ürün türleri',

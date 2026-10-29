@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
     "audit:site": "node scripts/audit-site.mjs",
+    "audit:product-ld": "node scripts/audit-product-ld.mjs",
     "i18n:sync": "node scripts/sync-i18n.mjs",
     "qa:all": "npm run typecheck && npm run lint -- --no-cache && npm run audit:site",
     "test:unit": "node --import tsx --test tests/unit/*.test.ts",
