@@ -5,7 +5,28 @@ _Son güncelleme: 28.10.2026 (SEO + yapay zekâ araması turu `35836fd`, voltekn
 ## Şu an yapılan
 **28.10.2026 — voltekno.com geçişi başladı** (ayrıntı ve sıra: aşağıda "voltekno.com geçişi"). Kararlar: SEO dahil, veritabanı test sitesinden kopya, Firebase şimdilik eski proje, gönderen `noreply@voltekno.com`. Yerel prova geçti (132/132 eski adres 308). **Sırada sizin hPanel adımlarınız:** G2 ortam değişkenleri, G3 veritabanı + `media/` kopyası, `noreply@voltekno.com` kutusu. Sonra ben voltekno.com'a yükleyip DNS öncesi test ederim; DNS'i (G6) siz çevirirsiniz.
 
-**29.10.2026 — sıralı yapılacaklar listesi** aşağıda "Yapılacaklar — sıralı"; 1. madde (İngilizce `/en/`) başladı. Geçişte ürün verisi kontrolleri: "voltekno.com geçişi" → "Canlıya alınca — ürün yapılandırılmış verisi".
+**30.10.2026 — ana dal yayına hazır (`urun-katalogu-ikas`, commit edildi, push ve yayın yok):**
+- **Commit'ler:**
+  - `52aa147` ürün yapılandırılmış verisi
+  - `3889894` iyzico ve akü kargo teklifi (diğer oturum)
+  - `16c563b` Firebase taşıma (diğer oturum)
+  - `952575c` güvenlik 1–2. tur ve GTIN
+  - `341fe44` İngilizce `/en` dalının birleştirilmesi
+  - `5672b39` güvenlik 3. tur düzeltmeleri
+- **Birleştirme (`341fe44`):** 10 dosyada çakışma vardı. Yapılandırılmış veri artık hem kaçışlı hem dile göre: `jsonLdHtml(localizeSiteUrls(…))`. Sepette 20 adet sınırı ile dile duyarlı bağlantılar birlikte; hata çevirilerinde çevrilmiş ürün adı, adet sınırı ve yeni akü teklif metni.
+- **Doğrulama (son commit'in üretim derlemesi):**
+  - Tip denetimi 0 hata; lint'te yalnız eski 3 uyarı; birim testi 221/221.
+  - `next build` 483 sayfa.
+  - Uçtan uca (akış + duman + ödeme; e-postası kapalı, ayrı veritabanı kopyası): **133 geçti, 2 atlandı (kart/ortam koşullu), 0 kaldı.** Tek kalan test eski şema biçimini bekliyordu (varyantlı ürün artık `ProductGroup`); test güncellendi ve geçti.
+  - Diğer oturumda: izlenen dosyalarda gizli anahtar yok, `npm audit` (üretim) yüksek ve kritik 0.
+- **Güvenlik 3. tur (yayın öncesi zorunlu tarama):** Ayrıntı aşağıda "Güvenlik taraması" bölümünde, S21–S25.
+- **Yerel ortam notu:** 30.10 01:10'da test sunucusu açıkken çalışan bir `prisma generate`, motor dosyası kilitli olduğu için yarıda kaldı. `node_modules/.prisma/client` ve `node_modules/.bin` silindi; ikisi yeniden üretildi. **Kural:** sunucu açıkken `prisma generate` çalıştırılmaz.
+- **Yayında yapılacaklar:**
+  - Hostinger'da `prisma db push`. Yeni sütunlar: `AdminUser.sessionVersion`, `ProductOverride.gtin`, İngilizce dalın `locale` sütunları.
+  - Firestore kuralları ve eski Firebase oturumlarının iptali (S2).
+  - Yayından sonra "Canlıya alınca — ürün yapılandırılmış verisi" kontrolleri (Ü1–Ü7). Ü2 ve Ü3'e `/en` adresleri de eklenmeli.
+
+**29.10.2026 — sıralı yapılacaklar listesi** aşağıda "Yapılacaklar — sıralı". 1. madde (İngilizce `/en/`) tamamlandı ve ana dala birleşti (`341fe44`). Geçişte ürün verisi kontrolleri: "voltekno.com geçişi" → "Canlıya alınca — ürün yapılandırılmış verisi".
 
 **Canlıda (nextfirststep.com, son yayın `d4c2137`, 25.10.2026 akşam, SEO hariç): ürün sayfasında "Uyumlu ürünler" bölümü kaldırıldı; öncesinde `c95249c` ile yerel staging testlerinde (kontrol listesi 23–34) bulunan düzeltmeler — çerez tercihleri, kurulum notu e-postada, tek yönetici bildirim adresi, teklif doğrulama bildirimi, sahte POS dönüşü e-posta atmıyor, eski iKAS kök adresleri yönlendiriliyor, yapısal veri alan adı; öncesinde (`d8a3483`, 25.10) müşteri kontrol listesi 1. öncelik kod maddeleri 2–6, voltajı tanımsız DC ürünleri ve 2. öncelik maddeleri 10–17, 19–22 (aşağıda); ürün grupları ve yönetim paneli denetimi A01–A18 (`c095ad4` ile 23.10) ve öncesi —** 21.10'daki her şey (Navlungo entegrasyonu, Geliver takibi, akü için iletişim, desi ve görseller, teslimat tahmini, sipariş korumaları) ve 22.10 turları: mobil hero ve paket kartları, yorum yalnızca teslim almış üyeye, sayfalama ve gezinme kuralları, açılır menünün ekrana sığması, yönetim girişi düzeltmesi, Victron 120 V ürünlerin kaldırılması (338 ürün), kısa akü metni, resmî kaynaklı desiler, kargo kaynağı etiketi, iptal ve iadelerin cirodan düşmesi, Geliver'den gönderi oluşturma (anahtar girilene kadar kapalı), hesaba özel favoriler, telefon ve e-posta doğrulaması, AFT Power ürünleri (3 şarj istasyonu fiyatlı ve kurulumlu, 6 depolama ürünü teklifle; katalog 347 ürün).
 
@@ -62,7 +83,26 @@ _Sıra: önce sizin onayladığınız ve yalnız kodla yapılabilen işler, sonr
 | 9 | Depo düzeni (K3) | Siz | `main` dalının ileri sarılması, `origin` adresinin yeni GitHub adresine çevrilmesi, eski dallar ve iki yarım İngilizce çalışma kopyası (`admiring-mahavira-309b7b`, `awesome-greider-503600`; 1. madde bitince silinebilir) |
 | 10 | Teknik öneriler | Ben, karar verilirse | İstemci paketinden kataloğun çıkarılması, nonce tabanlı CSP, Tailwind 4 geçişi (`npm audit`'teki 7 yüksek açık), panelde Navlungo gönderi iptali ve iade toplama |
 
-## Güvenlik taraması — 1. tur (29.10.2026, ana dalda — commit edilmedi, yayınlanmadı)
+## Güvenlik taraması (29–30.10.2026; 1–2. tur `952575c`, 3. tur `5672b39`; yayınlanmadı)
+
+**3. tur (30.10, yayın öncesi):** Son taramadan sonra gelen kod tarandı: iyzico ödeme formu, akü kargo teklifi, `/en` yönlendirmesi ve tüm JSON-LD. Kritik ya da yüksek bulgu yok.
+| # | Önem | Bulgu | Durum |
+|---|---|---|---|
+| S21 | Orta | İyzico'nun dolandırıcılık incelemesine aldığı ödemede (kart çekilmiş) sipariş iptal ediliyor, stok ve kupon serbest kalıyordu | ✅ Sipariş beklemede kalıyor, yöneticiye uyarı gidiyor. Müşteriye "ödemeniz incelemede, yeniden ödemeyin" mesajı gösteriliyor. **Sizde:** İyzico panelinde incelenen ödemeyi onaylayınca siparişi panelden "ödendi" yapın |
+| S22 | Düşük–Orta | Taksitli ödemede vade farkı dahil tutar sipariş toplamıyla karşılaştırılıyordu: ödenen sipariş "tutar uyuşmazlığı"nda kalıyordu | ✅ Sepet tutarı karşılaştırılıyor; çekilen tutar sipariş geçmişine yazılıyor |
+| S23 | Düşük | Ödeme sonucunda tutar boş gelirse karşılaştırma geçiyordu | ✅ Geçersiz tutar onay sayılmıyor |
+| S24 | Düşük | Aynı siparişe iki iyzico formu açılıp ikisi de ödenirse ikinci çekim fark edilmiyor | Açık: Ödeme numarası siparişe yazılıp farklı numarayla ikinci onayda yöneticiye uyarı. Olasılık düşük |
+| S25 | Bilgi | `/en//…` biçimindeki adres dil önekinde site dışına yönlendirmeye dönüşebilirdi (Next bunu şimdilik kendisi engelliyor) | ✅ Önekteki çift eğik çizgi teke indiriliyor, birim testi eklendi |
+| — | Hata (güvenlik dışı) | İngilizce ziyaretçi İyzico ödeme sayfasını Türkçe görüyordu | ✅ Sayfanın dili çerezden ve sipariş dilinden alınıyor |
+**Sağlam bulunanlar:**
+- İyzico sonucu tarayıcıdan değil, İyzico'dan imzalı istekle alınıyor; sipariş İyzico'nun numarasından bulunuyor.
+- Yapılandırma eksikse ödeme yolu kapalı kalıyor.
+- Akü ve teklifli ürünler sunucuda reddediliyor.
+- `/en/admin` öneksiz adrese yönleniyor ve yetki kapısından geçiyor; kodlanmış ya da çift eğik çizgili yollar kapıyı aşamıyor.
+- İstemcinin gönderdiği dil başlığı yalnız dili etkiliyor.
+- 15 JSON-LD betiğinin hepsi kaçışlı.
+
+## Güvenlik taraması — 1. tur (29.10.2026)
 **Yöntem:** güvenlik eklentisi henüz kurulu değil (kurulunca aynı tarama onunla tekrarlanır). Kodun üç alanda okunarak incelenmesi (giriş/yönetim yetkisi; sipariş, fiyat ve ödeme; açık uçlar, dosyalar, başlıklar, sırlar), `npm audit`, test sitesinde yalnız GET ile güvenlik başlıkları ve IP başlığı ölçümü. Bulgular kodda tek tek doğrulandı.
 
 | # | Önem | Bulgu | Durum |
