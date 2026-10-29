@@ -5,14 +5,16 @@
 
 import { getCarrier, orderTrackingUrl } from '@/lib/shipping/carriers'
 
-type ApiOrderLine = { id: string; productName: string; quantity: number; lineTotal: number; variantMatrix?: { productId?: string } | null }
+type ApiOrderLine = { id: string; productName: string; quantity: number; lineTotal: number; variantMatrix?: { productId?: string; variantKey?: string } | null }
 export type ApiReturnRequest = {
   id: string
   requestNo: string
   type: string
   typeLabel: string
+  typeLabelEn?: string
   status: string
   statusLabel: string
+  statusLabelEn?: string
   items: { lineId: string; name: string; quantity: number }[]
   reason: string | null
   rejectReason: string | null
@@ -123,6 +125,8 @@ export function toOrderView(o: ApiOrder) {
     items: (o.lines ?? []).map((l) => ({
       id: l.id,
       productId: l.variantMatrix?.productId ?? null,
+      // Ad sipariş anındaki Türkçe kayıttır; İngilizce sayfada katalog çevirisiyle gösterilir (lib/catalog-en lineItemName)
+      variantKey: l.variantMatrix?.variantKey ?? null,
       name: l.productName,
       quantity: l.quantity,
       price: l.quantity ? l.lineTotal / l.quantity : l.lineTotal,

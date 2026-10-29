@@ -2,11 +2,19 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
+import { localizedMetadata } from '@/lib/locale-metadata'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Kargo ve Teslimat',
   description: 'Voltekno kargo süreleri, desiye göre kargo ücreti, kargo firmaları ve teslimat koşulları.',
   alternates: { canonical: '/shipping' },
+}
+
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Shipping & Delivery',
+    description: 'Voltekno delivery times, shipping fees by volumetric weight (desi), carriers and delivery terms.',
+  })
 }
 
 export default async function ShippingPage() {

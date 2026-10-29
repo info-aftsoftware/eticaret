@@ -11,6 +11,7 @@ import { contactHref } from '@/lib/contact-topics'
 import { ProductCard } from '@/components/ProductCard'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { getLocale } from 'next-intl/server'
+import { localizedMetadata } from '@/lib/locale-metadata'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const MAX_PRODUCTS = 16
@@ -30,7 +31,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const title = `${item.seoTitle} | Voltekno`
   const description = item.seoDescription
 
-  return {
+  const trMetadata: Metadata = {
     // Kök şablon "%s | Voltekno" ekler; sayfa başlığına marka tekrar yazılmaz
     title: item.seoTitle,
     description,
@@ -50,6 +51,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
       images: [item.image],
     },
   }
+  return localizedMetadata(trMetadata, {
+    title: `${item.en.shortTitle} Solar Energy Solutions`,
+    description: item.en.description,
+  })
 }
 
 function buildBreadcrumbSchema(item: NonNullable<ReturnType<typeof getPackageCategory>>) {

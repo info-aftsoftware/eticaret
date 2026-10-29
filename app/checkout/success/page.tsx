@@ -132,7 +132,7 @@ function SuccessContent() {
           : { title: L('Ödeme onayı bekleniyor', 'Awaiting payment confirmation'), description: L('Ödemeniz henüz onaylanmadı. Onaylandığında e-posta ile bilgilendirileceksiniz.', 'Your payment has not been confirmed yet. You will be notified by email once it is confirmed.'), icon: 'wait' as const }
 
   const dueDate = bankTransferDeadline(Date.now())
-    .toLocaleDateString(L('tr-TR', 'en-GB'), { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE })
+    .toLocaleDateString(L('tr-TR', 'en-US'), { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE })
   const ok = view.icon === 'ok'
   const showAccountCta = ok && authReady && !isAuthenticated && !!last?.guest
 

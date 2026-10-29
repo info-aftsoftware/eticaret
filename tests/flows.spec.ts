@@ -356,6 +356,11 @@ test.describe('İngilizce akış', () => {
     await page.locator('main button[type=submit]').last().click()
     await page.waitForURL(/\/checkout\/success/, { timeout: 30_000 })
     await expect(page.locator('body')).toContainText('Your order has been received')
+    // Sipariş müşterinin dilini saklar: sipariş/kargo/iptal e-postaları İngilizce gönderilir
+    const orderNo = new URL(page.url()).searchParams.get('order_id') || ''
+    expect(orderNo).toBeTruthy()
+    const o = await (await page.request.post(`/api/orders/by-no/${orderNo}`, { data: { email: c.email, phone: c.phone } })).json()
+    expect(o.order?.locale).toBe('en')
   })
 
   test('EN: sunucunun Türkçe stok hatası İngilizce gösterilir', async ({ page }) => {
@@ -401,47 +406,119 @@ test.describe('İngilizce akış', () => {
   })
 })
 
-/** Ürün adı, açıklama, adres/unvan ve yasal metinler bilerek Türkçe; arayüz metinleri taranır. */
-const TR_RE = /[çğıöşüÇĞİÖŞÜ]|\b(ve|ile|için|Sepet|Ürün|Sipariş|Ödeme|Giriş|Hesab|Şifre|Tümü|Kargo|İade|Teklif|İndirim|Adet|Kapat|Devam|Gönder|Kaydet|Seçin|Yükleniyor|Stokta|Tükendi|Favori|Karşılaştır)\b/
-const EN_PAGES = ['/', '/products', '/category/gunes-paneli', `/products/tommatech-450wp-dark-series-16bb-topcon-gunes-paneli`, '/paketler', '/categories', '/cart', '/checkout',
-  '/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/profile', '/favorites', '/orders', '/siparis-takip', '/contact', '/faq', '/shipping',
-  '/hakkimizda', '/ges', '/ges/teklif-dogrulama', '/karsilastir', '/blog', '/checkout/cancel?reason=declined&order_id=ORD-2026-00009', '/bu-sayfa-yok']
+/**
+ * İngilizce seçiliyken görünür Türkçe metin taraması: arayüz, katalog (ürün adı, açıklama, teknik özellikler, filtreler),
+ * yasal metinler, blog, paketler, marka ve ürün türü sayfaları, sekme başlığı ve erişilebilirlik öznitelikleri.
+ * Türkçe kalabilen özel adlar: şirket unvanı ve adresi, il/ilçe adları (seçim listeleri), kargo firmaları, marka adları,
+ * kanun bent harfleri (KVKK md. 5/2-ç, md. 11 a–ğ: yasal atıf olduğu için çeviride de aynen kalır).
+ */
+const TR_RE = /[çğıöşüÇĞİÖŞÜ]|\b(ve|ile|için|bir|bu|Sepet|Sepete|Ürün|Ürünler|Sipariş|Ödeme|Giriş|Hesab|Şifre|Tümü|Kargo|İade|Teklif|İndirim|Adet|Kapat|Devam|Gönder|Kaydet|Seçin|Yükleniyor|Stokta|Tükendi|Favori|Karşılaştır|Fiyat|Fiyatları|Detay|Kategori|Marka|Paket|Hakkımızda|İletişim|Tahmini|Toplam|Ücretsiz|Teslimat|Güneş|Akü|Şarj)\b/
+/** Özel adlar metinden çıkarılır, kalan kısım taranır */
+const TR_NAMES = /Türkiye|İstabreeze|Çaydaçıra|AFET TEKNOLOJ\S*|TİCARET VE SANAYİ LİMİTED ŞİRKETİ|TİC\. VE SAN\. LTD\. ŞTİ\.|MERSİS|ELAZIĞ|Elazığ|Elâzığ|İzmir|İstanbul|Muğla|Şanlıurfa|Aydın|Kadıköy|Prof\. Dr\. Nuri Orhan Bul\.|İç Kapı|Mah\.|Sürat Kargo|Yurtiçi Kargo|Yurtiçi|Kolay Gelsin|Aras Kargo|PTT Kargo|Türkçe|E2E Test Ürünü|Otomatik testler için geçici ürün|Test Müşteri|Gönderi Takip|Takip No|TEDAŞ|EDAŞ|İkas Bilişim A\.Ş\.|İYS|TÜBİS|\([çğ]\)|(?:^|[;\s])[çğ]\)/g
+const EN_PRODUCTS = [
+  'tommatech-450wp-dark-series-16bb-topcon-gunes-paneli',
+  'tommatech-16bb-topcon-gunes-paneli-450wp-600wp',
+  'tommatech-marine-mrn1-12-8v-100ah-lifepo4-lityum-aku-small',
+  'tommatech-uno-hybrid-n6k-6-kw-monofaze-lv-hibrit-inverter',
+  'np-power-mppt-sarj-kontrol-cihazi-30a-40a',
+  'tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw',
+  'altech-boreas-2000-2-kw-48v-off-grid-ruzgar-turbini',
+  'tommatech-likya-22-kw-ac-arac-sarj-istasyonu-soketli-led-bluetooth',
+  'tommatech-triome-10-kw-r290-monofaze-isi-pompasi-130-l-tank-dahil',
+  'apex-safepower-12v-jel-aku-100ah-150ah-200ah',
+  'alpex-modifiye-sinus-inverter-300w-2000w-12v-24v',
+]
+const EN_PAGES = [
+  '/', '/products', `/products?category=${encodeURIComponent('TopCon Güneş Paneli')}`, '/products?q=inverter', '/categories',
+  '/category/gunes-paneli', '/category/solar-aku', '/category/solar-inverter', '/category/solar-sarj-kontrol', '/category/solar-baglanti-ekipmani',
+  '/category/ruzgar-enerjisi', '/category/isi-pompasi', '/category/elektrikli-arac-sarj',
+  '/category/solar-aku/lityum-aku', '/category/solar-inverter/hibrit-inverter', '/marka/tommatech', '/marka/victron',
+  ...EN_PRODUCTS.map((id) => `/products/${id}`),
+  '/paketler', '/paketler/bag-evi-paketleri', '/paketler/villa-paketleri', '/paketler/karavan-paketleri',
+  '/cart', '/checkout', '/checkout/cancel?reason=declined&order_id=ORD-2026-00009',
+  '/login', '/register', '/forgot-password', '/reset-password', '/verify-email', '/profile', '/favorites', '/orders', '/siparis-takip',
+  '/contact', '/faq', '/shipping', '/hakkimizda', '/ges', '/ges/teklif-dogrulama', '/karsilastir',
+  '/blog', '/blog/ev-sarj-istasyonu-secimi', '/blog/lityum-vs-kursum-asit', '/blog/ges-nasil-kurulur', '/blog/karavan-enerji-paketi',
+  '/privacy', '/terms', '/returns', '/cookies', '/pages/on-bilgilendirme-formu', '/pages/kvkk', '/pages/acik-riza-metni',
+  '/pages/ticari-elektronik-ileti-onayi', '/pages/uyelik-ve-kullanim-kosullari', '/bu-sayfa-yok',
+]
 
-test.describe('İngilizce sayfalarda Türkçe arayüz metni', () => {
+/** Sayfada görünen (ve erişilebilirlik özniteliklerindeki) Türkçe metinler */
+async function turkishOnPage(page: Page): Promise<string[]> {
+  return page.evaluate(([src, names]) => {
+    const re = new RegExp(src)
+    const nm = new RegExp(names, 'g')
+    const isTr = (t: string) => re.test(t.replace(nm, ''))
+    // option: il / ilçe adları; data-tr-ok: bilerek Türkçe bırakılan özel ad
+    const skip = (el: Element) => !!el.closest('script,style,noscript,option,[data-tr-ok]')
+    const out = new Set<string>()
+    const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
+    let n: Node | null
+    while ((n = w.nextNode())) {
+      const t = (n.textContent || '').trim()
+      const el = n.parentElement
+      if (t.length < 2 || !el || skip(el) || !isTr(t)) continue
+      const cs = getComputedStyle(el)
+      if (cs.display === 'none' || cs.visibility === 'hidden') continue
+      out.add(t.slice(0, 120))
+    }
+    for (const el of document.querySelectorAll('[placeholder],[aria-label],[title],img[alt]')) {
+      if (skip(el)) continue
+      for (const a of ['placeholder', 'aria-label', 'title', 'alt']) {
+        const v = el.getAttribute(a)
+        if (v && isTr(v)) out.add(`@${a}: ${v.slice(0, 100)}`)
+      }
+    }
+    if (isTr(document.title)) out.add(`<title>: ${document.title}`)
+    return [...out]
+  }, [TR_RE.source, TR_NAMES.source] as const)
+}
+
+test.describe('İngilizce sayfalarda Türkçe metin', () => {
   for (const path of EN_PAGES) {
     test(`EN ${path}`, async ({ page }) => {
+      test.setTimeout(60_000)
       await seedCart(page, 1, 'en')
       await page.goto(path)
-      await page.waitForTimeout(2500)
-      const hits = await page.evaluate((src) => {
-        const re = new RegExp(src)
-        const skip = (el: Element) => !!el.closest('script,style,noscript,h1,.prose,article,[itemprop=name],[itemprop=description],a[href*="/products/"],footer address,option,[lang="tr"],a[href*="/blog/"],[data-tr-ok]')
-        const out = new Set<string>()
-        const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)
-        let n: Node | null
-        while ((n = w.nextNode())) {
-          const t = (n.textContent || '').trim()
-          const el = n.parentElement
-          if (t.length < 2 || !el || !re.test(t) || skip(el)) continue
-          const cs = getComputedStyle(el)
-          if (cs.display === 'none' || cs.visibility === 'hidden') continue
-          out.add(t.slice(0, 100))
-        }
-        for (const el of document.querySelectorAll('[placeholder],[aria-label],[title]')) {
-          if (skip(el)) continue
-          for (const a of ['placeholder', 'aria-label', 'title']) {
-            const v = el.getAttribute(a)
-            if (v && re.test(v)) out.add(`@${a}: ${v.slice(0, 90)}`)
-          }
-        }
-        return [...out]
-      }, TR_RE.source)
-      const ignore = /Çaydaçıra|AFET TEKNOLOJ|MERSİS|ELAZIĞ|Elazığ|^@aria-label: (Add|Remove) .*(to|from) (cart|favorites|compare)|^@title: .* products$|TommaTech|Victron|Apex|Havensis|Likya|İstabreeze|Türkçe|E2E Test Ürünü|^₺|İzmir|İstanbul|Muğla|Şanlıurfa|Sürat Kargo|HepsiJET|Yurtiçi|Kolay Gelsin|Aras Kargo|PTT/
-      const real = hits.filter((h) => !ignore.test(h))
-      test.info().annotations.push({ type: 'tr-hits', description: JSON.stringify(real) })
-      if (real.length) console.log(`[TR] ${path}:\n  ${real.join('\n  ')}`)
-      expect.soft(real, `${path} İngilizcede Türkçe metin`).toEqual([])
+      // Açık kalan bağlantılar (sohbet, analitik) yüzünden networkidle hiç gelmeyebilir: kısa sınırla beklenir
+      await page.waitForLoadState('networkidle', { timeout: 8_000 }).catch(() => {})
+      await page.waitForTimeout(1500)
+      const hits = await turkishOnPage(page)
+      test.info().annotations.push({ type: 'tr-hits', description: JSON.stringify(hits) })
+      if (hits.length) console.log(`[TR] ${path}:\n  ${hits.join('\n  ')}`)
+      expect.soft(hits, `${path} İngilizcede Türkçe metin`).toEqual([])
       await expect(page.locator('html')).toHaveAttribute('lang', 'en')
     })
   }
+
+  test('EN: ürün sayfası sekmeleri ve sepete ekleme bildirimi', async ({ page }) => {
+    await seedCart(page, 1, 'en')
+    await page.goto('/products/tommatech-16bb-topcon-gunes-paneli-450wp-600wp')
+    await expect(page.locator('h1')).toContainText('Solar Panel', { timeout: 20_000 })
+    for (const tab of await page.getByRole('tab').all()) {
+      await tab.click()
+      await page.waitForTimeout(300)
+      expect.soft(await turkishOnPage(page), `sekme ${await tab.textContent()}`).toEqual([])
+    }
+    const add = page.getByRole('button', { name: /add to cart/i }).first()
+    if (await add.isVisible()) {
+      await add.click()
+      await page.waitForTimeout(800)
+      expect.soft(await turkishOnPage(page), 'sepete ekleme sonrası').toEqual([])
+    }
+  })
+
+  test('EN: ödeme sayfasında zorunlu alan uyarıları ve sözleşme penceresi İngilizce', async ({ page }) => {
+    await seedCart(page, 1, 'en')
+    await page.goto('/checkout')
+    await expect(page.locator('#name')).toBeVisible({ timeout: 20_000 })
+    // Boş form gönderimi: alan uyarıları
+    await page.locator('main button[type=submit]').last().click()
+    await page.waitForTimeout(500)
+    expect.soft(await turkishOnPage(page), 'boş form uyarıları').toEqual([])
+    // Mesafeli satış sözleşmesi penceresi: İngilizce çeviri ve Türkçe metnin bağlayıcı olduğu notu
+    await page.getByRole('button', { name: /Distance Sales Agreement/i }).first().click()
+    await expect(page.getByRole('dialog')).toContainText('legally binding', { timeout: 10_000 })
+    expect.soft(await turkishOnPage(page), 'sözleşme penceresi').toEqual([])
+  })
 })

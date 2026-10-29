@@ -20,6 +20,8 @@ import { BankTransferDetails } from '@/components/order/BankTransferDetails'
 import { BANK_TRANSFER_DISCOUNT_RATE, STORE_TIME_ZONE, VAT_RATE, bankTransferDeadline } from '@/lib/store-config'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useL } from '@/lib/i18n-inline'
+import { useLocale } from 'next-intl'
+import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { useServerError } from '@/lib/server-error-i18n'
 
 type Creds = { email: string; phone: string }
@@ -131,7 +133,7 @@ function ProgressTimeline({ order }: { order: any }) {
             </span>
             <span className="min-w-0 pt-1.5 sm:pt-0">
               <span className={`block text-sm leading-tight ${done ? 'font-semibold text-[#121926]' : 'text-[#5d6e80]'}`}>{s.label}</span>
-              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date), L('tr-TR', 'en-GB')) : active ? L('Şu an', 'Now') : ''}</span>
+              <span className="block text-xs text-[#5d6e80]">{done && s.date ? fmtDay(new Date(s.date), L('tr-TR', 'en-US')) : active ? L('Şu an', 'Now') : ''}</span>
             </span>
           </li>
         )
@@ -162,8 +164,9 @@ export default function OrderDetailPage() {
   const id = decodeURIComponent(params.id as string)
   const { user, isAuthenticated, authReady } = useAuthStore()
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const [order, setOrder] = useState<any>(null)
   const [isPrismaOrder, setIsPrismaOrder] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -179,8 +182,9 @@ export default function OrderDetailPage() {
   const [actionNotice, setActionNotice] = useState('')
   const [downloading, setDownloading] = useState<string | null>(null)
   const L = useL()
+  const catalogLocale = toCatalogLocale(useLocale())
   const tErr = useServerError()
-  const loc = L('tr-TR', 'en-GB')
+  const loc = L('tr-TR', 'en-US')
 
   /** Misafir sipariş takibi: sipariş no + e-posta + telefon birlikte doğrulanır. */
   const lookupGuestOrder = async (e: React.FormEvent) => {
@@ -579,7 +583,11 @@ export default function OrderDetailPage() {
                     </a>
                   )}
                 </div>
-                {trackingHint && <p className="mt-3 text-[13px] text-[#5d6e80]">{trackingHint}</p>}
+                {trackingHint && (
+                  <p className="mt-3 text-[13px] text-[#5d6e80]">
+                    {L(trackingHint, trackingHint === carrier?.trackingHint ? carrier?.trackingHintEn ?? trackingHint : trackingHint)}
+                  </p>
+                )}
               </Card>
             )}
 
@@ -589,7 +597,7 @@ export default function OrderDetailPage() {
                 {(order.items || []).map((item: any, i: number) => (
                   <li key={item.id ?? i} className="flex items-start justify-between gap-4 py-3 text-sm first:pt-0 last:pb-0">
                     <span className="min-w-0 text-[#121926]">
-                      {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{item.name}</Link> : <span className="font-medium">{item.name}</span>}
+                      {item.productId ? <Link href={`/products/${item.productId}`} className="font-medium hover:underline">{lineItemName(item, catalogLocale)}</Link> : <span className="font-medium">{item.name}</span>}
                       <span className="block text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `Qty: ${item.quantity}`)}</span>
                     </span>
                     <span className="shrink-0 font-semibold tabular-nums text-[#121926]">{formatPrice((item.price || 0) * (item.quantity || 1))}</span>

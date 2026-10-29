@@ -4,10 +4,12 @@ import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import { ArrowRight, Clock } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
+import { BLOG_POSTS_EN } from '@/lib/blog-posts-en'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Blog – Enerji Rehberi',
   description: 'Güneş paneli, batarya, EV şarj ve enerji sistemleri hakkında bilgilendirici yazılar, karşılaştırmalar ve kurulum rehberleri.',
   alternates: { canonical: '/blog' },
@@ -18,13 +20,23 @@ export const metadata: Metadata = {
   },
 }
 
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Blog – Energy Guide',
+    description: 'Informative articles, comparisons and installation guides on solar panels, batteries, EV charging and energy systems.',
+    shareTitle: 'Blog – Energy Guide | Voltekno',
+    shareDescription: 'Guides on solar panels, batteries, EV charging and energy systems.',
+  })
+}
+
 const BLOG_CATEGORIES = [
   { label: { tr: 'Tümü', en: 'All' }, value: 'all' },
   { label: { tr: 'EV Şarj', en: 'EV Charging' }, value: 'ev-sarj' },
   { label: { tr: 'Güneş Enerjisi', en: 'Solar Energy' }, value: 'gunes-enerjisi' },
-  { label: { tr: 'Batarya', en: 'Battery' }, value: 'batarya' },
-  { label: { tr: 'İnverter', en: 'Inverter' }, value: 'inverter' },
-  { label: { tr: 'GES', en: 'Solar Plant' }, value: 'ges' },
+  { label: { tr: 'Batarya', en: 'Batteries' }, value: 'batarya' },
+  { label: { tr: 'İnverter', en: 'Inverters' }, value: 'inverter' },
+  { label: { tr: 'GES', en: 'Solar PV Systems' }, value: 'ges' },
 ]
 
 const BLOG_POSTS: {
@@ -149,7 +161,7 @@ export default async function BlogPage() {
       <div className="py-12 sm:py-16 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {BLOG_POSTS.map((post) => (
+            {BLOG_POSTS.map((tr) => locale === 'en' && BLOG_POSTS_EN[tr.slug] ? { ...tr, ...BLOG_POSTS_EN[tr.slug] } : tr).map((post) => (
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
@@ -177,7 +189,7 @@ export default async function BlogPage() {
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <span className="flex items-center gap-1 text-[10px] text-slate-400 font-medium">
-                      <Clock className="w-3 h-3" /> {L(`${post.readTime} okuma`, `${post.readTime.replace(' dk', ' min')} read`)}
+                      <Clock className="w-3 h-3" /> {L(`${post.readTime} okuma`, `${post.readTime} read`)}
                     </span>
                   </div>
                   <h2 className="font-bold text-slate-900 text-sm leading-snug mb-2 group-hover:text-brand transition-colors line-clamp-2">

@@ -37,10 +37,10 @@ export function CollectionPage({
   faq?: { q: string; a: string }[]
   linkGroups?: { title: string; items: LinkItem[] }[]
   jsonLd: object[]
-  /** İngilizce arayüz: çerçeve etiketleri İngilizce, Türkçe katalog içeriği lang="tr" ile işaretlenir */
+  /** İngilizce arayüz: çerçeve etiketleri İngilizce (içerik çağıran sayfada çevrilir) */
   en?: boolean
 }) {
-  const contentLang = en ? 'tr' : undefined
+  const contentLang = undefined
   return (
     <div className="bg-white">
       {jsonLd.map((data, i) => (
@@ -188,4 +188,6 @@ export function collectionJsonLd(crumbs: Crumb[], name: string, description: str
 }
 
 const tl = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 })
-export const fmtTL = (n: number) => tl.format(n)
+const tlEn = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'TRY', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 0 })
+/** Tutar (TL); en: İngilizce sayı biçimi */
+export const fmtTL = (n: number, en = false) => (en ? tlEn : tl).format(n)

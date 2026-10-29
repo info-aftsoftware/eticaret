@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { notFound } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { PRODUCT_TYPES } from '@/lib/seo/product-types'
-import { typeBySlug, typeHref } from '@/lib/seo/taxonomy'
+import { localizeType, typeBySlug, typeHref } from '@/lib/seo/taxonomy'
+import { CATEGORY_GROUPS } from '@/lib/categories'
+import { BLOG_POSTS_EN } from '@/lib/blog-posts-en'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import { brandHref } from '@/lib/seo/brands'
 import { CATEGORY_META } from '../category-meta'
 import { getStorefrontProducts, type StorefrontProduct } from '@/lib/discounts'
@@ -45,24 +48,32 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const t = typeBySlug(id, type)
   if (!t) return {}
   const path = `/category/${t.group}/${t.slug}`
-  return {
-    title: t.title,
-    description: t.description,
-    alternates: { canonical: path },
-    openGraph: { images: [DEFAULT_OG_IMAGE], type: 'website', title: `${t.title} | Voltekno`, description: t.description, url: path, siteName: 'Voltekno' },
-    twitter: { images: [DEFAULT_OG_IMAGE.url], card: 'summary', title: `${t.title} | Voltekno`, description: t.description },
-  }
+  const enType = localizeType(t, 'en')
+  return localizedMetadata(
+    {
+      title: t.title,
+      description: t.description,
+      alternates: { canonical: path },
+      openGraph: { images: [DEFAULT_OG_IMAGE], type: 'website', title: `${t.title} | Voltekno`, description: t.description, url: path, siteName: 'Voltekno' },
+      twitter: { images: [DEFAULT_OG_IMAGE.url], card: 'summary', title: `${t.title} | Voltekno`, description: t.description },
+    },
+    { title: enType.title, description: enType.description },
+  )
 }
 
 export default async function ProductTypePage(props: Props) {
   const { id, type } = await props.params
-  const t = typeBySlug(id, type)
-  if (!t) notFound()
+  const source = typeBySlug(id, type)
+  if (!source) notFound()
 
-  const products = await loadProducts(t.category)
-  const en = (await getLocale().catch(() => 'tr')) === 'en'
+  const products = await loadProducts(source.category)
+  const locale = await getLocale().catch(() => 'tr')
+  const en = locale === 'en'
   const L = (tr: string, enText: string) => (en ? enText : tr)
-  const groupName = CATEGORY_META[t.group]?.title ?? t.group
+  const t = localizeType(source, locale)
+  const labelKey = CATEGORY_GROUPS.find((g) => g.id === t.group)?.labelKey
+  const tHeader = en && labelKey ? await getTranslations('header').catch(() => null) : null
+  const groupName = (tHeader && labelKey ? tHeader(labelKey) : null) ?? CATEGORY_META[t.group]?.title ?? t.group
   const path = `/category/${t.group}/${t.slug}`
   const crumbs: Crumb[] = [
     { name: 'Ana Sayfa', href: '/' },
@@ -82,21 +93,24 @@ export default async function ProductTypePage(props: Props) {
       {brands.length > 0 && <> · {L('Markalar', 'Brands')}: {brands.map(([b], i) => (
         <span key={b}>{i > 0 && ', '}<a href={brandHref(b)} className="text-[#0b2540] hover:underline underline-offset-2">{b}</a></span>
       ))}</>}
-      {minPrice > 0 && <> · {L(`Fiyatlar ${fmtTL(grossPrice(minPrice))} başlıyor (KDV dahil)`, `From ${fmtTL(grossPrice(minPrice))} (incl. VAT)`)}</>}
+      {minPrice > 0 && <> · {L(`Fiyatlar ${fmtTL(grossPrice(minPrice))} başlıyor (KDV dahil)`, `From ${fmtTL(grossPrice(minPrice), true)} (VAT incl.)`)}</>}
     </>
   )
 
   const related = t.related
     .map((slug) => PRODUCT_TYPES.find((x) => x.slug === slug))
     .filter((x): x is NonNullable<typeof x> => Boolean(x))
-  const siblings = PRODUCT_TYPES.filter((x) => x.group === t.group && x.slug !== t.slug && !t.related.includes(x.slug))
+    .map((x) => localizeType(x, locale))
+  const siblings = PRODUCT_TYPES.filter((x) => x.group === t.group && x.slug !== t.slug && !t.related.includes(x.slug)).map((x) =>
+    localizeType(x, locale),
+  )
 
   const linkGroups = [
     ...(related.length || siblings.length
       ? [{ title: L('İlgili ürün türleri', 'Related product types'), items: [...related, ...siblings].map((x) => ({ label: x.h1, href: typeHref(x.category) })) }]
       : []),
     ...(t.blog.length
-      ? [{ title: L('Rehberler', 'Guides'), items: t.blog.filter((s) => BLOG_POSTS[s]).map((s) => ({ label: BLOG_POSTS[s].title, href: `/blog/${s}` })) }]
+      ? [{ title: L('Rehberler', 'Guides'), items: t.blog.filter((s) => BLOG_POSTS[s]).map((s) => ({ label: (en && BLOG_POSTS_EN[s]?.title) || BLOG_POSTS[s].title, href: `/blog/${s}` })) }]
       : []),
     { title: groupName, items: [{ label: L(`Tüm ${groupName} ürünleri`, `All ${groupName} products`), href: `/category/${t.group}` }] },
   ]

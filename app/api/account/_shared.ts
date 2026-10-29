@@ -4,6 +4,12 @@
 import type { NextRequest } from 'next/server'
 import type { DecodedIdToken } from 'firebase-admin/auth'
 import { getAdminAuth } from '@/lib/firebaseAdminServer'
+import { toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
+
+/** E-postanın dili: isteği yapan sayfanın site dili (NEXT_LOCALE çerezi); yoksa Türkçe. */
+export function requestLocale(request: NextRequest): CatalogLocale {
+  return toCatalogLocale(request.cookies.get('NEXT_LOCALE')?.value)
+}
 
 /**
  * E-postadaki bağlantıların kökü. Sitenin kendi adresi (env); geliştirmede istek localhost'tan geliyorsa o.

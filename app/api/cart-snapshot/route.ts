@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 
 /**
  * Üye sepeti özeti (terk edilen sepet hatırlatması için). Yalnızca giriş yapmış üye; sepet tarayıcıda kalır.
- * PUT    { items: [{ id, quantity }] } — boş liste özeti siler
+ * PUT    { items: [{ id, quantity }] } — boş liste özeti siler; site dili (NEXT_LOCALE) hatırlatmanın dili olur
  * DELETE — özeti siler
  */
 
@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCustomerFromRequest } from '@/lib/customerAuth'
 import { isRateLimited } from '@/lib/rate-limit'
+import { toCatalogLocale } from '@/lib/catalog-en'
 
 export async function PUT(request: NextRequest) {
   if (isRateLimited(request, 'cart-snapshot', 60, 60_000)) {
@@ -31,11 +32,12 @@ export async function PUT(request: NextRequest) {
     await prisma.cartSnapshot.deleteMany({ where: { userId: customer.userId } })
     return NextResponse.json({ ok: true })
   }
+  const locale = toCatalogLocale(request.cookies.get('NEXT_LOCALE')?.value)
   // Sepet değiştiğinde hatırlatma hakkı yenilenir (bir sepet için en fazla bir hatırlatma)
   await prisma.cartSnapshot.upsert({
     where: { userId: customer.userId },
-    create: { userId: customer.userId, email: customer.email, items },
-    update: { email: customer.email, items, remindedAt: null },
+    create: { userId: customer.userId, email: customer.email, items, locale },
+    update: { email: customer.email, items, remindedAt: null, locale },
   })
   return NextResponse.json({ ok: true })
 }

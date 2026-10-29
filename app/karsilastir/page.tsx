@@ -15,6 +15,8 @@ import { VAT_RATE } from '@/lib/store-config'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { keysByCategory, missingKind, normalizeSpecs } from '@/lib/compare-specs'
+import { useLocale } from 'next-intl'
+import { productName, specKeyLabel, specValueLabel, toCatalogLocale } from '@/lib/catalog-en'
 
 type P = {
   id: string
@@ -35,12 +37,14 @@ type P = {
 /** Ürün karşılaştırma: seçilen ürünlerin teknik özellikleri yan yana (farklı değerler vurgulanır). */
 export default function ComparePage() {
   const L = useL()
+  const catalogLocale = toCatalogLocale(useLocale())
   const ids = useCompareStore((s) => s.ids)
   const remove = useCompareStore((s) => s.remove)
   const addItem = useCartStore((s) => s.addItem)
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const price = (n: number) => fmtPrice(n, currency, rates?.rates ?? null)
+  const price = (n: number) => fmtPrice(n, currency, rates?.rates ?? null, numberLocale)
   const [products, setProducts] = useState<P[] | null>(null)
   const [onlyDiff, setOnlyDiff] = useState(false)
   // Katalogda kategori başına geçen özellik adları: eksik değer "Belirtilmemiş" mi "Bu kategoride verilmez" mi (lib/compare-specs)
@@ -108,13 +112,13 @@ export default function ComparePage() {
                   {products.map((p) => (
                     <th key={p.id} scope="col" className="p-3 text-left font-normal">
                       <div className="relative space-y-2">
-                        <button type="button" onClick={() => remove(p.id)} aria-label={L(`${p.name} ürününü karşılaştırmadan çıkar`, `Remove ${p.name} from comparison`)} className="absolute -top-1 right-0 p-1 rounded hover:bg-slate-100">
+                        <button type="button" onClick={() => remove(p.id)} aria-label={L(`${p.name} ürününü karşılaştırmadan çıkar`, `Remove ${productName(p, catalogLocale)} from comparison`)} className="absolute -top-1 right-0 p-1 rounded hover:bg-slate-100">
                           <X className="w-4 h-4" />
                         </button>
                         <div className="relative w-24 h-24 bg-white rounded">
                           {p.image ? <Image src={p.image} alt="" fill sizes="96px" className="object-contain" /> : <Package className="w-10 h-10 m-7 text-slate-300" />}
                         </div>
-                        <Link href={`/products/${p.slug ?? p.id}`} className="block font-semibold text-ink hover:text-brand pr-6">{p.name}</Link>
+                        <Link href={`/products/${p.slug ?? p.id}`} className="block font-semibold text-ink hover:text-brand pr-6">{productName(p, catalogLocale)}</Link>
                       </div>
                     </th>
                   ))}
@@ -122,7 +126,7 @@ export default function ComparePage() {
               </thead>
               <tbody className="divide-y divide-palette">
                 <tr>
-                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Fiyat (KDV dahil)', 'Price (incl. VAT)')}</th>
+                  <th scope="row" className="p-3 text-left text-ink-muted font-medium">{L('Fiyat (KDV dahil)', 'Price (VAT incl.)')}</th>
                   {products.map((p) => (
                     <td key={p.id} className="p-3">
                       {p.oldPrice && <span className="block text-xs text-slate-400 line-through">{price(p.oldPrice * (1 + VAT_RATE / 100))}</span>}
@@ -148,8 +152,11 @@ export default function ComparePage() {
                 )}
                 {rows.map((k) => (
                   <tr key={k} className={isDiff(k) ? 'bg-amber-50/60' : ''}>
-                    <th scope="row" className="p-3 text-left text-ink-muted font-medium">{k}</th>
-                    {products.map((p) => <td key={p.id} className="p-3">{specOf(p, k) ?? missing(p, k)}</td>)}
+                    <th scope="row" className="p-3 text-left text-ink-muted font-medium">{specKeyLabel(k, catalogLocale)}</th>
+                    {products.map((p) => {
+                      const v = specOf(p, k)
+                      return <td key={p.id} className="p-3">{v != null ? specValueLabel(v, catalogLocale) : missing(p, k)}</td>
+                    })}
                   </tr>
                 ))}
                 <tr>

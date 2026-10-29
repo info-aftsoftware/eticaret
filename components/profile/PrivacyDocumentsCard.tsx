@@ -38,7 +38,7 @@ export function PrivacyDocumentsCard() {
     window.location.reload()
   }
 
-  const kvkkMail = `mailto:${SELLER.email}?subject=${encodeURIComponent('KVKK Başvurusu')}`
+  const kvkkMail = `mailto:${SELLER.email}?subject=${encodeURIComponent(L('KVKK Başvurusu', 'KVKK data protection request'))}`
 
   return (
     <Card className="classic-card rounded-lg">

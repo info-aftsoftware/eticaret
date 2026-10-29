@@ -470,6 +470,9 @@ model Order {
   paymentDiscount Float    @default(0) // Havale/EFT indirimi (ara toplamın %3'ü)
   total           Float
   currency        String   @default("TRY")
+  // Müşterinin sipariş anındaki site dili (tr | en): sipariş, kargo, iptal/iade e-postaları bu dilde gönderilir.
+  // Yasal metinler ve sözleşme PDF'i her durumda Türkçedir.
+  locale          String   @default("tr")
   // Additional
   shippingCarrier String?  // lib/shipping/carriers.ts id (yurtici, aras, ...)
   // Kargo ücretinin nereden verildiği (lib/shipping/fee.ts): "geliver" (önceki firma listesi) veya "navlungo" (Navlungo teklifi)
@@ -557,6 +560,7 @@ model CartSnapshot {
   items      Json      // [{ id, quantity }] — sepet kalemi id'leri (ürün veya ürün-varyant)
   updatedAt  DateTime  @updatedAt
   remindedAt DateTime?
+  locale     String    @default("tr") // hatırlatma e-postasının dili: sepetin son güncellendiği site dili (tr | en)
 
   @@index([updatedAt])
 }
@@ -568,6 +572,7 @@ model StockAlert {
   email      String
   createdAt  DateTime  @default(now())
   notifiedAt DateTime?
+  locale     String    @default("tr") // bildirim e-postasının dili: talebin verildiği site dili (tr | en)
 
   @@unique([productId, email])
   @@index([notifiedAt])
@@ -1021,6 +1026,7 @@ model StoreQuestion {
   status            String    @default("pending") // pending | answered | hidden
   answeredAt        DateTime?
   answerEmailSentAt DateTime?
+  locale            String    @default("tr") // yanıt e-postasının dili: sorunun sorulduğu site dili (tr | en)
   createdAt         DateTime  @default(now())
 
   @@index([productId, status])

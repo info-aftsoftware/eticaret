@@ -132,7 +132,7 @@ export function AddToCartButton({
       addToast({
         type: 'success',
         title: t('removed'),
-        description: `${displayName} sepetten kaldırıldı.`,
+        description: L(`${displayName} sepetten kaldırıldı.`, `${displayName} removed from cart.`),
       })
     }
   }

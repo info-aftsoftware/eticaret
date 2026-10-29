@@ -10,6 +10,8 @@ import { Loader2, RotateCcw } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'
 import type { OrderView } from '@/lib/order-view'
 import { useL } from '@/lib/i18n-inline'
+import { useLocale } from 'next-intl'
+import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 
 const TYPES = [
   { value: 'withdrawal', label: 'Cayma hakkı (14 gün içinde, gerekçesiz)', en: 'Right of withdrawal (within 14 days, no reason needed)' },
@@ -37,6 +39,7 @@ export function ReturnSection({
   onCancel: (returnId: string) => Promise<string | null>
 }) {
   const L = useL()
+  const catalogLocale = toCatalogLocale(useLocale())
   const returns = order.returns
   const [open, setOpen] = useState(false)
   const [type, setType] = useState<string>(returns?.canWithdraw ? 'withdrawal' : 'defective')
@@ -75,10 +78,10 @@ export function ReturnSection({
           <div key={r.id} className="rounded-lg border border-gray-200 p-3 space-y-1.5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="font-semibold">{r.requestNo}</span>
-              <Badge className={STATUS_CLASS[r.status] ?? ''}>{r.statusLabel}</Badge>
+              <Badge className={STATUS_CLASS[r.status] ?? ''}>{L(r.statusLabel, r.statusLabelEn ?? r.statusLabel)}</Badge>
             </div>
-            <p className="text-gray-600">{r.typeLabel}</p>
-            <p className="text-gray-800">{r.items.map((i) => `${i.name} × ${i.quantity}`).join(', ')}</p>
+            <p className="text-gray-600">{L(r.typeLabel, r.typeLabelEn ?? r.typeLabel)}</p>
+            <p className="text-gray-800">{r.items.map((i) => `${lineItemName(i, catalogLocale)} × ${i.quantity}`).join(', ')}</p>
             {r.status === 'REQUESTED' && (
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-gray-600">{L('Talebiniz inceleniyor. İade kodu e-posta ile gönderilecek; lütfen kod gelmeden ürünü göndermeyin.', 'Your request is being reviewed. A return code will be sent by email; please do not send the product before you receive it.')}</p>
@@ -97,7 +100,7 @@ export function ReturnSection({
             {r.status === 'REJECTED' && r.rejectReason && <p className="text-red-700">{L('Gerekçe:', 'Reason:')} {r.rejectReason}</p>}
             {r.status === 'REFUNDED' && r.refundAmount != null && (
               <p className="text-green-700">
-                {L(`${r.refundAmount.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })} ödeme yaptığınız yönteme iade edildi.`, `${r.refundAmount.toLocaleString('en-GB', { style: 'currency', currency: 'TRY' })} has been refunded to your original payment method.`)}
+                {L(`${r.refundAmount.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })} ödeme yaptığınız yönteme iade edildi.`, `${r.refundAmount.toLocaleString('en-US', { style: 'currency', currency: 'TRY', currencyDisplay: 'narrowSymbol' })} has been refunded to your original payment method.`)}
               </p>
             )}
           </div>
@@ -107,7 +110,7 @@ export function ReturnSection({
           <div className="space-y-2">
             {returns?.canWithdraw && returns.withdrawalUntil && (
               <p className="text-gray-600">
-                {L('Cayma hakkınızı', 'You can exercise your right of withdrawal without giving a reason until')} <strong>{returns.withdrawalUntil.toLocaleDateString(L('tr-TR', 'en-GB'), { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
+                {L('Cayma hakkınızı', 'You can exercise your right of withdrawal without giving a reason until')} <strong>{returns.withdrawalUntil.toLocaleDateString(L('tr-TR', 'en-US'), { day: '2-digit', month: 'long', year: 'numeric' })}</strong>
                 {L(' tarihine kadar gerekçe göstermeden kullanabilirsiniz.', '.')}
               </p>
             )}
@@ -134,7 +137,7 @@ export function ReturnSection({
                 return (
                   <div key={item.id} className="flex items-center justify-between gap-3">
                     <label htmlFor={`rq-${item.id}`} className={max === 0 ? 'text-gray-400' : ''}>
-                      {item.name} {max === 0 && L('(iade edilmiş)', '(returned)')}
+                      {lineItemName(item, catalogLocale)} {max === 0 && L('(iade edilmiş)', '(returned)')}
                     </label>
                     <select
                       id={`rq-${item.id}`}
