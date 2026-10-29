@@ -105,3 +105,28 @@ test('alıcı alanları: ad/soyad, telefon, TC yer tutucusu, tutarlar', () => {
   assert.equal(req.buyer.gsmNumber, '+905321234567')
   assert.equal(req.shippingAddress.address, 'Cad. 1, Merkez, Elazığ')
 })
+
+test('sonuç sorgusu: incelemedeki ödeme iptal sayılmaz, tutar taksit farkı olmadan, eksik tutar NaN', async () => {
+  const { retrieveCheckoutForm } = await import('../../lib/payments/iyzico')
+  const config = { apiKey: 'k', secretKey: 's', baseUrl: 'https://sandbox-api.iyzipay.com' }
+  const realFetch = globalThis.fetch
+  const answer = (body: Record<string, unknown>) => {
+    globalThis.fetch = (async () => new Response(JSON.stringify({ status: 'success', basketId: 'ORD-2026-00001', currency: 'TRY', ...body }))) as typeof fetch
+  }
+  try {
+    answer({ paymentStatus: 'SUCCESS', fraudStatus: 0, price: '1000.00', paidPrice: '1063.50', paymentId: '1' })
+    const review = await retrieveCheckoutForm('tokentoken12', config as never)
+    assert.ok(review.valid && !review.approved && review.underReview)
+    assert.ok(review.valid && review.amount === 1000 && review.paidPrice === 1063.5)
+
+    answer({ paymentStatus: 'SUCCESS', fraudStatus: 1, price: '1000.00', paidPrice: '1063.50' })
+    const ok = await retrieveCheckoutForm('tokentoken12', config as never)
+    assert.ok(ok.valid && ok.approved && !ok.underReview && ok.amount === 1000)
+
+    answer({ paymentStatus: 'FAILURE', fraudStatus: -1 })
+    const bad = await retrieveCheckoutForm('tokentoken12', config as never)
+    assert.ok(bad.valid && !bad.approved && !bad.underReview && Number.isNaN(bad.amount))
+  } finally {
+    globalThis.fetch = realFetch
+  }
+})

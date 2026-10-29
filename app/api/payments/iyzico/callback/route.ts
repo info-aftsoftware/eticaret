@@ -44,9 +44,10 @@ export async function POST(request: NextRequest) {
 
   return settleCardPayment(order, {
     approved: result.approved,
+    underReview: result.underReview,
     amount: result.amount,
     currency: result.currency,
-    providerRef: result.paymentId ? `iyzico ödeme no ${result.paymentId}` : '',
+    providerRef: [result.paymentId && `iyzico ödeme no ${result.paymentId}`, result.paidPrice != null && result.paidPrice !== result.amount && `çekilen ${result.paidPrice} TL (taksit farkı dahil)`].filter(Boolean).join(', '),
     label: 'iyzico',
     errorMessage: result.errorMessage,
     threeDFailed: result.threeDFailed,

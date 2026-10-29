@@ -63,7 +63,7 @@ async function replayOrder(key: string, ip: string | null) {
   const provider = unpaidCard ? getCardProvider() : null
   if (provider === 'iyzico') {
     // iyzico ödeme formu tek kullanımlık: tekrar gelen istekte aynı sipariş için yenisi açılır
-    const { paymentPageUrl } = await startIyzicoPayment(order, { ip })
+    const { paymentPageUrl } = await startIyzicoPayment(order, { ip, locale: order.locale === 'en' ? 'en' : 'tr' })
     payment = { redirectUrl: paymentPageUrl, bank: 'iyzico' }
   } else if (provider === 'bank') {
     const posConfig = getBankPosConfig()!
@@ -409,7 +409,8 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
         const returnToken = crypto.randomBytes(18).toString('base64url')
         await prisma.order.update({ where: { id: order.id }, data: { paymentProviderRef: returnToken } })
         if (cardProvider === 'iyzico') {
-          const locale = request.headers.get('x-locale') === 'en' ? 'en' : 'tr'
+          // API'ye dil başlığı gelmez (middleware yalnız sayfalara verir): sayfanın bıraktığı çerez
+          const locale = request.cookies.get('NEXT_LOCALE')?.value === 'en' ? 'en' : 'tr'
           const { paymentPageUrl } = await startIyzicoPayment({ ...order, paymentProviderRef: returnToken }, { ip, locale })
           payment = { redirectUrl: paymentPageUrl, bank: 'iyzico' }
         } else if (posConfig) {

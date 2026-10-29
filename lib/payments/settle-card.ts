@@ -26,6 +26,8 @@ export function failRedirect(code: PosFailCode, orderNo: string | null = null, c
 
 export type CardSettlement = {
   approved: boolean
+  /** Ödeme alındı ama sağlayıcı incelemesinde (iyzico fraudStatus 0): sipariş iptal edilmez, yönetici uyarılır */
+  underReview?: boolean
   amount: number
   currency: string
   /** Kayıt için sağlayıcı referansı (ör. "işlem no …, provizyon …" / "iyzico ödeme no …") */
@@ -84,6 +86,17 @@ export async function settleCardPayment(order: Order, r: CardSettlement): Promis
       }
       // Tutar uyuşmazlığı: sipariş ödendi yapılmadı, yöneticiye bildirim gitti
       return failRedirect('amount', order.orderNo)
+    }
+
+    // İncelemedeki ödeme: kart çekildi, sağlayıcı onaylamadı/reddetmedi. Sipariş beklemede kalır, stok ayrılmış durur
+    if (r.underReview && order.paymentStatus !== 'PAID') {
+      await logOrderEvent(order.id, {
+        type: 'payment',
+        message: `${r.label}: ödeme alındı, dolandırıcılık incelemesinde (${r.amount} ${r.currency}${r.providerRef ? `, ${r.providerRef}` : ''}). ${r.label} panelinden onaylanınca "ödendi", reddedilirse iptal edin.`,
+        visibleToCustomer: false,
+      })
+      await reportError(`${r.logKey}-inceleme`, new Error(`${r.label} ödemesi incelemede — panelden kontrol edin`), { orderNo: order.orderNo, amount: `${r.amount} ${r.currency}`, ref: r.providerRef || null })
+      return failRedirect('review', order.orderNo)
     }
 
     let cancelled = false

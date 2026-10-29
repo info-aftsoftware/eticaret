@@ -29,7 +29,7 @@ export async function applyPaymentResult(result: PaymentWebhookResult): Promise<
     return 'failed'
   }
 
-  if (Math.abs(result.amount - order.total) > 0.01 || result.currency.toUpperCase() !== order.currency.toUpperCase()) {
+  if (!Number.isFinite(result.amount) || Math.abs(result.amount - order.total) > 0.01 || result.currency.toUpperCase() !== order.currency.toUpperCase()) {
     await reportError('odeme-tutari-uyusmazligi', new Error('Ödenen tutar sipariş toplamıyla eşleşmiyor'), {
       orderNo: order.orderNo,
       paid: `${result.amount} ${result.currency}`,

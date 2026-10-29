@@ -6,6 +6,7 @@ export const POS_FAIL_MESSAGES = {
   amount: 'Ödeme tutarı doğrulanamadı. Siparişiniz kontrol ediliyor; ekibimiz sizinle iletişime geçecek.',
   paid_cancelled: 'Ödemeniz bankadan onaylandı ancak bu sipariş daha önce iptal edilmişti. Ücret iadesi için ekibimiz sizinle iletişime geçecek.',
   server: 'Ödeme sonucu işlenirken bir hata oluştu. Kartınızdan çekim yapıldıysa lütfen bizimle iletişime geçin.',
+  review: 'Ödemeniz alındı ve ödeme kuruluşunun güvenlik incelemesinde. Siparişiniz beklemede; inceleme tamamlanınca size bilgi vereceğiz, yeniden ödeme yapmayın.',
 } as const
 
 export type PosFailCode = keyof typeof POS_FAIL_MESSAGES
@@ -17,6 +18,7 @@ const POS_FAIL_MESSAGES_EN: Record<PosFailCode, string> = {
   amount: 'The payment amount could not be verified. Your order is being reviewed; our team will contact you.',
   paid_cancelled: 'Your bank approved the payment, but this order had already been cancelled. Our team will contact you about the refund.',
   server: 'An error occurred while processing the payment result. If your card was charged, please contact us.',
+  review: 'Your payment was received and is under the payment provider\'s security review. Your order is on hold; we will let you know when the review is complete. Please do not pay again.',
 }
 
 export function posFailMessage(code: string | null, locale: string = 'tr'): string | null {

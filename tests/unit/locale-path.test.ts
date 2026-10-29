@@ -53,3 +53,8 @@ test('türetilmiş filtre adları ve aralık etiketleri İngilizce', async () =>
   assert.equal(specValueLabel('Bifacial (çift yüzlü)', 'en'), 'Bifacial (double-sided)')
   assert.equal(specValueLabel('50 Ah ve altı', 'tr'), '50 Ah ve altı')
 })
+
+test('çift eğik çizgi site dışına yönlendirmeye dönüşmez', () => {
+  assert.deepEqual(stripLocale('/en//evil.com'), { locale: 'en', path: '/evil.com' })
+  assert.deepEqual(stripLocale('/en/\evil.com'), { locale: 'en', path: '/evil.com' })
+})

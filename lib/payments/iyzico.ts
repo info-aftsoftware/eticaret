@@ -183,7 +183,11 @@ export type IyzicoResult =
       valid: true
       orderNo: string
       approved: boolean
+      /** Ödeme alındı ama iyzico dolandırıcılık incelemesinde (fraudStatus 0): sipariş beklemede kalır, yönetici kontrol eder */
+      underReview: boolean
       amount: number
+      /** Müşterinin ödediği tutar (taksit vade farkı dahil olabilir); kayıt için */
+      paidPrice: number | null
       currency: string
       paymentId: string | null
       errorMessage: string | null
@@ -196,6 +200,7 @@ type DetailResponse = IyzicoBase & {
   fraudStatus?: number
   basketId?: string
   conversationId?: string
+  price?: number | string
   paidPrice?: number | string
   currency?: string
   paymentId?: string
@@ -210,13 +215,20 @@ export async function retrieveCheckoutForm(token: string, config: IyzicoConfig |
   const orderNo = res.basketId || res.conversationId
   if (!orderNo) return { valid: false, reason: `iyzico sonucu sipariş içermiyor (${res.errorCode ?? res.status})` }
   // fraudStatus: 1 = onaylı, 0 = incelemede, -1 = reddedildi; yalnızca 1 kabul edilir
-  const approved = res.status === 'success' && res.paymentStatus === 'SUCCESS' && res.fraudStatus === 1
-  const amount = Number(res.paidPrice)
+  const paid = res.status === 'success' && res.paymentStatus === 'SUCCESS'
+  const approved = paid && res.fraudStatus === 1
+  // Kart çekildi, iyzico inceliyor: iptal edilmez (müşteri ücretlendirildi), yönetici iyzico panelinden onaylar
+  const underReview = paid && res.fraudStatus === 0
+  // Sipariş tutarıyla karşılaştırılan: sepet tutarı (price). paidPrice taksit vade farkını içerebilir, yalnız kaydedilir
+  const amount = Number(res.price ?? res.paidPrice)
+  const paidPrice = Number(res.paidPrice)
   return {
     valid: true,
     orderNo,
     approved,
+    underReview,
     amount: Number.isFinite(amount) ? amount : NaN,
+    paidPrice: Number.isFinite(paidPrice) ? paidPrice : null,
     currency: res.currency || 'TRY',
     paymentId: res.paymentId || null,
     threeDFailed: !approved && typeof res.mdStatus === 'number' && res.mdStatus !== 1,

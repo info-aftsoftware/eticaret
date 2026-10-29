@@ -22,7 +22,7 @@ export function isLocalizablePath(path: string): boolean {
 /** /en/products?x → { locale: 'en', path: '/products?x' }; önek yoksa Türkçe */
 export function stripLocale(pathname: string): { locale: SiteLocale; path: string } {
   if (pathname === EN_PREFIX || pathname.startsWith(`${EN_PREFIX}/`) || pathname.startsWith(`${EN_PREFIX}?`) || pathname.startsWith(`${EN_PREFIX}#`)) {
-    const rest = pathname.slice(EN_PREFIX.length)
+    const rest = pathname.slice(EN_PREFIX.length).replace(/^[/\\]+/, '/')
     return { locale: 'en', path: rest.startsWith('/') ? rest : `/${rest}` }
   }
   return { locale: 'tr', path: pathname }
