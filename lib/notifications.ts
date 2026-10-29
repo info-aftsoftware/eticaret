@@ -7,9 +7,11 @@ import ShipmentNotice from '../emails/ShipmentNotice'
 import RFQAdminNotification from '../emails/RFQAdminNotification'
 import RFQCustomerConfirmation from '../emails/RFQCustomerConfirmation'
 import QuoteReady from '../emails/QuoteReady'
-import WelcomeEmail, { WELCOME_EMAIL_SUBJECT } from '../emails/Welcome'
-import { EmailVerification } from '../emails/EmailVerification'
-import PasswordResetEmail from '../emails/PasswordResetEmail'
+import WelcomeEmail, { welcomeEmailSubject } from '../emails/Welcome'
+import { EmailVerification, emailVerificationSubject } from '../emails/EmailVerification'
+import PasswordResetEmail, { passwordResetSubject } from '../emails/PasswordResetEmail'
+import type { EmailLocale } from '../emails/order/shared'
+import { localizePath } from '@/lib/i18n/locale-path'
 
 /** HTML e-posta gövdesine yerleştirilen kullanıcı girdisini kaçışlar (HTML enjeksiyonuna karşı). */
 const esc = (v: unknown) =>
@@ -364,14 +366,15 @@ export async function sendQuoteReadyToCustomer(data: {
 }
 
 // --- Üyelik e-postaları (hoş geldiniz, e-posta doğrulama, şifre sıfırlama) ---
+// Dil: e-postayı tetikleyen isteğin site dili (NEXT_LOCALE çerezi); verilmezse Türkçe.
 
 /** Kayıt sonrası hoş geldiniz e-postası. Tekilliği çağıran taraf sağlar (bkz. /api/account/welcome). */
-export async function sendWelcomeEmail(data: { email: string; name: string; siteUrl: string; emailVerified: boolean }): Promise<boolean> {
+export async function sendWelcomeEmail(data: { email: string; name: string; siteUrl: string; emailVerified: boolean; locale?: EmailLocale }): Promise<boolean> {
   try {
     const result = await sendEmail(
       data.email,
-      WELCOME_EMAIL_SUBJECT,
-      WelcomeEmail({ name: data.name, siteUrl: data.siteUrl, emailVerified: data.emailVerified })
+      welcomeEmailSubject(data.locale),
+      WelcomeEmail({ name: data.name, siteUrl: data.siteUrl, emailVerified: data.emailVerified, locale: data.locale })
     )
     return result.success
   } catch {
@@ -380,12 +383,12 @@ export async function sendWelcomeEmail(data: { email: string; name: string; site
 }
 
 /** E-posta doğrulama bağlantısı (Firebase oobCode ile sitenin /verify-email sayfasına). */
-export async function sendEmailVerificationMessage(data: { email: string; name: string; verificationUrl: string }): Promise<boolean> {
+export async function sendEmailVerificationMessage(data: { email: string; name: string; verificationUrl: string; locale?: EmailLocale }): Promise<boolean> {
   try {
     const result = await sendEmail(
       data.email,
-      'E-posta adresinizi doğrulayın - Voltekno',
-      EmailVerification({ name: data.name, verificationUrl: data.verificationUrl })
+      emailVerificationSubject(data.locale),
+      EmailVerification({ name: data.name, verificationUrl: data.verificationUrl, locale: data.locale })
     )
     return result.success
   } catch {
@@ -394,12 +397,12 @@ export async function sendEmailVerificationMessage(data: { email: string; name: 
 }
 
 /** Şifre sıfırlama bağlantısı (Firebase oobCode ile sitenin /reset-password sayfasına). */
-export async function sendPasswordResetMessage(data: { email: string; name: string; resetUrl: string }): Promise<boolean> {
+export async function sendPasswordResetMessage(data: { email: string; name: string; resetUrl: string; locale?: EmailLocale }): Promise<boolean> {
   try {
     const result = await sendEmail(
       data.email,
-      'Şifre sıfırlama talebiniz - Voltekno',
-      PasswordResetEmail({ name: data.name, resetUrl: data.resetUrl })
+      passwordResetSubject(data.locale),
+      PasswordResetEmail({ name: data.name, resetUrl: data.resetUrl, locale: data.locale })
     )
     return result.success
   } catch {
@@ -407,7 +410,7 @@ export async function sendPasswordResetMessage(data: { email: string; name: stri
   }
 }
 
-// Ürün sorusu yanıtlandı: soruyu soran müşteriye yanıt e-postası (admin > Sorular)
+// Ürün sorusu yanıtlandı: soruyu soran müşteriye yanıt e-postası (admin > Sorular), sorunun sorulduğu site dilinde
 export async function sendQuestionAnsweredEmail(data: {
   to: string
   customerName: string
@@ -415,21 +418,23 @@ export async function sendQuestionAnsweredEmail(data: {
   productName: string
   question: string
   answer: string
+  locale?: EmailLocale
 }): Promise<boolean> {
   try {
-    const { default: QuestionAnsweredEmail } = await import('../emails/QuestionAnsweredEmail')
+    const { default: QuestionAnsweredEmail, questionAnsweredSubject } = await import('../emails/QuestionAnsweredEmail')
     const { STORE_CONTACT } = await import('./store-config')
-    const productUrl = `${STORE_CONTACT.siteUrl.replace(/\/$/, '')}/products/${encodeURIComponent(data.productId)}`
+    const productUrl = `${STORE_CONTACT.siteUrl.replace(/\/$/, '')}${localizePath(`/products/${encodeURIComponent(data.productId)}`, data.locale === 'en' ? 'en' : 'tr')}`
     const result = await sendEmail(
       data.to,
-      `Sorunuz yanıtlandı - ${data.productName}`.slice(0, 150),
+      questionAnsweredSubject(data.productName, data.locale),
       QuestionAnsweredEmail({
         data: {
-          customerName: data.customerName || 'Değerli müşterimiz',
+          customerName: data.customerName,
           productName: data.productName,
           productUrl,
           question: data.question,
           answer: data.answer,
+          locale: data.locale,
         },
       })
     )

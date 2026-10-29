@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link, { usePathname } from '@/lib/i18n/navigation'
 import { GitCompare, X } from 'lucide-react'
 import { useCompareStore } from '@/lib/store/useCompareStore'
 import { useL } from '@/lib/i18n-inline'

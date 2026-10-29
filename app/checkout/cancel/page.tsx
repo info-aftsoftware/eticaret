@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { useSearchParams } from 'next/navigation'
 import { ShoppingCart, Banknote } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'

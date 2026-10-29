@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/lib/i18n/navigation'
 import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
+import { useL } from '@/lib/i18n-inline'
 
 /** /orders: üye → Hesabım > Siparişlerim, misafir → sipariş takip formu. */
 export default function OrdersIndexPage() {
   const router = useRouter()
+  const L = useL()
   const { isAuthenticated, authReady } = useAuthStore()
 
   useEffect(() => {
@@ -18,7 +20,7 @@ export default function OrdersIndexPage() {
   return (
     <div className="flex min-h-[50vh] items-center justify-center gap-3 bg-[#f5f7fa] text-[#20384e]">
       <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
-      <span>Siparişlerinize yönlendiriliyorsunuz…</span>
+      <span>{L('Siparişlerinize yönlendiriliyorsunuz…', 'Taking you to your orders…')}</span>
     </div>
   )
 }

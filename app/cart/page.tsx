@@ -1,10 +1,9 @@
 ﻿'use client'
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import { contactHref } from '@/lib/contact-topics'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useCartStore, type CartItem } from '@/lib/store/useCartStore'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import {
@@ -28,7 +27,8 @@ import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
 import { useAuthStore } from '@/lib/store/useAuthStore'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { CartRelatedProducts } from '@/components/CartRelatedProducts'
 import { LegalDocumentDialog } from '@/components/LegalDocumentDialog'
 import { trackViewCart, cartItemToGa } from '@/lib/analytics'
@@ -59,6 +59,7 @@ function CartLine({
   formatPrice: (n: number) => string
 }) {
   const L = useL()
+  const itemName = lineItemName(item, toCatalogLocale(useLocale()))
   const tErr = useServerError()
   const removeItem = useCartStore((s) => s.removeItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
@@ -97,7 +98,7 @@ function CartLine({
           className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-[#e6ebf1] bg-white sm:h-24 sm:w-24"
         >
           {item.image && !imgError ? (
-            <Image src={item.image} alt={item.name || L('Ürün', 'Product')} fill sizes="96px" className="object-contain p-1.5" onError={() => setImgError(true)} />
+            <Image src={item.image} alt={itemName || L('Ürün', 'Product')} fill sizes="96px" className="object-contain p-1.5" onError={() => setImgError(true)} />
           ) : (
             <Package className="h-8 w-8 text-slate-300" />
           )}
@@ -107,10 +108,10 @@ function CartLine({
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <Link href={href} className="line-clamp-2 text-sm font-semibold leading-snug text-[#121926] hover:text-[#0b2540] hover:underline sm:text-[15px]">
-                {item.name || L('Ürün', 'Product')}
+                {itemName || L('Ürün', 'Product')}
               </Link>
               <p className="mt-1 text-xs text-[#5d6e80]">
-                {formatPrice(grossPrice(item.price))} {L('/ adet', '/ unit')} <span className="text-[#9aa8b6]">· {L('KDV dahil', 'incl. VAT')}</span>
+                {formatPrice(grossPrice(item.price))} {L('/ adet', '/ unit')} <span className="text-[#9aa8b6]">· {L('KDV dahil', 'VAT incl.')}</span>
               </p>
               {status?.campaign && <p className="mt-0.5 text-xs font-medium text-[#b42318]">{status.campaign}</p>}
               {item.isCustom && (
@@ -121,7 +122,7 @@ function CartLine({
               type="button"
               onClick={() => removeItem(item.id)}
               className="-mr-1 -mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#5d6e80] transition-colors hover:bg-red-50 hover:text-[#b42318] touch-manipulation"
-              aria-label={L(`${item.name} sepetten kaldır`, `Remove ${item.name} from cart`)}
+              aria-label={L(`${itemName} sepetten kaldır`, `Remove ${itemName} from cart`)}
               title={L('Sepetten kaldır', 'Remove from cart')}
             >
               <Trash2 className="h-4 w-4" />
@@ -151,7 +152,7 @@ function CartLine({
                   if (e.key === 'Enter') (e.target as HTMLInputElement).blur()
                 }}
                 className="h-10 w-14 !min-h-0 border-x border-[#e6ebf1] bg-transparent !px-1 !py-0 text-center text-sm font-semibold tabular-nums text-[#121926] [appearance:textfield] focus:outline-none sm:h-9 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                aria-label={L(`${item.name} adedi`, `${item.name} quantity`)}
+                aria-label={L(`${itemName} adedi`, `${itemName} quantity`)}
               />
               <button
                 type="button"
@@ -224,8 +225,9 @@ export default function CartPage() {
   const L = useL()
   const tErr = useServerError()
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const { items, clearCart, getTotalPrice, getTotalItems, _hasHydrated } = useCartStore()
   const { isAuthenticated } = useAuthStore()
   const { status, priceChanges, blocking } = useCartValidation()
@@ -392,7 +394,7 @@ export default function CartPage() {
     `mt-0.5 h-5 w-5 shrink-0 rounded border-[#d3d9e1] text-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/30 ${err ? 'border-red-400' : ''}`
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={`${getTotalItems()} ${t('itemsCount')}`}>
+    <ClassicPageShell breadcrumbs={[{ label: t('title') }]} title={t('title')} description={t('itemsCount', { count: getTotalItems() })}>
       <div className="grid min-w-0 max-w-full grid-cols-1 gap-5 pb-safe lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
         <div className="min-w-0 space-y-5">
           {batteryItems.length > 0 && (

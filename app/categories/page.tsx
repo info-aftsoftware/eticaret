@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { ChevronRight } from 'lucide-react'
 import { CATEGORY_GROUPS } from '@/lib/categories'

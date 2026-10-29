@@ -35,11 +35,14 @@ export function estimateDelivery(now: Date = new Date()): { shipDate: Date; from
   return { shipDate: ship, from: addBusinessDays(ship, TRANSIT_DAYS.min), to: addBusinessDays(ship, TRANSIT_DAYS.max) }
 }
 
-/** "17–20 Ekim" / "30 Ekim – 2 Kasım" */
-export function formatDeliveryRange(from: Date, to: Date): string {
+/** "17–20 Ekim" / "30 Ekim – 2 Kasım"; İngilizcede "October 17–20" / "October 30 – November 2" */
+export function formatDeliveryRange(from: Date, to: Date, locale: 'tr' | 'en' = 'tr'): string {
+  const lang = locale === 'en' ? 'en-US' : 'tr-TR'
   const opts = { day: 'numeric', month: 'long', timeZone: 'UTC' } as const
   if (from.getUTCMonth() === to.getUTCMonth()) {
-    return `${from.getUTCDate()}–${to.toLocaleDateString('tr-TR', opts)}`
+    return locale === 'en'
+      ? `${from.toLocaleDateString(lang, opts)}–${to.getUTCDate()}`
+      : `${from.getUTCDate()}–${to.toLocaleDateString(lang, opts)}`
   }
-  return `${from.toLocaleDateString('tr-TR', opts)} – ${to.toLocaleDateString('tr-TR', opts)}`
+  return `${from.toLocaleDateString(lang, opts)} – ${to.toLocaleDateString(lang, opts)}`
 }

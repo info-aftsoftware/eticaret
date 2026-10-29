@@ -1,0 +1,2285 @@
+{
+ "aft-2-7-kwh-canta-tip-tasinabilir-guc-istasyonu": {
+  "name": "AFT 2.7 kWh Case-Type Portable Power Station (2000 W)",
+  "description": "AFT 2.7 kWh case-type storable power pack: 220 VAC pure sine wave, 2000 W, 1000 W MPPT solar input, 6000 cycles. Request a quote for pricing.",
+  "src": "b14a6c714d"
+ },
+ "aft-2-7-kwh-lifepo4-lfp-batarya": {
+  "name": "AFT 2.7 kWh LiFePO4 (LFP) Battery (12V / 24V)",
+  "description": "AFT 2.7 kWh LFP battery: 12 V model 206 Ah, 24 V model 105 Ah; 6000 cycles, Bluetooth, 25 kg. Request a quote for pricing.",
+  "src": "dc29c7b76c"
+ },
+ "aft-2-7-kwh-tasinabilir-guc-istasyonu": {
+  "name": "AFT 2.7 kWh Portable Power Station (2000 W)",
+  "description": "AFT 2.7 kWh storable power pack: 220 VAC pure sine wave, 2000 W, 1000 W MPPT solar input, 6000 cycles, 35 kg. Request a quote for pricing.",
+  "src": "84947ba3ce"
+ },
+ "aft-5-4-kwh-lifepo4-lfp-batarya": {
+  "name": "AFT 5.4 kWh LiFePO4 (LFP) Battery (24V / 48V)",
+  "description": "AFT 5.4 kWh LFP battery: 24 V model 206 Ah, 48 V model 105 Ah; 6000 cycles, Bluetooth, 45 kg. Request a quote for pricing.",
+  "src": "4d9cf94d91"
+ },
+ "aft-5-4-kwh-tekerlekli-tasinabilir-guc-istasyonu": {
+  "name": "AFT 5.4 kWh Wheeled Portable Power Station (3000 W)",
+  "description": "AFT 5.4 kWh storable power pack: 220 VAC pure sine wave, 3000 W, 1000 W MPPT solar input, 6000 cycles, on wheels. Request a quote for pricing.",
+  "src": "cc22838bd6"
+ },
+ "aft-dc-hizli-elektrikli-arac-sarj-istasyonu-45-180kw": {
+  "name": "AFT DC Fast Electric Vehicle Charging Station (45 kW - 180 kW)",
+  "description": "AFT Grid Core DC fast charging station: 45, 90, 135 and 180 kW power options, 150-1000 VDC output, CCS2, OCPP 1.6, IP54. We will contact you about installation and delivery.",
+  "variants": {
+   "aftgc45": "45 kW",
+   "aftgc90": "90 kW",
+   "aftgc135": "135 kW",
+   "aftgc180": "180 kW"
+  },
+  "src": "4f2b5521a0"
+ },
+ "aft-guc-katmani-moduler-lifepo4-enerji-depolama-unitesi": {
+  "name": "AFT Power Layer Modular LiFePO4 Energy Storage Unit (5.4 - 172 kWh)",
+  "description": "AFT Power Layer: 51.2 V modular LiFePO4; single module 105 Ah / 5.4 kWh, up to 172 kWh in the cabinet system, 6000 cycles. Request a quote for pricing.",
+  "src": "6733b5d5e0"
+ },
+ "aft-pro-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw": {
+  "name": "AFT PRO DC Fast Electric Vehicle Charging Station (90 kW - 270 kW)",
+  "description": "AFT PRO DC fast charging station: 90, 180 and 270 kW power options. We will contact you about installation and delivery.",
+  "variants": {
+   "aftpro90": "90 kW",
+   "aftpro180": "180 kW",
+   "aftpro270": "270 kW"
+  },
+  "src": "6279dd40fa"
+ },
+ "aft-pro-v2-dc-hizli-elektrikli-arac-sarj-istasyonu-90-270kw": {
+  "name": "AFT PRO V2 DC Fast Electric Vehicle Charging Station (90 kW - 270 kW)",
+  "description": "AFT PRO V2 (Grid Pulse Gen2) DC fast charging station: 90, 180 and 270 kW, 2 DC outputs, 150-1000 VDC, OCPP 1.6, 15\" touchscreen, RFID / QR / NFC payment. We will contact you about installation and delivery.",
+  "variants": {
+   "aftprov290": "90 kW",
+   "aftprov2180": "180 kW",
+   "aftprov2270": "270 kW"
+  },
+  "src": "88923674c3"
+ },
+ "alpex-6200w-48v-on-grid-off-grid-hibrit-inverter": {
+  "name": "Alpex 6200W 48V On-Grid/Off-Grid Hybrid Inverter",
+  "description": "Alpex 6200W 48V On-Grid/Off-Grid Hybrid Inverter – 6200 W pure sine wave output · 48 V battery system · On-grid and off-grid operation. Details at Voltekno.",
+  "src": "43af347c86"
+ },
+ "alpex-modifiye-sinus-inverter-300w-2000w-12v-24v": {
+  "name": "Alpex Modified Sine Wave Inverter (300W - 2000W, 12V / 24V)",
+  "description": "Alpex Modified Sine Wave Inverter – Modified sine wave output · 300 W - 2000 W power options · 12 V and 24 V battery options. Details at Voltekno.",
+  "variants": {
+   "alpex00362": "300W 12V Modified Sine Wave Inverter",
+   "alpex00363": "600W 12V Modified Sine Wave Inverter",
+   "alpex00364": "600W 24V Modified Sine Wave Inverter",
+   "alpex00365": "1000W 12V Modified Sine Wave Inverter",
+   "alpex00366": "1000W 24V Modified Sine Wave Inverter",
+   "alpex00367": "1500W 12V Modified Sine Wave Inverter",
+   "alpex00368": "1500W 24V Modified Sine Wave Inverter",
+   "alpex00369": "2000W 12V Modified Sine Wave Inverter",
+   "alpex00370": "2000W 24V Modified Sine Wave Inverter"
+  },
+  "src": "dc2d2452d4"
+ },
+ "alpex-sebeke-sarjli-ups-modifiye-sinus-inverter-500w-1500w-12v": {
+  "name": "Alpex Grid-Charging (UPS) Modified Sine Wave Inverter",
+  "description": "Alpex Grid-Charging (UPS) Modified Sine Wave Inverter – Modified sine wave output · Built-in grid battery charger. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "alpex00378": "500W 12V Grid-Charging (UPS) Modified Sine Wave Inverter",
+   "alpex00379": "1000W 12V Grid-Charging (UPS) Modified Sine Wave Inverter",
+   "alpex00380": "1500W 12V Grid-Charging (UPS) Modified Sine Wave Inverter"
+  },
+  "src": "c2547832f7"
+ },
+ "alpex-sebeke-sarjli-ups-tam-sinus-inverter-500w-12v-2000w-24v": {
+  "name": "Alpex Grid-Charging (UPS) Pure Sine Wave Inverter",
+  "description": "Alpex Grid-Charging (UPS) Pure Sine Wave Inverter – Pure sine wave output · Built-in grid battery charger. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "alpex00372": "500W 12V Grid-Charging (UPS) Pure Sine Wave Inverter",
+   "alpex00376": "2000W 24V Grid-Charging (UPS) Pure Sine Wave Inverter"
+  },
+  "src": "ce8d67a965"
+ },
+ "alpex-tam-sinus-inverter-500w-2000w-12v-24v": {
+  "name": "Alpex Pure Sine Wave Inverter (500W - 2000W, 12V / 24V)",
+  "description": "Alpex Pure Sine Wave Inverter – Pure sine wave output waveform · 500 W - 2000 W power options · 12 V and 24 V battery options. Details at Voltekno.",
+  "variants": {
+   "alpex00355": "500W 12V Pure Sine Wave Inverter",
+   "alpex00356": "1000W 12V Pure Sine Wave Inverter",
+   "alpex00357": "1000W 24V Pure Sine Wave Inverter",
+   "alpex00358": "1500W 12V Pure Sine Wave Inverter",
+   "alpex00359": "1500W 24V Pure Sine Wave Inverter",
+   "alpex00360": "2000W 12V Pure Sine Wave Inverter",
+   "alpex00361": "2000W 24V Pure Sine Wave Inverter"
+  },
+  "src": "7192c498f2"
+ },
+ "alpex-wi-fi-uzaktan-izleme-modulu": {
+  "name": "Alpex Wi-Fi Remote Monitoring Module",
+  "description": "Alpex Wi-Fi Remote Monitoring Module – Wi-Fi connectivity · Remote monitoring · For compatible Alpex inverters. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "23141c6ba0"
+ },
+ "altech-7-m-kafes-tipi-ruzgar-turbini-montaj-diregi": {
+  "name": "Altech 7 m Lattice Wind Turbine Mounting Tower",
+  "description": "Altech 7 m Lattice Wind Turbine Mounting Tower – 7 m height · Rigid lattice structure · For wind turbine mounting. Details at Voltekno.",
+  "src": "2308710337"
+ },
+ "altech-boreas-2000-2-kw-24v-off-grid-ruzgar-turbini": {
+  "name": "Altech Boreas 2000 2 kW 24V Off-Grid Wind Turbine",
+  "description": "Altech Boreas 2000 2 kW 24V Off-Grid Wind Turbine – 2 kW rated power · 24 V battery system · Off-grid use. Technical specifications and datasheet at Voltekno.",
+  "src": "61793a2f00"
+ },
+ "altech-boreas-2000-2-kw-48v-off-grid-ruzgar-turbini": {
+  "name": "Altech Boreas 2000 2 kW 48V Off-Grid Wind Turbine",
+  "description": "Altech Boreas 2000 2 kW 48V Off-Grid Wind Turbine – 2 kW rated power · 48 V battery system · Off-grid use. Technical specifications and datasheet at Voltekno.",
+  "src": "dd186a50ba"
+ },
+ "altech-boreas-4000-4-kw-24v-off-grid-ruzgar-turbini": {
+  "name": "Altech Boreas 4000 4 kW 24V Off-Grid Wind Turbine",
+  "description": "Altech Boreas 4000 4 kW 24V Off-Grid Wind Turbine – 4 kW rated power · 24 V battery system · Off-grid use. Technical specifications and datasheet at Voltekno.",
+  "src": "858390aab3"
+ },
+ "altech-boreas-4000-4-kw-48v-off-grid-ruzgar-turbini": {
+  "name": "Altech Boreas 4000 4 kW 48V Off-Grid Wind Turbine",
+  "description": "Altech Boreas 4000 4 kW 48V Off-Grid Wind Turbine – 4 kW rated power · 48 V battery system · Off-grid use. Technical specifications and datasheet at Voltekno.",
+  "src": "26c441a3bd"
+ },
+ "altech-boreas-6000-6-kw-48v-off-grid-ruzgar-turbini": {
+  "name": "Altech Boreas 6000 6 kW 48V Off-Grid Wind Turbine",
+  "description": "Altech Boreas 6000 6 kW 48V Off-Grid Wind Turbine – 6 kW rated power · 48 V battery system · Off-grid use. Technical specifications and datasheet at Voltekno.",
+  "src": "cf5613f7e3"
+ },
+ "altech-nova-ruzgar-turbini-3-kw-12-kw": {
+  "name": "Altech Nova Wind Turbine (3 kW - 12 kW)",
+  "description": "Altech Nova Wind Turbine – 3 kW - 12 kW power options · High power for farms and businesses. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "altechat3kwnova300000392": "3000 3 kW Wind Turbine",
+   "altechat5kwnova500000393": "5000 5 kW Wind Turbine",
+   "altechat8kwnova800000394": "8000 8 kW Wind Turbine",
+   "altechat12kwnovapre00395": "12000 12 kW Wind Turbine"
+  },
+  "src": "e862621f77"
+ },
+ "apex-51-2v-lifepo4-lityum-aku-100ah-280ah": {
+  "name": "Apex 51.2V LiFePO4 Lithium Battery (100Ah / 280Ah)",
+  "description": "Apex 51.2V LiFePO4 Lithium Battery – LiFePO4 chemistry · 51.2 V nominal voltage · 100 Ah and 280 Ah options · Built-in BMS. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "apex00448": "100Ah LiFePO4 Lithium Battery",
+   "apex00450": "280Ah LiFePO4 Lithium Battery"
+  },
+  "src": "7f58411fe0"
+ },
+ "apex-80a-otomatik-transfer-switch": {
+  "name": "Apex 80A Automatic Transfer Switch",
+  "description": "Apex 80A Automatic Transfer Switch – 80 A current capacity · Automatic switchover between sources · Prevents parallel operation. Details at Voltekno.",
+  "src": "47f3fb9fa5"
+ },
+ "apex-apx-11-pro-11-kw-mppt-akilli-inverter": {
+  "name": "Apex APX 11 Pro 11 kW MPPT Smart Inverter",
+  "description": "Apex APX 11 Pro 11 kW MPPT Smart Inverter – 11 kW rated power · Built-in MPPT solar charge controller · Pure sine wave output. Technical specifications and datasheet at Voltekno.",
+  "src": "be39f29e1e"
+ },
+ "apex-apx-4-2-pro-4-2-kw-hibrit-mppt-akilli-inverter": {
+  "name": "Apex APX 4.2 Pro 4.2 kW Hybrid MPPT Smart Inverter",
+  "description": "Apex APX 4.2 Pro 4.2 kW Hybrid MPPT Smart Inverter – 4.2 kW rated power · Built-in MPPT solar charge controller · Pure sine wave output. Details at Voltekno.",
+  "src": "dab74ff065"
+ },
+ "apex-apx-6-2-pro-6-2-kw-hibrit-mppt-akilli-inverter": {
+  "name": "Apex APX 6.2 Pro 6.2 kW Hybrid MPPT Smart Inverter",
+  "description": "Apex APX 6.2 Pro 6.2 kW Hybrid MPPT Smart Inverter – 6.2 kW rated power · Built-in MPPT solar charge controller · Pure sine wave output. Details at Voltekno.",
+  "src": "a590ca2022"
+ },
+ "apex-apx-8-5-pro-8-5-kw-mppt-akilli-inverter": {
+  "name": "Apex APX 8.5 Pro 8.5 kW MPPT Smart Inverter",
+  "description": "Apex APX 8.5 Pro 8.5 kW MPPT Smart Inverter – 8.5 kW rated power · Built-in MPPT solar charge controller · Pure sine wave output. Details at Voltekno.",
+  "src": "6790f2d494"
+ },
+ "apex-apx-aku-sarj-cihazi-12v-24v-20a-100a": {
+  "name": "Apex APX Battery Charger (12V / 24V, 20A - 100A)",
+  "description": "Apex APX Battery Charger – 12 V and 24 V options · 20 A - 100 A charging current · Suitable for large battery banks. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "apex00506": "APX1240 12V 40A Battery Charger",
+   "apex00507": "APX2420 24V 20A Battery Charger",
+   "apex00508": "APX1260 12V 60A Battery Charger",
+   "apex00509": "APX1280 12V 80A Battery Charger",
+   "apex00510": "APX2440 24V 40A Battery Charger",
+   "apex00511": "APX12100 12V 100A Battery Charger"
+  },
+  "src": "846f857669"
+ },
+ "apex-fs-d-serisi-tam-sinus-inverter-600w-4000w-12v-24v": {
+  "name": "Apex FS D Series Pure Sine Wave Inverter",
+  "description": "Apex FS D Series Pure Sine Wave Inverter – Pure sine wave output · 600 W - 4000 W power options · 12 V and 24 V battery options. Details at Voltekno.",
+  "variants": {
+   "apex00463": "600 D 600W 12V Pure Sine Wave Inverter",
+   "apex00464": "1000 D 1000W 12/24V Pure Sine Wave Inverter",
+   "apex00465": "1500 D 1500W 12/24V Pure Sine Wave Inverter",
+   "apex00466": "2000 D 2000W 12/24V Pure Sine Wave Inverter",
+   "apex00467": "3000 D 3000W 12/24V Pure Sine Wave Inverter",
+   "apex00468": "4000 D 4000W 12/24V Pure Sine Wave Inverter"
+  },
+  "src": "360b376ad9"
+ },
+ "apex-nfs-1500w-sarjli-tam-sinus-inverter-25a-sarj-16a-bypass": {
+  "name": "Apex NFS 1500W Pure Sine Wave Inverter Charger (25A Charging, 16A Bypass)",
+  "description": "Apex NFS 1500W Pure Sine Wave Inverter Charger – 1500 W pure sine wave output · 25 A built-in battery charger · 16 A grid bypass. Details at Voltekno.",
+  "src": "89ae00b2e0"
+ },
+ "apex-nk-600-600w-12v-tam-sinus-inverter": {
+  "name": "Apex NK 600 600W 12V Pure Sine Wave Inverter",
+  "description": "Apex NK 600 600W 12V Pure Sine Wave Inverter – 600 W pure sine wave output · 12 V battery input · Compact design. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "2d8efb547b"
+ },
+ "apex-nps-sarjli-tam-sinus-inverter-600w-2000w": {
+  "name": "Apex NPS Pure Sine Wave Inverter Charger (600W - 2000W)",
+  "description": "Apex NPS Pure Sine Wave Inverter Charger – Pure sine wave output · Built-in battery charger · 600 W - 2000 W power options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "apex00457": "600W Pure Sine Wave Inverter Charger",
+   "apex00458": "1000W Pure Sine Wave Inverter Charger",
+   "apex00459": "1500W Pure Sine Wave Inverter Charger",
+   "apex00460": "2000W Pure Sine Wave Inverter Charger"
+  },
+  "src": "9b6ff2b575"
+ },
+ "apex-ns-serisi-modifiye-sinus-inverter-300w-2000w": {
+  "name": "Apex NS Series Modified Sine Wave Inverter (300W - 2000W)",
+  "description": "Apex NS Series Modified Sine Wave Inverter – Modified sine wave output · 300 W - 2000 W power options · Cost-effective solution. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "apex00477": "300W Modified Sine Wave Inverter",
+   "apex00478": "600W Modified Sine Wave Inverter",
+   "apex00479": "1200W 12/24V Modified Sine Wave Inverter",
+   "apex00480": "2000W Modified Sine Wave Inverter"
+  },
+  "src": "508855e8d8"
+ },
+ "apex-safepower-12v-jel-aku-100ah-150ah-200ah": {
+  "name": "Apex Safepower 12V Gel Battery (100Ah / 150Ah / 200Ah)",
+  "description": "Apex Safepower 12V Gel Battery – Gel technology · 12 V nominal voltage · 100 / 150 / 200 Ah options. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "apex00451": "100Ah Gel Battery",
+   "apex00452": "150Ah Gel Battery",
+   "apex00453": "200Ah Gel Battery"
+  },
+  "src": "b21fe1a068"
+ },
+ "deye-10-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 10 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 10 kW Three-Phase On-Grid Inverter – 10 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "187a1a0450"
+ },
+ "deye-12-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 12 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 12 kW Three-Phase On-Grid Inverter – 12 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "e64aa8fcdf"
+ },
+ "deye-15-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 15 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 15 kW Three-Phase On-Grid Inverter – 15 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "a08aa39dd4"
+ },
+ "deye-20-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 20 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 20 kW Three-Phase On-Grid Inverter – 20 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "214f10cfe6"
+ },
+ "deye-25-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 25 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 25 kW Three-Phase On-Grid Inverter – 25 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "34aea018e3"
+ },
+ "deye-30-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 30 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 30 kW Three-Phase On-Grid Inverter – 30 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "e73c83b386"
+ },
+ "deye-33-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 33 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 33 kW Three-Phase On-Grid Inverter – 33 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "13fd1dbe2f"
+ },
+ "deye-40-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 40 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 40 kW Three-Phase On-Grid Inverter – 40 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "4c014b5a32"
+ },
+ "deye-5-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 5 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 5 kW Three-Phase On-Grid Inverter – 5 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "31436cd82e"
+ },
+ "deye-50-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 50 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 50 kW Three-Phase On-Grid Inverter – 50 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "0e6e9e7276"
+ },
+ "deye-60-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 60 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 60 kW Three-Phase On-Grid Inverter – 60 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "12f56ddd4f"
+ },
+ "deye-8-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 8 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 8 kW Three-Phase On-Grid Inverter – 8 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "482191d7d0"
+ },
+ "deye-80-kw-trifaze-on-grid-inverter": {
+  "name": "Deye 80 kW Three-Phase On-Grid Inverter",
+  "description": "Deye 80 kW Three-Phase On-Grid Inverter – 80 kW rated AC output power · Three-phase grid connection · High energy yield with MPPT. Details at Voltekno.",
+  "src": "75511c4515"
+ },
+ "deye-monofaze-lv-hibrit-inverter-5-kw-16-kw": {
+  "name": "Deye Single-Phase LV Hybrid Inverter (5 kW - 16 kW)",
+  "description": "Deye Single-Phase LV Hybrid Inverter – Single-phase 230 V hybrid inverter · 48 V LV battery support. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "deye00416": "5 kW Single-Phase LV Hybrid Inverter",
+   "deye00417": "6 kW Single-Phase LV Hybrid Inverter",
+   "deye00418": "8 kW Single-Phase LV Hybrid Inverter",
+   "deye00419": "10 kW Single-Phase LV Hybrid Inverter",
+   "deye00420": "12 kW Single-Phase LV Hybrid Inverter",
+   "deye00421": "15 kW Single-Phase LV Hybrid Inverter",
+   "deye00422": "16 kW Single-Phase LV Hybrid Inverter"
+  },
+  "src": "3328c605b4"
+ },
+ "deye-monofaze-on-grid-inverter-3-kw-10-kw": {
+  "name": "Deye Single-Phase On-Grid Inverter (3 kW - 10 kW)",
+  "description": "Deye Single-Phase On-Grid Inverter – Grid-tied single-phase string inverter · Cost-effective PV solution with no batteries required. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "deye00398": "3 kW Single-Phase On-Grid Inverter",
+   "deye00399": "5 kW Single-Phase On-Grid Inverter",
+   "deye00400": "8 kW Single-Phase On-Grid Inverter",
+   "deye00401": "10 kW Single-Phase On-Grid Inverter"
+  },
+  "src": "44c3940bec"
+ },
+ "deye-off-grid-akilli-inverter-5-kw-6-kw": {
+  "name": "Deye Off-Grid Smart Inverter (5 kW / 6 kW)",
+  "description": "Deye Off-Grid Smart Inverter – Grid-independent operation · Built-in MPPT solar charge controller · Compatible with 48 V battery systems. Details at Voltekno.",
+  "variants": {
+   "deye00396": "5 kW Off-Grid Smart Inverter",
+   "deye00397": "6 kW Off-Grid Smart Inverter"
+  },
+  "src": "a1baf71efb"
+ },
+ "deye-trifaze-hv-hibrit-inverter-10-kw-80-kw": {
+  "name": "Deye Three-Phase HV Hybrid Inverter (10 kW - 80 kW)",
+  "description": "Deye Three-Phase HV Hybrid Inverter – Three-phase 230/400 V hybrid inverter · Compatible with high-voltage lithium batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "deye00428": "10 kW Three-Phase HV Hybrid Inverter",
+   "deye00429": "12 kW Three-Phase HV Hybrid Inverter",
+   "deye00430": "15 kW Three-Phase HV Hybrid Inverter",
+   "deye00431": "20 kW Three-Phase HV Hybrid Inverter",
+   "deye00432": "25 kW Three-Phase HV Hybrid Inverter",
+   "deye00433": "30 kW Three-Phase HV Hybrid Inverter",
+   "deye00434": "40 kW Three-Phase HV Hybrid Inverter",
+   "deye00435": "50 kW Three-Phase HV Hybrid Inverter",
+   "deye00436": "60 kW Three-Phase HV Hybrid Inverter",
+   "deye00437": "80 kW Three-Phase HV Hybrid Inverter"
+  },
+  "src": "2060ceee4c"
+ },
+ "deye-trifaze-lv-hibrit-inverter-8-kw-20-kw": {
+  "name": "Deye Three-Phase LV Hybrid Inverter (8 kW - 20 kW)",
+  "description": "Deye Three-Phase LV Hybrid Inverter – Three-phase 230/400 V hybrid inverter · 48 V LV battery support, compatible with lithium and lead-acid. Details at Voltekno.",
+  "variants": {
+   "deye00423": "8 kW Three-Phase LV Hybrid Inverter",
+   "deye00424": "10 kW Three-Phase LV Hybrid Inverter",
+   "deye00425": "12 kW Three-Phase LV Hybrid Inverter",
+   "deye00426": "15 kW Three-Phase LV Hybrid Inverter",
+   "deye00427": "20 kW Three-Phase LV Hybrid Inverter"
+  },
+  "src": "f7760316ab"
+ },
+ "electrozirve-12-8v-lifepo4-lityum-aku-100ah-200ah": {
+  "name": "Electrozirve 12.8V LiFePO4 Lithium Battery (100Ah / 200Ah)",
+  "description": "Electrozirve 12.8V LiFePO4 Lithium Battery – LiFePO4 chemistry · 12.8 V nominal voltage · 100 Ah and 200 Ah options · Built-in BMS. Details at Voltekno.",
+  "variants": {
+   "electr00446": "100Ah LiFePO4 Lithium Battery",
+   "electr00447": "200Ah LiFePO4 Lithium Battery"
+  },
+  "src": "5bb108ae93"
+ },
+ "electrozirve-30a-cift-yonlu-dc-dc-aku-sarj-cihazi": {
+  "name": "Electrozirve 30A Bidirectional DC-DC Battery Charger",
+  "description": "Electrozirve 30A Bidirectional DC-DC Battery Charger – Bidirectional DC-DC charging · 30 A charging current. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "66d2991db0"
+ },
+ "electrozirve-ac1225c-12v-25a-aku-sarj-cihazi": {
+  "name": "Electrozirve AC1225C 12V 25A Battery Charger",
+  "description": "Electrozirve AC1225C 12V 25A Battery Charger – 12 V battery charging · 25 A charging current. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "0ebaebb36f"
+ },
+ "electrozirve-cr80-kablolu-inverter-kumandasi": {
+  "name": "Electrozirve CR80 Wired Inverter Remote Control",
+  "description": "Electrozirve CR80 Wired Inverter Remote Control – Wired remote control · Turns the inverter on/off remotely. Technical specifications and datasheet at Voltekno.",
+  "src": "fe65ca522e"
+ },
+ "electrozirve-crd80-kablolu-ekranli-inverter-kumandasi": {
+  "name": "Electrozirve CRD80 Wired Inverter Remote Control with Display",
+  "description": "Electrozirve CRD80 Wired Inverter Remote Control with Display – Wired remote control with display · Turns the inverter on/off remotely. Details at Voltekno.",
+  "src": "2b96139655"
+ },
+ "electrozirve-crw80-kablosuz-inverter-kumandasi": {
+  "name": "Electrozirve CRW80 Wireless Inverter Remote Control",
+  "description": "Electrozirve CRW80 Wireless Inverter Remote Control – Wireless remote control · Turns the inverter on/off remotely. Technical specifications and datasheet at Voltekno.",
+  "src": "42baf4c00f"
+ },
+ "electrozirve-crw88-kablosuz-car-design-inverter-kumandasi": {
+  "name": "Electrozirve CRW88 Wireless (Car Design) Inverter Remote Control",
+  "description": "Electrozirve CRW88 Wireless (Car Design) Inverter Remote Control – Wireless remote control styled like a car key. Technical specifications and datasheet at Voltekno.",
+  "src": "62814d9c92"
+ },
+ "electrozirve-ec12-12-12v-dc-dc-aku-sarj-cihazi-20a-40a-60a": {
+  "name": "Electrozirve EC12-12 12V DC-DC Battery Charger",
+  "description": "Electrozirve EC12-12 12V DC-DC Battery Charger – 12 V → 12 V DC-DC charging · 20 A, 40 A and 60 A options · Protects the starter battery. Details at Voltekno.",
+  "variants": {
+   "electr00516": "20A DC-DC Battery Charger",
+   "electr00517": "40A DC-DC Battery Charger",
+   "electr00518": "60A DC-DC Battery Charger"
+  },
+  "src": "0fd096fa06"
+ },
+ "electrozirve-hp2410-10a-pwm-sarj-kontrol-cihazi": {
+  "name": "Electrozirve HP2410 10A PWM Charge Controller",
+  "description": "Electrozirve HP2410 10A PWM Charge Controller – 10 A charging current · PWM charging · Overcharge and over-discharge protection. Technical specifications and datasheet at Voltekno.",
+  "src": "36573b86b0"
+ },
+ "electrozirve-hp2420-20a-pwm-sarj-kontrol-cihazi": {
+  "name": "Electrozirve HP2420 20A PWM Charge Controller",
+  "description": "Electrozirve HP2420 20A PWM Charge Controller – 20 A charging current · PWM charging · Overcharge and over-discharge protection. Technical specifications and datasheet at Voltekno.",
+  "src": "18896d2d29"
+ },
+ "electrozirve-hp2430-30a-pwm-sarj-kontrol-cihazi": {
+  "name": "Electrozirve HP2430 30A PWM Charge Controller",
+  "description": "Electrozirve HP2430 30A PWM Charge Controller – 30 A charging current · PWM charging · Overcharge and over-discharge protection. Technical specifications and datasheet at Voltekno.",
+  "src": "1722620c15"
+ },
+ "electrozirve-hp2440-40a-pwm-sarj-kontrol-cihazi": {
+  "name": "Electrozirve HP2440 40A PWM Charge Controller",
+  "description": "Electrozirve HP2440 40A PWM Charge Controller – 40 A charging current · PWM charging · Overcharge and over-discharge protection. Technical specifications and datasheet at Voltekno.",
+  "src": "9c929fa870"
+ },
+ "electrozirve-hp2450-50a-pwm-sarj-kontrol-cihazi": {
+  "name": "Electrozirve HP2450 50A PWM Charge Controller",
+  "description": "Electrozirve HP2450 50A PWM Charge Controller – 50 A charging current · PWM charging · Overcharge and over-discharge protection. Technical specifications and datasheet at Voltekno.",
+  "src": "1c23081210"
+ },
+ "electrozirve-hp2460-60a-pwm-sarj-kontrol-cihazi": {
+  "name": "Electrozirve HP2460 60A PWM Charge Controller",
+  "description": "Electrozirve HP2460 60A PWM Charge Controller – 60 A charging current · PWM charging · Overcharge and over-discharge protection. Technical specifications and datasheet at Voltekno.",
+  "src": "8c9ef7c476"
+ },
+ "electrozirve-ic-serisi-tam-sinus-inverter-1000w-3000w": {
+  "name": "Electrozirve IC Series Pure Sine Wave Inverter (1000W - 3000W)",
+  "description": "Electrozirve IC Series Pure Sine Wave Inverter – Pure sine wave output · 1000 W - 3000 W power options. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "electr00469": "1000 1000W Pure Sine Wave Inverter",
+   "electr00470": "2000 2000W Pure Sine Wave Inverter",
+   "electr00471": "3000 3000W Pure Sine Wave Inverter"
+  },
+  "src": "b7af380aa1"
+ },
+ "electrozirve-mc-48100n25-100a-ekranli-mppt-sarj-kontrol-cihazi": {
+  "name": "Electrozirve MC-48100N25 100A MPPT Charge Controller with Display",
+  "description": "Electrozirve MC-48100N25 100A MPPT Charge Controller with Display – 100 A charging current · MPPT charging · Built-in display. Technical specifications and datasheet at Voltekno.",
+  "src": "914eeda4a5"
+ },
+ "electrozirve-mc-4860n25-60a-ekranli-mppt-sarj-kontrol-cihazi": {
+  "name": "Electrozirve MC-4860N25 60A MPPT Charge Controller with Display",
+  "description": "Electrozirve MC-4860N25 60A MPPT Charge Controller with Display – 60 A charging current · MPPT charging · Built-in display. Technical specifications and datasheet at Voltekno.",
+  "src": "64a602b168"
+ },
+ "electrozirve-mc-4885n15-85a-ekranli-mppt-sarj-kontrol-cihazi": {
+  "name": "Electrozirve MC-4885N15 85A MPPT Charge Controller with Display",
+  "description": "Electrozirve MC-4885N15 85A MPPT Charge Controller with Display – 85 A charging current · MPPT charging · Built-in display. Technical specifications and datasheet at Voltekno.",
+  "src": "a4f67d6554"
+ },
+ "electrozirve-mc-serisi-ekransiz-mppt-sarj-kontrol-cihazi-20a-50a": {
+  "name": "Electrozirve MC Series MPPT Charge Controller without Display",
+  "description": "Electrozirve MC Series MPPT Charge Controller without Display – MPPT charging · Economical design without display. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "electr00493": "MC-2420 20A MPPT Charge Controller without Display",
+   "electr00494": "MC-2430 30A MPPT Charge Controller without Display",
+   "electr00495": "MC-2440 40A MPPT Charge Controller without Display",
+   "electr00496": "MC-2450 50A MPPT Charge Controller without Display"
+  },
+  "src": "d03af8a221"
+ },
+ "electrozirve-mf-4860n15-60a-ekranli-mppt-sarj-kontrol-cihazi": {
+  "name": "Electrozirve MF-4860N15 60A MPPT Charge Controller with Display",
+  "description": "Electrozirve MF-4860N15 60A MPPT Charge Controller with Display – 60 A charging current · MPPT charging · Built-in display. Technical specifications and datasheet at Voltekno.",
+  "src": "f35d23bb05"
+ },
+ "electrozirve-ml-serisi-ekranli-mppt-sarj-kontrol-cihazi-20a-60a": {
+  "name": "Electrozirve ML Series MPPT Charge Controller with Display",
+  "description": "Electrozirve ML Series MPPT Charge Controller with Display – MPPT charging · Built-in display · 20 A - 60 A current options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "electr00489": "ML-2420 20A MPPT Charge Controller with Display",
+   "electr00490": "ML-2430 30A MPPT Charge Controller with Display",
+   "electr00491": "ML-2440 40A MPPT Charge Controller with Display",
+   "electr00492": "ML-4860 60A MPPT Charge Controller with Display"
+  },
+  "src": "a5eee0cff0"
+ },
+ "electrozirve-sarj-kontrol-cihazi-bluetooth-kiti-bt-1-bt-2": {
+  "name": "Electrozirve Charge Controller Bluetooth Kit",
+  "description": "Electrozirve Charge Controller Bluetooth Kit – Wireless monitoring via Bluetooth · Tracking via mobile app. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "electr00503": "BT-1 Charge Controller Bluetooth Kit",
+   "electr00504": "BT-2 Charge Controller Bluetooth Kit"
+  },
+  "src": "64e71c0e1b"
+ },
+ "electrozirve-sarj-kontrol-cihazi-harici-ekrani-rm-5-rm-6": {
+  "name": "Electrozirve Charge Controller External Display (RM-5 / RM-6)",
+  "description": "Electrozirve Charge Controller External Display – External monitoring display · For compatible Electrozirve charge controllers. Details at Voltekno.",
+  "variants": {
+   "electr00501": "RM-6 Charge Controller External Display",
+   "electr00502": "RM-5 Charge Controller External Display"
+  },
+  "src": "1ef6ba3a78"
+ },
+ "electrozirve-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a": {
+  "name": "Electrozirve Unidirectional DC-DC Battery Charger (30A / 40A)",
+  "description": "Electrozirve Unidirectional DC-DC Battery Charger – Unidirectional DC-DC charging · 30 A and 40 A options · Protects the starter battery. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "electr00519": "30A Unidirectional DC-DC Battery Charger",
+   "electr00521": "40A Unidirectional DC-DC Battery Charger"
+  },
+  "src": "adfeaf0292"
+ },
+ "exelon-12v-100ah-jel-aku": {
+  "name": "Exelon 12V 100Ah Gel Battery",
+  "description": "Exelon 12V 100Ah Gel Battery – Gel technology · 12 V nominal voltage · 100 Ah capacity · Maintenance-free, sealed. Technical specifications and datasheet at Voltekno.",
+  "src": "619b6a555a"
+ },
+ "exelon-12v-150ah-jel-aku": {
+  "name": "Exelon 12V 150Ah Gel Battery",
+  "description": "Exelon 12V 150Ah Gel Battery – Gel technology · 12 V nominal voltage · 150 Ah capacity · Maintenance-free, sealed. Technical specifications and datasheet at Voltekno.",
+  "src": "e59d73e6ae"
+ },
+ "exelon-12v-200ah-jel-aku": {
+  "name": "Exelon 12V 200Ah Gel Battery",
+  "description": "Exelon 12V 200Ah Gel Battery – Gel technology · 12 V nominal voltage · 200 Ah capacity · Maintenance-free, sealed. Technical specifications and datasheet at Voltekno.",
+  "src": "240688d7e7"
+ },
+ "exelon-ecp-6200-48-6-2-kw-48v-akilli-inverter": {
+  "name": "Exelon ECP-6200/48 6.2 kW 48V Smart Inverter",
+  "description": "Exelon ECP-6200/48 6.2 kW 48V Smart Inverter – 6.2 kW nominal power · 48 V battery system. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "006743aa5b"
+ },
+ "exelon-el-12-12-8v-lifepo4-lityum-aku-100ah-200ah": {
+  "name": "Exelon EL-12 12.8V LiFePO4 Lithium Battery (100Ah / 200Ah)",
+  "description": "Exelon EL-12 12.8V LiFePO4 Lithium Battery – LiFePO4 chemistry · 12.8 V nominal voltage · 100 Ah and 200 Ah options · Built-in BMS. Details at Voltekno.",
+  "variants": {
+   "exelonel1210000538": "EL-12-100 12.8V 100Ah LiFePO4 Lithium Battery",
+   "exelonel1220000539": "EL-12-200 12.8V 200Ah LiFePO4 Lithium Battery"
+  },
+  "src": "7ba712fefe"
+ },
+ "exelon-elh-serisi-akilli-inverter-elh-12-elh-15-elh-24": {
+  "name": "Exelon ELH Series Smart Inverter (ELH-12 / ELH-15 / ELH-24)",
+  "description": "Exelon ELH Series Smart Inverter – Energy storage-focused smart inverter solution · Three capacity options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "exelonelh1200535": "ELH-12 Smart Inverter",
+   "exelonelh1500536": "ELH-15 Smart Inverter",
+   "exelonelh2400537": "ELH-24 Smart Inverter"
+  },
+  "src": "be13d65831"
+ },
+ "exelon-emax-pmax-11p-11-kw-akilli-inverter": {
+  "name": "Exelon EMAX PMAX-11P 11 kW 48V Smart Inverter",
+  "description": "Exelon EMAX PMAX-11P 11 kW Smart Inverter – 11 kW nominal power · Solar, battery and grid/generator management · Pure sine wave output. Details at Voltekno.",
+  "src": "27682daa2f"
+ },
+ "exelon-emax-pmax-12p-12-kw-akilli-inverter": {
+  "name": "Exelon EMAX PMAX-12P 12 kW 48V Smart Inverter",
+  "description": "Exelon EMAX PMAX-12P 12 kW Smart Inverter – 12 kW nominal power · Solar, battery and grid/generator management · Pure sine wave output. Details at Voltekno.",
+  "src": "5574d01162"
+ },
+ "exelon-emax-pro-10-2-10-2-kw-akilli-inverter": {
+  "name": "Exelon EMAX PRO-10.2 10.2 kW 48V Smart Inverter",
+  "description": "Exelon EMAX PRO-10.2 10.2 kW Smart Inverter – 10.2 kW nominal power · Solar, battery and grid/generator management. Technical specifications and datasheet at Voltekno.",
+  "src": "c5c567ba21"
+ },
+ "exelon-exs-serisi-24v-akilli-inverter-3-2-kw-4-2-kw": {
+  "name": "Exelon EXS Series 24V Smart Inverter (3.2 kW / 4.2 kW)",
+  "description": "Exelon EXS Series 24V Smart Inverter – 3.2 kW and 4.2 kW power options · 24 V battery system. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "exelonexs32002400529": "EXS-3200/24 3.2 kW 24V Smart Inverter",
+   "exelonexs42002400530": "EXS-4200/24 4.2 kW 24V Smart Inverter"
+  },
+  "src": "a6c1ebfde7"
+ },
+ "frecon-0-75-kw-1-hp-solar-pompa-surucusu-pv150a-pv150i": {
+  "name": "Frecon 0.75 kW (1 HP) Solar Pump Drive (PV150A / PV150I)",
+  "description": "Frecon 0.75 kW (1 HP) Solar Pump Drive – Runs the pump directly on solar power without batteries · Up to 99% MPPT efficiency. Details at Voltekno.",
+  "variants": {
+   "freconpv150a2s07bh00551": "PV150A-2S-0.7B-H 0.75 kW 1 HP Solar Pump Drive (220V Single-Phase)",
+   "freconpv150i2s07bh00554": "PV150I-2S-0.7B-H 0.75 kW 1 HP Solar Pump Drive (220V Single-Phase)"
+  },
+  "src": "24cc69397d"
+ },
+ "frecon-1-5-kw-2-hp-solar-pompa-surucusu-pv150a-pv150i": {
+  "name": "Frecon 1.5 kW (2 HP) Solar Pump Drive (PV150A / PV150I)",
+  "description": "Frecon 1.5 kW (2 HP) Solar Pump Drive – Runs the pump directly on solar power without batteries · Up to 99% MPPT efficiency. Details at Voltekno.",
+  "variants": {
+   "freconpv150a2s15bh00552": "PV150A-2S-1.5B-H 1.5 kW 2 HP Solar Pump Drive (220V Single-Phase)",
+   "freconpv150i2s15bh00555": "PV150I-2S-1.5B-H 1.5 kW 2 HP Solar Pump Drive (220V Single-Phase)"
+  },
+  "src": "025cc4158e"
+ },
+ "frecon-2-2-kw-3-hp-solar-pompa-surucusu-pv150a-pv150i-pv500": {
+  "name": "Frecon 2.2 kW (3 HP) Solar Pump Drive",
+  "description": "Frecon 2.2 kW (3 HP) Solar Pump Drive – Runs the pump directly on solar power without batteries · Up to 99% MPPT efficiency. Details at Voltekno.",
+  "variants": {
+   "freconpv150a2s22bh00553": "PV150A-2S-2.2B-H 2.2 kW 3 HP Solar Pump Drive (220V Single-Phase)",
+   "freconpv150i2s22bh00556": "PV150I-2S-2.2B-H 2.2 kW 3 HP Solar Pump Drive (220V Single-Phase)",
+   "freconpv5004t22bh00559": "PV500-4T-2.2B-H 2.2 kW 3 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "a1af9de3eb"
+ },
+ "frecon-pv150a-2s-0-4b-h-0-4-kw-0-53-hp-solar-pompa-surucusu-220v-monofaze-giris": {
+  "name": "Frecon PV150A-2S-0.4B-H 0.4 kW 0.53 HP Solar Pump Drive (220V Single-Phase)",
+  "description": "Frecon PV150A-2S-0.4B-H 0.4 kW (0.53 HP) Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "src": "45b155b259"
+ },
+ "frecon-pv150i-2s-4-0b-h-4-kw-5-5-hp-solar-pompa-surucusu-220v-monofaze-giris": {
+  "name": "Frecon PV150I-2S-4.0B-H 4 kW 5.5 HP Solar Pump Drive (220V Single-Phase)",
+  "description": "Frecon PV150I-2S-4.0B-H 4 kW (5.5 HP) Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "src": "5613015c6c"
+ },
+ "frecon-pv150i-2s-5-5b-h-5-5-kw-7-5-hp-solar-pompa-surucusu-220v-monofaze-giris": {
+  "name": "Frecon PV150I-2S-5.5B-H 5.5 kW 7.5 HP Solar Pump Drive (220V Single-Phase)",
+  "description": "Frecon PV150I-2S-5.5B-H 5.5 kW (7.5 HP) Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "src": "3e59b45d82"
+ },
+ "frecon-pv500-4t-11-kw-14-75-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 11 kW Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 11 kW (14.75 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t011bh00563": "PV500-4T-011B-H 11 kW 14.75 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t011bhvh00588": "PV500-4T-011B-HV-H 11 kW 14.75 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "cfd51ce875"
+ },
+ "frecon-pv500-4t-110-kw-147-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 110 kW (147 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 110 kW (147 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t110h00573": "PV500-4T-110-H 110 kW 147 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t110hvh00598": "PV500-4T-110-HV-H 110 kW 147 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "274fdc1400"
+ },
+ "frecon-pv500-4t-132-kw-177-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 132 kW (177 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 132 kW (177 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t132h00574": "PV500-4T-132-H 132 kW 177 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t132hvh00599": "PV500-4T-132-HV-H 132 kW 177 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "d30db5deb9"
+ },
+ "frecon-pv500-4t-15-kw-20-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 15 kW (20 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 15 kW (20 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t015bh00564": "PV500-4T-015B-H 15 kW 20 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t015bhvh00589": "PV500-4T-015B-HV-H 15 kW 20 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "2a828635b4"
+ },
+ "frecon-pv500-4t-160-160-kw-203-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-160 160 kW 203 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-160 160 kW (203 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "bb984d92c0"
+ },
+ "frecon-pv500-4t-18-5-kw-25-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 18.5 kW (25 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 18.5 kW (25 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t0188h00565": "PV500-4T-018B-H 18.5 kW 25 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t018bhvh00590": "PV500-4T-018B-HV-H 18.5 kW 25 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "09fa0ac4fd"
+ },
+ "frecon-pv500-4t-185-185-kw-247-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-185 185 kW 247 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-185 185 kW (247 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "f99dbefdef"
+ },
+ "frecon-pv500-4t-200-200-kw-267-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-200 200 kW 267 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-200 200 kW (267 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "032531be43"
+ },
+ "frecon-pv500-4t-22-kw-29-5-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 22 kW (29.5 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 22 kW (29.5 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t022bh00566": "PV500-4T-022B-H 22 kW 29.5 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t022bhvh00591": "PV500-4T-022B-HV-H 22 kW 29.5 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "ea57c979bc"
+ },
+ "frecon-pv500-4t-220-220-kw-293-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-220 220 kW 293 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-220 220 kW (293 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "143caef82b"
+ },
+ "frecon-pv500-4t-250-250-kw-333-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-250 250 kW 333 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-250 250 kW (333 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "a3ff23828c"
+ },
+ "frecon-pv500-4t-280-280-kw-373-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-280 280 kW 373 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-280 280 kW (373 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "66e858cb28"
+ },
+ "frecon-pv500-4t-30-kw-40-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 30 kW (40 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 30 kW (40 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t030bh00567": "PV500-4T-030B-H 30 kW 40 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t030bhvh00592": "PV500-4T-030B-HV-H 30 kW 40 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "7677687cd3"
+ },
+ "frecon-pv500-4t-315-315-kw-420-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-315 315 kW 420 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-315 315 kW (420 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "3922ee6bcf"
+ },
+ "frecon-pv500-4t-355-355-kw-473-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-355 355 kW 473 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-355 355 kW (473 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "f6e981f559"
+ },
+ "frecon-pv500-4t-37-kw-49-6-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 37 kW (49.6 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 37 kW (49.6 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t037h00568": "PV500-4T-037-H 37 kW 49.6 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t037hvh00593": "PV500-4T-037-HV-H 37 kW 49.6 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "c7e546fc92"
+ },
+ "frecon-pv500-4t-4-kw-5-4-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 4 kW (5.4 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 4 kW (5.4 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t40bh00560": "PV500-4T-4.0B-H 4 kW 5.4 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t40bhvh00585": "PV500-4T-4.0B-HV-H 4 kW 5.4 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "f4be8ea340"
+ },
+ "frecon-pv500-4t-400-h-400-kw-536-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-400-H 400 kW 536 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-400-H 400 kW (536 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "25f267d45c"
+ },
+ "frecon-pv500-4t-45-kw-60-3-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 45 kW (60.3 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 45 kW (60.3 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t045h00569": "PV500-4T-045-H 45 kW 60.3 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t045hvh00594": "PV500-4T-045-HV-H 45 kW 60.3 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "517ae8a930"
+ },
+ "frecon-pv500-4t-450-h-450-kw-603-hp-trifaze-solar-pompa-surucusu": {
+  "name": "Frecon PV500-4T-450-H 450 kW 603 HP Solar Pump Drive (380V Three-Phase)",
+  "description": "Frecon PV500-4T-450-H 450 kW (603 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Details at Voltekno.",
+  "src": "0e855f7aea"
+ },
+ "frecon-pv500-4t-5-5-kw-7-4-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 5.5 kW (7.4 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 5.5 kW (7.4 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t558h00561": "PV500-4T-5.5B-H 5.5 kW 7.4 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t558hvh00586": "PV500-4T-5.5B-HV-H 5.5 kW 7.4 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "0f758a4965"
+ },
+ "frecon-pv500-4t-55-kw-73-75-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 55 kW Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 55 kW (73.75 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t055h00570": "PV500-4T-055-H 55 kW 73.75 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t055hvh00595": "PV500-4T-055-HV-H 55 kW 73.75 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "36fa52ed5e"
+ },
+ "frecon-pv500-4t-7-5-kw-10-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 7.5 kW (10 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 7.5 kW (10 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t758h00562": "PV500-4T-7.5B-H 7.5 kW 10 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t75bhvh00587": "PV500-4T-7.5B-HV-H 7.5 kW 10 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "5c253b7b2c"
+ },
+ "frecon-pv500-4t-75-kw-100-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 75 kW (100 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 75 kW (100 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t075h00571": "PV500-4T-075-H 75 kW 100 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t075hvh00596": "PV500-4T-075-HV-H 75 kW 100 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "5740ef4467"
+ },
+ "frecon-pv500-4t-90-kw-120-hp-trifaze-solar-pompa-surucusu-standart-hv": {
+  "name": "Frecon PV500-4T 90 kW (120 HP) Three-Phase Solar Pump Drive",
+  "description": "Frecon PV500-4T 90 kW (120 HP) Three-Phase Solar Pump Drive – Runs the pump directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "freconpv5004t090h00572": "PV500-4T-090-H 90 kW 120 HP Solar Pump Drive (380V Three-Phase)",
+   "freconpv5004t090hvh00597": "PV500-4T-090-HV-H 90 kW 120 HP Solar Pump Drive (380V Three-Phase)"
+  },
+  "src": "3449304c44"
+ },
+ "havensis-batchg-1224bbc-12-12v-20a-dc-dc-aku-sarj-cihazi": {
+  "name": "Havensis BATCHG-1224BBC 12/12V 20A DC-DC Battery Charger",
+  "description": "Havensis BATCHG-1224BBC 12/12V 20A DC-DC Battery Charger – 12 V → 12 V, 20 A charging · Compatible with gel and AGM batteries. Technical specifications and datasheet at Voltekno.",
+  "src": "fa79b78087"
+ },
+ "havensis-boost-dcdc-2448-24-48v-boost-dc-dc-sarj-cihazi-20a-40a": {
+  "name": "Havensis Boost DCDC-2448 24-48V Boost DC-DC Charger",
+  "description": "Havensis Boost DCDC-2448 24-48V Boost DC-DC Charger – Step-up DC-DC charging · Suitable for 24-48 V service batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "havens00630": "20A Boost DC-DC Charger",
+   "havens00631": "40A Boost DC-DC Charger"
+  },
+  "src": "68560b37b3"
+ },
+ "havensis-boost-mppt-2472-24-72v-boost-mppt-sarj-kontrol-cihazi": {
+  "name": "Havensis Boost MPPT-2472 24-72V Boost MPPT Charge Controller",
+  "description": "Havensis Boost MPPT-2472 24-72V Boost MPPT Charge Controller – Step-up MPPT · 15-60 V PV input, 36-72 V battery charging. Details at Voltekno.",
+  "src": "a25b49a816"
+ },
+ "havensis-c216dsp-sarj-kontrol-cihazi-harici-ekrani": {
+  "name": "Havensis C216DSP External Display for Charge Controllers",
+  "description": "Havensis C216DSP External Display for Charge Controllers – External monitoring and settings display · MODBUS-RTU communication. Technical specifications and datasheet at Voltekno.",
+  "src": "a8b7741466"
+ },
+ "havensis-dcdc-1224-12-24v-tek-yonlu-dc-dc-aku-sarj-cihazi-30a-40a": {
+  "name": "Havensis DCDC-1224 12/24V Unidirectional DC-DC Battery Charger",
+  "description": "Havensis DCDC-1224 12/24V Unidirectional DC-DC Battery Charger – Unidirectional DC-DC charging, 30 A / 40 A · 10-35 V input, 12-32 V output. Details at Voltekno.",
+  "variants": {
+   "havens00623": "30A Unidirectional DC-DC Battery Charger",
+   "havens00625": "40A Unidirectional DC-DC Battery Charger"
+  },
+  "src": "5d51f6cfb9"
+ },
+ "havensis-dcdc-1224b-12-24v-cift-yonlu-dc-dc-aku-sarj-cihazi-30a-40a": {
+  "name": "Havensis DCDC-1224B 12/24V Bidirectional DC-DC Battery Charger",
+  "description": "Havensis DCDC-1224B 12/24V Bidirectional DC-DC Battery Charger – Bidirectional DC-DC charging · Trickle charging for the starter battery. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "havens00624": "30A Bidirectional DC-DC Battery Charger",
+   "havens00626": "40A Bidirectional DC-DC Battery Charger"
+  },
+  "src": "abd15c672e"
+ },
+ "havensis-dualcharger-3020amd-50a-mppt-dc-dc-aku-sarj-cihazi": {
+  "name": "Havensis DualCharger-3020AMD 50A MPPT + DC-DC Battery Charger",
+  "description": "Havensis DualCharger-3020AMD 50A MPPT + DC-DC Battery Charger – 30 A MPPT solar charging · 20 A DC-DC charging + 3 A trickle charging. Details at Voltekno.",
+  "src": "ac65f7defb"
+ },
+ "havensis-dualcharger-4030amd-60a-mppt-dc-dc-aku-sarj-cihazi": {
+  "name": "Havensis DualCharger-4030AMD 60A MPPT + DC-DC Battery Charger",
+  "description": "Havensis DualCharger-4030AMD 60A MPPT + DC-DC Battery Charger – 40 A MPPT solar charging · 30 A DC-DC charging + 4 A trickle charging. Details at Voltekno.",
+  "src": "b3df946a92"
+ },
+ "havensis-ekbt-bluetooth-lu-harici-ekran": {
+  "name": "Havensis EKBT External Display with Bluetooth",
+  "description": "Havensis EKBT External Display with Bluetooth – External display + built-in Bluetooth · Monitoring via mobile app. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "e16a66b4fe"
+ },
+ "havensis-hinv-1300w-12v-tam-sinus-ups-li-inverter": {
+  "name": "Havensis HINV 1300W 12V Pure Sine Wave Inverter with UPS",
+  "description": "Havensis HINV 1300W 12V Pure Sine Wave Inverter with UPS – 1300 W pure sine wave output, 2600 W peak power · 25 A built-in battery charger. Details at Voltekno.",
+  "src": "0761d914c4"
+ },
+ "havensis-hts-230-15-otomatik-transfer-switch": {
+  "name": "Havensis HTS-230-15 Automatic Transfer Switch",
+  "description": "Havensis HTS-230-15 Automatic Transfer Switch – Automatic grid-inverter switchover · Prevents parallel operation. Technical specifications and datasheet at Voltekno.",
+  "src": "0da3f64f01"
+ },
+ "havensis-hv-mps-serisi-solar-45amps-45a-60-72v-mppt-sarj-kontrol-cihazi-200v-pv": {
+  "name": "Havensis HV MPS Series Solar-45AMPS 45A 60/72V MPPT Charge Controller (200V PV)",
+  "description": "Havensis HV MPS Series Solar-45AMPS 45A 60/72V MPPT Charge Controller – 45 A charging current · 60/72 V battery systems. Technical specifications and datasheet at Voltekno.",
+  "src": "0cbee127bd"
+ },
+ "havensis-hv-mps-serisi-solar-80amps-45a-60-72v-mppt-sarj-kontrol-cihazi-200v-pv": {
+  "name": "Havensis HV MPS Series Solar-80AMPS 45A 60/72V MPPT Charge Controller (200V PV)",
+  "description": "Havensis HV MPS Series Solar-80AMPS 45A 60/72V MPPT Charge Controller – 45 A charging current · 60/72 V battery systems. Technical specifications and datasheet at Voltekno.",
+  "src": "fb06ef6414"
+ },
+ "havensis-hvss-500-500a-smart-shunt-aku-monitoru": {
+  "name": "Havensis HVSS-500 500A Smart Shunt Battery Monitor",
+  "description": "Havensis HVSS-500 500A Smart Shunt Battery Monitor – 500 A measuring capacity · 9-70 V DC operating range. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "f163b22216"
+ },
+ "havensis-minisolar-10ads-12-24v-10a-pwm-sarj-kontrol-cihazi-dijital-seri": {
+  "name": "Havensis MiniSolar-10ADS 12/24V 10A PWM Charge Controller (Digital Series)",
+  "description": "Havensis MiniSolar-10ADS 12/24V 10A PWM Charge Controller – LCD display: battery voltage, load current, output mode, charge level. Details at Voltekno.",
+  "src": "a100dc46e4"
+ },
+ "havensis-minisolar-10aes-12v-10a-pwm-sarj-kontrol-cihazi-eko-seri": {
+  "name": "Havensis MiniSolar-10AES 12V 10A PWM Charge Controller (Eco Series)",
+  "description": "Havensis MiniSolar-10AES 12V 10A PWM Charge Controller – 32-bit ARM processor · 4-stage PWM charging · Day/night function. Details at Voltekno.",
+  "src": "c79701b87a"
+ },
+ "havensis-minisolar-10ass-12-24v-10a-pwm-sarj-kontrol-cihazi-standart-seri": {
+  "name": "Havensis MiniSolar-10ASS 12/24V 10A PWM Charge Controller (Standard Series)",
+  "description": "Havensis MiniSolar-10ASS 12/24V 10A PWM Charge Controller – 12/24 V automatic system detection · 32-bit ARM processor. Technical specifications and datasheet at Voltekno.",
+  "src": "14996f6e06"
+ },
+ "havensis-minisolar-20ads-12-24v-20a-pwm-sarj-kontrol-cihazi-dijital-seri": {
+  "name": "Havensis MiniSolar-20ADS 12/24V 20A PWM Charge Controller (Digital Series)",
+  "description": "Havensis MiniSolar-20ADS 12/24V 20A PWM Charge Controller – LCD display: battery voltage, load current, output mode, charge level. Details at Voltekno.",
+  "src": "b7dbf33bcc"
+ },
+ "havensis-minisolar-20aes-12v-20a-pwm-sarj-kontrol-cihazi-eko-seri": {
+  "name": "Havensis MiniSolar-20AES 12V 20A PWM Charge Controller (Eco Series)",
+  "description": "Havensis MiniSolar-20AES 12V 20A PWM Charge Controller – 32-bit ARM processor · 4-stage PWM charging · Day/night function. Details at Voltekno.",
+  "src": "85a7392cf9"
+ },
+ "havensis-minisolar-20ass-12-24v-20a-pwm-sarj-kontrol-cihazi-standart-seri": {
+  "name": "Havensis MiniSolar-20ASS 12/24V 20A PWM Charge Controller (Standard Series)",
+  "description": "Havensis MiniSolar-20ASS 12/24V 20A PWM Charge Controller – 12/24 V automatic system detection · 32-bit ARM processor. Technical specifications and datasheet at Voltekno.",
+  "src": "ffbeba505a"
+ },
+ "havensis-minisolar-3aes-12v-3a-pwm-sarj-kontrol-cihazi-eko-seri": {
+  "name": "Havensis MiniSolar-3AES 12V 3A PWM Charge Controller (Eco Series)",
+  "description": "Havensis MiniSolar-3AES 12V 3A PWM Charge Controller – 3-stage PWM charging · Day/night function · Short-circuit fuse. Details at Voltekno.",
+  "src": "cd1c973dc9"
+ },
+ "havensis-minisolar-5aes-12v-5a-pwm-sarj-kontrol-cihazi-eko-seri": {
+  "name": "Havensis MiniSolar-5AES 12V 5A PWM Charge Controller (Eco Series)",
+  "description": "Havensis MiniSolar-5AES 12V 5A PWM Charge Controller – 3-stage PWM charging · Day/night function · Short-circuit fuse. Details at Voltekno.",
+  "src": "9493b728cf"
+ },
+ "havensis-minisolar-6aes-12v-6a-pwm-sarj-kontrol-cihazi-eko-seri": {
+  "name": "Havensis MiniSolar-6AES 12V 6A PWM Charge Controller (Eco Series)",
+  "description": "Havensis MiniSolar-6AES 12V 6A PWM Charge Controller – 32-bit ARM processor · 4-stage PWM charging · Day/night function. Details at Voltekno.",
+  "src": "3e634cdceb"
+ },
+ "havensis-minisolar-bt-v2-rs485-bluetooth-uzaktan-izleme-modulu": {
+  "name": "Havensis MiniSolar-BT V2 RS485 Bluetooth Remote Monitoring Module",
+  "description": "Havensis MiniSolar-BT V2 RS485 Bluetooth Remote Monitoring Module – Bluetooth connectivity · SOLAR EKRAN BLE app. Technical specifications and datasheet at Voltekno.",
+  "src": "358857520b"
+ },
+ "havensis-minisolar-mps-3a-12v-mppt-sarj-kontrol-cihazi": {
+  "name": "Havensis MiniSolar MPS 3A 12V MPPT Charge Controller",
+  "description": "Havensis MiniSolar MPS 3A 12V MPPT Charge Controller – 3 A charging current · 30 V maximum PV input voltage · 12 V battery system. Details at Voltekno.",
+  "src": "fe1b7683db"
+ },
+ "havensis-mps-serisi-20a-12-24v-mppt-sarj-kontrol-cihazi-100v-pv": {
+  "name": "Havensis MPS Series 20A 12/24V MPPT Charge Controller (100V PV)",
+  "description": "Havensis MPS Series 20A 12/24V MPPT Charge Controller – 20 A charging current · 100 V maximum PV input voltage. Technical specifications and datasheet at Voltekno.",
+  "src": "af8c06edc9"
+ },
+ "havensis-mps-serisi-30a-12-24v-mppt-sarj-kontrol-cihazi-100v-pv": {
+  "name": "Havensis MPS Series 30A 12/24V MPPT Charge Controller (100V PV)",
+  "description": "Havensis MPS Series 30A 12/24V MPPT Charge Controller – 30 A charging current · 100 V maximum PV input voltage. Technical specifications and datasheet at Voltekno.",
+  "src": "36090759e1"
+ },
+ "havensis-mps-serisi-40a-mppt-sarj-kontrol-cihazi-100v-150v-pv": {
+  "name": "Havensis MPS Series 40A MPPT Charge Controller",
+  "description": "Havensis MPS Series 40A MPPT Charge Controller – 40 A charging current · 100 V or 150 V PV input options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "havens00612": "12/24V MPPT Charge Controller (100V PV)",
+   "havens00615": "12/24/36/48V MPPT Charge Controller (150V PV)"
+  },
+  "src": "3e161b08db"
+ },
+ "havensis-mps-serisi-50a-12-24v-mppt-sarj-kontrol-cihazi-100v-pv": {
+  "name": "Havensis MPS Series 50A 12/24V MPPT Charge Controller (100V PV)",
+  "description": "Havensis MPS Series 50A 12/24V MPPT Charge Controller – 50 A charging current · 100 V maximum PV input voltage. Technical specifications and datasheet at Voltekno.",
+  "src": "abc80ab40e"
+ },
+ "havensis-mps-serisi-60a-mppt-sarj-kontrol-cihazi-100v-150v-pv": {
+  "name": "Havensis MPS Series 60A MPPT Charge Controller",
+  "description": "Havensis MPS Series 60A MPPT Charge Controller – 60 A charging current · 100 V or 150 V PV input options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "havens00614": "12/24V MPPT Charge Controller (100V PV)",
+   "havens00616": "12/24/36/48V MPPT Charge Controller (150V PV)"
+  },
+  "src": "99ae059422"
+ },
+ "havensis-mps-serisi-70a-12-24-36-48v-mppt-sarj-kontrol-cihazi-150v-pv": {
+  "name": "Havensis MPS Series 70A 12/24/36/48V MPPT Charge Controller (150V PV)",
+  "description": "Havensis MPS Series 70A 12/24/36/48V MPPT Charge Controller – 70 A charging current · 150 V maximum PV input voltage. Technical specifications and datasheet at Voltekno.",
+  "src": "cc39d463b0"
+ },
+ "havensis-mps-serisi-80a-12-24-36-48v-mppt-sarj-kontrol-cihazi-150v-200v-pv": {
+  "name": "Havensis MPS Series 80A 12/24/36/48V MPPT Charge Controller",
+  "description": "Havensis MPS Series 80A 12/24/36/48V MPPT Charge Controller – 80 A charging current · 150 V or 200 V PV input options. Details at Voltekno.",
+  "variants": {
+   "havens00618": "(150V PV)",
+   "havens00619": "(200V PV)"
+  },
+  "src": "f38d64241c"
+ },
+ "havensis-solar-wifi-485-mppt-uzaktan-izleme-modulu": {
+  "name": "Havensis Solar-WiFi-485 MPPT Remote Monitoring Module",
+  "description": "Havensis Solar-WiFi-485 MPPT Remote Monitoring Module – Wi-Fi connectivity · Remote monitoring via solarekran.com. Technical specifications and datasheet at Voltekno.",
+  "src": "8fe6f344d2"
+ },
+ "istabreeze-50-cm-kompozit-ruzgar-turbini-kanadi-siyah-beyaz": {
+  "name": "İstabreeze 50 cm Composite Wind Turbine Blade (Black-White)",
+  "description": "İstabreeze 50 cm Composite Wind Turbine Blade – Replacement blade · 50 cm composite. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "d0981ef112"
+ },
+ "istabreeze-56-cm-karbon-ruzgar-turbini-kanadi": {
+  "name": "İstabreeze 56 cm Carbon Wind Turbine Blade",
+  "description": "İstabreeze 56 cm Carbon Wind Turbine Blade – Replacement blade · 56 cm carbon. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "dc51b3452b"
+ },
+ "istabreeze-57-cm-kompozit-ruzgar-turbini-kanadi-siyah": {
+  "name": "İstabreeze 57 cm Composite Wind Turbine Blade (Black)",
+  "description": "İstabreeze 57 cm Composite Wind Turbine Blade – Replacement blade · 57 cm composite. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "a4a6f0d176"
+ },
+ "istabreeze-90-cm-kompozit-ruzgar-turbini-kanadi-beyaz": {
+  "name": "İstabreeze 90 cm Composite Wind Turbine Blade (White)",
+  "description": "İstabreeze 90 cm Composite Wind Turbine Blade – Replacement blade · 90 cm composite. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "f76a5228d3"
+ },
+ "istabreeze-air-speed-500w-12-24v-ruzgar-turbini": {
+  "name": "İstabreeze Air Speed 500W 12/24V Wind Turbine",
+  "description": "İstabreeze Air Speed 500W 12/24V Wind Turbine – 500 W maximum power · 12 V / 24 V system options · Compact and lightweight design. Details at Voltekno.",
+  "src": "538e526b9c"
+ },
+ "istabreeze-aluminyum-kanat-flansi": {
+  "name": "İstabreeze Aluminum Blade Flange",
+  "description": "İstabreeze Aluminum Blade Flange – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "de41b4b2e5"
+ },
+ "istabreeze-direk-uzatma-ek-borusu-15-kg-40-kg": {
+  "name": "İstabreeze Pole Extension Pipe (15 kg / 40 kg)",
+  "description": "İstabreeze Pole Extension Pipe – Increases pole height · Compatible with 15 kg and 40 kg poles. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "istabr00657": "(15 kg Load Capacity)",
+   "istabr00658": "(40 kg Load Capacity)"
+  },
+  "src": "8ee0c9fc9b"
+ },
+ "istabreeze-heli-serisi-48v-ruzgar-turbini-2-kw-4-kw": {
+  "name": "İstabreeze Heli Series 48V Wind Turbine (2 kW / 4 kW)",
+  "description": "İstabreeze Heli Series 48V Wind Turbine – 2 kW and 4 kW power options · 48 V battery system. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "istabr00647": "2.0 2 kW 48V Wind Turbine",
+   "istabr00648": "4.0 4 kW 48V Wind Turbine"
+  },
+  "src": "94df032a01"
+ },
+ "istabreeze-heli-serisi-ruzgar-turbini-alternatoru-2-kw-4-kw-48v": {
+  "name": "İstabreeze Heli Series Wind Turbine Alternator",
+  "description": "İstabreeze Heli Series Wind Turbine Alternator – Compatible with Heli 2.0 and Heli 4.0 turbines · 48 V system. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "istabr00665": "2.0 2 kW 48V Wind Turbine Alternator",
+   "istabr00666": "4.0 4 kW 48V Wind Turbine Alternator"
+  },
+  "src": "5839769acd"
+ },
+ "istabreeze-i-700-ruzgar-turbini-kuyruk-borusu": {
+  "name": "İstabreeze i-700 Wind Turbine Tail Pipe",
+  "description": "İstabreeze i-700 Wind Turbine Tail Pipe – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "db78251e71"
+ },
+ "istabreeze-i-serisi-ruzgar-turbini-500w-2000w": {
+  "name": "İstabreeze i Series Wind Turbine (500W - 2000W)",
+  "description": "İstabreeze i Series Wind Turbine – 3-phase permanent magnet alternator with NdFeB magnets. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "istabri50000639": "i-500 500W 12/24V Wind Turbine",
+   "istabri70000641": "i-700 700W 12/24/48V Wind Turbine",
+   "istabri100000642": "i-1000 1000W 24/48V Wind Turbine",
+   "istabri150000643": "i-1500 1500W 24/48V Wind Turbine",
+   "istabri200000644": "i-2000 2000W 48V Wind Turbine"
+  },
+  "src": "5871374e11"
+ },
+ "istabreeze-kanat-flansi-3-kollu-5-kollu": {
+  "name": "İstabreeze Blade Flange (3-Arm / 5-Arm)",
+  "description": "İstabreeze Blade Flange – 3-arm and 5-arm options · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "istabr00680": "3-Arm Blade Flange",
+   "istabr00681": "5-Arm Blade Flange"
+  },
+  "src": "61f6c79a26"
+ },
+ "istabreeze-kompozit-ruzgar-turbini-kanadi-60-cm-107-cm-beyaz-siyah": {
+  "name": "İstabreeze Composite Wind Turbine Blade",
+  "description": "İstabreeze Composite Wind Turbine Blade – Composite replacement blade · 60 cm and 107 cm options · White-black color. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "istabr00670": "60 cm Composite Wind Turbine Blade (White-Black)",
+   "istabr00672": "107 cm Composite Wind Turbine Blade (White-Black)"
+  },
+  "src": "164562dc9f"
+ },
+ "istabreeze-pro-wind-ruzgar-sarj-kontrol-cihazi-1500w-4000w": {
+  "name": "İstabreeze Pro Wind Wind Turbine Charge Controller",
+  "description": "İstabreeze Pro Wind Wind Turbine Charge Controller – 1500 W, 2000 W and 4000 W power options · 24 V and 48 V systems. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "istabr00651": "1500W 24V Wind Turbine Charge Controller",
+   "istabr00652": "2000W 24/48V Wind Turbine Charge Controller",
+   "istabr00653": "4000W 48V Wind Turbine Charge Controller"
+  },
+  "src": "7bcfe64b38"
+ },
+ "istabreeze-ruzgar-gunes-hibrit-sarj-kontrol-cihazi-650w-850w": {
+  "name": "İstabreeze Wind-Solar Hybrid Charge Controller",
+  "description": "İstabreeze Wind-Solar Hybrid Charge Controller – Wind + solar hybrid charging · Automatic braking when the battery is full. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "istabr00649": "650W 12/24V Wind-Solar Hybrid Charge Controller",
+   "istabr00650": "850W 12/24/48V Wind-Solar Hybrid Charge Controller"
+  },
+  "src": "9d2ed65a20"
+ },
+ "istabreeze-ruzgar-turbini-5-kollu-buyuk-burun": {
+  "name": "İstabreeze Wind Turbine 5-Arm Large Nose Cone",
+  "description": "İstabreeze Wind Turbine 5-Arm Large Nose Cone – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "30bb90df0d"
+ },
+ "istabreeze-ruzgar-turbini-alternatoru-500g-2000g": {
+  "name": "İstabreeze Wind Turbine Alternator (500G - 2000G)",
+  "description": "İstabreeze Wind Turbine Alternator – 3-phase permanent magnet alternator · 500 W - 2000 W power options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "istabr00660": "500G 12/24V Wind Turbine Alternator",
+   "istabr00661": "800G 12/24/48V Wind Turbine Alternator",
+   "istabr00662": "1000G 24/48V Wind Turbine Alternator",
+   "istabr00663": "1500G 24/48V Wind Turbine Alternator",
+   "istabr00664": "2000G 48V Wind Turbine Alternator"
+  },
+  "src": "545e5dd7d7"
+ },
+ "istabreeze-ruzgar-turbini-buyuk-burun": {
+  "name": "İstabreeze Wind Turbine Large Nose Cone",
+  "description": "İstabreeze Wind Turbine Large Nose Cone – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "7e5735ba8f"
+ },
+ "istabreeze-ruzgar-turbini-diregi-40-kg-tasima-kapasiteli": {
+  "name": "İstabreeze Wind Turbine Pole (40 kg Load Capacity)",
+  "description": "İstabreeze Wind Turbine Pole – 40 kg load capacity · For 1-2 kW class turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "3e3fd55212"
+ },
+ "istabreeze-ruzgar-turbini-direk-seti-15-kg-tasima-kapasiteli": {
+  "name": "İstabreeze Wind Turbine Pole Set (15 kg Load Capacity)",
+  "description": "İstabreeze Wind Turbine Pole Set – 15 kg load capacity · For small wind turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "324c7e3398"
+ },
+ "istabreeze-ruzgar-turbini-kucuk-burun": {
+  "name": "İstabreeze Wind Turbine Small Nose Cone",
+  "description": "İstabreeze Wind Turbine Small Nose Cone – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "6c53fa146d"
+ },
+ "istabreeze-ruzgar-turbini-kuyrugu-700w-2000w-modeller-icin": {
+  "name": "İstabreeze Wind Turbine Tail (for 700W-2000W Models)",
+  "description": "İstabreeze Wind Turbine Tail – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "6de6c27679"
+ },
+ "istabreeze-ruzgar-turbini-kuyruk-borusu-1-2-kw-modeller-icin": {
+  "name": "İstabreeze Wind Turbine Tail Pipe (for 1-2 kW Models)",
+  "description": "İstabreeze Wind Turbine Tail Pipe – Original spare part · Compatible with İstabreeze turbines. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "d21134296b"
+ },
+ "istabreeze-ruzgar-turbini-manuel-fren-panosu": {
+  "name": "İstabreeze Wind Turbine Manual Brake Panel",
+  "description": "İstabreeze Wind Turbine Manual Brake Panel – Manual braking of the turbine · Safety during storms and maintenance. Technical specifications and datasheet at Voltekno.",
+  "src": "9bf2028d51"
+ },
+ "istabreeze-ruzgar-turbini-ses-dusurucu-amortisor": {
+  "name": "İstabreeze Wind Turbine Noise-Reducing Damper",
+  "description": "İstabreeze Wind Turbine Noise-Reducing Damper – Vibration damping · Reduces noise transmitted to the structure. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "1d423167ad"
+ },
+ "istabreeze-windsafe-korumali-ruzgar-turbini-1500w-24v-2000w-48v": {
+  "name": "İstabreeze Windsafe Protected Wind Turbine",
+  "description": "İstabreeze Windsafe Protected Wind Turbine – 1500 W and 2000 W power options · 24 V and 48 V systems · Protected design. Details at Voltekno.",
+  "variants": {
+   "istabr00645": "1500W 24V Protected Wind Turbine",
+   "istabr00646": "2000W 48V Protected Wind Turbine"
+  },
+  "src": "a91c23704a"
+ },
+ "mexxsun-mpk8-60a-12-24-48v-mppt-sarj-kontrol-cihazi": {
+  "name": "Mexxsun MPK8 60A 12/24/48V MPPT Charge Controller",
+  "description": "Mexxsun MPK8 60A 12/24/48V MPPT Charge Controller – 60 A charging current · 12 / 24 / 48 V system support · MPPT charging. Technical specifications and datasheet at Voltekno.",
+  "src": "aa77704f77"
+ },
+ "np-power-12v-jel-aku-100ah-200ah": {
+  "name": "NP Power 12V Gel Battery (100Ah / 200Ah)",
+  "description": "NP Power 12V Gel Battery – Gel technology · 12 V nominal voltage · 100 Ah and 200 Ah options · Maintenance-free. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "nppowe00454": "100Ah Gel Battery",
+   "nppowe00455": "200Ah Gel Battery"
+  },
+  "src": "8e702d3e5c"
+ },
+ "np-power-12v-tam-sinus-inverter-300w-600w": {
+  "name": "NP Power 12V Pure Sine Wave Inverter (300W / 600W)",
+  "description": "NP Power 12V Pure Sine Wave Inverter – Pure sine wave output · 12 V battery input · 300 W and 600 W options · Compact design. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "nppowe00461": "300 300W 12V Pure Sine Wave Inverter",
+   "nppowe00462": "600 600W 12V Pure Sine Wave Inverter"
+  },
+  "src": "03a8e218b4"
+ },
+ "np-power-51-2v-100ah-lifepo4-lityum-aku": {
+  "name": "NP Power 51.2V 100Ah LiFePO4 Lithium Battery",
+  "description": "NP Power 51.2V 100Ah LiFePO4 Lithium Battery – LiFePO4 chemistry · 51.2 V / 100 Ah / 5.12 kWh · Built-in BMS · Compatible with 48 V systems. Details at Voltekno.",
+  "src": "10985d9a6d"
+ },
+ "np-power-aku-sarj-cihazi-12v-24v-10a-30a": {
+  "name": "NP Power Battery Charger (12V / 24V, 10A - 30A)",
+  "description": "NP Power Battery Charger – 12 V and 24 V options · 10 A - 30 A charging current. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "nppowe00512": "NP1210 12V 10A Battery Charger",
+   "nppowe00513": "NP1220 12V 20A Battery Charger",
+   "nppowe00514": "NP2410 24V 10A Battery Charger",
+   "nppowe00515": "NP1230 12V 30A Battery Charger"
+  },
+  "src": "71e0241775"
+ },
+ "np-power-mppt-akilli-inverter-3-5-kw-11-kw": {
+  "name": "NP Power MPPT Smart Inverter (3.5 kW - 11 kW)",
+  "description": "NP Power MPPT Smart Inverter – 3.5 kW - 11 kW power options · Built-in MPPT solar charge controller · Pure sine wave output. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "nppowe00438": "3.5 kW MPPT Smart Inverter",
+   "nppowe00439": "6.2 kW MPPT Smart Inverter",
+   "nppowe00440": "8.5 kW MPPT Smart Inverter",
+   "nppowe00441": "11 kW MPPT Smart Inverter"
+  },
+  "src": "75008adb15"
+ },
+ "np-power-mppt-sarj-kontrol-cihazi-30a-40a": {
+  "name": "NP Power MPPT Charge Controller (30A / 40A)",
+  "description": "NP Power MPPT Charge Controller – MPPT charging · 30 A and 40 A options · Battery protection functions. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "nppowe00487": "NP2430 30A MPPT Charge Controller",
+   "nppowe00488": "NP2440 40A MPPT Charge Controller"
+  },
+  "src": "fbde6eeca2"
+ },
+ "tommatech-15wp-tasinabilir-gunes-sarj-paneli": {
+  "name": "TommaTech 15Wp Portable Solar Charging Panel",
+  "description": "TommaTech 15Wp Portable Solar Charging Panel – 15 Wp power · High-efficiency IBC cells · USB-A and USB-C outputs, QC 3.0 fast charging. Details at Voltekno.",
+  "src": "d6489ed3eb"
+ },
+ "tommatech-16bb-topcon-gunes-paneli-450wp-600wp": {
+  "name": "TommaTech 16BB TOPCon Solar Panel (450Wp / 600Wp)",
+  "description": "TommaTech 16BB TOPCon Solar Panel – n-type TOPCon, 16BB half-cell technology · Module efficiency above 23%. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommattt450108tn1000071": "450Wp 16BB TOPCon Solar Panel",
+   "tommattt600144tn1000073": "600Wp 16BB TOPCon Solar Panel"
+  },
+  "src": "f1a8db8e54"
+ },
+ "tommatech-2-2-kw-trifaze-380v-solar-pompa-surucusu-900vdc": {
+  "name": "TommaTech 2.2 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+  "description": "TommaTech 2.2 kW Three-Phase 380V Solar Pump Drive – Runs pumps directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "src": "e5f1628c62"
+ },
+ "tommatech-22-kw-arac-sarj-istasyonu-led-isikli-stand-bos-pano": {
+  "name": "TommaTech 22 kW EV Charging Station LED-Lit Stand (Empty Enclosure)",
+  "description": "TommaTech 22 kW EV Charging Station LED-Lit Stand – Floor-mounted charging station stand · LED lighting. Technical specifications and datasheet at Voltekno.",
+  "src": "90e14be26d"
+ },
+ "tommatech-22-kw-type-2-32a-arac-sarj-kablosu-5-m": {
+  "name": "TommaTech 22 kW Type 2 32A EV Charging Cable 5 m",
+  "description": "TommaTech 22 kW Type 2 32A EV Charging Cable 5 m – Type 2 - Type 2 connection · 32 A, up to 22 kW three-phase · 5 m length. Details at Voltekno.",
+  "src": "71d694c85e"
+ },
+ "tommatech-240wp-48pm-half-cut-monokristal-gunes-paneli": {
+  "name": "TommaTech 240Wp 48PM Half-Cut Monocrystalline Solar Panel",
+  "description": "TommaTech 240Wp 48PM Half-Cut Monocrystalline Solar Panel – 240 Wp output power · Half-cell monocrystalline construction. Technical specifications and datasheet at Voltekno.",
+  "src": "57f79ec2af"
+ },
+ "tommatech-25wp-katlanabilir-gunes-sarj-paneli": {
+  "name": "TommaTech 25Wp Foldable Solar Charging Panel",
+  "description": "TommaTech 25Wp Foldable Solar Charging Panel – 25 Wp power · Foldable, portable design · USB-A and USB-C outputs, QC 3.0. Details at Voltekno.",
+  "src": "a46236f945"
+ },
+ "tommatech-285wp-72tn10-topcon-gunes-paneli": {
+  "name": "TommaTech 285Wp 72TN10 TOPCon Solar Panel",
+  "description": "TommaTech 285Wp 72TN10 TOPCon Solar Panel – 285 Wp output power · n-type TOPCon cells · Mid-size, easy-to-carry design. Details at Voltekno.",
+  "src": "1bc66edbcc"
+ },
+ "tommatech-30-100v-200a-ayarlanabilir-mobil-batarya-sarj-unitesi": {
+  "name": "TommaTech 30-100V 200A Adjustable Mobile Battery Charger",
+  "description": "TommaTech 30-100V 200A Adjustable Mobile Battery Charger – 30-100 V adjustable output voltage · 200 A charging current. Details at Voltekno.",
+  "src": "4360d43b15"
+ },
+ "tommatech-36tn10-topcon-gunes-paneli-40wp-130wp": {
+  "name": "TommaTech 36TN10 TOPCon Solar Panel (40Wp - 130Wp)",
+  "description": "TommaTech 36TN10 TOPCon Solar Panel – n-type TOPCon cell technology · 11 power options from 40Wp to 130Wp. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommattt04036tn1000075": "40Wp TOPCon 36TN10 Solar Panel",
+   "tommattt04536tn1000076": "45Wp TOPCon 36TN10 Solar Panel",
+   "tommattt05536tn1000077": "55Wp TOPCon 36TN10 Solar Panel",
+   "tommattt06536tn1000078": "65Wp TOPCon 36TN10 Solar Panel",
+   "tommattt07036tn1000079": "70Wp TOPCon 36TN10 Solar Panel",
+   "tommattt08036tn1000080": "80Wp TOPCon 36TN10 Solar Panel",
+   "tommattt08536tn1100081": "85Wp TOPCon 36TN10 Solar Panel",
+   "tommattt10036tn1000082": "100Wp TOPCon 36TN10 Solar Panel",
+   "tommattt11036tn1000083": "110Wp TOPCon 36TN10 Solar Panel",
+   "tommattt12036tn1000084": "120Wp TOPCon 36TN10 Solar Panel",
+   "tommattt13036tn1000085": "130Wp TOPCon 36TN10 Solar Panel"
+  },
+  "src": "543a1f4f41"
+ },
+ "tommatech-40-100v-ayarlanabilir-batarya-sarj-unitesi-200a-300a": {
+  "name": "TommaTech 40-100V Adjustable Battery Charger",
+  "description": "TommaTech 40-100V Adjustable Battery Charger – 40-100 V adjustable output voltage. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatsrjttadj40100v200a00229": "200A Adjustable Battery Charger",
+   "tommatsrjttadj40100v300a00230": "300A Adjustable Battery Charger"
+  },
+  "src": "2a142bf7e4"
+ },
+ "tommatech-450wp-dark-series-16bb-topcon-gunes-paneli": {
+  "name": "TommaTech 450Wp Dark Series 16BB TOPCon Solar Panel",
+  "description": "TommaTech 450Wp Dark Series 16BB TOPCon Solar Panel – Aesthetic black-frame design · n-type TOPCon, 16BB, 108 half-cells. Details at Voltekno.",
+  "src": "5f8a8bfcb5"
+ },
+ "tommatech-50-kw-r290-endustriyel-isi-pompasi": {
+  "name": "TommaTech 50 kW R290 Industrial Heat Pump",
+  "description": "TommaTech 50 kW R290 Industrial Heat Pump – 50 kW heating capacity · R290 eco-friendly refrigerant. Technical specifications and datasheet at Voltekno.",
+  "src": "b93e26db25"
+ },
+ "tommatech-51-2v-280ah-lifepo4-lityum-batarya": {
+  "name": "TommaTech 51.2V 280Ah LiFePO4 Lithium Battery",
+  "description": "TommaTech 51.2V 280Ah LiFePO4 Lithium Battery – 51.2 V / 280 Ah / 14,336 Wh · 140 A maximum charge and discharge current. Technical specifications and datasheet at Voltekno.",
+  "src": "2251717330"
+ },
+ "tommatech-51-5-kw-r410-trifaze-havuz-tipi-isi-pompasi": {
+  "name": "TommaTech 51.5 kW R410 Three-Phase Pool Heat Pump",
+  "description": "TommaTech 51.5 kW R410 Three-Phase Pool Heat Pump – 51.5 kW heating capacity · Three-phase supply · R410A refrigerant. Details at Voltekno.",
+  "src": "61bf38a66b"
+ },
+ "tommatech-600wp-bifacial-16bb-topcon-gunes-paneli": {
+  "name": "TommaTech 600Wp Bifacial 16BB TOPCon Solar Panel",
+  "description": "TommaTech 600Wp Bifacial 16BB TOPCon Solar Panel – Bifacial n-type TOPCon cells · 23.23% front-side module efficiency. Technical specifications and datasheet at Voltekno.",
+  "src": "b24748eee7"
+ },
+ "tommatech-aquavera-r290-inverter-havuz-isi-pompasi-24-kw-33-kw": {
+  "name": "TommaTech Aquavera R290 Inverter Pool Heat Pump",
+  "description": "TommaTech Aquavera R290 Inverter Pool Heat Pump – R290 eco-friendly refrigerant · Full DC inverter compressor and DC fan. Details at Voltekno.",
+  "variants": {
+   "tommathppolmfr29024p00335": "24 kW R290 Single-Phase Inverter Pool Heat Pump",
+   "tommathppoltfr29033p00337": "33 kW R290 Three-Phase Inverter Pool Heat Pump"
+  },
+  "src": "749e7782a7"
+ },
+ "tommatech-dark-series-esnek-flexible-gunes-paneli-110wp-170wp": {
+  "name": "TommaTech Dark Series Flexible Solar Panel",
+  "description": "TommaTech Dark Series Flexible Solar Panel – Black appearance · High-efficiency IBC cells. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatttflex110fb00095": "110Wp Dark Series Flexible Solar Panel",
+   "tommatttflex170fb00097": "170Wp Dark Series Flexible Solar Panel"
+  },
+  "src": "b474708855"
+ },
+ "tommatech-duvar-tipi-batarya-sarj-unitesi-24v-80v-40a-300a": {
+  "name": "TommaTech Wall-Mounted Battery Charger",
+  "description": "TommaTech Wall-Mounted Battery Charger – 24 V - 80 V, 40 A - 300 A model options · Wall-mounted installation, space-saving. Details at Voltekno.",
+  "variants": {
+   "tommatsrjttacdvr24v100a00219": "24V 100A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr48v100a00220": "48V 100A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr48v150a00221": "48V 150A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr48v200a00222": "48V 200A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr72v40a00223": "72V 40A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr80v80a00224": "80V 80A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr80v100a00225": "80V 100A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr80v200a00226": "80V 200A Wall-Mounted Battery Charger",
+   "tommatsrjttacdvr80v300a00227": "80V 300A Wall-Mounted Battery Charger"
+  },
+  "src": "438c27dbba"
+ },
+ "tommatech-entegre-tip-su-gecirmez-batarya-sarj-unitesi-24v-48v-72v": {
+  "name": "TommaTech Integrated-Type Waterproof Battery Charger",
+  "description": "TommaTech Integrated-Type Waterproof Battery Charger – 24 V, 48 V and 72 V model options. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatsrjttacent24v30a00205": "24V 30A Integrated-Type Battery Charger",
+   "tommatsrjttacent24v50a00207": "24V 50A Integrated-Type Battery Charger",
+   "tommatsrjttacent48v20a00209": "48V 20A Integrated-Type Battery Charger",
+   "tommatsrjttacent48v25a00211": "48V 25A Integrated-Type Battery Charger",
+   "tommatsrjttacent48v30a00212": "48V 30A Integrated-Type Battery Charger",
+   "tommatsrjttacent48v50a00213": "48V 50A Integrated-Type Battery Charger",
+   "tommatsrjttacent48v60a00214": "48V 60A Integrated-Type Battery Charger",
+   "tommatsrjttacent72v25a00215": "72V 25A Integrated-Type Battery Charger"
+  },
+  "src": "05a30014b3"
+ },
+ "tommatech-esnek-flexible-gunes-paneli-110wp-170wp": {
+  "name": "TommaTech Flexible Solar Panel (110Wp / 170Wp)",
+  "description": "TommaTech Flexible Solar Panel – High-efficiency IBC cells · 3 mm thickness, bends up to 30°. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatttflex11000094": "110Wp Flexible Solar Panel",
+   "tommatttflex17000096": "170Wp Flexible Solar Panel"
+  },
+  "src": "187e8d073b"
+ },
+ "tommatech-f-serisi-15-kw-48v-trifaze-lv-hibrit-inverter-2-mppt": {
+  "name": "TommaTech F Series 15 kW 48V Three-Phase LV Hybrid Inverter (2 MPPT)",
+  "description": "TommaTech F Series 15 kW 48V Three-Phase LV Hybrid Inverter – 15 kW three-phase hybrid inverter · 48 V LV battery, 280 A charge/discharge. Details at Voltekno.",
+  "src": "03fb3d84fe"
+ },
+ "tommatech-f-serisi-20-kw-48v-trifaze-lv-hibrit-inverter-2-mppt": {
+  "name": "TommaTech F Series 20 kW 48V Three-Phase LV Hybrid Inverter (2 MPPT)",
+  "description": "TommaTech F Series 20 kW 48V Three-Phase LV Hybrid Inverter – 20 kW three-phase hybrid inverter · 48 V LV battery, 350 A charge/discharge. Details at Voltekno.",
+  "src": "57d573dd69"
+ },
+ "tommatech-hightech-power-s-4-kwh-hv-lityum-batarya-modulu": {
+  "name": "TommaTech Hightech Power S 4 kWh HV Lithium Battery Module",
+  "description": "TommaTech Hightech Power S 4 kWh HV Lithium Battery Module – 4 kWh module · 8-24 kWh system with 2-6 modules. Technical specifications and datasheet at Voltekno.",
+  "src": "6ea97ba2cb"
+ },
+ "tommatech-hightech-power-s-5-1-kwh-lv-aio-lityum-batarya": {
+  "name": "TommaTech Hightech Power S 5.1 kWh LV AIO Lithium Battery",
+  "description": "TommaTech Hightech Power S 5.1 kWh LV AIO Lithium Battery – 5.1 kWh LV battery module · Tower-type integrated design. Technical specifications and datasheet at Voltekno.",
+  "src": "27897340bf"
+ },
+ "tommatech-hightech-power-s-hv-bms": {
+  "name": "TommaTech Hightech Power S HV BMS",
+  "description": "TommaTech Hightech Power S HV BMS – HV battery system management · Cell protection and balancing. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "a8d0526850"
+ },
+ "tommatech-hightech-power-s-hv-bms-aio": {
+  "name": "TommaTech Hightech Power S HV BMS (AIO)",
+  "description": "TommaTech Hightech Power S HV BMS – HV battery system management · Cell protection and balancing. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "c2fa93eecc"
+ },
+ "tommatech-hightech-power-s-lv-bms-aio": {
+  "name": "TommaTech Hightech Power S LV BMS (AIO)",
+  "description": "TommaTech Hightech Power S LV BMS – LV AIO battery system management · Battery protection and balancing · Communication with the inverter. Details at Voltekno.",
+  "src": "f3dbb98964"
+ },
+ "tommatech-katlanabilir-canta-tipi-gunes-paneli-150wp-200wp": {
+  "name": "TommaTech Foldable Briefcase-Type Solar Panel",
+  "description": "TommaTech Foldable Briefcase-Type Solar Panel – n-type TOPCon, 16BB cells · Foldable, briefcase-style portable design. Details at Voltekno.",
+  "variants": {
+   "tommattt15036tn10prt00091": "150Wp Foldable Briefcase-Type Solar Panel",
+   "tommattt20048tn10prt00092": "200Wp Foldable Briefcase-Type Solar Panel"
+  },
+  "src": "482285deb0"
+ },
+ "tommatech-likya-22-kw-ac-arac-sarj-istasyonu-5-m-kablolu-led-bluetooth": {
+  "name": "TommaTech Likya 22 kW AC EV Charging Station (5 m Cable, LED, Bluetooth)",
+  "description": "TommaTech Likya 22 kW AC EV Charging Station – AC charging up to 22 kW · 5 m tethered cable with Type 2 connector. Technical specifications and datasheet at Voltekno.",
+  "src": "2d6d3dcd1f"
+ },
+ "tommatech-likya-22-kw-ac-arac-sarj-istasyonu-soketli-led-bluetooth": {
+  "name": "TommaTech Likya 22 kW AC EV Charging Station (Socket, LED, Bluetooth)",
+  "description": "TommaTech Likya 22 kW AC EV Charging Station – AC charging up to 22 kW · Type 2 socket outlet · 6-32 A adjustable charging current. Details at Voltekno.",
+  "src": "059651290f"
+ },
+ "tommatech-marine-mrn1-12-8v-100ah-lifepo4-lityum-aku-small": {
+  "name": "TommaTech Marine MRN1 12.8V 100Ah LiFePO4 Lithium Battery (Small)",
+  "description": "TommaTech Marine MRN1 12.8V 100Ah LiFePO4 Lithium Battery – LiFePO4 chemistry, 12.8 V / 100 Ah / 1280 Wh · Built-in BMS protection. Details at Voltekno.",
+  "src": "e3f16d0029"
+ },
+ "tommatech-marine-mrn1-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah-25-6v-200ah": {
+  "name": "TommaTech Marine MRN1 LiFePO4 Lithium Battery",
+  "description": "TommaTech Marine MRN1 LiFePO4 Lithium Battery – LiFePO4 chemistry, built-in BMS · 12 V and 24 V system options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatbtrpmrn1128v200ah00099": "12.8V 200Ah LiFePO4 Lithium Battery",
+   "tommatbtrpmrn1256v100ah00101": "25.6V 100Ah LiFePO4 Lithium Battery",
+   "tommatbtrpmrn1256v200ah00103": "25.6V 200Ah LiFePO4 Lithium Battery"
+  },
+  "src": "ccb86aee63"
+ },
+ "tommatech-marine-mrn3-lifepo4-lityum-aku-12-8v-200ah-25-6v-100ah": {
+  "name": "TommaTech Marine MRN3 LiFePO4 Lithium Battery",
+  "description": "TommaTech Marine MRN3 LiFePO4 Lithium Battery – LiFePO4 chemistry, built-in BMS · 12 V and 24 V system options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatbtrpmrn3128v200ah00100": "12.8V 200Ah LiFePO4 Lithium Battery",
+   "tommatbtrpmrn3256v100ah00102": "25.6V 100Ah LiFePO4 Lithium Battery"
+  },
+  "src": "58d5d0e8e8"
+ },
+ "tommatech-mdk110a-solar-pompa-surucusu-diyot-modulu-55-75-kw": {
+  "name": "TommaTech MDK110A Solar Pump Drive Diode Module (For 55-75 kW Drives)",
+  "description": "TommaTech MDK110A Solar Pump Drive Diode Module – Compatible with SPI series solar pump drives · Reverse current protection. Details at Voltekno.",
+  "src": "b2117d2b1f"
+ },
+ "tommatech-mdk110a-solar-pompa-surucusu-diyot-modulu-90-110-kw": {
+  "name": "TommaTech MDK110A Solar Pump Drive Diode Module (For 90-110 kW Drives)",
+  "description": "TommaTech MDK110A Solar Pump Drive Diode Module – Compatible with SPI series solar pump drives · Reverse current protection. Details at Voltekno.",
+  "src": "756e7c966e"
+ },
+ "tommatech-mdk25a-solar-pompa-surucusu-diyot-modulu": {
+  "name": "TommaTech MDK25A Solar Pump Drive Diode Module (For 2.2-5.5 kW Drives)",
+  "description": "TommaTech MDK25A Solar Pump Drive Diode Module – Compatible with SPI series solar pump drives · Reverse current protection. Details at Voltekno.",
+  "src": "b8b9003f95"
+ },
+ "tommatech-mdk70a-solar-pompa-surucusu-diyot-modulu": {
+  "name": "TommaTech MDK70A Solar Pump Drive Diode Module (For 15 kW Drives)",
+  "description": "TommaTech MDK70A Solar Pump Drive Diode Module – Compatible with SPI series solar pump drives · Reverse current protection. Details at Voltekno.",
+  "src": "fd707b9786"
+ },
+ "tommatech-mdk90a-solar-pompa-surucusu-diyot-modulu-37-45-kw": {
+  "name": "TommaTech MDK90A Solar Pump Drive Diode Module (For 37-45 kW Drives)",
+  "description": "TommaTech MDK90A Solar Pump Drive Diode Module – Compatible with SPI series solar pump drives · Reverse current protection. Details at Voltekno.",
+  "src": "f65ff9c0d5"
+ },
+ "tommatech-mobil-tip-batarya-sarj-unitesi-24v-48v-72v": {
+  "name": "TommaTech Mobile-Type Battery Charger (24V / 48V / 72V)",
+  "description": "TommaTech Mobile-Type Battery Charger – High-current fast charging · RS485 / CAN communication. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatsrjttacmbl24v100a00216": "24V 100A Mobile-Type Battery Charger",
+   "tommatsrjttacmbl48v100a00217": "48V 100A Mobile-Type Battery Charger",
+   "tommatsrjttacmbl72v40a00218": "72V 40A Mobile-Type Battery Charger"
+  },
+  "src": "576eb78cb8"
+ },
+ "tommatech-moduler-batarya-alt-taban-25-6v-208ah-51-2v-102ah": {
+  "name": "TommaTech Modular Battery Base (25.6V 208Ah / 51.2V 102Ah)",
+  "description": "TommaTech Modular Battery Base – Metal construction · Compatible with Modular Series batteries · Stable stacking. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "947c6bfa07"
+ },
+ "tommatech-moduler-seri-lifepo4-lityum-batarya-25-6v-204ah-51-2v-102ah": {
+  "name": "TommaTech Modular Series LiFePO4 Lithium Battery",
+  "description": "TommaTech Modular Series LiFePO4 Lithium Battery – Prismatic LiFePO4 cells · Expandable up to 16 units via parallel connection. Details at Voltekno.",
+  "variants": {
+   "tommatbtrp256v204ah00104": "25.6V 204Ah LiFePO4 Lithium Battery",
+   "tommatbtrp512v102ah00198": "51.2V 102Ah LiFePO4 Lithium Battery"
+  },
+  "src": "3608550492"
+ },
+ "tommatech-new-1k-12v-1000w-akilli-inverter": {
+  "name": "TommaTech New 1K 12V 1000W Smart Inverter",
+  "description": "TommaTech New 1K 12V 1000W Smart Inverter – 1000 W pure sine wave output · 12 V battery system · Built-in PWM solar charge controller. Details at Voltekno.",
+  "src": "3ac51193bc"
+ },
+ "tommatech-new-1k-12v-1000w-mppt-akilli-inverter": {
+  "name": "TommaTech New 1K 12V 1000W MPPT Smart Inverter",
+  "description": "TommaTech New 1K 12V 1000W MPPT Smart Inverter – 1000 W pure sine wave output · 12 V battery system · Built-in MPPT solar charge controller. Details at Voltekno.",
+  "src": "d4fa7ed02e"
+ },
+ "tommatech-new-3k-24v-3000w-akilli-inverter": {
+  "name": "TommaTech New 3K 24V 3000W Smart Inverter",
+  "description": "TommaTech New 3K 24V 3000W Smart Inverter – 3000 W pure sine wave output · 24 V battery system · Built-in PWM solar charge controller. Details at Voltekno.",
+  "src": "40d90ea956"
+ },
+ "tommatech-new-5k-48v-5000w-akilli-inverter": {
+  "name": "TommaTech New 5K 48V 5000W Smart Inverter",
+  "description": "TommaTech New 5K 48V 5000W Smart Inverter – 5000 W pure sine wave output · 48 V battery system · Built-in PWM solar charge controller. Details at Voltekno.",
+  "src": "d869435399"
+ },
+ "tommatech-pb-serisi-51-2v-100ah-lifepo4-lityum-batarya": {
+  "name": "TommaTech PB Series 51.2V 100Ah LiFePO4 Lithium Battery",
+  "description": "TommaTech PB Series 51.2V 100Ah LiFePO4 Lithium Battery – 51.2 V / 100 Ah / 5.12 kWh · 120 A continuous, 150 A peak discharge. Details at Voltekno.",
+  "src": "a0e12df8ae"
+ },
+ "tommatech-plus-500w-512wh-tasinabilir-guc-istasyonu": {
+  "name": "TommaTech Plus 500W 512Wh Portable Power Station",
+  "description": "TommaTech Plus 500W 512Wh Portable Power Station – 512 Wh LiFePO4 battery, 4000+ cycles · 500 W AC output, 500 W AC charging. Details at Voltekno.",
+  "src": "a982429aea"
+ },
+ "tommatech-plusx-11k-48v-11000w-mppt-akilli-inverter": {
+  "name": "TommaTech PlusX 11K 48V 11000W MPPT Smart Inverter",
+  "description": "TommaTech PlusX 11K 48V 11000W MPPT Smart Inverter – 11 kW nominal, 22,000 VA peak power · Dual MPPT, up to 13 kW PV. Details at Voltekno.",
+  "src": "2b0ff80857"
+ },
+ "tommatech-power-serisi-8-3-kw-r290-monofaze-isi-pompasi": {
+  "name": "TommaTech Power Series 8.3 kW R290 Single-Phase Heat Pump",
+  "description": "TommaTech Power Series 8.3 kW R290 Single-Phase Heat Pump – R290 natural, eco-friendly refrigerant. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "ea74b99597"
+ },
+ "tommatech-power-serisi-8-4-kw-r32-evi-monofaze-isi-pompasi": {
+  "name": "TommaTech Power Series 8.4 kW R32 EVI Single-Phase Heat Pump",
+  "description": "TommaTech Power Series 8.4 kW R32 EVI Single-Phase Heat Pump – EVI technology, operation down to −30 °C · A+++ energy class. Details at Voltekno.",
+  "src": "76b0a7a48e"
+ },
+ "tommatech-power-serisi-r290-trifaze-isi-pompasi-14-8-kw-18-2-kw-24-kw": {
+  "name": "TommaTech Power Series R290 Three-Phase Heat Pump",
+  "description": "TommaTech Power Series R290 Three-Phase Heat Pump – R290 natural, eco-friendly refrigerant. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommathpttr290tf14800339": "14.8 kW R290 Three-Phase Heat Pump",
+   "tommathpttr290tf18200340": "18.2 kW R290 Three-Phase Heat Pump",
+   "tommathpttr290tf2400341": "24 kW R290 Three-Phase Heat Pump"
+  },
+  "src": "527e622fdf"
+ },
+ "tommatech-power-serisi-r32-evi-trifaze-isi-pompasi-13-kw-18-2-kw-23-kw": {
+  "name": "TommaTech Power Series R32 EVI Three-Phase Heat Pump",
+  "description": "TommaTech Power Series R32 EVI Three-Phase Heat Pump – EVI technology, operation down to −30 °C · A+++ energy class. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommathpttevir32tf1300343": "13 kW R32 EVI Three-Phase Heat Pump",
+   "tommathpttevir32tf18200344": "18.2 kW R32 EVI Three-Phase Heat Pump",
+   "tommathpttevir32tf2300345": "23 kW R32 EVI Three-Phase Heat Pump"
+  },
+  "src": "e71146d134"
+ },
+ "tommatech-pro-3k-24v-3000w-mppt-wi-fi-akilli-inverter": {
+  "name": "TommaTech Pro 3K 24V 3000W MPPT Wi-Fi Smart Inverter",
+  "description": "TommaTech Pro 3K 24V 3000W MPPT Wi-Fi Smart Inverter – 3000 W pure sine wave output, 6000 VA peak power. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "e1ae4a96c9"
+ },
+ "tommatech-pro-5k-48v-5000w-mppt-wi-fi-akilli-inverter": {
+  "name": "TommaTech Pro 5K 48V 5000W MPPT Wi-Fi Smart Inverter",
+  "description": "TommaTech Pro 5K 48V 5000W MPPT Wi-Fi Smart Inverter – 5000 W pure sine wave output, 10000 VA peak power. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "19fea3f23e"
+ },
+ "tommatech-prox-1-5k-12v-1500w-mppt-akilli-inverter": {
+  "name": "TommaTech ProX 1.5K 12V 1500W MPPT Smart Inverter",
+  "description": "TommaTech ProX 1.5K 12V 1500W MPPT Smart Inverter – 1500 W nominal, 3000 VA peak power · 2000 W maximum PV power. Technical specifications and datasheet at Voltekno.",
+  "src": "c6a3c255a5"
+ },
+ "tommatech-prox-8k-48v-8000w-mppt-akilli-inverter": {
+  "name": "TommaTech ProX 8K 48V 8000W MPPT Smart Inverter",
+  "description": "TommaTech ProX 8K 48V 8000W MPPT Smart Inverter – 8000 W nominal, 16000 VA peak power · 10,000 W maximum PV power. Technical specifications and datasheet at Voltekno.",
+  "src": "5deff3a31d"
+ },
+ "tommatech-prox-mppt-akilli-inverter-4-2-kw-24v-6-2-kw-48v": {
+  "name": "TommaTech ProX MPPT Smart Inverter",
+  "description": "TommaTech ProX MPPT Smart Inverter – Pure sine wave output · Wide PV input range · Built-in MPPT solar charge controller. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatofgttprox42k24mf00238": "4.2K 24V 4200W MPPT Smart Inverter",
+   "tommatofgttprox62k48mf00239": "6.2K 48V 6200W MPPT Smart Inverter"
+  },
+  "src": "a033e5fca7"
+ },
+ "tommatech-r-serisi-500w-448wh-tasinabilir-guc-istasyonu": {
+  "name": "TommaTech R Series 500W 448Wh Portable Power Station",
+  "description": "TommaTech R Series 500W 448Wh Portable Power Station – 448 Wh LiFePO4 battery, 4000+ cycles · 500 W AC output. Technical specifications and datasheet at Voltekno.",
+  "src": "77882a5a4f"
+ },
+ "tommatech-r-serisi-guc-istasyonu-panel-baglanti-kablosu-daire-soket": {
+  "name": "TommaTech R Series Power Station Panel Connection Cable (Round Socket)",
+  "description": "TommaTech R Series Power Station Panel Connection Cable – MC4 - DC5525 connection · 18 AWG cross-section · 1 m length. Technical specifications and datasheet at Voltekno.",
+  "src": "e16927f7f6"
+ },
+ "tommatech-r32-monofaze-split-isi-pompasi-dis-unite-12-kw-18-kw": {
+  "name": "TommaTech R32 Single-Phase Split Heat Pump Outdoor Unit",
+  "description": "TommaTech R32 Single-Phase Split Heat Pump Outdoor Unit – Split design: water circuit inside the building · R32 refrigerant. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommathptt12r32mfdis00349": "12 kW R32 Single-Phase Split Heat Pump Outdoor Unit",
+   "tommathptt18r32mfdis00350": "18 kW R32 Single-Phase Split Heat Pump Outdoor Unit"
+  },
+  "src": "a3c9c74052"
+ },
+ "tommatech-r32-split-isi-pompasi-ic-unite-8-12-kw-18-22-kw": {
+  "name": "TommaTech R32 Split Heat Pump Indoor Unit",
+  "description": "TommaTech R32 Split Heat Pump Indoor Unit – Split system indoor unit · Compatible with R32 outdoor units. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommathptt812r32mfic00353": "8-12 kW R32 Single-Phase Split Heat Pump Indoor Unit",
+   "tommathptt1822r32mfic00354": "18-22 kW R32 Single-Phase Split Heat Pump Indoor Unit"
+  },
+  "src": "637fd5264e"
+ },
+ "tommatech-r32-trifaze-split-isi-pompasi-dis-unite-12-kw-22-kw": {
+  "name": "TommaTech R32 Three-Phase Split Heat Pump Outdoor Unit",
+  "description": "TommaTech R32 Three-Phase Split Heat Pump Outdoor Unit – Split design: water circuit inside the building · R32 refrigerant. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommathptt12r32tfdis00351": "12 kW R32 Three-Phase Split Heat Pump Outdoor Unit",
+   "tommathptt22r32tfdis00352": "22 kW R32 Three-Phase Split Heat Pump Outdoor Unit"
+  },
+  "src": "4d9c1f04db"
+ },
+ "tommatech-rack-moduler-batarya-paralel-kablo-seti-15-cm": {
+  "name": "TommaTech Rack/Modular Battery Parallel Cable Set 15 cm",
+  "description": "TommaTech Rack/Modular Battery Parallel Cable Set 15 cm – For rack/modular series batteries · 15 cm pre-terminated cable. Details at Voltekno.",
+  "src": "03a97af51a"
+ },
+ "tommatech-rack-moduler-batarya-seri-guc-kablosu-seti-1-5-m": {
+  "name": "TommaTech Rack/Modular Battery Series Power Cable Set 1.5 m",
+  "description": "TommaTech Rack/Modular Battery Series Power Cable Set 1.5 m – For rack/modular series batteries · 1.5 m pre-terminated power cable. Details at Voltekno.",
+  "src": "23181a7b25"
+ },
+ "tommatech-rfid-arac-sarj-istasyonu-karti": {
+  "name": "TommaTech RFID EV Charging Station Card",
+  "description": "TommaTech RFID EV Charging Station Card – Contactless RFID card · Prevents unauthorized use. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "468f1e4e80"
+ },
+ "tommatech-sarj-takip-ortak-sarj-yonetimi-yazilimi": {
+  "name": "TommaTech Charge Tracking Shared Charging Management Software",
+  "description": "TommaTech Charge Tracking Shared Charging Management Software – Charging management for shared-use areas · Per-user charge tracking. Details at Voltekno.",
+  "src": "3a17f05493"
+ },
+ "tommatech-sc-serisi-entegre-tip-batarya-sarj-unitesi-24v-48v": {
+  "name": "TommaTech SC Series Integrated-Type Battery Charger",
+  "description": "TommaTech SC Series Integrated-Type Battery Charger – For 24 V and 48 V battery systems · Current options from 10 to 40 A. Details at Voltekno.",
+  "variants": {
+   "tommatsrjttacent24v10a00204": "24V 10A Integrated-Type Battery Charger (SC)",
+   "tommatsrjttacent24v40asc00206": "24V 40A Integrated-Type Battery Charger (SC)",
+   "tommatsrjttacent48v20asc00208": "48V 20A Integrated-Type Battery Charger (SC)",
+   "tommatsrjttacent48v25asc00210": "48V 25A Integrated-Type Battery Charger (SC)"
+  },
+  "src": "34685ca574"
+ },
+ "tommatech-solar-pompa-surucusu-4g-uzaktan-erisim-cihazi": {
+  "name": "TommaTech Solar Pump Drive 4G Remote Access Device",
+  "description": "TommaTech Solar Pump Drive 4G Remote Access Device – 4G mobile network connectivity. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "85b9f59dea"
+ },
+ "tommatech-solar-pompa-surucusu-diyot-modulu-mdk55a-mdk90a": {
+  "name": "TommaTech Solar Pump Drive Diode Module",
+  "description": "TommaTech Solar Pump Drive Diode Module – Compatible with SPI series solar pump drives · Reverse current protection. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatslmdiyodmdk55a00316": "MDK55A Solar Pump Drive Diode Module (For 7.5-11 kW Drives)",
+   "tommatslmdiyodmdk90a00318": "MDK90A Solar Pump Drive Diode Module (For 18.5-30 kW Drives)"
+  },
+  "src": "8a51012bce"
+ },
+ "tommatech-spi-serisi-solar-pompa-surucusu-2-2-kw-630-kw": {
+  "name": "TommaTech SPI Series Solar Pump Drive (2.2 kW - 630 kW)",
+  "description": "TommaTech SPI Series Solar Pump Drive – Runs pumps directly on solar power without batteries. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatspitt0222mf00286": "2.2 kW Single-Phase 220V Solar Pump Drive (450VDC)",
+   "tommatspitt0540tf00288": "4 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt0655tf00289": "5.5 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt11220tf00291": "22 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt12300tf00292": "30 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt13370tf00293": "37 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt15550tf00295": "55 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt16750tf00296": "75 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt17900tf00297": "90 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt181100tf00298": "110 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt222500tf00304": "250 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt243150tf00305": "315 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt243550tf00306": "355 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt245000tf00309": "500 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt246300tf00310": "630 kW Three-Phase 380V Solar Pump Drive (900VDC)"
+  },
+  "src": "8e92865c47"
+ },
+ "tommatech-spi-serisi-trifaze-solar-pompa-surucusu-7-5-kw-450-kw-900-1000vdc": {
+  "name": "TommaTech SPI Series Three-Phase Solar Pump Drive",
+  "description": "TommaTech SPI Series Three-Phase Solar Pump Drive – Runs pumps directly on solar power without batteries. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatspitt10185tf00290": "18.5 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt14450tf00294": "45 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt191320tf00299": "132 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt201600tf00300": "160 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt211850tf00301": "185 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt200tf00302": "200 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt220tf00303": "220 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt244000tf00307": "400 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatspitt244500tf00308": "450 kW Three-Phase 380V Solar Pump Drive (900VDC)",
+   "tommatinvslmtfv275kw00311": "7.5 kW Three-Phase 380V Solar Pump Drive (1000VDC)",
+   "tommatinvslmtfv211kw00312": "11 kW Three-Phase 380V Solar Pump Drive (1000VDC)",
+   "tommatinvslmtfv215kw00313": "15 kW Three-Phase 380V Solar Pump Drive (1000VDC)"
+  },
+  "src": "d66bd4a7dd"
+ },
+ "tommatech-titan-evi-inverter-isi-pompasi-16-kw-monofaze-16-20-26-kw-trifaze": {
+  "name": "TommaTech Titan EVI Inverter Heat Pump",
+  "description": "TommaTech Titan EVI Inverter Heat Pump – Monobloc design, no indoor unit required · Full DC inverter and EVI technology. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommathprstmf016nm100330": "16 kW Single-Phase EVI Inverter Heat Pump (Heating and Cooling)",
+   "tommathprsttf016nm100331": "16 kW Three-Phase EVI Inverter Heat Pump (Heating and Cooling)",
+   "tommathprsttf020nm100332": "20 kW Three-Phase EVI Inverter Heat Pump (Heating and Cooling)",
+   "tommathprsttf026nm100333": "26 kW Three-Phase EVI Inverter Heat Pump (Heating and Cooling)"
+  },
+  "src": "bda063053b"
+ },
+ "tommatech-titan-monofaze-evi-inverter-isi-pompasi-9-kw-13-kw": {
+  "name": "TommaTech Titan Single-Phase EVI Inverter Heat Pump",
+  "description": "TommaTech Titan Single-Phase EVI Inverter Heat Pump – Monobloc design, no indoor unit required · Full DC inverter and EVI technology. Details at Voltekno.",
+  "variants": {
+   "tommathprstmf009nm100328": "9 kW Single-Phase EVI Inverter Heat Pump (Heating and Cooling)",
+   "tommathprstmf013nm100329": "13 kW Single-Phase EVI Inverter Heat Pump (Heating and Cooling)"
+  },
+  "src": "e7cf2f92fb"
+ },
+ "tommatech-tpe-50-mm2-kirmizi-batarya-guc-kablosu-1-5-m": {
+  "name": "TommaTech TPE 50 mm² Red Battery Power Cable 1.5 m",
+  "description": "TommaTech TPE 50 mm² Red Battery Power Cable 1.5 m – 50 mm² cross-section, Class 5 flexible conductor · TPE insulation · Red. Details at Voltekno.",
+  "src": "b6c630198a"
+ },
+ "tommatech-trio-22-kw-trifaze-ac-arac-sarj-istasyonu-wi-fi-lcd": {
+  "name": "TommaTech Trio 22 kW Three-Phase AC EV Charging Station (Wi-Fi, LCD)",
+  "description": "TommaTech Trio 22 kW Three-Phase AC EV Charging Station – 22 kW three-phase AC charging · User authentication via RFID card. Technical specifications and datasheet at Voltekno.",
+  "src": "cdf7e3d7dd"
+ },
+ "tommatech-trio-castor-trifaze-on-grid-inverter-20-kw-25-kw": {
+  "name": "TommaTech Trio Castor Three-Phase On-Grid Inverter",
+  "description": "TommaTech Trio Castor Three-Phase On-Grid Inverter – Three-phase 230/400 V grid connection · 2 MPPTs, 2 strings per MPPT. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatinvttongcastor20kt00123": "20 kW Three-Phase On-Grid Inverter",
+   "tommatinvttongcastor25kt00124": "25 kW Three-Phase On-Grid Inverter"
+  },
+  "src": "a34e3d748b"
+ },
+ "tommatech-trio-evo-30-kw-trifaze-on-grid-inverter": {
+  "name": "TommaTech Trio Evo 30 kW Three-Phase On-Grid Inverter",
+  "description": "TommaTech Trio Evo 30 kW Three-Phase On-Grid Inverter – 30 kW nominal, 33 kVA maximum AC power · 39 kW maximum PV input power. Details at Voltekno.",
+  "src": "f7b50547d9"
+ },
+ "tommatech-trio-force-100-kw-trifaze-on-grid-inverter": {
+  "name": "TommaTech Trio Force 100 kW Three-Phase On-Grid Inverter",
+  "description": "TommaTech Trio Force 100 kW Three-Phase On-Grid Inverter – 100 kW nominal, 110 kVA maximum AC power · Up to 150 kW PV input power. Details at Voltekno.",
+  "src": "d167978add"
+ },
+ "tommatech-trio-hybrid-s-10-kw-hv-aio-trifaze-hibrit-inverter": {
+  "name": "TommaTech Trio Hybrid S 10 kW HV AIO Three-Phase Hybrid Inverter",
+  "description": "TommaTech Trio Hybrid S 10 kW HV AIO Three-Phase Hybrid Inverter – 10 kW three-phase hybrid inverter. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "516da204a9"
+ },
+ "tommatech-trio-hybrid-s-12-kw-lv-aio-trifaze-hibrit-inverter": {
+  "name": "TommaTech Trio Hybrid S 12 kW LV AIO Three-Phase Hybrid Inverter",
+  "description": "TommaTech Trio Hybrid S 12 kW LV AIO Three-Phase Hybrid Inverter – 12 kW three-phase hybrid inverter. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "105130a33e"
+ },
+ "tommatech-trio-hybrid-s-15-kw-hv-aio-trifaze-hibrit-inverter": {
+  "name": "TommaTech Trio Hybrid S 15 kW HV AIO Three-Phase Hybrid Inverter",
+  "description": "TommaTech Trio Hybrid S 15 kW HV AIO Three-Phase Hybrid Inverter – 15 kW three-phase hybrid inverter. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "0af1198a3d"
+ },
+ "tommatech-trio-hybrid-s-20-kw-hv-aio-trifaze-hibrit-inverter": {
+  "name": "TommaTech Trio Hybrid S 20 kW HV AIO Three-Phase Hybrid Inverter",
+  "description": "TommaTech Trio Hybrid S 20 kW HV AIO Three-Phase Hybrid Inverter – 20 kW three-phase hybrid inverter. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "ecb16251c3"
+ },
+ "tommatech-trio-hybrid-s-hv-trifaze-hibrit-inverter-10-kw-20-kw": {
+  "name": "TommaTech Trio Hybrid S HV Three-Phase Hybrid Inverter",
+  "description": "TommaTech Trio Hybrid S HV Three-Phase Hybrid Inverter – Three-phase hybrid inverter · High-voltage lithium battery support. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatinvtthy10shv00144": "10 kW HV Three-Phase Hybrid Inverter",
+   "tommatinvtthy20shv00145": "20 kW HV Three-Phase Hybrid Inverter"
+  },
+  "src": "120fc7a8eb"
+ },
+ "tommatech-trio-inova-trifaze-on-grid-inverter-5-kw-10-kw-15-kw": {
+  "name": "TommaTech Trio Inova Three-Phase On-Grid Inverter",
+  "description": "TommaTech Trio Inova Three-Phase On-Grid Inverter – Three-phase 230/400 V grid connection. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatinvttonginova5ktf00120": "5 kW Three-Phase On-Grid Inverter",
+   "tommatinvttonginova10ktf00121": "10 kW Three-Phase On-Grid Inverter",
+   "tommatinvttonginova15ktf00122": "15 kW Three-Phase On-Grid Inverter"
+  },
+  "src": "1c6fb81b5e"
+ },
+ "tommatech-trio-smart-meter-ct-li-akim-trafolu-trifaze-sayac": {
+  "name": "TommaTech Trio Smart Meter with CT (Three-Phase Meter with Current Transformer)",
+  "description": "TommaTech Trio Smart Meter with CT – Energy metering at the grid connection point · Zero-export applications. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "e0fbfc9aa0"
+ },
+ "tommatech-trio-smart-meter-trifaze-akilli-sayac": {
+  "name": "TommaTech Trio Smart Meter (Three-Phase Smart Meter)",
+  "description": "TommaTech Trio Smart Meter – Energy metering at the grid connection point · Zero-export applications. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "98839e4907"
+ },
+ "tommatech-trio-zen-trifaze-on-grid-inverter-40-kw-50-kw": {
+  "name": "TommaTech Trio Zen Three-Phase On-Grid Inverter (40 kW / 50 kW)",
+  "description": "TommaTech Trio Zen Three-Phase On-Grid Inverter – 3 / 4 MPPT inputs, 40 A per MPPT. Technical specifications, datasheet and current price at Voltekno.",
+  "variants": {
+   "tommatinvttongzen40ktf00126": "40 kW Three-Phase On-Grid Inverter",
+   "tommatinvttongzen50ktf00127": "50 kW Three-Phase On-Grid Inverter"
+  },
+  "src": "872caec6c9"
+ },
+ "tommatech-triome-10-kw-r290-monofaze-isi-pompasi-130-l-tank-dahil": {
+  "name": "TommaTech Triome 10 kW Single-Phase Residential Heat Pump (130 L Tank Included)",
+  "description": "TommaTech Triome 10 kW R290 Single-Phase Heat Pump – Heating, cooling and hot water in one unit · 130 L integrated hot water tank. Details at Voltekno.",
+  "src": "aa6d8ebade"
+ },
+ "tommatech-uno-atom-n3k-3-kw-monofaze-on-grid-inverter": {
+  "name": "TommaTech Uno Atom N3K 3 kW Single-Phase On-Grid Inverter",
+  "description": "TommaTech Uno Atom N3K 3 kW Single-Phase On-Grid Inverter – 3 kW nominal, 3.3 kVA maximum AC power. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "160792e51e"
+ },
+ "tommatech-uno-home-n5k-5-kw-monofaze-on-grid-inverter": {
+  "name": "TommaTech Uno Home N5K 5 kW Single-Phase On-Grid Inverter",
+  "description": "TommaTech Uno Home N5K 5 kW Single-Phase On-Grid Inverter – 5 kW nominal, 5.5 kVA maximum AC power. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "f5f54c2ef9"
+ },
+ "tommatech-uno-hybrid-n12k-12-kw-monofaze-lv-hibrit-inverter": {
+  "name": "TommaTech Uno Hybrid N12K 12 kW Single-Phase LV Hybrid Inverter",
+  "description": "TommaTech Uno Hybrid N12K 12 kW Single-Phase LV Hybrid Inverter – 12 kW single-phase hybrid inverter · 48 V LV battery support. Technical specifications and datasheet at Voltekno.",
+  "src": "6b1b6022b0"
+ },
+ "tommatech-uno-hybrid-n16k-16-kw-monofaze-lv-hibrit-inverter": {
+  "name": "TommaTech Uno Hybrid N16K 16 kW Single-Phase LV Hybrid Inverter",
+  "description": "TommaTech Uno Hybrid N16K 16 kW Single-Phase LV Hybrid Inverter – 16 kW single-phase hybrid inverter · 48 V LV battery support. Technical specifications and datasheet at Voltekno.",
+  "src": "4df7db7e87"
+ },
+ "tommatech-uno-hybrid-n6k-6-kw-monofaze-lv-hibrit-inverter": {
+  "name": "TommaTech Uno Hybrid N6K 6 kW Single-Phase LV Hybrid Inverter",
+  "description": "TommaTech Uno Hybrid N6K 6 kW Single-Phase LV Hybrid Inverter – 6 kW single-phase hybrid inverter · 48 V LV battery support. Technical specifications and datasheet at Voltekno.",
+  "src": "bc83d16741"
+ },
+ "tommatech-uno-hybrid-n8k-8-kw-monofaze-lv-hibrit-inverter": {
+  "name": "TommaTech Uno Hybrid N8K 8 kW Single-Phase LV Hybrid Inverter",
+  "description": "TommaTech Uno Hybrid N8K 8 kW Single-Phase LV Hybrid Inverter – 8 kW single-phase hybrid inverter · 48 V LV battery support. Technical specifications and datasheet at Voltekno.",
+  "src": "1cf548f8da"
+ },
+ "tommatech-uno-smart-meter-monofaze-akilli-sayac": {
+  "name": "TommaTech Uno Smart Meter (Single-Phase Smart Meter)",
+  "description": "TommaTech Uno Smart Meter – Energy metering at the grid connection point · Zero-export applications. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "3e6f10f6eb"
+ },
+ "tommatech-v-serisi-guc-istasyonu-panel-baglanti-kablosu-mc4-xt60": {
+  "name": "TommaTech V Series Power Station Panel Connection Cable (MC4-XT60)",
+  "description": "TommaTech V Series Power Station Panel Connection Cable – MC4 - XT60 connection · 12 AWG cross-section · 1 m length. Technical specifications and datasheet at Voltekno.",
+  "src": "7cf46c44e1"
+ },
+ "tommatech-v-serisi-plus-tasinabilir-guc-istasyonu-1030wh-2240wh": {
+  "name": "TommaTech V Series Plus Portable Power Station",
+  "description": "TommaTech V Series Plus Portable Power Station – LiFePO4 battery, 4000+ cycle life · MPPT solar input · Fast AC charging. Details at Voltekno.",
+  "variants": {
+   "tommatmgiv1200wpls00106": "1030Wh Portable Power Station (1800W AC Charging)",
+   "tommatmgiv2400wpls00107": "2400W 2240Wh Portable Power Station"
+  },
+  "src": "dc9080d726"
+ },
+ "tommatech-yuksek-guclu-solar-pompa-surucusu-diyot-modulu-132-kw-250-kw": {
+  "name": "TommaTech High-Power Solar Pump Drive Diode Module",
+  "description": "TommaTech High-Power Solar Pump Drive Diode Module – Compatible with high-power SPI drives · Reverse current protection. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "tommatslmdiyodmdk110a00322": "MDK110A Solar Pump Drive Diode Module (For 132 kW Drives)",
+   "tommatslmdiyodmdk110a00323": "MDK110A Solar Pump Drive Diode Module (For 160 kW Drives)",
+   "tommatslmdiyodmdk110a00324": "MDK110A Solar Pump Drive Diode Module (For 185 kW Drives)",
+   "tommatslmdiyodmdc1501600325": "MDC150-16 Solar Pump Drive Diode Module (For 250 kW Drives)"
+  },
+  "src": "ab2cd15a5c"
+ },
+ "victron-3-pinli-erkek-disi-uzatma-kablosu-1-m-2-li-paket": {
+  "name": "Victron 3-Pin Male-Female Extension Cable 1 m (2-Pack)",
+  "description": "Victron 3-Pin Male-Female Extension Cable 1 m – 3-pin male-female circular connector · 1 m length · 2 pcs / pack. Technical specifications and datasheet at Voltekno.",
+  "src": "12145edcd4"
+ },
+ "victron-ac-akim-sensoru": {
+  "name": "Victron AC Current Sensor",
+  "description": "Victron AC Current Sensor – AC line current measurement · Compatible with MultiPlus / Quattro · Monitoring on GX and VRM. Technical specifications and datasheet at Voltekno.",
+  "src": "1909e98e83"
+ },
+ "victron-anl-sigorta-yuvasi": {
+  "name": "Victron ANL Fuse Holder",
+  "description": "Victron ANL Fuse Holder – For ANL-type fuses · Bolted, robust connection · For high-current DC main lines. Details at Voltekno.",
+  "src": "d3d9f02e0d"
+ },
+ "victron-battery-alarm-gx-aku-alarm-cihazi": {
+  "name": "Victron Battery Alarm GX Battery Alarm Device",
+  "description": "Victron Battery Alarm GX Battery Alarm Device – Low and high voltage alarm · Visual and audible warning. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "3b20e7372e"
+ },
+ "victron-battery-balancer-aku-dengeleyici": {
+  "name": "Victron Battery Balancer",
+  "description": "Victron Battery Balancer – Balancing for series-connected 12 V battery pairs. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "adc3cec562"
+ },
+ "victron-blue-smart-ip67-24-8-aku-sarj-cihazi-24v-8a-1-cikis-120v": {
+  "name": "Victron Blue Smart IP67 24/8 Battery Charger (24V 8A, 1 Output, 120V)",
+  "description": "Victron Blue Smart IP67 24/8 Battery Charger – 24 V, 8 A charging current · IP67 fully sealed aluminum housing. Technical specifications and datasheet at Voltekno.",
+  "src": "f64752a389"
+ },
+ "victron-bluesolar-pwm-pro-sicaklik-sensoru": {
+  "name": "Victron BlueSolar PWM-Pro Temperature Sensor",
+  "description": "Victron BlueSolar PWM-Pro Temperature Sensor – Battery temperature measurement · Temperature-compensated charging. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "19a12c1c29"
+ },
+ "victron-bluesolar-pwm-pro-usb-arayuz-kablosu": {
+  "name": "Victron BlueSolar PWM-Pro - USB Interface Cable",
+  "description": "Victron BlueSolar PWM-Pro - USB Interface Cable – Configuration and monitoring via PC · USB connection. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "15fc8efc2f"
+ },
+ "victron-bluesolar-pwm-pro-uzaktan-kontrol-paneli": {
+  "name": "Victron BlueSolar PWM-Pro Remote Control Panel",
+  "description": "Victron BlueSolar PWM-Pro Remote Control Panel – Compatible with the PWM-Pro series · Remote monitoring and configuration. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "ffbb0e8c86"
+ },
+ "victron-bmv-702-712-icin-sicaklik-sensoru": {
+  "name": "Victron Temperature Sensor for BMV-702/712",
+  "description": "Victron Temperature Sensor for BMV-702/712 – Compatible with BMV-702 / BMV-712 · Battery temperature measurement and alarm. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "80f1dce418"
+ },
+ "victron-canusb-arayuz": {
+  "name": "Victron CANUSB Interface",
+  "description": "Victron CANUSB Interface – USB - VE.Can connection · Configuration and software updates · Service and installation tool. Technical specifications and datasheet at Voltekno.",
+  "src": "3f0f55ea92"
+ },
+ "victron-ccgx-wi-fi-modulu-basit": {
+  "name": "Victron CCGX Wi-Fi Module (Simple)",
+  "description": "Victron CCGX Wi-Fi Module – Easy USB connection · Wi-Fi connectivity for the GX device · Internet access for VRM remote monitoring. Details at Voltekno.",
+  "src": "f4ef6ac9c0"
+ },
+ "victron-cyrix-ct-12-24v-120a-aku-birlestirici-kiti": {
+  "name": "Victron Cyrix-ct 12/24V 120A Battery Combiner Kit",
+  "description": "Victron Cyrix-ct 12/24V 120A Battery Combiner Kit – Automatic 12/24 V detection · Bidirectional battery combining. Technical specifications and datasheet at Voltekno.",
+  "src": "cba431a966"
+ },
+ "victron-digital-multi-control-200-200a-gx-uzaktan-kontrol-paneli-90-rj45": {
+  "name": "Victron Digital Multi Control 200/200A GX Remote Control Panel (90° RJ45)",
+  "description": "Victron Digital Multi Control 200/200A GX Remote Control Panel – On / off / charger-only mode. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "08d1395d24"
+ },
+ "victron-digital-multi-control-200-200a-uzaktan-kontrol-paneli": {
+  "name": "Victron Digital Multi Control 200/200A Remote Control Panel",
+  "description": "Victron Digital Multi Control 200/200A Remote Control Panel – On / off / charger-only mode selection. Technical specifications and datasheet at Voltekno.",
+  "src": "98aea00287"
+ },
+ "victron-din35-ray-adaptoru-buyuk-cift": {
+  "name": "Victron DIN35 Rail Adapter Large (Pair)",
+  "description": "Victron DIN35 Rail Adapter Large – 35 mm DIN rail mounting · For large-size devices · 2 pcs / pack. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "29406294c9"
+ },
+ "victron-din35-ray-adaptoru-orta-cift": {
+  "name": "Victron DIN35 Rail Adapter Medium (Pair)",
+  "description": "Victron DIN35 Rail Adapter Medium – 35 mm DIN rail mounting · For medium-size devices · 2 pcs / pack. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "02b23aeac3"
+ },
+ "victron-easyplus-c-12-1600-70-16-inverter-sarj-cihazi-12v-1600va": {
+  "name": "Victron EasyPlus C 12/1600/70-16 Inverter/Charger (12V 1600VA)",
+  "description": "Victron EasyPlus C 12/1600/70-16 Inverter/Charger – Pure sine wave inverter + 70 A charger + transfer switch in a single enclosure. Details at Voltekno.",
+  "src": "9b2b267338"
+ },
+ "victron-ekrano-gx-duvar-montaj-aparati": {
+  "name": "Victron Ekrano GX Wall Mount Bracket",
+  "description": "Victron Ekrano GX Wall Mount Bracket – Surface wall mounting without a panel cutout · Fully compatible with Ekrano GX. Technical specifications and datasheet at Voltekno.",
+  "src": "3e7eba2aff"
+ },
+ "victron-ekrano-gx-sistem-izleme-ekrani": {
+  "name": "Victron Ekrano GX System Monitoring Display",
+  "description": "Victron Ekrano GX System Monitoring Display – 7-inch touchscreen, 1024 × 600 pixels · Built-in GX controller. Technical specifications and datasheet at Voltekno.",
+  "src": "d973c80fc9"
+ },
+ "victron-gx-gsm-ve-gx-lte-aktif-gps-anteni": {
+  "name": "Victron GX GSM and GX LTE Active GPS Antenna",
+  "description": "Victron GX GSM and GX LTE Active GPS Antenna – Compatible with GX GSM / GX LTE modems · Location tracking via VRM. Technical specifications and datasheet at Voltekno.",
+  "src": "b6c5297866"
+ },
+ "victron-gx-io-extender-150-giris-cikis-genisletme-modulu": {
+  "name": "Victron GX IO-Extender 150 Input/Output Expansion Module",
+  "description": "Victron GX IO-Extender 150 Input/Output Expansion Module – USB connection to the GX device. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "5726d669ca"
+ },
+ "victron-gx-tank-140-tank-seviye-olcum-modulu": {
+  "name": "Victron GX Tank 140 Tank Level Measurement Module",
+  "description": "Victron GX Tank 140 Tank Level Measurement Module – 4 tank inputs · Compatible with 4-20 mA and 0-10 V sensors · USB connection to the GX device. Details at Voltekno.",
+  "src": "291f780827"
+ },
+ "victron-gx-touch-50-dokunmatik-ekran": {
+  "name": "Victron GX Touch 50 Touchscreen Display",
+  "description": "Victron GX Touch 50 Touchscreen Display – 5-inch touchscreen · Fully compatible with Cerbo GX. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "aceec61f98"
+ },
+ "victron-gx-touch-70-duvar-montaj-aparati": {
+  "name": "Victron GX Touch 70 Wall Mount Bracket",
+  "description": "Victron GX Touch 70 Wall Mount Bracket – Surface wall mounting without a panel cutout · Compatible with GX Touch 70. Technical specifications and datasheet at Voltekno.",
+  "src": "8a5877df85"
+ },
+ "victron-inverter-control-inverter-uzaktan-kontrol-paneli": {
+  "name": "Victron Inverter Control Inverter Remote Control Panel",
+  "description": "Victron Inverter Control Inverter Remote Control Panel – Remote on / off · Operation and alarm LEDs. Technical specifications and datasheet at Voltekno.",
+  "src": "fde38e558f"
+ },
+ "victron-inverter-control-ve-direct-inverter-uzaktan-kontrol-paneli": {
+  "name": "Victron Inverter Control VE.Direct Inverter Remote Control Panel",
+  "description": "Victron Inverter Control VE.Direct Inverter Remote Control Panel – Remote on / off · ECO mode selection. Technical specifications and datasheet at Voltekno.",
+  "src": "9ee91cdd2a"
+ },
+ "victron-inverter-rs-smart-solar-48-6000-mppt-li-akilli-inverter-48v-6000va": {
+  "name": "Victron Inverter RS Smart Solar 48/6000 Smart Inverter with MPPT (48V 6000VA)",
+  "description": "Victron Inverter RS Smart Solar 48/6000 Smart Inverter with MPPT – Inverter + MPPT solar charger + DC-DC converter in a single enclosure. Details at Voltekno.",
+  "src": "044fb9181d"
+ },
+ "victron-lithium-superpack-12-8v-100ah-lityum-aku-m8": {
+  "name": "Victron Lithium SuperPack 12.8V 100Ah Lithium Battery (M8)",
+  "description": "Victron Lithium SuperPack 12.8V 100Ah Lithium Battery – LiFePO4, 12.8 V / 100 Ah / 1280 Wh. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "28f29dfc44"
+ },
+ "victron-lithium-superpack-12-8v-20ah-lityum-aku-m5": {
+  "name": "Victron Lithium SuperPack 12.8V 20Ah Lithium Battery (M5)",
+  "description": "Victron Lithium SuperPack 12.8V 20Ah Lithium Battery – LiFePO4, 12.8 V / 20 Ah / 256 Wh · 30 A continuous, 80 A peak discharge current. Details at Voltekno.",
+  "src": "bdc0115599"
+ },
+ "victron-lithium-superpack-12-8v-60ah-lityum-aku-m6": {
+  "name": "Victron Lithium SuperPack 12.8V 60Ah Lithium Battery (M6)",
+  "description": "Victron Lithium SuperPack 12.8V 60Ah Lithium Battery – LiFePO4, 12.8 V / 60 Ah / 768 Wh · 30 A continuous, 80 A peak discharge current. Details at Voltekno.",
+  "src": "38400a1035"
+ },
+ "victron-lithium-superpack-lityum-aku-12-8v-200ah-25-6v-50ah-m8": {
+  "name": "Victron Lithium SuperPack Lithium Battery",
+  "description": "Victron Lithium SuperPack Lithium Battery – LiFePO4 chemistry, built-in BMS · 12.8 V / 200 Ah and 25.6 V / 50 Ah options. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "victrobat51212070502123": "12.8V 200Ah Lithium Battery (M8)",
+   "victrobat52405070502124": "25.6V 50Ah Lithium Battery (M8)"
+  },
+  "src": "4da553885b"
+ },
+ "victron-lynx-distributor-dc-dagitim-modulu-m10": {
+  "name": "Victron Lynx Distributor DC Distribution Module (M10)",
+  "description": "Victron Lynx Distributor DC Distribution Module – 4 MEGA fuse holders · M10 busbar connection · Fuse status LED indicator. Details at Voltekno.",
+  "src": "17cb94d15c"
+ },
+ "victron-moduler-mega-sigorta-yuvasi": {
+  "name": "Victron Modular MEGA Fuse Holder",
+  "description": "Victron Modular MEGA Fuse Holder – For MEGA-type fuses · Modular design that can be joined side by side · Protective cover. Details at Voltekno.",
+  "src": "d159738837"
+ },
+ "victron-mppt-control-uzaktan-ekran-ve-direct-kablo-haric": {
+  "name": "Victron MPPT Control Remote Display (VE.Direct Cable Not Included)",
+  "description": "Victron MPPT Control Remote Display – Remote display for VE.Direct MPPTs · Monitoring and configuration · Panel mounting. Technical specifications and datasheet at Voltekno.",
+  "src": "ef674ea70d"
+ },
+ "victron-mppt-wirebox-m-kablo-kapagi": {
+  "name": "Victron MPPT WireBox-M Cable Cover",
+  "description": "Victron MPPT WireBox-M Cable Cover – Terminal protection · Tidy cable entry · Compatible with suitable MPPT models. Technical specifications and datasheet at Voltekno.",
+  "src": "9784400783"
+ },
+ "victron-multiplus-ii-48-3000-35-50-inverter-sarj-cihazi-48v-3000va-120v-ul-1741": {
+  "name": "Victron MultiPlus-II 48/3000/35-50 Inverter/Charger (48V 3000VA, 120V, UL 1741)",
+  "description": "Victron MultiPlus-II 48/3000/35-50 Inverter/Charger – 48 V DC, 3000 VA pure sine wave inverter · 5500 W peak power. Technical specifications and datasheet at Voltekno.",
+  "src": "b3448cce0c"
+ },
+ "victron-on-sarj-pre-charge-kablosu": {
+  "name": "Victron Pre-Charge Cable",
+  "description": "Victron Pre-Charge Cable – Limits inrush current · Prevents sparks and blown fuses when connecting. Technical specifications and datasheet at Voltekno.",
+  "src": "54678479c9"
+ },
+ "victron-peak-power-pack-tasinabilir-lityum-aku-12-8v-20ah-30ah-40ah": {
+  "name": "Victron Peak Power Pack Portable Lithium Battery",
+  "description": "Victron Peak Power Pack Portable Lithium Battery – LiFePO4 chemistry, 12.8 V · Built-in charger and solar regulator. Technical specifications and datasheet at Voltekno.",
+  "variants": {
+   "victroppp01202000002117": "20Ah 256Wh Portable Lithium Battery",
+   "victroppp01203000002118": "30Ah 384Wh Portable Lithium Battery",
+   "victroppp01204000002119": "40Ah 512Wh Portable Lithium Battery"
+  },
+  "src": "bf2db6ab75"
+ },
+ "victron-phoenix-24-250-ve-direct-tam-sinus-inverter-24v-250va-schuko": {
+  "name": "Victron Phoenix 24/250 VE.Direct Pure Sine Wave Inverter (24V 250VA, Schuko)",
+  "description": "Victron Phoenix 24/250 VE.Direct Pure Sine Wave Inverter – 24 V DC input, 230 V AC pure sine wave output · 250 VA nominal power. Technical specifications and datasheet at Voltekno.",
+  "src": "fff0599db6"
+ },
+ "victron-phoenix-charger-control-uzaktan-kontrol-paneli": {
+  "name": "Victron Phoenix Charger Control Remote Control Panel",
+  "description": "Victron Phoenix Charger Control Remote Control Panel – Remote on / off · Charge current limiting. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "b7b79cb4e1"
+ },
+ "victron-rj12-utp-kablo-1-8-m": {
+  "name": "Victron RJ12 UTP Cable 1.8 m",
+  "description": "Victron RJ12 UTP Cable 1.8 m – With RJ12 connectors · 1.8 m length · Original Victron cable. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "26025e7e79"
+ },
+ "victron-rs232-usb-donusturucu": {
+  "name": "Victron RS232 - USB Converter",
+  "description": "Victron RS232 - USB Converter – RS232 serial port - USB conversion · Computer connection for legacy interfaces. Technical specifications and datasheet at Voltekno.",
+  "src": "457422188a"
+ },
+ "victron-rs485-usb-arayuz-kablosu-1-8-m-5-m": {
+  "name": "Victron RS485 - USB Interface Cable (1.8 m / 5 m)",
+  "description": "Victron RS485 - USB Interface Cable – RS485 - USB conversion · Energy meter - GX device connection · 1.8 m and 5 m options. Details at Voltekno.",
+  "variants": {
+   "victroass03057201801886": "1.8 m",
+   "victroass03057205001887": "5 m"
+  },
+  "src": "3e785dce50"
+ },
+ "victron-shs-200-aku-kutusu": {
+  "name": "Victron SHS 200 Battery Box",
+  "description": "Victron SHS 200 Battery Box – Compatible with SHS 200 · Battery protection and tidy mounting. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "ffb6df05b7"
+ },
+ "victron-shs-200-mppt-v3-0-kullandikca-ode-solar-ev-sistemi-mc4": {
+  "name": "Victron SHS 200 MPPT v3.0 Pay-As-You-Go Solar Home System (MC4)",
+  "description": "Victron SHS 200 MPPT v3.0 Pay-As-You-Go Solar Home System – Built-in MPPT solar charge control · Pay-as-you-go infrastructure. Details at Voltekno.",
+  "src": "f7b5f1da25"
+ },
+ "victron-shs-200-solar-kablo-5-m": {
+  "name": "Victron SHS 200 Solar Cable 5 m",
+  "description": "Victron SHS 200 Solar Cable 5 m – Compatible with SHS 200 · 5 m length. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "f95aabe58c"
+ },
+ "victron-skylla-i-control-gx-uzaktan-kontrol-paneli-90-rj45": {
+  "name": "Victron Skylla-i Control GX Remote Control Panel (90° RJ45)",
+  "description": "Victron Skylla-i Control GX Remote Control Panel – Remote on / off · Charge current limit setting · Status LEDs. Details at Voltekno.",
+  "src": "b27959a9b9"
+ },
+ "victron-smallbms-lityum-batarya-yonetim-sistemi": {
+  "name": "Victron smallBMS Lithium Battery Management System",
+  "description": "Victron smallBMS Lithium Battery Management System – For Lithium Battery Smart batteries · Load disconnect and charge disconnect outputs. Details at Voltekno.",
+  "src": "1c0603802d"
+ },
+ "victron-smallbms-ng-lityum-batarya-yonetim-sistemi": {
+  "name": "Victron smallBMS NG Lithium Battery Management System",
+  "description": "Victron smallBMS NG Lithium Battery Management System – For Lithium NG batteries · Load disconnect and charge disconnect outputs. Technical specifications and datasheet at Voltekno.",
+  "src": "de261996e8"
+ },
+ "victron-smart-battery-sense-kablosuz-aku-sensoru-10-m-menzil": {
+  "name": "Victron Smart Battery Sense Wireless Battery Sensor (10 m Range)",
+  "description": "Victron Smart Battery Sense Wireless Battery Sensor – Wireless voltage and temperature measurement · VE.Smart Networking compatibility. Technical specifications and datasheet at Voltekno.",
+  "src": "3be4d29d93"
+ },
+ "victron-smart-bms-12-200-lityum-batarya-yonetim-sistemi": {
+  "name": "Victron Smart BMS 12/200 Lithium Battery Management System",
+  "description": "Victron Smart BMS 12/200 Lithium Battery Management System – For 12.8 V Lithium Battery Smart batteries. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "99dccfd237"
+ },
+ "victron-smart-bms-cl-12-100-baglanti-kablosu": {
+  "name": "Victron Smart BMS CL 12/100 Connection Cable",
+  "description": "Victron Smart BMS CL 12/100 Connection Cable – Compatible with Smart BMS CL 12/100 · Original Victron cable. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "97ee5b6fab"
+ },
+ "victron-smart-bms-cl-12-100-lityum-batarya-yonetim-sistemi": {
+  "name": "Victron Smart BMS CL 12/100 Lithium Battery Management System",
+  "description": "Victron Smart BMS CL 12/100 Lithium Battery Management System – Alternator current limiting. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "238859e6cc"
+ },
+ "victron-smartsolar-takilabilir-ekran-pluggable-display": {
+  "name": "Victron SmartSolar Pluggable Display",
+  "description": "Victron SmartSolar Pluggable Display – Plugs directly onto the MPPT · Displays real-time values · On-device configuration. Details at Voltekno.",
+  "src": "b62f48ad28"
+ },
+ "victron-solidswitch-104-kati-hal-anahtari": {
+  "name": "Victron SolidSwitch 104 Solid-State Switch",
+  "description": "Victron SolidSwitch 104 Solid-State Switch – Solid-state DC switching · Remote control input. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "5a9fc01656"
+ },
+ "victron-ters-ceviren-inverting-uzaktan-ac-kapa-kablosu": {
+  "name": "Victron Inverting Remote On/Off Cable",
+  "description": "Victron Inverting Remote On/Off Cable – Inverts the control signal. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "4a15eedba6"
+ },
+ "victron-ters-cevirmeyen-non-inverting-uzaktan-ac-kapa-kablosu": {
+  "name": "Victron Non-Inverting Remote On/Off Cable",
+  "description": "Victron Non-Inverting Remote On/Off Cable – Passes the signal through directly. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "ff779fb9ec"
+ },
+ "victron-ufr1001e-ada-modu-koruma-anti-islanding-rolesi": {
+  "name": "Victron UFR1001E Anti-Islanding Protection Relay",
+  "description": "Victron UFR1001E Anti-Islanding Protection Relay – Voltage and frequency monitoring · Anti-islanding protection. Technical specifications and datasheet at Voltekno.",
+  "src": "857144dfc7"
+ },
+ "victron-ve-bus-bms-ng-lityum-batarya-yonetim-sistemi": {
+  "name": "Victron VE.Bus BMS NG (Lithium Battery Management System)",
+  "description": "Victron VE.Bus BMS NG – For Lithium NG batteries · MultiPlus / Quattro control via VE.Bus · Load and charge disconnect outputs. Details at Voltekno.",
+  "src": "cf3bdef481"
+ },
+ "victron-ve-bus-bms-v2-lityum-batarya-yonetim-sistemi": {
+  "name": "Victron VE.Bus BMS V2 (Lithium Battery Management System)",
+  "description": "Victron VE.Bus BMS V2 – For Lithium Battery Smart batteries · MultiPlus / Quattro control via VE.Bus. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "5ae4b0a911"
+ },
+ "victron-ve-direct-bluetooth-smart-dongle": {
+  "name": "Victron VE.Direct Bluetooth Smart Dongle",
+  "description": "Victron VE.Direct Bluetooth Smart Dongle – Bluetooth connectivity for VE.Direct devices · Monitoring and configuration with VictronConnect. Details at Voltekno.",
+  "src": "e945371be6"
+ },
+ "victron-ve-net-gmdss-kontrol-paneli": {
+  "name": "Victron VE.Net GMDSS Control Panel",
+  "description": "Victron VE.Net GMDSS Control Panel – GMDSS battery system monitoring · VE.Net network compatibility · Alarm indicators. Technical specifications, datasheet and current price at Voltekno.",
+  "src": "03f1e925fb"
+ },
+ "victron-venus-gx-sistem-izleme-cihazi": {
+  "name": "Victron Venus GX System Monitoring Device",
+  "description": "Victron Venus GX System Monitoring Device – Screenless GX system controller · Remote monitoring and management via VRM. Technical specifications and datasheet at Voltekno.",
+  "src": "5997a31036"
+ },
+ "victron-vm-3p75ct-trifaze-enerji-sayaci": {
+  "name": "Victron VM-3P75CT Three-Phase Energy Meter",
+  "description": "Victron VM-3P75CT Three-Phase Energy Meter – Three-phase energy measurement · Current transformer-based measurement · Communication with GX devices. Technical specifications and datasheet at Voltekno.",
+  "src": "84a54542b6"
+ },
+ "victron-zigbee-rs485-donusturucu": {
+  "name": "Victron Zigbee - RS485 Converter",
+  "description": "Victron Zigbee - RS485 Converter – Wireless meter connection · Works as a pair with the Zigbee - USB converter. Technical specifications and datasheet at Voltekno.",
+  "src": "81540f8314"
+ }
+}

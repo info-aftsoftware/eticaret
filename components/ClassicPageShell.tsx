@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { ChevronRight } from 'lucide-react'
 import { useL } from '@/lib/i18n-inline'
 

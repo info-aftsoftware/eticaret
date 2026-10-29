@@ -13,6 +13,7 @@ import { sendQuestionAnsweredEmail } from '@/lib/notifications'
 import { getMergedProductById } from '@/lib/catalog-merge'
 import { prisma } from '@/lib/prisma'
 import { EMAIL_RE } from '@/lib/reviews'
+import { productName as localizedProductName, toCatalogLocale } from '@/lib/catalog-en'
 
 export async function GET(request: NextRequest) {
   const auth = await checkAdmin(request)
@@ -66,14 +67,18 @@ export async function PATCH(request: NextRequest) {
     let emailed = false
     const to = q.userEmail.trim()
     if (notify !== false && changed && EMAIL_RE.test(to)) {
-      const productName = q.productName || (await getMergedProductById(q.productId).catch(() => null))?.name || 'Ürün'
+      // Sorunun sorulduğu site dili (eski kayıtlarda Türkçe)
+      const locale = toCatalogLocale(q.locale)
+      const productName =
+        q.productName || (await getMergedProductById(q.productId).catch(() => null))?.name || (locale === 'en' ? 'Product' : 'Ürün')
       emailed = await sendQuestionAnsweredEmail({
         to,
         customerName: q.userName,
         productId: q.productId,
-        productName,
+        productName: localizedProductName({ id: q.productId, name: productName }, locale),
         question: q.question,
         answer: text,
+        locale,
       })
       if (emailed) await prisma.storeQuestion.update({ where: { id }, data: { answerEmailSentAt: new Date() } })
     }

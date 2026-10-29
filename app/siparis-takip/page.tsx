@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import { AlertCircle, Loader2, Package, ShieldCheck, Truck } from 'lucide-react'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useAuthStore } from '@/lib/store/useAuthStore'

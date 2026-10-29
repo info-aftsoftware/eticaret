@@ -1,9 +1,8 @@
 ﻿'use client'
 
 import React, { useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { AlertCircle, ArrowLeft, Banknote, Building2, Check, ChevronDown, CreditCard, Loader2, Lock, MapPin, Package, ShoppingCart, User } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { trackBeginCheckout, trackAddPaymentInfo, cartItemToGa } from '@/lib/analytics'
@@ -34,6 +33,8 @@ import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
+import { useLocale } from 'next-intl'
+import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { useServerError } from '@/lib/server-error-i18n'
 
 /** Sipariş denemesi anahtarı: çift tıklama / ağ tekrarında sunucu ikinci sipariş açmaz, ilkini döner */
@@ -263,9 +264,11 @@ export default function CheckoutPage() {
   const tErr = useServerError()
   const router = useRouter()
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const cartItems = useCartStore((state) => state.items)
+  const catalogLocale = toCatalogLocale(useLocale())
   const cartTotal = useCartStore((state) => state.getTotalPrice())
   const clearCart = useCartStore((state) => state.clearCart)
   const couponCode = useCartStore((state) => state.couponCode)
@@ -763,9 +766,9 @@ export default function CheckoutPage() {
             <span className="absolute -right-0 -top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-md bg-[#0b2540] px-1 text-[11px] font-semibold text-white">{item.quantity}</span>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="line-clamp-2 text-sm font-medium leading-snug text-[#121926]">{item.name}</p>
+            <p className="line-clamp-2 text-sm font-medium leading-snug text-[#121926]">{lineItemName(item, catalogLocale)}</p>
             {item.selectedVariant?.label && <p className="mt-0.5 text-xs text-[#5d6e80]">{item.selectedVariant.label}</p>}
-            <p className="mt-0.5 text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `${item.quantity} pcs`)} × {formatPrice(item.price)}</p>
+            <p className="mt-0.5 text-xs text-[#5d6e80]">{L(`${item.quantity} adet`, `Qty ${item.quantity}`)} × {formatPrice(item.price)}</p>
           </div>
           <span className="shrink-0 text-sm font-semibold text-[#121926] tabular-nums">{formatPrice(item.price * item.quantity)}</span>
         </li>

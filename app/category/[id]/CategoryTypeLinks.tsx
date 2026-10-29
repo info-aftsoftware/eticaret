@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { PAGE_CONTAINER } from '@/lib/page-container'

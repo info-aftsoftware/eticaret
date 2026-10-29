@@ -17,6 +17,11 @@ import { getProductDescriptionHtml } from '@/lib/product-descriptions'
 import { withDetails } from '@/lib/catalog-details'
 import { labelMeasurements, variantDistinctLabels } from '@/lib/seo/variant-attributes'
 import legacyProductRedirects from '@/lib/legacy-product-redirects.json'
+import { getLocale } from 'next-intl/server'
+import { localHref } from '@/lib/i18n/server'
+import { localizeSiteUrls, withLocaleAlternates } from '@/lib/i18n/alternates'
+import { localizeProduct, toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
+import { localizeDescriptionHtml } from '@/lib/catalog-en/descriptions.server'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const LEGACY_PRODUCT_REDIRECTS = legacyProductRedirects as Record<string, string>
@@ -62,7 +67,7 @@ function productDescription(product: Pick<MergedProduct, 'name' | 'category' | '
 }
 
 /** Katalog (kod + admin düzenlemeleri); veritabanına ulaşılamazsa koddaki ürün */
-async function loadProduct(id: string): Promise<StorefrontProduct | null> {
+async function loadCatalogProduct(id: string): Promise<StorefrontProduct | null> {
   try {
     const merged = await getStorefrontProductById(id)
     if (merged) return merged
@@ -71,6 +76,21 @@ async function loadProduct(id: string): Promise<StorefrontProduct | null> {
   }
   const mock = mockProducts.find((p) => p.id === id)
   return mock ? { ...withDetails(mock), id: mock.id, descriptionHtml: getProductDescriptionHtml(mock.id) } : null
+}
+
+/**
+ * Ürün, ziyaretçinin dilinde: İngilizcede ad / kısa açıklama / varyant adları ve HTML açıklama çevrilir
+ * (URL ve kanonik adres değişmez; teknik özellik çevirisi istemcide gösterim sırasında yapılır).
+ */
+async function loadProduct(id: string): Promise<{ product: StorefrontProduct; locale: CatalogLocale } | null> {
+  const product = await loadCatalogProduct(id)
+  if (!product) return null
+  const locale = toCatalogLocale(await getLocale().catch(() => 'tr'))
+  if (locale !== 'en') return { product, locale }
+  return {
+    product: { ...localizeProduct(product, locale), descriptionHtml: localizeDescriptionHtml(product.descriptionHtml, locale) },
+    locale,
+  }
 }
 
 const SITE_NAME = 'Voltekno'
@@ -93,16 +113,20 @@ function truncate(str: string, max: number) {
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const params = await props.params;
-  const product = await loadProduct(params.id)
-  if (!product) return { title: 'Ürün Bulunamadı' }
+  const loaded = await loadProduct(params.id)
+  if (!loaded) return { title: 'Ürün Bulunamadı' }
+  const { product, locale } = loaded
 
-  // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir
-  const title = product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
+  // app/products/layout.tsx kök başlık şablonunu devralmadığı için marka burada eklenir.
+  // Excel'in SEO başlığı Türkçe; İngilizcede başlık çevrilmiş addan üretilir.
+  const title =
+    locale === 'tr' && product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
   const description = truncate(productDescription(product), 160)
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
 
-  return {
+  // Canonical bu dilin adresi (/en/products/…), dil eşleri iki dilde (lib/i18n/alternates)
+  return withLocaleAlternates({
     title: { absolute: title },
     description,
     alternates: {
@@ -122,15 +146,15 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
       description,
       ...(imageUrl && { images: [imageUrl] }),
     },
-  }
+  }, locale)
 }
 
 /** Görünür breadcrumb ile aynı yol: Ana Sayfa › Ürünler › ana kategori › alt kategori › ürün */
-function buildBreadcrumbJsonLd(product: StorefrontProduct) {
+function buildBreadcrumbJsonLd(product: StorefrontProduct, locale: CatalogLocale) {
   const groupId = product.category ? getGroupIdForCategory(product.category) : null
   const items: { name: string; item?: string }[] = [
-    { name: 'Ana Sayfa', item: `${SITE_URL}/` },
-    { name: 'Ürünler', item: `${SITE_URL}/products` },
+    { name: locale === 'en' ? 'Home' : 'Ana Sayfa', item: `${SITE_URL}/` },
+    { name: locale === 'en' ? 'Products' : 'Ürünler', item: `${SITE_URL}/products` },
   ]
   if (groupId && CATEGORY_META[groupId]) items.push({ name: CATEGORY_META[groupId].title, item: `${SITE_URL}/category/${groupId}` })
   // Alt kategori: dizinlenebilir tür sayfası (tek türlü grupta grup sayfasıyla aynıysa tekrar eklenmez)
@@ -333,17 +357,20 @@ function buildProductJsonLd(product: StorefrontProduct, rating: Rating) {
 
 export default async function ProductPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
-  const product = await loadProduct(params.id)
-  if (!product) {
+  const loaded = await loadProduct(params.id)
+  if (!loaded) {
     // Eski katalogdaki ürün: yeni ürüne/kategoriye kalıcı yönlendirme (next.config.js redirects ile aynı liste;
     // boşluk içeren eski kablo id'leri gibi config'te eşleşmeyen adresler burada yakalanır)
     const legacyTarget = LEGACY_PRODUCT_REDIRECTS[params.id] ?? LEGACY_PRODUCT_REDIRECTS[safeDecode(params.id)]
-    if (legacyTarget) permanentRedirect(legacyTarget)
+    if (legacyTarget) permanentRedirect(await localHref(legacyTarget))
     notFound()
   }
+  const { product, locale } = loaded
 
   const rating = await reviewSummary(product.id).catch(() => ({ average: 0, count: 0 }))
-  const productJsonLd = buildProductJsonLd(product, rating)
+  // İngilizce sayfada şemadaki ürün, teklif ve kırıntı adresleri /en önekli (lib/i18n/alternates)
+  const productJsonLd = localizeSiteUrls(buildProductJsonLd(product, rating), locale)
+  const breadcrumbJsonLd = localizeSiteUrls(buildBreadcrumbJsonLd(product, locale), locale)
 
   return (
     <>
@@ -355,7 +382,7 @@ export default async function ProductPage(props: { params: Promise<{ id: string 
       )}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildBreadcrumbJsonLd(product)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(breadcrumbJsonLd) }}
       />
       <ProductDetailClient initialProduct={product} productId={params.id} />
     </>

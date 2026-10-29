@@ -2,8 +2,7 @@
 
 import { Turnstile } from '@/components/Turnstile'
 import React, { useState, useEffect, useCallback } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link, { usePathname } from '@/lib/i18n/navigation'
 import { Star, Loader2, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'

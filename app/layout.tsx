@@ -7,8 +7,8 @@ import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
 import { ClientErrorReporter } from '@/components/ClientErrorReporter'
 import { CartSync } from '@/components/CartSync'
-import { EnglishScopeNotice } from '@/components/EnglishScopeNotice'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
+import { localizedMetadata } from '@/lib/locale-metadata'
 
 // latin-ext: Türkçe harfler (ş, ğ, ı, İ) aynı fonttan gelsin; yoksa yedek fonttan çizilip sonradan değişiyor (CLS)
 const inter = Inter({ subsets: ['latin', 'latin-ext'], display: 'swap' })
@@ -24,7 +24,7 @@ export const viewport: Viewport = {
   themeColor: '#0f172a',
 }
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   icons: {
     icon: [
@@ -78,6 +78,24 @@ export const metadata: Metadata = {
   }),
 }
 
+/**
+ * Ana sayfa ve kendi başlığı olmayan sayfalar: İngilizce seçili ziyaretçide sekme başlığı ve açıklama İngilizce.
+ * Kanonik URL, hreflang ve anahtar kelimeler Türkçe sürümle aynı kalır.
+ */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: {
+      default: 'Solar Panels, Batteries, Inverters and EV Charging | Voltekno',
+      template: '%s | Voltekno',
+    },
+    description:
+      'Solar panels, lithium batteries, solar inverters, charge controllers and turnkey solar (PV) solutions. Ready-made energy packages, fast delivery and expert technical support.',
+    shareTitle: 'Solar Panels, Batteries, Inverters and EV Charging | Voltekno',
+    shareDescription:
+      'Solar panels, lithium batteries, inverters, EV charging and energy storage products. Solar sizing and technical support. Fast delivery across Turkey.',
+  })
+}
+
 // Kurum + site şeması yalnızca ana sayfada (components/StructuredData.tsx); diğer sayfalar @id ile başvurur.
 
 export default async function RootLayout({
@@ -99,7 +117,6 @@ export default async function RootLayout({
           <FirebaseAnalyticsInit />
           <ClientErrorReporter />
           <CartSync />
-          <EnglishScopeNotice />
           {children}
         </IntlProvider>
       </body>

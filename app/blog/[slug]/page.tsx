@@ -1,13 +1,16 @@
 import React from 'react'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { ArrowLeft, Clock, Tag, ArrowRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
-import { BLOG_POSTS, blogDateIso } from '@/lib/blog-posts'
+import { BLOG_POSTS, blogDateIso, type BlogPost } from '@/lib/blog-posts'
+import { BLOG_POSTS_EN } from '@/lib/blog-posts-en'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import { PRODUCT_TYPES } from '@/lib/seo/product-types'
-import { typeHref } from '@/lib/seo/taxonomy'
+import { localizeType, typeHref } from '@/lib/seo/taxonomy'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
@@ -24,7 +27,13 @@ function renderContent(content: string) {
 
     if (!line) { i++; continue }
 
-    if (line.startsWith('## ')) {
+    if (line.startsWith('### ')) {
+      elements.push(
+        <h3 key={i} className="text-lg font-bold text-slate-900 mt-8 mb-3 leading-snug">
+          {line.replace('### ', '')}
+        </h3>
+      )
+    } else if (line.startsWith('## ')) {
       elements.push(
         <h2 key={i} className="text-xl sm:text-2xl font-extrabold text-slate-900 mt-10 mb-4 leading-snug">
           {line.replace('## ', '')}
@@ -108,33 +117,10 @@ function renderContent(content: string) {
   return elements
 }
 
-/** Sayfa çerçevesi için İngilizce etiketler (yazı içerikleri Türkçe kalır) */
-const CATEGORY_EN: Record<string, string> = {
-  'ev-sarj': 'EV Charging',
-  'gunes-enerjisi': 'Solar Energy',
-  batarya: 'Battery',
-  inverter: 'Inverter',
-  ges: 'Solar Plant',
-}
-
-const MONTHS_EN: Record<string, string> = {
-  Ocak: 'January',
-  Şubat: 'February',
-  Mart: 'March',
-  Nisan: 'April',
-  Mayıs: 'May',
-  Haziran: 'June',
-  Temmuz: 'July',
-  Ağustos: 'August',
-  Eylül: 'September',
-  Ekim: 'October',
-  Kasım: 'November',
-  Aralık: 'December',
-}
-
-function dateEn(date: string): string {
-  const [d, m, y] = date.split(' ')
-  return MONTHS_EN[m] ? `${MONTHS_EN[m]} ${d}, ${y}` : date
+/** Yazı, ziyaretçinin dilinde (İngilizcesi lib/blog-posts-en.ts; slug, kategori adresi ve yayın tarihi ortak) */
+function localizedPost(slug: string, post: BlogPost, locale: string): BlogPost {
+  const en = locale === 'en' ? BLOG_POSTS_EN[slug] : undefined
+  return en ? { ...post, ...en } : post
 }
 
 export async function generateStaticParams() {
@@ -145,31 +131,34 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const params = await props.params;
   const post = BLOG_CONTENT[params.slug]
   if (!post) return { title: 'Yazı Bulunamadı' }
-  return {
+  const en = BLOG_POSTS_EN[params.slug]
+  const trMetadata: Metadata = {
     title: `${post.title} | Voltekno Blog`,
     description: post.desc,
     alternates: { canonical: `/blog/${params.slug}` },
     openGraph: { images: [DEFAULT_OG_IMAGE], type: 'article', title: post.title, description: post.desc, url: `/blog/${params.slug}` },
   }
+  if (!en) return trMetadata
+  return localizedMetadata(trMetadata, { title: `${en.title} | Voltekno Blog`, description: en.desc, shareTitle: en.title })
 }
 
 export default async function BlogPostPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const post = BLOG_CONTENT[params.slug]
-  if (!post) notFound()
+  const source = BLOG_CONTENT[params.slug]
+  if (!source) notFound()
 
   const locale = await getLocale()
   const L = (tr: string, en: string) => (locale === 'en' ? en : tr)
-  const categoryLabel = (slug: string, tr: string) => L(tr, CATEGORY_EN[slug] ?? tr)
-  const readTimeLabel = (readTime: string) => L(readTime, readTime.replace(' dk', ' min'))
+  const post = localizedPost(params.slug, source, locale)
 
   const otherPosts = Object.entries(BLOG_CONTENT)
     .filter(([slug]) => slug !== params.slug)
     .slice(0, 3)
+    .map(([slug, p]) => [slug, localizedPost(slug, p, locale)] as const)
 
   // Yazının konusuyla ilgili ürün türü sayfaları (lib/seo/product-types.ts → blog alanı)
-  const relatedTypes = PRODUCT_TYPES.filter((t) => t.blog.includes(params.slug))
-  const published = blogDateIso(post.date)
+  const relatedTypes = PRODUCT_TYPES.filter((t) => t.blog.includes(params.slug)).map((t) => localizeType(t, locale))
+  const published = blogDateIso(source.date)
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -181,14 +170,14 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
       image: [`${SITE_URL}${DEFAULT_OG_IMAGE.url}`],
       author: { '@type': 'Organization', name: 'Voltekno', url: `${SITE_URL}/hakkimizda` },
       publisher: { '@id': `${SITE_URL}/#organization` },
-      inLanguage: 'tr',
+      inLanguage: locale === 'en' ? 'en' : 'tr',
       articleSection: post.category,
     },
     {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 1, name: L('Ana Sayfa', 'Home'), item: `${SITE_URL}/` },
         { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
         { '@type': 'ListItem', position: 3, name: post.title },
       ],
@@ -198,7 +187,7 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
   return (
     <div className="min-h-full bg-white">
       {jsonLd.map((d, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(d) }} />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(d, locale === 'en' ? 'en' : 'tr')) }} />
       ))}
       {/* Hero */}
       <div className="bg-[#f5f7fa] border-b border-[#e6ebf1] pt-12 pb-14 px-4 mt-5 lg:mt-7">
@@ -211,12 +200,12 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
           </Link>
           <div className="flex items-center gap-3 mb-5">
             <span className="text-xs font-bold uppercase tracking-widest bg-white border border-[#e6ebf1] text-[#0b2540] rounded-lg px-3 py-1.5">
-              {categoryLabel(post.categorySlug, post.category)}
+              {post.category}
             </span>
             <span className="flex items-center gap-1 text-xs text-[#5d6e80]">
-              <Clock className="w-3.5 h-3.5" /> {L(`${post.readTime} okuma`, `${readTimeLabel(post.readTime)} read`)}
+              <Clock className="w-3.5 h-3.5" /> {L(`${post.readTime} okuma`, `${post.readTime} read`)}
             </span>
-            <span className="text-xs text-[#5d6e80]">{L(post.date, dateEn(post.date))}</span>
+            <span className="text-xs text-[#5d6e80]">{post.date}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#121926] leading-tight mb-4">
             {post.title}
@@ -280,12 +269,12 @@ export default async function BlogPostPage(props: { params: Promise<{ slug: stri
                     href={`/blog/${slug}`}
                     className="group block rounded-xl border border-slate-200 p-4 hover:border-brand/40 hover:shadow-md transition-all"
                   >
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand mb-2 block">{categoryLabel(p.categorySlug, p.category)}</span>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand mb-2 block">{p.category}</span>
                     <h4 className="text-sm font-bold text-slate-800 group-hover:text-brand transition-colors line-clamp-2 leading-snug mb-1">
                       {p.title}
                     </h4>
                     <span className="flex items-center gap-1 text-[11px] text-slate-400">
-                      <Clock className="w-3 h-3" /> {readTimeLabel(p.readTime)}
+                      <Clock className="w-3 h-3" /> {p.readTime}
                     </span>
                   </Link>
                 ))}

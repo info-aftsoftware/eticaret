@@ -11,6 +11,7 @@ import { isRateLimited, getClientIp } from '@/lib/rate-limit'
 import { verifyTurnstile, TURNSTILE_ERROR } from '@/lib/turnstile'
 import { prisma } from '@/lib/prisma'
 import { EMAIL_RE, reviewAuthorFromRequest } from '@/lib/reviews'
+import { toCatalogLocale } from '@/lib/catalog-en'
 
 export async function GET(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params
@@ -64,6 +65,8 @@ export async function POST(request: NextRequest, props: { params: Promise<{ id: 
         userEmail: email,
         question: question.trim(),
         status: 'pending',
+        // Yanıt e-postasının dili: sorunun sorulduğu site dili
+        locale: toCatalogLocale(request.cookies.get('NEXT_LOCALE')?.value),
       },
     })
     return NextResponse.json({ id: q.id }, { status: 201 })

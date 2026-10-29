@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { Bell, Heart, Package, ShoppingBag, Trash2 } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
@@ -12,6 +12,8 @@ import { useToast } from '@/components/ui/toast'
 import { AddToCartButton } from '@/components/AddToCartButton'
 import { useL } from '@/lib/i18n-inline'
 import { grossPrice } from '@/lib/store-config'
+import { useLocale } from 'next-intl'
+import { localizeProduct, toCatalogLocale } from '@/lib/catalog-en'
 
 export type FavoriteProductSummary = {
   id: string
@@ -71,6 +73,7 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
   const [key, setKey] = useState(initial?.key ?? '')
   const selected = product.variants.find((v) => v.key === key) ?? initial
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
   const L = useL()
   return (
@@ -86,7 +89,7 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
       >
         {product.variants.map((v) => (
           <option key={v.key} value={v.key}>
-            {v.label} — {fmtPrice(grossPrice(v.price), currency, rates?.rates ?? null)}
+            {v.label} — {fmtPrice(grossPrice(v.price), currency, rates?.rates ?? null, numberLocale)}
           </option>
         ))}
       </select>
@@ -100,10 +103,13 @@ function VariantAddToCart({ product }: { product: FavoriteProductSummary }) {
   )
 }
 
-function FavoriteCard({ id, product, onRemove }: { id: string; product: FavoriteProductSummary | null; onRemove: (id: string) => void }) {
+function FavoriteCard({ id, product: rawProduct, onRemove }: { id: string; product: FavoriteProductSummary | null; onRemove: (id: string) => void }) {
+  const locale = toCatalogLocale(useLocale())
+  const product = rawProduct && localizeProduct(rawProduct, locale)
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (n: number) => fmtPrice(n, currency, rates?.rates ?? null)
+  const formatPrice = (n: number) => fmtPrice(n, currency, rates?.rates ?? null, numberLocale)
   const L = useL()
 
   if (!product) {

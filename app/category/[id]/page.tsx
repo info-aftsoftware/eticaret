@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { redirect } from 'next/navigation'
+import { localHref, requestLocale } from '@/lib/i18n/server'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 import { CATEGORY_GROUPS, LEGACY_CATEGORY_REDIRECTS } from '@/lib/categories'
 import { CategoryPageClient } from './CategoryPageClient'
 import { categoryInitialProducts } from '@/lib/category-initial'
@@ -12,6 +14,8 @@ import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
 import { categoryHref } from '@/lib/seo/type-paths'
 import { typeByCategory } from '@/lib/seo/taxonomy'
+import { getTranslations } from 'next-intl/server'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
@@ -39,7 +43,7 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   // "Fiyatları" zaten title içindeyse tekrar ekleme
   const pageTitle = title.includes('Fiyat') ? title : `${title} Fiyatları ve Modelleri`
 
-  return {
+  const trMetadata: Metadata = {
     title: pageTitle,
     description,
     alternates: { canonical: `/category/${params.id}` },
@@ -58,6 +62,16 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
       images: [imageUrl ?? DEFAULT_OG_IMAGE.url],
     },
   }
+  // İngilizce ziyaretçi: kategori adı menüdeki çevirisiyle (kanonik ve Türkçe SEO metni değişmez)
+  const labelKey = CATEGORY_GROUPS.find((group) => group.id === params.id)?.labelKey
+  if (!labelKey) return trMetadata
+  const tHeader = await getTranslations('header').catch(() => null)
+  const enTitle = tHeader ? tHeader(labelKey) : title
+  return localizedMetadata(trMetadata, {
+    title: `${enTitle} — Prices and Models`,
+    description: `Filter ${enTitle} products by price, brand and features. Reliable products and technical support at voltekno.`,
+    shareTitle: `${enTitle} | Voltekno`,
+  })
 }
 
 export default async function CategoryPage(props: { params: Promise<{ id: string }> }) {
@@ -65,7 +79,7 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
   // Eski kategori URL'leri yeni Excel kategorilerine yönlendirilir (karşılığı yoksa tüm ürünler)
   if (params.id in LEGACY_CATEGORY_REDIRECTS) {
     const target = LEGACY_CATEGORY_REDIRECTS[params.id]
-    redirect(target ? `/category/${target}` : '/products')
+    redirect(await localHref(target ? `/category/${target}` : '/products'))
   }
 
   const title = getCategoryTitle(params.id)
@@ -96,6 +110,8 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
     ],
   }
 
+  // İngilizce sayfada şemadaki adresler /en önekli
+  const locale = await requestLocale()
   const itemListJsonLd = categoryProducts.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -115,12 +131,12 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(breadcrumbJsonLd, locale)) }}
       />
       {itemListJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: jsonLdHtml(itemListJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(itemListJsonLd, locale)) }}
         />
       )}
       <CategoryPageClient id={params.id} initialProducts={await categoryInitialProducts(params.id)} />

@@ -3,12 +3,13 @@
  * Sıra: kırıntı yolu → H1 + giriş → katalogdan özet (ürün sayısı, markalar/türler, başlangıç fiyatı) → ürünler →
  * alım rehberi (H2'ler) → sık sorulan sorular → ilgili bağlantılar. Görünür kırıntı yolu ile JSON-LD aynı yolu verir.
  */
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import type { ReactNode } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ProductCard } from '@/components/ProductCard'
 import type { StorefrontProduct } from '@/lib/discounts'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 export type Crumb = { name: string; href: string }
@@ -38,14 +39,14 @@ export function CollectionPage({
   faq?: { q: string; a: string }[]
   linkGroups?: { title: string; items: LinkItem[] }[]
   jsonLd: object[]
-  /** İngilizce arayüz: çerçeve etiketleri İngilizce, Türkçe katalog içeriği lang="tr" ile işaretlenir */
+  /** İngilizce arayüz: çerçeve etiketleri İngilizce (içerik çağıran sayfada çevrilir) */
   en?: boolean
 }) {
-  const contentLang = en ? 'tr' : undefined
+  const contentLang = undefined
   return (
     <div className="bg-white">
       {jsonLd.map((data, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(data) }} />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(data, en ? 'en' : 'tr')) }} />
       ))}
       <div className={`${PAGE_CONTAINER} py-6 sm:py-8`}>
         <nav aria-label={en ? 'Breadcrumb' : 'Kırıntı yolu'} className="mb-4">
@@ -189,4 +190,6 @@ export function collectionJsonLd(crumbs: Crumb[], name: string, description: str
 }
 
 const tl = new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 })
-export const fmtTL = (n: number) => tl.format(n)
+const tlEn = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'TRY', currencyDisplay: 'narrowSymbol', maximumFractionDigits: 0 })
+/** Tutar (TL); en: İngilizce sayı biçimi */
+export const fmtTL = (n: number, en = false) => (en ? tlEn : tl).format(n)

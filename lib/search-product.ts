@@ -3,6 +3,8 @@
  * Türkçe karakter normalizasyonu ve aranacak metin oluşturma.
  */
 
+import { productDescription, productName } from '@/lib/catalog-en'
+
 export type ProductLike = {
   id?: string
   name?: string
@@ -47,6 +49,9 @@ export function buildSearchableText(product: ProductLike): string {
     ...(product.tags || []),
     // Varyantlı ürünlerde model adı ve varyant SKU'su ile de bulunabilsin
     ...(product.variants || []).flatMap((v) => [v.label, v.sku]),
+    // İngilizce sitede yazılan sorgular da eşleşsin (katalog adı/kısa açıklamanın İngilizcesi)
+    ...(product.id && product.name ? [productName({ id: product.id, name: product.name }, 'en')] : []),
+    ...(product.id && product.description ? [productDescription({ id: product.id, description: product.description }, 'en')] : []),
   ].filter(Boolean) as string[]
 
   if (product.specifications && typeof product.specifications === 'object') {

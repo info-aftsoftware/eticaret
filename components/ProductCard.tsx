@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { ChevronRight, Heart, Minus, Package, Plus, ShoppingCart } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
@@ -10,13 +10,13 @@ import { useExchangeRates } from '@/lib/useExchangeRates'
 import type { ProductVariant } from '@/components/AddToCartButton'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
-import { useRouter } from 'next/navigation'
 import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isQuoteOnly } from '@/lib/sale-mode'
 import { grossPrice } from '@/lib/store-config'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { productDescription, productName, toCatalogLocale, variantLabel } from '@/lib/catalog-en'
 
 export interface ProductCardProduct {
   id: string
@@ -51,8 +51,8 @@ export interface ProductCardProps {
 }
 
 export function ProductCard({
-  product,
-  selectedVariant,
+  product: rawProduct,
+  selectedVariant: rawSelectedVariant,
   variant = 'full',
   priority = false,
   className = '',
@@ -61,7 +61,12 @@ export function ProductCard({
   oldPrice,
   discount,
 }: ProductCardProps) {
+  const locale = toCatalogLocale(useLocale())
+  // Katalog metni ziyaretçinin dilinde (lib/catalog/en); fiyat/stok/id değişmez
+  const product = { ...rawProduct, name: productName(rawProduct, locale), description: productDescription(rawProduct, locale) }
+  const selectedVariant = rawSelectedVariant && { ...rawSelectedVariant, label: variantLabel(rawProduct.id, rawSelectedVariant, locale) }
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
   const addItem = useCartStore((s) => s.addItem)
   const updateQuantity = useCartStore((s) => s.updateQuantity)
@@ -166,7 +171,7 @@ export function ProductCard({
 
   const hasRealImage = Boolean(product.image && !imageError && !product.image.includes('placeholder'))
   const displayPrice = selectedVariant ? selectedVariant.price : product.price
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const showOldPrice = !selectedVariant && !!oldPrice && oldPrice > displayPrice
 
   const btnBase = `inline-flex w-full items-center justify-center gap-1.5 rounded-lg font-semibold transition-colors touch-manipulation ${

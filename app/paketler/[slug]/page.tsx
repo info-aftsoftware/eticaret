@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,8 @@ import { contactHref } from '@/lib/contact-topics'
 import { ProductCard } from '@/components/ProductCard'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { getLocale } from 'next-intl/server'
+import { localizedMetadata } from '@/lib/locale-metadata'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
@@ -31,7 +33,7 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
   const title = `${item.seoTitle} | Voltekno`
   const description = item.seoDescription
 
-  return {
+  const trMetadata: Metadata = {
     // Kök şablon "%s | Voltekno" ekler; sayfa başlığına marka tekrar yazılmaz
     title: item.seoTitle,
     description,
@@ -51,6 +53,10 @@ export async function generateMetadata(props: { params: Promise<{ slug: string }
       images: [item.image],
     },
   }
+  return localizedMetadata(trMetadata, {
+    title: `${item.en.shortTitle} Solar Energy Solutions`,
+    description: item.en.description,
+  })
 }
 
 function buildBreadcrumbSchema(item: NonNullable<ReturnType<typeof getPackageCategory>>) {
@@ -93,11 +99,11 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
     <div className="min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildBreadcrumbSchema(item)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(buildBreadcrumbSchema(item), locale === 'en' ? 'en' : 'tr')) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdHtml(buildFaqSchema(item)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(buildFaqSchema(item), locale === 'en' ? 'en' : 'tr')) }}
       />
 
       {/* Hero */}

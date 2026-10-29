@@ -1,11 +1,12 @@
 import { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
-import Link from 'next/link'
+import { localizedMetadata } from '@/lib/locale-metadata'
+import Link from '@/lib/i18n/navigation'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { FAQContent } from './FAQContent'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Sık Sorulan Sorular: Sipariş, Kargo ve Ürünler',
   description: "Voltekno'da sipariş, ödeme, kargo ve teknik konularda sık sorulan sorular: güneş paneli, akü, inverter ve EV şarj hakkında merak ettikleriniz.",
   alternates: { canonical: '/faq' },
@@ -16,6 +17,17 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'Voltekno',
   },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Frequently Asked Questions: Orders, Shipping and Products',
+    description:
+      'Frequently asked questions about ordering, payment, shipping and technical topics at Voltekno: solar panels, batteries, inverters and EV charging.',
+    shareTitle: 'Frequently Asked Questions | Voltekno',
+    shareDescription: 'Frequently asked questions about orders, shipping, products and technical topics.',
+  })
 }
 
 export default async function FAQPage() {

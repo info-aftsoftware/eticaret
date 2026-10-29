@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { productsHref, type NavGroup } from './AllCategoriesMenu'
 import { useL } from '@/lib/i18n-inline'

@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useCallback, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useLocale } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -20,7 +21,7 @@ import { User, Settings, Trash2, Package, Truck, Plus, Pencil as Edit } from 'lu
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
-import Link from 'next/link'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import { useToast } from '@/components/ui/toast'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { toOrderView, ORDER_STATUS_LABELS } from '@/lib/order-view'
@@ -58,8 +59,9 @@ function ProfilePageContent() {
   }, [user?.id])
   const addToCart = useCartStore((state) => state.addItem)
   const currency = useCurrencyStore((s) => s.currency)
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const [orders, setOrders] = useState<any[]>([])
   const [addresses, setAddresses] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -347,7 +349,7 @@ function ProfilePageContent() {
                           <div>
                             <CardTitle className="text-lg">{L('Sipariş', 'Order')} #{order.orderId}</CardTitle>
                             <p className="text-sm text-ink-muted mt-1">
-                              {new Date(order.createdAt).toLocaleDateString(L('tr-TR', 'en-GB'), {
+                              {new Date(order.createdAt).toLocaleDateString(L('tr-TR', 'en-US'), {
                                 day: '2-digit',
                                 month: 'long',
                                 year: 'numeric',

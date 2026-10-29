@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic'
 
 import { NextRequest, NextResponse } from 'next/server'
+import { toCatalogLocale } from '@/lib/catalog-en'
 import { reportError } from '@/lib/alerts'
 import { prisma } from '@/lib/prisma'
 import type { Prisma } from '@prisma/client'
@@ -313,6 +314,8 @@ async function createOrder(request: NextRequest, parsedBody: Record<string, unkn
         paymentDiscount: pricing.paymentDiscount,
         total: pricing.total,
         currency: 'TRY',
+        // Müşteri e-postaları siparişin verildiği site dilinde gönderilir
+        locale: toCatalogLocale(request.cookies.get('NEXT_LOCALE')?.value ?? str(body.locale, 5)),
         customerNote: str(body.notes, 2000) || null,
         notes: JSON.stringify({
           consents: {

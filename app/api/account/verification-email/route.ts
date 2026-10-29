@@ -10,7 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getAdminAuth, adminProjectMatchesClient } from '@/lib/firebaseAdminServer'
 import { isRateLimited } from '@/lib/rate-limit'
 import { sendEmailVerificationMessage } from '@/lib/notifications'
-import { siteOrigin, verifyBearer, oobCodeFromLink, inCooldown, clearCooldown } from '../_shared'
+import { siteOrigin, verifyBearer, oobCodeFromLink, inCooldown, clearCooldown, requestLocale } from '../_shared'
 
 const COOLDOWN_MS = 55_000
 
@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
       email,
       name: record.displayName || (decoded.name as string | undefined) || '',
       verificationUrl,
+      locale: requestLocale(request),
     })
     if (!sent) {
       clearCooldown(key)

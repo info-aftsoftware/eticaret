@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, Suspense } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ChevronRight, Package, SlidersHorizontal, Filter, Menu, X, Search } from 'lucide-react'
@@ -17,7 +17,8 @@ import { useL } from '@/lib/i18n-inline'
 import { buildSpecFacets, matchesSpecFilter } from '@/lib/spec-facets'
 import { CATEGORY_META } from '@/app/category/[id]/category-meta'
 import { ProductPageShell } from '@/components/ProductPageShell'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { specKeyLabel, specValueLabel, toCatalogLocale } from '@/lib/catalog-en'
 import { fmtPrice } from '@/lib/format'
 import { useCurrencyStore } from '@/lib/store/useCurrencyStore'
 import { useExchangeRates } from '@/lib/useExchangeRates'
@@ -37,8 +38,10 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
   const [searchQuery, setSearchQuery] = useState('')
 
   const currency = useCurrencyStore((s) => s.currency)
+
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
 
   // Güncel katalog (admin fiyat/stok düzenlemeleri + aktif kampanyalar). İlk çizim sunucunun verdiği güncel fiyatlarla;
   // yalnız sunucu verisi yoksa katalog dosyası (içe aktarma anındaki kur) kullanılır
@@ -53,6 +56,8 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
   const meta = CATEGORY_META[groupId]
   const tHeader = useTranslations('header')
   const L = useL()
+  // Özellik filtreleri Türkçe anahtarlarla çalışır; başlık ve değerler gösterimde çevrilir
+  const catalogLocale = toCatalogLocale(useLocale())
   const groupLabelKey = CATEGORY_GROUPS.find((g) => g.id === groupId)?.labelKey
   /** Başlık ve alt kategori adları seçili dilde (Türkçede SEO başlığı, İngilizcede çeviri) */
   const title = L(meta?.title ?? '', groupLabelKey ? tHeader(groupLabelKey) : meta?.title ?? '')
@@ -174,7 +179,7 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
             <div className="absolute inset-0 flex items-center justify-center p-0">
               <Image
                 src={meta.image}
-                alt={meta.title}
+                alt={title}
                 fill
                 className="object-contain"
                 style={{ objectPosition: meta.imagePosition ?? 'center center' }}
@@ -359,8 +364,8 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                 {specFacets.length > 0 && (
                   <div className="border-t border-slate-200 pt-4 space-y-4">
                     {specFacets.map((facet) => (
-                      <div key={facet.key} lang="tr">
-                        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
+                      <div key={facet.key}>
+                        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{specKeyLabel(facet.key, catalogLocale)}</h4>
                         <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
                           {facet.values.map((value) => {
                             const checked = (selectedSpecs[facet.key] ?? []).includes(value)
@@ -372,7 +377,7 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                                   onChange={(e) => updateSpecFilter(facet.key, value, e.target.checked)}
                                   className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand/30"
                                 />
-                                <span className="truncate">{value}</span>
+                                <span className="truncate">{specValueLabel(value, catalogLocale)}</span>
                               </label>
                             )
                           })}
@@ -519,8 +524,8 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                 {specFacets.length > 0 && (
                   <div className="border-t border-slate-200 pt-4 space-y-4">
                     {specFacets.map((facet) => (
-                      <div key={facet.key} lang="tr">
-                        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
+                      <div key={facet.key}>
+                        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{specKeyLabel(facet.key, catalogLocale)}</h4>
                         <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
                           {facet.values.map((value) => {
                             const checked = (selectedSpecs[facet.key] ?? []).includes(value)
@@ -532,7 +537,7 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                                   onChange={(e) => updateSpecFilter(facet.key, value, e.target.checked)}
                                   className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand/30"
                                 />
-                                <span className="truncate">{value}</span>
+                                <span className="truncate">{specValueLabel(value, catalogLocale)}</span>
                               </label>
                             )
                           })}
@@ -600,7 +605,7 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                 )}
                 {Object.entries(selectedSpecs).map(([key, values]) => values.map(val => (
                   <span key={`${key}-${val}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
-                    {key}: {val}
+                    {specKeyLabel(key, catalogLocale)}: {specValueLabel(val, catalogLocale)}
                     <button type="button" onClick={() => updateSpecFilter(key, val, false)} className="text-slate-400 hover:text-slate-600"><X className="w-3.5 h-3.5" /></button>
                   </span>
                 )))}

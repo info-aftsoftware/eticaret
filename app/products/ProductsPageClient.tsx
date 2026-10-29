@@ -1,10 +1,11 @@
 'use client'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Link, { useRouter } from '@/lib/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 import { pageItems, parsePageParam } from '@/lib/pagination'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { specKeyLabel, specValueLabel, toCatalogLocale } from '@/lib/catalog-en'
 import { useL } from '@/lib/i18n-inline'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -43,10 +44,14 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
   const tHeader = useTranslations('header')
   const tProducts = useTranslations('products')
   const L = useL()
+  // Özellik filtreleri Türkçe anahtarlarla çalışır; başlık ve değerler gösterimde çevrilir
+  const catalogLocale = toCatalogLocale(useLocale())
 
   const currency = useCurrencyStore((s) => s.currency)
+
+  const numberLocale = useLocale()
   const { rates } = useExchangeRates()
-  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null)
+  const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
 
   const [filterOpen, setFilterOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState(query.q)
@@ -382,8 +387,8 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
         <section className="space-y-4">
           <h3 className="text-sm font-semibold text-slate-800">{L('Kategoriye Özel Filtreler', 'Category-Specific Filters')}</h3>
           {specFacets.map((facet) => (
-            <div key={facet.key} lang="tr">
-              <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{facet.key}</h4>
+            <div key={facet.key}>
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">{specKeyLabel(facet.key, catalogLocale)}</h4>
               <div className="space-y-1.5 max-h-44 overflow-y-auto pr-1">
                 {facet.values.map((value) => {
                   const checked = (selectedSpecs[facet.key] ?? []).includes(value)
@@ -395,7 +400,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
                         onChange={(e) => updateSpecFilter(facet.key, value, e.target.checked)}
                         className="h-4 w-4 rounded border-slate-300 text-brand focus:ring-brand/30"
                       />
-                      <span className="truncate">{value}</span>
+                      <span className="truncate">{specValueLabel(value, catalogLocale)}</span>
                     </label>
                   )
                 })}
@@ -476,7 +481,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             <div className="mb-4 flex flex-wrap items-center gap-2">
               {Object.entries(selectedSpecs).flatMap(([key, values]) => values.map((value) => (
                 <span key={`${key}-${value}`} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs bg-slate-100 text-slate-700 border border-slate-200">
-                  {key}: {value}
+                  {specKeyLabel(key, catalogLocale)}: {specValueLabel(value, catalogLocale)}
                   <button
                     type="button"
                     onClick={() => updateSpecFilter(key, value, false)}

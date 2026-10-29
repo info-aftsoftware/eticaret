@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { Heart } from 'lucide-react'
 import { useToast } from '@/components/ui/toast'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/lib/i18n/navigation'
 import { favoriteLoginHref, useFavorites } from '@/lib/useFavorites'
 import { useL } from '@/lib/i18n-inline'
 

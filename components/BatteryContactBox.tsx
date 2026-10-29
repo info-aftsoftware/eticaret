@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { Phone, Mail } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'
 import { useL } from '@/lib/i18n-inline'

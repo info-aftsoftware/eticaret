@@ -9,8 +9,8 @@
  */
 
 import React, { useEffect, useRef, useState, Suspense } from 'react'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Link, { useRouter } from '@/lib/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 import { applyActionCode, checkActionCode } from 'firebase/auth'
 import { Loader2, RefreshCw, ArrowRight } from 'lucide-react'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'

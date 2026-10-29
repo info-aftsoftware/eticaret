@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useL } from '@/lib/i18n-inline'

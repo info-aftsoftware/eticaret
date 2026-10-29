@@ -1,15 +1,25 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import { localizedMetadata } from '@/lib/locale-metadata'
+import Link from '@/lib/i18n/navigation'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'Hakkımızda',
   description: 'Voltekno hakkında: misyonumuz, değerlerimiz ve temiz enerji çözümlerindeki uzmanlığımız.',
   alternates: { canonical: '/hakkimizda' },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'About Us',
+    description: 'About Voltekno: our mission, our values and our expertise in clean energy solutions.',
+  })
 }
 
 const stats = [
@@ -67,7 +77,7 @@ export default async function HakkimizdaPage() {
   }
   return (
     <div className="min-h-screen bg-surface">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(aboutJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(localizeSiteUrls(aboutJsonLd, locale === 'en' ? 'en' : 'tr')) }} />
 
       {/* Breadcrumb + Başlık */}
       <div className="bg-surface-elevated border-b border-palette">

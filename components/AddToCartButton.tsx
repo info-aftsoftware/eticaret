@@ -7,7 +7,7 @@ import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 
 export interface ProductVariant {
@@ -132,7 +132,7 @@ export function AddToCartButton({
       addToast({
         type: 'success',
         title: t('removed'),
-        description: `${displayName} sepetten kaldırıldı.`,
+        description: L(`${displayName} sepetten kaldırıldı.`, `${displayName} removed from cart.`),
       })
     }
   }

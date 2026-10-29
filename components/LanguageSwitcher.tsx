@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ChevronDown } from 'lucide-react'
+import { localizePath, stripLocale } from '@/lib/i18n/locale-path'
 
 const LOCALE_COOKIE = 'NEXT_LOCALE'
 
@@ -25,13 +26,12 @@ export function LanguageSwitcher() {
   const setLocale = (newLocale: 'tr' | 'en') => {
     if (newLocale === locale || switching) return
     setSwitching(true)
-    // Oturum çerezi: site varsayılan olarak Türkçe açılır. İngilizce seçimi yalnızca bu tarayıcı oturumu boyunca
-    // geçerlidir, tarayıcı kapanınca yeni ziyaret yine Türkçe başlar (önceden bir yıl saklanıyordu)
+    // Dil adresten gelir: aynı sayfanın diğer dildeki adresine gidilir (/products ↔ /en/products). Çerez,
+    // sayfadan yapılan API çağrıları için middleware'de de yazılır; burada hemen yazılması geçişte boşluk bırakmaz.
     document.cookie = `${LOCALE_COOKIE}=${newLocale};path=/;samesite=lax`
-    // router.refresh() yalnızca o anki sayfanın sunucu bileşenlerini tazeliyordu: istemci yönlendirici
-    // önbelleğindeki (önceden yüklenmiş) sayfalar ve istemci durumu eski dilde kalıyor, değişim geç
-    // ve parça parça görünüyordu. Tam yeniden yükleme her şeyi tek seferde yeni dile geçirir.
-    window.location.reload()
+    // Tam sayfa geçişi: istemci yönlendirici önbelleğindeki sayfalar ve istemci durumu eski dilde kalmasın
+    const { pathname, search, hash } = window.location
+    window.location.assign(localizePath(stripLocale(pathname).path + search + hash, newLocale))
   }
 
   return (

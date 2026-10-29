@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { Turnstile } from '@/components/Turnstile'
 import { whatsappHref, WhatsAppIcon } from '@/components/WhatsAppButton'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'

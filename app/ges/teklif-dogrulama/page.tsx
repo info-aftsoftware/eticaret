@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'
 import { legalHref } from '@/lib/legal/documents'

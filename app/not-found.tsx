@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { Button } from '@/components/ui/button'

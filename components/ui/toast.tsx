@@ -1,9 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { X, CheckCircle2, AlertCircle, Info, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useL } from '@/lib/i18n-inline'
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning'
 
@@ -89,6 +90,7 @@ function ToastContainer({ toasts, removeToast }: { toasts: Toast[]; removeToast:
 }
 
 function SnackbarItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
+  const L = useL()
   const [isVisible, setIsVisible] = React.useState(false)
   React.useEffect(() => {
     const t = setTimeout(() => setIsVisible(true), 10)
@@ -116,7 +118,7 @@ function SnackbarItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string
         type="button"
         onClick={() => onRemove(toast.id)}
         className="shrink-0 !min-h-0 !min-w-0 p-1.5 rounded-md text-[#5d6e80] hover:text-[#121926] hover:bg-[#f1f4f8]"
-        aria-label="Kapat"
+        aria-label={L('Kapat', 'Close')}
       >
         <X className="h-4 w-4" />
       </button>
@@ -125,6 +127,7 @@ function SnackbarItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string
 }
 
 function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
+  const L = useL()
   const [isVisible, setIsVisible] = React.useState(false)
 
   React.useEffect(() => {
@@ -175,7 +178,7 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) =
       <button
         onClick={() => onRemove(toast.id)}
         className="flex-shrink-0 p-1 rounded-md hover:bg-black/10 transition-colors"
-        aria-label="Kapat"
+        aria-label={L('Kapat', 'Close')}
       >
         <X className="h-4 w-4" />
       </button>

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
+import { localizedMetadata } from '@/lib/locale-metadata'
 import React from 'react'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
-export const metadata: Metadata = {
+const trMetadata: Metadata = {
   title: 'İletişim — Teknik Destek ve Ürün Teklifi',
   description:
     'voltekno ile iletişime geçin: güneş paneli, akü ve inverter için fiyat teklifi, teknik destek ve kurulum danışmanlığı. Elazığ merkezli, Türkiye geneli hizmet.',
@@ -18,6 +19,17 @@ export const metadata: Metadata = {
     siteName: 'Voltekno',
     url: `${SITE_URL}/contact`,
   },
+}
+
+/** Türkçe meta veri (kanonik, SEO) değişmez; İngilizce seçili ziyaretçide başlık ve açıklama İngilizce */
+export function generateMetadata(): Promise<Metadata> {
+  return localizedMetadata(trMetadata, {
+    title: 'Contact — Technical Support and Product Quotes',
+    description:
+      'Get in touch with voltekno: price quotes, technical support and installation consulting for solar panels, batteries and inverters. Based in Elazig, serving all of Turkey.',
+    shareTitle: 'Contact | Voltekno',
+    shareDescription: 'Price quotes and technical support for solar panels, batteries and EV charging.',
+  })
 }
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {

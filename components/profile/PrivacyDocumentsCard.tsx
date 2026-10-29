@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { FileText } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -38,7 +38,7 @@ export function PrivacyDocumentsCard() {
     window.location.reload()
   }
 
-  const kvkkMail = `mailto:${SELLER.email}?subject=${encodeURIComponent('KVKK Başvurusu')}`
+  const kvkkMail = `mailto:${SELLER.email}?subject=${encodeURIComponent(L('KVKK Başvurusu', 'KVKK data protection request'))}`
 
   return (
     <Card className="classic-card rounded-lg">

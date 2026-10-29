@@ -15,6 +15,7 @@ import { getNextReturnNo } from '@/lib/sequence'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { logOrderEvent, OrderTransitionError, type Actor } from '@/lib/order-service'
 import ReturnEmail, { RETURN_EMAIL_SUBJECTS, type ReturnEmailData, type ReturnEmailKind } from '@/emails/order/ReturnEmail'
+import { lineItemName, toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
 
 export const WITHDRAWAL_DAYS = 14
 export const DEFECT_LIABILITY_DAYS = 730
@@ -27,6 +28,13 @@ export const RETURN_TYPES = {
 } as const
 export type ReturnType = keyof typeof RETURN_TYPES
 
+/** İngilizce sitede ve İngilizce siparişlerin e-postalarında */
+export const RETURN_TYPES_EN: Record<ReturnType, string> = {
+  withdrawal: 'Right of withdrawal (14 days)',
+  defective: 'Defective / damaged product',
+  wrong_item: 'Wrong item shipped',
+}
+
 export const RETURN_STATUS_LABELS: Record<string, string> = {
   REQUESTED: 'Talep alındı',
   APPROVED: 'Onaylandı — ürün gönderimi bekleniyor',
@@ -34,6 +42,15 @@ export const RETURN_STATUS_LABELS: Record<string, string> = {
   RECEIVED: 'Ürün teslim alındı',
   REFUNDED: 'Ücret iadesi yapıldı',
   CANCELLED: 'İptal edildi',
+}
+
+export const RETURN_STATUS_LABELS_EN: Record<string, string> = {
+  REQUESTED: 'Request received',
+  APPROVED: 'Approved — awaiting shipment of the item',
+  REJECTED: 'Rejected',
+  RECEIVED: 'Item received',
+  REFUNDED: 'Refund issued',
+  CANCELLED: 'Cancelled',
 }
 
 const OPEN_STATUSES = ['REQUESTED', 'APPROVED', 'RECEIVED', 'REFUNDED']
@@ -71,31 +88,34 @@ export function returnEligibility(order: OrderWithReturns) {
 }
 
 import { suggestedRefund } from '@/lib/return-refund'
+import { localizePath } from '@/lib/i18n/locale-path'
 export { suggestedRefund }
 
-function toEmailData(order: Order, r: ReturnRequest): ReturnEmailData {
+function toEmailData(order: Order, r: ReturnRequest, locale: CatalogLocale): ReturnEmailData {
   const site = STORE_CONTACT.siteUrl.replace(/\/$/, '')
   return {
+    locale,
     requestNo: r.requestNo,
     orderNo: order.orderNo,
     customerName: order.shippingName,
     customerEmail: order.shippingEmail ?? '',
     customerPhone: order.shippingPhone,
-    typeLabel: RETURN_TYPES[r.type as ReturnType] ?? r.type,
-    items: itemsOf(r).map((i) => ({ name: i.name, quantity: i.quantity })),
+    typeLabel: (locale === 'en' ? RETURN_TYPES_EN : RETURN_TYPES)[r.type as ReturnType] ?? r.type,
+    items: itemsOf(r).map((i) => ({ name: lineItemName(i, locale), quantity: i.quantity })),
     reason: r.reason,
     customerNote: r.customerNote,
     rejectReason: r.rejectReason,
     carrierName: r.returnCarrier ? getCarrier(r.returnCarrier)?.name ?? r.returnCarrier : null,
     returnCode: r.returnCode,
     refundAmount: r.refundAmount,
-    orderUrl: `${site}/orders/${order.orderNo}`,
+    orderUrl: `${site}${localizePath(`/orders/${order.orderNo}`, locale === 'en' ? 'en' : 'tr')}`,
     adminUrl: `${site}/admin/orders/${order.id}?source=prisma`,
   }
 }
 
 async function notify(order: Order, r: ReturnRequest, kind: ReturnEmailKind) {
-  const data = toEmailData(order, r)
+  // Müşteri e-postası siparişin dilinde, admin bildirimi Türkçe
+  const data = toEmailData(order, r, kind === 'admin_new' ? 'tr' : toCatalogLocale(order.locale))
   const to = kind === 'admin_new' ? process.env.ADMIN_EMAIL || STORE_CONTACT.email : order.shippingEmail
   if (!to) return
   try {
@@ -308,7 +328,9 @@ export function toCustomerReturn(r: ReturnRequest) {
   return {
     ...rest,
     typeLabel: RETURN_TYPES[r.type as ReturnType] ?? r.type,
+    typeLabelEn: RETURN_TYPES_EN[r.type as ReturnType] ?? r.type,
     statusLabel: RETURN_STATUS_LABELS[r.status] ?? r.status,
+    statusLabelEn: RETURN_STATUS_LABELS_EN[r.status] ?? r.status,
     carrierName: r.returnCarrier ? getCarrier(r.returnCarrier)?.name ?? r.returnCarrier : null,
   }
 }
