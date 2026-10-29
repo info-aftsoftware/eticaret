@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { X, Package } from 'lucide-react'
 import { ClassicPageShell } from '@/components/ClassicPageShell'

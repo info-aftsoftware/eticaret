@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { ShoppingCart, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'

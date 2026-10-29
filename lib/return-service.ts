@@ -88,6 +88,7 @@ export function returnEligibility(order: OrderWithReturns) {
 }
 
 import { suggestedRefund } from '@/lib/return-refund'
+import { localizePath } from '@/lib/i18n/locale-path'
 export { suggestedRefund }
 
 function toEmailData(order: Order, r: ReturnRequest, locale: CatalogLocale): ReturnEmailData {
@@ -107,7 +108,7 @@ function toEmailData(order: Order, r: ReturnRequest, locale: CatalogLocale): Ret
     carrierName: r.returnCarrier ? getCarrier(r.returnCarrier)?.name ?? r.returnCarrier : null,
     returnCode: r.returnCode,
     refundAmount: r.refundAmount,
-    orderUrl: `${site}/orders/${order.orderNo}`,
+    orderUrl: `${site}${localizePath(`/orders/${order.orderNo}`, locale === 'en' ? 'en' : 'tr')}`,
     adminUrl: `${site}/admin/orders/${order.id}?source=prisma`,
   }
 }

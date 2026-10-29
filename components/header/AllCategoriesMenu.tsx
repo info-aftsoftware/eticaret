@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import Link, { usePathname } from '@/lib/i18n/navigation'
 import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { categoryHref } from '@/lib/seo/type-paths'

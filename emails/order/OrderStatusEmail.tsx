@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, Section, Link } from '@react-email/components'
 import { EmailLayout, OrderSummary, OrderProgress, CtaButton, BankTransferBox, AmountRow, s, fmtTRY, tx, type EmailLocale, type OrderEmailData } from './shared'
+import { localizePath } from '../../lib/i18n/locale-path'
 
 export type OrderEmailKind =
   | 'payment_reminder'
@@ -93,7 +94,7 @@ export default function OrderStatusEmail({ order, kind, reason }: {
   const title = TITLES[kind][en ? 'en' : 'tr']
   const refunded = order.paymentStatus === 'REFUNDED' || (order.refundAmount ?? 0) > 0
   const progress = PROGRESS[kind]
-  const site = (order.siteUrl || order.orderUrl.replace(/\/orders\/.*$/, '')).replace(/\/$/, '')
+  const site = (order.siteUrl || order.orderUrl.replace(/(\/en)?\/orders\/.*$/, '')).replace(/\/$/, '')
   return (
     <EmailLayout
       locale={order.locale}
@@ -171,7 +172,7 @@ export default function OrderStatusEmail({ order, kind, reason }: {
               ödeyebilirsiniz. Sorun devam ederse kartınızın internet alışverişine ve 3D Secure doğrulamasına açık olduğundan emin olun.
             </Text>
           )}
-          <CtaButton href={`${site}/cart`}>{L('Tekrar dene', 'Try again')}</CtaButton>
+          <CtaButton href={`${site}${localizePath('/cart', en ? 'en' : 'tr')}`}>{L('Tekrar dene', 'Try again')}</CtaButton>
         </>
       )}
 
@@ -209,7 +210,7 @@ export default function OrderStatusEmail({ order, kind, reason }: {
           {en ? (
             <Text style={s.note}>
               You may exercise your right of withdrawal within 14 days of delivery. You can create a return request from your order page; see the{' '}
-              <Link href={`${site}/returns`} style={s.link}>returns and withdrawal terms</Link>.
+              <Link href={`${site}${localizePath('/returns', 'en')}`} style={s.link}>returns and withdrawal terms</Link>.
             </Text>
           ) : (
             <Text style={s.note}>

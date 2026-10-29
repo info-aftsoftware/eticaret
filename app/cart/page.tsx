@@ -1,9 +1,8 @@
 ﻿'use client'
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useCartStore, type CartItem } from '@/lib/store/useCartStore'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import {

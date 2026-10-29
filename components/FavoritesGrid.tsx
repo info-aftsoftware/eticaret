@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { Bell, Heart, Package, ShoppingBag, Trash2 } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'

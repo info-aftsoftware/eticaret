@@ -3,12 +3,13 @@
  * Sıra: kırıntı yolu → H1 + giriş → katalogdan özet (ürün sayısı, markalar/türler, başlangıç fiyatı) → ürünler →
  * alım rehberi (H2'ler) → sık sorulan sorular → ilgili bağlantılar. Görünür kırıntı yolu ile JSON-LD aynı yolu verir.
  */
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import type { ReactNode } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ProductCard } from '@/components/ProductCard'
 import type { StorefrontProduct } from '@/lib/discounts'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 
 export type Crumb = { name: string; href: string }
 export type LinkItem = { label: string; href: string; note?: string }
@@ -44,7 +45,7 @@ export function CollectionPage({
   return (
     <div className="bg-white">
       {jsonLd.map((data, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
+        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(data, en ? 'en' : 'tr')) }} />
       ))}
       <div className={`${PAGE_CONTAINER} py-6 sm:py-8`}>
         <nav aria-label={en ? 'Breadcrumb' : 'Kırıntı yolu'} className="mb-4">

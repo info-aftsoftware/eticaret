@@ -1,7 +1,7 @@
 import React from 'react'
 import { BreadcrumbJsonLd } from '@/components/seo/BreadcrumbJsonLd'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { localizedMetadata } from '@/lib/locale-metadata'

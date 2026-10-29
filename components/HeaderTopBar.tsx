@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { Mail, Phone } from 'lucide-react'
 import { SELLER } from '@/lib/legal/company'
 import { useTranslations } from 'next-intl'

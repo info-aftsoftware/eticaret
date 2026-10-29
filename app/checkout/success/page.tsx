@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { CheckCircle2, Clock, XCircle, Package, Mail, Truck, Banknote, ArrowRight, Loader2 } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { useAuthStore } from '@/lib/store/useAuthStore'

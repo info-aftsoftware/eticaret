@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import { localizedMetadata } from '@/lib/locale-metadata'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com').replace(/\/$/, '')
 
@@ -75,7 +76,7 @@ export default async function HakkimizdaPage() {
   }
   return (
     <div className="min-h-screen bg-surface">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(aboutJsonLd, locale === 'en' ? 'en' : 'tr')) }} />
 
       {/* Breadcrumb + Başlık */}
       <div className="bg-surface-elevated border-b border-palette">

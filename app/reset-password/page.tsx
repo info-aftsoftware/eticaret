@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect, useRef, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import { Loader2, ArrowLeft } from 'lucide-react'
 import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth'
 import { getAuth, isFirebaseConfigured } from '@/lib/firebase/config'

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -12,6 +12,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { getLocale } from 'next-intl/server'
 import { localizedMetadata } from '@/lib/locale-metadata'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 const MAX_PRODUCTS = 16
@@ -97,11 +98,11 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
     <div className="min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildBreadcrumbSchema(item)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(buildBreadcrumbSchema(item), locale === 'en' ? 'en' : 'tr')) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildFaqSchema(item)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(buildFaqSchema(item), locale === 'en' ? 'en' : 'tr')) }}
       />
 
       {/* Hero */}

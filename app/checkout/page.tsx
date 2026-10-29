@@ -1,9 +1,8 @@
 ﻿'use client'
 
 import React, { useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
+import Link, { useRouter } from '@/lib/i18n/navigation'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { AlertCircle, ArrowLeft, Banknote, Building2, Check, ChevronDown, CreditCard, Loader2, Lock, MapPin, Package, ShoppingCart, User } from 'lucide-react'
 import { useCartStore } from '@/lib/store/useCartStore'
 import { trackBeginCheckout, trackAddPaymentInfo, cartItemToGa } from '@/lib/analytics'

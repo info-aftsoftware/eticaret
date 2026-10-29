@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { localizedMetadata } from '@/lib/locale-metadata'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { FAQContent } from './FAQContent'

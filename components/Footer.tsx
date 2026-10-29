@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { useTranslations } from 'next-intl'
 import { useL } from '@/lib/i18n-inline'

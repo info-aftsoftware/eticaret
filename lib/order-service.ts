@@ -37,6 +37,7 @@ import OrderStatusEmail, { ORDER_EMAIL_SUBJECTS, type OrderEmailKind } from '@/e
 import AdminOrderEmail, { ADMIN_ORDER_EMAIL_SUBJECTS, type AdminOrderEvent } from '@/emails/order/AdminOrderEmail'
 import type { OrderEmailData } from '@/emails/order/shared'
 import { lineItemName, toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
+import { localizePath } from '@/lib/i18n/locale-path'
 
 export type OrderWithLines = Order & { lines: OrderLine[] }
 export type Actor = 'system' | 'admin' | 'customer'
@@ -137,7 +138,8 @@ export function toOrderEmailData(order: OrderWithLines, localeOverride?: Catalog
       : (locale === 'en' ? carrier?.trackingHintEn ?? carrier?.trackingHint : carrier?.trackingHint) ?? null,
     customerNote: parseCustomerNote(order),
     installNote: orderHasInstall(order),
-    orderUrl: `${siteUrl()}/orders/${order.orderNo}`,
+    // Müşterinin sipariş dilindeki adres (/en/orders/…)
+    orderUrl: `${siteUrl()}${localizePath(`/orders/${order.orderNo}`, locale === 'en' ? 'en' : 'tr')}`,
     adminUrl: `${siteUrl()}/admin/orders/${order.id}?source=prisma`,
     siteUrl: siteUrl(),
     paymentDueDate: due.toLocaleDateString(dateLocale, { day: '2-digit', month: 'long', year: 'numeric', timeZone: STORE_TIME_ZONE }),

@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useMemo, Suspense } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { PAGE_CONTAINER } from '@/lib/page-container'
 import { ChevronRight, Package, SlidersHorizontal, Filter, Menu, X, Search } from 'lucide-react'

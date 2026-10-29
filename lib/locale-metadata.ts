@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
+import { withLocaleAlternates } from '@/lib/i18n/alternates'
 
 /**
- * Sekme başlığı ve meta açıklaması ziyaretçinin dilinde.
- * Türkçe meta veri (kanonik URL, anahtar kelimeler, çerezsiz gelen arama motorlarının gördüğü metin) aynen kalır;
- * yalnızca İngilizce seçili (NEXT_LOCALE=en) ziyaretçide başlık, açıklama ve paylaşım (Open Graph / Twitter)
- * başlıkları İngilizcesiyle değiştirilir.
+ * Sekme başlığı ve meta açıklaması sayfanın dilinde. İngilizce sayfada (/en/...) başlık, açıklama ve paylaşım
+ * (Open Graph / Twitter) başlıkları İngilizcesiyle değiştirilir; canonical ve dil eşleri localizedMetadata'da
+ * (lib/i18n/alternates) iki dil için de yazılır.
  */
 export type EnglishMeta = {
   title: string | { default: string; template: string }
@@ -39,5 +39,7 @@ export async function localizedMetadata(tr: Metadata, en: EnglishMeta): Promise<
   } catch {
     locale = 'tr'
   }
-  return locale === 'en' ? englishMetadata(tr, en) : tr
+  // Dil adresten (/en): canonical bu dilin adresi, dil eşleri (hreflang) her iki dilde (lib/i18n/alternates)
+  const site = locale === 'en' ? 'en' : 'tr'
+  return withLocaleAlternates(site === 'en' ? englishMetadata(tr, en) : tr, site)
 }

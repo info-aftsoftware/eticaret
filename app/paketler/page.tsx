@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { localizedMetadata } from '@/lib/locale-metadata'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { PAGE_CONTAINER } from '@/lib/page-container'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'https://voltekno.com'
 
@@ -62,7 +63,7 @@ export default async function PaketlerPage() {
     <div className="min-h-screen bg-slate-50">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildPackageListSchema()) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(buildPackageListSchema(), locale === 'en' ? 'en' : 'tr')) }}
       />
       <div className={`${PAGE_CONTAINER} py-10 md:py-14`}>
         <header className="mb-8 md:mb-10">

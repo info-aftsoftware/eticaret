@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { X, CheckCircle2, AlertCircle, Info, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useL } from '@/lib/i18n-inline'

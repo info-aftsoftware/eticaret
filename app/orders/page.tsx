@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/lib/i18n/navigation'
 import { Loader2 } from 'lucide-react'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { useL } from '@/lib/i18n-inline'

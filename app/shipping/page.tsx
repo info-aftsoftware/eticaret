@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { ChevronRight } from 'lucide-react'
 import { getLocale } from 'next-intl/server'
 import { localizedMetadata } from '@/lib/locale-metadata'

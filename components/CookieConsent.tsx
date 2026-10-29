@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 

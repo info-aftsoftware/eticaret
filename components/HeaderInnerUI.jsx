@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef } from 'react'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { fmtPrice } from '@/lib/format'
 import { HEADER_NAV_GROUP_COUNT } from '@/lib/categories'
 import { HeaderWrapper } from './HeaderWrapper'

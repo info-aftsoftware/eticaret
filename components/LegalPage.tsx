@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { notFound } from 'next/navigation'
 import { ChevronRight } from 'lucide-react'
 import { getLegalDocument, LEGAL_SLUGS, legalHref, type LegalSlug } from '@/lib/legal/documents'

@@ -11,6 +11,7 @@ import { getMergedProductById } from '@/lib/catalog-merge'
 import { STORE_CONTACT } from '@/lib/store-config'
 import { productName, toCatalogLocale } from '@/lib/catalog-en'
 import BackInStockEmail, { backInStockSubject } from '@/emails/BackInStockEmail'
+import { localizePath } from '@/lib/i18n/locale-path'
 
 /** Bekleyen talepleri tarar; stokta olan ürünler için e-posta gönderir. productIds verilirse yalnızca onlar. */
 export async function processStockAlerts(productIds?: string[]): Promise<{ notified: number; products: string[] }> {
@@ -43,7 +44,7 @@ export async function processStockAlerts(productIds?: string[]): Promise<{ notif
         const res = await sendEmail(
           a.email,
           backInStockSubject(name, locale),
-          React.createElement(BackInStockEmail, { productName: name, productUrl: `${site}/products/${product.slug ?? product.id}`, locale })
+          React.createElement(BackInStockEmail, { productName: name, productUrl: `${site}${localizePath(`/products/${product.slug ?? product.id}`, locale)}`, locale })
         )
         sent = res.success
       } catch (e) {

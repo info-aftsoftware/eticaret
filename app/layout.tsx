@@ -7,7 +7,6 @@ import IntlProvider from './IntlProvider'
 import { FirebaseAnalyticsInit } from '@/components/FirebaseAnalyticsInit'
 import { ClientErrorReporter } from '@/components/ClientErrorReporter'
 import { CartSync } from '@/components/CartSync'
-import { EnglishScopeNotice } from '@/components/EnglishScopeNotice'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { localizedMetadata } from '@/lib/locale-metadata'
 
@@ -118,7 +117,6 @@ export default async function RootLayout({
           <FirebaseAnalyticsInit />
           <ClientErrorReporter />
           <CartSync />
-          <EnglishScopeNotice />
           {children}
         </IntlProvider>
       </body>

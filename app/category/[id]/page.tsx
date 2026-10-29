@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { DEFAULT_OG_IMAGE } from '@/lib/seo/og'
 import { redirect } from 'next/navigation'
+import { localHref, requestLocale } from '@/lib/i18n/server'
+import { localizeSiteUrls } from '@/lib/i18n/alternates'
 import { CATEGORY_GROUPS, LEGACY_CATEGORY_REDIRECTS } from '@/lib/categories'
 import { CategoryPageClient } from './CategoryPageClient'
 import { categoryInitialProducts } from '@/lib/category-initial'
@@ -76,7 +78,7 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
   // Eski kategori URL'leri yeni Excel kategorilerine yönlendirilir (karşılığı yoksa tüm ürünler)
   if (params.id in LEGACY_CATEGORY_REDIRECTS) {
     const target = LEGACY_CATEGORY_REDIRECTS[params.id]
-    redirect(target ? `/category/${target}` : '/products')
+    redirect(await localHref(target ? `/category/${target}` : '/products'))
   }
 
   const title = getCategoryTitle(params.id)
@@ -107,6 +109,8 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
     ],
   }
 
+  // İngilizce sayfada şemadaki adresler /en önekli
+  const locale = await requestLocale()
   const itemListJsonLd = categoryProducts.length > 0 ? {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -126,12 +130,12 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(breadcrumbJsonLd, locale)) }}
       />
       {itemListJsonLd && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localizeSiteUrls(itemListJsonLd, locale)) }}
         />
       )}
       <CategoryPageClient id={params.id} initialProducts={await categoryInitialProducts(params.id)} />

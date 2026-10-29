@@ -15,6 +15,7 @@ import { STORE_CONTACT, VAT_RATE } from '@/lib/store-config'
 import { getMarketingConsent } from '@/lib/marketing-consent'
 import { productName, variantLabel, toCatalogLocale, type CatalogLocale } from '@/lib/catalog-en'
 import AbandonedCartEmail, { abandonedCartSubject, type AbandonedCartLine } from '@/emails/AbandonedCartEmail'
+import { localizePath } from '@/lib/i18n/locale-path'
 
 const HOUR = 3_600_000
 
@@ -81,7 +82,7 @@ export async function processAbandonedCarts(opts: { dry?: boolean } = {}) {
     const res = await sendEmail(
       snap.email,
       abandonedCartSubject(locale),
-      React.createElement(AbandonedCartEmail, { lines, cartUrl: `${site}/cart`, settingsUrl: `${site}/profile?tab=settings`, locale })
+      React.createElement(AbandonedCartEmail, { lines, cartUrl: `${site}${localizePath('/cart', locale)}`, settingsUrl: `${site}${localizePath('/profile?tab=settings', locale)}`, locale })
     )
     if (res.success) {
       await prisma.cartSnapshot.update({ where: { userId: snap.userId }, data: { remindedAt: new Date() } })

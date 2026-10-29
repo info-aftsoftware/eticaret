@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { reportClientError } from '@/components/ClientErrorReporter'
-import Link from 'next/link'
+import Link from '@/lib/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { Button } from '@/components/ui/button'

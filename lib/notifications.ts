@@ -11,6 +11,7 @@ import WelcomeEmail, { welcomeEmailSubject } from '../emails/Welcome'
 import { EmailVerification, emailVerificationSubject } from '../emails/EmailVerification'
 import PasswordResetEmail, { passwordResetSubject } from '../emails/PasswordResetEmail'
 import type { EmailLocale } from '../emails/order/shared'
+import { localizePath } from '@/lib/i18n/locale-path'
 
 /** HTML e-posta gövdesine yerleştirilen kullanıcı girdisini kaçışlar (HTML enjeksiyonuna karşı). */
 const esc = (v: unknown) =>
@@ -422,7 +423,7 @@ export async function sendQuestionAnsweredEmail(data: {
   try {
     const { default: QuestionAnsweredEmail, questionAnsweredSubject } = await import('../emails/QuestionAnsweredEmail')
     const { STORE_CONTACT } = await import('./store-config')
-    const productUrl = `${STORE_CONTACT.siteUrl.replace(/\/$/, '')}/products/${encodeURIComponent(data.productId)}`
+    const productUrl = `${STORE_CONTACT.siteUrl.replace(/\/$/, '')}${localizePath(`/products/${encodeURIComponent(data.productId)}`, data.locale === 'en' ? 'en' : 'tr')}`
     const result = await sendEmail(
       data.to,
       questionAnsweredSubject(data.productName, data.locale),

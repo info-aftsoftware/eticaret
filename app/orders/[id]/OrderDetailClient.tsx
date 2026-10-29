@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
-import { useParams, useRouter } from 'next/navigation'
+import Link, { useRouter } from '@/lib/i18n/navigation'
+import { useParams } from 'next/navigation'
 import { AlertCircle, Banknote, Check, CheckCircle2, Clock, Copy, CreditCard, ExternalLink, FileText, Loader2, MapPin, Package, PackageCheck, ReceiptText, RotateCcw, Truck, XCircle } from 'lucide-react'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore'

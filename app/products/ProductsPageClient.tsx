@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Link, { useRouter } from '@/lib/i18n/navigation'
+import { useSearchParams } from 'next/navigation'
 import { pageItems, parsePageParam } from '@/lib/pagination'
 import { useLocale, useTranslations } from 'next-intl'
 import { specKeyLabel, specValueLabel, toCatalogLocale } from '@/lib/catalog-en'
