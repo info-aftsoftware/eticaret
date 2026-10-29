@@ -1,6 +1,6 @@
 # Firebase kurulumu — voltekno-eticaret
 
-Proje boş başlıyor; eski `eticaret-54bdc` projesinden veri veya kullanıcı taşınmıyor (18.10.2026 kararı). Sonucu: eski hesaplar yeni projede yok, kullanıcılar yeniden kayıt olur; eski favori/adresler görünmez, Prisma'daki eski üye siparişleri eski kimlikte kalır (sipariş takip formuyla yine açılır).
+Eski `eticaret-54bdc` projesindeki veriler 26.10.2026'da taşındı (18.10'daki "boş başlasın" kararı değişti). Auth kullanıcıları **aynı UID'ler ve şifre özetleriyle** aktarıldı, Firestore belgeleri aynı yollara kopyalandı. Prisma'daki siparişler Firebase UID'sine bağlı olduğu için eski müşterilerin siparişleri, favorileri ve adresleri yeni projede de görünür. Ayrıntı ve geçiş günü eşitlemesi: aşağıda "Veri taşıma".
 Kod tarafı hazır: web yapılandırması `.env.local` içinde, kurallar `firestore.rules` ve `storage.rules` içinde.
 
 ## Durum
@@ -10,14 +10,15 @@ Kod tarafı hazır: web yapılandırması `.env.local` içinde, kurallar `firest
 | Web yapılandırması (`NEXT_PUBLIC_FIREBASE_*`) | kod | tamam |
 | `.firebaserc` → `voltekno-eticaret` | kod | tamam |
 | `storage.rules` + `firebase.json` | kod | tamam |
-| 1. Firestore veritabanı | Console | bekliyor |
-| 2. Authentication sağlayıcıları | Console | bekliyor |
-| 3. Yetkili alan adları | Console | bekliyor |
-| 4. E-posta işlem adresi | Console | bekliyor |
+| 1. Firestore veritabanı | Console | tamam (`(default)`) |
+| 2. Authentication sağlayıcıları | Console | tamam (E-posta/Şifre, Google) |
+| 3. Yetkili alan adları | Console | tamam (voltekno.com, www, nextfirststep.com) |
+| 4. E-posta işlem adresi | Console | kontrol edilmedi |
 | 5. Storage (Blaze plan) | Console | bekliyor |
 | 6. Servis hesabı anahtarı | Console → kod | bekliyor |
 | 7. API anahtarı kısıtlaması | Google Cloud | önerilir |
-| 8. Kuralları yükleme | CLI | 1 ve 5'ten sonra |
+| 8. Kuralları yükleme | CLI | Firestore kuralları + indeksler yüklendi (26.10); Storage, 5'ten sonra |
+| 10. Veri taşıma (Auth + Firestore) | betik | tamam (26.10); geçiş günü son eşitleme |
 | 9. Canlı sunucu ortam değişkenleri | Hostinger | 6'dan sonra |
 
 ## Console adımları
@@ -40,9 +41,41 @@ Firestore ve Storage açıldıktan sonra kurallar ve indeksler yüklenir:
 firebase deploy --only firestore,storage --project voltekno-eticaret
 ```
 
+## Veri taşıma
+
+26.10.2026'da yapıldı. Betikler `scripts/firebase-migrate/` klasöründe. Şifre özeti ve kullanıcı dosyaları repoya değil, sistemin geçici klasöründe (`%TEMP%/voltekno-fbmig`) tutulur. İş bitince silinmeleri gerekir.
+
+| Ne | Eski | Yeni | Not |
+|---|---|---|---|
+| Auth hesapları | 4 | 4 | 3 e-posta/şifre hesabı aynı UID ve SCRYPT özetiyle, 1 admin teknik kimliği (`admin-panel-user`) |
+| `users` | 3 | 3 | Belge kimlikleri Auth UID'leriyle eşleşiyor |
+| `users/*/addresses` | 1 | 1 | |
+| `users/*/favorites` | 6 | 6 | |
+| `newsletter` | 2 | 2 | |
+
+12 belgenin hepsi alan alan karşılaştırıldı, hepsi birebir aynı.
+
+Notlar:
+- CLI'nın `auth:import` komutu şifre özetlerini sessizce düşürdü. Şifreler Identity Toolkit `accounts:batchCreate` ile yazıldı (`batch-create.cjs`).
+- Yeni projede Firestore, varsayılan "her şeyi reddet" kuralıyla açılmıştı. Repodaki `firestore.rules` ve indeksler 26.10'da yüklendi.
+
+**Geçiş günü son eşitleme.** Canlı site yeni projeye geçene kadar müşteriler eski projede işlem yapmaya devam eder. Ortam değişkenlerini değiştirmeden hemen önce şu adımları uygulayın:
+
+```bash
+node scripts/firebase-migrate/fs-copy.cjs --apply --overwrite
+```
+
+Bu tarihten sonra eski projede açılan hesaplar varsa önce şu adımlar gerekir:
+
+1. `firebase auth:export %TEMP%/voltekno-fbmig/old-users.json --format=json --project eticaret-54bdc`
+2. `node scripts/firebase-migrate/hash-config.cjs`
+3. `node scripts/firebase-migrate/batch-create.cjs`
+
+Kontrol için `firebase auth:export %TEMP%/voltekno-fbmig/new-users.json --format=json --project voltekno-eticaret` ve ardından `node scripts/firebase-migrate/verify.cjs` çalıştırın. Son olarak `%TEMP%/voltekno-fbmig` klasörünü silin.
+
 ## Canlı sunucu
 
-`NEXT_PUBLIC_*` değerleri derleme sırasında koda gömülür. Hostinger ortam değişkenleri güncellendikten sonra uygulama yeniden derlenmelidir.
+Test sitesi (nextfirststep.com) 26.10'da hâlâ eski projeyi (`eticaret-54bdc`) kullanıyordu. `NEXT_PUBLIC_*` değerleri derleme sırasında koda gömülür. Hostinger ortam değişkenleri güncellendikten sonra uygulama yeniden derlenmelidir.
 
 ## Notlar
 
