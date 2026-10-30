@@ -23,7 +23,9 @@ _Son güncelleme: 28.10.2026 (SEO + yapay zekâ araması turu `35836fd`, voltekn
 - **Yerel ortam notu:** 30.10 01:10'da test sunucusu açıkken çalışan bir `prisma generate`, motor dosyası kilitli olduğu için yarıda kaldı. `node_modules/.prisma/client` ve `node_modules/.bin` silindi; ikisi yeniden üretildi. **Kural:** sunucu açıkken `prisma generate` çalıştırılmaz.
 - **Yayında yapılacaklar:**
   - Hostinger'da `prisma db push`. Yeni sütunlar: `AdminUser.sessionVersion`, `ProductOverride.gtin`, İngilizce dalın `locale` sütunları.
-  - Firestore kuralları ve eski Firebase oturumlarının iptali (S2).
+  - Firestore kuralları eski projede (`eticaret-54bdc`) yayında. Eski Firebase oturumlarının iptali (S2) hâlâ sizde: `node --env-file=.env.eticaret-54bdc.local scripts/revoke-admin-firebase.mjs`.
+  - Eski projede yetkili alan adları eklendi (30.10): `voltekno.com`, `www.voltekno.com`, `nextfirststep.com` (G9 tamam). E-posta şablonu ayarları API ile değişmiyor; isteğe bağlı Console adımı `FIREBASE_SETUP.md` başında.
+  - GitHub hâlâ sizde. Yeni adres ve gönderim: `git remote set-url origin https://github.com/info-aftsoftware/eticaret.git`, `git push origin urun-katalogu-ikas`, `git push origin urun-katalogu-ikas:main`.
   - Yayından sonra "Canlıya alınca — ürün yapılandırılmış verisi" kontrolleri (Ü1–Ü7). Ü2 ve Ü3'e `/en` adresleri de eklenmeli.
 
 **29.10.2026 — sıralı yapılacaklar listesi** aşağıda "Yapılacaklar — sıralı". 1. madde (İngilizce `/en/`) tamamlandı ve ana dala birleşti (`341fe44`). Geçişte ürün verisi kontrolleri: "voltekno.com geçişi" → "Canlıya alınca — ürün yapılandırılmış verisi".
@@ -904,7 +906,7 @@ _✅ geçti · ❌ hata (Not sütununda) · — uygulanmaz_
 | G6 | DNS: `voltekno.com` A kaydı → Hostinger IP'si (hPanel voltekno.com sitesi "Alan adını bağla" önerisini gösterir; nextfirststep.com için kullanılan `88.222.222.127` / `2.57.91.108` aynı sunucu kümesi), `www` CNAME → `voltekno.com`. TTL düşük (300) | Siz (hPanel) | İkas kaydını silmek yerine değiştirin; geri dönmek gerekirse eski değerler yukarıda |
 | G7 | SSL: Hostinger Let's Encrypt sertifikasını DNS yayılınca kurar (genelde dakikalar–birkaç saat); http→https ve www→kök tek adımda 301 | Siz/Hostinger | |
 | G8 | Canlı kontrol: ana sayfa, ürün, kategori, `/robots.txt` (Disallow: / **olmamalı**), `/sitemap.xml`, eski ikas adresleri 308 (ör. `/akuler`, `/alpex-tam-sinus-inverter-2000w`), admin girişi, iletişim formu e-postası | Ben | Sipariş açan betik çalıştırılmaz |
-| G9 | Firebase: Authentication → Authorized domains'a `voltekno.com` ve `www.voltekno.com` (hem eski hem yeni projede, hangisi kullanılıyorsa) | Siz | Yoksa Google/e-posta girişi voltekno.com'da çalışmaz |
+| G9 | Firebase: Authentication → Authorized domains'a `voltekno.com` ve `www.voltekno.com` (hem eski hem yeni projede, hangisi kullanılıyorsa) | ✅ 30.10 (iki projede de) | Yoksa Google/e-posta girişi voltekno.com'da çalışmaz |
 | G10 | Search Console (alan adı özelliği, DNS TXT zaten var), site haritası gönderimi, "Dizine eklenmesini iste"; Bing Webmaster Tools (Search Console'dan içe aktar); Merchant Center akışı `https://voltekno.com/feed/google-merchant.xml`; Google Business Profile | Siz | 2 hafta "Sayfalar" raporunda 404 artışı izlenir |
 | G11 | ikas aboneliği: 1–2 hafta sorunsuz çalıştıktan sonra iptal; ikas'taki sipariş/müşteri kayıtlarının dışa aktarımı alınmalı | Siz | |
 | G12 | nextfirststep.com: test ortamı olarak kalır (noindex) veya kapatılır. Kalırsa ortam değişkenine `INTERNAL_CRON=0` eklenmeli: yoksa kendi veritabanı kopyasındaki müşterilere havale hatırlatması / sipariş iptali e-postası göndermeye devam eder | Siz | |
