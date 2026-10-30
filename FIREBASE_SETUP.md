@@ -4,7 +4,7 @@
 > - Firestore kuralları depodaki `firestore.rules` ile yayında.
 > - Yetkili alan adları eklendi: `voltekno.com`, `www.voltekno.com`, `nextfirststep.com`.
 > - E-posta şablonu ayarları (dönüş adresi, gönderen adı) API ile değiştirilemiyor (`EMAIL_TEMPLATE_UPDATE_NOT_ALLOWED`). Bunlar yalnız yedek yolu etkiler, çünkü site doğrulama ve şifre e-postalarını kendi SMTP'siyle markalı olarak gönderir. İsterseniz Console → Authentication → Templates'ten gönderen adını "Voltekno", eylem adresini `https://voltekno.com/verify-email` yapın.
-> - Eski ortak yönetim kimliğinin oturum iptali (`scripts/revoke-admin-firebase.mjs`, S2) henüz çalıştırılmadı.
+> - Eski ortak yönetim kimliğinin (`admin-panel-user`) oturumları 30.10'da iptal edildi (`scripts/revoke-admin-firebase.mjs`, S2).
 
 Eski `eticaret-54bdc` projesindeki veriler 26.10.2026'da taşındı (18.10'daki "boş başlasın" kararı değişti). Auth kullanıcıları **aynı UID'ler ve şifre özetleriyle** aktarıldı, Firestore belgeleri aynı yollara kopyalandı. Prisma'daki siparişler Firebase UID'sine bağlı olduğu için eski müşterilerin siparişleri, favorileri ve adresleri yeni projede de görünür. Ayrıntı ve geçiş günü eşitlemesi: aşağıda "Veri taşıma".
 Kod tarafı hazır: web yapılandırması `.env.local` içinde, kurallar `firestore.rules` ve `storage.rules` içinde.
