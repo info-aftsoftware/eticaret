@@ -25,6 +25,7 @@ _Son güncelleme: 28.10.2026 (SEO + yapay zekâ araması turu `35836fd`, voltekn
   - Hostinger'da `prisma db push`. Yeni sütunlar: `AdminUser.sessionVersion`, `ProductOverride.gtin`, İngilizce dalın `locale` sütunları.
   - ✅ Firestore kuralları eski projede (`eticaret-54bdc`) yayında. Eski ortak yönetim kimliğinin oturumları 30.10'da iptal edildi (S2 tamam).
   - ✅ Eski projede yetkili alan adları eklendi (30.10): `voltekno.com`, `www.voltekno.com`, `nextfirststep.com` (G9 tamam). E-posta şablonu ayarları API ile değişmiyor; isteğe bağlı Console adımı `FIREBASE_SETUP.md` başında.
+  - ✅ E-posta kutusu (31.10): `noreply@voltekno.com` açıldı. Yerel `.env.local` bu kutuya çevrildi (`SMTP_USER`, `SMTP_FROM`, `SMTP_FROM_NAME=Voltekno`). Hostinger SMTP girişi doğrulandı; doğrulama e-posta göndermedi. DNS kontrolü: MX Hostinger; SPF `include:_spf.mail.hostinger.com include:_spf.firebasemail.com ~all`; DKIM `hostingermail-a/b/c` CNAME; DMARC `p=none`. Şifre yalnız `.env.local`'da (git dışı). Canlıda G2 adımında aynı değerler girilecek. `SMTP_REPLY_TO` boş: yanıtlar noreply kutusuna düşer, `info@voltekno.com` açılırsa ona yönlendirilir.
   - ✅ GitHub (30.10): `origin` artık `https://github.com/info-aftsoftware/eticaret.git`. `urun-katalogu-ikas` ve `main` ikisi de `96f19c6`'da.
   - Yayından sonra "Canlıya alınca — ürün yapılandırılmış verisi" kontrolleri (Ü1–Ü7). Ü2 ve Ü3'e `/en` adresleri de eklenmeli.
 
