@@ -88,6 +88,18 @@ _Sıra: önce sizin onayladığınız ve yalnız kodla yapılabilen işler, sonr
 
 ## Güvenlik taraması (29–30.10.2026; 1–2. tur `952575c`, 3. tur `5672b39`; yayınlanmadı)
 
+**4. tur (04.11, yayın öncesi):** `5672b39`'dan sonra gelenler tarandı: belgeler, `nodemailer` 10.3.0, bir test ve giriş sayfasındaki altyapı uyarısı (commit edilmedi). Ayrıca izlenen dosyalar ve GitHub'daki tüm commit geçmişi gizli anahtar için tarandı, `npm audit` çalıştırıldı.
+| # | Önem | Bulgu | Durum |
+|---|---|---|---|
+| S26 | Orta | **GitHub deposu `info-aftsoftware/eticaret` herkese açık** (GitHub API, girişsiz 200, `visibility: public`). İçeride iç işleyiş belgeleri var: sunucu kullanıcı adı ve klasör yolları, yönetim süreçleri, açık güvenlik maddelerinin listesi (S14, S16, S20, S24). `.claude/launch.json`'da yerel test sunucusunun `ADMIN_TOKEN` ve `JWT_SECRET` değerleri var (952575c'den beri; yerel `.env` dosyalarındakilerle aynı değil) | **Sizde:** GitHub → depo → Settings → General → Danger Zone → "Change visibility" → Private. voltekno.com'da `ADMIN_TOKEN`, `JWT_SECRET`, `CRON_SECRET` yeni değerler olmalı (G2); nextfirststep.com'da `ADMIN_TOKEN` `Y1dx…` ile başlıyorsa değiştirin |
+| S27 | Orta (bağımlılık) | Üretim bağımlılıklarında 7 orta, 4 düşük açık; hepsi dolaylı (`firebase-admin` altında `google-gax`/`gaxios`/`gcp-metadata`, `glob`/`minimatch`/`rimraf`, `sucrase`). Yüksek ve kritik 0 | ✅ 04.11: `npm audit fix` (41 paket, çoğu eslint araçları; `sucrase` 3.35.1). Kalan zincirin kaynağı `rimraf` 5'ti (`gaxios` ve `google-gax` çekiyordu, ikisi de çalışırken yüklemiyor); `package.json` → `overrides` ile yalnız bu ikisinde `rimraf` ^6.1.4. **Üretimde orta/yüksek/kritik 0**; kalan 4 düşük `deepmerge` → `html-to-text` → `@react-email/render` zinciri, düzeltmesi yayımlanmamış (yalnız kendi e-posta şablonlarımızı işliyor). Geliştirme araçlarında 18 orta (eslint 8 zinciri; kapanması eslint 9 geçişi ister, siteye girmiyor) |
+**Temiz bulunanlar:**
+- Giriş uyarısı sabit metin ve site içi bağlantıdan ibaret; kullanıcı girdisi yok.
+- Git geçmişinde `.env`, servis hesabı anahtarı, SMTP şifresi ya da veritabanı dosyası hiç commit edilmemiş.
+- Eski derleme çıktılarında (`57aa16f`, `bffc4ae`) yalnız Firebase web anahtarı var. Bu anahtar zaten tarayıcıya giden kodda bulunuyor ve gizli değil. "PRIVATE KEY" eşleşmesi bir kütüphanenin metin kontrolü, gerçek anahtar değil.
+- İzlenen dosyalarda müşteri verisi yok; telefon ve e-postalar şirketin kendi bilgileri ya da örnek değerler.
+- Tip denetimi 0 hata, birim testi 221/221, lint'te yalnız eski uyarılar.
+
 **3. tur (30.10, yayın öncesi):** Son taramadan sonra gelen kod tarandı: iyzico ödeme formu, akü kargo teklifi, `/en` yönlendirmesi ve tüm JSON-LD. Kritik ya da yüksek bulgu yok.
 | # | Önem | Bulgu | Durum |
 |---|---|---|---|

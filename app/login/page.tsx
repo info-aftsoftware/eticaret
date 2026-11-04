@@ -15,6 +15,9 @@ import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
 import { useServerError } from '@/lib/server-error-i18n'
 
+// Altyapı değişikliği duyurusu: 04.11.2026'dan itibaren 1 ay gösterilir, bu tarihten sonra kendiliğinden kalkar.
+const MIGRATION_NOTICE_UNTIL = new Date('2026-12-05T00:00:00+03:00')
+
 function LoginForm() {
   const L = useL()
   const tErr = useServerError()
@@ -66,7 +69,14 @@ function LoginForm() {
   return (
     <AuthLayout breadcrumb={L('Giriş Yap', 'Sign In')} title={L('Giriş Yap', 'Sign In')} subtitle={L('Hesabınıza giriş yaparak siparişlerinizi takip edin ve hızlıca alışveriş yapın.', 'Sign in to your account to track your orders and shop faster.')}>
       <div className="space-y-5">
-        {verified && <FormAlert tone="success">{L('E-posta adresiniz doğrulandı. Giriş yapabilirsiniz.', 'Your email address has been verified. You can now sign in.')}</FormAlert>}
+        {Date.now() < MIGRATION_NOTICE_UNTIL.getTime() && (
+          <FormAlert tone="info">
+            {L('Altyapı değişikliği nedeniyle eski kullanıcılarımızın tekrar kayıt olması gerekmektedir. Değişim, iade gibi eski siparişlerinizle ilgili durumlarda lütfen ', 'Due to an infrastructure change, existing customers need to register again. For matters related to your previous orders, such as exchanges or returns, please ')}
+            <Link href="/contact" className={linkClass}>{L('bizimle iletişime geçin', 'contact us')}</Link>
+            {L('.', '.')}
+          </FormAlert>
+        )}
+        {verified &&<FormAlert tone="success">{L('E-posta adresiniz doğrulandı. Giriş yapabilirsiniz.', 'Your email address has been verified. You can now sign in.')}</FormAlert>}
         {reset && <FormAlert tone="success">{L('Şifreniz güncellendi. Yeni şifrenizle giriş yapabilirsiniz.', 'Your password has been updated. You can sign in with your new password.')}</FormAlert>}
         {redirectParam && !verified && !reset && (
           <FormAlert tone="info">
