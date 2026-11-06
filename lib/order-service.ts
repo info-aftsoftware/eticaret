@@ -20,7 +20,6 @@ import React from 'react'
 import { reportError } from '@/lib/alerts'
 import type { Order, OrderLine, OrderStatus } from '@prisma/client'
 import { releaseCouponUse } from '@/lib/order-pricing'
-import { estimateDelivery, formatDeliveryRange } from '@/lib/delivery-estimate'
 import { revalidateStorefront } from '@/lib/storefront-revalidate'
 import { prisma } from '@/lib/prisma'
 import { sendEmail, type EmailAttachment } from '@/lib/email'
@@ -95,12 +94,9 @@ export function toOrderEmailData(order: OrderWithLines, localeOverride?: Catalog
   const dateLocale = locale === 'en' ? 'en-US' : 'tr-TR'
   const carrier = order.shippingCarrier ? getCarrier(order.shippingCarrier) : undefined
   const due = bankTransferDeadline(order.createdAt)
-  // Ödeme onay anındaki teslimat tahmini: 15:00 kuralıyla aynı gün / ertesi iş günü çıkış + 1–3 iş günü taşıma
-  let estimatedDelivery: string | null = null
-  try {
-    const { from, to } = estimateDelivery(order.paidAt ?? order.createdAt)
-    estimatedDelivery = formatDeliveryRange(from, to, locale)
-  } catch { estimatedDelivery = null }
+  // Tahmini teslimat aralığı hiçbir yerde gösterilmiyor (7.11.2026, kullanıcı kararı): e-postalarda da satır çıkmaz.
+  // Yeniden açmak için: estimateDelivery(order.paidAt ?? order.createdAt) → formatDeliveryRange(from, to, locale)
+  const estimatedDelivery: string | null = null
   return {
     locale,
     orderNo: order.orderNo,

@@ -40,7 +40,6 @@ import { isContactOnlyLine } from '@/lib/shipping/battery'
 import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { useL } from '@/lib/i18n-inline'
 import { useServerError } from '@/lib/server-error-i18n'
-import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { useCartValidation, type CartLineStatus } from '@/lib/useCartValidation'
 
 const productIdOf = (item: CartItem, status?: CartLineStatus) => status?.productId ?? item.productId ?? item.id
@@ -556,8 +555,6 @@ export default function CartPage() {
                 </form>
               )}
             </div>
-
-            <DeliveryEstimate className="mt-5" />
 
             {/* Sözleşme ve şartlar */}
             <fieldset className={`mt-5 space-y-1 rounded-lg border p-3 transition-colors ${hasContractErrors ? 'border-red-200 bg-red-50/70' : 'border-[#e6ebf1] bg-[#f5f7fa]'}`}>

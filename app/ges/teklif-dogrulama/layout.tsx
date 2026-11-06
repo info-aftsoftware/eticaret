@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { localizedMetadata } from '@/lib/locale-metadata'
 
 /** Teklif doğrulama aracı: müşteriye özel kodla çalışır, arama sonuçlarında gösterilmez (GES sayfasının başlığını da miras almaz). */
@@ -16,6 +17,11 @@ export function generateMetadata(): Promise<Metadata> {
   })
 }
 
+// Şimdilik kapalı (7.11.2026): bağlantılar kaldırıldı, doğrudan gelenler GES sayfasına yönlenir.
+// Yeniden açmak için QUOTE_VERIFY_ENABLED = true yapıp footer / GES formu bağlantılarını geri koymak yeterli.
+const QUOTE_VERIFY_ENABLED = false
+
 export default function QuoteVerifyLayout({ children }: { children: React.ReactNode }) {
+  if (!QUOTE_VERIFY_ENABLED) redirect('/ges')
   return children
 }

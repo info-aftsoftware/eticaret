@@ -15,7 +15,6 @@ import { useCartStore } from '@/lib/store/useCartStore'
 import { useToast } from '@/components/ui/toast'
 import { FavoriteButton } from '@/components/FavoriteButton'
 import { StockAlertForm } from '@/components/StockAlertForm'
-import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import { BatteryContactBox } from '@/components/BatteryContactBox'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isInstallShipping, isQuoteOnly, INSTALL_NOTE_TR, INSTALL_NOTE_EN } from '@/lib/sale-mode'
@@ -38,6 +37,25 @@ import { ProductQA } from '@/components/ProductQA'
 import { useL } from '@/lib/i18n-inline'
 import { categoryHref } from '@/lib/seo/type-paths'
 import { brandHref } from '@/lib/seo/brands'
+import { SELLER } from '@/lib/legal/company'
+import { whatsappHref } from '@/components/WhatsAppButton'
+
+/** Ürün açıklamasındaki "Ad – özellik · özellik · özellik. Detaylar Voltekno'da." maddeleri; yoksa teknik tablonun ilk 4 satırı */
+function keyHighlights(description?: string, specs?: Record<string, string> | null): string[] {
+  const d = description ?? ''
+  const dash = d.indexOf(' – ')
+  if (dash > -1) {
+    const parts = d
+      .slice(dash + 3)
+      .split(' · ')
+      // son maddeden "Detaylar Voltekno'da." / "Details at Voltekno." gibi kapanış cümlesini at
+      .map((s, i, arr) => (i === arr.length - 1 ? s.split(/\.\s+/)[0] : s).replace(/\.$/, '').trim())
+      .filter(Boolean)
+    if (parts.length >= 2) return parts.slice(0, 5)
+  }
+  if (specs) return Object.entries(specs).slice(0, 4).map(([k, v]) => `${k}: ${v}`)
+  return []
+}
 import { lineStock, stockKeyFor } from '@/lib/variant-stock'
 import { panelLineLogistics } from '@/lib/shipping/fee'
 
@@ -439,7 +457,7 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   </Link>
                 ) : <span />}
                 <div className="flex items-center gap-2 shrink-0">
-                  <FavoriteButton productId={product.id} />
+                  <FavoriteButton productId={product.id} variant="labeled" />
                   <CompareButton productId={product.id} productName={product.name} />
                 </div>
               </div>
@@ -507,6 +525,30 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       <span className="text-[28px] sm:text-[32px] font-extrabold text-[#121926] tracking-tight tabular-nums">{formatPrice(grossPrice(price))}</span>
                       <span className="text-[13px] text-[#5d6e80]">{L('KDV dahil', 'incl. VAT')}</span>
                     </div>
+                    {!outOfStock && (
+                      <p className="mt-1.5 text-[14px] font-semibold text-emerald-700">
+                        {L(`Havale ile ödemelerde %${BANK_TRANSFER_DISCOUNT_RATE} İndirim!`, `${BANK_TRANSFER_DISCOUNT_RATE}% off when paying by bank transfer!`)}
+                      </p>
+                    )}
+                  </div>
+                )
+              })()}
+
+              {/* Öne çıkan özellikler: açıklamadaki "– a · b · c" maddeleri, yoksa teknik tablonun ilk satırları */}
+              {(() => {
+                const items = keyHighlights(product.description, localizeSpecs(effectiveVariant?.specifications ?? product.specifications, locale))
+                if (items.length === 0) return null
+                return (
+                  <div className="mt-5">
+                    <p className="text-[13px] font-semibold text-[#121926]">{L('Öne çıkan özellikler', 'Key features')}</p>
+                    <ul className="mt-2 space-y-1.5 text-[13.5px] leading-snug text-[#3b4a5a]">
+                      {items.map((it) => (
+                        <li key={it} className="flex gap-2.5">
+                          <span aria-hidden className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-[#5d6e80]" />
+                          <span className="min-w-0">{it}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )
               })()}
@@ -542,16 +584,19 @@ export default function ProductDetailClient({ initialProduct, productId: product
                       </span>
                       <span className="text-[#5d6e80]"> {L(`KDV dahil · %${BANK_TRANSFER_DISCOUNT_RATE} indirimli`, `VAT incl. · ${BANK_TRANSFER_DISCOUNT_RATE}% off`)}</span>
                     </dd>
-                    <dt className="text-[#5d6e80]">{contactOnly || installShipping ? L('Kargo', 'Shipping') : L('Teslimat', 'Delivery')}</dt>
-                    <dd>
-                      {contactOnly ? (
-                        <span className="font-medium text-[#0b2540]">{L('Teklifle belirlenir', 'Quoted separately')}</span>
-                      ) : installShipping ? (
-                        <span className="font-medium text-[#0b2540]">{L('Kurulum ve nakliye için sizinle iletişime geçeceğiz', 'We will contact you about installation and delivery')}</span>
-                      ) : (
-                        <DeliveryEstimate compact />
-                      )}
-                    </dd>
+                    {/* Tahmini teslimat tarihi ürün sayfalarında gösterilmez (7.11.2026); yalnız özel kargo notları kalır */}
+                    {(contactOnly || installShipping) && (
+                      <>
+                        <dt className="text-[#5d6e80]">{L('Kargo', 'Shipping')}</dt>
+                        <dd>
+                          <span className="font-medium text-[#0b2540]">
+                            {contactOnly
+                              ? L('Teklifle belirlenir', 'Quoted separately')
+                              : L('Kurulum ve nakliye için sizinle iletişime geçeceğiz', 'We will contact you about installation and delivery')}
+                          </span>
+                        </dd>
+                      </>
+                    )}
                   </>
                 )}
               </dl>
@@ -617,8 +662,9 @@ export default function ProductDetailClient({ initialProduct, productId: product
                   disabled={outOfStock}
                   onClick={() => {
                     if (outOfStock) return
-                    // Sepette zaten varsa adet değişmez; yoksa 1 adet eklenir
-                    if (cartQty === 0 && !addCurrentToCart(true)) return
+                    // Hemen Al: her tıklamada 1 adet sepete eklenir ve sepete gidilir.
+                    // Stok sınırı dolduysa ekleme yapılmaz (uyarı çıkar) ama ürün zaten sepette olduğu için yine sepete gidilir.
+                    if (!addCurrentToCart(true) && cartQty === 0) return
                     router.push('/cart')
                   }}
                   className="rounded-lg h-12 px-4 bg-[#f5b400] hover:bg-[#e0a500] text-[#111111] font-semibold text-[15px] disabled:opacity-60 disabled:pointer-events-none flex items-center justify-center"
@@ -627,6 +673,29 @@ export default function ProductDetailClient({ initialProduct, productId: product
                 </Button>
               </div>
               )}
+
+              {/* Hizmet bilgisi + yardım satırı (ana sayfadaki güven kartlarıyla aynı vaatler) */}
+              <div className="mt-5 rounded-lg border border-[#e6ebf1] bg-[#f8fafc] px-4 py-3.5 text-[13px] text-[#20384e]">
+                <ul className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-x-5 gap-y-1.5">
+                  <li>{L('Orijinal, faturalı ve garantili ürün', 'Genuine, invoiced and warranted')}</li>
+                  <li>{L('Özenli paketleme, kargo takibi', 'Careful packing, tracked shipping')}</li>
+                  <li>{L('Güvenli ödeme', 'Secure payment')}</li>
+                  <li>{L('Ürün seçiminde mühendis desteği', 'Engineering help choosing products')}</li>
+                </ul>
+                <p className="mt-3 border-t border-[#e6ebf1] pt-3 text-[#5d6e80]">
+                  {L('Sorunuz mu var? ', 'Have a question? ')}
+                  <a href={SELLER.phoneHref} className="font-semibold text-[#0b2540] hover:underline underline-offset-2 whitespace-nowrap">{SELLER.phone}</a>
+                  {' · '}
+                  <a
+                    href={whatsappHref(L(`Merhaba, ${product.name} hakkında bilgi almak istiyorum.`, `Hello, I would like information about ${product.name}.`))}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-[#0b2540] hover:underline underline-offset-2 whitespace-nowrap"
+                  >
+                    {L('WhatsApp’tan yazın', 'Message us on WhatsApp')}
+                  </a>
+                </p>
+              </div>
 
             </div>
           </div>

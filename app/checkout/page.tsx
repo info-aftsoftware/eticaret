@@ -30,7 +30,6 @@ import {
 } from '@/lib/checkout-validation'
 import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog'
 import { CartQuoteNotice } from '@/components/CartQuoteNotice'
-import { DeliveryEstimate } from '@/components/DeliveryEstimate'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
 import { useLocale } from 'next-intl'
@@ -1064,7 +1063,6 @@ export default function CheckoutPage() {
                     <div className="hidden max-h-[300px] overflow-y-auto pr-1 lg:block">{itemList}</div>
                     <div className="hidden lg:block">{summaryLines}</div>
                     <div className="lg:hidden">{summaryLines}</div>
-                    <DeliveryEstimate className="mt-1" />
 
                     <div>
                       <label className="flex cursor-pointer items-start gap-3">

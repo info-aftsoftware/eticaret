@@ -7,6 +7,12 @@ import { ALL_CATEGORY_VALUES } from '@/lib/categories'
 type CategoriesWithProductsContextValue = Set<string> | null
 
 const CategoriesWithProductsContext = createContext<CategoriesWithProductsContextValue>(null)
+/** Kategori başına ürün sayısı (header açılır menüsü). null = yüklenmedi veya statik yedekte sayı yok. */
+const CategoryCountsContext = createContext<Record<string, number> | null>(null)
+
+export function useCategoryCounts(): Record<string, number> | null {
+  return useContext(CategoryCountsContext)
+}
 
 export function useCategoriesWithProducts(): CategoriesWithProductsContextValue {
   return useContext(CategoriesWithProductsContext)
@@ -22,6 +28,7 @@ function parseCategoryResponse(data: unknown): string[] {
 
 export function CategoriesWithProductsProvider({ children }: { children: React.ReactNode }) {
   const [set, setSet] = useState<Set<string> | null>(null)
+  const [counts, setCounts] = useState<Record<string, number> | null>(null)
 
   useEffect(() => {
     let cancelled = false
@@ -39,6 +46,8 @@ export function CategoriesWithProductsProvider({ children }: { children: React.R
         if (cancelled) return
         const arr = parseCategoryResponse(data)
         setSet(arr.length > 0 ? new Set(arr) : new Set(ALL_CATEGORY_VALUES))
+        const c = data && typeof data === 'object' ? (data as { counts?: unknown }).counts : null
+        if (c && typeof c === 'object') setCounts(c as Record<string, number>)
       })
       .catch(() => {
         if (cancelled) return
@@ -57,7 +66,7 @@ export function CategoriesWithProductsProvider({ children }: { children: React.R
 
   return (
     <CategoriesWithProductsContext.Provider value={set}>
-      {children}
+      <CategoryCountsContext.Provider value={counts}>{children}</CategoryCountsContext.Provider>
     </CategoriesWithProductsContext.Provider>
   )
 }

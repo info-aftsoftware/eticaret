@@ -11,9 +11,11 @@ import { mockProducts } from '@/lib/products-mock'
 
 export async function GET() {
   try {
-    const inCatalog = new Set(mockProducts.map((p) => p.category))
-    const categoryValues = ALL_CATEGORY_VALUES.filter((v) => inCatalog.has(v))
-    return NextResponse.json({ categoryValues })
+    const counts: Record<string, number> = {}
+    for (const p of mockProducts) counts[p.category] = (counts[p.category] ?? 0) + 1
+    const categoryValues = ALL_CATEGORY_VALUES.filter((v) => counts[v])
+    // counts: header açılır menüsündeki alt kategori ürün sayıları
+    return NextResponse.json({ categoryValues, counts: Object.fromEntries(categoryValues.map((v) => [v, counts[v]])) })
   } catch {
     return NextResponse.json({ categoryValues: [] })
   }

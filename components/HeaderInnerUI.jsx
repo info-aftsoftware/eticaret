@@ -220,7 +220,7 @@ export function HeaderInnerUI(props) {
 
       {/* ── Masaüstü: logo + arama + hesap / sepet ─────────────────────────── */}
       <div className="hidden min-[1025px]:block bg-white shadow-[0_1px_0_#e3e8ee]">
-        <div className="flex items-center h-[101px] pt-6 px-6 gap-11 min-w-0 max-w-[1514px] mx-auto">
+        <div className="flex items-center h-[92px] pt-4 px-6 gap-11 min-w-0 max-w-[1514px] mx-auto">
           <Logo size="header" href="/" />
           <div ref={desktopSearchRef} className="relative flex-1 min-w-0 max-w-[910px]">
             {searchForm('search-suggestions-desktop')}
@@ -284,7 +284,7 @@ export function HeaderInnerUI(props) {
 
       {/* ── Masaüstü: TÜM KATEGORİLER + kategori linkleri ─────────────────── */}
       <div className="hidden min-[1025px]:block bg-white shadow-[0_6px_16px_rgba(11,37,64,0.04)]">
-        <div className="flex items-center h-[65px] px-6 min-w-0 max-w-[1454px] mx-auto">
+        <div className="flex items-center h-[62px] px-6 min-w-0 max-w-[1454px] mx-auto">
           <AllCategoriesMenu navGroups={navGroups} t={t} />
           {/* Daralınca önce boşluklar azalır (justify-evenly), sonra sondaki kategoriler gizlenir (6 → 5 → 4);
               gizlenenler "Tüm Kategoriler" menüsünde. ≤1024 px'te mobil/tablet header (hamburger) devreye girer. */}

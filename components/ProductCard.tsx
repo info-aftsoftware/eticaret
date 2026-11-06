@@ -15,6 +15,7 @@ import { useL } from '@/lib/i18n-inline'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isQuoteOnly } from '@/lib/sale-mode'
 import { grossPrice } from '@/lib/store-config'
+import { brandHref } from '@/lib/seo/brands'
 import { useLocale, useTranslations } from 'next-intl'
 import { productDescription, productName, toCatalogLocale, variantLabel } from '@/lib/catalog-en'
 
@@ -216,7 +217,19 @@ export function ProductCard({
         <div className={`flex flex-1 flex-col border-t border-[#f1f4f8] ${isCompact ? 'p-2.5 sm:p-3' : 'p-3'}`}>
           {product.brand && (
             <p className={`mb-1 font-semibold uppercase tracking-wide text-[#5d6e80] ${isCompact ? 'text-[10px]' : 'text-[10px] sm:text-[11px]'}`}>
-              {product.brand}
+              {/* Kart zaten ürün bağlantısı (iç içe <a> olamaz): marka adı tıklanınca marka sayfasına gider */}
+              <span
+                role="link"
+                title={L(`${product.brand} ürünleri`, `${product.brand} products`)}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  router.push(brandHref(product.brand!))
+                }}
+                className="cursor-pointer hover:text-[#0b2540] hover:underline underline-offset-2"
+              >
+                {product.brand}
+              </span>
             </p>
           )}
           <h3 className={`line-clamp-2 font-medium leading-snug text-[#121926] ${isCompact ? 'text-xs' : 'text-xs sm:text-sm'}`}>

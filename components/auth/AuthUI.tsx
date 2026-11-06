@@ -29,7 +29,7 @@ export function AuthLayout({
   return (
     <ClassicPageShell breadcrumbs={[{ label: breadcrumb }]} noTitle pageHasOwnH1>
       <div className="flex justify-center py-2 sm:py-6 min-w-0">
-        <div className="w-full max-w-[440px] min-w-0 sm:bg-white sm:border sm:border-[#e3e8ee] sm:rounded-lg sm:p-8">
+        <div className="w-full max-w-[520px] min-w-0 sm:bg-white sm:border sm:border-[#e3e8ee] sm:rounded-lg sm:p-8">
           <div className="mb-6">
             <h1 className="text-[22px] sm:text-[24px] font-bold tracking-tight text-[#121926]">{title}</h1>
             {subtitle && <p className="mt-1.5 text-[14.5px] leading-relaxed text-[#5d6e80]">{subtitle}</p>}
@@ -49,8 +49,8 @@ export function FormAlert({ tone = 'error', children }: { tone?: 'error' | 'succ
   }[tone]
   const Icon = tone === 'error' ? AlertCircle : tone === 'success' ? CheckCircle2 : Info
   return (
-    <div role={tone === 'error' ? 'alert' : 'status'} className={`flex gap-2.5 rounded-md border px-3.5 py-3 text-[14px] leading-relaxed ${styles}`}>
-      <Icon className="mt-0.5 h-[18px] w-[18px] shrink-0" />
+    <div role={tone === 'error' ? 'alert' : 'status'} className={`flex gap-2.5 rounded-md border px-3.5 py-2.5 text-[13px] leading-[1.55] ${styles}`}>
+      <Icon className="mt-px h-4 w-4 shrink-0" />
       <div className="min-w-0">{children}</div>
     </div>
   )

@@ -9,44 +9,108 @@ import { useL } from '@/lib/i18n-inline'
 import { categoryHref } from '@/lib/seo/type-paths'
 
 /**
- * Ana sayfa hero'su — voltekno.com ile birebir:
- * 24 px iç boşluklu alanda yatay kayan tam genişlik slaytlar, solda koyu başlık + sarı buton,
- * altta ortalı noktalar ve hero'nun alt kenarına binen 4 güven kartı.
+ * Ana sayfa hero'su: her slayt bir ürün türünü katalogdaki gerçek ürün fotoğraflarıyla temsil eder.
+ * Fotoğraflar kırpılmaz (object-contain, max-w/max-h ile oranı korunur); açık zemin slaytın tamamını
+ * kapladığı için hangi en-boy oranında olursa olsun kenarlarda boşluk kalmaz.
+ * Görseller public/images/hero/products/ altında: ürün fotoğraflarının beyaz kenarları kırpılmış hâlleri.
+ * Solda koyu başlık + sarı buton, altta ortalı noktalar, hero'nun alt kenarına binen 4 güven kartı.
  */
-const SLIDES = [
+type HeroProduct = { src: string; w: number; h: number; maxH: number; maxW: number; alt: string; altEn: string }
+type HeroSlide = {
+  id: string
+  title: readonly string[]
+  cta: string
+  href: string
+  en: { title: readonly string[]; cta: string }
+  products: readonly HeroProduct[]
+}
+
+const P = (name: string, w: number, h: number, maxH: number, maxW: number, alt: string, altEn: string): HeroProduct => ({
+  src: `/images/hero/products/${name}.webp`, w, h, maxH, maxW, alt, altEn,
+})
+
+const SLIDES: readonly HeroSlide[] = [
   {
-    image: '/images/hero/voltekno-hero-1.webp',
-    title: ['Yenilenebilir Enerji', 'Çözümleri'],
+    id: 'ges',
+    title: ['Güneş Enerjisi', 'Sistemleri'],
     cta: 'TÜM ÜRÜNLER',
-    en: { title: ['Renewable Energy', 'Solutions'], cta: 'ALL PRODUCTS', alt: 'Wall-mounted inverter, gel battery and solar panel' },
     href: '/products',
-    alt: 'Duvara monte inverter, jel akü ve güneş paneli',
+    en: { title: ['Solar Energy', 'Systems'], cta: 'ALL PRODUCTS' },
+    products: [
+      P('panel-topcon', 469, 900, 96, 30, 'TommaTech TOPCon güneş paneli', 'TommaTech TOPCon solar panel'),
+      P('inverter-uno-hybrid', 570, 900, 66, 26, 'TommaTech Uno Hybrid hibrit inverter', 'TommaTech Uno Hybrid inverter'),
+      P('aku-mrn1', 880, 507, 34, 30, 'TommaTech Marine lityum akü', 'TommaTech Marine lithium battery'),
+    ],
   },
   {
-    image: '/images/hero/voltekno-hero-2.webp',
+    id: 'lityum',
     title: ['Lityum Enerji', 'Depolama Sistemleri'],
     cta: 'KEŞFET',
-    en: { title: ['Lithium Energy', 'Storage Systems'], cta: 'EXPLORE', alt: 'Stacked lithium battery modules' },
     href: categoryHref('Lityum Akü'),
-    alt: 'Üst üste yığınlanmış lityum batarya modülleri',
+    en: { title: ['Lithium Energy', 'Storage Systems'], cta: 'EXPLORE' },
+    products: [
+      P('aku-pb', 553, 880, 88, 32, 'TommaTech PB Serisi 51,2V lityum batarya', 'TommaTech PB Series 51.2V lithium battery'),
+      P('guc-istasyonu', 863, 630, 44, 32, 'TommaTech taşınabilir güç istasyonu', 'TommaTech portable power station'),
+      P('aku-victron', 900, 758, 46, 30, 'Victron Lithium SuperPack lityum akü', 'Victron Lithium SuperPack battery'),
+    ],
   },
   {
-    image: '/images/hero/voltekno-hero-3.webp',
-    // 2,4:1 geniş görsel: mobilde 16:9 kırpılınca sağdaki ürünlerin tamamı görünsün
-    mobileFocus: 'object-[100%_50%]',
+    id: 'sulama',
     title: ['Solar Tarımsal', 'Sulama Çözümleri'],
     cta: 'İNCELE',
-    en: { title: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW', alt: 'TommaTech solar pump drives and solar panel' },
     href: categoryHref('Solar Pompa Sürücüsü'),
-    alt: 'TommaTech solar pompa sürücüleri ve güneş paneli',
+    en: { title: ['Solar Agricultural', 'Irrigation'], cta: 'VIEW' },
+    products: [
+      P('panel-bifacial', 347, 880, 96, 24, 'TommaTech bifacial güneş paneli', 'TommaTech bifacial solar panel'),
+      P('pompa-spi', 579, 880, 70, 30, 'TommaTech SPI solar pompa sürücüsü', 'TommaTech SPI solar pump drive'),
+      P('pompa-spi-trifaze', 466, 709, 54, 26, 'TommaTech trifaze solar pompa sürücüsü', 'TommaTech three-phase solar pump drive'),
+    ],
   },
-] as const
+  {
+    id: 'ev-sarj',
+    title: ['Elektrikli Araç', 'Şarj İstasyonları'],
+    cta: 'İNCELE',
+    href: categoryHref('Elektrikli Araç Şarj İstasyonu'),
+    en: { title: ['EV Charging', 'Stations'], cta: 'VIEW' },
+    products: [
+      P('ev-aft-pro', 571, 880, 96, 40, 'AFT PRO V2 DC hızlı şarj istasyonu', 'AFT PRO V2 DC fast charging station'),
+      P('ev-likya', 396, 880, 64, 26, 'TommaTech Likya 22 kW AC şarj istasyonu', 'TommaTech Likya 22 kW AC charger'),
+    ],
+  },
+  {
+    id: 'isi-pompasi',
+    title: ['Isı Pompası', 'Çözümleri'],
+    cta: 'İNCELE',
+    href: categoryHref('Isı Pompası'),
+    en: { title: ['Heat Pump', 'Solutions'], cta: 'VIEW' },
+    products: [
+      P('isi-triome', 489, 889, 90, 28, 'TommaTech Triome ev tipi ısı pompası', 'TommaTech Triome domestic heat pump'),
+      P('isi-power', 667, 599, 52, 34, 'TommaTech Power Serisi ısı pompası', 'TommaTech Power Series heat pump'),
+      P('isi-titan', 472, 522, 46, 26, 'TommaTech Titan EVI ısı pompası', 'TommaTech Titan EVI heat pump'),
+    ],
+  },
+  {
+    id: 'ruzgar',
+    title: ['Rüzgar Enerjisi', 'Sistemleri'],
+    cta: 'İNCELE',
+    href: categoryHref('Rüzgar Türbini'),
+    en: { title: ['Wind Energy', 'Systems'], cta: 'VIEW' },
+    products: [
+      P('ruzgar-istabreeze', 579, 880, 98, 44, 'İstabreeze i Serisi rüzgar türbini', 'İstabreeze i Series wind turbine'),
+      P('ruzgar-nova', 659, 880, 84, 44, 'Altech Nova rüzgar türbini', 'Altech Nova wind turbine'),
+    ],
+  },
+]
+
+/** Slayt zemini: açık gri-mavi geçiş + ürünlerin arkasında yumuşak ışık (ürün fotoğraflarının beyazı multiply ile zemine karışır) */
+const SLIDE_BG =
+  'radial-gradient(ellipse 46% 70% at 70% 48%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 70%), linear-gradient(110deg, #f3f5f8 0%, #edf1f6 45%, #e2e9f2 100%)'
 
 const FEATURES = [
   { tr: ['Orijinal ve Faturalı Ürün', 'Tüm ürünler faturalı ve garantili olarak satılır'], en: ['Genuine, Invoiced Products', 'Every product is sold with invoice and warranty'] },
   { tr: ['Özenli Paketleme, Hızlı Kargo', 'Stoktaki ürünlerde hızlı sevkiyat ve takip'], en: ['Careful Packing, Fast Shipping', 'Quick dispatch and tracking for in-stock items'] },
   // Ödeme yönteminden bağımsız doğru metin (kart ödemesi açılana kadar kart vaat edilmez, madde 2)
-  { tr: ['Güvenli Ödeme', 'SSL korumalı ödeme, havalede %3 indirim'], en: ['Secure Payment', 'SSL-protected checkout, 3% off by bank transfer'] },
+  { tr: ['Güvenli Ödeme', 'Havale ve EFT ile ödemede %3 indirim'], en: ['Secure Payment', '3% off when paying by bank transfer'] },
   { tr: ['Uzman Teknik Destek', 'Ürün seçimi ve sistem tasarımında mühendis desteği'], en: ['Expert Technical Support', 'Engineering help with product choice and system design'] },
 ] as const
 
@@ -69,10 +133,12 @@ export function HeroSlider() {
   return (
     <section aria-label={L('Öne çıkan çözümler', 'Featured solutions')} className="bg-white">
       <div
-        className={`${PAGE_CONTAINER} py-6 overflow-hidden`}
+        className={`${PAGE_CONTAINER} pt-4 pb-6 overflow-hidden`}
         aria-roledescription="carousel"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
+        // Fare üzerindeyken durmaz: hero ilk ekranın çoğunu kapladığından imleç hep üstünde kalıyor, slayt hiç kaymıyordu.
+        // Yalnız parmakla kaydırırken ve klavyeyle bir slayt bağlantısına odaklanınca bekler.
+        onFocus={(e) => { if ((e.target as HTMLElement).matches?.(':focus-visible')) setPaused(true) }}
+        onBlur={() => setPaused(false)}
         onTouchStart={(e) => { touchX.current = e.touches[0].clientX; setPaused(true) }}
         onTouchEnd={(e) => {
           if (touchX.current != null) {
@@ -93,24 +159,39 @@ export function HeroSlider() {
               const copy = isEn ? slide.en : slide
               return (
                 <div
-                  key={slide.image}
+                  key={slide.id}
                   role="group"
                   aria-roledescription="slide"
                   aria-label={`${i + 1} / ${SLIDES.length}`}
                   aria-hidden={!active}
-                  className="relative shrink-0 w-full flex flex-col min-[641px]:block min-[641px]:aspect-video min-[641px]:max-h-[596px] bg-[#f5f7fa] overflow-hidden"
+                  className="relative isolate shrink-0 w-full flex flex-col min-[641px]:block min-[641px]:aspect-video min-[641px]:max-h-[min(596px,max(360px,calc(100svh_-_220px)))] overflow-hidden"
+                  style={{ background: SLIDE_BG }}
                 >
-                  {/* Mobilde görsel tam genişlikte 16:9 (boş gri alan kalmasın), geniş ekranda tüm alanı kaplar */}
-                  <div className="relative w-full aspect-video min-[641px]:absolute min-[641px]:inset-0 min-[641px]:aspect-auto">
-                    <Image
-                      src={slide.image}
-                      alt={copy.alt}
-                      fill
-                      priority={i === 0}
-                      fetchPriority={i === 0 ? 'high' : 'low'}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1400px"
-                      className={`object-cover ${'mobileFocus' in slide ? slide.mobileFocus : 'object-center'} min-[641px]:object-[50%_45%]`}
+                  {/* Geniş ekranda yükseklik ekran yüksekliğine bağlı (header ~193px + üst boşluk): hero ilk ekranda tam görünsün */}
+                  {/* Ürün sahnesi: mobilde üstte 16:9, geniş ekranda başlığın sağında tüm yükseklik */}
+                  <div className="relative w-full aspect-video min-[641px]:absolute min-[641px]:inset-y-0 min-[641px]:right-0 min-[641px]:left-[42%] min-[641px]:w-auto min-[641px]:aspect-auto">
+                    {/* Zemin gölgesi: ürünler aynı çizgide duruyor görünsün */}
+                    <div
+                      aria-hidden
+                      className="absolute inset-x-[4%] bottom-[7%] h-[12%]"
+                      style={{ background: 'radial-gradient(closest-side, rgba(20,43,64,0.16), rgba(20,43,64,0))' }}
                     />
+                    <div className="absolute inset-x-[5%] top-[7%] bottom-[12%] flex items-end justify-center gap-[3%]">
+                      {slide.products.map((p) => (
+                        <Image
+                          key={p.src}
+                          src={p.src}
+                          alt={isEn ? p.altEn : p.alt}
+                          width={p.w}
+                          height={p.h}
+                          priority={i === 0}
+                          fetchPriority={i === 0 ? 'high' : 'low'}
+                          sizes="(max-width: 640px) 45vw, 30vw"
+                          className="min-w-0 object-contain mix-blend-multiply"
+                          style={{ width: 'auto', height: 'auto', maxHeight: `${p.maxH}%`, maxWidth: `${p.maxW}%` }}
+                        />
+                      ))}
+                    </div>
                   </div>
                   {/* Mobilde başlık ve buton görselin hemen altında (noktalar butonun sağında); geniş ekranda görselin üzerinde ortada */}
                   <div className="px-5 pt-4 pb-5 min-[641px]:absolute min-[641px]:inset-0 min-[641px]:flex min-[641px]:items-center min-[641px]:p-6">
@@ -135,7 +216,7 @@ export function HeroSlider() {
           <div className="absolute bottom-[34px] right-5 min-[641px]:right-auto min-[641px]:bottom-6 min-[641px]:left-1/2 min-[641px]:-translate-x-1/2 z-[2] flex items-center gap-3">
             {SLIDES.map((slide, i) => (
               <button
-                key={slide.image}
+                key={slide.id}
                 type="button"
                 onClick={() => go(i)}
                 aria-label={L(`${i + 1}. slayt`, `Slide ${i + 1}`)}

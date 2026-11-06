@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { Calculator, ChevronDown, CheckCircle, Clock, ShieldCheck, Loader2, FileCheck, Star } from 'lucide-react'
+import { Calculator, ChevronDown, CheckCircle, Clock, ShieldCheck, Loader2, Star } from 'lucide-react'
 import {
   GES_REGIONS, MONTHLY_KWH_MIN, MONTHLY_KWH_MAX,
   SUN_HOURS_MIN, SUN_HOURS_MAX, PR_MIN, PR_MAX, GES_DEFAULT_PR,
@@ -39,7 +39,8 @@ function fieldCls(err?: string) {
 
 /** Select trigger className with error state */
 function selectCls(err?: string) {
-  return `h-12 w-full rounded-xl border bg-white transition-shadow focus:outline-none focus:ring-2 ${err
+  // md:h-12 / md:px-4: SelectTrigger'ın kendi md:h-9 sınıfı ezmesin, metin kutularıyla aynı yükseklikte kalsın
+  return `h-12 md:h-12 px-4 md:px-4 text-sm md:text-sm w-full rounded-xl border bg-white transition-shadow focus:outline-none focus:ring-2 ${err
     ? 'border-red-400 focus:ring-red-200 bg-red-50/40'
     : 'border-slate-200 focus:ring-brand/20'
     }`
@@ -299,17 +300,20 @@ export default function GesPage() {
       if (form.attachmentBillUrl) body.attachmentBillUrl = form.attachmentBillUrl
       if (form.attachmentRoofUrl) body.attachmentRoofUrl = form.attachmentRoofUrl
 
-      const { collection: col, addDoc, serverTimestamp: srvTs } = await import('firebase/firestore')
-      const { getDb } = await import('@/lib/firebase/config')
-      const db = getDb()
-      await addDoc(col(db, 'gesQuotes'), { ...body, createdAt: srvTs() })
+      body.formData = { excludeInstallationCost, fullQuoteRequested: !excludeInstallationCost }
 
-      const notifyRes = await fetch('/api/ges-quote/notify', {
+      // Talep sunucuda veritabanına kaydedilir (Yönetim › GES Teklifleri) ve yöneticiye e-postayla bildirilir.
+      // (Eskiden tarayıcıdan Firestore'a yazılıyordu; o adım hata verince talep hiç gitmiyordu.)
+      const res = await fetch('/api/ges-quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
-      if (!notifyRes.ok) console.error('GES notify error:', notifyRes.statusText)
+      const data = await res.json().catch(() => null)
+      if (!res.ok || !data?.success) {
+        setFormErrors({ submit: (typeof data?.error === 'string' && data.error) || t('quoteForm.errorSubmit') })
+        return
+      }
 
       if (typeof window !== 'undefined') {
         try {
@@ -351,12 +355,6 @@ export default function GesPage() {
                 <Button onClick={() => { setSuccess(false); setCalcResult(null); setForm(initialForm) }}
                   size="lg" className="rounded-xl px-8 bg-orange-500 hover:bg-orange-600">
                   {L('Yeni Form Doldur', 'Fill Out a New Form')}
-                </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-xl px-8">
-                  <Link href="/ges/teklif-dogrulama">
-                    <FileCheck className="w-4 h-4 mr-2" />
-                    {L('Teklif Doğrula', 'Verify a Quote')}
-                  </Link>
                 </Button>
               </div>
             </CardContent>
@@ -649,10 +647,12 @@ export default function GesPage() {
                     <div className="space-y-1.5">
                       <Label htmlFor="monthlyKwhForm" className="text-sm font-medium text-slate-700">
                         {t('quoteForm.monthlyKwhFree')}
-                        {calcResult && (
-                          <span className="ml-2 text-xs text-green-600 font-normal">{L('(hesaplamadan alındı)', '(from calculation)')}</span>
-                        )}
                       </Label>
+                      {/* "Hesaplamadan alındı" notu kutunun içinde sağda: etiket tek satır kalır, yan alanla hizalı */}
+                      <div className="relative">
+                      {calcResult && (
+                        <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-xs text-green-600">{L('hesaplamadan alındı', 'from calculation')}</span>
+                      )}
                       <input
                         id="monthlyKwhForm"
                         type="text"
@@ -664,8 +664,9 @@ export default function GesPage() {
                           if (calcErrors.monthlyKwh) setCalcErrors((p) => ({ ...p, monthlyKwh: undefined as any }))
                         }}
                         placeholder={L('Örn. 350', 'e.g. 350')}
-                        className={fieldCls()}
+                        className={`${fieldCls()} ${calcResult ? 'pr-36' : ''}`}
                       />
+                      </div>
                     </div>
 
                     {/* monthlyBillRange */}
@@ -993,17 +994,6 @@ export default function GesPage() {
                     {t('quoteForm.submit')}
                   </Button>
 
-                </div>
-
-                {/* Footer link */}
-                <div className="pt-4 border-t border-slate-100 text-center">
-                  <Link
-                    href="/ges/teklif-dogrulama"
-                    className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-brand transition-colors"
-                  >
-                    <FileCheck className="w-4 h-4" />
-                    {L('Başka bir firmadan aldığınız teklifi doğrulatmak ister misiniz?', 'Would you like to have a quote from another company verified?')}
-                  </Link>
                 </div>
 
               </form>

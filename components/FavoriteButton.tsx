@@ -11,10 +11,12 @@ interface FavoriteButtonProps {
   productId: string
   productName?: string
   className?: string
+  /** icon: 36 px yuvarlak simge · labeled: yazılı, "Karşılaştır" düğmesiyle aynı görünüm (ürün sayfası) */
+  variant?: 'icon' | 'labeled'
 }
 
 /** Ürün sayfası favori butonu — ürün kartı ve favoriler sayfasıyla aynı durumu kullanır (lib/useFavorites). */
-export function FavoriteButton({ productId, className = '' }: FavoriteButtonProps) {
+export function FavoriteButton({ productId, className = '', variant = 'icon' }: FavoriteButtonProps) {
   const { isFavorite, toggle, isMember, authReady } = useFavorites()
   const router = useRouter()
   const { addToast } = useToast()
@@ -51,14 +53,36 @@ export function FavoriteButton({ productId, className = '' }: FavoriteButtonProp
     }
   }
 
+  const label = active ? L('Favorilerden çıkar', 'Remove from favorites') : L('Favorilere ekle', 'Add to favorites')
+
+  if (variant === 'labeled') {
+    return (
+      <button
+        type="button"
+        onClick={handleToggle}
+        disabled={busy}
+        aria-pressed={active}
+        aria-label={label}
+        title={label}
+        className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition-colors touch-manipulation disabled:opacity-60 ${
+          active ? 'border-brand bg-brand/10 text-brand' : 'border-slate-200 text-slate-700 hover:border-slate-300'
+        } ${className}`}
+      >
+        <Heart className={`w-4 h-4 ${active ? 'fill-current' : ''}`} aria-hidden />
+        {/* Dar ekranda yalnızca simge; ad aria-label ile (Karşılaştır düğmesiyle aynı) */}
+        <span className="hidden min-[420px]:inline">{active ? L('Favorilerde', 'In favorites') : L('Favorilere ekle', 'Add to favorites')}</span>
+      </button>
+    )
+  }
+
   return (
     <button
       type="button"
       onClick={handleToggle}
       disabled={busy}
       aria-pressed={active}
-      aria-label={active ? L('Favorilerden çıkar', 'Remove from favorites') : L('Favorilere ekle', 'Add to favorites')}
-      title={active ? L('Favorilerden çıkar', 'Remove from favorites') : L('Favorilere ekle', 'Add to favorites')}
+      aria-label={label}
+      title={label}
       className={`relative z-30 inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors touch-manipulation disabled:opacity-60 ${
         active
           ? 'border-[#f5b400] bg-[#f5b400] text-[#111]'

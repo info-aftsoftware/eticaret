@@ -64,7 +64,7 @@ export function CollectionPage({
           </ol>
         </nav>
 
-        <header className="max-w-3xl" lang={contentLang}>
+        <header lang={contentLang}>
           <h1 className="text-[26px] sm:text-[32px] font-bold leading-tight text-[#121926]">{h1}</h1>
           <div className="mt-3 text-[15px] leading-relaxed text-[#3b4a5a]">{intro}</div>
           <div className="mt-3 text-[13.5px] leading-relaxed text-[#5d6e80]">{facts}</div>

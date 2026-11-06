@@ -106,7 +106,6 @@ export function Footer() {
             <ul className="space-y-0">
               {[
                 { href: '/ges', label: t('ges'), highlight: true },
-                { href: '/ges/teklif-dogrulama', label: t('gesQuoteVerify') },
                 { href: contactHref('urun'), label: t('urunTeklifi') },
                 { href: contactHref('destek'), label: L('Teknik Destek', 'Technical Support') },
                 { href: '/paketler', label: L('Kullanım Alanına Göre Çözümler', 'Solutions by Use') },

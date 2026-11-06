@@ -10,18 +10,9 @@ import { CATEGORY_GROUPS, getCategoryKey } from '@/lib/categories'
 import { mockProducts, PLACEHOLDER_PRODUCT_IMAGE } from '@/lib/products-mock'
 import { useL } from '@/lib/i18n-inline'
 import { categoryHref } from '@/lib/seo/type-paths'
+import { GROUP_IMAGES } from '@/lib/category-images'
 
-/** Her ana kategoriyi en iyi temsil eden ürün görseli (yoksa gruptaki ilk görselli ürün kullanılır) */
-const GROUP_IMAGES: Record<string, string> = {
-  'solar-aku': '/images/products/voltekno/16hgmhvy8ciGnk6KDjTVacsSwxS6FmTBh.webp',
-  'solar-inverter': '/images/products/voltekno/1fp4IZM48_kfsQWm6jVGAcL07VnIkMtnI.webp',
-  'gunes-paneli': '/images/products/voltekno/1SfPNowoPDRUrusBcQf2n8JRxFaOjxZbe.webp',
-  'solar-sarj-kontrol': '/images/products/voltekno/1Ljnbfi_nYV6-niNLUZftU4nLlfWBr3vn.webp',
-  'solar-baglanti-ekipmani': '/images/products/override/apex-80a-ats-1.webp',
-  'ruzgar-enerjisi': '/images/products/voltekno/1y87j6hUisrHK1xp4foB6pYFbAjmS8qGT.webp',
-  'isi-pompasi': '/images/products/voltekno/1aHKVNfDf_RZe7eoHxkJsTL51e8DPDQYm.webp',
-  'elektrikli-arac-sarj': '/images/products/voltekno/1xWJp1WcdJ2j8Dy3YpYNeSV2aIUblX2uV.webp',
-}
+// Her ana kategoriyi temsil eden görsel lib/category-images.ts'te (yoksa gruptaki ilk görselli ürün kullanılır)
 
 type Tile = {
   id: string

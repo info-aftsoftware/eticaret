@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
 import Link from '@/lib/i18n/navigation'
+import { brandHref } from '@/lib/seo/brands'
 import Image from 'next/image'
 import { Bell, Heart, Package, ShoppingBag, Trash2 } from 'lucide-react'
 import { fmtPrice } from '@/lib/format'
@@ -162,7 +163,11 @@ function FavoriteCard({ id, product: rawProduct, onRemove }: { id: string; produ
       </button>
 
       <div className="flex flex-1 flex-col border-t border-[#f1f4f8] p-3 sm:p-4">
-        {product.brand && <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[#5d6e80]">{product.brand}</p>}
+        {product.brand && (
+          <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-[#5d6e80]">
+            <Link href={brandHref(product.brand)} className="hover:text-[#0b2540] hover:underline underline-offset-2">{product.brand}</Link>
+          </p>
+        )}
         <Link href={href} className="line-clamp-2 text-sm font-medium leading-snug text-[#121926] hover:text-[#0b2540] hover:underline">
           {product.name}
         </Link>
