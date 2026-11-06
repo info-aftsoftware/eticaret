@@ -123,6 +123,27 @@ export function HeroSlider() {
   const touchX = useRef<number | null>(null)
   const go = useCallback((i: number) => setCurrent((i + SLIDES.length) % SLIDES.length), [])
 
+  // Diğer slaytların görselleri yan tarafta (ekran dışında) durduğu için "lazy" kalırsa ancak slayt kayınca
+  // inmeye başlar ve bir an boş görünür. İlk slayt yüklendikten sonra tarayıcı boşta kalınca hepsi arka planda indirilir.
+  const [warm, setWarm] = useState(false)
+  useEffect(() => {
+    let idle: number | undefined
+    let t: ReturnType<typeof setTimeout> | undefined
+    const start = () => {
+      const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }
+      if (w.requestIdleCallback) idle = w.requestIdleCallback(() => setWarm(true), { timeout: 1500 })
+      else t = setTimeout(() => setWarm(true), 300)
+    }
+    if (document.readyState === 'complete') start()
+    else window.addEventListener('load', start, { once: true })
+    return () => {
+      window.removeEventListener('load', start)
+      if (t) clearTimeout(t)
+      const w = window as Window & { cancelIdleCallback?: (id: number) => void }
+      if (idle !== undefined) w.cancelIdleCallback?.(idle)
+    }
+  }, [])
+
   useEffect(() => {
     if (paused) return
     const timer = setTimeout(() => go(current + 1), INTERVAL_MS)
@@ -185,6 +206,7 @@ export function HeroSlider() {
                           height={p.h}
                           priority={i === 0}
                           fetchPriority={i === 0 ? 'high' : 'low'}
+                          loading={i === 0 ? undefined : warm || i === (current + 1) % SLIDES.length ? 'eager' : 'lazy'}
                           sizes="(max-width: 640px) 45vw, 30vw"
                           className="min-w-0 object-contain mix-blend-multiply"
                           style={{ width: 'auto', height: 'auto', maxHeight: `${p.maxH}%`, maxWidth: `${p.maxW}%` }}
