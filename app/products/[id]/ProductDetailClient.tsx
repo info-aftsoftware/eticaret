@@ -39,23 +39,7 @@ import { categoryHref } from '@/lib/seo/type-paths'
 import { brandHref } from '@/lib/seo/brands'
 import { SELLER } from '@/lib/legal/company'
 import { whatsappHref } from '@/components/WhatsAppButton'
-
-/** Ürün açıklamasındaki "Ad – özellik · özellik · özellik. Detaylar Voltekno'da." maddeleri; yoksa teknik tablonun ilk 4 satırı */
-function keyHighlights(description?: string, specs?: Record<string, string> | null): string[] {
-  const d = description ?? ''
-  const dash = d.indexOf(' – ')
-  if (dash > -1) {
-    const parts = d
-      .slice(dash + 3)
-      .split(' · ')
-      // son maddeden "Detaylar Voltekno'da." / "Details at Voltekno." gibi kapanış cümlesini at
-      .map((s, i, arr) => (i === arr.length - 1 ? s.split(/\.\s+/)[0] : s).replace(/\.$/, '').trim())
-      .filter(Boolean)
-    if (parts.length >= 2) return parts.slice(0, 5)
-  }
-  if (specs) return Object.entries(specs).slice(0, 4).map(([k, v]) => `${k}: ${v}`)
-  return []
-}
+import { keyHighlights } from '@/lib/seo/product-highlights'
 import { lineStock, stockKeyFor } from '@/lib/variant-stock'
 import { panelLineLogistics } from '@/lib/shipping/fee'
 

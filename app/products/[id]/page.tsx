@@ -6,7 +6,9 @@ import { notFound, permanentRedirect } from 'next/navigation'
 import ProductDetailClient from './ProductDetailClient'
 import type { MergedProduct } from '@/lib/catalog-merge'
 import { getStorefrontProductById, type StorefrontProduct } from '@/lib/discounts'
-import { VAT_RATE } from '@/lib/store-config'
+import { BANK_TRANSFER_DISCOUNT_RATE, VAT_RATE, grossPrice } from '@/lib/store-config'
+import { keyHighlights, productMetaDescription } from '@/lib/seo/product-highlights'
+import { fmtTL } from '@/components/seo/CollectionPage'
 import { lineLogistics, panelLineLogistics, shippingFeeFor } from '@/lib/shipping/fee'
 import { isContactOnlyProduct } from '@/lib/shipping/battery'
 import { isInstallShipping, isQuoteOnly } from '@/lib/sale-mode'
@@ -108,7 +110,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BAS
 
 function truncate(str: string, max: number) {
   if (!str || str.length <= max) return str
-  return str.slice(0, max).trim() + '…'
+  // Kelime sınırında kes (kelime ortasında bölünmesin)
+  const cut = str.slice(0, max - 1)
+  const space = cut.lastIndexOf(' ')
+  return (space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[s,.;:–-]+$/, '') + '…'
 }
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -121,7 +126,20 @@ export async function generateMetadata(props: { params: Promise<{ id: string }> 
   // Excel'in SEO başlığı Türkçe; İngilizcede başlık çevrilmiş addan üretilir.
   const title =
     locale === 'tr' && product.metaTitle && !DUPLICATE_META_TITLES.has(product.metaTitle) ? product.metaTitle : `${product.name} | ${SITE_NAME}`
-  const description = truncate(productDescription(product), 160)
+  // Türkçe: ürüne özgü açıklama (öne çıkan özellikler + KDV dahil fiyat); İngilizce: çevrilmiş kısa açıklama
+  const variantPrices = (product.variants ?? []).map((v) => v.price).filter((n) => n > 0)
+  const netFrom = variantPrices.length ? Math.min(...variantPrices) : product.price
+  const sellable = !isQuoteOnly(product) && netFrom > 0
+  const description =
+    locale === 'tr'
+      ? productMetaDescription({
+          name: product.name,
+          highlights: keyHighlights(product.description, product.specifications),
+          priceText: sellable ? fmtTL(grossPrice(netFrom)) : null,
+          fromPrice: variantPrices.length > 1 && new Set(variantPrices).size > 1,
+          bankDiscountRate: sellable ? BANK_TRANSFER_DISCOUNT_RATE : undefined,
+        })
+      : truncate(productDescription(product), 160)
   const image = (product.images && product.images[0]) || product.image
   const imageUrl = image?.startsWith('http') ? image : image ? `${SITE_URL}${image}` : undefined
 

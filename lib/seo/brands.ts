@@ -38,7 +38,13 @@ export const BRANDS: BrandSeo[] = [
   { slug: 'altech', name: 'Altech' },
   { slug: 'np-power', name: 'NP Power' },
   { slug: 'alpex', name: 'Alpex' },
-  { slug: 'mexxsun', name: 'Mexxsun' },
+  {
+    slug: 'mexxsun',
+    name: 'Mexxsun',
+    // Kaynak: mexxsun.com/en/corporate/about-us (Mexxsun Renewable Energy Ltd. Co.) — 7.11.2026'da doğrulandı
+    about: 'Mexxsun, güneş enerjisi sistemleri için inverter, şarj kontrol cihazı ve lityum akü gibi ürünler sunan bir yenilenebilir enerji markasıdır (Mexxsun Renewable Energy Ltd. Co.).',
+    aboutEn: 'Mexxsun is a renewable energy brand (Mexxsun Renewable Energy Ltd. Co.) offering inverters, charge controllers and lithium batteries for solar energy systems.',
+  },
 ]
 
 const BY_NAME = new Map(BRANDS.map((b) => [b.name.toLocaleLowerCase('tr'), b]))

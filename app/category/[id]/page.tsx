@@ -10,6 +10,8 @@ import { categoryInitialProducts } from '@/lib/category-initial'
 /** Fiyatlar kurla değiştiği için sayfa 10 dakikada bir yeniden üretilir (ilk çizim güncel fiyatla, madde 3) */
 export const revalidate = 600
 import { CategoryTypeLinks } from './CategoryTypeLinks'
+import { CategoryGroupGuide } from './CategoryGroupGuide'
+import { CATEGORY_GROUP_CONTENT } from '@/lib/seo/category-group-content'
 import { CATEGORY_META } from './category-meta'
 import { mockProducts } from '@/lib/products-mock'
 import { categoryHref } from '@/lib/seo/type-paths'
@@ -84,6 +86,7 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
 
   const title = getCategoryTitle(params.id)
   const meta = CATEGORY_META[params.id]
+  const guide = CATEGORY_GROUP_CONTENT[params.id]
 
   // Kategori ürünlerini ItemList schema için hazırla (ilk 10)
   const group = CATEGORY_GROUPS.find((g) => g.id === params.id)
@@ -143,6 +146,8 @@ export default async function CategoryPage(props: { params: Promise<{ id: string
       {typeLinks.length > 1 && (
         <CategoryTypeLinks groupId={params.id} title={title} links={typeLinks} />
       )}
+      {/* Seçim rehberi + SSS: yalnızca Türkçe (İngilizce sayfada karışık dil olmasın) */}
+      {guide && locale !== 'en' && <CategoryGroupGuide title={title} content={guide} />}
     </>
   )
 }
