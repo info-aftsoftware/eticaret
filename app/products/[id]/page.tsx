@@ -234,16 +234,7 @@ function shippingDetailsFor(product: StorefrontProduct, lineId: string) {
       currency: 'TRY',
     },
     shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'TR' },
-    deliveryTime: {
-      '@type': 'ShippingDeliveryTime',
-      businessDays: {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-      },
-      cutoffTime: '15:00',
-      handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
-      transitTime: { '@type': 'QuantitativeValue', minValue: 1, maxValue: 3, unitCode: 'DAY' },
-    },
+    // Teslim süresi verilmez: süre alıcının şehrine ve kargo firmasına göre değişir, taahhüt edilmez
   }
 }
 
