@@ -234,7 +234,7 @@ export function HeroSlider() {
             })}
           </div>
 
-          <div className="absolute bottom-[34px] right-5 min-[641px]:right-auto min-[641px]:bottom-6 min-[641px]:left-1/2 min-[641px]:-translate-x-1/2 z-[2] flex items-center gap-3">
+          <div className="absolute bottom-[34px] right-5 min-[641px]:right-auto min-[641px]:bottom-6 min-[641px]:left-1/2 min-[641px]:-translate-x-1/2 z-[2] flex items-center gap-2.5 min-[641px]:gap-3">
             {SLIDES.map((slide, i) => (
               <button
                 key={slide.id}
@@ -244,8 +244,8 @@ export function HeroSlider() {
                 aria-current={i === current ? 'true' : undefined}
                 className="group/dot p-1.5 -m-1.5 !min-h-0 min-w-0 rounded-full"
               >
-                {/* Görünen nokta 12px; dokunma alanı 24px (erişilebilirlik) */}
-                <span className={`block h-3 rounded-full transition-all duration-300 ${i === current ? 'w-8 bg-[#14141a]' : 'w-3 bg-[#c9d2dc] min-[641px]:bg-white group-hover/dot:bg-white/80'}`} />
+                {/* Görünen nokta mobilde 10px (düğmeye yapışmasın), geniş ekranda 12px; dokunma alanı 24px (erişilebilirlik) */}
+                <span className={`block h-2.5 min-[641px]:h-3 rounded-full transition-all duration-300 ${i === current ? 'w-6 min-[641px]:w-8 bg-[#14141a]' : 'w-2.5 min-[641px]:w-3 bg-[#c9d2dc] min-[641px]:bg-white group-hover/dot:bg-white/80'}`} />
               </button>
             ))}
           </div>

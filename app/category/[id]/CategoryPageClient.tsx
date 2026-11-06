@@ -571,7 +571,10 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                 <SlidersHorizontal className="w-4 h-4 text-slate-400 hidden sm:block" />
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                   <SelectTrigger aria-label={L('Sıralama', 'Sort')} className="w-[178px] min-h-[44px] h-11 text-sm border-slate-200 bg-white rounded-xl touch-manipulation">
-                    <SelectValue />
+                    {/* Seçili sıralamanın adı açıkça yazılır (Radix ilk çizimde boş bırakabiliyor) */}
+                    <SelectValue>
+                      {({ newest: tProducts('sortNewest'), 'price-asc': tProducts('sortPriceAsc'), 'price-desc': tProducts('sortPriceDesc'), 'name-asc': tProducts('sortNameAsc') } as Record<string, string>)[sortBy] ?? tProducts('sortByPlaceholder')}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="newest">{tProducts('sortNewest')}</SelectItem>

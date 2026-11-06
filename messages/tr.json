@@ -635,7 +635,7 @@
     "faqQ4": "GES hesaplama sonucu kesin maliyet verir mi?",
     "faqA4": "Hayır. Sonuç ön keşif niteliğindedir; kesin maliyet keşif, proje ve ekipman seçimine göre netleşir.",
     "faqQ5": "Kargo ve teknik destek süreçleri nasıl işliyor?",
-    "faqA5": "Stok durumuna göre hızlı sevkiyat yapılır, satış sonrası teknik destek ekibi kurulum ve kullanım sorularında yardımcı olur.",
+    "faqA5": "Siparişler stok durumuna göre hazırlanıp kargoya verilir; teslim süresi bulunduğunuz şehre göre değişir. Satış sonrası teknik destek ekibi kurulum ve kullanım sorularında yardımcı olur.",
     "seeAllFaq": "Tüm soruları gör"
   },
   "products": {
@@ -651,8 +651,8 @@
     "secureShoppingDesc": "256 Bit SSL Sertifikası",
     "easyReturn": "KOLAY İADE",
     "easyReturnDesc": "14 Gün İçinde Değişim",
-    "fastShipping": "HIZLI KARGO",
-    "fastShippingDesc": "Hafta İçi 16:00'ya Kadar",
+    "fastShipping": "KARGO TAKİBİ",
+    "fastShippingDesc": "Teslim süresi şehre göre değişir",
     "filters": "Filtreler",
     "categoriesFilters": "Kategoriler & Filtreler",
     "category": "Kategori",

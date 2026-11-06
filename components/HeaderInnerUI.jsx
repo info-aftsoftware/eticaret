@@ -360,9 +360,10 @@ export function HeaderInnerUI(props) {
 
           {/* Başlık: sade, tek satır */}
           <div className="shrink-0 px-4 pt-4 pb-2">
-            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px]">
+            {/* Logo zaten ana sayfa bağlantısı; iç içe <a> olmasın diye dış sarmalayıcı yalnızca menüyü kapatır */}
+            <div onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-[44px]">
               <Logo size="md" href="/" />
-            </Link>
+            </div>
           </div>
 
           {/* Arama: tek kutu, ikon içeride */}
@@ -499,11 +500,24 @@ export function HeaderInnerUI(props) {
               </div>
             </div>
 
-            {/* Blog */}
-            <div className="pt-1">
-              <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className={`flex items-center gap-3 h-12 px-3 rounded-xl text-sm font-medium transition-colors touch-manipulation ${pathname === '/blog' ? 'bg-white text-brand shadow-sm border border-slate-200/80' : 'text-slate-700 hover:bg-white/80'}`}>
-                Blog
-              </Link>
+            {/* Masaüstü üst çubuktaki kurumsal bağlantılar: mobilde de menüden ulaşılsın */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              {[
+                { href: '/ges', label: L('GES Teklifi', 'Solar Quote') },
+                { href: '/siparis-takip', label: L('Sipariş Takibi', 'Order Tracking') },
+                { href: '/faq', label: L('S.S.S.', 'FAQ') },
+                { href: '/hakkimizda', label: L('Hakkımızda', 'About Us') },
+                { href: '/blog', label: 'Blog' },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center h-11 px-3 rounded-xl border text-sm font-medium transition-colors touch-manipulation ${pathname === link.href ? 'bg-white text-brand border-slate-200 shadow-sm' : 'bg-white/60 text-slate-700 border-slate-200/80 hover:bg-white'}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
             {/* İletişim */}
             <div className="pt-1">

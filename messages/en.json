@@ -635,7 +635,7 @@
     "faqQ4": "Does GES calculation provide exact cost?",
     "faqA4": "No. It is a preliminary estimate; final cost is clarified after site survey, project scope, and equipment selection.",
     "faqQ5": "How do shipping and technical support work?",
-    "faqA5": "We provide fast shipment based on stock and post-sales technical support for installation and usage questions.",
+    "faqA5": "Orders are prepared according to stock and shipped; delivery time varies by your city. Our after-sales technical team helps with installation and usage questions.",
     "seeAllFaq": "View all questions"
   },
   "products": {
@@ -651,8 +651,8 @@
     "secureShoppingDesc": "256 Bit SSL Certificate",
     "easyReturn": "EASY RETURNS",
     "easyReturnDesc": "Exchange within 14 days",
-    "fastShipping": "FAST SHIPPING",
-    "fastShippingDesc": "Weekdays until 4:00 PM",
+    "fastShipping": "SHIPMENT TRACKING",
+    "fastShippingDesc": "Delivery time varies by city",
     "filters": "Filters",
     "categoriesFilters": "Categories & Filters",
     "category": "Category",

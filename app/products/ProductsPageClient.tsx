@@ -445,7 +445,10 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
             <span className="text-sm text-slate-600 font-medium">{tProducts('productsListed', { count: totalCount })}</span>
             <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortOption)}>
               <SelectTrigger aria-label={L('Sıralama', 'Sort')} className="min-h-[44px] h-11 w-[180px] max-w-full bg-white border-slate-200 text-slate-800 text-sm rounded-xl touch-manipulation">
-                <SelectValue placeholder={tProducts('sortByPlaceholder')} />
+                {/* Seçili sıralamanın adı açıkça yazılır (Radix ilk çizimde boş bırakabiliyor) */}
+                <SelectValue placeholder={tProducts('sortByPlaceholder')}>
+                  {({ newest: tProducts('sortNewest'), 'price-asc': tProducts('sortPriceAsc'), 'price-desc': tProducts('sortPriceDesc'), 'name-asc': tProducts('sortNameAsc'), 'name-desc': tProducts('sortNameDesc') } as Record<string, string>)[sortBy] ?? tProducts('sortByPlaceholder')}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent align="end" className="rounded-xl border-slate-200 bg-white">
                 <SelectItem value="newest" className="text-sm">{tProducts('sortNewest')}</SelectItem>
