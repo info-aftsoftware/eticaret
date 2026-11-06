@@ -401,6 +401,36 @@ export function HeaderInnerUI(props) {
               </div>
             )}
 
+            {/* Hesap: giriş yapan kişi için hesap bağlantıları ve çıkış */}
+            {isAuthenticated && user && (
+              <div className="rounded-xl border border-slate-200 bg-white p-3">
+                <p className="truncate px-1 text-sm font-semibold text-ink">{t('greeting', { name: user.name })}</p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <Link
+                    href="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center h-10 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 touch-manipulation"
+                  >
+                    {t('myAccount')}
+                  </Link>
+                  <Link
+                    href="/profile?tab=orders"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center h-10 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 touch-manipulation"
+                  >
+                    {t('viewOrders')}
+                  </Link>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setMobileMenuOpen(false); logout(); router.push('/') }}
+                  className="mt-2 w-full h-10 rounded-lg bg-slate-100 hover:bg-slate-200 text-sm font-medium text-ink transition-colors touch-manipulation"
+                >
+                  {t('logout')}
+                </button>
+              </div>
+            )}
+
             {/* Ana menü */}
             <div className="space-y-0.5">
               <Link href="/" onClick={() => setMobileMenuOpen(false)} className={`flex items-center gap-3 h-12 px-3 rounded-xl text-sm font-medium transition-colors touch-manipulation ${pathname === '/' ? 'bg-white text-brand shadow-sm border border-slate-200/80' : 'text-slate-700 hover:bg-white/80'}`}>

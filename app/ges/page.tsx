@@ -23,8 +23,7 @@ import { getAddresses } from '@/lib/firebase/firestore'
 import { useL } from '@/lib/i18n-inline'
 import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
-
-const CONTACT_DRAFT_KEY = 'site_contact_draft'
+import { dropLegacyContactDraft } from '@/lib/privacy/device-data'
 
 /** Required field marker */
 const Req = () => <span className="text-red-500 font-bold ml-0.5" aria-hidden="true">*</span>
@@ -120,11 +119,8 @@ export default function GesPage() {
 
   useEffect(() => {
     let mounted = true
-    const draft = (() => {
-      if (typeof window === 'undefined') return {}
-      try { return JSON.parse(localStorage.getItem(CONTACT_DRAFT_KEY) || '{}') as Record<string, string> }
-      catch { return {} }
-    })()
+    // Yalnızca giriş yapan kişinin kendi bilgileri doldurulur; tarayıcıda form taslağı tutulmaz (ortak cihazda sızmasın)
+    dropLegacyContactDraft()
     if (isAuthenticated && user?.id) {
       getAddresses(user.id)
         .then((addresses) => {
@@ -132,10 +128,10 @@ export default function GesPage() {
           const addr = addresses.find((a) => a.isDefault) ?? addresses[0]
           setForm((p) => ({
             ...p,
-            fullName: user.name?.trim() || draft.fullName || p.fullName,
-            phone: user.phone?.trim() || draft.phone || p.phone,
-            email: user.email?.trim() || draft.email || p.email,
-            city: addr?.city?.trim() || draft.city || p.city,
+            fullName: user.name?.trim() || p.fullName,
+            phone: user.phone?.trim() || p.phone,
+            email: user.email?.trim() || p.email,
+            city: addr?.city?.trim() || p.city,
             district: addr?.district?.trim() || p.district,
           }))
         })
@@ -143,20 +139,11 @@ export default function GesPage() {
           if (!mounted) return
           setForm((p) => ({
             ...p,
-            fullName: user.name?.trim() || draft.fullName || p.fullName,
-            phone: user.phone?.trim() || draft.phone || p.phone,
-            email: user.email?.trim() || draft.email || p.email,
-            city: draft.city || p.city,
+            fullName: user.name?.trim() || p.fullName,
+            phone: user.phone?.trim() || p.phone,
+            email: user.email?.trim() || p.email,
           }))
         })
-    } else {
-      setForm((p) => ({
-        ...p,
-        fullName: draft.fullName || p.fullName,
-        phone: draft.phone || p.phone,
-        email: draft.email || p.email,
-        city: draft.city || p.city,
-      }))
     }
     return () => { mounted = false }
   }, [isAuthenticated, user?.id, user?.name, user?.phone, user?.email])
@@ -315,14 +302,6 @@ export default function GesPage() {
         return
       }
 
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.setItem(CONTACT_DRAFT_KEY, JSON.stringify({
-            fullName: form.fullName.trim(), phone: form.phone.trim(),
-            city: form.city.trim(), email: form.email.trim(),
-          }))
-        } catch { /* ignore */ }
-      }
       setSuccess(true)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch {

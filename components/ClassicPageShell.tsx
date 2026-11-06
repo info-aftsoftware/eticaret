@@ -24,6 +24,8 @@ interface ClassicPageShellProps {
   noTitle?: boolean
   /** Sayfa kendi görünür h1'ini çiziyorsa ekran okuyucu için gizli h1 eklenmez (sayfada tek h1) */
   pageHasOwnH1?: boolean
+  /** Başlığın sağındaki işlemler (ör. Çıkış Yap) */
+  actions?: React.ReactNode
 }
 
 /**
@@ -37,6 +39,7 @@ export function ClassicPageShell({
   className = '',
   noTitle = false,
   pageHasOwnH1 = false,
+  actions,
 }: ClassicPageShellProps) {
   const L = useL()
   return (
@@ -67,7 +70,8 @@ export function ClassicPageShell({
             <h1 className="sr-only">{breadcrumbs[breadcrumbs.length - 1].label}</h1>
           )}
           {!noTitle && (title || description) && (
-            <div className="mt-1 md:mt-2">
+            <div className="mt-1 md:mt-2 flex flex-wrap items-start justify-between gap-3">
+              <div className="min-w-0">
               {title && (
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
                   {title}
@@ -76,6 +80,8 @@ export function ClassicPageShell({
               {description && (
                 <p className="mt-1 text-sm text-slate-600 md:text-base">{description}</p>
               )}
+              </div>
+              {actions && <div className="shrink-0">{actions}</div>}
             </div>
           )}
         </div>

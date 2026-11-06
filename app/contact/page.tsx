@@ -12,6 +12,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useL } from '@/lib/i18n-inline'
+import { useAuthStore } from '@/lib/store/useAuthStore'
+import { dropLegacyContactDraft } from '@/lib/privacy/device-data'
 import { isValidEmail, isValidTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 import { Phone, Send, Loader2 } from 'lucide-react'
@@ -20,24 +22,6 @@ import { legalHref } from '@/lib/legal/documents'
 
 const CONTACT_IMAGE =
   'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80'
-
-const SITE_CONTACT_DRAFT_KEY = 'site_contact_draft'
-
-function loadContactDraftForPage(): { name: string; email: string; phone: string } {
-  if (typeof window === 'undefined') return { name: '', email: '', phone: '' }
-  try {
-    const raw = localStorage.getItem(SITE_CONTACT_DRAFT_KEY)
-    if (!raw) return { name: '', email: '', phone: '' }
-    const parsed = JSON.parse(raw) as { fullName?: string; phone?: string; city?: string; email?: string }
-    return {
-      name: typeof parsed.fullName === 'string' ? parsed.fullName : '',
-      email: typeof parsed.email === 'string' ? parsed.email : '',
-      phone: typeof parsed.phone === 'string' ? parsed.phone : '',
-    }
-  } catch {
-    return { name: '', email: '', phone: '' }
-  }
-}
 
 export default function ContactPage() {
   const L = useL()
@@ -78,17 +62,18 @@ export default function ContactPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Yalnızca giriş yapan kişinin kendi bilgileri doldurulur; tarayıcıda form taslağı tutulmaz (ortak cihazda sızmasın)
+  const authUser = useAuthStore((s) => (s.isAuthenticated ? s.user : null))
   useEffect(() => {
-    const draft = loadContactDraftForPage()
-    if (draft.name || draft.email || draft.phone) {
-      setFormData((prev) => ({
-        ...prev,
-        name: draft.name || prev.name,
-        email: draft.email || prev.email,
-        phone: draft.phone || prev.phone,
-      }))
-    }
-  }, [])
+    dropLegacyContactDraft()
+    if (!authUser) return
+    setFormData((prev) => ({
+      ...prev,
+      name: prev.name || authUser.name?.trim() || '',
+      email: prev.email || authUser.email?.trim() || '',
+      phone: prev.phone || authUser.phone?.trim() || '',
+    }))
+  }, [authUser])
 
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [turnstileReset, setTurnstileReset] = useState(0)

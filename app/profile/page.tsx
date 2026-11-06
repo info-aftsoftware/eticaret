@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, Suspense } from 'react'
+import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -47,7 +47,9 @@ const ORDER_STATUS_LABELS_EN: Record<string, string> = {
 function ProfilePageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { user, isAuthenticated, token } = useAuthStore()
+  const { user, isAuthenticated, token, logout } = useAuthStore()
+  // Çıkış Yap ile ayrılırken giriş sayfasına yönlendirme yapılmaz (ana sayfaya gidilir)
+  const loggingOut = useRef(false)
   const authReady = useFirebaseAuthStore((s) => s.authReady)
   const { addToast } = useToast()
   const L = useL()
@@ -89,6 +91,7 @@ function ProfilePageContent() {
   useEffect(() => {
     if (!authReady) return
     if (!isAuthenticated) {
+      if (loggingOut.current) return
       router.replace(`/login?redirect=${encodeURIComponent('/profile' + window.location.search)}`)
       return
     }
@@ -309,7 +312,12 @@ function ProfilePageContent() {
   }
 
   return (
-    <ClassicPageShell breadcrumbs={[{ label: L('Hesabım', 'My Account') }]} title={L('Hesabım', 'My Account')} description={L('Siparişler, adresler ve ayarlar', 'Orders, addresses and settings')}>
+    <ClassicPageShell breadcrumbs={[{ label: L('Hesabım', 'My Account') }]} title={L('Hesabım', 'My Account')} description={L('Siparişler, adresler ve ayarlar', 'Orders, addresses and settings')}
+      actions={
+        <Button type="button" variant="outline" className="h-10 rounded-lg" onClick={() => { loggingOut.current = true; logout(); router.push('/') }}>
+          {L('Çıkış Yap', 'Log out')}
+        </Button>
+      }>
       <EmailVerifyBanner className="mb-6" />
       <Tabs value={activeTab} onValueChange={(value) => router.push(`/profile?tab=${value}`)} className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto rounded-lg bg-surface p-1 min-w-0">

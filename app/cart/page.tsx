@@ -11,7 +11,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Heart,
-  Info,
   Lock,
   Minus,
   Package,
@@ -47,13 +46,11 @@ const productIdOf = (item: CartItem, status?: CartLineStatus) => status?.product
 function CartLine({
   item,
   status,
-  priceChange,
   productQty,
   formatPrice,
 }: {
   item: CartItem
   status?: CartLineStatus
-  priceChange?: { from: number; to: number }
   productQty: number
   formatPrice: (n: number) => string
 }) {
@@ -180,15 +177,6 @@ function CartLine({
             </p>
           )}
 
-          {priceChange && !unavailable && (
-            <p className="mt-2 flex items-start gap-1.5 rounded-md bg-[#eef4fb] px-2.5 py-1.5 text-xs text-[#20384e]">
-              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
-              <span>
-                {L('Fiyat güncellendi:', 'Price updated:')} <span className="line-through">{formatPrice(priceChange.from)}</span> → <strong>{formatPrice(priceChange.to)}</strong>
-              </span>
-            </p>
-          )}
-
           {unavailable && (
             <div role="alert" className="mt-2 rounded-md border border-red-200 bg-red-50 px-2.5 py-2 text-xs text-red-900">
               <p className="flex items-start gap-1.5">
@@ -229,7 +217,7 @@ export default function CartPage() {
   const formatPrice = (amount: number) => fmtPrice(amount, currency, rates?.rates ?? null, numberLocale)
   const { items, clearCart, getTotalPrice, getTotalItems, _hasHydrated } = useCartStore()
   const { isAuthenticated } = useAuthStore()
-  const { status, priceChanges, blocking } = useCartValidation()
+  const { status, blocking } = useCartValidation()
   const [couponCode, setCouponCode] = useState('')
   const [couponDiscount, setCouponDiscount] = useState(0)
   const [couponError, setCouponError] = useState('')
@@ -440,19 +428,12 @@ export default function CartPage() {
                 </button>
               )}
             </div>
-            {Object.keys(priceChanges).length > 0 && (
-              <p role="status" className="mx-4 mt-4 flex items-start gap-2 rounded-lg border border-[#cfe0f2] bg-[#eef4fb] p-3 text-sm text-[#20384e] sm:mx-5">
-                <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                {L('Bazı ürünlerin fiyatı güncellendi (kampanya veya fiyat değişikliği). Tutarlar güncel fiyatlarla gösteriliyor.', 'Prices of some items have been updated (promotion or price change). Amounts are shown at current prices.')}
-              </p>
-            )}
             <ul className="divide-y divide-[#f1f4f8] px-4 py-4 sm:px-5">
               {items.map((item) => (
                 <CartLine
                   key={item.id}
                   item={item}
                   status={status[item.id]}
-                  priceChange={priceChanges[item.id]}
                   productQty={productQtyOf(item)}
                   formatPrice={formatPrice}
                 />

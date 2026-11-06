@@ -24,6 +24,7 @@ import { getAuth } from '@/lib/firebase/config'
 import { getUserProfile, setUserProfile } from '@/lib/firebase/firestore'
 import { isFirebaseConfigured } from '@/lib/firebase/config'
 import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
+import { clearPersonalDeviceData } from '@/lib/privacy/device-data'
 
 /** app/api/admin/auth: admin panelinin Firebase özel kimliği (müşteri değil) */
 const ADMIN_PANEL_UID = 'admin-panel-user'
@@ -195,10 +196,8 @@ export const useFirebaseAuthStore = create<AuthState>()(
           try { firebaseSignOut(getAuth()) } catch (e) { console.error('Logout error:', e) }
         }
         set({ user: null, token: null, isAuthenticated: false, rememberMe: false })
-        if (typeof window !== 'undefined') {
-          sessionStorage.removeItem('auth-token')
-          sessionStorage.removeItem('auth-user')
-        }
+        // Kişisel izler cihazda kalmaz (form bilgileri, sipariş sorgusu, karşılaştırma listesi…)
+        clearPersonalDeviceData()
       },
 
       setUser: (user) => set({ user, isAuthenticated: !!user }),
