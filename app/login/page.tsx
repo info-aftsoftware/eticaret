@@ -122,15 +122,16 @@ function LoginForm() {
             error={errors.password}
             autoComplete="current-password"
             disabled={loading}
-            labelExtra={
-              <Link href={email ? `/forgot-password?email=${encodeURIComponent(email.trim())}` : '/forgot-password'} className="text-[13.5px] font-medium text-[#0b2540] hover:underline underline-offset-2">
-                {L('Şifremi unuttum', 'Forgot password?')}
-              </Link>
-            }
           />
-          <Checkbox checked={rememberMe} onChange={setRememberMe} disabled={loading}>
-            {L('Beni hatırla', 'Remember me')}
-          </Checkbox>
+          {/* Beni hatırla ve Şifremi unuttum aynı satırda */}
+          <div className="flex items-center justify-between gap-3">
+            <Checkbox checked={rememberMe} onChange={setRememberMe} disabled={loading}>
+              {L('Beni hatırla', 'Remember me')}
+            </Checkbox>
+            <Link href={email ? `/forgot-password?email=${encodeURIComponent(email.trim())}` : '/forgot-password'} className="shrink-0 text-[13.5px] font-medium text-[#0b2540] hover:underline underline-offset-2">
+              {L('Şifremi unuttum', 'Forgot password?')}
+            </Link>
+          </div>
 
           <PrimaryButton type="submit" loading={loading} loadingText={L('Giriş yapılıyor…', 'Signing in…')}>
             {L('Giriş Yap', 'Sign In')}

@@ -108,9 +108,8 @@ const SLIDE_BG =
 
 const FEATURES = [
   { tr: ['Orijinal ve Faturalı Ürün', 'Tüm ürünler faturalı ve garantili olarak satılır'], en: ['Genuine, Invoiced Products', 'Every product is sold with invoice and warranty'] },
-  { tr: ['Özenli Paketleme, Hızlı Kargo', 'Stoktaki ürünlerde hızlı sevkiyat ve takip'], en: ['Careful Packing, Fast Shipping', 'Quick dispatch and tracking for in-stock items'] },
-  // Ödeme yönteminden bağımsız doğru metin (kart ödemesi açılana kadar kart vaat edilmez, madde 2)
-  { tr: ['Güvenli Ödeme', 'Havale ve EFT ile ödemede %3 indirim'], en: ['Secure Payment', '3% off when paying by bank transfer'] },
+  { tr: ['Özenli Paketleme ve Kargo Takibi', 'Teslim süresi bulunduğunuz şehre göre değişir'], en: ['Careful Packing and Tracking', 'Delivery time varies by your city'] },
+  { tr: ['Güvenli Ödeme', 'Kredi/banka kartı veya havale/EFT; havalede %3 indirim'], en: ['Secure Payment', 'Credit/debit card or bank transfer; 3% off by transfer'] },
   { tr: ['Uzman Teknik Destek', 'Ürün seçimi ve sistem tasarımında mühendis desteği'], en: ['Expert Technical Support', 'Engineering help with product choice and system design'] },
 ] as const
 

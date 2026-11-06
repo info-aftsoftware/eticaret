@@ -46,7 +46,7 @@ export default async function ShippingPage() {
               <div className="flex gap-3">
                 <div>
                   <p className="font-semibold text-ink">{L('Stokta Mevcut Ürünler', 'In-Stock Products')}</p>
-                  <p className="text-ink-muted text-sm mt-0.5">{L('Ödeme onayından itibaren kargoya verilir. Kargo firması teslim süresi bölgeye ve siparişe göre değişir; tahmini süre sipariş onay e-postanızda belirtilir.', 'Shipped once payment is confirmed. The carrier delivery time varies by region and order; the estimated time is stated in your order confirmation email.')}</p>
+                  <p className="text-ink-muted text-sm mt-0.5">{L('Ödeme onayından sonra hazırlanıp kargoya verilir. Teslim süresi bulunduğunuz şehre ve kargo firmasına göre değişir.', 'Prepared and shipped after payment is confirmed. Delivery time varies by your city and the carrier.')}</p>
                 </div>
               </div>
               <div className="flex gap-3">
@@ -64,8 +64,8 @@ export default async function ShippingPage() {
             </div>
             <div className="mt-5 bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-800">
               {L(
-                'Hafta içi 15:00 öncesi verilen siparişler aynı gün, sonrası ertesi iş günü kargoya verilir; kargoda 1–3 iş günü sürer (hafta sonu hariç). Resmî tatiller iş günü sayılmaz. Stok dışı / özel sipariş ürünlerde süre sipariş öncesi bildirilir.',
-                'Orders placed before 15:00 on business days ship the same day, otherwise the next business day; transit takes 1–3 business days (excluding weekends). Public holidays are not business days. Lead times for out-of-stock / made-to-order items are quoted before ordering.'
+                'Siparişler stok durumuna göre hazırlanıp anlaşmalı kargo firmasına teslim edilir. Teslim süresi bulunduğunuz şehre ve kargo firmasının dağıtım planına göre değişir; kesin bir teslim süresi taahhüt edilmez. Kargoya verildiğinde takip numarası e-postayla paylaşılır. Stok dışı / özel sipariş ürünlerde tedarik süresi sipariş öncesi bildirilir.',
+                'Orders are prepared according to stock and handed to our partner carrier. Delivery time varies by your city and the carrier’s distribution schedule; no fixed delivery time is guaranteed. The tracking number is emailed once the order ships. Lead times for out-of-stock / made-to-order items are quoted before ordering.'
               )}
             </div>
           </div>

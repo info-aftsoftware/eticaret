@@ -2,10 +2,12 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import Link, { usePathname } from '@/lib/i18n/navigation'
-import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react'
+import { ArrowRight, ChevronDown, ChevronRight, ChevronUp } from 'lucide-react'
 import { PACKAGE_CATEGORIES } from '@/lib/package-categories'
 import { categoryHref } from '@/lib/seo/type-paths'
 import { useL } from '@/lib/i18n-inline'
+import { GroupPanelContent, groupPanelWidth } from './GroupPanel'
+import { useCategoryCounts } from '@/components/CategoriesWithProductsProvider'
 
 export type NavGroup = {
   id: string
@@ -68,9 +70,20 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
   }
   const close = () => setOpen(false)
 
+  const L = useL()
+  const counts = useCategoryCounts()
+  const groupTotal = (g: NavGroup) => (counts ? g.categories.reduce((n, c) => n + (counts[c.value] ?? 0), 0) : 0)
   const activeGroup = navGroups.find((g) => g.id === activeId)
+  // Başlıktaki kategori menüleriyle aynı görünüm: yuvarlatılmış satır, açık gri vurgu, sağda ürün sayısı
   const itemClass = (active: boolean) =>
-    `flex items-center justify-between gap-3 px-5 h-[39px] text-[14.5px] font-medium transition-colors ${active ? 'bg-[#f1f4f8] text-[#0b2540]' : 'text-[#14141a] hover:bg-[#f1f4f8]'}`
+    `group/item flex items-center justify-between gap-3 rounded-md px-3 h-10 text-[14px] font-medium transition-colors ${active ? 'bg-[#f1f4f8] text-[#0b2540]' : 'text-[#20384e] hover:bg-[#f1f4f8] hover:text-[#0b2540]'}`
+  const itemTail = (n: number, active: boolean) => (
+    <span className="flex shrink-0 items-center gap-2">
+      {n > 0 && <span className="text-[12px] font-normal tabular-nums text-[#8a99a8]">{n}</span>}
+      <ChevronRight className={`h-4 w-4 transition-colors ${active ? 'text-[#0b2540]' : 'text-[#b4c0cc] group-hover/item:text-[#5d6e80]'}`} aria-hidden />
+    </span>
+  )
+  const panelWidth = activeGroup ? groupPanelWidth(activeGroup) : 640
 
   return (
     <div ref={rootRef} className="relative shrink-0" onMouseEnter={show} onMouseLeave={hide}>
@@ -90,8 +103,9 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
       {open && (
         <div id="all-categories-panel" className="absolute left-0 top-full mt-2 z-50 flex items-start">
           <ul
-            className="w-[290px] py-2 rounded-xl bg-white border border-[#e3e8ee] shadow-[0_18px_40px_rgba(11,37,64,0.16)]"
+            className="w-[290px] p-2 rounded-xl bg-white border border-[#e3e8ee] shadow-[0_18px_40px_rgba(11,37,64,0.12)]"
           >
+            <li className="px-3 pt-1.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#8a99a8]">{L('Kategoriler', 'Categories')}</li>
             {navGroups.map((g) => (
               <li key={g.id}>
                 <Link
@@ -101,12 +115,12 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
                   onClick={close}
                   className={itemClass(activeId === g.id)}
                 >
-                  {t(g.labelKey)}
-                  <ArrowRight className="w-3.5 h-3.5 shrink-0 text-[#727276]" aria-hidden />
+                  <span className="min-w-0 truncate">{t(g.labelKey)}</span>
+                  {itemTail(groupTotal(g), activeId === g.id)}
                 </Link>
               </li>
             ))}
-            <li>
+            <li className="mt-1 border-t border-[#eef1f5] pt-1">
               <Link
                 href="/paketler"
                 onMouseEnter={() => setActiveId(PACKAGES_ID)}
@@ -114,43 +128,38 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
                 onClick={close}
                 className={itemClass(activeId === PACKAGES_ID)}
               >
-                {t('catGroupReadyPackages')}
-                <ArrowRight className="w-3.5 h-3.5 shrink-0 text-[#727276]" aria-hidden />
+                <span className="min-w-0 truncate">{t('catGroupReadyPackages')}</span>
+                {itemTail(0, activeId === PACKAGES_ID)}
               </Link>
             </li>
           </ul>
 
           {(activeGroup || activeId === PACKAGES_ID) && (
             <div
-              className="ml-2 w-[min(640px,calc(100vw-360px))] min-h-[200px] max-h-[70vh] overflow-y-auto rounded-xl bg-white border border-[#e3e8ee] shadow-[0_18px_40px_rgba(11,37,64,0.16)] p-6"
+              className="ml-2 min-h-[200px] max-h-[70vh] overflow-y-auto rounded-xl bg-white border border-[#e3e8ee] shadow-[0_18px_40px_rgba(11,37,64,0.12)] p-5"
+              style={{ width: `min(${panelWidth}px, calc(100vw - 360px))` }}
             >
               {activeId === PACKAGES_ID ? (
                 <>
-                  <PanelHeading title={t('catGroupReadyPackages')} href="/paketler" onClick={close} />
-                  <ul className="grid grid-cols-2 gap-2">
+                  <div className="flex items-baseline justify-between gap-3 px-3">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#8a99a8]">{t('catGroupReadyPackages')}</p>
+                    <Link href="/paketler" onClick={close} className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#0b2540] hover:text-[#12335a]">
+                      {L('Tümünü gör', 'View all')} <ArrowRight className="h-4 w-4" aria-hidden />
+                    </Link>
+                  </div>
+                  <ul className="mt-2 grid grid-cols-2 gap-x-3 gap-y-0.5">
                     {PACKAGE_CATEGORIES.map((p) => (
-                      <li key={p.slug}>
-                        <Link href={`/paketler/${p.slug}`} onClick={close} className="block rounded-lg border border-[#e6ebf1] px-4 py-3 hover:bg-[#f1f4f8] transition-colors">
-                          <span className="block text-sm font-semibold text-[#20384e]">{p.shortTitle}</span>
-                          <span className="block text-xs text-[#5d6e80] mt-0.5 line-clamp-2">{p.description}</span>
+                      <li key={p.slug} className="min-w-0">
+                        <Link href={`/paketler/${p.slug}`} onClick={close} className="block rounded-md px-3 py-2 transition-colors hover:bg-[#f1f4f8]">
+                          <span className="block text-[13.5px] font-medium leading-snug text-[#20384e]">{p.shortTitle}</span>
+                          <span className="mt-0.5 block text-[12px] leading-snug text-[#5d6e80] line-clamp-2">{p.description}</span>
                         </Link>
                       </li>
                     ))}
                   </ul>
                 </>
               ) : activeGroup ? (
-                <>
-                  <PanelHeading title={t(activeGroup.labelKey)} href={activeGroup.href} onClick={close} />
-                  <ul className="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1">
-                    {activeGroup.categories.map((cat) => (
-                      <li key={cat.value} className="min-w-0">
-                        <Link href={productsHref(cat.value)} onClick={close} className="block text-[13.5px] font-medium text-[#20384e] hover:text-[#0b2540] py-1.5">
-                          {t(cat.labelKey)}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                <GroupPanelContent group={activeGroup} label={t(activeGroup.labelKey)} t={t} onNavigate={close} />
               ) : null}
             </div>
           )}
@@ -160,14 +169,3 @@ export function AllCategoriesMenu({ navGroups, t }: { navGroups: NavGroup[]; t: 
   )
 }
 
-function PanelHeading({ title, href, onClick }: { title: string; href: string; onClick: () => void }) {
-  const L = useL()
-  return (
-    <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#e6ebf1]">
-      <span className="text-[15px] font-semibold text-[#0b2540]">{title}</span>
-      <Link href={href} onClick={onClick} className="inline-flex items-center gap-1 text-xs font-medium text-[#5d6e80] hover:text-[#0b2540]">
-        {L('Tümünü Gör', 'View all')} <ArrowRight className="w-3 h-3" aria-hidden />
-      </Link>
-    </div>
-  )
-}

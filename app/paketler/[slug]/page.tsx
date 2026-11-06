@@ -178,26 +178,6 @@ export default async function PaketDetailPage(props: { params: Promise<{ slug: s
             </Link>
           </div>
 
-          {/* Madde 14–15: hazır paket değil; listede bulunmak uyumluluk iddiası değil */}
-          <div className="mb-6 rounded-xl border border-slate-200 bg-white p-4 text-sm text-slate-600 leading-relaxed">
-            <p>
-              {L(
-                `Bu sayfa hazır bir paket değildir. ${item.shortTitle} kurulumlarında kullanılan ürün gruplarından seçilmiş ürünler listelenir; listede bulunmak sizin sisteminizle uyumlu olduğu anlamına gelmez. Adetli malzeme listesi, güç ve depolama kapasitesi, toplam bedel ve dahil/hariç kapsam ihtiyaç analizinden sonra teklifte hazırlanır.`,
-                `This page is not a ready-made package. It lists products from the product groups used in ${item.en.shortTitle.toLowerCase()} installations; being listed does not mean compatibility with your system. The bill of materials, power and storage capacity, total price and scope are prepared in a quote after a needs analysis.`
-              )}
-            </p>
-            {locale !== 'en' && item.includesItems.length > 0 && (
-              <div className="mt-3">
-                <p className="font-semibold text-slate-800">Tipik bir sistemde bulunanlar (örnek, kesin liste teklifte belirlenir)</p>
-                <ul className="mt-1.5 list-disc pl-5 space-y-0.5">
-                  {item.includesItems.map((x) => (
-                    <li key={x}>{x}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
           {relatedProducts.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-slate-300 bg-white py-16 text-center">
               <p className="text-slate-500">{L('Bu kategoriye ait ürün bulunamadı.', 'No products found in this category.')}</p>

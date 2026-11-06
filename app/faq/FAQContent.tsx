@@ -3,7 +3,6 @@
 import React from 'react'
 import { ChevronDown } from 'lucide-react'
 import { useL } from '@/lib/i18n-inline'
-import { usePaymentMethods } from '@/lib/usePaymentMethods'
 
 const faqItems = [
   {
@@ -39,8 +38,8 @@ const faqItems = [
       {
         q: { tr: 'Kargo süresi ne kadar?', en: 'How long does shipping take?' },
         a: {
-          tr: 'Hafta içi 15:00 öncesi verilen siparişler aynı gün, sonrası ertesi iş günü kargoya verilir; kargoda 1–3 iş günü sürer (hafta sonu hariç). Örneğin perşembe sabahı verilen sipariş cuma–salı arası elinizde olur. Tahmini tarih aralığını ürün ve sepet sayfasında da görebilirsiniz.',
-          en: 'Orders placed before 15:00 on business days ship the same day, otherwise the next business day; transit takes 1–3 business days (excluding weekends). For example, an order placed Thursday morning arrives between Friday and Tuesday. You can also see the estimated range on the product and cart pages.',
+          tr: 'Siparişler stok durumuna göre hazırlanıp anlaşmalı kargo firmasına teslim edilir. Teslim süresi bulunduğunuz şehre ve kargo firmasının dağıtım planına göre değişir; kesin bir teslim süresi taahhüt edilmez. Kargoya verildiğinde takip numarası e-postayla paylaşılır.',
+          en: 'Orders are prepared according to stock and handed to our partner carrier. Delivery time varies by your city and the carrier’s distribution schedule; no fixed delivery time is guaranteed. The tracking number is emailed once the order ships.',
         },
       },
       {
@@ -108,10 +107,10 @@ const faqItems = [
 
 export function FAQContent() {
   const L = useL()
-  const { card } = usePaymentMethods()
-  const payment = card
-    ? L('Kredi kartı ve banka kartı (bankanın 3D Secure ortamında) ile havale/EFT ile ödeme alıyoruz.', 'We accept credit and debit cards (bank 3D Secure) and bank transfer (wire/EFT).')
-    : L('Şu anda havale/EFT ile ödeme alıyoruz (havalede %3 indirim); kredi ve banka kartıyla ödeme kullanıma açıldığında ödeme sayfasında görünecek.', 'We currently accept bank transfer (wire/EFT, 3% off); card payment will appear on the checkout page once available.')
+  const payment = L(
+    'Kredi kartı ve banka kartıyla (iyzico güvencesiyle, 3D Secure) ve havale/EFT ile ödeme alıyoruz; havale/EFT ile ödemede %3 indirim uygulanır.',
+    'We accept credit and debit cards (secured by iyzico, 3D Secure) and bank transfer (wire/EFT); bank transfer payments get 3% off.',
+  )
   return (
     <div className="space-y-8">
       {faqItems.map((section) => (

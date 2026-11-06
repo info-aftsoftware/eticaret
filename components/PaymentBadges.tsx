@@ -1,51 +1,31 @@
 'use client'
 
-import { Lock } from 'lucide-react'
+import Image from 'next/image'
 import { useL } from '@/lib/i18n-inline'
-import { usePaymentMethods } from '@/lib/usePaymentMethods'
 
 /**
- * Kabul edilen kartlar ve güvenlik rozetleri (banka sanal POS başvurusunda istenir).
- * Kart logoları ve 3D Secure yalnız kartla ödeme açıkken görünür (madde 2); kapalıyken "Havale / EFT" gösterilir.
- * Görseller yerine sade metin/SVG rozetler — marka dosyası gerekmez, koyu/açık zeminde okunur.
+ * Ödeme yöntemleri: iyzico'nun resmî logo bandı (iyzico ile Öde, Mastercard, Visa, American Express, Troy)
+ * ve havale/EFT. Kredi kartı ve banka kartıyla ödeme iyzico üzerinden alınır.
  */
 export function PaymentBadges({ className = '' }: { className?: string }) {
   const L = useL()
-  const box = 'inline-flex h-7 items-center justify-center rounded bg-white px-2 shadow-sm'
-  const { card } = usePaymentMethods()
-  if (!card) {
-    return (
-      <ul className={`flex flex-wrap items-center gap-2 ${className}`} aria-label={L('Ödeme yöntemi ve güvenliği', 'Payment method and security')}>
-        <li className={`${box} text-[11px] font-semibold text-slate-700`}>{L('Havale / EFT', 'Bank transfer')}</li>
-        <li className={`${box} gap-1 text-[11px] font-semibold text-slate-700`}>
-          <Lock className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
-          256-bit SSL
-        </li>
-      </ul>
-    )
-  }
   return (
-    <ul className={`flex flex-wrap items-center gap-2 ${className}`} aria-label={L('Kabul edilen kartlar ve ödeme güvenliği', 'Accepted cards and payment security')}>
-      <li className={box} title="Visa">
-        <span className="text-[13px] font-extrabold italic tracking-tight text-[#1a1f71]">VISA</span>
-      </li>
-      <li className={box} title="Mastercard">
-        <svg width="30" height="18" viewBox="0 0 30 18" aria-hidden>
-          <circle cx="11" cy="9" r="8" fill="#eb001b" />
-          <circle cx="19" cy="9" r="8" fill="#f79e1b" fillOpacity="0.9" />
-        </svg>
-        <span className="sr-only">Mastercard</span>
-      </li>
-      <li className={box} title="Troy">
-        <span className="text-[13px] font-bold lowercase text-[#00a3b4]">troy</span>
-      </li>
-      <li className={`${box} gap-1 text-[11px] font-semibold text-slate-700`}>
-        3D Secure
-      </li>
-      <li className={`${box} gap-1 text-[11px] font-semibold text-slate-700`}>
-        <Lock className="h-3.5 w-3.5 text-emerald-600" aria-hidden />
-        256-bit SSL
-      </li>
-    </ul>
+    <div className={`flex flex-wrap items-center gap-3 ${className}`} aria-label={L('Ödeme yöntemleri', 'Payment methods')}>
+      <span className="inline-flex h-10 items-center rounded-md bg-white px-3 shadow-sm">
+        <Image
+          src="/images/payment/logo_band.png"
+          alt={L(
+            'iyzico ile Öde — Mastercard, Visa, American Express ve Troy kartlarla ödeme',
+            'Pay with iyzico — Mastercard, Visa, American Express and Troy cards',
+          )}
+          width={858}
+          height={64}
+          className="h-6 w-auto max-w-full"
+        />
+      </span>
+      <span className="inline-flex h-10 items-center rounded-md bg-white px-3 text-[12px] font-semibold text-slate-700 shadow-sm">
+        {L('Havale / EFT', 'Bank transfer')}
+      </span>
+    </div>
   )
 }
