@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label'
 import { useL } from '@/lib/i18n-inline'
 import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
 import { formatTrPhone, onlyDigits } from '@/lib/checkout-validation'
-import { taxOfficesByCity } from '@/lib/tax-offices'
+import { TaxOfficeInput } from '@/components/TaxOfficeInput'
 
 /** Kayıtlı adres formu: teslimat bilgileri + bu adrese fatura kesilirken kullanılacak bireysel/kurumsal bilgiler */
 export type AddressFormValue = {
@@ -59,7 +59,6 @@ export function AddressFormFields({
   const L = useL()
   const id = (name: string) => `${idPrefix}-${name}`
   const districts = value.city ? getDistrictsByCity(value.city) : []
-  const offices = taxOfficesByCity(value.city)
   const cityKnown = TR_CITIES.some((c) => c.name === value.city)
   const districtKnown = districts.includes(value.district)
 
@@ -210,7 +209,11 @@ export function AddressFormFields({
             </div>
             <div>
               <Label htmlFor={id('taxOffice')}>{L('Vergi dairesi *', 'Tax office *')}</Label>
-              <TaxOfficeInput id={id('taxOffice')} city={value.city} offices={offices} value={value.taxOffice} onChange={(taxOffice) => onChange({ taxOffice })} />
+              <TaxOfficeInput
+                id={id('taxOffice')}
+                city={value.city}
+                renderInput={(p) => <Input {...p} value={value.taxOffice} onChange={(e) => onChange({ taxOffice: e.target.value })} />}
+              />
             </div>
           </div>
         )}
@@ -232,26 +235,3 @@ export function AddressFormFields({
   )
 }
 
-/** Vergi dairesi: seçilen ilin daireleri öneri listesi olarak gelir; listede olmayan daire elle yazılabilir */
-function TaxOfficeInput({ id, city, offices, value, onChange }: { id: string; city: string; offices: string[]; value: string; onChange: (v: string) => void }) {
-  const L = useL()
-  return (
-    <>
-      <Input
-        id={id}
-        list={offices.length ? `${id}-list` : undefined}
-        autoComplete="off"
-        placeholder={city ? L('Seçin veya yazın', 'Select or type') : L('Önce il seçin', 'Select a province first')}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      {offices.length > 0 && (
-        <datalist id={`${id}-list`}>
-          {offices.map((o) => (
-            <option key={o} value={o} />
-          ))}
-        </datalist>
-      )}
-    </>
-  )
-}

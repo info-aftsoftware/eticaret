@@ -1,5 +1,6 @@
 'use client'
 
+import { sortLabelKey } from '@/lib/sort-label'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link, { useRouter } from '@/lib/i18n/navigation'
 import { useSearchParams } from 'next/navigation'
@@ -447,7 +448,7 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
               <SelectTrigger aria-label={L('Sıralama', 'Sort')} className="min-h-[44px] h-11 w-[180px] max-w-full bg-white border-slate-200 text-slate-800 text-sm rounded-xl touch-manipulation">
                 {/* Seçili sıralamanın adı açıkça yazılır (Radix ilk çizimde boş bırakabiliyor) */}
                 <SelectValue placeholder={tProducts('sortByPlaceholder')}>
-                  {({ newest: tProducts('sortNewest'), 'price-asc': tProducts('sortPriceAsc'), 'price-desc': tProducts('sortPriceDesc'), 'name-asc': tProducts('sortNameAsc'), 'name-desc': tProducts('sortNameDesc') } as Record<string, string>)[sortBy] ?? tProducts('sortByPlaceholder')}
+                  {tProducts(sortLabelKey(sortBy))}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent align="end" className="rounded-xl border-slate-200 bg-white">

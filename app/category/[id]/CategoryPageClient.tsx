@@ -1,5 +1,6 @@
 'use client'
 
+import { sortLabelKey } from '@/lib/sort-label'
 import React, { useState, useMemo, Suspense } from 'react'
 import Link from '@/lib/i18n/navigation'
 import Image from 'next/image'
@@ -573,7 +574,7 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
                   <SelectTrigger aria-label={L('Sıralama', 'Sort')} className="w-[178px] min-h-[44px] h-11 text-sm border-slate-200 bg-white rounded-xl touch-manipulation">
                     {/* Seçili sıralamanın adı açıkça yazılır (Radix ilk çizimde boş bırakabiliyor) */}
                     <SelectValue>
-                      {({ newest: tProducts('sortNewest'), 'price-asc': tProducts('sortPriceAsc'), 'price-desc': tProducts('sortPriceDesc'), 'name-asc': tProducts('sortNameAsc') } as Record<string, string>)[sortBy] ?? tProducts('sortByPlaceholder')}
+                      {tProducts(sortLabelKey(sortBy))}
                     </SelectValue>
                   </SelectTrigger>
                   <SelectContent>

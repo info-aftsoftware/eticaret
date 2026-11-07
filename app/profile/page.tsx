@@ -51,7 +51,8 @@ function ProfilePageContent() {
   const searchParams = useSearchParams()
   const { user, isAuthenticated, token, logout } = useAuthStore()
   // Çıkış Yap ile ayrılırken giriş sayfasına yönlendirme yapılmaz (ana sayfaya gidilir)
-  const loggingOut = useRef(false)
+  /** Bu sayfada oturum açıkken çıkış yapıldıysa (profil veya mobil menü düğmesi) giriş sayfasına değil ana sayfaya gidilir */
+  const wasAuthed = useRef(false)
   const authReady = useFirebaseAuthStore((s) => s.authReady)
   const { addToast } = useToast()
   const L = useL()
@@ -84,11 +85,15 @@ function ProfilePageContent() {
 
   useEffect(() => {
     if (!authReady) return
-    if (!isAuthenticated) {
-      if (loggingOut.current) return
-      router.replace(`/login?redirect=${encodeURIComponent('/profile' + window.location.search)}`)
+    if (isAuthenticated) {
+      wasAuthed.current = true
       return
     }
+    if (wasAuthed.current) {
+      router.replace('/')
+      return
+    }
+    router.replace(`/login?redirect=${encodeURIComponent('/profile' + window.location.search)}`)
   }, [authReady, isAuthenticated, router])
 
   const loadOrders = useCallback(async () => {
@@ -161,7 +166,7 @@ function ProfilePageContent() {
       addToast({ type: 'error', title: L('Hata', 'Error'), description: L(PHONE_ERROR_TR, PHONE_ERROR_EN) })
       return
     }
-    if (addressForm.postalCode && !/^d{5}$/.test(addressForm.postalCode)) {
+    if (addressForm.postalCode && !/^\d{5}$/.test(addressForm.postalCode)) {
       addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Posta kodu 5 haneli olmalıdır.', 'Postal code must be 5 digits.') })
       return
     }
@@ -319,7 +324,7 @@ function ProfilePageContent() {
   return (
     <ClassicPageShell breadcrumbs={[{ label: L('Hesabım', 'My Account') }]} title={L('Hesabım', 'My Account')} description={L('Siparişler, adresler ve ayarlar', 'Orders, addresses and settings')}
       actions={
-        <Button type="button" variant="outline" className="h-10 rounded-lg" onClick={() => { loggingOut.current = true; logout(); router.push('/') }}>
+        <Button type="button" variant="outline" className="h-10 rounded-lg" onClick={() => { logout(); router.push('/') }}>
           {L('Çıkış Yap', 'Log out')}
         </Button>
       }>

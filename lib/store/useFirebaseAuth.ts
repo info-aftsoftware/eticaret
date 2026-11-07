@@ -25,6 +25,7 @@ import { getUserProfile, setUserProfile } from '@/lib/firebase/firestore'
 import { isFirebaseConfigured } from '@/lib/firebase/config'
 import { authErrorCode, authErrorMessage } from '@/lib/auth-errors'
 import { clearPersonalDeviceData } from '@/lib/privacy/device-data'
+import { useCompareStore } from '@/lib/store/useCompareStore'
 
 /** app/api/admin/auth: admin panelinin Firebase özel kimliği (müşteri değil) */
 const ADMIN_PANEL_UID = 'admin-panel-user'
@@ -197,6 +198,7 @@ export const useFirebaseAuthStore = create<AuthState>()(
         }
         set({ user: null, token: null, isAuthenticated: false, rememberMe: false })
         // Kişisel izler cihazda kalmaz (form bilgileri, sipariş sorgusu, karşılaştırma listesi…)
+        useCompareStore.getState().clear()
         clearPersonalDeviceData()
       },
 

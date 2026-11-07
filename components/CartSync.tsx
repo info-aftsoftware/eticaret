@@ -4,8 +4,6 @@ import { useEffect } from 'react'
 import { useCartStore, handleCartAuthChange, getCartOwner } from '@/lib/store/useCartStore'
 import { useAuthStore, getAuthToken } from '@/lib/store/useAuthStore'
 import { handleFavoritesAuthChange } from '@/lib/useFavorites'
-import { useCompareStore } from '@/lib/store/useCompareStore'
-import { clearPersonalDeviceData } from '@/lib/privacy/device-data'
 
 const uidOf = (s: { isAuthenticated: boolean; user: { id: string } | null }) => (s.isAuthenticated && s.user?.id ? s.user.id : null)
 
@@ -30,12 +28,9 @@ export function CartSync() {
       if (uid === prevUid) return
       const before = prevUid
       prevUid = uid
+      // Karşılaştırma listesi ve kişisel izler yalnız açık çıkışta (logout) temizlenir: "Beni hatırla" kapalıyken
+      // açılan yeni sekme oturumsuz başlar ama diğer sekmede hâlâ giriş yapılmış olabilir
       handleCartAuthChange(before, uid)
-      // Çıkış veya oturumun düşmesi: önceki kişinin karşılaştırma listesi ve kişisel izleri temizlenir
-      if (before !== null && uid === null) {
-        useCompareStore.getState().clear()
-        clearPersonalDeviceData()
-      }
     })
   }, [])
 

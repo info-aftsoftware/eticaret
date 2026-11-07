@@ -32,7 +32,7 @@ import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog
 import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
-import { taxOfficesByCity } from '@/lib/tax-offices'
+import { TaxOfficeInput } from '@/components/TaxOfficeInput'
 import { useLocale } from 'next-intl'
 import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { useServerError } from '@/lib/server-error-i18n'
@@ -86,11 +86,13 @@ type SavedAddress = {
 }
 
 /** Kayıtlı adreste fatura bilgisi varsa (profilde bireysel/kurumsal) fatura alanlarını doldurur */
+/** Adreste gerçekten fatura bilgisi varsa onu döner; boş varsayılan "bireysel" tür, kullanıcının girdiği kurumsal bilgiyi ezmez */
 function invoiceFrom(address: SavedAddress): Partial<FormState> {
-  if (address.invoiceType === 'company') {
+  if (address.invoiceType === 'company' && (address.companyName?.trim() || address.taxId?.trim())) {
     return { billingType: 'company', companyName: address.companyName || '', taxId: onlyDigits(address.taxId || '').slice(0, 10), taxOffice: address.taxOffice || '' }
   }
-  if (address.invoiceType === 'individual') return { billingType: 'individual', idNumber: onlyDigits(address.idNumber || '').slice(0, 11) }
+  const idNumber = onlyDigits(address.idNumber || '').slice(0, 11)
+  if (address.invoiceType === 'individual' && idNumber) return { billingType: 'individual', idNumber }
   return {}
 }
 
@@ -746,7 +748,6 @@ export default function CheckoutPage() {
 
   const errorCount = Object.values(errors).filter(Boolean).length
   const f = formData
-  const taxOffices = taxOfficesByCity(f.useDifferentBillingAddress ? f.billingCity : f.city)
   const describe = (id: string) => (errors[id] ? `${id}-error` : undefined)
 
   const summaryLines = (
@@ -1009,15 +1010,14 @@ export default function CheckoutPage() {
                     </Field>
                     <Field id="taxOffice" label={L('Vergi dairesi', 'Tax office')} required error={errors.taxOffice}>
                       {/* Faturanın ilinin vergi daireleri öneri olarak gelir; listede olmayan daire yazılabilir */}
-                      <input id="taxOffice" name="taxOffice" autoComplete="off" value={f.taxOffice} onChange={handleInputChange}
-                        list={taxOffices.length ? 'tax-office-list' : undefined}
-                        placeholder={taxOffices.length ? L('Seçin veya yazın', 'Select or type') : undefined}
-                        aria-invalid={!!errors.taxOffice || undefined} aria-describedby={describe('taxOffice')} className={inputCls(!!errors.taxOffice)} />
-                      {taxOffices.length > 0 && (
-                        <datalist id="tax-office-list">
-                          {taxOffices.map((o) => <option key={o} value={o} />)}
-                        </datalist>
-                      )}
+                      <TaxOfficeInput
+                        id="taxOffice"
+                        city={f.useDifferentBillingAddress ? f.billingCity : f.city}
+                        renderInput={(p) => (
+                          <input {...p} name="taxOffice" value={f.taxOffice} onChange={handleInputChange}
+                            aria-invalid={!!errors.taxOffice || undefined} aria-describedby={describe('taxOffice')} className={inputCls(!!errors.taxOffice)} />
+                        )}
+                      />
                     </Field>
                   </div>
                 )}

@@ -113,7 +113,7 @@ function truncate(str: string, max: number) {
   // Kelime sınırında kes (kelime ortasında bölünmesin)
   const cut = str.slice(0, max - 1)
   const space = cut.lastIndexOf(' ')
-  return (space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[s,.;:–-]+$/, '') + '…'
+  return (space > max * 0.6 ? cut.slice(0, space) : cut).replace(/[\s,.;:–-]+$/, '') + '…'
 }
 
 export async function generateMetadata(props: { params: Promise<{ id: string }> }): Promise<Metadata> {
