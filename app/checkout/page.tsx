@@ -1120,7 +1120,7 @@ export default function CheckoutPage() {
 
             {/* Sağ sütun: özet + onay */}
             <aside className="min-w-0">
-              <div className="space-y-4 lg:sticky lg:top-[calc(var(--header-h)+16px)]">
+              <div className="space-y-4 lg:sticky lg:top-24">
                 <div className="rounded-xl border border-[#e6ebf1] bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
                   <div className="flex items-center justify-between border-b border-[#eef1f5] px-5 py-3.5">
                     <h2 className="text-base font-semibold text-[#121926]">{L('Sipariş özeti', 'Order summary')}</h2>

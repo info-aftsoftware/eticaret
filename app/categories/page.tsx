@@ -12,7 +12,7 @@ export default function CategoriesPage() {
   const tHome = useTranslations('home')
 
   return (
-    <div className="min-h-screen bg-surface pb-safe w-full max-w-full min-w-0 overflow-x-clip">
+    <div className="min-h-screen bg-surface pb-safe w-full max-w-full min-w-0 overflow-x-hidden">
       <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-8 py-8 md:py-12 max-w-7xl min-w-0">
         <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-ink mb-2">

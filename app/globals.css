@@ -196,23 +196,11 @@
 }
 
 @layer base {
-  /* Yapışkan başlığın yüksekliği: sayfa içindeki yapışkan öğeler (özet, filtre, içindekiler) bunun altına hizalanır */
-  :root {
-    --header-h: 118px;
-  }
-  @media (min-width: 1025px) {
-    :root {
-      --header-h: 193px;
-    }
-  }
   * {
     @apply border-border;
   }
-  /* Yatay taşma 'clip' ile kesilir: 'hidden' kaydırma kutusu oluşturup yapışkan (sticky) başlığı bozuyordu.
-     Eski tarayıcılarda (clip desteklenmiyorsa) hidden geçerli kalır. */
   html {
     overflow-x: hidden;
-    overflow-x: clip;
   }
   body {
     @apply bg-background text-foreground antialiased;
@@ -224,7 +212,6 @@
     min-height: 100dvh;
     max-width: 100%;
     overflow-x: hidden;
-    overflow-x: clip;
   }
   
   /* Custom scrollbar */

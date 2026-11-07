@@ -72,8 +72,7 @@ export default async function IntlProvider({
       <TooltipProvider>
         <ToastProvider>
           <CategoriesWithProductsProvider>
-          {/* overflow-x-clip: hidden kaydırma kutusu oluşturup yapışkan başlığı (sticky) bozuyordu */}
-          <div className="min-h-screen min-h-dvh flex flex-col bg-background w-full max-w-full overflow-x-clip">
+          <div className="min-h-screen min-h-dvh flex flex-col bg-background w-full max-w-full overflow-x-hidden">
             <a
               href="#main-content"
               className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] bg-brand text-brand-foreground px-4 py-3 rounded-lg min-h-[44px] flex items-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand"
@@ -84,7 +83,7 @@ export default async function IntlProvider({
                 önce 56px yer tutucu çizilip içerik aşağı kayıyordu (CLS 0.93) */}
             <Header />
             {/* min-h-screen: içerik istemcide geç gelse de footer ilk ekranda görünüp aşağı kaymaz (CLS) */}
-            <main className="flex-1 min-h-screen pb-safe min-w-0 w-full max-w-full overflow-x-clip pt-0 mt-0 [&>*]:mt-0 [&>*]:pt-0" id="main-content">
+            <main className="flex-1 min-h-screen pb-safe min-w-0 w-full max-w-full overflow-x-hidden overflow-y-auto pt-0 mt-0 [&>*]:mt-0 [&>*]:pt-0" id="main-content">
               {/* Dış Suspense yok: içerik (LCP görseli dahil) gizli akış bloğunda kalıp sayfanın sonunu beklemesin */}
               <PageContainer>{children}</PageContainer>
             </main>

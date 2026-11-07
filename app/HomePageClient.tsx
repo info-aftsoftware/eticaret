@@ -77,7 +77,7 @@ export default function HomePageClient() {
   const sectionDescClass = 'text-slate-600 text-sm sm:text-base mt-1'
 
   return (
-    <div className="w-full max-w-full min-w-0 overflow-x-clip">
+    <div className="w-full max-w-full min-w-0 overflow-x-hidden">
       {/* Slayt başlıkları döndüğü için sayfanın tek H1'i görünmez; arama motoru ve ekran okuyucu içindir */}
       <h1 className="sr-only">{L('voltekno — Güneş Paneli, Akü, Solar İnverter ve Enerji Sistemleri', 'voltekno — Solar Panels, Batteries, Solar Inverters and Energy Systems')}</h1>
 
