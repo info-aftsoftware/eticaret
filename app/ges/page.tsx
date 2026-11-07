@@ -21,7 +21,7 @@ import { TR_CITIES, getDistrictsByCity } from '@/lib/tr-cities'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { getAddresses } from '@/lib/firebase/firestore'
 import { useL } from '@/lib/i18n-inline'
-import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
+import { isValidTrPhone, formatTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { jsonLdHtml } from '@/lib/seo/json-ld'
 import { dropLegacyContactDraft } from '@/lib/privacy/device-data'
 
@@ -129,7 +129,7 @@ export default function GesPage() {
           setForm((p) => ({
             ...p,
             fullName: user.name?.trim() || p.fullName,
-            phone: user.phone?.trim() || p.phone,
+            phone: user.phone ? formatTrPhone(user.phone) : p.phone,
             email: user.email?.trim() || p.email,
             city: addr?.city?.trim() || p.city,
             district: addr?.district?.trim() || p.district,
@@ -140,7 +140,7 @@ export default function GesPage() {
           setForm((p) => ({
             ...p,
             fullName: user.name?.trim() || p.fullName,
-            phone: user.phone?.trim() || p.phone,
+            phone: user.phone ? formatTrPhone(user.phone) : p.phone,
             email: user.email?.trim() || p.email,
           }))
         })
@@ -550,7 +550,8 @@ export default function GesPage() {
                         id="phone"
                         type="tel"
                         value={form.phone}
-                        onChange={(e) => set({ phone: e.target.value })}
+                        inputMode="tel"
+                        onChange={(e) => set({ phone: formatTrPhone(e.target.value) })}
                         placeholder={t('quoteForm.phonePlaceholder')}
                         className={fieldCls(formErrors.phone)}
                         autoComplete="tel"

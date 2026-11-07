@@ -31,7 +31,9 @@ import { MarketingConsentCard } from '@/components/profile/MarketingConsentCard'
 import { PrivacyDocumentsCard } from '@/components/profile/PrivacyDocumentsCard'
 import { EmailVerifyBanner } from '@/components/EmailVerifyBanner'
 import { useL } from '@/lib/i18n-inline'
-import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
+import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN, validateBilling, formatTrPhone } from '@/lib/checkout-validation'
+import { AddressFormFields, EMPTY_ADDRESS_FORM, type AddressFormValue } from '@/components/profile/AddressFormFields'
+import { useServerError } from '@/lib/server-error-i18n'
 
 const ORDER_STATUS_LABELS_EN: Record<string, string> = {
   pending: 'Pending',
@@ -75,17 +77,9 @@ function ProfilePageContent() {
   const [passwordSuccess, setPasswordSuccess] = useState(false)
   const [updatingPassword, setUpdatingPassword] = useState(false)
   const [profileCustomerNo, setProfileCustomerNo] = useState<string | null>(null)
-  const [addressForm, setAddressForm] = useState({
-    title: '',
-    name: '',
-    phone: '',
-    addressLine: '',
-    city: '',
-    district: '',
-    postalCode: '',
-    country: 'Türkiye',
-    isDefault: false,
-  })
+  const [addressForm, setAddressForm] = useState<AddressFormValue>(EMPTY_ADDRESS_FORM)
+  const patchAddressForm = (patch: Partial<AddressFormValue>) => setAddressForm((p) => ({ ...p, ...patch }))
+  const tErr = useServerError()
   const activeTab = searchParams.get('tab') || 'orders'
 
   useEffect(() => {
@@ -153,23 +147,13 @@ function ProfilePageContent() {
   }, [authReady, user?.id, loadOrders, loadAddresses])
 
   const resetAddressForm = () => {
-    setAddressForm({
-      title: '',
-      name: '',
-      phone: '',
-      addressLine: '',
-      city: '',
-      district: '',
-      postalCode: '',
-      country: 'Türkiye',
-      isDefault: false,
-    })
+    setAddressForm(EMPTY_ADDRESS_FORM)
     setEditingAddressId(null)
   }
 
   const handleSaveAddress = async () => {
     if (!user?.id) return
-    if (!addressForm.title?.trim() || !addressForm.name?.trim() || !addressForm.phone?.trim() || !addressForm.addressLine?.trim() || !addressForm.city?.trim() || !addressForm.district?.trim() || !addressForm.postalCode?.trim()) {
+    if (!addressForm.title?.trim() || !addressForm.name?.trim() || !addressForm.phone?.trim() || !addressForm.addressLine?.trim() || !addressForm.city?.trim() || !addressForm.district?.trim()) {
       addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Zorunlu alanları doldurun.', 'Please fill in the required fields.') })
       return
     }
@@ -177,12 +161,27 @@ function ProfilePageContent() {
       addToast({ type: 'error', title: L('Hata', 'Error'), description: L(PHONE_ERROR_TR, PHONE_ERROR_EN) })
       return
     }
+    if (addressForm.postalCode && !/^d{5}$/.test(addressForm.postalCode)) {
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: L('Posta kodu 5 haneli olmalıdır.', 'Postal code must be 5 digits.') })
+      return
+    }
+    // Fatura bilgisi: ödeme sayfasıyla aynı kurallar (kurumsalda ünvan, VKN, vergi dairesi; bireyselde TC isteğe bağlı)
+    const billingErrors = validateBilling({ billingType: addressForm.invoiceType, idNumber: addressForm.idNumber, companyName: addressForm.companyName, taxId: addressForm.taxId, taxOffice: addressForm.taxOffice })
+    const firstBillingError = Object.values(billingErrors)[0]
+    if (firstBillingError) {
+      addToast({ type: 'error', title: L('Hata', 'Error'), description: tErr(firstBillingError) ?? firstBillingError })
+      return
+    }
+    // Seçilmeyen fatura türünün alanları kaydedilmez
+    const toSave = addressForm.invoiceType === 'company'
+      ? { ...addressForm, idNumber: '', companyName: addressForm.companyName.trim(), taxOffice: addressForm.taxOffice.trim() }
+      : { ...addressForm, companyName: '', taxId: '', taxOffice: '' }
     try {
       if (editingAddressId) {
-        await updateAddress(user.id, editingAddressId, addressForm)
+        await updateAddress(user.id, editingAddressId, toSave)
         addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Adres güncellendi.', 'Address updated.') })
       } else {
-        await addAddress(user.id, addressForm)
+        await addAddress(user.id, toSave)
         addToast({ type: 'success', title: L('Başarılı', 'Success'), description: L('Adres eklendi.', 'Address added.') })
       }
       setAddressDialogOpen(false)
@@ -218,22 +217,28 @@ function ProfilePageContent() {
 
   const openEditAddress = (address: typeof addresses[0]) => {
     setAddressForm({
+      ...EMPTY_ADDRESS_FORM,
       title: address.title,
       name: address.name,
-      phone: address.phone,
+      phone: address.phone ? formatTrPhone(address.phone) : '',
       addressLine: address.addressLine,
       city: address.city,
       district: address.district,
-      postalCode: address.postalCode,
+      postalCode: address.postalCode || '',
       country: address.country || 'Türkiye',
       isDefault: address.isDefault,
+      invoiceType: address.invoiceType === 'company' ? 'company' : 'individual',
+      idNumber: address.idNumber || '',
+      companyName: address.companyName || '',
+      taxId: address.taxId || '',
+      taxOffice: address.taxOffice || '',
     })
     setEditingAddressId(address.id)
     setAddressDialogOpen(true)
   }
 
   useEffect(() => {
-    if (user) setProfileEdit({ name: user.name || '', phone: user.phone || '' })
+    if (user) setProfileEdit({ name: user.name || '', phone: user.phone ? formatTrPhone(user.phone) : '' })
   }, [user?.id, user?.name, user?.phone])
 
   const refreshUserProfile = useFirebaseAuthStore((s) => s.refreshUserProfile)
@@ -425,95 +430,12 @@ function ProfilePageContent() {
                   </DialogTrigger>
                   <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto" onOpenAutoFocus={(e) => e.preventDefault()}>
                     <DialogHeader>
-                      <DialogTitle>{L('Yeni Adres Ekle', 'Add New Address')}</DialogTitle>
+                      <DialogTitle>{editingAddressId ? L('Adresi Düzenle', 'Edit Address') : L('Yeni Adres Ekle', 'Add New Address')}</DialogTitle>
                       <DialogDescription>
-                        {L('Teslimat adresinizi ekleyin.', 'Add your delivery address.')}
+                        {L('Teslimat adresinizi ve bu adrese kesilecek fatura bilgisini ekleyin.', 'Add your delivery address and the invoice details for it.')}
                       </DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-4 py-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="title">{L('Adres Başlığı *', 'Address Title *')}</Label>
-                          <Input
-                            id="title"
-                            placeholder={L('Ev, İş, vb.', 'Home, Work, etc.')}
-                            value={addressForm.title}
-                            onChange={(e) => setAddressForm({ ...addressForm, title: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="name">{L('Ad Soyad *', 'Full Name *')}</Label>
-                          <Input
-                            id="name"
-                            value={addressForm.name}
-                            onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label htmlFor="phone">{L('Telefon *', 'Phone *')}</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          value={addressForm.phone}
-                          onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="addressLine">{L('Adres *', 'Address *')}</Label>
-                        <Input
-                          id="addressLine"
-                          value={addressForm.addressLine}
-                          onChange={(e) => setAddressForm({ ...addressForm, addressLine: e.target.value })}
-                        />
-                      </div>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div>
-                          <Label htmlFor="district">{L('İlçe *', 'District *')}</Label>
-                          <Input
-                            id="district"
-                            value={addressForm.district}
-                            onChange={(e) => setAddressForm({ ...addressForm, district: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="city">{L('Şehir *', 'City *')}</Label>
-                          <Input
-                            id="city"
-                            value={addressForm.city}
-                            onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="postalCode">{L('Posta Kodu *', 'Postal Code *')}</Label>
-                          <Input
-                            id="postalCode"
-                            value={addressForm.postalCode}
-                            onChange={(e) => setAddressForm({ ...addressForm, postalCode: e.target.value })}
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label htmlFor="country">{L('Ülke', 'Country')}</Label>
-                        <Input
-                          id="country"
-                          value={addressForm.country}
-                          onChange={(e) => setAddressForm({ ...addressForm, country: e.target.value })}
-                        />
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id="isDefault"
-                          checked={addressForm.isDefault}
-                          onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
-                          className="w-4 h-4 text-brand border-palette rounded focus:ring-brand"
-                        />
-                        <Label htmlFor="isDefault" className="cursor-pointer">
-                          {L('Varsayılan adres olarak ayarla', 'Set as default address')}
-                        </Label>
-                      </div>
-                    </div>
+                    <AddressFormFields idPrefix="addr" value={addressForm} onChange={patchAddressForm} />
                     <DialogFooter>
                       <Button variant="outline" className="rounded-xl" onClick={() => setAddressDialogOpen(false)}>
                         {L('İptal', 'Cancel')}
@@ -543,93 +465,10 @@ function ProfilePageContent() {
                         <DialogHeader>
                           <DialogTitle>{L('Yeni Adres Ekle', 'Add New Address')}</DialogTitle>
                           <DialogDescription>
-                            {L('Teslimat adresinizi ekleyin.', 'Add your delivery address.')}
+                            {L('Teslimat adresinizi ve bu adrese kesilecek fatura bilgisini ekleyin.', 'Add your delivery address and the invoice details for it.')}
                           </DialogDescription>
                         </DialogHeader>
-                        <div className="space-y-4 py-4">
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label htmlFor="title-empty">{L('Adres Başlığı *', 'Address Title *')}</Label>
-                              <Input
-                                id="title-empty"
-                                placeholder={L('Ev, İş, vb.', 'Home, Work, etc.')}
-                                value={addressForm.title}
-                                onChange={(e) => setAddressForm({ ...addressForm, title: e.target.value })}
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="name-empty">{L('Ad Soyad *', 'Full Name *')}</Label>
-                              <Input
-                                id="name-empty"
-                                value={addressForm.name}
-                                onChange={(e) => setAddressForm({ ...addressForm, name: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <Label htmlFor="phone-empty">{L('Telefon *', 'Phone *')}</Label>
-                            <Input
-                              id="phone-empty"
-                              type="tel"
-                              value={addressForm.phone}
-                              onChange={(e) => setAddressForm({ ...addressForm, phone: e.target.value })}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="addressLine-empty">{L('Adres *', 'Address *')}</Label>
-                            <Input
-                              id="addressLine-empty"
-                              value={addressForm.addressLine}
-                              onChange={(e) => setAddressForm({ ...addressForm, addressLine: e.target.value })}
-                            />
-                          </div>
-                          <div className="grid grid-cols-3 gap-4">
-                            <div>
-                              <Label htmlFor="district-empty">{L('İlçe *', 'District *')}</Label>
-                              <Input
-                                id="district-empty"
-                                value={addressForm.district}
-                                onChange={(e) => setAddressForm({ ...addressForm, district: e.target.value })}
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="city-empty">{L('Şehir *', 'City *')}</Label>
-                              <Input
-                                id="city-empty"
-                                value={addressForm.city}
-                                onChange={(e) => setAddressForm({ ...addressForm, city: e.target.value })}
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="postalCode-empty">{L('Posta Kodu *', 'Postal Code *')}</Label>
-                              <Input
-                                id="postalCode-empty"
-                                value={addressForm.postalCode}
-                                onChange={(e) => setAddressForm({ ...addressForm, postalCode: e.target.value })}
-                              />
-                            </div>
-                          </div>
-                          <div>
-                            <Label htmlFor="country-empty">{L('Ülke', 'Country')}</Label>
-                            <Input
-                              id="country-empty"
-                              value={addressForm.country}
-                              onChange={(e) => setAddressForm({ ...addressForm, country: e.target.value })}
-                            />
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <input
-                              type="checkbox"
-                              id="isDefault-empty"
-                              checked={addressForm.isDefault}
-                              onChange={(e) => setAddressForm({ ...addressForm, isDefault: e.target.checked })}
-                              className="w-4 h-4 text-brand border-palette rounded focus:ring-brand"
-                            />
-                            <Label htmlFor="isDefault-empty" className="cursor-pointer">
-                              {L('Varsayılan adres olarak ayarla', 'Set as default address')}
-                            </Label>
-                          </div>
-                        </div>
+                        <AddressFormFields idPrefix="addr-first" value={addressForm} onChange={patchAddressForm} />
                         <DialogFooter>
                           <Button variant="outline" className="rounded-xl" onClick={() => setAddressDialogOpen(false)}>
                             {L('İptal', 'Cancel')}
@@ -715,8 +554,12 @@ function ProfilePageContent() {
                       <Label htmlFor="profile-phone">{L('Telefon', 'Phone')}</Label>
                       <Input
                         id="profile-phone"
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel-national"
+                        placeholder="5xx xxx xx xx"
                         value={profileEdit.phone}
-                        onChange={(e) => setProfileEdit((p) => ({ ...p, phone: e.target.value }))}
+                        onChange={(e) => setProfileEdit((p) => ({ ...p, phone: formatTrPhone(e.target.value) }))}
                         className="rounded-xl"
                       />
                     </div>

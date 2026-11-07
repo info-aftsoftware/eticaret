@@ -38,6 +38,12 @@ export interface FirebaseAddress {
   postalCode: string
   country: string
   isDefault: boolean
+  /** Bu adrese kesilecek fatura (ödeme sayfasında adres seçilince fatura bilgileri dolar) */
+  invoiceType?: 'individual' | 'company'
+  idNumber?: string
+  companyName?: string
+  taxId?: string
+  taxOffice?: string
 }
 
 export interface FirebaseOrder {

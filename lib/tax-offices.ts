@@ -1,0 +1,100 @@
+/**
+ * İllere göre vergi daireleri (ödeme sayfasında kurumsal faturada öneri listesi).
+ * Kaynak: GİB defterdarlık "Adres ve Telefon Bilgileri" listelerini derleyen e-yasamrehberi.com/vergi-daireleri
+ * (il sayfaları, 7.11.2026'da okundu). Liste yalnızca öneridir: alan serbest metin kalır, listede olmayan
+ * (yeni açılmış, adı değişmiş) daire elle yazılabilir. Eskişehir'de ayrı daire listesi yok; defterdarlık şubeleri.
+ */
+const RAW: Record<string, string> = {
+  Adana: '5 Ocak; Adana İhtisas; Aladağ; Ceyhan; Çukurova; Feke; İmamoğlu; Karaisalı; Karataş; Kozan; Pozantı; Saimbeyli; Seyhan; Tufanbeyli; Yumurtalık; Yüreğir; Ziyapaşa',
+  Adıyaman: 'Adıyaman; Besni; Çelikhan; Gölbaşı; Kahta; Karakuş; Sincik',
+  Afyonkarahisar: 'Başmakçı; Bolvadin; Çay; Çiğiltepe; Çobanlar; Dazkırı; Dinar; Emirdağ; Evciler; İhsaniye; İscehisar; Kocatepe; Sandıklı; Sinanpaşa; Sultandağı; Şuhut; Tınaztepe',
+  Ağrı: 'Ağrı; Diyadin; Doğubeyazıt; Eleşkirt; İshakpaşa; Patnos; Tutak',
+  Amasya: 'Amasya; Göynücek; Gümüşhacıköy; Merzifon; Suluova; Taşova',
+  Ankara: '100. Yıl İhtisas; Akyurt; Anadolu İhtisas; Ankara İhtisas; Ankara Kurumlar; Ayaş; Bala; Başkent; Beypazarı; Beytepe; Cumhuriyet; Çankaya; Çubuk; Dışkapı; Dikimevi; Doğanbey; Elmadağ; Etimesgut; Gölbaşı; Harçlar; Haymana; Hitit; İvedik; Kahramankazan; Kalecik; Kavaklıdere; Keçiören; Kızılbey; Kızılcahamam; M.Karagüzel; Maltepe; Mithatpaşa; Nallıhan; Ostim; Polatlı; Seğmenler; Sincan; Şereflikoçhisar; Ulus; Veraset ve İntikal; Y.Galip; Yeğenbey; Yenimahalle; Yıldırımbeyazıt',
+  Antalya: 'Akseki; Alanya; Antalya İhtisas; Antalya Kurumlar; Demre; Düden; Elmalı; Falez; Finike; Gazipaşa; Kalekapı; Kaş; Kemer; Korkuteli; Kumluca; Manavgat; Muratpaşa; Serik; Üçkapılar',
+  Artvin: 'Ardanuç; Arhavi; Artvin; Borçka; Hopa; Şavşat; Yusufeli',
+  Aydın: 'Bozdoğan; Buharkent; Çine; Didim; Efeler; Germencik; Güzelhisar; İncirliova; Karacasu; Karpuzlu; Koçarlı; Köşk; Kuşadası; Kuyucak; Nazilli; Söke; Sultanhisar; Yenipazar',
+  Balıkesir: 'Ayvalık; Bandırma; Bigadiç; Burhaniye; Dursunbey; Edremit; Erdek; Gömeç; Gönen; Havran; İvrindi; Karesi; Kepsut; Koca Seyit; Kurtdereli; Manyas; Marmara; Savaştepe; Sındırgı; Susurluk',
+  Bilecik: 'Bilecik; Bozüyük; Gölpazarı; Kayı; Osmaneli; Söğüt',
+  Bingöl: 'Bingöl; Genç; Karlıova; Solhan; Yüzen Ada',
+  Bitlis: 'Adilcevaz; Ahlat; Bitlis; Güroymak; Hizan; Tatvan',
+  Bolu: 'Bolu; Gerede; Göynük; Köroğlu; Mengen; Mudurnu; Yeniçağa',
+  Burdur: 'Bucak; Burdur; Çavdır; Gölhisar; Karamanlı; Salda; Tefenni; Yeşilova',
+  Bursa: 'Bursa İhtisas; Bursa Veraset ve Harçlar; Çekirge; Ertuğrulgazi; Gemlik; Gökdere; İnegöl; İznik; Karacabey; Kozahan; Mudanya; Mustafakemalpaşa; Nilüfer; Orhaneli; Orhangazi; Osmangazi; Setbaşı; Uludağ; Yenişehir; Yeşil; Yıldırım',
+  Çanakkale: 'Ayvacık; Bayramiç; Biga; Bozcaada; Çan; Çanakkale; Eceabat; Ezine; Gelibolu; Gökçeada; Lapseki; Yenice',
+  Çankırı: 'Çankırı; Çerkeş; Ilgaz; Karatekin; Orta; Şabanözü',
+  Çorum: 'Akşemseddin; Alaca; Bayat; Çorum; Hasanpaşa; İskilip; Kargı; Mecitözü; Osmancık; Sungurlu',
+  Denizli: 'Acıpayam; Babadağ; Bayramyeri; Bekilli; Bozkurt; Buldan; Çal; Çameli; Çardak; Çınar; Çivril; Denizli İhtisas; Gökpınar; Güney; Honaz; Kale; Pamukkale; Sarayköy; Saraylar; Serinhisar; Tavas',
+  Diyarbakır: 'Bismil; C.Sıtkı Tarancı; Çermik; Çınar; Ergani; Gökalp; Hani; Kayapınar; Lice; Silvan; Süleymannazif',
+  Edirne: 'Arda; Enez; Havsa; İpsala; Keşan; Kırkpınar; Meriç; Tunca; Uzunköprü',
+  Elazığ: 'Elazığ; Harput; Hazar; Karakoçan; Kovancılar; Palu',
+  Erzincan: 'Ergan; Fevzipaşa; Tercan',
+  Erzurum: 'Aşkale; Aziziye; Hınıs; Horasan; İspir; Karayazı; Kazımkarabekir; Oltu; Palandöken; Pasinler',
+  Eskişehir: 'Alpu Şubesi; Beylikova Şubesi; Çifteler Şubesi; Günyüzü Şubesi; Han Şubesi; İnönü Şubesi; Mahmudiye Şubesi; Mihalgazi Şubesi; Mihalıççık Şubesi; Sarıcakaya Şubesi; Seyitgazi Şubesi; Sivrihisar Şubesi',
+  Gaziantep: 'Araban; Gaziantep İhtisas; Gazikent; İslahiye; Kozanlı; Nizip; Nurdağı; Oğuzeli; Suburcu; Şahinbey; Şehitkamil; Yavuzeli',
+  Giresun: 'Ada; Bulancak; Dereli; Espiye; Eynesil; Giresun; Görele; Keşap; Piraziz; Şebinkarahisar; Tirebolu; Yağlıdere',
+  Gümüşhane: 'Gümüşhane; Kelkit; Kürtün; Şiran; Torul',
+  Hakkari: 'Hakkari; Şemdinli; Yüksekova',
+  Hatay: '23 Temmuz; Akdeniz; Altınözü; Antakya; Asım Gündüz; Belen; Dörtyol; Erzin; Hassa; Kırıkhan; Kumlu; Reyhanlı; Sahil; Samandağ; Şükrükanatlı; Yayladağı',
+  Isparta: 'Davraz; Eğirdir; Gelendost; Gülkent; Kaymakkapı; Keçiborlu; Senirkent; Şarkikaraağaç; Yalvaç',
+  Mersin: 'Anamur; Aydıncık; Bozyazı; Erdemli; Gülnar; İstiklal; Kızılmurat; Liman; Mersin İhtisas; Mut; Silifke; Şehitkerim; Toros; Uray',
+  İstanbul: 'Adalar; Alemdağ; Anadolu Kurumlar; Atışalanı; Avcılar; Bakırköy; Başakşehir; Bayrampaşa; Beşiktaş; Beyazıt; Beykoz; Beylikdüzü; Beyoğlu; Boğaziçi Kurumlar; Büyük Mükellefler; Büyükçekmece; Çamlıca İhtisas; Davutpaşa; Erenköy; Esenler; Esenyurt; Fatih; Gaziosmanpaşa; Göztepe; Güneşli; Güngören; Haliç İhtisas; Halkalı; Hisar; Hocapaşa; İkitelli; Kadıköy; Kağıthane; Kartal; Kasımpaşa; Kocamustafapaşa; Kocasinan; Kozyatağı; Küçükçekmece; Küçükköy; Küçükyalı; Marmara Kurumlar; Maslak; Mecidiyeköy; Merter; Nakil Vasıta; Pendik; Rıhtım; Sarıgazi; Sarıyer; Silivri; Sultanbeyli; Şile; Şişli; Tuna; Tuzla; Ümraniye; Üsküdar; Vatan İhtisas; Yakacık; Yeditepe; Yenibosna; Yenikapı; Zeytinburnu; Zincirlikuyu',
+  İzmir: '9 Eylül; Aliağa; Balçova; Bayındır; Belkahve; Bergama; Beydağ; Bornova; Çakabey İhtisas; Çeşme; Çiğli; Dikili; Ege; Foça; Gaziemir; Hasan Tahsin; İzmir İhtisas; Kadifekale; Karaburun; Karşıyaka; Kemalpaşa; Kemeraltı; Kınık; Kiraz; Konak; Kordon; Menderes; Menemen; Ödemiş; Seferihisar; Selçuk; Şirinyer; Taşıtlar; Tire; Torbalı; Urla; Yamanlar',
+  Kars: 'Kafkas; Kağızman; Kars; Sarıkamış; Selim',
+  Kastamonu: 'Araç; Atabey; Azdavay; Bozkurt; Cide; Daday; Devrekani; İnebolu; Kastamonu; Taşköprü; Tosya',
+  Kayseri: 'Bünyan; Develi; Erciyes; Gevher Nesibe; İncesu; Kaleönü; Kayseri İhtisas; Kültepe; Mimarsinan; Pınarbaşı; Sarız; Tomarza; Yahyalı; Yeşilhisar',
+  Kırklareli: 'Babaeski; Demirköy; Kırk Şehitler; Kırklareli; Lüleburgaz; Pınarhisar; Vize',
+  Kırşehir: 'Cacabey; Çiçekdağı; Kaman; Kırşehir; Mucur',
+  Kocaeli: 'Acısu; Alemdar; Derince; Gebze İhtisas; Gölcük; İlyasbey; Kandıra; Karamürsel; Kocaeli İhtisas; Körfez; Tepecik; Uluçınar',
+  Konya: 'Akşehir; Alaaddin; Altınekin; Beyşehir; Bozkır; Cihanbeyli; Çumra; Doğanhisar; Emirgazi; Ereğli; Hüyük; Ilgın; Kadınhanı; Karapınar; Karatay; Konya İhtisas; Kulu; Meram; Mevlana; Sarayönü; Selçuk; Seydişehir; Yunak',
+  Kütahya: '30 Ağustos; Altıntaş; Çaltepe; Çinili; Domaniç; Emet; Gediz; Hisarcık; Simav; Tavşanlı',
+  Malatya: 'Akçadağ; Arapgir; Battalgazi; Beydağı; Darende; Doğanşehir; Fırat; Hekimhan',
+  Manisa: 'Ahmetli; Akhisar; Alaşehir; Demirci; Gölmarmara; Gördes; Kırkağaç; Köprübaşı; Kula; Manisa İhtisas; Mesir; Salihli Adil Oral; Sarıgöl; Saruhanlı; Selendi; Soma; Şehit Cihan Güneş; Turgutlu',
+  Kahramanmaraş: 'Afşin; Aksu; Andırın; Aslanbey; Çağlayancerit; Elbistan; Göksun; Nurhak; Pazarcık; Türkoğlu',
+  Mardin: 'Dargeçit; Derik; Kızıltepe; Mardin; Mazıdağı; Midyat; Nusaybin; Ömerli; Savur',
+  Muğla: 'Bodrum; Dalaman; Datça; Fethiye; Kavaklıdere; Köyceğiz; Marmaris; Milas; Muğla; Ortaca; Seydikemer; Ula; Yatağan',
+  Muş: 'Bulanık; Hasköy; Korkut; Malazgirt; Muş; Varto',
+  Nevşehir: 'Acıgöl; Avanos; Derinkuyu; Gülşehir; Hacıbektaş; Kozaklı; Nevşehir; Ürgüp',
+  Niğde: 'Altunhisar; Bor; Çamardı; Çiftlik; Niğde; Ulukışla',
+  Ordu: 'Akkuş; Altınordu; Aybastı; Boztepe; Çatalpınar; Çaybaşı; Fatsa; Gölköy; Gürgentepe; Kabataş; Korgan; Köprübaşı; Kumru; Perşembe; Ulubey; Ünye',
+  Rize: 'Ardeşen; Çamlıhemşin; Çayeli; Fındıklı; Kaçkar; Pazar; Rize; Yeşilçay',
+  Sakarya: 'Akyazı; Ali Fuat Cebesoy; Geyve; Gümrükönü; Hendek; Karapürçek; Karasu; Kaynarca; Kocaali; Pamukova; Sakarya İhtisas; Sapanca',
+  Samsun: '19 Mayıs; 19 Mayıs Ballıca; Alaçam; Asarcık; Bafra; Çarşamba; Gaziler; Havza; Kavak; Ladik; Salıpazarı; Terme; Vezirköprü; Yakakent; Zafer',
+  Siirt: 'Baykan; Deliklitaş; Kurtalan; Siirt',
+  Sinop: 'Ayancık; Boyabat; Durağan; Erfelek; Gerze; Sinop; Türkeli',
+  Sivas: '4 Eylül; Divriği; Gemerek; Gürün; Kale; Kangal; Site; Suşehri; Şarkışla; Yıldızeli; Zara',
+  Tekirdağ: 'Çerkezköy; Çorlu; Çorlu İhtisas; Hayrabolu; Kapaklı; Malkara; Marmaraereğlisi; Muratlı; Namık Kemal; Saray; Süleymanpaşa; Şarköy',
+  Tokat: 'Almus; Erbaa; Niksar; Pazar; Reşadiye; Tokat; Topçam; Turhal; Zile',
+  Trabzon: 'Akçaabat; Araklı; Arsin; Beşikdüzü; Çarşıbaşı; Çaykara; Düzköy; Hızırbey; Karadeniz; Maçka; Of; Ortahisar; Sürmene; Şalpazarı; Tonya; Vakfıkebir; Yomra',
+  Tunceli: 'Munzur; Tunceli',
+  Şanlıurfa: 'Akçakale; Birecik; Bozova; Ceylanpınar; Göbeklitepe; Halfeti; Harran; Hilvan; Siverek; Suruç; Şehitlik; Topçumeydanı; Viranşehir',
+  Uşak: 'Banaz; Eşme; Karahallı; Sivaslı; Ulubey; Uşak',
+  Van: 'Akdamar; Başkale; Çaldıran; Edremit; Erciş; Gevaş; Gürpınar; Muradiye; Özalp; Van',
+  Yozgat: 'Akdağmadeni; Aydıncık; Boğazlıyan; Çamlık; Çayıralan; Çekerek; Saraykent; Sarıkaya; Sorgun; Şefaatli; Yerköy; Yozgat',
+  Zonguldak: 'Alaplı; Çaycuma; Devrek; Gökçebey; Karadeniz Ereğli; Karaelmas; Uzunmehmet',
+  Aksaray: 'Ağaçören; Aksaray; Eskil; Gülağaç; Güzelyurt; Ortaköy; Sultanhanı',
+  Bayburt: 'Bayburt',
+  Karaman: 'Ermenek; Karaman; Larende; Sarıveliler',
+  Kırıkkale: 'Delice; Irmak; Kaletepe; Keskin; Kırıkkale',
+  Batman: 'Batman; Kozluk; Raman',
+  Şırnak: 'Cizre; İdil; Silopi; Şırnak; Uludere',
+  Bartın: 'Amasra; Bartın; Ulus',
+  Ardahan: 'Ardahan; Göle',
+  Iğdır: 'Aras; Iğdır; Tuzluca',
+  Yalova: 'Altınova; Armutlu; Çınarcık; Yalova',
+  Karabük: 'Demirkent; Eskipazar; Karabük; Safranbolu; Yenice',
+  Kilis: 'Kilis',
+  Osmaniye: 'Amanos; Bahçe; Düziçi; Kadirli; Osmaniye; Toprakkale',
+  Düzce: 'Akçakoca; Cumayeri; Çilimli; Düzce; Gölyaka; Gümüşova; Kaynaşlı; Yığılca',
+}
+
+/** "Elâzığ" / "Elazığ" gibi yazım farkları eşleşsin */
+const norm = (s: string) => s.trim().replace(/â/g, 'a').replace(/Â/g, 'A').replace(/î/g, 'i').replace(/û/g, 'u').toLocaleLowerCase('tr')
+
+const BY_CITY = new Map(Object.entries(RAW).map(([city, list]) => [norm(city), list.split(';').map((s) => s.trim()).filter(Boolean)]))
+
+/** İlin vergi daireleri (bilinmiyorsa boş liste) */
+export function taxOfficesByCity(city: string | null | undefined): string[] {
+  if (!city) return []
+  return BY_CITY.get(norm(city)) ?? []
+}

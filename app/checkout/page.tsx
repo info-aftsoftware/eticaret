@@ -32,6 +32,7 @@ import { LegalDocumentDialog, LegalLink } from '@/components/LegalDocumentDialog
 import { CartQuoteNotice } from '@/components/CartQuoteNotice'
 import type { LegalSlug } from '@/lib/legal/documents'
 import { useL } from '@/lib/i18n-inline'
+import { taxOfficesByCity } from '@/lib/tax-offices'
 import { useLocale } from 'next-intl'
 import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { useServerError } from '@/lib/server-error-i18n'
@@ -77,6 +78,20 @@ type SavedAddress = {
   postalCode: string
   country?: string
   isDefault?: boolean
+  invoiceType?: 'individual' | 'company'
+  idNumber?: string
+  companyName?: string
+  taxId?: string
+  taxOffice?: string
+}
+
+/** Kayıtlı adreste fatura bilgisi varsa (profilde bireysel/kurumsal) fatura alanlarını doldurur */
+function invoiceFrom(address: SavedAddress): Partial<FormState> {
+  if (address.invoiceType === 'company') {
+    return { billingType: 'company', companyName: address.companyName || '', taxId: onlyDigits(address.taxId || '').slice(0, 10), taxOffice: address.taxOffice || '' }
+  }
+  if (address.invoiceType === 'individual') return { billingType: 'individual', idNumber: onlyDigits(address.idNumber || '').slice(0, 11) }
+  return {}
 }
 
 /** Kayıtlı adresteki il adını listedeki yazımla eşleştirir (büyük/küçük harf farkı vb.) */
@@ -356,6 +371,8 @@ export default function CheckoutPage() {
     const city = matchCity(address.city)
     setFormData((prev) => ({
       ...prev,
+      // Fatura adresi teslimat adresiyle aynıysa bu adresin fatura bilgisi de kullanılır
+      ...(prev.useDifferentBillingAddress ? {} : invoiceFrom(address)),
       name: address.name || prev.name,
       phone: address.phone ? formatTrPhone(address.phone) : prev.phone,
       addressLine: address.addressLine,
@@ -366,6 +383,22 @@ export default function CheckoutPage() {
     }))
     setErrors({})
   }, [])
+
+  /** Fatura adresi farklıysa kayıtlı adreslerden biri fatura adresi olarak seçilebilir */
+  const [billingAddressId, setBillingAddressId] = useState<string | null>(null)
+  const applyBillingAddress = (address: SavedAddress) => {
+    const city = matchCity(address.city)
+    setBillingAddressId(address.id)
+    setFormData((prev) => ({
+      ...prev,
+      ...invoiceFrom(address),
+      billingCity: city,
+      billingDistrict: matchDistrict(city, address.district),
+      billingPostalCode: onlyDigits(address.postalCode || '').slice(0, 5),
+      billingAddressLine: address.addressLine,
+    }))
+    setErrors((p) => ({ ...p, billingCity: '', billingDistrict: '', billingPostalCode: '', billingAddressLine: '', idNumber: '', companyName: '', taxId: '', taxOffice: '' }))
+  }
 
   // Üyenin kayıtlı adresleri (varsayılan adres otomatik seçilir)
   React.useEffect(() => {
@@ -713,6 +746,7 @@ export default function CheckoutPage() {
 
   const errorCount = Object.values(errors).filter(Boolean).length
   const f = formData
+  const taxOffices = taxOfficesByCity(f.useDifferentBillingAddress ? f.billingCity : f.city)
   const describe = (id: string) => (errors[id] ? `${id}-error` : undefined)
 
   const summaryLines = (
@@ -974,8 +1008,16 @@ export default function CheckoutPage() {
                         aria-invalid={!!errors.taxId || undefined} aria-describedby={describe('taxId')} className={inputCls(!!errors.taxId)} />
                     </Field>
                     <Field id="taxOffice" label={L('Vergi dairesi', 'Tax office')} required error={errors.taxOffice}>
+                      {/* Faturanın ilinin vergi daireleri öneri olarak gelir; listede olmayan daire yazılabilir */}
                       <input id="taxOffice" name="taxOffice" autoComplete="off" value={f.taxOffice} onChange={handleInputChange}
+                        list={taxOffices.length ? 'tax-office-list' : undefined}
+                        placeholder={taxOffices.length ? L('Seçin veya yazın', 'Select or type') : undefined}
                         aria-invalid={!!errors.taxOffice || undefined} aria-describedby={describe('taxOffice')} className={inputCls(!!errors.taxOffice)} />
+                      {taxOffices.length > 0 && (
+                        <datalist id="tax-office-list">
+                          {taxOffices.map((o) => <option key={o} value={o} />)}
+                        </datalist>
+                      )}
                     </Field>
                   </div>
                 )}
@@ -990,13 +1032,36 @@ export default function CheckoutPage() {
                   <span className="text-sm text-[#20384e]">{L('Fatura adresim teslimat adresiyle aynı', 'Billing address is the same as shipping address')}</span>
                 </label>
 
+                {f.useDifferentBillingAddress && isAuthenticated && savedAddresses.length > 0 && (
+                  <fieldset className="mt-4">
+                    <legend className="mb-2 text-sm font-medium text-[#20384e]">{L('Kayıtlı adreslerim', 'My saved addresses')}</legend>
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                      {savedAddresses.map((address) => {
+                        const active = billingAddressId === address.id
+                        return (
+                          <label key={address.id} className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${active ? 'border-[#0b2540] bg-[#f1f4f8] ring-1 ring-[#0b2540]' : 'border-[#d3d9e1] hover:border-[#b8c2ce]'}`}>
+                            <input type="radio" name="billingSavedAddress" checked={active} onChange={() => applyBillingAddress(address)} className="mt-1 h-4 w-4 accent-[#0b2540]" />
+                            <span className="min-w-0 text-sm">
+                              <span className="flex items-center gap-2 font-medium text-[#121926]">
+                                {address.title || L('Adres', 'Address')}
+                                {address.invoiceType === 'company' && <span className="rounded bg-[#e6ebf1] px-1.5 py-0.5 text-[11px] font-medium text-[#20384e]">{L('Kurumsal', 'Corporate')}</span>}
+                              </span>
+                              <span className="mt-0.5 block truncate text-[#5d6e80]">{address.invoiceType === 'company' && address.companyName ? address.companyName : address.addressLine}</span>
+                              <span className="block text-xs text-[#5d6e80]">{address.district} / {address.city}</span>
+                            </span>
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </fieldset>
+                )}
                 {f.useDifferentBillingAddress && (
                   <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-6">
-                    <Field id="billingCity" label={L('Fatura ili', 'Billing province')} required error={errors.billingCity} className="sm:col-span-2">
+                    <Field id="billingCity" label={L('İl', 'Province')} required error={errors.billingCity} className="sm:col-span-2">
                       <CitySelect id="billingCity" value={f.billingCity} invalid={!!errors.billingCity} describedBy={describe('billingCity')}
-                        onChange={(city) => { setFormData((p) => ({ ...p, billingCity: city, billingDistrict: '' })); setErrors((p) => ({ ...p, billingCity: '', billingDistrict: '' })) }} />
+                        onChange={(city) => { setBillingAddressId(null); setFormData((p) => ({ ...p, billingCity: city, billingDistrict: '' })); setErrors((p) => ({ ...p, billingCity: '', billingDistrict: '' })) }} />
                     </Field>
-                    <Field id="billingDistrict" label={L('Fatura ilçesi', 'Billing district')} required error={errors.billingDistrict} className="sm:col-span-2">
+                    <Field id="billingDistrict" label={L('İlçe', 'District')} required error={errors.billingDistrict} className="sm:col-span-2">
                       <DistrictSelect id="billingDistrict" city={f.billingCity} value={f.billingDistrict} invalid={!!errors.billingDistrict} describedBy={describe('billingDistrict')}
                         onChange={(d) => setField('billingDistrict', d)} />
                     </Field>
@@ -1005,7 +1070,7 @@ export default function CheckoutPage() {
                         value={f.billingPostalCode} onChange={handleInputChange} onBlur={(e) => validateField('billingPostalCode', e.target.value)}
                         aria-invalid={!!errors.billingPostalCode || undefined} aria-describedby={describe('billingPostalCode')} className={inputCls(!!errors.billingPostalCode)} />
                     </Field>
-                    <Field id="billingAddressLine" label={L('Fatura adresi', 'Billing address')} required error={errors.billingAddressLine} className="sm:col-span-6">
+                    <Field id="billingAddressLine" label={L('Açık adres', 'Street address')} required error={errors.billingAddressLine} className="sm:col-span-6">
                       <textarea id="billingAddressLine" name="billingAddressLine" autoComplete="billing street-address" rows={3} value={f.billingAddressLine} onChange={handleInputChange}
                         aria-invalid={!!errors.billingAddressLine || undefined} aria-describedby={describe('billingAddressLine')}
                         className={`${inputCls(!!errors.billingAddressLine)} h-auto min-h-[88px] py-3 leading-relaxed`} />

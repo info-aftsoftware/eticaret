@@ -15,7 +15,7 @@ import { AuthLayout, TextField, PasswordField, PasswordStrength, Checkbox, Prima
 import { SocialSignInButtons } from '@/components/auth/SocialSignInButtons'
 import { saveSignupConsents } from '@/components/auth/consents'
 import { useL } from '@/lib/i18n-inline'
-import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
+import { isValidTrPhone, PHONE_ERROR_TR, PHONE_ERROR_EN, formatTrPhone } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 
 const MIN_PASSWORD = 8
@@ -62,7 +62,8 @@ function RegisterPageContent() {
   }, [searchParams])
 
   const update = (field: keyof typeof formData) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, [field]: e.target.value }))
+    // Telefon şablonla yazılır: 5xx xxx xx xx
+    setFormData((prev) => ({ ...prev, [field]: field === 'phone' ? formatTrPhone(e.target.value) : e.target.value }))
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }))
   }
 
@@ -161,7 +162,7 @@ function RegisterPageContent() {
             <TextField label={L('E-posta', 'Email')} required type="email" inputMode="email" placeholder={L('ornek@email.com', 'example@email.com')} value={formData.email} onChange={update('email')} error={errors.email} autoComplete="email" disabled={loading} hint={L('Sipariş ve fatura bildirimleri bu adrese gönderilir.', 'Order and invoice notifications are sent to this address.')} />
           </div>
           <div data-field="phone">
-            <TextField label={L('Telefon', 'Phone')} type="tel" inputMode="tel" placeholder="0555 123 45 67" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint={L('İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için.', 'Optional — so we can reach you about delivery.')} />
+            <TextField label={L('Telefon', 'Phone')} type="tel" inputMode="tel" placeholder="5xx xxx xx xx" value={formData.phone} onChange={update('phone')} error={errors.phone} autoComplete="tel" disabled={loading} hint={L('İsteğe bağlı — teslimatla ilgili size ulaşabilmemiz için.', 'Optional — so we can reach you about delivery.')} />
           </div>
           <div className="space-y-4">
             <div data-field="password">

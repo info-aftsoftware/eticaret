@@ -14,7 +14,7 @@ import { ClassicPageShell } from '@/components/ClassicPageShell'
 import { useL } from '@/lib/i18n-inline'
 import { useAuthStore } from '@/lib/store/useAuthStore'
 import { dropLegacyContactDraft } from '@/lib/privacy/device-data'
-import { isValidEmail, isValidTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
+import { isValidEmail, isValidTrPhone, formatTrPhone, EMAIL_ERROR_TR, EMAIL_ERROR_EN, PHONE_ERROR_TR, PHONE_ERROR_EN } from '@/lib/checkout-validation'
 import { useServerError } from '@/lib/server-error-i18n'
 import { Phone, Send, Loader2 } from 'lucide-react'
 import { CONTACT_TOPICS, composeSubject, isContactTopic, productPrefill, type ContactTopicId } from '@/lib/contact-topics'
@@ -71,7 +71,7 @@ export default function ContactPage() {
       ...prev,
       name: prev.name || authUser.name?.trim() || '',
       email: prev.email || authUser.email?.trim() || '',
-      phone: prev.phone || authUser.phone?.trim() || '',
+      phone: prev.phone || (authUser.phone ? formatTrPhone(authUser.phone) : ''),
     }))
   }, [authUser])
 
@@ -124,7 +124,9 @@ export default function ContactPage() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    // Telefon şablonla yazılır: 5xx xxx xx xx
+    setFormData((prev) => ({ ...prev, [name]: name === 'phone' ? formatTrPhone(value) : value }))
   }
 
   return (
@@ -213,7 +215,7 @@ export default function ContactPage() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => { handleChange(e); setErrors((prev) => ({ ...prev, phone: '' })) }}
-                        placeholder="0532 123 45 67"
+                        placeholder="5xx xxx xx xx"
                         inputMode="tel"
                         autoComplete="tel"
                         aria-invalid={Boolean(errors.phone)}

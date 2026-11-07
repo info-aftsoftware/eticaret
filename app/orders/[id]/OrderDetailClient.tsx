@@ -22,6 +22,7 @@ import { useL } from '@/lib/i18n-inline'
 import { useLocale } from 'next-intl'
 import { lineItemName, toCatalogLocale } from '@/lib/catalog-en'
 import { useServerError } from '@/lib/server-error-i18n'
+import { formatTrPhone } from '@/lib/checkout-validation'
 
 type Creds = { email: string; phone: string }
 type OrderEvent = { id: string; type: string; status: string | null; message: string; createdAt: Date }
@@ -420,7 +421,7 @@ export default function OrderDetailPage() {
                   </div>
                   <div>
                     <label htmlFor="lookup-phone" className="mb-1.5 block text-sm font-medium text-[#20384e]">{L('Telefon', 'Phone')}</label>
-                    <input id="lookup-phone" type="tel" required autoComplete="tel" placeholder="5xx xxx xx xx" value={lookupPhone} onChange={(e) => setLookupPhone(e.target.value)}
+                    <input id="lookup-phone" type="tel" required autoComplete="tel" placeholder="5xx xxx xx xx" value={lookupPhone} onChange={(e) => setLookupPhone(formatTrPhone(e.target.value))}
                       className="h-12 w-full rounded-lg border border-[#d3d9e1] px-3.5 text-base outline-none focus:border-[#0b2540] focus:ring-2 focus:ring-[#0b2540]/15" />
                   </div>
                   {lookupError && <p role="alert" className="flex items-start gap-1.5 text-sm text-red-600"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />{lookupError}</p>}
