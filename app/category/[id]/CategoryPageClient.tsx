@@ -400,8 +400,8 @@ export function CategoryPageClient({ id: groupId, initialProducts }: { id: strin
         </Sheet>
 
         <div className="grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] gap-6 lg:gap-8 min-w-0 items-start">
-          <aside className="hidden lg:block">
-            <div className="sticky top-[108px] rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <aside className="hidden lg:block self-stretch">
+            <div className="sticky top-[calc(var(--header-h)+16px)] max-h-[calc(100dvh-var(--header-h)-32px)] overflow-y-auto overscroll-contain rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
               <div className="space-y-6">
                 <div className="relative">
                   <Input

@@ -138,7 +138,7 @@ export default async function BlogPage() {
       </div>
 
       {/* Category filter */}
-      <div className="border-b border-slate-200 bg-white sticky top-0 z-10 px-4 shadow-sm">
+      <div className="border-b border-slate-200 bg-white sticky top-[var(--header-h)] z-10 px-4 shadow-sm">
         <div className="container mx-auto max-w-5xl">
           <div className="flex gap-2 overflow-x-auto py-3 scrollbar-none">
             {BLOG_CATEGORIES.map((cat) => (

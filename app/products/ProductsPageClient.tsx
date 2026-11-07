@@ -476,10 +476,10 @@ export function ProductsPageClient({ query, initial }: { query: ProductsQuery; i
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_minmax(0,1fr)] gap-6 lg:gap-8 min-w-0">
         <aside className="hidden lg:block">
-          <div className="sticky top-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">{filtersPanel}</div>
+          <div className="sticky top-[calc(var(--header-h)+16px)] max-h-[calc(100dvh-var(--header-h)-32px)] overflow-y-auto overscroll-contain rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">{filtersPanel}</div>
         </aside>
 
-        <main className="min-w-0 overflow-x-hidden">
+        <main className="min-w-0 overflow-x-clip">
           {Object.keys(selectedSpecs).length > 0 && (
             <div className="mb-4 flex flex-wrap items-center gap-2">
               {Object.entries(selectedSpecs).flatMap(([key, values]) => values.map((value) => (

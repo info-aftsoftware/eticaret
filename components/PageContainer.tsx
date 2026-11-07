@@ -15,7 +15,7 @@ const isFullwidth = (p: string) => p === '/' || FULLWIDTH_PREFIXES.some((x) => p
 export function PageContainer({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? ''
   if (isFullwidth(pathname)) {
-    return <div className="w-full min-w-0 overflow-x-hidden">{children}</div>
+    return <div className="w-full min-w-0 overflow-x-clip">{children}</div>
   }
-  return <div className={`${PAGE_CONTAINER} overflow-x-hidden pt-5 pb-4 lg:pt-7 lg:pb-8`}>{children}</div>
+  return <div className={`${PAGE_CONTAINER} overflow-x-clip pt-5 pb-4 lg:pt-7 lg:pb-8`}>{children}</div>
 }

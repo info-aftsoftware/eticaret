@@ -38,7 +38,7 @@ export function LegalPage({ slug }: { slug: LegalSlug }) {
           <article className="bg-surface-elevated rounded-lg border border-palette shadow-sm p-6 md:p-10 min-w-0">
             <LegalDocumentView doc={doc} notice={en && doc !== getLegalDocument(slug) ? LEGAL_TRANSLATION_NOTICE : undefined} />
           </article>
-          <nav aria-label={L('Diğer yasal metinler', 'Other legal documents')} className="lg:sticky lg:top-4 self-start bg-surface-elevated rounded-lg border border-palette p-4">
+          <nav aria-label={L('Diğer yasal metinler', 'Other legal documents')} className="lg:sticky lg:top-[calc(var(--header-h)+16px)] self-start bg-surface-elevated rounded-lg border border-palette p-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted mb-2">{L('Yasal metinler', 'Legal documents')}</p>
             <ul className="space-y-1 text-sm">
               {LEGAL_SLUGS.map((s) => (

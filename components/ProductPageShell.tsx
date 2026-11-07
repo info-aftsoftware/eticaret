@@ -21,7 +21,7 @@ export function ProductPageShell({
     breadcrumbs,
 }: ProductPageShellProps) {
     return (
-        <div className="min-h-screen min-h-[100dvh] bg-slate-50 flex flex-col w-full max-w-full min-w-0 overflow-x-hidden pt-0 mt-0">
+        <div className="min-h-screen min-h-[100dvh] bg-slate-50 flex flex-col w-full max-w-full min-w-0 overflow-x-clip pt-0 mt-0">
             {hero && (
                 <section className="w-full shrink-0 min-w-0">
                     {hero}
@@ -36,9 +36,9 @@ export function ProductPageShell({
                 </div>
             )}
 
-            <div className="flex-1 w-full max-w-full min-w-0 overflow-x-hidden pb-safe relative z-0">
+            <div className="flex-1 w-full max-w-full min-w-0 overflow-x-clip pb-safe relative z-0">
                 <div className={`${PAGE_CONTAINER} pt-4 sm:pt-6 md:pt-8 pb-16 sm:pb-20 md:pb-24 bg-slate-50`}>
-                    <div className="min-w-0 max-w-full overflow-x-hidden w-full">
+                    <div className="min-w-0 max-w-full overflow-x-clip w-full">
                         {children}
                     </div>
                 </div>
