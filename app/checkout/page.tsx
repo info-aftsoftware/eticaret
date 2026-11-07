@@ -101,6 +101,7 @@ function Field({
   id,
   label,
   required,
+  hideOptional,
   error,
   hint,
   className = '',
@@ -109,6 +110,8 @@ function Field({
   id: string
   label: string
   required?: boolean
+  /** İsteğe bağlı alanda "(isteğe bağlı)" etiketini gösterme */
+  hideOptional?: boolean
   error?: string
   hint?: React.ReactNode
   className?: string
@@ -119,7 +122,7 @@ function Field({
     <div className={`min-w-0 ${className}`}>
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-[#20384e]">
         {label}
-        {required ? <span className="text-red-600"> *</span> : <span className="font-normal text-[#5d6e80]"> {L('(isteğe bağlı)', '(optional)')}</span>}
+        {required ? <span className="text-red-600"> *</span> : hideOptional ? null : <span className="font-normal text-[#5d6e80]"> {L('(isteğe bağlı)', '(optional)')}</span>}
       </label>
       {children}
       {error ? (
@@ -953,10 +956,10 @@ export default function CheckoutPage() {
 
                 {f.billingType === 'individual' ? (
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <Field id="idNumber" label={L('T.C. kimlik no', 'Turkish ID number')} error={errors.idNumber} hint={L('E-arşiv faturanız için; boş bırakabilirsiniz.', 'For your e-archive invoice; you may leave this blank.')}>
+                    <Field id="idNumber" label={L('T.C. kimlik no', 'Turkish ID number')} hideOptional error={errors.idNumber}>
                       <input id="idNumber" name="idNumber" inputMode="numeric" autoComplete="off" placeholder={L('11 haneli', '11 digits')}
                         value={f.idNumber} onChange={handleInputChange} onBlur={(e) => validateField('idNumber', e.target.value)}
-                        aria-invalid={!!errors.idNumber || undefined} aria-describedby={errors.idNumber ? 'idNumber-error' : 'idNumber-hint'} className={inputCls(!!errors.idNumber)} />
+                        aria-invalid={!!errors.idNumber || undefined} aria-describedby={errors.idNumber ? 'idNumber-error' : undefined} className={inputCls(!!errors.idNumber)} />
                     </Field>
                   </div>
                 ) : (
